@@ -69,7 +69,7 @@
     "messageConfirmQuickBet": "Tính năng cược nhanh cho phép bạn đặt cược trực tiếp chỉ với một cú click chuột hoặc một chạm vào các cửa cược mong muốn. Bạn có muốn bật tính năng này?",
     "confirmBetNote": "1-Click Bet là tính năng cược nhanh, cho phép bạn đặt cược trực tiếp mà không cần thông qua bước xác nhận. Bật ngay tính năng này tại",
     "oneClickHintMsg": "<strong>1-Click Bet</strong> là tính năng cho phép bạn đặt cược trực tiếp mà không cần thông qua bước xác nhận. Người chơi đặt cược bằng cách click chuột hoặc chạm vào cửa cược mong muốn.",
-    "oneClickTitle": "1-Click Bet",
+    "oneClickTitle": "Quick Bet",
     "turnOn": "Bật 1-Click Bet",
     "oneClickBetOn": "1-Click Bet đã bật",
     "systemName": "New Number Game",

@@ -1,29 +1,36 @@
 [data-theme="light"] .header {
-    --header-background: #2D4976;    
-    --header-background-mobi: linear-gradient(180deg, #ffffff 50%, #EAEAEA 100%);
+    --header-background: #2d4976;
+    --header-background-mobi: linear-gradient(180deg, #ffffff 50%, #eaeaea 100%);
     --header-text-color: var(--text-color);
-    --header-balance-color: var(--primary-color);
-    --header-border-bottom: #C5C5C5;
+    --header-balance-color: #ffc909;
+    --header-border-bottom: #c5c5c5;
+    --username-color: #c0c0c0;
     --icon-menu-color: #6e809a;
     --slide-nav-background: #fff;
     --icon-menu-background-hover: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.4) 100%);
-    --site-name-color: #324b6d;
+    --site-name-color: #fff;
     --settings-container-background: #a9cee7;
 }
 
 .header {
     display: flex;
     align-items: center;
-    height: 4.4rem;
-    background: var(--header-background);
-    border-bottom: 0.1rem solid var(--header-border-bottom);
-    position: fixed;
+    height: 3.2rem;
+    background: #000;
+
+    // position: fixed;
     top: 0;
     width: 100%;
     z-index: var(--header-index);
 
     .header-right {
         display: flex;
+        padding-right: 1.2rem;
+    }
+
+    .header-left {
+        display: flex;
+        align-items: center;
     }
 
     .header-container {
@@ -31,15 +38,14 @@
         justify-content: space-between;
         align-items: center;
         width: 100%;
-        padding-left: 1rem;
-        padding-right: 1.2rem;
     }
 
     .site-name {
         font-weight: 500;
-        font-size: 1.8rem;
+        font-size: 1.5rem;
         color: var(--site-name-color);
         text-decoration: none;
+        font-family: var(--font-game-name);
 
         &:hover {
             text-decoration: none;
@@ -47,14 +53,20 @@
         }
     }
 
+    .back-to-home {
+        display: block;
+        width: 3.2rem;
+        text-align: center;
+    }
+
     &.mobile {
         height: 3.8rem;
         position: initial;
-        
+
         .site-name > img {
             height: 3rem;
-        }        
-    }    
+        }
+    }
 }
 
 .icon-user {

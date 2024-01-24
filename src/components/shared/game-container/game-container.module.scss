@@ -1,6 +1,6 @@
 [data-theme="light"] .game-container {
     --game-container-background: #fff;
-    --game-container-border: #5674A4;
+    --game-container-border: #5674a4;
 }
 
 .game-container {
@@ -19,33 +19,4 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-
-    @media (max-width: 300px) {
-        min-width: 36rem;
-    }
-
-    &:last-child {
-        margin-bottom: 0;
-    }
-}
-
-@media (min-width: 768px) {
-    .game-container {
-        flex: 1 1 calc(50% - 0.8rem);
-        max-width: calc(50% - 0.8rem);
-        margin-bottom: 0.6rem;
-
-        &:last-child {
-            margin-right: 0;
-            margin-bottom: 0.6rem;
-        }
-    }
-}
-
-@media (min-width: 1024px) {
-    .game-container {
-        flex: 1 1 calc(100% / 3 - 0.8rem);
-        max-width: calc(100% / 3 - 0.8rem);
-        margin: 0 0 0.6rem 0.6rem;
-    }
 }

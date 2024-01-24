@@ -114,7 +114,7 @@ export const ChipSlider: React.FC<{
         infinite: false,
         adaptiveHeight: true,
         swipeToSlide: true,
-        slidesToShow: 10,
+        slidesToShow: 5,
         arrows: false,
         onSwipe: () => {
             isSwipe = true;
@@ -131,13 +131,13 @@ export const ChipSlider: React.FC<{
             {
                 breakpoint: 1279,
                 settings: {
-                    slidesToShow: 8,
+                    slidesToShow: 5,
                 },
             },
             {
                 breakpoint: 1023,
                 settings: {
-                    slidesToShow: 6,
+                    slidesToShow: 5,
                 },
             },
             {
@@ -164,8 +164,9 @@ export const ChipSlider: React.FC<{
                 {ChipValues.map((value) => (
                     <div
                         key={value}
-                        className={`${Styles["chip-container"]} ${selectedChip === value ? Styles["selected"] : ""} ${enabledQuickBet ? Styles["enabled-quick-bet"] : ""
-                            } ${Styles[ChipMapper[systemName][value]]} ${Styles[systemName]}`}
+                        className={`${Styles["chip-container"]} ${selectedChip === value ? Styles["selected"] : ""} ${
+                            enabledQuickBet ? Styles["enabled-quick-bet"] : ""
+                        } ${Styles[ChipMapper[systemName][value]]} ${Styles[systemName]}`}
                         onClick={() => onClickChip(value)}
                     >
                         <img

@@ -20,7 +20,12 @@ import { Props } from "./type";
 import messageTransmitter from "../../helpers/message-transmitter";
 import { buildSocketGatewayUrl } from "../../helpers/url-helper";
 import { AppTypes } from "../../common/constants";
-import NumberWar from "./numberWar/page";
+import BacBall from "./bacBall/page";
+import NextBall from "./nextBall/page";
+import LuckyThree from "./luckyThree/page";
+import SicBalls from "./sicBalls/page";
+import HappyFour from "./happyFour/page";
+import HappyWheel from "./happyWheel/page";
 
 let gamesOrder = [];
 const getRenderGames = (selectedCategory: GameCategoryType, selectedPage: number, favoriteGames: number[], userOfferGames: number[]) => {
@@ -32,7 +37,9 @@ const getRenderGames = (selectedCategory: GameCategoryType, selectedPage: number
             ? GameCategoryConfig[getAppSettings().appType][GameCategoryType[selectedCategory]]
             : favoriteGames;
     const tabFavoriteGames = favoriteGames.filter((gameId) => tabGames.includes(gameId) && getAppSettings().offeredGames.includes(gameId));
-    const tabUnfavoriteGames = getAppSettings().offeredGames.filter((gameId) => !favoriteGames.includes(gameId) && tabGames.includes(gameId));
+    const tabUnfavoriteGames = getAppSettings().offeredGames.filter(
+        (gameId) => !favoriteGames.includes(gameId) && tabGames.includes(gameId)
+    );
 
     gamesOrder = tabFavoriteGames.concat(tabUnfavoriteGames);
     const startIndex = gamesOrder.length > (selectedPage - 1) * GamesInOnePage ? (selectedPage - 1) * GamesInOnePage : 0;
@@ -44,7 +51,8 @@ const getCategoryByGameId = (gameId: number) => {
     return (
         GameCategoryKeys.find(
             (category) =>
-                GameCategoryConfig[getAppSettings().appType][category] && GameCategoryConfig[getAppSettings().appType][category].includes(gameId)
+                GameCategoryConfig[getAppSettings().appType][category] &&
+                GameCategoryConfig[getAppSettings().appType][category].includes(gameId)
         ) ?? getDefaultCategory()
     );
 };
@@ -168,12 +176,17 @@ export const Games: React.FC<Props> = ({
         };
 
         switch (gameId) {
-
             case 3:
                 return <FishPrawnCrab key={`game-${gameId}`} {...gameProps} />;
 
             case 1111:
-                return <NumberWar />
+                return <BacBall />;
+            //return <LuckyThree />;
+            //return <NextBall />;
+            //return <SicBalls />;
+            //return <HappyFour />;
+            //return <HappyWheel />
+
             default:
                 return null;
         }
@@ -235,10 +248,7 @@ export const Games: React.FC<Props> = ({
     }, [queryGame]);
 
     return (
-        <div
-            className={`game-container ${!isMobileOnly ? "game-wrapper" : "game-wapper-mobile"} ${isShowSlidingChip ? styles["open-chips"] : styles["close-chips"]
-                }`}
-        >
+        <div className={`game-container game-wrapper ${isShowSlidingChip ? styles["open-chips"] : styles["close-chips"]}`}>
             <SystemContextProvider
                 value={{
                     setFavorite,

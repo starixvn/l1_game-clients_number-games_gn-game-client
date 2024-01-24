@@ -34,11 +34,21 @@ const UMPage: React.FC<{ locale: string }> = ({ locale }) => {
     }
     return (
         <div className="error-page">
-            <img alt="UM" src={`/static/images/um-${theme}.svg?v=2`} className="error-background" />
+            <div className="um-background">
+                <img src="/static/images/um-planet.png" alt="background" />
+            </div>
+            <div className="um-moving-star">
+                <img className="um-star-tail" src="/static/images/icon-thunder.svg" alt="background" />
+                <img className="um-star-tail" src="/static/images/icon-thunder.svg" alt="background" />
+            </div>
+            <div className="um-spaceman">
+                <img src="/static/images/um-spaceman.png" alt="spaceman" />
+            </div>
             <p className="um-title">
                 {t("messages:sysMaintenance")} <br /> {t("um:umTitleFirst")}
             </p>
-            <p className="highlight">{t("um:umContent").toString().replace("{0}", startTime).replace("{1}", endTime)}</p>
+            <p className="highlight">{t("um:umContentStart")}</p>
+            <p className="highlight txt-bold">{t("um:umContent").toString().replace("{0}", startTime).replace("{1}", endTime)}</p>
             <p>{t("um:umNotice")}</p>
         </div>
     );

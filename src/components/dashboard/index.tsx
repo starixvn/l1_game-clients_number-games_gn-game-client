@@ -28,6 +28,7 @@ import { isL1System, Themes } from "../../common/constants";
 import { AnnouncementModal } from "./announcement";
 import { ToolbarGuide } from "../hide-toolbar-guide";
 import { buildUrl } from "../../helpers/url-helper";
+import RoundResult from "../shared/round-result";
 
 const orientationType = { portrait: "portrait", landscape: "landscape" };
 class Dashboard extends React.PureComponent<Props, State> {
@@ -441,7 +442,7 @@ class Dashboard extends React.PureComponent<Props, State> {
         const offerGames: number[] = authorizeInfo?.user?.offerGames?.map((game: any) => game?.gameId) ?? [];
         return (
             <AuthContextProvider value={authContextValue}>
-                <div className={Styles["dashboard"]}>
+                <div className={`${Styles["dashboard"]}`}>
                     <Header
                         user={authorizeInfo.user}
                         enabledNotification={enabledWinningStreakNotification}
@@ -491,6 +492,7 @@ class Dashboard extends React.PureComponent<Props, State> {
                         isNewPromotion={isNewPromotion}
                         isShowToolbarGuide={isShowToolbarGuide}
                     />
+
                     {isShowHistory && (
                         <HistoryModal
                             onCloseModal={this.toggleHistoryModal}

@@ -1,62 +1,88 @@
 .ball {
-  width: 34px;
-  height: 34px;
-  position: relative;
+    width: 34px;
+    height: 34px;
+    position: relative;
+    border-radius: 50%;
 }
 
 .ball-border-gray {
-  border: 1px solid #9c9c9c;
+    border: 1px solid #9c9c9c;
 }
 
 .ball-border-black {
-  border: 1px solid #000;
+    border: 1px solid #000;
 }
 
 .ball-img {
-  position: absolute;
-  top: 0;
-  z-index: -1;
+    position: absolute;
+    top: 0;
+    width: 100%;
 }
 
 .ball-number {
-  font-size: 13px;
-  height: 32px;
-  font-weight: bold;
-  color: #2c2f3e;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    font-size: 13px;
+    height: 32px;
+    font-weight: bold;
+    color: #2c2f3e;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+}
+
+.red {
+    --bg: url("/images/ball/ball-blue.png") no-repeat;
+}
+
+.blue {
+    --bg: url("/images/ball/ball-red.png") no-repeat;
+}
+
+.ball-bg {
+    position: relative;
+    &::after {
+        content: "";
+        display: block;
+        position: absolute;
+        top: 0;
+        width: 3.2rem;
+        height: 3.2rem;
+        background: var(--bg);
+        background-size: contain;
+    }
 }
 
 .loading {
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 28px;
-  height: 28px;
-  border: solid 2px rgba(255, 255, 255, 0.5);
-  border-radius: 50%;
-  border-right-color: transparent;
-  border-bottom-color: transparent;
-  -webkit-transition: all 0.5s ease-in;
-  -webkit-animation-name: rotate;
-  -webkit-animation-duration: 1s;
-  -webkit-animation-iteration-count: infinite;
-  -webkit-animation-timing-function: linear;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 28px;
+    height: 28px;
+    border: solid 2px rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+    -webkit-transition: all 0.5s ease-in;
+    -webkit-animation-name: rotate;
+    -webkit-animation-duration: 1s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: linear;
 
-  transition: all 0.5s ease-in;
-  animation-name: rotate;
-  animation-duration: 1s;
-  animation-iteration-count: infinite;
-  animation-timing-function: linear;
+    transition: all 0.5s ease-in;
+    animation-name: rotate;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
 }
 
 @keyframes rotate {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }

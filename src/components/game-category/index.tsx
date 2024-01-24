@@ -18,8 +18,9 @@ const renderPagingCategory = (
         result.push(
             <span
                 onClick={() => onSelectPage(category, i + 1)}
-                className={`${styles["category-page"]} ${GameCategoryType[category] === selectedCategory && selectedPage - 1 === i ? styles["selected"] : ""
-                    }`}
+                className={`${styles["category-page"]} ${
+                    GameCategoryType[category] === selectedCategory && selectedPage - 1 === i ? styles["selected"] : ""
+                }`}
                 key={i}
             >
                 {i + 1}
@@ -40,7 +41,8 @@ export const GameCategory: React.FC<{
     const wrapperRef = useRef<HTMLDivElement>(null);
 
     const categoryPage = GameCategoryKeys.reduce((result, category) => {
-        const categoryLength = category !== "favorite" ? GameCategoryConfig[getAppSettings().appType][category].length : favoriteGames.length;
+        const categoryLength =
+            category !== "favorite" ? GameCategoryConfig[getAppSettings().appType][category].length : favoriteGames.length;
 
         result[category] = Math.ceil(categoryLength / GamesInOnePage);
 
@@ -56,7 +58,7 @@ export const GameCategory: React.FC<{
     }, [wrapperRef?.current, selectedCategory]);
 
     return (
-        <div ref={wrapperRef} className={`${styles["category-container"]} ${isMobileOnly ? styles["mobile"] : ""}`}>
+        <div ref={wrapperRef} className={`${styles["category-container"]}`}>
             <ul className={`${styles["category-list"]} ${styles[appTypeClass]}`}>
                 {GameCategoryKeys.map((categoryKey) => (
                     <li

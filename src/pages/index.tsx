@@ -90,20 +90,13 @@ function Home() {
         return <SplashScreen locale={language}></SplashScreen>;
     }
 
-    return <Dashboard session={session} queryGame={+gameId} setIsUm={setIsUm} />;
+    return <UMPage locale={language} />;
 }
 
 export const getStaticProps = async ({ locale }) => {
     return {
         props: {
-            ...(await serverSideTranslations(locale, [
-                "common",
-                "fishprawncrab",
-                "register",
-                "bethistory",
-                "messages",
-                "um",
-            ])),
+            ...(await serverSideTranslations(locale, ["common", "fishprawncrab", "register", "bethistory", "messages", "um"])),
         },
     };
 };

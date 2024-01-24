@@ -1,5 +1,6 @@
 {
     "umTitleFirst": "VUI LÒNG QUAY LẠI SAU.",
-    "umContent": "Thời gian bảo trì từ {0} đến {1} (GMT +8)",
+    "umContentStart": "Thời gian bảo trì từ",
+    "umContent": "{0} đến {1} (GMT +8)",
     "umNotice": "Sau thời gian bảo trì, bạn hãy đăng nhập lại để có thể tiếp tục chơi game."
 }

@@ -1,5 +1,6 @@
 {
     "umTitleFirst": "SILAKAN KEMBALI LAGI.",
-    "umContent": "Mulai dari {0} hingga {1} (GMT+8)",
+    "umContentStart": "Mulai dari",
+    "umContent": "{0} hingga {1} (GMT+8)",
     "umNotice": "Silakan login kembali untuk melanjutkan permainan setelah maintenance selesai."
 }

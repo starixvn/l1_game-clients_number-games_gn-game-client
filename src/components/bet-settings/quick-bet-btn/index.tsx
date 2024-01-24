@@ -76,6 +76,9 @@ export const QuickBetBtn: React.FC<{
 
     return (
         <div className={`${Styles["toggle"]} ${isHeaderSetting ? Styles["header-setting"] : Styles["bet-setting"]} ${deviceClass}`}>
+            <div className={Styles["one-click-bet"]} onClick={onClickQuickBet}>
+                {t("common:oneClickTitle")}
+            </div>
             <div>
                 {!enabledQuickBet && <div className={Styles["ripple-animation"]}></div>}
                 <input
@@ -89,9 +92,6 @@ export const QuickBetBtn: React.FC<{
                 <label className={Styles["toggle-btn"]} htmlFor="toggle-quickbet">
                     <div className={Styles["quick-bet-icon"]}></div>
                 </label>
-                <div className={Styles["one-click-bet"]} onClick={onClickQuickBet}>
-                    {t("common:oneClickTitle")}
-                </div>
             </div>
             {isShowModalConfirm && !!enabledQuickBet === false && (
                 <div className={Styles["modalConfirm"]}>

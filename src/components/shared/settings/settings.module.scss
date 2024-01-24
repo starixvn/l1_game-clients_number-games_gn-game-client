@@ -1,6 +1,6 @@
 [data-theme="light"] .settings-container {
     --icon-favorite-color: #945f08;
-    --icon-color: #F2A61C;
+    --icon-color: #f2a61c;
     --position-icon-favorite: -73px -82px;
 }
 
@@ -8,132 +8,27 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100%;    
-    @media(min-width: 768px) {
+    position: absolute;
+    bottom: -4.4rem;
+    @media (min-width: 768px) {
         padding: 0 0.5rem;
     }
 }
 
 .setting-right {
-    display: grid;
-    grid-template-columns: repeat(5, 3rem);
-    grid-gap: 1rem;
-    align-items: center;
-    margin-top: .5rem;
-
-    &.saba-mega-keno, &.mega-keno {
-        grid-template-columns: repeat(4, 3rem);
-    }
-}
-
-.count-label {
-    display: block;
-    position: absolute;
-    top: 0;
-    right: -0.4rem;
-    padding: 0.2rem 0.5rem;
-    line-height: 1.1rem;
-    border-radius: 0.3rem;
-    background: #E8382F;
-    font-family: "SanFranciscoDisplay", serif;
-    font-size: 1.1rem;
-    font-weight: 500;
-    color: #fff;
-
-    @media screen and (min-width: 768px) {
-        right: -0.8rem;
-    }
-}
-
-%icon {
-    display: inline-block;
-    background-repeat: no-repeat;
-    background-image: url("/static/images/setting-sprites.png?v=3");
-    background-image: -webkit-image-set(
-        url("/static/images/setting-sprites.png?v=3") 1x,
-        url("/static/images/setting-sprites@2x.png?v=3") 2x,
-        url("/static/images/setting-sprites@3x.png?v=3") 3x
-    );
-    background-image: image-set(
-        url("/static/images/setting-sprites.png?v=3") 1x,
-        url("/static/images/setting-sprites@2x.png?v=3") 2x,
-        url("/static/images/setting-sprites@3x.png?v=3") 3x
-    );
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    flex: 1 1;
 }
 
 .setting-button {
-    position: relative;
-    @media(max-width: 767px) {
-        justify-self: flex-end;
-    } 
-
-    &:hover {
-        cursor: pointer;
-    }
+    height: 3.2rem;
+    width: 3.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(33, 45, 61, 0.4);
+    border-radius: 1rem;
+    border: none;
 }
-.icon-noti,
-.icon-sound-on, 
-.icon-sound-off, 
-.icon-history,
-.icon-favorite-normal {
-    color: #fff;
-    font-size: 3.2rem;
-    line-height: 3.2rem;
-}
-
-// .desktop-style {
-//     .icon-sound-on::before, 
-//     .icon-sound-off::before, 
-//     .icon-history::before,
-//     .icon-favorite-normal::before {
-//         color: #fff;  
-//     }    
-// }
-
-%icon-notify {
-    @extend %icon;
-    width: 2.4rem;
-    height: 2rem;
-}
-
-
-.icon-sound-on-dark {
-    @extend %icon-notify;
-   background-position: 0 -58px;
-}
-
-.icon-sound-off-dark {
-    @extend %icon-notify;
-    background-position: -147px -36px;
-}
-
-.icon-sound-off-light {
-    @extend %icon-notify;
-   background-position: -147px -84px;
-}
-
-.icon-sound-on-light {
-    @extend %icon-notify;
-    background-position: 0 -84px;
-}
-
-
-.icon-ticket-history-light {
-    @extend %icon-notify;
-    background-position: -36px -84px;
-}
-
-.icon-ticket-history-dark {
-    @extend %icon-notify;
-    background-position: -36px -58px;
-}
-
-// .icon-favorite {
-//     @extend %icon-notify;
-//     background-position: var(--position-icon-favorite);
-//     position: relative;
-//     top: -1px;
-//     &:before {
-//         content: none;
-//     }
-// }

@@ -14,96 +14,88 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
-
 .icon-noti:before {
-  content: "\e905";
-  color: #fff;
+    content: "\e905";
+    color: #fff;
 }
 .icon-history:before {
-  content: "\e907";
-  color: #fff;
+    content: "\e907";
+    color: #fff;
 }
 .icon-menu:before {
-  content: "\e90b";
-  color: #fff;
+    content: "\e90b";
+    color: #fff;
 }
 .icon-sound-off:before {
-  content: "\e911";
-  color: #fff;
+    content: "\e911";
+    color: #fff;
 }
 .icon-sound-on:before {
-  content: "\e912";
-  color: #fff;
+    content: "\e912";
+    color: #fff;
 }
-.icon-coin:before {
-  content: "\e903";
-  color: #f0f0f0;
-}
+
 .icon-arrow-left:before {
-  content: "\e900";
-  color: #fff;
+    content: "\e900";
+    color: #fff;
 }
 .icon-edit:before {
-  content: "\e90a";
-  color: #9c9c9c;
+    content: "\e90a";
+    color: #9c9c9c;
 }
 .icon-refresh:before {
-  content: "\e909";
-  color: #fff;
+    content: "\e909";
+    color: #fff;
 }
 .icon-info:before {
-  content: "\e908";
-  color: #359b5b;
+    content: "\e908";
+    color: #359b5b;
 }
-.icon-user:before {
-  content: "\e901";
-  color: #afafaf;
-}
+
 .icon-cancel:before {
-  content: "\e914";
-  color: #9298a4;
+    content: "\e914";
+    color: #9298a4;
 }
 .icon-warning:before {
-  content: "\e913";
-  color: #ffb52a;
+    content: "\e913";
+    color: #ffb52a;
 }
 .icon-error:before {
-  content: "\e90f";
-  color: #f00;
+    content: "\e90f";
+    color: #f00;
 }
 .icon-success:before {
-  content: "\e910";
-  color: #5bb379;
+    content: "\e910";
+    color: #5bb379;
 }
 .icon-user-group:before {
-  content: "\e90e";
-  color: #9e9e9e;
+    content: "\e90e";
+    color: #9e9e9e;
 }
 .icon-favorite-normal:before {
-  content: "\e90d";
-  color: #fff;
+    content: "\e90d";
+    color: #fff;
 }
 .icon-chip-symbol:before {
-  content: "\e90c";
-  color: #fff;
+    content: "\e90c";
+    color: #fff;
 }
 .icon-close:before {
-  content: "\e902";
-  color: #89898b;
+    content: "\e902";
+    color: #89898b;
 }
 .icon-favorite:before {
-  content: "\e904";
-  color: #fff;
+    content: "\e904";
+    color: #fff;
 }
 
 .icon-ca {
-  display: inline-block;
-  width: 2.9rem;
-  height: 2.9rem;
-  background: url("/static/images/fpc-ca.svg") no-repeat center;
-  background-size: contain;
+    display: inline-block;
+    width: 2.9rem;
+    height: 2.9rem;
+    background: url("/static/images/fpc-ca.svg") no-repeat center;
+    background-size: contain;
 }
-
 
 .icon-tom {
     display: inline-block;
@@ -145,53 +137,50 @@
     background-size: contain;
 }
 
-
-
-
 /* NEW NUMBER GAME */
 [class^="icon-"],
 [class*=" icon-"] {
-  /* use !important to prevent issues with browser extensions that change fonts */
-  font-family: "icomoon", serif !important;
-  speak: never;
-  font-style: normal;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: "icomoon", serif !important;
+    speak: never;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
 
-  /* Better Font Rendering =========== */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 .icon-coin-outline:before {
-  content: "\e907";
-  color: #fff;
+    content: "\e907";
+    color: #fff;
 }
 .icon-coin:before {
-  content: "\e905";
+    content: "\e905";
 }
 .icon-user:before {
-  content: "\e906";
+    content: "\e906";
 }
 .icon-back:before {
-  content: "\e900";
-  color: #fff;
+    content: "\e900";
+    color: #fff;
 }
 .icon-guide:before {
-  content: "\e901";
-  color: #fff;
+    content: "\e901";
+    color: #fff;
 }
 .icon-home:before {
-  content: "\e902";
-  color: #fff;
+    content: "\e902";
+    color: #fff;
 }
 .icon-sound-off:before {
-  content: "\e903";
-  color: #fff;
+    content: "\e903";
+    color: #fff;
 }
 .icon-sound-on:before {
-  content: "\e904";
-  color: #fff;
+    content: "\e904";
+    color: #fff;
 }

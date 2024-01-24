@@ -24,57 +24,54 @@ type Props = {
     updateEnabledQuickBet?: Function;
     isShowBoostedOdds: boolean;
     promotionNotifications: [];
-    isShowToolbarGuide: boolean
+    isShowToolbarGuide: boolean;
 };
 
 export const getLogoName = () => {
     if (getAppSettings().appType === AppTypes.megaKeno) {
         return isL1System() ? "saba-mega-keno" : "mega-keno";
     }
-    
 
     return isL1System() ? "saba" : "vgaming";
 };
 
-const Header: React.FC<Props> = (props) => {    
+const Header: React.FC<Props> = (props) => {
     return (
-        <>
-            <header className={`${Styles.header} ${isMobileOnly ? Styles["mobile"] : ""}`} data-testid="header">
-                <div className="game-container d-flex">
-                    <div className={Styles["header-container"]}>
+        <header className={`${Styles.header}`} data-testid="header">
+            <div className="game-container d-flex">
+                <div className={Styles["header-container"]}>
+                    <div className={Styles["header-left"]}>
+                        <span className={`icon-back ${Styles["back-to-home"]}`}></span>
                         <a onClick={() => window.location.reload()} className={Styles["site-name"]}>
-                            <img
-                                className="header-logo"
-                                alt="UM"
-                                src={`/static/images/logo-desktop-${getLogoName()}.svg?v=${buildVersion}`}
-                            />
+                            Bac Ball
                         </a>
-                        <div className={Styles["header-right"]}>
-                            {
-                                <Settings
-                                    enabledSound={props.enabledSound}
-                                    enabledNotification={props.enabledNotification}
-                                    onToggleSound={props.onToggleSound}
-                                    onToggleNotification={props.onToggleNotification}
-                                    toggleHistoryModal={props.toggleHistoryModal}
-                                    toggleGuideModal={props.toggleGuideModal}
-                                    toggleAnnouncementModal={props.toggleAnnouncementModal}
-                                    favoriteGames={props.favoriteGames}
-                                    offerGames={props.offerGames}
-                                    updateFavoriteGames={props.updateFavoriteGames}
-                                    enabledQuickBet={props.enabledQuickBet}
-                                    updateEnabledQuickBet={props.updateEnabledQuickBet}
-                                    isShowBoostedOdds={props.isShowBoostedOdds}
-                                    promotionNotifications={props.promotionNotifications}
-                                    isShowToolbarGuide={props.isShowToolbarGuide}
-                                />
-                            }
-                            {!isMobileOnly && <UserInfo user={props.user} />}
-                        </div>
+                    </div>
+
+                    <div className={Styles["header-right"]}>
+                        {
+                            <Settings
+                                enabledSound={props.enabledSound}
+                                enabledNotification={props.enabledNotification}
+                                onToggleSound={props.onToggleSound}
+                                onToggleNotification={props.onToggleNotification}
+                                toggleHistoryModal={props.toggleHistoryModal}
+                                toggleGuideModal={props.toggleGuideModal}
+                                toggleAnnouncementModal={props.toggleAnnouncementModal}
+                                favoriteGames={props.favoriteGames}
+                                offerGames={props.offerGames}
+                                updateFavoriteGames={props.updateFavoriteGames}
+                                enabledQuickBet={props.enabledQuickBet}
+                                updateEnabledQuickBet={props.updateEnabledQuickBet}
+                                isShowBoostedOdds={props.isShowBoostedOdds}
+                                promotionNotifications={props.promotionNotifications}
+                                isShowToolbarGuide={props.isShowToolbarGuide}
+                            />
+                        }
+                        <UserInfo user={props.user} />
                     </div>
                 </div>
-            </header>
-        </>
+            </div>
+        </header>
     );
 };
 

@@ -1,5 +1,6 @@
 {
     "umTitleFirst": "請稍後再回來。",
-    "umContent": "從 {0} 到 {1} (GMT+8)",
+    "umContentStart": "從",
+    "umContent": "{0} 到 {1} (GMT+8)",
     "umNotice": "維護完成後請重新登錄繼續玩遊戲。"
 }

@@ -20,31 +20,13 @@ html {
     -ms-overscroll-behavior: none;
     -webkit-tap-highlight-color: transparent;
 
-    --font-family: "SanFranciscoDisplay", arial, sans-serif;
+    --font-family: "Montserrat", arial, sans-serif;
     --font-money: "BebasNeue", Arial, sans-serif;
     --font-number: "SanFranciscoDisplay", Arial, sans-serif;
-    --primary-color: #FF8B20;
+    --font-game-name: "BeVietNam", sans-serif;
+    --primary-color: #ff8b20;
 
     // buttons
-    --btn-green-background: #5bb379;
-    --btn-green-background-hover: #4e9967;
-    --btn-green-color: #fff;
-
-    --btn-orange-background: #ffb335;
-    --btn-orange-background-hover: #e5a030;
-    --btn-orange-color: #fff;
-
-    --btn-blue-background: linear-gradient(176.7deg, #82A1D4 2.64%, #5474A7 96.87%);
-    --btn-blue-background-hover: linear-gradient(176.7deg, #82A1D4 2.64%, #3a5c93 96.87%);
-    --btn-blue-color: #fff;
-
-    --btn-red-background: linear-gradient(176.7deg, #DC5751 2.64%, #B6403A 96.87%);
-    --btn-red-background-hover: linear-gradient(176.7deg, #DC5751 2.64%, #DC5751 96.87%);
-    --btn-red-color: #fff;
-
-    --btn-grey-background: linear-gradient(180deg, #E0E0E0 0%, #B8B8B8 100%);
-    --btn-grey-background-hover: linear-gradient(180deg, #E0E0E0 0%, #aaaaaa 100%);
-    --btn-grey-color: #2c2f3e;
 
     // z-index
     --bet-setting-index: 300;
@@ -68,109 +50,22 @@ html {
     --tooltip-buttons-index: 100;
     --global-api-error-index: 2000;
 
-    // dots
-    --dot-even-background: linear-gradient(180deg, #ffffff 0%, #e7e7e7 100%);
-    --dot-even-border: linear-gradient(180deg, #ececec 0%, #c5c5c5 100%);
-    --dot-even-text-color: #323232;
-    --dot-even-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5);
-
-    --dot-odd-background: linear-gradient(180deg, #ff6e79 6.04%, #e73542 50.31%, #cc1a27 100%);
-    --dot-odd-border: linear-gradient(180deg, #ff8e95 6.04%, #a80915 100%);
-    --dot-odd-text-color: #fff;
-    --dot-odd-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5);
-
-    --bigSmall-dot-big-background: linear-gradient(180deg, #3f7fca 0%, #225694 100%);
-    --bigSmall-dot-big-border: linear-gradient(180deg, #4c91e2 0%, #0e3462 100%);
-    --bigSmall-dot-big-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5);
-    --bigSmall-big-text-color: #3b7bc6;
-
-    --bigSmall-dot-small-background: linear-gradient(180deg, #ff6e79 6.04%, #e73542 50.31%, #cc1a27 100%);
-    --bigSmall-dot-small-border: linear-gradient(180deg, #ff8e95 6.04%, #a80915 100%);
-    --bigSmall-dot-small-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5);
-    --bigSmall-small-text-color: #de4b56;
-
-    --dragonTiger-dot-dragon-background: linear-gradient(180deg, #ffbc56 0%, #ff9a00 100%);
-    --dragonTiger-dot-dragon-border: linear-gradient(180deg, #ffb57c 0%, #d56109 100%);
-    --dragonTiger-dot-dragon-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5);
-    --dragonTiger-dragon-text-color: #ff9a00;
-
-    --dragonTiger-dot-tiger-background: linear-gradient(180deg, #ff6e79 6.04%, #e73542 50.31%, #cc1a27 100%);
-    --dragonTiger-dot-tiger-border: linear-gradient(180deg, #ff8e95 6.04%, #a80915 100%);
-    --dragonTiger-dot-tiger-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5);
-    --dragonTiger-tiger-text-color: #ff3434;
-
-    --dragonTiger-dot-tie-background: linear-gradient(180deg, #40a0b1 0%, #235f6a 100%);
-    --dragonTiger-dot-tie-border: linear-gradient(180deg, #4dbdd1 0%, #084c58 100%);
-    --dragonTiger-dot-tie-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5);
-    --dragonTiger-tie-text-color: #235f6a;
-
-    --baccarat-dot-banker-background: linear-gradient(180deg, #40a0b1 0%, #235f6a 100%);
-    --baccarat-dot-banker-border: linear-gradient(180deg, #4dbdd1 0%, #084c58 100%);
-    --baccarat-dot-banker-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5);
-    --baccarat-tie-banker-color: #235f6a;
-
-    --baccarat-dot-banker-background: linear-gradient(180deg, #ff6e79 6.04%, #e73542 50.31%, #cc1a27 100%);
-    --baccarat-dot-banker-border: linear-gradient(180deg, #ff8e95 6.04%, #a80915 100%);
-    --baccarat-dot-banker-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5);
-    --baccarat-banker-text-color: #ff3434;
-
-    --baccarat-dot-player-background: linear-gradient(180deg, #3f7fca 0%, #225694 100%);
-    --baccarat-dot-player-border: linear-gradient(180deg, #4c91e2 0%, #0e3462 100%);
-    --baccarat-dot-player-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5);
-    --baccarat-player-text-color: #3b7bc6;
-
-    --baccarat-dot-tie-background: linear-gradient(180deg, #24cf4a 0%, #0f9e2f 100%);
-    --baccarat-dot-tie-border: linear-gradient(180deg, #2ee457 0%, #10903c 100%);
-    --baccarat-dot-tie-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5);
-    --baccarat-tie-text-color: #fff;
-    --baccarat-tie-statistic-text-color: #36d000;
-
-    --keno-pro-even-statistic-text-color: #3b7bc6;
-    --keno-pro-odd-statistic-text-color: #ff4352;
-    --keno-pro-gold-statistic-text-color: #ff9a00;
-    --keno-pro-wood-statistic-text-color: #18b43b;
-    --keno-pro-water-statistic-text-color: #3b7bc6;
-    --keno-pro-fire-statistic-text-color: #ff4352;
-    --keno-pro-earth-statistic-text-color: #ba5600;
-
-    --keno-pro-dot-earth-background: linear-gradient(180deg, #e1802e 0%, #c56f26 100%);
-    --keno-pro-dot-earth-border: linear-gradient(180deg, #ff9c4a 0%, #a24702 100%);
-    --keno-pro-dot-earth-shadow: 0px 1px 1px rgba(0, 0, 0, 0.4);
-
-    --keno-pro-dot-fire-background: linear-gradient(180deg, #ff636f 6.04%, #e73542 50.31%, #cc1a27 100%);
-    --keno-pro-dot-fire-border: linear-gradient(180deg, #f63643 6.04%, #990510 100%);
-    --keno-pro-dot-fire-shadow: 0px 1px 1px rgba(0, 0, 0, 0.4);
-
-    --keno-pro-dot-water-background: linear-gradient(180deg, #3a78c0 0%, #285f9f 100%);
-    --keno-pro-dot-water-border: linear-gradient(180deg, #4c91e2 0%, #193f63 100%);
-    --keno-pro-dot-water-shadow: 0px 1px 1px rgba(0, 0, 0, 0.4);
-
-    --keno-pro-dot-wood-background: linear-gradient(180deg, #24cf4a 0%, #0f9e2f 100%);
-    --keno-pro-dot-wood-border: linear-gradient(180deg, #2ee457 0%, #10903c 100%);
-    --keno-pro-dot-wood-shadow: 0px 1px 1px rgba(0, 0, 0, 0.4);
-
-    --keno-pro-dot-gold-background: linear-gradient(180deg, #ffb94e 0%, #ff9a00 100%);
-    --keno-pro-dot-gold-border: linear-gradient(180deg, #ffcc7e 0%, #cf7d00 100%);
-    --keno-pro-dot-gold-shadow: 0px 1px 1px rgba(0, 0, 0, 0.4);
-
-    --threeCards-dot-red-background: linear-gradient(180deg, #ff636f 6.04%, #e73542 50.31%, #cc1a27 100%);
-    --threeCards-dot-red-border: linear-gradient(180deg, #f63643 6.04%, #990510 100%);
-    --threeCards-dot-red-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5);
-    --threeCards-dot-red-text-color: #fff;
-    --three-cards-red-statistic-text-color: #ff4352;
-
-    --threeCards-dot-black-background: linear-gradient(180deg, #55657c 0%, #2d3d52 100%);
-    --threeCards-dot-black-border: linear-gradient(180deg, #627591 0%, #0d213d 100%);
-    --threeCards-dot-black-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5);
-    --threeCards-black-text-color: #fff;
+    // spacing size
+    --spacing-size-1: 0.4rem;
+    --spacing-size-2: 0.8rem;
+    --spacing-size-3: 1.2rem;
+    --spacing-size-4: 1.6rem;
+    --spacing-size-5: 2rem;
+    --spacing-size-6: 2.4rem;
 }
 
 [data-theme="light"] {
-    --page-background-color: #fff;
-    --page-background-image: url("/static/images/themes/background-theme-light.jpg");
+    --page-background-color: #000000;
+    --game-background-image: url("/images/bg-show-result.jpg");
+    --background-image: url("/images/bg-1.jpg");
     --text-color: #2c2f3e;
 
-    --border-color: #C5CBDB;
+    --border-color: #c5cbdb;
 
     --opacity-background: rgba(12, 12, 12, 0.36);
     --opacity-background-grey: rgba(221, 221, 221, 0.6);
@@ -190,7 +85,7 @@ html {
     --dropdown-shadow: 0px 5px 8px rgba(0, 0, 0, 0.2);
     --dropdown-item-color: var(-text-color);
     --dropdown-item-background: #fff;
-    --dropdown-item-background-hover: #F5EEB8;
+    --dropdown-item-background-hover: #f5eeb8;
     --dropdown-item-color-hover: var(-text-color);
 
     --icon-close-background: #eaebf0;
@@ -233,11 +128,16 @@ body {
 body {
     padding: 0;
     margin: 0;
-    background: var(--page-background-color) var(--page-background-image) no-repeat center center fixed;
-    background-size: cover;
+    background: var(--page-background-color) var(--background-image) no-repeat top center fixed;
+    //background-size: cover;
     font: 500 1.4rem/1.5 var(--font-family);
     color: var(--text-color);
     overscroll-behavior: contain;
+    background-size: auto;
+
+    @media screen and (orientation: portrait) {
+        background-size: cover;
+    }
 }
 
 .no-scroll-html {
@@ -259,13 +159,86 @@ body {
 .game-container {
     position: relative;
     width: 100%;
-    margin: 0 auto;
+}
 
-    &.game-wrapper {
-        margin-top: 4.4rem;
-    }
+.countdown-timer {
+    position: absolute;
+    top: 1.5rem;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    font-size: 1.7rem;
+    color: white;
+}
 
-    @media (min-width: 1260px) {
-        width: 126.7rem;
+.round-id {
+    padding-left: 1.2rem;
+    line-height: 3.2rem;
+    font-size: 1rem;
+    color: white;
+}
+
+.game-name {
+    font-family: "BeVietNam", sans-serif;
+    font-weight: 700;
+}
+
+.circle-percentage {
+    stroke: var(--color);
+}
+
+.text-percentage {
+    fill: var(--color);
+}
+
+.icon-coin,
+.icon-user {
+    color: var(--color);
+}
+
+.bet-name,
+.bet-odds {
+    font-size: 14px;
+    font-weight: 500;
+    color: white;
+    text-transform: uppercase;
+}
+
+.bet-odds {
+    line-height: 1;
+}
+
+.own-bet {
+    position: absolute;
+    bottom: 5px;
+    left: 0;
+    right: 0;
+    height: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .bet-value {
+        display: flex;
+        align-items: center;
+        font-size: 11px;
+        font-weight: 600;
+        color: white;
+        padding: 0 4px;
+        border-radius: 10px;
+        background: linear-gradient(133deg, rgba(53, 206, 97, 1) 0%, rgba(11, 178, 66, 1) 100%);
+
+        &::before {
+            content: "";
+            position: relative;
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            margin-right: 2px;
+            background: url(/images/coin-outline.svg) no-repeat 50%;
+            background-size: contain;
+            vertical-align: middle;
+        }
     }
 }

@@ -8,11 +8,8 @@
     justify-content: center;
     height: 5rem;
     width: 3rem;
-    color: #fff;
-    font-size: 2rem;
-    @media (min-width: 768px) {
-        top: calc(50% - 2.5rem);
-    }
+
+    background: url("/static/images/icon-arrow-back.svg") no-repeat center;
 
     &:hover:not(.disabled) {
         cursor: pointer;
@@ -31,48 +28,28 @@
             color: #4ee42c;
         }
     }
-
-    &:before {
-        content: "▲";
-    }
 }
 
 .icon-prev {
     @extend %icon;
-    left: -2rem;
-    transform: rotate(-90deg);
-
-    @media (min-width: 768px) {
-        left: -4rem;
-    }
+    left: -2.5rem;
 }
 
 .icon-next {
     @extend %icon;
-    right: -2rem;
-    transform: rotate(90deg);
-
-    @media (min-width: 768px) {
-        right: -4rem;
-    }
+    right: -2.5rem;
+    transform: scale(-1);
 }
 
 .chip-container {
     --chip-highlight-width: calc(4rem * var(--ratio) + 1.4rem);
     --chip-highlight-height: calc(4.174rem * var(--ratio) + 1.4rem);
-    @media (min-width: 768px) {
-        --chip-highlight-width: calc(4.6rem * var(--ratio) + 1.4rem);
-        --chip-highlight-height: calc(4.8rem * var(--ratio) + 1.4rem);
-        .selected {
-            --ratio: 1.2;
-            top: -0.4rem;
-        }
-    }
+    --ratio: 1.1;
 
     transition: all -0.1s ease-in;
 
     &.selected {
-        --ratio: 1.1;
+        --ratio: 1.25;
         transition: all -0.1s ease-out;
 
         &:before {
@@ -154,46 +131,6 @@
                 url("/static/images/chips/active/chip-active-quick-bet@2x.png") 2x,
                 url("/static/images/chips/active/chip-active-quick-bet@3x.png") 3x
             );
-        }
-    }
-
-    @media (min-device-width: 375px) and (min-device-height: 667px) {
-        --ratio: 1.1;
-        &.selected {
-            --ratio: 1.25;
-        }
-    }
-
-    @media (min-width: 768px) and (max-width: 1024px) {
-        --ratio: 1.1;
-        --chip-highlight-width: calc(4.6rem * var(--ratio) + 1.4rem);
-        --chip-highlight-height: calc(4.8rem * var(--ratio) + 1.4rem);
-
-        &.selected {
-            --ratio: 1.3;
-            top: -0.5rem;
-        }
-    }
-
-    @media (min-width: 1025px) and (max-width: 1279px) {
-        --ratio: 1.2;
-        --chip-highlight-width: calc(4.6rem * var(--ratio) + 1.4rem);
-        --chip-highlight-height: calc(4.8rem * var(--ratio) + 1.4rem);
-
-        &.selected {
-            --ratio: 1.4;
-            top: -0.5rem;
-        }
-    }
-
-    @media (min-width: 1200px) {
-        --ratio: 1.3;
-        --chip-highlight-width: calc(4.6rem * var(--ratio) + 1.4rem);
-        --chip-highlight-height: calc(4.8rem * var(--ratio) + 1.4rem);
-
-        &.selected {
-            --ratio: 1.5;
-            top: -0.6rem;
         }
     }
 

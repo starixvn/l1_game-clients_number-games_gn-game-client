@@ -1,25 +1,24 @@
 [data-theme="light"] .category-container {
-    --game-category-background: #F1F1F5;
+    --game-category-background: #f1f1f5;
     --game-category-border: #969696;
-    --game-category-border-active-color: #FE6B15;
+    --game-category-border-active-color: #fe6b15;
     --game-category-text-color: #545454;
-    --game-category-text-active-color: #FE6B15;
+    --game-category-text-active-color: #fe6b15;
 
     @media (min-width: 768px) {
         --game-category-border: #6d9cbb;
-        --game-category-border-active-color: #FE6B15;
+        --game-category-border-active-color: #fe6b15;
         --game-category-text-color: #28526d;
-        --game-category-text-active-color: #FE6B15;
+        --game-category-text-active-color: #fe6b15;
     }
 
     //--paging-item-hover-background: linear-gradient(180deg, #ffffff 0%, #c8c9c9 100%);
-    --paging-item-hover-background: #6582B1;
-    --paging-item-border: #5574AE;
-    --paging-item-text-color: #5574AE;
+    --paging-item-hover-background: #6582b1;
+    --paging-item-border: #5574ae;
+    --paging-item-text-color: #5574ae;
 }
 
 .category-container {
-    //border-bottom: 0.1rem solid var(--game-category-border);
     background: var(--game-category-background);
     overflow-x: auto;
     overflow-y: hidden;
@@ -29,72 +28,42 @@
     scrollbar-width: none;
     overscroll-behavior-y: contain;
     -ms-overscroll-behavior-y: contain;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    justify-content: center;
 
     &::-webkit-scrollbar {
         display: none;
-    }
-
-    @media (min-width: 768px) {
-        position: fixed;
-        left: 0;
-        width: 100%;
-        justify-content: center;
-        margin-bottom: 1rem;
-    }
-
-    @media (min-width: 1024px) {
-        overflow: initial;
-    }
-
-    &.mobile {
-        .category-text {
-            line-height: 2.8rem !important;
-        }
-
-        margin-bottom: 0.6rem;
     }
 }
 
 .category-list {
     display: flex;
-   
     margin-top: 0;
     margin-bottom: 0;
     padding: 0;
     list-style: none;
 
-    &.SM{
-        justify-content: flex-start;
+    &.SM {
+        justify-content: space-around;
     }
-    &.MK{
+    &.MK {
         justify-content: center;
-    }
-    
-    @media (min-width: 768px) {
-        justify-content: center;
-        padding-left: 1rem;
-        padding-right: 1rem;
     }
 
     @media (min-width: 1260px) {
-        width: 126rem;
+        max-width: 37.5rem;
         margin: 0 auto;
     }
 
     .category-item {
-        padding-left: 1.5rem;
-        padding-right: 1.5rem;        
-
-        @media (min-width: 1024px) {
-            padding-left: 3rem;
-            padding-right: 3rem;
-        }
-
         .category-text {
             line-height: 3.4rem;
             padding-left: 0.2rem;
             padding-right: 0.2rem;
-            font-size: 1.4rem;
+            font-size: 1rem;
             color: var(--game-category-text-color);
             white-space: nowrap;
             font-weight: bold;

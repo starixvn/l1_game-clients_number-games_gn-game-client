@@ -1,5 +1,6 @@
 {
     "umTitleFirst": "PLEASE COME BACK LATER.",
-    "umContent": "Starting from {0} to {1} (GMT+8)",
+    "umContentStart": "Starting from",
+    "umContent": "{0} to {1} (GMT+8)",
     "umNotice": "Please kindly re-login to continue playing games after the maintenance is complete."
 }
