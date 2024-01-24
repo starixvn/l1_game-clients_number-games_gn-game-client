@@ -161,7 +161,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
 
     protected initSocket() {
         const { socketInfo } = this.props;
-        const { session } = this.context;
+        const { session } = this.context as any;
         const { proxy, enableMsgpackParser } = getAppSettings();
         const socketUri = buildServerUrl(socketInfo.namespace);
         const socket = io(socketUri, {
@@ -170,7 +170,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
             path: `${proxy.path}/${socketInfo.path}/socket.io`,
             parser: enableMsgpackParser ? MsgpackParser : undefined,
         });
-        
+
         socket.on("connect", () => {
             this.clearDisconnectTimeout();
             document.visibilityState !== "hidden" && socket.emit("signin", session);
@@ -310,7 +310,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
     handleKickOut(errorCode: string) {
         (errorCode === "1001" || errorCode === "1002") &&
             setTimeout(() => {
-                this.context.signOut();
+                // this.context.signOut();
             }, 10000);
     }
 
@@ -406,7 +406,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
     };
 
     handleUserData({ user, gameConfigs }) {
-        this.context.setBalance(user.red);
+        //this.context.setBalance(user.red);
         gameConfigs && this.setState({ rate: user.rate });
     }
 
@@ -539,13 +539,12 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
     }
 
     async updateUserBalance() {
-        const balanceResponse = await getBalance(this.context.session);
-
-        if (balanceResponse.isSuccessful) {
-            this.context.setBalance(balanceResponse.balance);
-        } else {
-            this.props.setApiErrorMessage(balanceResponse.errorCode);
-        }
+        // const balanceResponse = await getBalance(this.context.session);
+        // if (balanceResponse.isSuccessful) {
+        //     this.context.setBalance(balanceResponse.balance);
+        // } else {
+        //     this.props.setApiErrorMessage(balanceResponse.errorCode);
+        // }
     }
 
     handleGameConfigs({ gameConfigs }) {

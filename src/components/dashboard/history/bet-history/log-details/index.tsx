@@ -20,7 +20,7 @@ const BetHistoryDetailsContainer: React.FC<Props> = ({
                 </div>
                 <div className={Styles["details"]}> {translateText.betDetails}</div>
                 <span className={`icon-close ${Styles["icon-close"]}`} onClick={closeModalBetHistory} data-testid="icon-close"></span>
-                {renderBetLogsDetails}
+                {renderBetLogsDetails as any}
             </div>
             {isShowResultDetail && renderResultDetail}
         </BaseDialog>

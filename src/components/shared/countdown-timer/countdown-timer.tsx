@@ -74,19 +74,19 @@ const Timer = () => {
 
     return (
         <div className={`${styles.timer} ${styles[gameName]}`}>
-            <CountdownCircleTimer {...timerProps} colors={[[ctx.gameState === GameState.LockingBet ? "#FF7B7B" : "#15E84B", 1]]}>
+            {/* <CountdownCircleTimer {...timerProps} colors={[[ctx.gameState === GameState.LockingBet ? "#FF7B7B" : "#15E84B", 1]]}>
                 {({ remainingTime }) => {
                     if (remainingTime === 0) {
                         return (1).toLocaleString("en-US", { minimumIntegerDigits: 2 });
                     }
                     return remainingTime.toLocaleString("en-US", { minimumIntegerDigits: 2 });
                 }}
-            </CountdownCircleTimer>
+            </CountdownCircleTimer> */}
         </div>
     );
 };
 
-const GameStatus: React.FC = ({ children }) => {
+const GameStatus: React.FC<{ children: React.ReactNode }> = ({ children }: { children: React.ReactNode }) => {
     const { gameSetting } = useGameContext();
     const gameName = gameSetting.gameName.toLocaleLowerCase();
     return <div className={`${styles["game-status"]} ${styles[gameName]}`}>{children}</div>;

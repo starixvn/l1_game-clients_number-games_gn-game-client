@@ -3,7 +3,7 @@ import { isMobileOnly } from "react-device-detect";
 import { buildVersion, isL1System } from "../../../common/constants";
 import Styles from "./container.module.scss";
 
-const FirstLoginContainer: React.FC = ({ children }) => {
+const FirstLoginContainer: React.FC<{ children: React.ReactNode }> = ({ children }: { children: React.ReactNode }) => {
     const logoTheme = isL1System() ? "logo-custom-saba-orange" : "logo-custom-vgaming";
 
     return (

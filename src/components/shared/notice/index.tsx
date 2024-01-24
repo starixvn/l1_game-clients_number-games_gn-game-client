@@ -16,7 +16,7 @@ interface Props {
     betChoice2?: string;
 }
 
-const BaseNotice: React.FC<{ onClose: () => void; duration: number; isOpen?: boolean; isWarning: boolean }> = ({
+const BaseNotice: React.FC<{ onClose: () => void; duration: number; isOpen?: boolean; isWarning: boolean; children: React.ReactNode }> = ({
     children,
     onClose,
     duration,

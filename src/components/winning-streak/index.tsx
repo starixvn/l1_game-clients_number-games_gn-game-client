@@ -52,6 +52,7 @@ const getTextOnIconChoice = (gameName: string, choice: string, translate: Functi
 
 const winningStreak = {};
 
+// eslint-disable-next-line react/display-name
 export const WinningStreak = forwardRef((props, ref) => {
     const { t } = useTranslation();
     const [winningStreakQueue, setWinningStreakQueue] = useState<{ [key: string]: WinningStreakItem }>({});
