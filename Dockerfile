@@ -1,4 +1,4 @@
-FROM hub.lumigame.com/base/node:16.19-alpine AS builder
+FROM hub.lumigame.com/base/node:20.9.0-alpine AS builder
 WORKDIR /app
 
 ENV YARN_CACHE_FOLDER=/root/.yarn
@@ -18,7 +18,7 @@ COPY src ./src
 
 RUN yarn build
 
-FROM hub.lumigame.com/base/node:16.19-alpine AS runner
+FROM hub.lumigame.com/base/node:20.9.0-alpine AS runner
 
 WORKDIR /app
 ENV NODE_ENV production

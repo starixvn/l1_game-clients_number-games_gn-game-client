@@ -59,4 +59,4 @@ const runObfuscationProcess = async (dirNames) => {
     }
 };
 
-runObfuscationProcess(["./configs/L1/", "./configs/L2/", "./configs/L1/mega-keno/", "./configs/L2/mega-keno/"]);
+runObfuscationProcess(["./configs/L1/", "./configs/L2/", "./configs/L1/mega-keno/", "./configs/L2/mega-keno/", "./configs/gn/"]);
