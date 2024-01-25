@@ -90,7 +90,7 @@ function Home() {
         return <SplashScreen locale={language}></SplashScreen>;
     }
 
-    return <UMPage locale={language} />;
+    return <Dashboard session={session} queryGame={+gameId} setIsUm={setIsUm} />;
 }
 
 export const getStaticProps = async ({ locale }) => {

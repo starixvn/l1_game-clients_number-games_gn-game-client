@@ -35,14 +35,19 @@ const UMPage: React.FC<{ locale: string }> = ({ locale }) => {
     return (
         <div className="error-page">
             <div className="um-background">
-                <img src="/static/images/um-planet.png" alt="background" />
+                <img className="star-bg" src="/static/images/um/star-bg.png" alt="background" width={344} />
+                <img src="/static/images/um/planet-center.png" alt="background" width={432} />
             </div>
-            <div className="um-moving-star">
-                <img className="um-star-tail" src="/static/images/icon-thunder.svg" alt="background" />
-                <img className="um-star-tail" src="/static/images/icon-thunder.svg" alt="background" />
+            <div className="um-moving-comet">
+                <img className="moving-comet comet-1" src="/static/images/um/comet-1.svg" alt="spaceman" />
+                <img className="moving-comet comet-2" src="/static/images/um/comet-2.svg" alt="spaceman" />
+                <img className="moving-comet comet-3" src="/static/images/um/comet-3.svg" alt="spaceman" />
+                <img className="moving-comet comet-4" src="/static/images/um/comet-4.svg" alt="spaceman" />
+                <img src="/static/images/um/plannet-1.svg" alt="spaceman" />
+                <img src="/static/images/um/plannet-2.svg" alt="spaceman" />
             </div>
             <div className="um-spaceman">
-                <img src="/static/images/um-spaceman.png" alt="spaceman" />
+                <img src="/static/images/um/um-spaceman.png" alt="spaceman" />
             </div>
             <p className="um-title">
                 {t("messages:sysMaintenance")} <br /> {t("um:umTitleFirst")}

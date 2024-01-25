@@ -60,43 +60,95 @@
 
 .um-spaceman {
     position: absolute;
-    transform: translateY(0);
-    animation: top-bottom 5s infinite;
-}
-
-.um-moving-star {
-    position: absolute;
-    width: 37.5rem;
-    height: 37.5rem;
-    transform: rotate(-30deg) translate(6rem, -8rem);
+    transform: translate(0, 0);
+    animation: spin 5s linear infinite;
 }
 
 .um-star-tail {
     position: absolute;
-    // animation: tail-star-move 10s infinite;
     z-index: 2;
 }
 
-@keyframes top-bottom {
-    0% {
-        transform: translateY(3rem);
+.um-background {
+    position: relative;
+}
+
+.star-bg {
+    position: absolute;
+    left: 4rem;
+    top: -8rem;
+    animation: star-bling 5s infinite;
+}
+
+.um-moving-comet {
+    position: absolute;
+    width: 37.5rem;
+    height: 37.5rem;
+    transform: translateY(-20rem);
+}
+
+.moving-comet {
+    position: absolute;
+    z-index: 2;
+    animation: comet-move 5s infinite;
+
+    &.comet-1 {
+        top: -2rem;
+        right: 0;
     }
-    50% {
-        transform: translateY(0);
+
+    &.comet-2 {
+        top: 0rem;
+        right: 15rem;
+        opacity: 0;
+        animation-delay: 1s;
     }
-    100% {
-        transform: translateY(3rem);
+
+    &.comet-3 {
+        top: 5rem;
+        right: 0;
+        opacity: 0;
+        animation-delay: 1.5s;
+    }
+
+    &.comet-4 {
+        top: 13rem;
+        right: 0rem;
+        opacity: 0;
+        animation-delay: 2s;
     }
 }
 
-@keyframes tail-star-move {
-    0% {
-        transform: translate(200vw);
-        opacity: 0.4;
+@keyframes spin {
+    from {
+        transform: rotate(0deg) translate(-10px) rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg) translate(-10px) rotate(-360deg);
+    }
+}
+
+@keyframes star-bling {
+    0%,
+    100% {
+        opacity: 0.5;
     }
 
+    50% {
+        opacity: 1;
+    }
+}
+
+@keyframes comet-move {
+    20%,
     100% {
-        transform: translateX(-200vw);
-        opacity: 0.8;
+        opacity: 0;
+        transform: translate(-38rem, 28rem);
+    }
+    0% {
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
     }
 }

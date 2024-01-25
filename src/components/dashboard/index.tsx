@@ -13,7 +13,7 @@ import { GetLocalizedErrorMessage } from "../../helpers/notice-helper";
 import { authorize, getSettingGames, reCheckIn } from "../../services/auth-service";
 import { updateSignInSMStatus, updateThemeSetting } from "../../services/user-setting-service";
 import BetSettings from "../bet-settings";
-import Games from "../games/games";
+
 import Header from "../header";
 import BaseDialog from "../shared/base-dialog";
 import { ModalType } from "../shared/base-dialog/type";
@@ -29,6 +29,7 @@ import { AnnouncementModal } from "./announcement";
 import { ToolbarGuide } from "../hide-toolbar-guide";
 import { buildUrl } from "../../helpers/url-helper";
 import RoundResult from "../shared/round-result";
+import Games from "../../games/games";
 
 const orientationType = { portrait: "portrait", landscape: "landscape" };
 class Dashboard extends React.PureComponent<Props, State> {
