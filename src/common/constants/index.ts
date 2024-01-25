@@ -20,9 +20,6 @@ export interface RoundResultData {
 
 export const systemName = getAppSettings().system.toLocaleLowerCase();
 
-export const isL1System = () => {
-    return systemName === "l1";
-};
 
 export const ChipMapper = {
     gn: {

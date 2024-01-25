@@ -1,5 +1,5 @@
 import React from "react";
-import { buildVersion, isL1System, locales, systemName } from "../../common/constants";
+import { buildVersion, locales, systemName } from "../../common/constants";
 import Styles from "./splash-screen.module.scss";
 
 export default function SplashScreen({ locale }) {
@@ -12,7 +12,7 @@ export default function SplashScreen({ locale }) {
                 height="96"
                 alt="Logo"
             />
-            {locale === locales.vi && isL1System() && (
+            {locale === locales.vi && (
                 <img
                     src={`/static/images/splash-screen/${locale}/info.svg`}
                     className={Styles["info"]}

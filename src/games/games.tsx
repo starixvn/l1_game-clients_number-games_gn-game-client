@@ -17,7 +17,6 @@ import {
 } from "../components/game-category/constants";
 import { WinningStreak } from "../components/winning-streak";
 import { WinningStreakItem } from "../components/winning-streak/winning-streak.type";
-import FishPrawnCrab from "./fish-prawn-crab";
 import styles from "./games.module.scss";
 import { Props } from "./type";
 import messageTransmitter from "../helpers/message-transmitter";

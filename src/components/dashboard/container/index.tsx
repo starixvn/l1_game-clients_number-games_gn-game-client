@@ -1,6 +1,6 @@
 import React from "react";
 import { isMobileOnly } from "react-device-detect";
-import { buildVersion, isL1System } from "../../../common/constants";
+import { buildVersion } from "../../../common/constants";
 import Styles from "./container.module.scss";
 
 const FirstLoginContainer: React.FC<{ children: React.ReactNode }> = ({ children }: { children: React.ReactNode }) => {
