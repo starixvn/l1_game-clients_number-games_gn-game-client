@@ -5,23 +5,18 @@ export const GamesInOnePage = 20;
 
 export const GameCategoryConfig = {
     [AppTypes.mobile]: {
-        hot: [3],
-        dice: [3],
-        favorite: [3],
+        hot: [1111],
         newNumberGames: [1111, 1112, 1113, 1114, 1115, 1116],
     },
 };
 
 export enum GameCategoryType {
     hot,
-    dice,
-    favorite,
     newNumberGames,
 }
 
 const SystemGameCategory = {
-    ["L1"]: [GameCategoryType.hot, GameCategoryType.dice, GameCategoryType.favorite, GameCategoryType.newNumberGames],
-    ["L2"]: [GameCategoryType.hot, GameCategoryType.dice, GameCategoryType.favorite, GameCategoryType.newNumberGames],
+    ["GN"]: [GameCategoryType.hot, GameCategoryType.newNumberGames],
 };
 
 export const favoriteGameIdIgnore = []; // TODO: Consider later

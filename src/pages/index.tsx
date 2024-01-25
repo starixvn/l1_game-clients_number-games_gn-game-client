@@ -27,7 +27,19 @@ function Home() {
 
     useEffect(() => {
         const signIn = async () => {
-            const userSession = await getUserSession(token as string);
+            // const userSession = await getUserSession(token as string);
+
+            const userSession = {
+                "isAuthenticated": true,
+                "umInfo": null,
+                "username": "ONEworks1_1646865",
+                "language": "vi-VN",
+                "ss": "nvkWjTVeXnGJdut24cRqg3TBR03s6s90_ONEworks1_1646865",
+                "system": 2,
+                "memberName": "username_1646865",
+                "rate": 1,
+                "isUM": false
+            };
 
             if (!userSession) {
                 router.push("timeout");

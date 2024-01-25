@@ -1,9 +1,9 @@
-import Link from "next/link";
-import RoundResult from "../../shared/round-result";
-import Ball from "../../shared/ball";
-import PercentageCircle from "../../shared/percentage-circle";
+
+import RoundResult from "../../components/shared/round-result";
+import Ball from "../../components/shared/ball";
+import PercentageCircle from "../../components/shared/percentage-circle";
 import Style from "./next-ball.module.scss";
-import { RoundResultData } from "../../../common/constants";
+import { RoundResultData } from "../../common/constants";
 
 interface BetOptionData {
     betChoice: string;

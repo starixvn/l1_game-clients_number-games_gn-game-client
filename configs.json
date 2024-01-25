@@ -16,6 +16,6 @@
     "enableSourceMap": true,
     "subGuideDomain": "l1-guide-3",
     "enableMsgpackParser": false,
-    "system": "L1",
+    "system": "GN",
     "appType": 2
 }

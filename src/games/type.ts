@@ -1,4 +1,4 @@
-import { UserStakeLevel } from "../shared/game-base/type";
+import { UserStakeLevel } from "../components/shared/game-base/type";
 
 export type Props = {
     betValue: number;

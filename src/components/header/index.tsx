@@ -1,9 +1,5 @@
 import React from "react";
-import { isMobileOnly } from "react-device-detect";
 import { User } from "sc-user-service-client/dist/auth";
-import { getAppSettings } from "../../common/app-settings";
-import { AppTypes, buildVersion, isL1System } from "../../common/constants";
-
 import { Settings } from "../shared/settings";
 import { UserInfo } from "../user-info";
 import Styles from "./header.module.scss";
@@ -28,11 +24,7 @@ type Props = {
 };
 
 export const getLogoName = () => {
-    if (getAppSettings().appType === AppTypes.megaKeno) {
-        return isL1System() ? "saba-mega-keno" : "mega-keno";
-    }
-
-    return isL1System() ? "saba" : "vgaming";
+    return "new-number-game";
 };
 
 const Header: React.FC<Props> = (props) => {

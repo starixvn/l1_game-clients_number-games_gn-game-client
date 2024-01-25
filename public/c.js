@@ -16,6 +16,6 @@ window.envConfig = {
     enableSourceMap: true,
     subGuideDomain: "l1-guide",
     enableMsgpackParser: false,
-    system: "L1",
+    system: "GN",
     appType: 2,
 };

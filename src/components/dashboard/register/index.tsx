@@ -2,7 +2,7 @@ import { Trans, useTranslation } from "next-i18next";
 import React, { useState } from "react";
 import { AuthorizeResponse, Response, SSOResponse } from "sc-user-service-client/dist/auth";
 
-import { sabaClubName, sabaMobileName, vGamingName, vGamingMobileName, Themes, systemName, isL1System } from "../../../common/constants";
+import { sabaClubName, sabaMobileName, Themes } from "../../../common/constants";
 import { GetLocalizedErrorMessage } from "../../../helpers/notice-helper";
 import { randomInteger } from "../../../helpers/number-helper";
 import { createNickname } from "../../../services/auth-service";
@@ -40,13 +40,13 @@ export default function Register({ session, handleStateLogin }: Props) {
             return;
         }
         const response = await createNickname(session, name, selectedAvatarId);
-        const authorizeResponse = response as AuthorizeResponse;
+        const authorizeResponse = response as any;
         if (authorizeResponse && authorizeResponse.authorized) {
             updateThemeSetting(session);
             Object.assign(authorizeResponse.user, { settings: { theme: Themes.light } });
             handleStateLogin(authorizeResponse);
         } else {
-            setNameInValid(t(GetLocalizedErrorMessage((response as Response).errorCode)));
+            setNameInValid(t(GetLocalizedErrorMessage((response as any).errorCode)));
             setIsValidUserName(false);
         }
     };
@@ -87,26 +87,24 @@ export default function Register({ session, handleStateLogin }: Props) {
                 <TextBlock>
                     <Trans t={t}>
                         {t(
-                            `register:registerTitle1-${systemName}-apptype${getAppSettings().appType}`,
-                            isL1System() ? { sabaMobileName: sabaMobileName } : { vGamingMobileName: vGamingMobileName }
+                            `register:registerTitle1-l1-apptype${getAppSettings().appType}`,
+                            { sabaMobileName: sabaMobileName }
                         )}
                     </Trans>
                 </TextBlock>
                 <TextBlock>
                     <Trans t={t}>
                         {t(
-                            `register:registerTitle2-${systemName}-apptype${getAppSettings().appType}`,
-                            isL1System()
-                                ? { sabaMobileName: sabaMobileName, sabaClubName: sabaClubName }
-                                : { vGamingMobileName: vGamingMobileName, vGamingName: vGamingName }
+                            `register:registerTitle2-l1-apptype${getAppSettings().appType}`,
+                            { sabaMobileName: sabaMobileName, sabaClubName: sabaClubName }
                         )}
                     </Trans>
                 </TextBlock>
                 <TextBlock>
                     <Trans t={t}>
                         {t(
-                            `register:registerTitle3-${systemName}-apptype${getAppSettings().appType}`,
-                            isL1System() ? { sabaClubName: sabaClubName } : { vGamingName: vGamingName }
+                            `register:registerTitle3-l1-apptype${getAppSettings().appType}`,
+                            { sabaClubName: sabaClubName }
                         )}
                     </Trans>
                 </TextBlock>

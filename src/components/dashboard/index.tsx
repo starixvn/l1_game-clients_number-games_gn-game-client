@@ -24,7 +24,7 @@ import Register from "./register";
 import Styles from "./dashboard.module.scss";
 import { io, Socket } from "socket.io-client";
 import MsgpackParser from "socket.io-msgpack-parser";
-import { isL1System, Themes } from "../../common/constants";
+import { Themes } from "../../common/constants";
 import { AnnouncementModal } from "./announcement";
 import { ToolbarGuide } from "../hide-toolbar-guide";
 import { buildUrl } from "../../helpers/url-helper";
@@ -56,7 +56,7 @@ class Dashboard extends React.PureComponent<Props, State> {
             isShowGuide: false,
             isShowAnnouncement: false,
             enabledQuickBet: false,
-            betValue: isL1System() ? 1 : 10,
+            betValue: 1,
             isBlockUI: false,
             isShowSlidingChip: isMobileOnly ? false : true,
             isShowBoostedOdds: false,
@@ -177,14 +177,14 @@ class Dashboard extends React.PureComponent<Props, State> {
         const { session, i18n } = this.props;
         const authorizeResponse = await authorize(session);
 
-        const errorResponse = authorizeResponse as Response;
+        const errorResponse = authorizeResponse as any;
 
         if (errorResponse && errorResponse.errorCode === "SB0002") {
             this.props.router.push("/timeout", "/timeout", { locale: i18n.language });
             return;
         }
 
-        const authorizeInfo = authorizeResponse as AuthorizeResponse;
+        const authorizeInfo = authorizeResponse as any;
 
         this.updateAuthorizeInfo(authorizeInfo);
 
@@ -199,7 +199,7 @@ class Dashboard extends React.PureComponent<Props, State> {
             window.addEventListener("orientationchange", this.handleOrientation, false);
         }
 
-        this.connectNotificationSocket();
+        // this.connectNotificationSocket();
         await this.updateBetSettingGames();
     }
 
@@ -385,7 +385,7 @@ class Dashboard extends React.PureComponent<Props, State> {
     async updateBetSettingGames() {
         const { session } = this.props;
         const betSettings = await getSettingGames(session);
-        this.setState({ settingGames: betSettings.settingGames });
+        this.setState({ settingGames: betSettings.settingGames as any });
     }
 
     toggleSlidingChip() {

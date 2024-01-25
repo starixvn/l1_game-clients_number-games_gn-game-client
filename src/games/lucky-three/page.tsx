@@ -1,10 +1,10 @@
 import Link from "next/link";
-import RoundResult from "../../shared/round-result";
-import Ball from "../../shared/ball";
-import PercentageCircle from "../../shared/percentage-circle";
+import RoundResult from "../../components/shared/round-result";
+import Ball from "../../components/shared/ball";
+import PercentageCircle from "../../components/shared/percentage-circle";
 import Style from "./lucky-three.module.scss";
-import { BetOptionData, RoundResultData } from "../../../common/constants";
-import Dot from "../../shared/dot";
+import { BetOptionData, RoundResultData } from "../../common/constants";
+import Dot from "../../components/shared/dot";
 
 const resultData: RoundResultData[] = [
     {

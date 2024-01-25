@@ -24,25 +24,29 @@ import messageTransmitter from "../helpers/message-transmitter";
 import { buildSocketGatewayUrl } from "../helpers/url-helper";
 import { AppTypes } from "../common/constants";
 import BacBall from "./bac-ball/page";
-import { FavoriteGuide } from "../components/favorite-guide";
 import { GameCategory } from "../components/game-category";
 import { ViewMode } from "../components/shared/game-base/type";
+import HappyFour from "./happy-four/page";
+import HappyWheel from "./happyWheel/page";
+import SicBalls from "./sic-balls/page";
+import NextBall from "./next-ball/page";
+import LuckyThree from "./lucky-three/page";
 
 let gamesOrder = [];
 const getRenderGames = (selectedCategory: GameCategoryType, selectedPage: number, favoriteGames: number[], userOfferGames: number[]) => {
     if (selectedCategory === GameCategoryType.newNumberGames) {
         return GameCategoryConfig[AppTypes.mobile].newNumberGames;
     }
-    const tabGames =
-        selectedCategory !== GameCategoryType.favorite
-            ? GameCategoryConfig[getAppSettings().appType][GameCategoryType[selectedCategory]]
-            : favoriteGames;
-    const tabFavoriteGames = favoriteGames.filter((gameId) => tabGames.includes(gameId) && getAppSettings().offeredGames.includes(gameId));
-    const tabUnfavoriteGames = getAppSettings().offeredGames.filter(
+
+    if (selectedCategory === GameCategoryType.hot) {
+        return GameCategoryConfig[AppTypes.mobile].hot;
+    }
+    const tabGames = GameCategoryConfig[getAppSettings().appType][GameCategoryType[selectedCategory]];
+
+    gamesOrder = getAppSettings().offeredGames.filter(
         (gameId) => !favoriteGames.includes(gameId) && tabGames.includes(gameId)
     );
 
-    gamesOrder = tabFavoriteGames.concat(tabUnfavoriteGames);
     const startIndex = gamesOrder.length > (selectedPage - 1) * GamesInOnePage ? (selectedPage - 1) * GamesInOnePage : 0;
 
     return gamesOrder.filter((game) => userOfferGames.includes(game)).slice(startIndex, startIndex + GamesInOnePage);
@@ -143,11 +147,7 @@ export const Games: React.FC<Props> = ({
             userOfferGames
         );
 
-        return renderGames.length === 0 && selectedCategory === GameCategoryType.favorite ? (
-            <FavoriteGuide />
-        ) : (
-            renderGames.map((gameId, index) => getGameComponentById(gameId, index))
-        );
+        return renderGames.map((gameId, index) => getGameComponentById(gameId, index));
     };
 
     const getGameComponentById = (gameId: number, index: number) => {
@@ -177,11 +177,20 @@ export const Games: React.FC<Props> = ({
         };
 
         switch (gameId) {
-            case 3:
-                return <FishPrawnCrab key={`game-${gameId}`} {...gameProps} />;
-
+            // case 3:
+            //     return <FishPrawnCrab key={`game-${gameId}`} {...gameProps} />;
             case 1111:
                 return <BacBall />;
+            case 1112:
+                return <HappyFour />;
+            case 1113:
+                return <HappyWheel />;
+            case 1114:
+                return <LuckyThree />;
+            case 1115:
+                return <NextBall />;
+            case 1116:
+                return <SicBalls />;
 
             default:
                 return null;

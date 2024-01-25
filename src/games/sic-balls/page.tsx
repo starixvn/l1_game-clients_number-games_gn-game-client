@@ -1,11 +1,11 @@
 "use client";
 import Link from "next/link";
 
-import RoundResult from "../../shared/round-result";
-import PercentageCircle from "../../shared/percentage-circle";
+import RoundResult from "../../components/shared/round-result";
+import PercentageCircle from "../../components/shared/percentage-circle";
 import Style from "./sic-balls.module.scss";
-import { BetOptionData, RoundResultData } from "../../../common/constants";
-import animationData from "../../../../public/images/sic-balls/light-anim.json";
+import { BetOptionData, RoundResultData } from "../../common/constants";
+import animationData from "../../../public/images/sic-balls/light-anim.json";
 import Lottie from "lottie-react";
 
 const resultData: RoundResultData[] = [

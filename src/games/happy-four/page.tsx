@@ -1,11 +1,10 @@
-import Link from "next/link";
 
-import RoundResult from "../../shared/round-result";
-import Ball from "../../shared/ball";
-import PercentageCircle from "../../shared/percentage-circle";
+import Ball from "../../components/shared/ball";
+import PercentageCircle from "../../components/shared/percentage-circle";
 import Style from "./happy-four.module.scss";
-import { BetOptionData, RoundResultData } from "../../../common/constants";
-import Dot from "../../shared/dot";
+import Dot from "../../components/shared/dot";
+import RoundResult from "../../components/shared/round-result";
+import { BetOptionData, RoundResultData } from "../../common/constants";
 
 const resultData: RoundResultData[] = [
     {
