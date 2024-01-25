@@ -4,7 +4,6 @@ import { getAppSettings } from "../../../common/app-settings";
 import BaseDialog from "../../shared/base-dialog";
 import GameSelector from "../../shared/game-selector";
 import Styles from "./history.module.scss";
-import FishPrawnCrabBetHistory from "../../../games/fish-prawn-crab/bet-history";
 
 export const HistoryModal: React.FC<{ onCloseModal: Function; offerGames: number[]; fractionalOddsFormat: boolean | undefined }> = ({
     onCloseModal,
@@ -21,8 +20,6 @@ export const HistoryModal: React.FC<{ onCloseModal: Function; offerGames: number
 
     const renderHistory = () => {
         switch (selectedGameId) {
-            case 3:
-                return <FishPrawnCrabBetHistory key={selectedGameId} gameId={selectedGameId} fractionalOddsFormat={fractionalOddsFormat} />;
             default:
                 return <></>;
         }

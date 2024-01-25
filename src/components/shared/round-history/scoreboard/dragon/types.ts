@@ -1,7 +1,7 @@
-import { Round, RoundKenoMatchBase } from "../../../../../types";
+import { Round } from "../../../../../types";
 
 export interface Props<R, S> {
-    roundHistory: Round<R, S>[] | RoundKenoMatchBase<R, S>[];
+    roundHistory: Round<R, S>[];
     dotDetails?: DotDetails;
     getRoundValue?: Function;
     isShowBlink?: boolean;
