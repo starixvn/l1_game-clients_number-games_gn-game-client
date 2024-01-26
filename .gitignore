@@ -30,3 +30,6 @@ yarn-error.log*
 
 *.orig
 *.snap
+
+# stryker temp files
+stryker-tmp
