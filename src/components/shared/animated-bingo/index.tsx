@@ -33,7 +33,13 @@ const AnimatedBingo = () => {
         // loadDrumNumberJson();
     }, []);
 
-    console.log("button", playAnim);
+    const renderButtonPlay = () => {
+        return (
+            <button className={Styles["button"]} onClick={() => setPlayAnim(!playAnim)}>
+                {playAnim ? "Play result" : "Reset result"}
+            </button>
+        );
+    };
 
     if (cageLoopFrames.length > 0 && drumBallFrames.length > 0) {
         return (
@@ -95,27 +101,7 @@ const AnimatedBingo = () => {
                     </div>
                 )}
 
-                {!playAnim && (
-                    <button
-                        className={Styles["button"]}
-                        onClick={() => {
-                            setPlayAnim(true);
-                        }}
-                    >
-                        Play result
-                    </button>
-                )}
-
-                {playAnim && (
-                    <button
-                        className={Styles["button"]}
-                        onClick={() => {
-                            setPlayAnim(false);
-                        }}
-                    >
-                        Reset Result
-                    </button>
-                )}
+                {renderButtonPlay()}
             </div>
         );
     } else {
