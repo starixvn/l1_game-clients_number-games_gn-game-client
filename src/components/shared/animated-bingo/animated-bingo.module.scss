@@ -1,58 +1,166 @@
 .ball {
-  width: 32px;
-  height: 32px;
-  position: relative;
+    width: 32px;
+    height: 32px;
+    position: relative;
 }
 
 .ball-border {
-  border: 1px solid #9c9c9c;
+    border: 1px solid #9c9c9c;
 }
 
 .ball-img {
-  position: absolute;
-  top: 0;
-  z-index: -1;
+    position: absolute;
+    top: 0;
+    z-index: -1;
 }
 
 .ball-number {
-  font-size: 13px;
-  height: 32px;
-  font-weight: bold;
-  color: #2c2f3e;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    font-size: 13px;
+    height: 32px;
+    font-weight: bold;
+    color: #2c2f3e;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .loading {
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 26px;
-  height: 26px;
-  border: solid 2px rgba(255, 255, 255, 0.5);
-  border-radius: 50%;
-  border-right-color: transparent;
-  border-bottom-color: transparent;
-  -webkit-transition: all 0.5s ease-in;
-  -webkit-animation-name: rotate;
-  -webkit-animation-duration: 1s;
-  -webkit-animation-iteration-count: infinite;
-  -webkit-animation-timing-function: linear;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 26px;
+    height: 26px;
+    border: solid 2px rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+    -webkit-transition: all 0.5s ease-in;
+    -webkit-animation-name: rotate;
+    -webkit-animation-duration: 1s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: linear;
 
-  transition: all 0.5s ease-in;
-  animation-name: rotate;
-  animation-duration: 1s;
-  animation-iteration-count: infinite;
-  animation-timing-function: linear;
+    transition: all 0.5s ease-in;
+    animation-name: rotate;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
 }
 
 @keyframes rotate {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* demo animation */
+
+.result-area {
+    position: relative;
+    display: grid;
+    grid: 1fr/1fr;
+    place-items: center;
+    place-content: center;
+    grid-template: "container";
+
+    --start-positionX: -30px;
+    --target-positionX: -45px;
+    --duration-slide-number: 0.75s;
+    --delay-time-slide-number: 1s;
+
+    --cage-width: 130px;
+    --cage-height: 130px;
+}
+
+.cage {
+    background: url(/images/animated-bingo/cage.png);
+    background-size: var(--cage-width) var(--cage-height);
+    width: var(--cage-width);
+    height: var(--cage-height);
+    margin: auto 0;
+    grid-area: container;
+    place-self: center center;
+}
+
+.cage-balls {
+    grid-area: container;
+    place-self: center center;
+}
+
+.cage-cover {
+    @extend .cage;
+    position: relative;
+    background: url(/images/animated-bingo/cage.png);
+    background-size: var(--cage-width) var(--cage-height);
+}
+
+.cage-border {
+    @extend .cage;
+    position: relative;
+    background: url(/images/animated-bingo/cage-border.png);
+    background-size: var(--cage-width) var(--cage-height);
+}
+
+.number {
+    grid-area: container;
+    place-self: center center;
+}
+
+.ball {
+    position: absolute;
+}
+
+.button {
+    position: relative;
+    z-index: 100;
+}
+
+.show {
+    display: block;
+}
+
+.hide {
+    display: none;
+}
+
+.number-text {
+    position: relative;
+    z-index: 20;
+    top: 0;
+    width: 78px;
+    height: 78px;
+    opacity: 0;
+    background: url(/images/animated-bingo/16.png);
+    background-size: 78px 78px;
+    transform-origin: center right;
+    right: var(--start-positionX);
+    animation: slide-left var(--duration-slide-number) var(--delay-time-slide-number) ease-out forwards;
+    transform: scale(0.55);
+}
+
+@keyframes slide-left {
+    0% {
+        opacity: 0;
+        transform: rotate(0deg) skew(20eg, 0deg) scale(0.55);
+        filter: blur(6px);
+    }
+
+    20% {
+        opacity: 0.5;
+        transform: rotateY(30deg) skew(0deg, 20eg) scale(0.55);
+    }
+
+    30% {
+        opacity: 1;
+        filter: blur(0);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translate(var(--target-positionX), 0) scale(0.55);
+    }
 }

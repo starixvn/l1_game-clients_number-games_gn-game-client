@@ -1,52 +1,126 @@
-import React from "react";
-import {
-  Stage,
-  Container,
-  AnimatedSprite,
-  useApp,
-  useTick,
-  Sprite,
-} from "@pixi/react";
-import Style from "./animated-bingo.module.scss";
+import { AnimatedSprite, Container, Stage } from "@pixi/react";
+import { Assets, Resource, Spritesheet, Texture } from "pixi.js";
+import React, { useEffect } from "react";
 
-const [width, height] = [500, 500];
-
-const images = [
-  "/images/animated-bingo/star-01.png",
-  "/images/animated-bingo/star-02.png",
-  "/images/animated-bingo/star-03.png",
-  "/images/animated-bingo/star-04.png",
-  "/images/animated-bingo/star-05.png",
-  "/images/animated-bingo/star-06.png",
-  "/images/animated-bingo/star-07.png",
-];
-
-const spriteshet = "/images/animated-bingo/animated-bingo.json";
+import Styles from "./animated-bingo.module.scss";
 
 const AnimatedBingo = () => {
-  const [playAnim, setPlayAnim] = React.useState(false);
-  console.log(playAnim);
+    const [playAnim, setPlayAnim] = React.useState(false);
+    console.log(playAnim);
+    const [cageLoopFrames, setCageLoopFrames] = React.useState<Texture<Resource>[]>([]);
+    const [drumBallFrames, setDrumBallFrames] = React.useState<Texture<Resource>[]>([]);
+    const [drumNumberFrames, setDrumNumberFrames] = React.useState<Texture<Resource>[]>([]);
 
-  return (
-    <div>
-      <Stage width={200} height={200} options={{ backgroundAlpha: 0 }}>
-        <Container position={[150, 150]}>
-          <AnimatedSprite
-            anchor={0.5}
-            images={images}
-            autoUpdate
-            isPlaying={playAnim}
-            initialFrame={0}
-            animationSpeed={0.2}
-            loop={false}
-          />
-        </Container>
-      </Stage>
-      <button className="button text-white" onClick={() => setPlayAnim(true)}>
-        Play
-      </button>
-    </div>
-  );
+    useEffect(() => {
+        const loadCageLoopsJson = async () => {
+            const sprite = await Assets.load<Spritesheet>("/images/animated-bingo/cage-balls.json");
+            setCageLoopFrames(sprite.animations["loop"]);
+        };
+        loadCageLoopsJson();
+
+        const loadDrumBallJson = async () => {
+            const sprite = await Assets.load<Spritesheet>("/images/animated-bingo/ball.json");
+            setDrumBallFrames(sprite.animations["blue"]);
+        };
+        loadDrumBallJson();
+
+        // const loadDrumNumberJson = async () => {
+        //   const sprite = await Assets.load<Spritesheet>(
+        //     "/images/animated-bingo/drum-ball-numbers.json"
+        //   );
+        //   setDrumNumberFrames(sprite.animations["16"]);
+        // };
+        // loadDrumNumberJson();
+    }, []);
+
+    console.log("button", playAnim);
+
+    if (cageLoopFrames.length > 0 && drumBallFrames.length > 0) {
+        return (
+            <div className={Styles["result-area"]}>
+                <div className={Styles["cage"]}></div>
+                <div className={Styles["cage-balls"]}>
+                    {playAnim && (
+                        <Stage width={130} height={130} options={{ backgroundAlpha: 0 }}>
+                            <Container position={[65, 65]}>
+                                <AnimatedSprite
+                                    anchor={0.5}
+                                    textures={cageLoopFrames}
+                                    autoUpdate
+                                    isPlaying={true}
+                                    initialFrame={0}
+                                    animationSpeed={0.6}
+                                    loop={false}
+                                />
+                            </Container>
+                        </Stage>
+                    )}
+                </div>
+                {/* <div className={Styles["cage-cover"]}></div> */}
+                <div className={Styles["cage-border"]}>
+                    <div className={Styles.ball}>
+                        {playAnim && (
+                            <Stage width={153} height={153} options={{ backgroundAlpha: 0 }}>
+                                <Container position={[73, 75]}>
+                                    <AnimatedSprite
+                                        anchor={0.5}
+                                        textures={drumBallFrames}
+                                        autoUpdate
+                                        isPlaying={true}
+                                        initialFrame={0}
+                                        animationSpeed={0.3}
+                                        loop={false}
+                                    />
+                                </Container>
+                            </Stage>
+                        )}
+                    </div>
+                </div>
+                {playAnim && (
+                    <div className={`${Styles["number"]} ${playAnim ? Styles["show"] : Styles["hide"]}}`}>
+                        {/* <Stage width={352} height={350} options={{ backgroundAlpha: 0 }}>
+                   <Container position={[250, 205]}>
+                       <AnimatedSprite
+                       anchor={0.5}
+                       textures={drumNumberFrames}
+                       autoUpdate
+                       isPlaying={true}
+                       initialFrame={0}
+                       animationSpeed={0.1}
+                       loop={true}
+                       />
+                   </Container>
+                   </Stage> */}
+                        <div className={Styles["number-text"]}></div>
+                    </div>
+                )}
+
+                {!playAnim && (
+                    <button
+                        className={Styles["button"]}
+                        onClick={() => {
+                            setPlayAnim(true);
+                        }}
+                    >
+                        Play result
+                    </button>
+                )}
+
+                {playAnim && (
+                    <button
+                        className={Styles["button"]}
+                        onClick={() => {
+                            setPlayAnim(false);
+                        }}
+                    >
+                        Reset Result
+                    </button>
+                )}
+            </div>
+        );
+    } else {
+        return null;
+    }
 };
 
 export default AnimatedBingo;

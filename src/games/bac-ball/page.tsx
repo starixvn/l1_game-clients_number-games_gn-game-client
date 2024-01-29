@@ -1,8 +1,9 @@
-import Style from "./bac-ball.module.scss";
-import RoundResult from "../../components/shared/round-result";
 import { BetOptionData, RoundResultData } from "../../common/constants";
+import AnimatedBingo from "../../components/shared/animated-bingo";
 import Ball from "../../components/shared/ball";
 import PercentageCircle from "../../components/shared/percentage-circle";
+import RoundResult from "../../components/shared/round-result";
+import Style from "./bac-ball.module.scss";
 
 const betData: BetOptionData[] = [
     {
@@ -91,7 +92,7 @@ export default function BacBall() {
                     </div>
                 </div>
             </div>
-
+            <AnimatedBingo />
             <div className={`${Style["betting-zone"]}`}>
                 <div className={Style["left-corner"]}></div>
                 <div className={Style["right-corner"]}></div>
