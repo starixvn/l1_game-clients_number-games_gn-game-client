@@ -47,48 +47,73 @@ const AnimatedBingo = () => {
 
     if (cageLoopFrames.length > 0 && ballFrames.length > 0) {
         return (
-            <div className={Styles["result-area"]}>
-                <div className={Styles["cage"]}></div>
-                <div className={Styles["cage-balls"]}>
-                    {playAnim && (
-                        <Stage width={130} height={130} options={{ backgroundAlpha: 0 }}>
-                            <Container position={[65, 65]}>
-                                <AnimatedSprite
-                                    anchor={0.5}
-                                    textures={cageLoopFrames}
-                                    autoUpdate
-                                    isPlaying={true}
-                                    initialFrame={0}
-                                    animationSpeed={0.6}
-                                    loop={false}
-                                />
-                            </Container>
-                        </Stage>
-                    )}
-                </div>
-                <div className={Styles["cage-cover"]}></div>
-                <div className={Styles["cage-border"]}>
-                    <div className={Styles.ball}>
-                        {playAnim && (
-                            <Stage width={153} height={153} options={{ backgroundAlpha: 0 }}>
-                                <Container position={[85, 86]}>
+            <div>
+                <div className={Styles["demo-title"]}>--------- Loop --------</div>
+                <div>
+                    <div className={Styles["result-area"]}>
+                        <div className={Styles["cage"]}></div>
+                        <div className={Styles["cage-balls"]}>
+                            <Stage width={130} height={130} options={{ backgroundAlpha: 0 }}>
+                                <Container position={[65, 65]}>
                                     <AnimatedSprite
                                         anchor={0.5}
-                                        textures={ballFrames}
+                                        textures={cageLoopFrames}
                                         autoUpdate
                                         isPlaying={true}
                                         initialFrame={0}
-                                        animationSpeed={0.3}
+                                        animationSpeed={0.6}
+                                        loop={true}
+                                    />
+                                </Container>
+                            </Stage>
+                        </div>
+                        <div className={Styles["cage-cover"]}></div>
+                        <div className={Styles["cage-border"]}></div>
+                    </div>
+                </div>
+                <div className={Styles["demo-title"]}>-------------------------</div>
+                <div className={Styles["result-area"]}>
+                    <div className={Styles["cage"]}></div>
+                    <div className={Styles["cage-balls"]}>
+                        {playAnim && (
+                            <Stage width={130} height={130} options={{ backgroundAlpha: 0 }}>
+                                <Container position={[65, 65]}>
+                                    <AnimatedSprite
+                                        anchor={0.5}
+                                        textures={cageLoopFrames}
+                                        autoUpdate
+                                        isPlaying={true}
+                                        initialFrame={0}
+                                        animationSpeed={0.6}
                                         loop={false}
                                     />
                                 </Container>
                             </Stage>
                         )}
                     </div>
-                </div>
-                {playAnim && (
-                    <div className={`${Styles["number"]} ${playAnim ? Styles["show"] : Styles["hide"]}}`}>
-                        {/* <Stage width={352} height={350} options={{ backgroundAlpha: 0 }}>
+                    <div className={Styles["cage-cover"]}></div>
+                    <div className={Styles["cage-border"]}>
+                        <div className={Styles.ball}>
+                            {playAnim && (
+                                <Stage width={153} height={153} options={{ backgroundAlpha: 0 }}>
+                                    <Container position={[85, 86]}>
+                                        <AnimatedSprite
+                                            anchor={0.5}
+                                            textures={ballFrames}
+                                            autoUpdate
+                                            isPlaying={true}
+                                            initialFrame={0}
+                                            animationSpeed={0.3}
+                                            loop={false}
+                                        />
+                                    </Container>
+                                </Stage>
+                            )}
+                        </div>
+                    </div>
+                    {playAnim && (
+                        <div className={`${Styles["number"]} ${playAnim ? Styles["show"] : Styles["hide"]}}`}>
+                            {/* <Stage width={352} height={350} options={{ backgroundAlpha: 0 }}>
                             <Container position={[250, 205]}>
                                 <AnimatedSprite
                                     anchor={0.5}
@@ -101,11 +126,12 @@ const AnimatedBingo = () => {
                                 />
                             </Container>
                         </Stage> */}
-                        <div className={Styles["number-text"]}>38</div>
-                    </div>
-                )}
+                            <div className={Styles["number-text"]}>38</div>
+                        </div>
+                    )}
 
-                {renderButtonPlay()}
+                    {renderButtonPlay()}
+                </div>
             </div>
         );
     } else {

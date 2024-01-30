@@ -1,12 +1,19 @@
 /* demo animation */
+.demo-title {
+    text-align: center;
+    color: #fff;
+    font-size: 2rem;
+    margin: 1rem;
+}
+
 .result-area {
-    --start-positionX: -30px;
-    --target-positionX: -40px;
+    --start-positionX: -3rem;
+    --target-positionX: -4rem;
     --duration-slide-number: 0.75s;
     --delay-time-slide-number: 0.65s;
 
-    --cage-width: 130px;
-    --cage-height: 130px;
+    --cage-width: 13rem;
+    --cage-height: 13rem;
 
     position: relative;
     display: grid;
@@ -17,8 +24,8 @@
 }
 
 %result {
-    width: 153px;
-    height: 153px;
+    width: 15.3rem;
+    height: 15.3rem;
     margin: auto 0;
     grid-area: container;
     place-self: center center;
@@ -63,13 +70,12 @@
     position: relative;
     z-index: 20;
     top: 0;
-    width: 58px;
-    height: 48px;
-    line-height: 48px;
-    font-weight: bold;
+    width: 5.8rem;
+    height: 4.8rem;
+    line-height: 4.8rem;
     text-align: center;
+    font-size: 4.8rem;
     opacity: 0;
-    font-size: 48px;
     transform-style: preserve-3d;
     transform-origin: center right;
     right: var(--start-positionX);
@@ -79,34 +85,34 @@
 @keyframes slide-left {
     0% {
         opacity: 0;
-        transform: rotateY(90deg) translateZ(5px) scale(0.7);
-        filter: blur(6px);
+        transform: rotateY(90deg) translateZ(0.5rem) scale(0.7);
+        filter: blur(0.6rem);
     }
 
     30% {
         opacity: 0.3;
-        filter: blur(4px);
-        transform: rotateY(70deg) translateZ(10px) scale(0.8);
+        filter: blur(0.4rem);
+        transform: rotateY(70deg) translateZ(1rem) scale(0.8);
     }
 
     70% {
         opacity: 0.6;
-        filter: blur(1px);
-        transform: rotateY(40deg) translateZ(8px) scale(0.9);
+        filter: blur(0.1rem);
+        transform: rotateY(40deg) translateZ(0.8rem) scale(0.9);
     }
 
     80% {
         filter: blur(0);
-        transform: translateX(-10px);
+        transform: translateX(-1rem);
     }
 
     98% {
         opacity: 1;
-        transform: translateX(-31px);
+        transform: translateX(-3.1rem);
     }
 
     100% {
         opacity: 1;
-        transform: translateX(-30px);
+        transform: translateX(-3rem);
     }
 }
