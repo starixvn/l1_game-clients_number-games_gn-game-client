@@ -1,0 +1,87 @@
+{"frames": {
+
+"highlight-winning-player-00.png":
+{
+	"frame": {"x":197,"y":599,"w":3,"h":3},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":0,"w":3,"h":3},
+	"sourceSize": {"w":210,"h":210}
+},
+"highlight-winning-player-01.png":
+{
+	"frame": {"x":109,"y":1077,"w":152,"h":54},
+	"rotated": true,
+	"trimmed": true,
+	"spriteSourceSize": {"x":5,"y":0,"w":152,"h":54},
+	"sourceSize": {"w":210,"h":210}
+},
+"highlight-winning-player-02.png":
+{
+	"frame": {"x":1,"y":1077,"w":153,"h":106},
+	"rotated": true,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":0,"w":153,"h":106},
+	"sourceSize": {"w":210,"h":210}
+},
+"highlight-winning-player-03.png":
+{
+	"frame": {"x":1,"y":922,"w":153,"h":159},
+	"rotated": true,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":0,"w":153,"h":159},
+	"sourceSize": {"w":210,"h":210}
+},
+"highlight-winning-player-04.png":
+{
+	"frame": {"x":1,"y":765,"w":155,"h":177},
+	"rotated": true,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":0,"w":155,"h":177},
+	"sourceSize": {"w":210,"h":210}
+},
+"highlight-winning-player-05.png":
+{
+	"frame": {"x":1,"y":599,"w":164,"h":194},
+	"rotated": true,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":0,"w":164,"h":194},
+	"sourceSize": {"w":210,"h":210}
+},
+"highlight-winning-player-06.png":
+{
+	"frame": {"x":1,"y":204,"w":181,"h":203},
+	"rotated": true,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":0,"w":181,"h":203},
+	"sourceSize": {"w":210,"h":210}
+},
+"highlight-winning-player-07.png":
+{
+	"frame": {"x":1,"y":1,"w":201,"h":206},
+	"rotated": true,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":0,"w":201,"h":206},
+	"sourceSize": {"w":210,"h":210}
+},
+"highlight-winning-player-08.png":
+{
+	"frame": {"x":1,"y":387,"w":202,"h":210},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":0,"w":202,"h":210},
+	"sourceSize": {"w":210,"h":210}
+}},
+"animations": {
+	"highlight-winning-player": ["highlight-winning-player-00.png","highlight-winning-player-01.png","highlight-winning-player-02.png","highlight-winning-player-03.png","highlight-winning-player-04.png","highlight-winning-player-05.png","highlight-winning-player-06.png","highlight-winning-player-07.png","highlight-winning-player-08.png"]
+},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "highlight-winning-player.png",
+	"format": "RGBA8888",
+	"size": {"w":208,"h":1231},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:b71b130d40c62daaa60c932aa6cf3b97:fa9a5cd327b700eb810f2b08d54fd988:523853c5e92ab68b7fa78a67daa5211f$"
+}
+}

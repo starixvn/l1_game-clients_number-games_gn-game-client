@@ -1,3 +1,7 @@
+import { AnimatedSprite, Container, Stage } from "@pixi/react";
+import { Assets, Resource, Spritesheet, Texture } from "pixi.js";
+import React, { useEffect } from "react";
+
 import { BetOptionData, RoundResultData } from "../../common/constants";
 import AnimatedBingo from "../../components/shared/animated-bingo";
 import Ball from "../../components/shared/ball";
@@ -63,6 +67,15 @@ export default function BacBall() {
         console.log("onClickTie");
     };
 
+    const [highlightWinningPlayerFrames, setHighlightWinningPlayerFrames] = React.useState<Texture<Resource>[]>([]);
+    useEffect(() => {
+        const loadCageLoopsJson = async () => {
+            const sprite = await Assets.load<Spritesheet>("/images/bac-number/highlight-winning-player.json");
+            setHighlightWinningPlayerFrames(sprite.animations["highlight-winning-player"]);
+        };
+        loadCageLoopsJson();
+    }, []);
+
     return (
         <>
             <div className="round-id">#2345</div>
@@ -94,7 +107,23 @@ export default function BacBall() {
             </div>
             <AnimatedBingo />
             <div className={`${Style["betting-zone"]}`}>
-                <div className={Style["left-corner"]}></div>
+                <div className={Style["left-corner"]}>
+                    {highlightWinningPlayerFrames.length > 0 && (
+                        <Stage width={210} height={210} options={{ backgroundAlpha: 0 }}>
+                            <Container position={[90, 95]}>
+                                <AnimatedSprite
+                                    anchor={0.5}
+                                    textures={highlightWinningPlayerFrames}
+                                    autoUpdate
+                                    isPlaying={true}
+                                    initialFrame={0}
+                                    animationSpeed={0.1}
+                                    loop={true}
+                                />
+                            </Container>
+                        </Stage>
+                    )}
+                </div>
                 <div className={Style["right-corner"]}></div>
                 <div className={`${Style["player"]} text-white relative`} onClick={onClickPlayer}>
                     <div className={`flex justify-between pt-5`}>
