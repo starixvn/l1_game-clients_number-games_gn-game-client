@@ -176,8 +176,6 @@ export const Games: React.FC<Props> = ({
         };
 
         switch (gameId) {
-            // case 3:
-            //     return <FishPrawnCrab key={`game-${gameId}`} {...gameProps} />;
             case 1111:
                 return <BacBall />;
             case 1112:

@@ -1,27 +1,30 @@
 import "../assets/errors.scss";
 import "../assets/main.scss";
-
 import { appWithTranslation } from "next-i18next";
 import { ThemeProvider } from "next-themes";
 import App, { AppProps } from "next/app";
 import Head from "next/head";
-
 import { buildVersion, systemName, Themes } from "../common/constants";
-import { getAppSettings } from "../common/app-settings";
+import { Profiler } from "react";
 
-interface KenoSoccerAppProps extends AppProps {
-    err: any;
-}
 
-class SabaMobiApp extends App<KenoSoccerAppProps> {
+class SabaNumberApp extends App<AppProps> {
+    callback(self) {
+        return (id, phase, actualTime, baseTime, startTime, commitTime) => {
+
+        }
+    }
+
     render() {
-        const { Component, pageProps, err } = this.props;
+        const { Component, pageProps } = this.props;
 
         return (
-            <ThemeProvider defaultTheme={Themes.light}>
-                <AppTilte />
-                <Component {...pageProps} err={err} />
-            </ThemeProvider>
+            <Profiler id="App" onRender={this.callback(this)}>
+                <ThemeProvider defaultTheme={Themes.light}>
+                    <AppTilte />
+                    <Component {...pageProps} />
+                </ThemeProvider>
+            </Profiler>
         );
     }
 }
@@ -35,4 +38,4 @@ export const AppTilte = () => {
     );
 };
 
-export default appWithTranslation(SabaMobiApp);
+export default appWithTranslation(SabaNumberApp);
