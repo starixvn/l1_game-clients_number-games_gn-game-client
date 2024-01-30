@@ -62,7 +62,7 @@ const AnimatedBingo = () => {
                         </Stage>
                     )}
                 </div>
-                {/* <div className={Styles["cage-cover"]}></div> */}
+                <div className={Styles["cage-cover"]}></div>
                 <div className={Styles["cage-border"]}>
                     <div className={Styles.ball}>
                         {playAnim && (
