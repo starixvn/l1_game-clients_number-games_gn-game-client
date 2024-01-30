@@ -8,20 +8,24 @@ const AnimatedBingo = () => {
     const [playAnim, setPlayAnim] = React.useState(false);
     console.log(playAnim);
     const [cageLoopFrames, setCageLoopFrames] = React.useState<Texture<Resource>[]>([]);
-    const [drumBallFrames, setDrumBallFrames] = React.useState<Texture<Resource>[]>([]);
+    const [ballFrames, setBallFrames] = React.useState<Texture<Resource>[]>([]);
     const [drumNumberFrames, setDrumNumberFrames] = React.useState<Texture<Resource>[]>([]);
 
     useEffect(() => {
-        const loadCageLoopsJson = async () => {
-            const sprite = await Assets.load<Spritesheet>("/images/animated-bingo/cage-balls.json");
-            setCageLoopFrames(sprite.animations["loop"]);
+        const loadAndSetFrames = async (url: string, animationKey: string, setFramesCallback) => {
+            const sprite = await Assets.load<Spritesheet>(url);
+            setFramesCallback(sprite.animations[animationKey]);
         };
-        loadCageLoopsJson();
 
-        const loadDrumBallJson = async () => {
-            const sprite = await Assets.load<Spritesheet>("/images/animated-bingo/ball.json");
-            setDrumBallFrames(sprite.animations["blue"]);
+        const loadCageLoopsJson = () => {
+            loadAndSetFrames("/images/animated-bingo/cage-balls.json", "loop", setCageLoopFrames);
         };
+
+        const loadDrumBallJson = () => {
+            loadAndSetFrames("/images/animated-bingo/ball.json", "blue", setBallFrames);
+        };
+
+        loadCageLoopsJson();
         loadDrumBallJson();
 
         // const loadDrumNumberJson = async () => {
@@ -41,7 +45,7 @@ const AnimatedBingo = () => {
         );
     };
 
-    if (cageLoopFrames.length > 0 && drumBallFrames.length > 0) {
+    if (cageLoopFrames.length > 0 && ballFrames.length > 0) {
         return (
             <div className={Styles["result-area"]}>
                 <div className={Styles["cage"]}></div>
@@ -70,7 +74,7 @@ const AnimatedBingo = () => {
                                 <Container position={[73, 75]}>
                                     <AnimatedSprite
                                         anchor={0.5}
-                                        textures={drumBallFrames}
+                                        textures={ballFrames}
                                         autoUpdate
                                         isPlaying={true}
                                         initialFrame={0}

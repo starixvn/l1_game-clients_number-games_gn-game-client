@@ -1,10 +1,9 @@
 /* demo animation */
-
 .result-area {
-    --start-positionX: -70px;
-    --target-positionX: -70px;
+    --start-positionX: -30px;
+    --target-positionX: -40px;
     --duration-slide-number: 0.75s;
-    --delay-time-slide-number: 1s;
+    --delay-time-slide-number: 0.65s;
 
     --cage-width: 130px;
     --cage-height: 130px;
@@ -18,8 +17,7 @@
 }
 
 .cage {
-    background: url(/images/animated-bingo/cage.png);
-    background-size: var(--cage-width) var(--cage-height);
+    background: url(/images/animated-bingo/cage.png) center no-repeat;
     width: var(--cage-width);
     height: var(--cage-height);
     margin: auto 0;
@@ -60,14 +58,6 @@
     z-index: 100;
 }
 
-.show {
-    display: block;
-}
-
-.hide {
-    display: none;
-}
-
 .number-text {
     position: relative;
     z-index: 20;
@@ -76,37 +66,45 @@
     height: 48px;
     line-height: 48px;
     font-weight: bold;
+    text-align: center;
     opacity: 0;
     font-size: 48px;
+    transform-style: preserve-3d;
     transform-origin: center right;
     right: var(--start-positionX);
-    animation: slide-left var(--duration-slide-number) var(--delay-time-slide-number) ease-out forwards;
+    animation: slide-left var(--duration-slide-number) var(--delay-time-slide-number) linear forwards;
 }
 
 @keyframes slide-left {
     0% {
         opacity: 0;
-        transform: rotate(0deg) skew(20eg, 0deg);
+        transform: rotateY(90deg) translateZ(5px) scale(0.7);
         filter: blur(6px);
     }
 
-    20% {
-        opacity: 0.2;
-        transform: rotateY(30deg) skew(0deg, 20eg);
-    }
-
     30% {
-        opacity: 0.5;
-        filter: blur(2px);
-        transform: translate(-40px, 0);
+        opacity: 0.3;
+        filter: blur(4px);
+        transform: rotateY(70deg) translateZ(10px) scale(0.8);
     }
 
-    60% {
+    70% {
+        opacity: 0.6;
         filter: blur(0);
+        transform: rotateY(40deg) translateZ(8px) scale(0.9);
+    }
+
+    80% {
+        transform: translateX(-10px);
+    }
+
+    98% {
+        opacity: 1;
+        transform: translateX(-31px);
     }
 
     100% {
         opacity: 1;
-        transform: translate(var(--target-positionX), 0);
+        transform: translateX(-30px);
     }
 }
