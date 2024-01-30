@@ -36,7 +36,7 @@ const AnimatedBingo = () => {
     const renderButtonPlay = () => {
         return (
             <button className={Styles["button"]} onClick={() => setPlayAnim(!playAnim)}>
-                {playAnim ? "Play result" : "Reset result"}
+                {!playAnim ? "Play result" : "Reset result"}
             </button>
         );
     };
@@ -85,19 +85,19 @@ const AnimatedBingo = () => {
                 {playAnim && (
                     <div className={`${Styles["number"]} ${playAnim ? Styles["show"] : Styles["hide"]}}`}>
                         {/* <Stage width={352} height={350} options={{ backgroundAlpha: 0 }}>
-                   <Container position={[250, 205]}>
-                       <AnimatedSprite
-                       anchor={0.5}
-                       textures={drumNumberFrames}
-                       autoUpdate
-                       isPlaying={true}
-                       initialFrame={0}
-                       animationSpeed={0.1}
-                       loop={true}
-                       />
-                   </Container>
-                   </Stage> */}
-                        <div className={Styles["number-text"]}></div>
+                            <Container position={[250, 205]}>
+                                <AnimatedSprite
+                                    anchor={0.5}
+                                    textures={drumNumberFrames}
+                                    autoUpdate
+                                    isPlaying={true}
+                                    initialFrame={0}
+                                    animationSpeed={0.1}
+                                    loop={true}
+                                />
+                            </Container>
+                        </Stage> */}
+                        <div className={Styles["number-text"]}>38</div>
                     </div>
                 )}
 

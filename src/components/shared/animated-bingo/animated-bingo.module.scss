@@ -67,8 +67,8 @@
     place-content: center;
     grid-template: "container";
 
-    --start-positionX: -30px;
-    --target-positionX: -45px;
+    --start-positionX: -70px;
+    --target-positionX: -70px;
     --duration-slide-number: 0.75s;
     --delay-time-slide-number: 1s;
 
@@ -131,36 +131,41 @@
     position: relative;
     z-index: 20;
     top: 0;
-    width: 78px;
-    height: 78px;
+    width: 58px;
+    height: 48px;
+    line-height: 48px;
+    font-weight: bold;
     opacity: 0;
-    background: url(/images/animated-bingo/16.png);
-    background-size: 78px 78px;
+    font-size: 48px;
     transform-origin: center right;
     right: var(--start-positionX);
     animation: slide-left var(--duration-slide-number) var(--delay-time-slide-number) ease-out forwards;
-    transform: scale(0.55);
 }
 
 @keyframes slide-left {
     0% {
         opacity: 0;
-        transform: rotate(0deg) skew(20eg, 0deg) scale(0.55);
+        transform: rotate(0deg) skew(20eg, 0deg);
         filter: blur(6px);
     }
 
     20% {
-        opacity: 0.5;
-        transform: rotateY(30deg) skew(0deg, 20eg) scale(0.55);
+        opacity: 0.2;
+        transform: rotateY(30deg) skew(0deg, 20eg);
     }
 
     30% {
-        opacity: 1;
+        opacity: 0.5;
+        filter: blur(2px);
+        transform: translate(-40px, 0);
+    }
+
+    60% {
         filter: blur(0);
     }
 
     100% {
         opacity: 1;
-        transform: translate(var(--target-positionX), 0) scale(0.55);
+        transform: translate(var(--target-positionX), 0);
     }
 }
