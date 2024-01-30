@@ -16,13 +16,18 @@
     grid-template: "container";
 }
 
-.cage {
-    background: url(/images/animated-bingo/cage.png) center no-repeat;
-    width: var(--cage-width);
-    height: var(--cage-height);
+%result {
+    width: 153px;
+    height: 153px;
     margin: auto 0;
     grid-area: container;
     place-self: center center;
+}
+
+.cage {
+    @extend %result;
+    background: url(/images/animated-bingo/cage.png) center no-repeat;
+    background-size: var(--cage-width) var(--cage-height);
 }
 
 .cage-balls {
@@ -31,17 +36,13 @@
 }
 
 .cage-cover {
-    @extend .cage;
-    position: relative;
-    background: url(/images/animated-bingo/cage-cover.png);
-    background-size: var(--cage-width) var(--cage-height);
+    @extend %result;
+    background: url(/images/animated-bingo/cage-cover.png) center no-repeat;
 }
 
 .cage-border {
-    @extend .cage;
-    position: relative;
-    background: url(/images/animated-bingo/cage-border.png);
-    background-size: var(--cage-width) var(--cage-height);
+    @extend %result;
+    background: url(/images/animated-bingo/cage-border-purple.png) center no-repeat;
 }
 
 .number {
@@ -90,11 +91,12 @@
 
     70% {
         opacity: 0.6;
-        filter: blur(0);
+        filter: blur(1px);
         transform: rotateY(40deg) translateZ(8px) scale(0.9);
     }
 
     80% {
+        filter: blur(0);
         transform: translateX(-10px);
     }
 

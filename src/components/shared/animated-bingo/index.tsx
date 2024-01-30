@@ -71,7 +71,7 @@ const AnimatedBingo = () => {
                     <div className={Styles.ball}>
                         {playAnim && (
                             <Stage width={153} height={153} options={{ backgroundAlpha: 0 }}>
-                                <Container position={[73, 75]}>
+                                <Container position={[85, 86]}>
                                     <AnimatedSprite
                                         anchor={0.5}
                                         textures={ballFrames}
