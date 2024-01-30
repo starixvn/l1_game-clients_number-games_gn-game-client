@@ -6,9 +6,13 @@
     margin: 1rem;
 }
 
-.result-area {
+.button {
+    position: relative;
+    z-index: 100;
+}
+
+.cage-area {
     --start-positionX: -3rem;
-    --target-positionX: -4rem;
     --duration-slide-number: 0.75s;
     --delay-time-slide-number: 0.65s;
 
@@ -21,6 +25,10 @@
     place-items: center;
     place-content: center;
     grid-template: "container";
+
+    &.small {
+        transform: scale(0.92);
+    }
 }
 
 %result {
@@ -29,11 +37,13 @@
     margin: auto 0;
     grid-area: container;
     place-self: center center;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
-.cage {
+.cage-bg {
     @extend %result;
-    background: url(/images/animated-bingo/cage.png) center no-repeat;
+    background-image: url(/images/animated-bingo/cage.png);
     background-size: var(--cage-width) var(--cage-height);
 }
 
@@ -44,29 +54,29 @@
 
 .cage-cover {
     @extend %result;
-    background: url(/images/animated-bingo/cage-cover.png) center no-repeat;
+    background-image: url(/images/animated-bingo/cage-cover.png);
 }
 
 .cage-border {
     @extend %result;
-    background: url(/images/animated-bingo/cage-border-purple.png) center no-repeat;
+    position: absolute;
+
+    &.single {
+        background-image: url(/images/animated-bingo/cage-border-purple.png);
+    }
+
+    &.left {
+        background-image: url(/images/animated-bingo/cage-border-blue.png);
+    }
+
+    &.right {
+        background-image: url(/images/animated-bingo/cage-border-red.png);
+    }
 }
 
 .number {
     grid-area: container;
     place-self: center center;
-}
-
-.ball {
-    position: absolute;
-}
-
-.button {
-    position: relative;
-    z-index: 100;
-}
-
-.number-text {
     position: relative;
     z-index: 20;
     top: 0;
@@ -96,7 +106,7 @@
     }
 
     70% {
-        opacity: 0.6;
+        opacity: 0.8;
         filter: blur(0.1rem);
         transform: rotateY(40deg) translateZ(0.8rem) scale(0.9);
     }

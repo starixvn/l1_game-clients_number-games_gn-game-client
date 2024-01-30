@@ -50,8 +50,8 @@ const AnimatedBingo = () => {
             <div>
                 <div className={Styles["demo-title"]}>--------- Loop --------</div>
                 <div>
-                    <div className={Styles["result-area"]}>
-                        <div className={Styles["cage"]}></div>
+                    <div className={`${Styles["cage-area"]} ${Styles["small"]}`}>
+                        <div className={Styles["cage-bg"]}></div>
                         <div className={Styles["cage-balls"]}>
                             <Stage width={130} height={130} options={{ backgroundAlpha: 0 }}>
                                 <Container position={[65, 65]}>
@@ -68,12 +68,12 @@ const AnimatedBingo = () => {
                             </Stage>
                         </div>
                         <div className={Styles["cage-cover"]}></div>
-                        <div className={Styles["cage-border"]}></div>
+                        <div className={`${Styles["cage-border"]} ${Styles["left"]}`}></div>
                     </div>
                 </div>
                 <div className={Styles["demo-title"]}>-------------------------</div>
-                <div className={Styles["result-area"]}>
-                    <div className={Styles["cage"]}></div>
+                <div className={Styles["cage-area"]}>
+                    <div className={Styles["cage-bg"]}></div>
                     <div className={Styles["cage-balls"]}>
                         {playAnim && (
                             <Stage width={130} height={130} options={{ backgroundAlpha: 0 }}>
@@ -92,43 +92,24 @@ const AnimatedBingo = () => {
                         )}
                     </div>
                     <div className={Styles["cage-cover"]}></div>
-                    <div className={Styles["cage-border"]}>
-                        <div className={Styles.ball}>
-                            {playAnim && (
-                                <Stage width={153} height={153} options={{ backgroundAlpha: 0 }}>
-                                    <Container position={[85, 86]}>
-                                        <AnimatedSprite
-                                            anchor={0.5}
-                                            textures={ballFrames}
-                                            autoUpdate
-                                            isPlaying={true}
-                                            initialFrame={0}
-                                            animationSpeed={0.3}
-                                            loop={false}
-                                        />
-                                    </Container>
-                                </Stage>
-                            )}
-                        </div>
+                    <div className={`${Styles["cage-border"]} ${Styles["single"]}`}>
+                        {playAnim && (
+                            <Stage width={153} height={153} options={{ backgroundAlpha: 0 }}>
+                                <Container position={[85, 86]}>
+                                    <AnimatedSprite
+                                        anchor={0.5}
+                                        textures={ballFrames}
+                                        autoUpdate
+                                        isPlaying={true}
+                                        initialFrame={0}
+                                        animationSpeed={0.3}
+                                        loop={false}
+                                    />
+                                </Container>
+                            </Stage>
+                        )}
                     </div>
-                    {playAnim && (
-                        <div className={`${Styles["number"]} ${playAnim ? Styles["show"] : Styles["hide"]}}`}>
-                            {/* <Stage width={352} height={350} options={{ backgroundAlpha: 0 }}>
-                            <Container position={[250, 205]}>
-                                <AnimatedSprite
-                                    anchor={0.5}
-                                    textures={drumNumberFrames}
-                                    autoUpdate
-                                    isPlaying={true}
-                                    initialFrame={0}
-                                    animationSpeed={0.1}
-                                    loop={true}
-                                />
-                            </Container>
-                        </Stage> */}
-                            <div className={Styles["number-text"]}>38</div>
-                        </div>
-                    )}
+                    {playAnim && <div className={`${Styles["number"]} ${playAnim ? Styles["show"] : Styles["hide"]}}`}>38</div>}
 
                     {renderButtonPlay()}
                 </div>

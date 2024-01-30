@@ -117,7 +117,7 @@ export default function BacBall() {
                                     autoUpdate
                                     isPlaying={true}
                                     initialFrame={0}
-                                    animationSpeed={0.3}
+                                    animationSpeed={0.1}
                                     loop={true}
                                 />
                             </Container>
