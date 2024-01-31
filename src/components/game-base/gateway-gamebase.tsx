@@ -1,7 +1,7 @@
 import React from "react";
 
 import GameBase from ".";
-import { SocketState } from "../types";
+import { SocketState } from "../../_shared/types";
 import { GameBaseState, GameState, GatewayGameBaseProps } from "./type";
 
 export default abstract class GatewayGameBase<P extends GatewayGameBaseProps, S extends GameBaseState<any, any>> extends GameBase<P, S> {

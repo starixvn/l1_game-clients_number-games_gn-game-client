@@ -2,7 +2,7 @@ import { WithTranslation } from "next-i18next";
 import { WithRouterProps } from "next/dist/client/with-router";
 import { Socket } from "socket.io-client";
 
-import { Round, SocketState } from "../types";
+import { SocketState } from "../../_shared/types";
 
 export interface GameConfigs {
     odds: { [key: string]: number };
@@ -189,3 +189,10 @@ export interface Boundary {
     left: number;
     right: number;
 }
+
+export interface Round<R, S> {
+    roundId: number;
+    result: R;
+    settlementResult: S;
+}
+

@@ -7,7 +7,7 @@ import MsgpackParser from "socket.io-msgpack-parser";
 import { getAppSettings } from "../_shared/app-settings";
 import { getLocalStorageItem, localStorageKeys } from "../_shared/local-storage";
 import { SystemContextProvider } from "../_shared/contexts/system";
-import { SocketState } from "../components/types";
+import { SocketState } from "../_shared/types";
 import {
     GameCategoryConfig,
     GameCategoryKeys,

@@ -1,5 +1,4 @@
-import { Round } from "../../../types";
-import { GameState } from "../../../game-base/type";
+import { GameState, Round } from "../../../game-base/type";
 
 export type PropsDot<R, S> = {
     children: React.ReactNode;

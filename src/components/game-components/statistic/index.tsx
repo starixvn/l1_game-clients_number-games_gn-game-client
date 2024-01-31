@@ -2,7 +2,7 @@ import { useTranslation } from "next-i18next";
 import React, { useMemo } from "react";
 
 import { useGameContext } from "../../../_shared/contexts/game-context/game-context";
-import { Round } from "../../types";
+import { Round } from "../../game-base/type";
 import Styles from "./statistic.module.scss";
 import { Props, PropsFollowPercent } from "./types";
 

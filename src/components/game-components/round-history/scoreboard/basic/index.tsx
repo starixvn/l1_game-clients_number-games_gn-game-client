@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Round } from "../../../../types";
+import { Round } from "../../../../game-base/type";
 import Styles from "../round-history.module.scss";
 import { Props } from "./types";
 
