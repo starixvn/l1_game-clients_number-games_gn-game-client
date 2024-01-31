@@ -1,0 +1,132 @@
+/* demo animation */
+.demo-title {
+    text-align: center;
+    color: #fff;
+    font-size: 2rem;
+    margin: 1rem;
+}
+
+.button {
+    position: relative;
+    z-index: 100;
+}
+
+.cage-area {
+    --start-positionX: -3rem;
+    --duration-slide-number: 0.75s;
+    --delay-time-slide-number: 0.65s;
+
+    --cage-width: 13rem;
+    --cage-height: 13rem;
+
+    position: relative;
+    display: grid;
+    grid: 1fr/1fr;
+    place-items: center;
+    place-content: center;
+    grid-template: "container";
+
+    &.small {
+        transform: scale(0.92);
+    }
+}
+
+%result {
+    width: 15.3rem;
+    height: 15.3rem;
+    margin: auto 0;
+    grid-area: container;
+    place-self: center center;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.cage-bg {
+    @extend %result;
+    background-image: url(/images/animated-bingo/cage.png);
+    background-size: var(--cage-width) var(--cage-height);
+}
+
+.cage-balls {
+    grid-area: container;
+    place-self: center center;
+}
+
+.cage-cover {
+    @extend %result;
+    background-image: url(/images/animated-bingo/cage-cover.png);
+}
+
+.cage-border {
+    @extend %result;
+    position: absolute;
+
+    &.purple {
+        background-image: url(/images/animated-bingo/cage-border-purple.png);
+    }
+
+    &.blue {
+        background-image: url(/images/animated-bingo/cage-border-blue.png);
+    }
+
+    &.red {
+        background-image: url(/images/animated-bingo/cage-border-red.png);
+    }
+
+    .left {
+        transform: scaleX(-1);
+    }
+}
+
+.number {
+    grid-area: container;
+    place-self: center center;
+    position: relative;
+    z-index: 20;
+    top: 0;
+    width: 5.8rem;
+    height: 4.8rem;
+    line-height: 4.8rem;
+    text-align: center;
+    font-size: 4.8rem;
+    opacity: 0;
+    transform-style: preserve-3d;
+    transform-origin: center right;
+    right: var(--start-positionX);
+    animation: slide-left var(--duration-slide-number) var(--delay-time-slide-number) linear forwards;
+}
+
+@keyframes slide-left {
+    0% {
+        opacity: 0;
+        transform: rotateY(90deg) translateZ(0.5rem) scale(0.7);
+        filter: blur(0.6rem);
+    }
+
+    30% {
+        opacity: 0.3;
+        filter: blur(0.4rem);
+        transform: rotateY(70deg) translateZ(1rem) scale(0.8);
+    }
+
+    70% {
+        opacity: 0.8;
+        filter: blur(0.1rem);
+        transform: rotateY(40deg) translateZ(0.8rem) scale(0.9);
+    }
+
+    80% {
+        filter: blur(0);
+        transform: translateX(-1rem);
+    }
+
+    98% {
+        opacity: 1;
+        transform: translateX(-3.1rem);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(-3rem);
+    }
+}

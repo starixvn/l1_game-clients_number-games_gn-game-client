@@ -12,13 +12,6 @@
 }
 
 .cage-area {
-    --start-positionX: -3rem;
-    --duration-slide-number: 0.75s;
-    --delay-time-slide-number: 0.65s;
-
-    --cage-width: 13rem;
-    --cage-height: 13rem;
-
     position: relative;
     display: grid;
     grid: 1fr/1fr;
@@ -61,68 +54,15 @@
     @extend %result;
     position: absolute;
 
-    &.single {
+    &.purple {
         background-image: url(/images/animated-bingo/cage-border-purple.png);
     }
 
-    &.left {
+    &.blue {
         background-image: url(/images/animated-bingo/cage-border-blue.png);
     }
 
-    &.right {
+    &.red {
         background-image: url(/images/animated-bingo/cage-border-red.png);
-    }
-}
-
-.number {
-    grid-area: container;
-    place-self: center center;
-    position: relative;
-    z-index: 20;
-    top: 0;
-    width: 5.8rem;
-    height: 4.8rem;
-    line-height: 4.8rem;
-    text-align: center;
-    font-size: 4.8rem;
-    opacity: 0;
-    transform-style: preserve-3d;
-    transform-origin: center right;
-    right: var(--start-positionX);
-    animation: slide-left var(--duration-slide-number) var(--delay-time-slide-number) linear forwards;
-}
-
-@keyframes slide-left {
-    0% {
-        opacity: 0;
-        transform: rotateY(90deg) translateZ(0.5rem) scale(0.7);
-        filter: blur(0.6rem);
-    }
-
-    30% {
-        opacity: 0.3;
-        filter: blur(0.4rem);
-        transform: rotateY(70deg) translateZ(1rem) scale(0.8);
-    }
-
-    70% {
-        opacity: 0.8;
-        filter: blur(0.1rem);
-        transform: rotateY(40deg) translateZ(0.8rem) scale(0.9);
-    }
-
-    80% {
-        filter: blur(0);
-        transform: translateX(-1rem);
-    }
-
-    98% {
-        opacity: 1;
-        transform: translateX(-3.1rem);
-    }
-
-    100% {
-        opacity: 1;
-        transform: translateX(-3rem);
     }
 }

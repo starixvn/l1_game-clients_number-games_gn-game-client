@@ -7,6 +7,7 @@ import AnimatedBingo from "../../components/game-components/animated-bingo";
 import Ball from "../../components/game-components/ball";
 import PercentageCircle from "../../components/game-components/percentage-circle";
 import RoundResult from "../../components/game-components/round-result";
+import Cage, { BallColor, CageColor } from "../../components/shared/cage";
 import Style from "./bac-ball.module.scss";
 
 const betData: BetOptionData[] = [
@@ -84,7 +85,7 @@ export default function BacBall() {
             <div className={Style["result-container"]}>
                 <div className={Style["player-container"]}>
                     <div className={Style["lottery-player-container"]}>
-                        <img src="/images/bac-number/lottery-player.png" alt="lottery-player" />
+                        <Cage color={CageColor.Blue} ballColor={BallColor.Blue} isSmall={true} />
                     </div>
                     <div className={Style["ball-container"]}>
                         <Ball number={38} color="red" />
@@ -101,7 +102,7 @@ export default function BacBall() {
                         <Ball isEmpty />
                     </div>
                     <div className="lottery">
-                        <img src="/images/bac-number/lottery-banker.png" alt="lottery-player" />
+                        <Cage color={CageColor.Red} ballColor={BallColor.Red} isSmall={true} />
                     </div>
                 </div>
             </div>
