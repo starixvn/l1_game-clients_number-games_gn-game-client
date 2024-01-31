@@ -43,8 +43,9 @@ const UMPage: React.FC<{ locale: string }> = ({ locale }) => {
                 <img className="moving-comet comet-2" src="/static/images/um/comet-2.svg" alt="spaceman" />
                 <img className="moving-comet comet-3" src="/static/images/um/comet-3.svg" alt="spaceman" />
                 <img className="moving-comet comet-4" src="/static/images/um/comet-4.svg" alt="spaceman" />
-                <img src="/static/images/um/plannet-1.svg" alt="spaceman" />
-                <img src="/static/images/um/plannet-2.svg" alt="spaceman" />
+                <img className="moving-planet planet-1" src="/static/images/um/planet-1.svg" alt="spaceman" />
+                <img className="moving-planet planet-2" src="/static/images/um/planet-2.svg" alt="spaceman" />
+                <img className="moving-planet planet-3" src="/static/images/um/planet-3.svg" alt="spaceman" />
             </div>
             <div className="um-spaceman">
                 <img src="/static/images/um/um-spaceman.png" alt="spaceman" />

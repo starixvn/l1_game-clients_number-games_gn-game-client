@@ -119,6 +119,27 @@
     }
 }
 
+.moving-planet {
+    position: absolute;
+    z-index: 2;
+    //animation: top-to-bottom 4s linear infinite;
+
+    &.planet-1 {
+        left: 72px;
+        bottom: 15px;
+    }
+
+    &.planet-2 {
+        left: 50px;
+        top: 70px;
+    }
+
+    &.planet-3 {
+        right: 72px;
+        bottom: 15px;
+    }
+}
+
 @keyframes spin {
     from {
         transform: rotate(0deg) translate(-10px) rotate(0deg);
@@ -150,5 +171,16 @@
     }
     10% {
         opacity: 1;
+    }
+}
+
+@keyframes top-to-bottom {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
     }
 }
