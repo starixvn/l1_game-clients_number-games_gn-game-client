@@ -1,8 +1,8 @@
 "use client";
 
-import RoundResult from "../../components/shared/round-result";
+import RoundResult from "../../components/game-components/round-result";
 import Style from "./happy-wheel.module.scss";
-import { BetOptionData, RoundResultData } from "../../common/constants";
+import { BetOptionData, RoundResultData } from "../../_shared/constants";
 
 const resultData: RoundResultData[] = [
     {

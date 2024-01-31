@@ -3,15 +3,15 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
 import { SSOResponse, UMInfo } from "sc-user-service-client/dist/auth";
-import { getAppSettings } from "../common/app-settings";
+import { getAppSettings } from "../_shared/app-settings";
 
-import { languageMapper } from "../common/constants";
-import { getLocalStorageItem, localStorageKeys, storeLocalStorageItem } from "../common/local-storage";
-import Dashboard from "../components/dashboard";
-import SplashScreen from "../components/splash-screen";
-import UMPage from "../components/um-page";
+import { languageMapper } from "../_shared/constants";
+import { getLocalStorageItem, localStorageKeys, storeLocalStorageItem } from "../_shared/local-storage";
+import Dashboard from "../components/page-components/dashboard";
+import SplashScreen from "../components/page-components/splash-screen";
+import UMPage from "../components/page-components/um-page";
 import { sso, verifySession } from "../services/auth-service";
-import * as Sentry from "../utils/sentry";
+import * as Sentry from "../_shared/sentry";
 
 const getUserSession = (token: string) => (token ? sso(token, getAppSettings().appType) : verifySession());
 

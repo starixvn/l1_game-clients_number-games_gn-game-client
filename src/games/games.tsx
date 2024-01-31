@@ -4,27 +4,27 @@ import { isIOS, isMobileOnly } from "react-device-detect";
 import { io, Socket } from "socket.io-client";
 import useSound from "use-sound";
 import MsgpackParser from "socket.io-msgpack-parser";
-import { getAppSettings } from "../common/app-settings";
-import { getLocalStorageItem, localStorageKeys } from "../common/local-storage";
-import { SystemContextProvider } from "../contexts/system";
-import { SocketState } from "../types";
+import { getAppSettings } from "../_shared/app-settings";
+import { getLocalStorageItem, localStorageKeys } from "../_shared/local-storage";
+import { SystemContextProvider } from "../_shared/contexts/system";
+import { SocketState } from "../components/types";
 import {
     GameCategoryConfig,
     GameCategoryKeys,
     GameCategoryType,
     GamesInOnePage,
     favoriteGameIdIgnore,
-} from "../components/game-category/constants";
-import { WinningStreak } from "../components/winning-streak";
-import { WinningStreakItem } from "../components/winning-streak/winning-streak.type";
+} from "../components/page-components/game-category/constants";
+import { WinningStreak } from "../components/page-components/winning-streak";
+import { WinningStreakItem } from "../components/page-components/winning-streak/winning-streak.type";
 import styles from "./games.module.scss";
 import { Props } from "./type";
-import messageTransmitter from "../helpers/message-transmitter";
-import { buildSocketGatewayUrl } from "../helpers/url-helper";
-import { AppTypes } from "../common/constants";
+import messageTransmitter from "../_shared/helpers/message-transmitter";
+import { buildSocketGatewayUrl } from "../_shared/helpers/url-helper";
+import { AppTypes } from "../_shared/constants";
 import BacBall from "./bac-ball/page";
-import { GameCategory } from "../components/game-category";
-import { ViewMode } from "../components/shared/game-base/type";
+import { GameCategory } from "../components/page-components/game-category";
+import { ViewMode } from "../components/game-base/type";
 import HappyFour from "./happy-four/page";
 import HappyWheel from "./happyWheel/page";
 import SicBalls from "./sic-balls/page";

@@ -1,6 +1,6 @@
 import { SSOResponse } from "sc-user-service-client/dist/auth";
 import { UserClientCommunication } from "./user-client-communication";
-import { Themes } from "../common/constants";
+import { Themes } from "../_shared/constants";
 
 const { userSettings: userSettingsService } = UserClientCommunication.getUserClientInstance();
 

@@ -1,6 +1,6 @@
 import UserServiceClient from "sc-user-service-client";
-import { getAppSettings } from "../common/app-settings";
-import { buildUrlWithPath } from "../helpers/url-helper";
+import { getAppSettings } from "../_shared/app-settings";
+import { buildUrlWithPath } from "../_shared/helpers/url-helper";
 
 export class UserClientCommunication {
     private static readonly instance: UserServiceClient;

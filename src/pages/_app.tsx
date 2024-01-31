@@ -4,7 +4,7 @@ import { appWithTranslation } from "next-i18next";
 import { ThemeProvider } from "next-themes";
 import App, { AppProps } from "next/app";
 import Head from "next/head";
-import { buildVersion, systemName, Themes } from "../common/constants";
+import { buildVersion, systemName, Themes } from "../_shared/constants";
 import { Profiler, StrictMode } from "react";
 
 

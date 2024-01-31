@@ -2,11 +2,11 @@ import { AnimatedSprite, Container, Stage } from "@pixi/react";
 import { Assets, Resource, Spritesheet, Texture } from "pixi.js";
 import React, { useEffect } from "react";
 
-import { BetOptionData, RoundResultData } from "../../common/constants";
-import AnimatedBingo from "../../components/shared/animated-bingo";
-import Ball from "../../components/shared/ball";
-import PercentageCircle from "../../components/shared/percentage-circle";
-import RoundResult from "../../components/shared/round-result";
+import { BetOptionData, RoundResultData } from "../../_shared/constants";
+import AnimatedBingo from "../../components/game-components/animated-bingo";
+import Ball from "../../components/game-components/ball";
+import PercentageCircle from "../../components/game-components/percentage-circle";
+import RoundResult from "../../components/game-components/round-result";
 import Style from "./bac-ball.module.scss";
 
 const betData: BetOptionData[] = [

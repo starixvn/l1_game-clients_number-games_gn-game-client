@@ -1,0 +1,129 @@
+import { useTranslation } from "next-i18next";
+import React, { useEffect, useMemo, useState } from "react";
+import { isMobileOnly } from "react-device-detect";
+
+import { getLocalStorageItem, localStorageKeys } from "../../../_shared/local-storage";
+import { favoriteGameIdIgnore } from "../../page-components/game-category/constants";
+import { CommonResourceKeys } from "../../../_shared/resources";
+import { GameResourceKeys } from "../../../_shared/resources/game-resource-keys";
+import { useGameActionContext } from "../../../_shared/contexts/game-actions-context";
+import { useGameContext } from "../../../_shared/contexts/game-context/game-context";
+import { useSystemContext } from "../../../_shared/contexts/system";
+import { PopupType, RebetStorageModel, ViewMode } from "../../game-base/type";
+import Styles from "./game-header.module.scss";
+
+export type GameHeaderProps = {
+    isShowCollapse: boolean;
+    isUpdateDisableRebet: boolean;
+    countdownTimerComponent: any;
+};
+
+export const GameHeader: React.FunctionComponent<GameHeaderProps> = ({ isShowCollapse, isUpdateDisableRebet, countdownTimerComponent }) => {
+    const { roundId, gameSetting, viewMode, gameState } = useGameContext();
+    const { favoriteGames, setFavorite } = useSystemContext();
+    const { updateViewMode, renderResultCollapse, updateStatusShowResult } = useGameActionContext();
+
+    const { id: gameId, gameName } = gameSetting;
+    const [isFavorite, updateFavorite] = useState<boolean>(favoriteGames.includes(gameId));
+    const { t } = useTranslation([gameName.toLowerCase()]);
+
+    useEffect(() => {
+        updateFavorite(favoriteGames.includes(gameId));
+    }, [favoriteGames]);
+
+    return useMemo(() => {
+        const favoriteClickHandle = (e: React.MouseEvent) => {
+            e.stopPropagation();
+            setFavorite(gameId, !isFavorite);
+            updateFavorite(!isFavorite);
+        };
+
+        const onHeaderClick = (e: React.MouseEvent) => {
+            e.stopPropagation();
+            if (isMobileOnly) {
+                const mode = viewMode === ViewMode.full ? ViewMode.collapse : ViewMode.full;
+                updateViewMode(mode);
+                updateStatusShowResult();
+            }
+        };
+
+        const showCollapseResult = isShowCollapse && viewMode === ViewMode.collapse;
+
+        return (
+            <div
+                data-testid="header"
+                className={`${Styles.header} ${viewMode === ViewMode.collapse ? Styles["border-radius-bottom"] : ""}`}
+                onClick={onHeaderClick}
+            >
+                <div className={Styles["header-left"]}>
+                    <div className={Styles["header-overlay"]}></div>
+                    {!favoriteGameIdIgnore.includes(gameId) ? (
+                        <div className={Styles["favorite-btn"]} onClick={favoriteClickHandle} data-testid="favorite-btn">
+                            <span
+                                className={
+                                    isFavorite
+                                        ? `icon-favorite ${Styles["icon-favorite"]}`
+                                        : `icon-favorite-normal ${Styles["icon-favorite-normal"]}`
+                                }
+                            ></span>
+                        </div>
+                    ) : (
+                        <div className={Styles["zone-none-favorite"]}></div>
+                    )}
+
+                    <div className={Styles["title-roundID"]}>
+                        <div className={Styles.title}>{t(GameResourceKeys.GAME_NAME)}</div>
+                        <div key={roundId} className={Styles.round}>
+                            #{roundId}
+                        </div>
+                    </div>
+                </div>
+                {!showCollapseResult && countdownTimerComponent}
+                <HeaderRight isUpdateDisableRebet={isUpdateDisableRebet} />
+                {showCollapseResult && <div className={Styles["header-result"]}>{renderResultCollapse()}</div>}
+            </div>
+        );
+    }, [gameState, roundId, viewMode, isFavorite]);
+};
+
+const HeaderRight = ({ isUpdateDisableRebet }) => {
+    const gameActions = useGameActionContext();
+    const { roundId, gameState, gameSetting, ownBets, viewMode } = useGameContext();
+    const { id: gameId } = gameSetting;
+    const [disabledRebet, updateDisableRebet] = useState<boolean>(false);
+    const { t } = useTranslation();
+
+    const rebetStorageKey = localStorageKeys.rebet;
+    const rebetStorage = getLocalStorageItem<RebetStorageModel>(rebetStorageKey) || {};
+    const rebetInfo = rebetStorage[gameId];
+
+    const rebetClickHandle = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        gameActions.openPopup(PopupType.Rebet);
+    };
+
+    useEffect(() => {
+        isUpdateDisableRebet && updateDisableRebet(true);
+    }, [gameState]);
+
+    useEffect(() => {
+        updateDisableRebet(rebetInfo?.betInfo === undefined || rebetInfo?.roundId + 1 !== roundId);
+    }, [roundId]);
+
+    return (
+        <div className={Styles["header-right"]}>
+            {viewMode !== ViewMode.collapse && (
+                <button
+                    className={Styles.rebet}
+                    disabled={disabledRebet || Object.keys(ownBets).length !== 0}
+                    onClick={rebetClickHandle}
+                    data-testid="rebet-btn"
+                >
+                    {t(CommonResourceKeys.REBET)}
+                </button>
+            )}
+        </div>
+    );
+};
+
+export default GameHeader;

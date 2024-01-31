@@ -1,10 +1,10 @@
 "use client";
 import Link from "next/link";
 
-import RoundResult from "../../components/shared/round-result";
-import PercentageCircle from "../../components/shared/percentage-circle";
+import RoundResult from "../../components/game-components/round-result";
+import PercentageCircle from "../../components/game-components/percentage-circle";
 import Style from "./sic-balls.module.scss";
-import { BetOptionData, RoundResultData } from "../../common/constants";
+import { BetOptionData, RoundResultData } from "../../_shared/constants";
 import animationData from "../../../public/images/sic-balls/light-anim.json";
 import Lottie from "lottie-react";
 

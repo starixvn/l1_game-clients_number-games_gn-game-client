@@ -1,10 +1,10 @@
 
-import Ball from "../../components/shared/ball";
-import PercentageCircle from "../../components/shared/percentage-circle";
+import Ball from "../../components/game-components/ball";
+import PercentageCircle from "../../components/game-components/percentage-circle";
 import Style from "./happy-four.module.scss";
-import Dot from "../../components/shared/dot";
-import RoundResult from "../../components/shared/round-result";
-import { BetOptionData, RoundResultData } from "../../common/constants";
+import Dot from "../../components/game-components/dot";
+import RoundResult from "../../components/game-components/round-result";
+import { BetOptionData, RoundResultData } from "../../_shared/constants";
 
 const resultData: RoundResultData[] = [
     {
