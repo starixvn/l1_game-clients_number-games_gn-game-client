@@ -5,13 +5,15 @@ import { ThemeProvider } from "next-themes";
 import App, { AppProps } from "next/app";
 import Head from "next/head";
 import { buildVersion, systemName, Themes } from "../common/constants";
-import { Profiler } from "react";
+import { Profiler, StrictMode } from "react";
 
 
 class SabaNumberApp extends App<AppProps> {
     callback(self) {
         return (id, phase, actualTime, baseTime, startTime, commitTime) => {
-
+            console.log(`
+Id: "${id}", Phase: "${phase}", Actual Time:${actualTime}, Base Time: ${baseTime}, Start Time:${startTime}, Commit Time: ${commitTime}
+`)
         }
     }
 
@@ -20,10 +22,12 @@ class SabaNumberApp extends App<AppProps> {
 
         return (
             <Profiler id="App" onRender={this.callback(this)}>
-                <ThemeProvider defaultTheme={Themes.light}>
-                    <AppTilte />
-                    <Component {...pageProps} />
-                </ThemeProvider>
+                <StrictMode>
+                    <ThemeProvider defaultTheme={Themes.light}>
+                        <AppTilte />
+                        <Component {...pageProps} />
+                    </ThemeProvider>
+                </StrictMode>
             </Profiler>
         );
     }
