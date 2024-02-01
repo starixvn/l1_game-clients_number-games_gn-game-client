@@ -312,7 +312,7 @@ jest.mock("next/config", () => () => ({
             },
         },
         guideUrl: "https://l1-guide.lumigame.com",
-        appType: 4,
+        appType: 1,
         system: "L1",
     },
 }));
