@@ -1,26 +1,41 @@
 [data-theme="light"] .modal {
-    --error-message-container-background: #fff;
-    --error-message-container-border: #fff;
-    --error-message-container-color: #2c2f3e;
+    --error-message-container-background: #242c32;
+    --error-message-container-border: #585858;
+    --error-message-container-color: #e6e6e6;
+    --icon-close-color: #ea1d41;
 }
 
 .modal {
     position: absolute;
     text-align: center;
-    padding: 2rem 2.1rem;
+    padding: 1.5rem 4.5rem 1.5rem 2.1rem;
     background-color: var(--error-message-container-background);
-    box-shadow: 0 0.4rem 2rem rgba(0, 0, 0, 0.5);
-    border-radius: 0.5rem;
-    font-size: 1.6rem;
+    box-shadow: rgba(0, 0, 0, 0.5) 0px 19px 38px, rgba(0, 0, 0, 0.3) 0px 15px 12px;
+    border-radius: 1.6rem;
+    font-size: 1.4rem;
     border: 1px solid var(--error-message-container-border);
     left: 50%;
     transform: translate(-50%, 0);
     min-width: 30rem;
+    color: var(--error-message-container-color);
+    font-weight: normal;
 
     .icon-close {
         position: absolute;
-        right: 1rem;
-        top: 1rem;
+        right: 1.2rem;
+        top: 1.6rem;
+        font-size: 2rem;
+        cursor: pointer;
+
+        &::before {
+            color: var(--icon-close-color);
+        }
+    }
+
+    .modal-title {
+        font-size: 1.6rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
     }
 }
 
@@ -28,11 +43,33 @@
     @extend .modal;
     top: 30%;
     z-index: var(--modal-index);
+    overflow: hidden;
 
     .modal-icon-warning {
         display: flex;
         justify-content: center;
         margin-bottom: 1.6rem;
         font-size: 4.2rem;
+    }
+    &.red-color {
+        --bg-radial-gradient: radial-gradient(circle, rgba(240, 66, 72, 0.2) 0%, rgba(240, 66, 72, 0.1) 30%, rgba(240, 66, 72, 0) 100%);
+    }
+
+    &.yellow-color {
+        --bg-radial-gradient: radial-gradient(circle, rgba(195, 161, 37, 0.2) 0%, rgba(195, 161, 37, 0.1) 30%, rgba(195, 161, 37, 0) 100%);
+    }
+
+    &::before {
+        content: "";
+        display: block;
+        position: absolute;
+        top: -10rem;
+        left: -10rem;
+        width: 24rem;
+        height: 24rem;
+        border-radius: 24rem;
+        background: var(--bg-radial-gradient);
+
+        opacity: 0.7;
     }
 }

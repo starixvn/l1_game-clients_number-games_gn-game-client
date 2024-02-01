@@ -26,7 +26,7 @@ import BacBall from "./bac-ball/page";
 import { GameCategory } from "../components/page-components/game-category";
 import { ViewMode } from "../components/game-base/type";
 import HappyFour from "./happy-four/page";
-import HappyWheel from "./happyWheel/page";
+import HappyWheel from "./happy-wheel/page";
 import SicBalls from "./sic-balls/page";
 import NextBall from "./next-ball/page";
 import LuckyThree from "./lucky-three/page";
@@ -42,9 +42,7 @@ const getRenderGames = (selectedCategory: GameCategoryType, selectedPage: number
     }
     const tabGames = GameCategoryConfig[getAppSettings().appType][GameCategoryType[selectedCategory]];
 
-    gamesOrder = getAppSettings().offeredGames.filter(
-        (gameId) => !favoriteGames.includes(gameId) && tabGames.includes(gameId)
-    );
+    gamesOrder = getAppSettings().offeredGames.filter((gameId) => !favoriteGames.includes(gameId) && tabGames.includes(gameId));
 
     const startIndex = gamesOrder.length > (selectedPage - 1) * GamesInOnePage ? (selectedPage - 1) * GamesInOnePage : 0;
 

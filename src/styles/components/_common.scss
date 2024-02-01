@@ -108,25 +108,6 @@ img {
     opacity: 0.9;
 }
 
-.icon-close {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 3rem;
-    width: 3rem;
-    border-radius: 50%;
-    background: var(--icon-close-background);
-
-    &:before {
-        font-size: 1.2rem;
-        color: var(--icon-close-color);
-    }
-
-    &:hover {
-        cursor: pointer;
-    }
-}
-
 .table {
     width: 100%;
     border-collapse: collapse;

@@ -9,7 +9,14 @@ const Ball = (props: any) => {
                 </div>
             )}
 
-            {props.isLoading && <div className={Styles.loading}></div>}
+            {props.isLoading && (
+                <div className={Styles.loading}>
+                    <svg className={Styles["circle-ring"]}>
+                        <circle id="after" cx="50%" cy="50%" r="47.2%" strokeDasharray="90.12870025634766" strokeLinecap="butt"></circle>
+                    </svg>
+                    <div className={Styles["circle-outer"]}></div>
+                </div>
+            )}
         </div>
     );
 };
