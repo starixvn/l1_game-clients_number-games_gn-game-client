@@ -1,11 +1,10 @@
 {
-    "subSocketGatewayDomain": "l1-gw3",
     "serverDomainMapper": {
         "localhost": "lumigame.com"
     },
     "proxy": {
         "ssl": true,
-        "subDomain": "l1-proxy3",
+        "subDomain": "gn-proxy",
         "path": ""
     },
     "sentry": {
@@ -14,7 +13,7 @@
     },
     "offeredGames": [],
     "enableSourceMap": true,
-    "subGuideDomain": "l1-guide-3",
+    "subGuideDomain": "gn-guide",
     "enableMsgpackParser": false,
     "system": "GN",
     "appType": 2

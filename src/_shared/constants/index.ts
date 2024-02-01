@@ -20,7 +20,6 @@ export interface RoundResultData {
 
 export const systemName = getAppSettings().system.toLocaleLowerCase();
 
-
 export const ChipMapper = {
     gn: {
         "1": "chip-1",

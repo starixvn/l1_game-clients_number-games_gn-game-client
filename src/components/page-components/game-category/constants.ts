@@ -5,8 +5,8 @@ export const GamesInOnePage = 20;
 
 export const GameCategoryConfig = {
     [AppTypes.mobile]: {
-        hot: [1111],
-        newNumberGames: [1111, 1112, 1113, 1114, 1115, 1116],
+        hot: [1001],
+        newNumberGames: [1001, 1112, 1113, 1114, 1115, 1116],
     },
 };
 
