@@ -140,6 +140,27 @@
     }
 }
 
+// 404 Page
+.number-4-left {
+    position: absolute;
+    top: 8rem;
+    left: 4rem;
+}
+
+.number-4-right {
+    position: absolute;
+    top: 8rem;
+    right: 4.2rem;
+}
+
+.errorOccurred-info {
+    margin-top: -10rem;
+    font-size: 1.6rem;
+    line-height: 2.6rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+
 @keyframes spin {
     from {
         transform: rotate(0deg) translate(-10px) rotate(0deg);
