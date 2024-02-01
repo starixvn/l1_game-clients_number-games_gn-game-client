@@ -7,16 +7,7 @@
     "rule3": "Tidak dapat mengubah nama panggilan setelah mengirimkan.",
     "invalidUsername": "Nama panggilan yang Anda masukan tidak valid, silakan coba lagi.",
     "changeAvatar": "Mengubah Avatar.",
-    "registerTitle1-l1-apptype1": "Selamat datang di <strong>{{sabaMobileName}}</strong>",
-    "registerTitle2-l1-apptype1": "<strong>{{sabaMobileName}}</strong> adalah versi tambahan dari <strong>{{sabaClubName}}</strong>, yang ditujukan untuk pemain yang menyukai kesederhanaan desain dan pengoptimalan dalam pengalaman bermain.",
-    "registerTitle3-l1-apptype1": "Semua versi <strong>{{sabaClubName}}</strong> terhubung bersama, dengan putaran permainan dan total taruhan yang sama.",
-    "registerTitle1-l1-apptype4": "Selamat datang di Mega Keno dari Permainan SABA (<strong>SABA.games</strong>)",
-    "registerTitle2-l1-apptype4": "Lobi ini ditujukan untuk pemain yang menyukai kesederhanaan desain dan pengoptimalan dalam pengalaman game.",
-    "registerTitle3-l1-apptype4": "Semua versi game SABA disinkronkan menjadi satu putaran permainan dan total taruhan yang sama.",
-    "registerTitle1-l2-apptype1": "Selamat datang di <strong>{{vGamingMobileName}}</strong>",
-    "registerTitle2-l2-apptype1": "<strong>{{vGamingMobileName}}</strong> adalah versi tambahan dari <strong>{{vGamingName}}</strong>, yang ditujukan untuk pemain yang menyukai kesederhanaan desain dan pengoptimalan dalam pengalaman bermain.",
-    "registerTitle3-l2-apptype1": "Semua versi <strong>{{vGamingName}}</strong> terhubung bersama, dengan putaran permainan dan total taruhan yang sama.",
-    "registerTitle1-l2-apptype4": "Selamat datang di Mega Keno dari <strong>Vgaming</strong>",
-    "registerTitle2-l2-apptype4": "Lobi ini ditujukan untuk pemain yang menyukai kesederhanaan desain dan pengoptimalan dalam pengalaman game.",
-    "registerTitle3-l2-apptype4": "Semua versi dari <strong>{{vGamingName}}</strong> disinkronkan bersama dalam putaran permainan dan total taruhan yang sama."
+    "registerTitle1-gn-apptype1": "Selamat datang di <strong>{{sabaNumberName}}</strong>",
+    "registerTitle2-gn-apptype1": "<strong>{{sabaNumberName}}</strong> adalah versi tambahan dari <strong>{{sabaClubName}}</strong>, yang ditujukan untuk pemain yang menyukai kesederhanaan desain dan pengoptimalan dalam pengalaman bermain.",
+    "registerTitle3-gn-apptype1": "Semua versi <strong>{{sabaClubName}}</strong> terhubung bersama, dengan putaran permainan dan total taruhan yang sama."
 }

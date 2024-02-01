@@ -7,16 +7,7 @@
     "rule3": "Không thể đổi tên nhân vật sau khi tạo.",
     "invalidUsername": "Tên nhân vật không hợp lệ.",
     "changeAvatar": "Thay đổi hình nhân vật",
-    "registerTitle1-l1-apptype1": "Chào mừng bạn đến với <strong>{{sabaMobileName}}</strong>",
-    "registerTitle2-l1-apptype1": "<strong>{{sabaMobileName}}</strong> là phiên bản bổ sung của <strong>{{sabaClubName}}</strong>, hướng đến người chơi yêu thích sự đơn giản và tối ưu trong trải nghiệm chơi game. ",
-    "registerTitle3-l1-apptype1": "Tất cả phiên bản <strong>{{sabaClubName}}</strong> đều liên thông với nhau về phiên game và số tổng cược.",
-    "registerTitle1-l1-apptype4": "Chào mừng bạn đến Sảnh Mega Keno của Cổng Game SABA (<strong>SABA.games</strong>)",
-    "registerTitle2-l1-apptype4": "Sảnh game này hướng đến người chơi yêu thích sự đơn giản và tối ưu trong trải nghiệm chơi game.",
-    "registerTitle3-l1-apptype4": "Tất cả sảnh của Cổng Game SABA đều liên thông với nhau về phiên game và số tổng cược.",
-    "registerTitle1-l2-apptype1": "Chào mừng bạn đến với <strong>{{vGamingMobileName}}</strong>",
-    "registerTitle2-l2-apptype1": "<strong>{{vGamingMobileName}}</strong> là phiên bản bổ sung của <strong>{{vGamingName}}</strong>, hướng đến người chơi yêu thích sự đơn giản và tối ưu trong trải nghiệm chơi game. ",
-    "registerTitle3-l2-apptype1": "Tất cả phiên bản <strong>{{vGamingName}}</strong> đều liên thông với nhau về phiên game và số tổng cược.",
-    "registerTitle1-l2-apptype4": "Chào mừng bạn đến Sảnh Mega Keno của <strong></strong><strong>Vgaming</strong>",
-    "registerTitle2-l2-apptype4": "Sảnh game này hướng đến người chơi yêu thích sự đơn giản và tối ưu trong trải nghiệm chơi game.",
-    "registerTitle3-l2-apptype4": "Tất cả sảnh của <strong>{{vGamingName}}</strong> đều liên thông với nhau về phiên game và số tổng cược."
+    "registerTitle1-gn-apptype1": "Chào mừng bạn đến với <strong>{{sabaNumberName}}</strong>",
+    "registerTitle2-gn-apptype1": "<strong>{{sabaNumberName}}</strong> là phiên bản bổ sung của <strong>{{sabaClubName}}</strong>, hướng đến người chơi yêu thích sự đơn giản và tối ưu trong trải nghiệm chơi game. ",
+    "registerTitle3-gn-apptype1": "Tất cả phiên bản <strong>{{sabaClubName}}</strong> đều liên thông với nhau về phiên game và số tổng cược."
 }

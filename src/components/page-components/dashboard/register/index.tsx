@@ -2,7 +2,7 @@ import { Trans, useTranslation } from "next-i18next";
 import React, { useState } from "react";
 import { AuthorizeResponse, Response, SSOResponse } from "sc-user-service-client/dist/auth";
 
-import { sabaClubName, sabaMobileName, Themes } from "../../../../_shared/constants";
+import { sabaClubName, sabaNumberName, Themes } from "../../../../_shared/constants";
 import { GetLocalizedErrorMessage } from "../../../../_shared/helpers/notice-helper";
 import { randomInteger } from "../../../../_shared/helpers/number-helper";
 import { createNickname } from "../../../../services/auth-service";
@@ -87,23 +87,23 @@ export default function Register({ session, handleStateLogin }: Props) {
                 <TextBlock>
                     <Trans t={t}>
                         {t(
-                            `register:registerTitle1-l1-apptype${getAppSettings().appType}`,
-                            { sabaMobileName: sabaMobileName }
+                            `register:registerTitle1-gn-apptype${getAppSettings().appType}`,
+                            { sabaNumberName: sabaNumberName }
                         )}
                     </Trans>
                 </TextBlock>
                 <TextBlock>
                     <Trans t={t}>
                         {t(
-                            `register:registerTitle2-l1-apptype${getAppSettings().appType}`,
-                            { sabaMobileName: sabaMobileName, sabaClubName: sabaClubName }
+                            `register:registerTitle2-gn-apptype${getAppSettings().appType}`,
+                            { sabaNumberName: sabaNumberName, sabaClubName: sabaClubName }
                         )}
                     </Trans>
                 </TextBlock>
                 <TextBlock>
                     <Trans t={t}>
                         {t(
-                            `register:registerTitle3-l1-apptype${getAppSettings().appType}`,
+                            `register:registerTitle3-gn-apptype${getAppSettings().appType}`,
                             { sabaClubName: sabaClubName }
                         )}
                     </Trans>

@@ -7,16 +7,7 @@
     "rule3": "提交後無法更改暱稱。",
     "invalidUsername": "輸入的暱稱無效，請重試。",
     "changeAvatar": "更改頭像",
-    "registerTitle1-l1-apptype1": "歡迎來到 <strong>{{sabaMobileName}}</strong>",
-    "registerTitle2-l1-apptype1": "<strong>{{sabaMobileName}}</strong> 是 <strong>{{sabaClubName}}</strong>, 的附加版本，面向喜歡游戲體驗中的簡單設計和優化的玩家。",
-    "registerTitle3-l1-apptype1": "所有版本的 <strong>{{sabaClubName}}</strong> 都連接在一起，具有相同的遊戲回合和總賭注。",
-    "registerTitle1-l1-apptype4": "歡迎來到 SABA Game 的 Mega Keno (<strong>SABA.games</strong>)",
-    "registerTitle2-l1-apptype4": "該大廳面向喜歡游戲體驗中的簡單設計和優化的玩家。",
-    "registerTitle3-l1-apptype4": "所有版本的 SABA 遊戲都在同一輪遊戲和總投注中同步。",
-    "registerTitle1-l2-apptype1": "歡迎來到 <strong>{{vGamingMobileName}}</strong>",
-    "registerTitle2-l2-apptype1": "<strong>{{vGamingMobileName}}</strong> 是 <strong>{{vGamingName}}</strong>, 的附加版本，面向喜歡游戲體驗中的簡單設計和優化的玩家。",
-    "registerTitle3-l2-apptype1": "所有版本的 <strong>{{vGamingName}}</strong> 都連接在一起，具有相同的遊戲回合和總賭注。",
-    "registerTitle1-l2-apptype4": "歡迎來到 Mega Keno 的 <strong>Vgaming</strong>",
-    "registerTitle2-l2-apptype4": "該大廳面向喜歡游戲體驗中的簡單設計和優化的玩家。",
-    "registerTitle3-l2-apptype4": "所有的版本 <strong>{{vGamingName}}</strong> 在同一輪遊戲和總賭注中同步在一起。"
+    "registerTitle1-gn-apptype1": "歡迎來到 <strong>{{sabaNumberName}}</strong>",
+    "registerTitle2-gn-apptype1": "<strong>{{sabaNumberName}}</strong> 是 <strong>{{sabaClubName}}</strong>, 的附加版本，面向喜歡游戲體驗中的簡單設計和優化的玩家。",
+    "registerTitle3-gn-apptype1": "所有版本的 <strong>{{sabaClubName}}</strong> 都連接在一起，具有相同的遊戲回合和總賭注。"
 }

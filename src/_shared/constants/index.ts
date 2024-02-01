@@ -77,10 +77,8 @@ export const Themes = {
     light: "light",
 };
 
-export const sabaMobileName = "Saba.mobi";
+export const sabaNumberName = "Saba.numbers";
 export const sabaClubName = "Saba.games";
-export const vGamingMobileName = "Vgaming Mobi";
-export const vGamingName = "Vgaming";
 
 export const buildVersion = process.env.buildVersion;
 export const AppTypes = {
