@@ -1,5 +1,5 @@
-import "../assets/errors.scss";
-import "../assets/main.scss";
+import "../styles/errors.scss";
+import "../styles/main.scss";
 import { appWithTranslation } from "next-i18next";
 import { ThemeProvider } from "next-themes";
 import App, { AppProps } from "next/app";
@@ -7,14 +7,13 @@ import Head from "next/head";
 import { buildVersion, systemName, Themes } from "../_shared/constants";
 import { Profiler, StrictMode } from "react";
 
-
 class SabaNumberApp extends App<AppProps> {
     callback(self) {
         return (id, phase, actualTime, baseTime, startTime, commitTime) => {
             console.log(`
 Id: "${id}", Phase: "${phase}", Actual Time:${actualTime}, Base Time: ${baseTime}, Start Time:${startTime}, Commit Time: ${commitTime}
-`)
-        }
+`);
+        };
     }
 
     render() {
