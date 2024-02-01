@@ -39,6 +39,7 @@ export type State = {
     isJoinGame: boolean;
     settingGames: number[];
     openGameId: number;
+    openGameName: string;
     isShowToolbarGuide: boolean;
 };
 

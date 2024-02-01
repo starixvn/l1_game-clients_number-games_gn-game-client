@@ -3,6 +3,7 @@ import { WithRouterProps } from "next/dist/client/with-router";
 import { Socket } from "socket.io-client";
 
 import { SocketState } from "../../_shared/types";
+import { Resource, Texture } from "pixi.js";
 
 export interface GameConfigs {
     odds: { [key: string]: number };
@@ -95,11 +96,9 @@ export interface GameBaseState<Result, SettlementResult> {
     betOptionElement?: HTMLElement;
     betChoiceElement?: HTMLElement;
     activeScoreboardTab?: number;
-    md5?: string;
-    md5ResultKey?: string;
-    showMD5ResultKey?: boolean;
     rate: number;
     disconnectReason?: string;
+    highlightWinningPlayerFrames: Texture<Resource>[];
 }
 
 export interface Notice {
@@ -195,4 +194,3 @@ export interface Round<R, S> {
     result: R;
     settlementResult: S;
 }
-

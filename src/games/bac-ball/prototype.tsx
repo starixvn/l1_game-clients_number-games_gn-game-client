@@ -52,7 +52,7 @@ const resultData: RoundResultData[] = [
     },
 ];
 
-export default function BacBall() {
+export default function BacBallPrototype() {
     const dataPlayer = betData[0];
     const dataBanker = betData[1];
     const dataTie = betData[2];

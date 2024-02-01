@@ -14,23 +14,16 @@ import { GameContextProvider } from "../../_shared/contexts/game-context/game-co
 import { GetLocalizedErrorMessage } from "../../_shared/helpers/notice-helper";
 import CountdownTimer from "../game-components/countdown-timer/countdown-timer";
 import GameContainer from "../game-components/game-container";
-import ScoreboardRoundHistory from "../game-components/round-history/scoreboard";
-import WinningBet from "../game-components/animations/winning-bet";
 import BaseDialog from "../game-components/base-dialog";
 import { ModalType } from "../game-components/base-dialog/type";
-import BaseResult from "../game-components/base-result";
-import BetContainer from "../game-components/bet-container";
 import DisabledModal from "../game-components/disabled-modal";
 import { ConnectFailedMessage, ErrorMessage } from "../game-components/error-message";
 import { ConnectFailedReasonKey } from "../game-components/error-message/type";
 import GameHeader from "../game-components/game-header";
 import GameLoading from "../game-components/game-loading";
 import { Notice } from "../game-components/notice";
-import OverlayMaskWhite from "../game-components/overlay-mask-white";
 import PlaceBetModal from "../game-components/place-bet-modal/place-bet-modal";
 import Rebet from "../game-components/rebet";
-import ResultDetail from "../game-components/result-detail";
-import SectionResultContainer from "../game-components/section-result-container";
 import Styles from "./game-base.module.scss";
 import MessageTransmitter from "../../_shared/helpers/message-transmitter";
 import { MessageTransmitterType } from "../../_shared/helpers/message-transmitter/type";
@@ -99,14 +92,12 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
         md5ResultKey: "",
         rate: 1,
         disconnectReason: "",
+        highlightWinningPlayerFrames: [],
     };
 
     constructor(props: P) {
         super(props);
-
         this.messageTransmitter = MessageTransmitter();
-        this.initWinStreakCollector();
-
         this.closePopup = this.closePopup.bind(this);
         this.openPopup = this.openPopup.bind(this);
         this.placeBet = this.placeBet.bind(this);
@@ -114,10 +105,8 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
         this.updateViewMode = this.updateViewMode.bind(this);
         this.playAcceptedBetAnimation = this.playAcceptedBetAnimation.bind(this);
         this.closeNotice = this.closeNotice.bind(this);
-        this.renderSettlementInfo = this.renderSettlementInfo.bind(this);
         this.updateUserBalance = this.updateUserBalance.bind(this);
         this.setActiveScoreboardTab = this.setActiveScoreboardTab.bind(this);
-        this.copyToClipboard = this.copyToClipboard.bind(this);
     }
 
     componentDidMount() {
@@ -148,7 +137,6 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
 
         this.isConnectFailed = false;
         this.isProcessingBet = false;
-        this.initWinStreakCollector();
         this.playPermissionListener = registerGlobalMessageEvent("notPermittedToPlay", this.handleRestrictPermission.bind(this));
         this.userStakeLevelListener = registerGlobalMessageEvent("userStakeLevel", ({ userStakeLevel }) =>
             this.props.updateUserStakeLevel(userStakeLevel)
@@ -162,13 +150,24 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
         const { socketInfo } = this.props;
         const { session } = this.context as any;
         const { proxy, enableMsgpackParser } = getAppSettings();
-        const socketUri = buildServerUrl(socketInfo.namespace);
-        const socket = io(socketUri, {
+        // const socketUri = buildServerUrl(socketInfo.namespace);
+        // const socket = io(socketUri, {
+        //     transports: ["websocket"],
+        //     upgrade: false,
+        //     path: `${proxy.path}/${socketInfo.path}/socket.io`,
+        //     parser: enableMsgpackParser ? MsgpackParser : undefined,
+        // });
+
+        const socketUri = buildServerUrl('bacball');
+        const socketOption = {
+            forceNew: true,
             transports: ["websocket"],
-            upgrade: false,
             path: `${proxy.path}/${socketInfo.path}/socket.io`,
+            upgrade: false,
             parser: enableMsgpackParser ? MsgpackParser : undefined,
-        });
+        };
+
+        const socket = io(socketUri, socketOption);
 
         socket.on("connect", () => {
             this.clearDisconnectTimeout();
@@ -212,9 +211,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
         this.messageTransmitter.register("endBet", this.handleEndBet.bind(this));
         this.messageTransmitter.register("apiError", this.handleApiError.bind(this));
         this.messageTransmitter.register("errorCode", this.handleError.bind(this));
-        this.messageTransmitter.register("md5", this.handleMD5.bind(this));
         this.messageTransmitter.register("userStakeLevel", this.handleUserStakeLevel.bind(this));
-        this.messageTransmitter.register("resultHash", this.handleResultHash.bind(this));
         this.messageTransmitter.register("odds", this.handleOdds.bind(this));
     }
 
@@ -601,7 +598,6 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
             showResultInfo: [GameState.DisplayResult].includes(gameState) || this.isUMInFirstLoad ? true : false,
         });
 
-        this.setWinStreakByRoundHistory(roundHistory);
     }
 
     getFinishAnimationDuration() {
@@ -626,7 +622,6 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
             settlementResult: finish.settlementResult,
             roundId: finish.roundId,
         });
-        finish.resultKey && this.setState({ md5ResultKey: finish.resultKey });
 
         const animationDuration = this.getFinishAnimationDuration();
 
@@ -636,9 +631,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
                 isShowBlink: false,
                 roundHistory: roundHistoryClone,
                 playResultAnimation: false,
-                showMD5ResultKey: true,
             });
-            this.notifyWinStreakByLatestSettlementResult(finish.settlementResult);
         }, animationDuration);
 
         this.showWinningAnimationTimeout = setTimeout(() => {
@@ -785,26 +778,8 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
     updateStatusShowResult = () => {
         if (this.state.gameState === GameState.DisplayResult) {
             this.setState({ playResultAnimation: false });
-            this.setState({ showResultInfo: true, showMD5ResultKey: true });
         }
     };
-
-    abstract renderBetOptions(): React.ReactElement;
-
-    abstract renderRoundHistory(): React.ReactElement;
-
-    abstract renderStatistic(): React.ReactElement;
-
-    abstract renderBoard(): React.ReactElement;
-
-    abstract renderResult(): React.ReactElement;
-
-    abstract renderResultCollapse(): React.ReactElement;
-
-    abstract getMainOptions(): string[];
-
-    abstract renderSettlementInfo(): JSX.Element;
-
     getChoiceNameOnHedgeBetMessage(choiceKey) {
         return this.getGameTranslate(choiceKey);
     }
@@ -815,38 +790,6 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
         return t(`${gameName.toLocaleLowerCase()}:${key}`);
     }
 
-    setWinStreakByRoundHistory(roundHistory) {
-        const history = roundHistory.sort((a, b) => a.roundId < b.roundId);
-        const mainOptions = this.getMainOptions();
-        this.initWinStreakCollector();
-
-        for (const round of history) {
-            mainOptions.forEach((option) => {
-                if (round.settlementResult[option] && !this.winStreakCollector[option].isStopStreak) {
-                    this.winStreakCollector[option].streak += 1;
-                } else {
-                    this.winStreakCollector[option].isStopStreak = true;
-                }
-            });
-
-            if (!mainOptions.some((option) => this.winStreakCollector[option].isStopStreak === false)) {
-                break;
-            }
-        }
-    }
-
-    initWinStreakCollector() {
-        const mainOptions = this.getMainOptions();
-
-        this.winStreakCollector = mainOptions.reduce((result, option) => {
-            result[option] = {
-                streak: 0,
-                isStopStreak: false,
-            };
-
-            return result;
-        }, {});
-    }
 
     getWinningStreakByOptions = ({ options }) => {
         return Math.max(...options.map((option) => this.winStreakCollector[option]?.streak ?? 0));
@@ -854,31 +797,6 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
 
     getOptionalWinStreakByOptions({ option }) {
         return "";
-    }
-
-    notifyWinStreakByLatestSettlementResult(settlementResult) {
-        const { notifyWinStreak, gameName } = this.props;
-        const mainOptions = this.getMainOptions();
-
-        mainOptions.forEach((option) => {
-            const winStreak = this.winStreakCollector[option];
-
-            if (settlementResult[option]) {
-                winStreak.streak += 1;
-
-                if (winStreak.streak > 3) {
-                    notifyWinStreak({
-                        key: uuidv4(),
-                        gameName: gameName,
-                        choice: option,
-                        streak: winStreak.streak,
-                        optional: this.getOptionalWinStreakByOptions({ option }),
-                    });
-                }
-            } else {
-                winStreak.streak = 0;
-            }
-        });
     }
 
     getOddsByChoice(choice: string) {
@@ -952,76 +870,33 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
         return <GameHeader {...gameHeaderProps} />;
     }
 
-    get isShowInlineResult() {
-        return false;
-    }
-
     renderResultSection() {
         return null;
     }
 
-    copyToClipboard(event: any) {
-        event.preventDefault();
-        const { md5, md5ResultKey, showMD5ResultKey } = this.state;
-        const md5Message = this.props.t(`common:${showMD5ResultKey ? "copyMD5Result" : "copyMD5Key"}`);
-        this.setState({ notice: { message: md5Message, duration: 2, isWarning: false } });
-        navigator.clipboard.writeText(showMD5ResultKey ? md5ResultKey : md5);
+
+    renderHeaderBlock() {
+        return <></>;
     }
 
-    handleMD5({ md5 }) {
-        this.setState({
-            md5,
-        });
+    renderResultBlock() {
+        return <></>;
     }
 
-    handleResultHash({ resultHash }) {
-        const { hashValue, rawValue } = resultHash;
-        hashValue && this.setState({ md5: hashValue });
-        rawValue && this.setState({ md5ResultKey: rawValue });
+    renderAnimation() {
+        return <></>;
     }
 
-    renderRawValueMD5() {
-        const { md5ResultKey } = this.state;
-        const arrayResult = md5ResultKey.split("_");
-        const totalScores = arrayResult[0].slice(1, arrayResult[0].length - 1).split(";");
-
-        return (
-            <>
-                <strong>{this.props.t("common:md5Result")}</strong>
-                {`: {`}
-                <span className={Styles["blue"]}>{totalScores[0]}</span>;<span className={Styles["red"]}>{totalScores[1]}</span>
-                {`}_`}
-                <span>{arrayResult[1]}</span>
-            </>
-        );
+    renderBettingBlock() {
+        return <></>;
     }
 
-    renderMD5() {
-        const { md5, md5ResultKey, showMD5ResultKey } = this.state;
-
-        let md5Text = (
-                <div>
-                    <strong>{this.props.t("common:md5Key")}:</strong> {md5}
-                </div>
-            ),
-            md5ClassName = "md5-key";
-        if ((showMD5ResultKey || !md5) && md5ResultKey) {
-            md5Text = this.renderRawValueMD5();
-            md5ClassName = "md5-result";
-        }
-
-        return (
-            <div className={Styles["md5-section"]}>
-                <span className={`${Styles["text"]} ${Styles[md5ClassName]}`}>{md5Text}</span>
-                <div className={Styles["copy-box"]} onClick={this.copyToClipboard}>
-                    <span className={Styles["copy-text"]}>{this.props.t("common:copy")}</span>
-                </div>
-            </div>
-        );
+    renderRoundResultBlock() {
+        return <></>;
     }
 
     renderGame() {
-        const { durations, supportMD5, gameName } = this.props;
+        const { durations, gameName } = this.props;
 
         const {
             remainingTime,
@@ -1049,7 +924,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
             viewMode,
             playResultAnimation,
             isShowBlink,
-            supportMD5,
+            supportMD5: false,
             rate,
         };
 
@@ -1066,7 +941,6 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
                 this.isProcessingBet = false;
                 this.clearRetryInterval();
             },
-            renderResultCollapse: this.renderResultCollapse.bind(this),
             setActiveScoreboardTab: this.setActiveScoreboardTab,
             updateStatusShowResult: this.updateStatusShowResult,
         };
@@ -1077,50 +951,11 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
         return (
             <GameContextProvider value={gameContext}>
                 <GameActionsContextProvider value={gameActionsContext}>
-                    {this.renderGameHeader()}
-                    {viewMode !== ViewMode.collapse && (
-                        <>
-                            {this.isShowInlineResult && (
-                                <SectionResultContainer gameName={gameName}>{this.renderResultSection()}</SectionResultContainer>
-                            )}
-                            {supportMD5 && this.renderMD5()}
-                            <BetContainer gameState={gameState}>
-                                <div ref={this.gameBaseContainerRef} className={betOptionsContainerClasses}>
-                                    {this.renderBetOptions()}
-                                </div>
-
-                                {this.isShowStartRoundAnimation && this.renderStartRoundAnimation()}
-                                {this.state.gameState === GameState.DisplayResult && (
-                                    <BaseResult showResultTimeInSecond={durations.showResult}>{this.renderResult()}</BaseResult>
-                                )}
-                                {this.state.showResultInfo && this.state.gameState === GameState.DisplayResult && (
-                                    <ResultDetail
-                                        renderSettlementInfo={this.renderSettlementInfo}
-                                        timeToShowInSecond={durations.showResult + (durations.balancingBet ?? 0) - animationDuration}
-                                    />
-                                )}
-                                {this.state.gameState === GameState.BalancingBet && <OverlayMaskWhite />}
-                                {this.state.notice && this.renderNotice()}
-                                {(this.state.showResultInfo || this.state.showWinningAnimation) && this.betWin > 0 && (
-                                    <WinningBet amount={this.betWin} />
-                                )}
-                            </BetContainer>
-                            <div className={`${Styles["mini-round-history"]} ${this.getRoundHistoryTabStyles()}`}>
-                                {this.state.roundHistory.length > 0 ? this.renderRoundHistory() : <></>}
-                            </div>
-                            {viewMode === ViewMode.full && (
-                                <>
-                                    <div className={`${Styles["statistic"]}`}>
-                                        {this.state.roundHistory.length > 0 ? this.renderStatistic() : <></>}
-                                    </div>
-                                    <ScoreboardRoundHistory activeScoreboardTab={activeScoreboardTab}>
-                                        {this.state.roundHistory.length > 0 ? this.renderBoard() : <></>}
-                                    </ScoreboardRoundHistory>
-                                </>
-                            )}
-                        </>
-                    )}
-                    {this.renderPopup(displayPopup)}
+                    {this.renderHeaderBlock()}
+                    {this.renderResultBlock()}
+                    {this.renderAnimation()}
+                    {this.renderBettingBlock()}
+                    {this.renderRoundResultBlock()}
                 </GameActionsContextProvider>
             </GameContextProvider>
         );

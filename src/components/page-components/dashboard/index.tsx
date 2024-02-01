@@ -66,6 +66,7 @@ class Dashboard extends React.PureComponent<Props, State> {
             isJoinGame: false,
             settingGames: [],
             openGameId: null,
+            openGameName: "",
             isShowToolbarGuide: getLocalStorageItem(localStorageKeys.toolbarGuide) ?? true,
         };
 
@@ -398,7 +399,8 @@ class Dashboard extends React.PureComponent<Props, State> {
     updateQueryGame(gameId: number, isJoinGame: boolean, isClearOpenGame = false) {
         const queryGame = isJoinGame ? gameId : this.props.queryGame;
         const openGameId = isClearOpenGame ? null : this.state.openGameId;
-        this.setState({ queryGame: queryGame, isJoinGame: isJoinGame, openGameId: openGameId });
+        const openGameName = isClearOpenGame ? null : this.state.openGameName;
+        this.setState({ queryGame: queryGame, isJoinGame: isJoinGame, openGameId: openGameId, openGameName: openGameName });
     }
 
     openGame(gameId: number) {
@@ -432,6 +434,7 @@ class Dashboard extends React.PureComponent<Props, State> {
             promotions,
             settingGames,
             openGameId,
+            openGameName,
             isShowToolbarGuide,
         } = this.state;
         const authContextValue = {
@@ -477,6 +480,7 @@ class Dashboard extends React.PureComponent<Props, State> {
                         updateQueryGames={this.updateQueryGame}
                         isJoinGame={isJoinGame}
                         openGameId={openGameId}
+                        openGameName={openGameName}
                         fractionalOddsFormat={authorizeInfo.user?.fractionalOddsFormat}
                     />
                     <BetSettings

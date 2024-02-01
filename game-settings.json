@@ -1,11 +1,11 @@
 {
-    "3": {
-        "id": 3,
-        "gameName": "FishPrawnCrab",
+    "1001": {
+        "id": 1001,
+        "gameName": "BacBall",
         "supportMD5": false,
         "socketInfo": {
-            "namespace": "fishprawncrab",
-            "path": "fishprawncrab"
+            "namespace": "bacball",
+            "path": "bacball"
         },
         "durations": {
             "wholeRound": 41,

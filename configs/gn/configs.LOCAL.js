@@ -8,7 +8,7 @@ window.envConfig = {
         dsn: "https://c65e9ef4f6c64d928f7b31ba355a44c2@sentry.lumigame.com/84",
         environment: "LOCAL",
     },
-    offeredGames: [],
+    offeredGames: [1001],
     enableSourceMap: true,
     subGuideDomain: "gn-guide",
     enableMsgpackParser: false,

@@ -1,5 +1,5 @@
 import { useTheme } from "next-themes";
-import React, { useEffect, useRef, useState } from "react";
+import React, { Fragment, useEffect, useRef, useState } from "react";
 import { isIOS, isMobileOnly } from "react-device-detect";
 import { io, Socket } from "socket.io-client";
 import useSound from "use-sound";
@@ -20,9 +20,9 @@ import { WinningStreakItem } from "../components/page-components/winning-streak/
 import styles from "./games.module.scss";
 import { Props } from "./type";
 import messageTransmitter from "../_shared/helpers/message-transmitter";
-import { buildSocketGatewayUrl } from "../_shared/helpers/url-helper";
+import { buildServerUrl, buildSocketGatewayUrl, buildSocketUrlByGameName, buildUrl } from "../_shared/helpers/url-helper";
 import { AppTypes } from "../_shared/constants";
-import BacBall from "./bac-ball/page";
+import BacBall from "./bac-ball";
 import { GameCategory } from "../components/page-components/game-category";
 import { ViewMode } from "../components/game-base/type";
 import HappyFour from "./happy-four/page";
@@ -116,6 +116,7 @@ export const Games: React.FC<Props> = ({
     isJoinGame,
     updateQueryGames,
     openGameId,
+    openGameName,
     fractionalOddsFormat,
 }) => {
     const [playPlaceBetSound] = useSound("./static/sounds/place-bet.mp3");
@@ -126,7 +127,7 @@ export const Games: React.FC<Props> = ({
     const winningStreakRef = useRef(null);
     const { theme } = useTheme();
     location.hash = `#${getCategoryHashTag(queryCategory, selectedPage)}`;
-    const socketGatewayRef = useRef<Socket>(null);
+    // const socketGatewayRef = useRef<Socket>(null);
     const [socketState, setSocketState] = useState<SocketState>(SocketState.None);
     const [isJoinedGame, setIsJoinedGame] = useState(false);
 
@@ -164,7 +165,7 @@ export const Games: React.FC<Props> = ({
             theme,
             userStakeLevel,
             updateUserStakeLevel,
-            socketGateway: socketGatewayRef.current,
+            // socketGateway: socketGatewayRef.current,
             socketGatewayState: socketState,
             retryConnectSocket: connectSocket,
             registerGlobalMessageEvent: registerGlobalMessageEvent,
@@ -175,17 +176,17 @@ export const Games: React.FC<Props> = ({
 
         switch (gameId) {
             case 1001:
-                return <BacBall />;
+                return <BacBall key={`game-${gameId}`} {...gameProps} />;
             case 1112:
-                return <HappyFour />;
+                return <HappyFour key={`game-${gameId}`} />;
             case 1113:
-                return <HappyWheel />;
+                return <HappyWheel key={`game-${gameId}`} />;
             case 1114:
-                return <LuckyThree />;
+                return <LuckyThree key={`game-${gameId}`} />;
             case 1115:
-                return <NextBall />;
+                return <NextBall key={`game-${gameId}`} />;
             case 1116:
-                return <SicBalls />;
+                return <SicBalls key={`game-${gameId}`} />;
 
             default:
                 return null;
@@ -199,32 +200,38 @@ export const Games: React.FC<Props> = ({
         history.pushState(null, "", `#${getCategoryHashTag(category, pageIndex)}`);
     };
 
-    const connectSocket = () => {
-        const { enableMsgpackParser } = getAppSettings();
-        const socketGatewayUrl = buildSocketGatewayUrl();
-        const socket = io(socketGatewayUrl, {
+    const connectSocket = (gameName: string) => {
+        const { proxy, enableMsgpackParser } = getAppSettings();
+        const socketUri = buildServerUrl('bacball');
+        const socketOption = {
             forceNew: true,
             transports: ["websocket"],
+            path: `/bacball/socket.io`,
             upgrade: false,
-            parser: enableMsgpackParser ? MsgpackParser : undefined,
-        });
+            // parser: enableMsgpackParser ? MsgpackParser : undefined,
+        };
 
-        socket.on("connect", () => {
-            setSocketState(SocketState.Connected);
-        });
-        socket.on("connect_error", () => {
-            setSocketState(SocketState.Error);
-        });
-        socket.on("disconnect", (reason) => {
-            setSocketState(SocketState.Disconnected);
-            console.log(reason);
-        });
+        const socket = io(socketUri, socketOption);
 
-        socket.on("message", (message) => {
-            GlobalMessageTransmitter.broadcast(message);
-        });
+        if (socket) {
+            socket.on("connect", () => {
+                setSocketState(SocketState.Connected);
+            });
 
-        socketGatewayRef.current = socket;
+            socket.on("connect_error", () => {
+                setSocketState(SocketState.Error);
+            });
+            socket.on("disconnect", (reason) => {
+                setSocketState(SocketState.Disconnected);
+                console.log(reason);
+            });
+
+            socket.on("message", (message) => {
+                GlobalMessageTransmitter.broadcast(message);
+            });
+        }
+
+        // socketGatewayRef.current = socket;
     };
 
     useEffect(() => {
@@ -232,10 +239,10 @@ export const Games: React.FC<Props> = ({
     }, [openGameId, isJoinGame]);
 
     useEffect(() => {
-        connectSocket();
+        connectSocket(openGameName);
 
         return () => {
-            socketGatewayRef.current.close();
+            // socketGatewayRef.current.close();
         };
     }, []);
 

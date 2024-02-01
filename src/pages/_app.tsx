@@ -10,9 +10,9 @@ import { Profiler, StrictMode } from "react";
 class SabaNumberApp extends App<AppProps> {
     callback(self) {
         return (id, phase, actualTime, baseTime, startTime, commitTime) => {
-            console.log(`
-Id: "${id}", Phase: "${phase}", Actual Time:${actualTime}, Base Time: ${baseTime}, Start Time:${startTime}, Commit Time: ${commitTime}
-`);
+            //             console.log(`
+            // Id: "${id}", Phase: "${phase}", Actual Time:${actualTime}, Base Time: ${baseTime}, Start Time:${startTime}, Commit Time: ${commitTime}
+            // `);
         };
     }
 
