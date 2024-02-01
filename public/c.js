@@ -17,5 +17,5 @@ window.envConfig = {
     subGuideDomain: "l1-guide",
     enableMsgpackParser: false,
     system: "GN",
-    appType: 2,
+    appType: 1,
 };
