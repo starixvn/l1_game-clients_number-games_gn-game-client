@@ -5,9 +5,9 @@ import React, { useEffect } from "react";
 import { BetOptionData, RoundResultData } from "../../_shared/constants";
 import AnimatedBingo from "../../components/game-components/animated-bingo";
 import Ball from "../../components/game-components/ball";
+import Cage, { BallColor, CageColor } from "../../components/game-components/cage";
 import PercentageCircle from "../../components/game-components/percentage-circle";
 import RoundResult from "../../components/game-components/round-result";
-import Cage, { BallColor, CageColor } from "../../components/shared/cage";
 import Style from "./bac-ball.module.scss";
 
 const betData: BetOptionData[] = [
@@ -119,7 +119,7 @@ export default function BacBall() {
                                     isPlaying={true}
                                     initialFrame={0}
                                     animationSpeed={0.2}
-                                    loop={false}
+                                    loop={true}
                                 />
                             </Container>
                         </Stage>

@@ -5,8 +5,6 @@ import React, { useEffect } from "react";
 import Styles from "./animated-bingo.module.scss";
 
 const AnimatedBingo = () => {
-    const [playAnim, setPlayAnim] = React.useState(false);
-    console.log(playAnim);
     const [cageLoopFrames, setCageLoopFrames] = React.useState<Texture<Resource>[]>([]);
 
     useEffect(() => {

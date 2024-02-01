@@ -13,6 +13,10 @@
 
 .cage-area {
     --start-positionX: -3rem;
+    --move-step-1: -1rem;
+    --move-step-2: -3.1rem;
+    --move-step-3: -3rem;
+
     --duration-slide-number: 0.75s;
     --delay-time-slide-number: 0.65s;
 
@@ -28,6 +32,18 @@
 
     &.small {
         transform: scale(0.92);
+    }
+
+    &.left {
+        --start-positionX: 3rem;
+
+        --move-step-1: 1rem;
+        --move-step-2: 3.1rem;
+        --move-step-3: 3rem;
+
+        .show-ball-anim {
+            transform: scaleX(-1);
+        }
     }
 }
 
@@ -72,10 +88,6 @@
     &.red {
         background-image: url(/images/animated-bingo/cage-border-red.png);
     }
-
-    .left {
-        transform: scaleX(-1);
-    }
 }
 
 .number {
@@ -117,16 +129,16 @@
 
     80% {
         filter: blur(0);
-        transform: translateX(-1rem);
+        transform: translateX(var(--move-step-1));
     }
 
     98% {
         opacity: 1;
-        transform: translateX(-3.1rem);
+        transform: translateX(var(--move-step-2));
     }
 
     100% {
         opacity: 1;
-        transform: translateX(-3rem);
+        transform: translateX(var(--move-step-3));
     }
 }
