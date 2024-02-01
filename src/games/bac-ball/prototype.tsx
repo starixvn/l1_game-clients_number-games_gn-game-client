@@ -69,12 +69,20 @@ export default function BacBallPrototype() {
     };
 
     const [highlightWinningPlayerFrames, setHighlightWinningPlayerFrames] = React.useState<Texture<Resource>[]>([]);
+    const [highlightWinningTieFrames, setHighlightWinningTieFrames] = React.useState<Texture<Resource>[]>([]);
+
     useEffect(() => {
-        const loadCageLoopsJson = async () => {
+        const loadHighlightWinningPlayerJson = async () => {
             const sprite = await Assets.load<Spritesheet>("/images/bac-number/highlight-winning-player.json");
             setHighlightWinningPlayerFrames(sprite.animations["highlight-winning-player"]);
         };
-        loadCageLoopsJson();
+        loadHighlightWinningPlayerJson();
+
+        const loadHighlightWinningTieJson = async () => {
+            const sprite = await Assets.load<Spritesheet>("/images/bac-number/highlight-winning-tie.json");
+            setHighlightWinningTieFrames(sprite.animations["highlight-winning-tie"]);
+        };
+        loadHighlightWinningTieJson();
     }, []);
 
     return (
