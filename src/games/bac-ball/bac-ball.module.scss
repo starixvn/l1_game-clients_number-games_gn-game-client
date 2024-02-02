@@ -82,26 +82,38 @@
     bottom: 15px;
 }
 
-.left-corner {
+%corner-cover {
     position: absolute;
-    top: 0;
-    left: 0;
-
-    width: 130px;
-    height: 25px;
-    transform-origin: 0%;
+    top: -1.5rem;
+    width: 13rem;
+    height: 2.5rem;
     z-index: 100;
+
+    .winning-effect {
+        position: relative;
+    }
+}
+
+.left-corner {
+    @extend %corner-cover;
+    left: -1.3rem;
+    transform: rotate(-8deg);
+
+    .winning-effect {
+        left: 0;
+        transform: rotate(8deg);
+    }
 }
 
 .right-corner {
-    position: absolute;
-    top: 0;
+    @extend %corner-cover;
     right: 0;
-    width: 130px;
-    height: 25px;
     transform: rotate(8deg);
-    transform-origin: 100%;
-    z-index: 10;
+
+    .winning-effect {
+        right: -1.3rem;
+        transform: scaleX(-1) rotate(8deg);
+    }
 }
 
 .lottery-player-container {

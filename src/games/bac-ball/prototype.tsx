@@ -117,23 +117,43 @@ export default function BacBallPrototype() {
             <AnimatedBingo />
             <div className={`${Style["betting-zone"]}`}>
                 <div className={Style["left-corner"]}>
-                    {highlightWinningPlayerFrames.length > 0 && (
-                        <Stage width={210} height={210} options={{ backgroundAlpha: 0 }}>
-                            <Container position={[90, 95]}>
-                                <AnimatedSprite
-                                    anchor={0.5}
-                                    textures={highlightWinningPlayerFrames}
-                                    autoUpdate
-                                    isPlaying={true}
-                                    initialFrame={0}
-                                    animationSpeed={0.2}
-                                    loop={true}
-                                />
-                            </Container>
-                        </Stage>
-                    )}
+                    <div className={Style["winning-effect"]}>
+                        {highlightWinningPlayerFrames.length > 0 && (
+                            <Stage width={210} height={210} options={{ backgroundAlpha: 0 }}>
+                                <Container position={[90, 110]}>
+                                    <AnimatedSprite
+                                        anchor={0.5}
+                                        textures={highlightWinningPlayerFrames}
+                                        autoUpdate
+                                        isPlaying={true}
+                                        initialFrame={0}
+                                        animationSpeed={0.2}
+                                        loop={true}
+                                    />
+                                </Container>
+                            </Stage>
+                        )}
+                    </div>
                 </div>
-                <div className={Style["right-corner"]}></div>
+                <div className={Style["right-corner"]}>
+                    <div className={Style["winning-effect"]}>
+                        {highlightWinningPlayerFrames.length > 0 && (
+                            <Stage width={210} height={210} options={{ backgroundAlpha: 0 }}>
+                                <Container position={[90, 108]}>
+                                    <AnimatedSprite
+                                        anchor={0.5}
+                                        textures={highlightWinningPlayerFrames}
+                                        autoUpdate
+                                        isPlaying={true}
+                                        initialFrame={0}
+                                        animationSpeed={0.2}
+                                        loop={true}
+                                    />
+                                </Container>
+                            </Stage>
+                        )}
+                    </div>
+                </div>
                 <div className={`${Style["player"]} text-white relative`} onClick={onClickPlayer}>
                     <div className={`flex justify-between pt-5`}>
                         <div className={Style.stake}>
@@ -181,6 +201,21 @@ export default function BacBallPrototype() {
                 </div>
 
                 <div className={`${Style["tie"]} text-white flex flex-col items-center pt-2 relative`} onClick={onClickTie}>
+                    {highlightWinningTieFrames.length > 0 && (
+                        <Stage width={210} height={210} options={{ backgroundAlpha: 0 }}>
+                            <Container position={[105, 77]}>
+                                <AnimatedSprite
+                                    anchor={0.5}
+                                    textures={highlightWinningTieFrames}
+                                    autoUpdate
+                                    isPlaying={true}
+                                    initialFrame={0}
+                                    animationSpeed={0.2}
+                                    loop={true}
+                                />
+                            </Container>
+                        </Stage>
+                    )}
                     <div className={Style.percent}>
                         <PercentageCircle percentage={dataTie.percent} />
                     </div>

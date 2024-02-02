@@ -84,7 +84,7 @@ const Cage: React.FunctionComponent<CageProps> = (cageProps) => {
                 <div className={`${Styles["cage-border"]} ${Styles[color]}`}>
                     {playAnim && (
                         <div className={Styles["show-ball-anim"]}>
-                            <Stage width={153} height={153} options={{ backgroundAlpha: 0 }}>
+                            <Stage width={250} height={250} options={{ backgroundAlpha: 0 }}>
                                 <Container position={[85, 86]}>
                                     <AnimatedSprite
                                         anchor={0.5}
