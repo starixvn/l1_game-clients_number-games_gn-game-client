@@ -3,13 +3,12 @@ import Head from "next/head";
 import { withRouter } from "next/router";
 import React from "react";
 import { isMobileOnly, isMobile, isSafari } from "react-device-detect";
-import { AuthorizeResponse, ReCheckInResponse, UMInfo, Response } from "sc-user-service-client/dist/auth";
+import { AuthorizeResponse, ReCheckInResponse, UMInfo, Response, SSOResponse } from "sc-user-service-client/dist/auth";
 import { Props, State } from "./type";
 import { getAppSettings } from "../../../_shared/app-settings";
 import { StorageHelper, localStorageKeys, GetLocalizedErrorMessage, buildUrl } from "../../../_shared/helpers";
-import LandscapeMode from "../landscape-mode";
 import { AuthContextProvider } from "../../../_shared/react-contexts";
-import { authorize, getSettingGames, reCheckIn } from "../../../services/auth-service";
+import { authorize, createNickname, getSettingGames, reCheckIn } from "../../../services/auth-service";
 import { updateSignInSMStatus, updateThemeSetting } from "../../../services/user-setting-service";
 import BetSettings from "../../page-components/bet-settings";
 
@@ -27,8 +26,10 @@ import { Themes } from "../../../_shared/constants";
 import { AnnouncementModal } from "../../page-components/dashboard/announcement";
 import { ToolbarGuide } from "../hide-toolbar-guide";
 import Games from "../../../games/games";
+import NameGenerator from "./register/name-generator";
+import { randomInteger } from "../../../_shared/helpers/number-helper";
 
-const orientationType = { portrait: "portrait", landscape: "landscape" };
+
 class Dashboard extends React.PureComponent<Props, State> {
     private notificationSocket: Socket = null;
     private reCheckInInterval: NodeJS.Timeout;
@@ -41,7 +42,6 @@ class Dashboard extends React.PureComponent<Props, State> {
         super(props);
 
         this.state = {
-            orientation: "",
             enabledWinningStreakNotification: StorageHelper.get(localStorageKeys.winningStreakNotification) ?? true,
             enabledPlaySound: StorageHelper.get(localStorageKeys.playSound) ?? false,
             favoriteGames: StorageHelper.get(localStorageKeys.favoriteGames) ?? [],
@@ -89,7 +89,6 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.handleUpdateUserStakeLevel = this.handleUpdateUserStakeLevel.bind(this);
         this.signOut = this.signOut.bind(this);
         this.toggleSlidingChip = this.toggleSlidingChip.bind(this);
-        this.handleOrientation = this.handleOrientation.bind(this);
         this.toggleAnnouncementModal = this.toggleAnnouncementModal.bind(this);
         this.handlePromotions = this.handlePromotions.bind(this);
         this.handlePromotionNotifications = this.handlePromotionNotifications.bind(this);
@@ -165,14 +164,9 @@ class Dashboard extends React.PureComponent<Props, State> {
         }
     }
 
-    handleOrientation() {
-        setTimeout(() => {
-            this.setState({ orientation: window.innerHeight < window.innerWidth ? orientationType.landscape : orientationType.portrait });
-        }, 200);
-    }
-
     async componentDidMount() {
-        const { session, i18n } = this.props;
+        console.log("componentDidMount")
+        const { session, i18n, directMode } = this.props;
         const authorizeResponse = await authorize(session);
 
         const errorResponse = authorizeResponse as any;
@@ -184,6 +178,11 @@ class Dashboard extends React.PureComponent<Props, State> {
 
         const authorizeInfo = authorizeResponse as any;
 
+        const { authorized } = authorizeInfo;
+        if (authorized === false && directMode) {
+            return await this.autoCreateNickname();
+        }
+
         this.updateAuthorizeInfo(authorizeInfo);
 
         this.updateUserBalance(authorizeInfo?.user?.red);
@@ -193,9 +192,6 @@ class Dashboard extends React.PureComponent<Props, State> {
             this.handleRecheckInResponse(reCheckInResponse);
         }, 60 * 1000);
 
-        if (isMobile) {
-            window.addEventListener("orientationchange", this.handleOrientation, false);
-        }
 
         // this.connectNotificationSocket();
         await this.updateBetSettingGames();
@@ -546,13 +542,32 @@ class Dashboard extends React.PureComponent<Props, State> {
         );
     }
 
-    renderComponents(authorizeInfo: AuthorizeResponse) {
+    autoCreateNickname = async () => {
+        console.log(`begin autoCreateNickname `);
+        const { session } = this.props;
+        const nickname = NameGenerator.generateName();
+        const maxAvatarId = 88;
+        const selectedAvatarId = randomInteger(1, maxAvatarId);
+        const response = await createNickname(session, nickname, selectedAvatarId);
+        const authorizeResponse = response as any;
+        if (authorizeResponse && authorizeResponse.authorized) {
+            updateThemeSetting(session);
+            Object.assign(authorizeResponse.user, { settings: { theme: Themes.light } });
+            this.handleRegister(authorizeResponse);
+        } else {
+            console.log(`autoCreateNickname failed: ${authorizeResponse?.errorCode}`);
+            this.props.router.push("/timeout", "/timeout", { locale: this.props.i18n.language });
+        }
+    }
+
+    renderComponents = (authorizeInfo: AuthorizeResponse) => {
         const { authorized } = authorizeInfo;
         if (authorized) {
             return this.renderDashBoard();
         }
 
         return <Register session={this.props.session} handleStateLogin={this.handleRegister} />;
+
     }
 
     renderGoogleAnalytic() {
@@ -580,11 +595,7 @@ class Dashboard extends React.PureComponent<Props, State> {
     }
 
     render() {
-        const { orientation, authorizeInfo } = this.state;
-
-        if (orientation === orientationType.landscape && isMobileOnly) {
-            return <LandscapeMode />;
-        }
+        const { authorizeInfo } = this.state;
 
         return authorizeInfo ? (
             <>

@@ -7,6 +7,7 @@ export type Props = {
     session: SSOResponse;
     queryGame: number;
     setIsUm: Function;
+    directMode: boolean;
 } & WithRouterProps &
     WithTranslation;
 
@@ -16,7 +17,6 @@ type APIErrorProp = {
 };
 
 export type State = {
-    orientation: string;
     enabledWinningStreakNotification: boolean;
     enabledPlaySound: boolean;
     userStakeLevel: UserStakeLevel;

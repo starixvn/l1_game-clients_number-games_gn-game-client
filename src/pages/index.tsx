@@ -22,7 +22,7 @@ function Home() {
     const [session, setSession] = useState<SSOResponse>(null);
     const [language, setLanguage] = useState<string>(null);
 
-    const { token, lang, gameId } = router.query;
+    const { token, lang, gameId, ref } = router.query;
     const { i18n } = useTranslation();
 
     usePWAWoker();
@@ -73,13 +73,14 @@ function Home() {
         return <SplashScreen locale={language}></SplashScreen>;
     }
 
-    return <Dashboard session={session} queryGame={+gameId} setIsUm={setIsUm} />;
+
+    return <Dashboard session={session} queryGame={+gameId} setIsUm={setIsUm} directMode={ref === "m_direct" || ref === "d_direct"} />;
 }
 
 export const getStaticProps = async ({ locale }) => {
     return {
         props: {
-            ...(await serverSideTranslations(locale, ["common", "fishprawncrab", "register", "bethistory", "messages", "um"])),
+            ...(await serverSideTranslations(locale, ["common", "register", "bethistory", "messages", "um"])),
         },
     };
 };
