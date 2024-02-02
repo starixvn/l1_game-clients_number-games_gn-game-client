@@ -65,6 +65,7 @@ export type GameBaseProps = {
 export interface GameBaseState<Result, SettlementResult> {
     signedIn: boolean;
     gameState: GameState;
+    roundRemainingTime: number;
     remainingTime: number;
     gameConfigs: GameConfigs;
     roundHistory: Round<Result, SettlementResult>[];

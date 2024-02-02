@@ -5,6 +5,7 @@ export type GameContextModel = {
     ownBets: object;
     gameSetting: GameBaseProps;
     roundId: number;
+    roundRemainingTime: number;
     remainingTime: number;
     gameConfigs: GameConfigs;
     gameState: GameState;

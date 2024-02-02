@@ -6,6 +6,7 @@ import { GameContextModel } from "./game-context-type";
 export const GameContext = React.createContext<GameContextModel>({
     roundId: 0,
     gameState: GameState.None,
+    roundRemainingTime: 0,
     remainingTime: 0,
     totalBets: {},
     ownBets: {},

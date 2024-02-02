@@ -54,6 +54,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
     protected betOptionBoundary: Boundary;
     protected socket: Socket;
     protected interval: NodeJS.Timeout;
+    protected roundTimeCounter: number;
     protected timeCounter: number;
     protected reBetStorageKey: string;
     protected messageTransmitter: MessageTransmitterType;
@@ -67,6 +68,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
     protected readonly defaultState = {
         signedIn: false,
         gameState: GameState.None,
+        roundRemainingTime: 0,
         remainingTime: 0,
         gameConfigs: { ...this.defaultGameConfig },
         roundHistory: [],
@@ -86,8 +88,6 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
         betOptionElement: null,
         betChoiceElement: null,
         activeScoreboardTab: 0,
-        md5: "",
-        md5ResultKey: "",
         rate: 1,
         disconnectReason: "",
         winningPlayerFrames: [],
@@ -436,29 +436,38 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
 
     handleRemainingTime({ remainingTime }) {
         const { gameState } = this.state;
-
+        const { durations } = this.props;
         if (gameState === GameState.None || !this.isUMInFirstLoad) {
-            this.runGame(remainingTime);
+            this.setState({ roundRemainingTime: remainingTime });
+            this.roundTimeCounter = remainingTime;
+            const turnRemainingTime = remainingTime % durations.wholeTurn;
+            this.runGame(turnRemainingTime === 0 ? durations.wholeTurn : turnRemainingTime);
         }
     }
 
     runGame(remainingTime: number) {
-        this.timeCounter = remainingTime;
+        const { durations } = this.props;
+        const turnRemainingTime = remainingTime % durations.wholeTurn;
+        this.timeCounter = turnRemainingTime === 0 ? durations.wholeTurn : turnRemainingTime;
 
         this.interval && clearInterval(this.interval);
         this.interval = setInterval(() => {
             if (this.timeCounter > 0) {
                 this.timeCounter = this.timeCounter - 1;
+                this.roundTimeCounter = this.roundTimeCounter - 1;
             }
             this.handleGamePlay(this.timeCounter);
         }, 1000);
 
-        this.handleGamePlay(remainingTime);
+        this.handleGamePlay(turnRemainingTime === 0 ? durations.wholeTurn : turnRemainingTime);
     }
 
     handleGamePlay(remainingTime: number) {
+        console.log(`---------------`);
+        console.log(`roundTimeCounter: ${this.roundTimeCounter}`);
+        console.log(`Turn RemainingTime: ${remainingTime}`);
         const newGameState = this.determineGameState(remainingTime);
-
+        console.log(`GameState: ${GameState[newGameState]}`);
         if (this.state.gameState !== newGameState && !this.isConnectFailed) {
             const newState = {
                 gameState: newGameState,
@@ -884,7 +893,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
     }
 
     renderGame() {
-        const { remainingTime, roundId, gameState, totalBets, ownBets, gameConfigs, viewMode, playResultAnimation, isShowBlink, rate } =
+        const { remainingTime, roundRemainingTime, roundId, gameState, totalBets, ownBets, gameConfigs, viewMode, playResultAnimation, isShowBlink, rate } =
             this.state;
 
         const gameContext = {
@@ -894,6 +903,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
             roundId,
             gameConfigs,
             gameState,
+            roundRemainingTime,
             remainingTime,
             viewMode,
             playResultAnimation,
