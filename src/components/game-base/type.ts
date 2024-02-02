@@ -126,13 +126,12 @@ export interface SocketInfo {
 }
 
 export interface GameDurations {
-    wholeRound: number;
+    wholeTurn: number;
     placingBets: number;
     lockingBet: number;
     showResult: number;
     resultAnimation: number;
     beforeStartRound: number;
-    balancingBet?: number;
 }
 
 export interface RebetStorageModel {

@@ -8,11 +8,12 @@
             "path": "bacball"
         },
         "durations": {
-            "wholeRound": 41,
-            "placingBets": 30,
-            "lockingBet": 5,
-            "showResult": 8,
-            "resultAnimation": 2,
+            "wholeRound": 132,
+            "wholeTurn": 33,
+            "placingBets": 25,
+            "lockingBet": 3,
+            "showResult": 5,
+            "resultAnimation": 3,
             "beforeStartRound": 2
         }
     }

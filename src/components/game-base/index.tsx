@@ -24,7 +24,6 @@ import GameLoading from "../game-components/game-loading";
 import { Notice } from "../game-components/notice";
 import PlaceBetModal from "../game-components/place-bet-modal/place-bet-modal";
 import Rebet from "../game-components/rebet";
-import Styles from "./game-base.module.scss";
 import MessageTransmitter from "../../_shared/helpers/message-transmitter";
 import { MessageTransmitterType } from "../../_shared/helpers/message-transmitter/type";
 import {
@@ -150,15 +149,8 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
         const { socketInfo } = this.props;
         const { session } = this.context as any;
         const { proxy, enableMsgpackParser } = getAppSettings();
-        // const socketUri = buildServerUrl(socketInfo.namespace);
-        // const socket = io(socketUri, {
-        //     transports: ["websocket"],
-        //     upgrade: false,
-        //     path: `${proxy.path}/${socketInfo.path}/socket.io`,
-        //     parser: enableMsgpackParser ? MsgpackParser : undefined,
-        // });
 
-        const socketUri = buildServerUrl('bacball');
+        const socketUri = buildServerUrl(socketInfo.namespace);
         const socketOption = {
             forceNew: true,
             transports: ["websocket"],
@@ -421,7 +413,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
 
     handleUM({ um, um_message, remainingTime }) {
         const { durations, i18n } = this.props;
-        if (um && remainingTime && remainingTime + 1 === durations.wholeRound) {
+        if (um && remainingTime && remainingTime + 1 === durations.wholeTurn) {
             this.isUMInFirstLoad = true;
         } else {
             this.isUMInFirstLoad = false;
@@ -429,7 +421,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
 
         if (
             um &&
-            (this.timeCounter <= durations.placingBets + durations.beforeStartRound + 1 || remainingTime + 1 === durations.wholeRound)
+            (this.timeCounter <= durations.placingBets + durations.beforeStartRound + 1 || remainingTime + 1 === durations.wholeTurn)
         ) {
             this.interval && clearInterval(this.interval);
             this.showResultInfoTimeout && clearTimeout(this.showResultInfoTimeout);
@@ -549,11 +541,11 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
 
     determineGameState(remainingTime: number): any {
         const { durations } = this.props;
-        if (durations.balancingBet && remainingTime > durations.wholeRound - durations.balancingBet) {
+        if (remainingTime > durations.wholeTurn) {
             return GameState.BalancingBet;
         }
 
-        if (remainingTime >= durations.wholeRound - durations.showResult - (durations.balancingBet ?? 0)) {
+        if (remainingTime >= durations.wholeTurn - durations.showResult) {
             return GameState.DisplayResult;
         }
 
@@ -601,8 +593,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
     }
 
     getFinishAnimationDuration() {
-        const { durations } = this.props;
-        return (durations.resultAnimation + (durations.balancingBet ?? 0)) * 1000;
+        return this.props.durations.resultAnimation * 1000;
     }
 
     handleFinish({ finish }) {
@@ -641,7 +632,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
             this.betWin > 0 && this.updateUserBalance();
         }, this.winningAnimationWaitingTimeInSecond);
 
-        this.runGame(durations.wholeRound);
+        this.runGame(durations.wholeTurn);
     }
 
     storeOwnBet(roundId: number) {
@@ -896,8 +887,6 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
     }
 
     renderGame() {
-        const { durations, gameName } = this.props;
-
         const {
             remainingTime,
             roundId,
@@ -908,8 +897,6 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
             viewMode,
             playResultAnimation,
             isShowBlink,
-            displayPopup,
-            activeScoreboardTab,
             rate,
         } = this.state;
 
@@ -945,9 +932,6 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
             updateStatusShowResult: this.updateStatusShowResult,
         };
 
-        const animationDuration = this.getFinishAnimationDuration() / 1000;
-        const betOptionFollowGameName = `bet-options-${gameName.toLowerCase()}`;
-        const betOptionsContainerClasses = `${Styles["bet-options"]} ${Styles[betOptionFollowGameName]}`;
         return (
             <GameContextProvider value={gameContext}>
                 <GameActionsContextProvider value={gameActionsContext}>
