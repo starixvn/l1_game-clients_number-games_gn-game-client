@@ -14,7 +14,7 @@ const AnimatedBingo = () => {
         };
 
         const loadCageLoopsJson = () => {
-            loadAndSetFrames("/images/animated-bingo/cage-balls.json", "loop", setCageLoopFrames);
+            loadAndSetFrames("/static/images/animated-bingo/cage-balls.json", "loop", setCageLoopFrames);
         };
 
         loadCageLoopsJson();

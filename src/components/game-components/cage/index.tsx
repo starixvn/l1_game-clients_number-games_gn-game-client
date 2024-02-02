@@ -40,11 +40,11 @@ const Cage: React.FunctionComponent<CageProps> = (cageProps) => {
         };
 
         const loadCageLoopsJson = () => {
-            loadAndSetFrames("/images/animated-bingo/cage-balls.json", "loop", setCageLoopFrames);
+            loadAndSetFrames("/static/images/animated-bingo/cage-balls.json", "loop", setCageLoopFrames);
         };
 
         const loadDrumBallJson = () => {
-            loadAndSetFrames("/images/animated-bingo/ball.json", ballColor, setBallFrames);
+            loadAndSetFrames("/static/images/animated-bingo/ball.json", ballColor, setBallFrames);
         };
 
         loadCageLoopsJson();

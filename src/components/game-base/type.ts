@@ -1,9 +1,9 @@
 import { WithTranslation } from "next-i18next";
 import { WithRouterProps } from "next/dist/client/with-router";
+import { Resource, Texture } from "pixi.js";
 import { Socket } from "socket.io-client";
 
 import { SocketState } from "../../_shared/types";
-import { Resource, Texture } from "pixi.js";
 
 export interface GameConfigs {
     odds: { [key: string]: number };
@@ -98,7 +98,8 @@ export interface GameBaseState<Result, SettlementResult> {
     activeScoreboardTab?: number;
     rate: number;
     disconnectReason?: string;
-    highlightWinningPlayerFrames: Texture<Resource>[];
+    winningPlayerFrames: Texture<Resource>[];
+    winningTieFrames: Texture<Resource>[];
 }
 
 export interface Notice {

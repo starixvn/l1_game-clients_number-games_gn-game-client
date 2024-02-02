@@ -2,30 +2,32 @@ import React from "react";
 import { isMobileOnly } from "react-device-detect";
 import Auth from "sc-user-service-client/dist/auth";
 import { io, Socket } from "socket.io-client";
-import { v4 as uuidv4 } from "uuid";
 import MsgpackParser from "socket.io-msgpack-parser";
+import { v4 as uuidv4 } from "uuid";
+
 import { getAppSettings } from "../../_shared/app-settings";
 import { LanguageLocaleMapper } from "../../_shared/constants";
-import * as LocalStorageManager from "../../_shared/local-storage";
-import { CommonResourceKeys, GameResourceKeys } from "../../_shared/resources";
 import { AuthContext } from "../../_shared/contexts/auth";
 import { GameActionsContextProvider } from "../../_shared/contexts/game-actions-context";
 import { GameContextProvider } from "../../_shared/contexts/game-context/game-context";
+import MessageTransmitter from "../../_shared/helpers/message-transmitter";
+import { MessageTransmitterType } from "../../_shared/helpers/message-transmitter/type";
 import { GetLocalizedErrorMessage } from "../../_shared/helpers/notice-helper";
-import CountdownTimer from "../game-components/countdown-timer/countdown-timer";
-import GameContainer from "../game-components/game-container";
+import { buildServerUrl } from "../../_shared/helpers/url-helper";
+import * as LocalStorageManager from "../../_shared/local-storage";
+import { CommonResourceKeys, GameResourceKeys } from "../../_shared/resources";
 import BaseDialog from "../game-components/base-dialog";
 import { ModalType } from "../game-components/base-dialog/type";
+import CountdownTimer from "../game-components/countdown-timer/countdown-timer";
 import DisabledModal from "../game-components/disabled-modal";
 import { ConnectFailedMessage, ErrorMessage } from "../game-components/error-message";
 import { ConnectFailedReasonKey } from "../game-components/error-message/type";
+import GameContainer from "../game-components/game-container";
 import GameHeader from "../game-components/game-header";
 import GameLoading from "../game-components/game-loading";
 import { Notice } from "../game-components/notice";
 import PlaceBetModal from "../game-components/place-bet-modal/place-bet-modal";
 import Rebet from "../game-components/rebet";
-import MessageTransmitter from "../../_shared/helpers/message-transmitter";
-import { MessageTransmitterType } from "../../_shared/helpers/message-transmitter/type";
 import {
     Boundary,
     GameBaseProps,
@@ -37,7 +39,6 @@ import {
     ViewMode,
     WinStreakCollectorModel,
 } from "./type";
-import { buildServerUrl } from "../../_shared/helpers/url-helper";
 
 const { rebet: reBetStorageKey } = LocalStorageManager.localStorageKeys;
 
@@ -91,7 +92,8 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
         md5ResultKey: "",
         rate: 1,
         disconnectReason: "",
-        highlightWinningPlayerFrames: [],
+        winningPlayerFrames: [],
+        winningTieFrames: [],
     };
 
     constructor(props: P) {
@@ -589,7 +591,6 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
             playResultAnimation: [GameState.DisplayResult].includes(gameState) || this.isUMInFirstLoad ? false : true,
             showResultInfo: [GameState.DisplayResult].includes(gameState) || this.isUMInFirstLoad ? true : false,
         });
-
     }
 
     getFinishAnimationDuration() {
@@ -781,7 +782,6 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
         return t(`${gameName.toLocaleLowerCase()}:${key}`);
     }
 
-
     getWinningStreakByOptions = ({ options }) => {
         return Math.max(...options.map((option) => this.winStreakCollector[option]?.streak ?? 0));
     };
@@ -865,7 +865,6 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
         return null;
     }
 
-
     renderHeaderBlock() {
         return <></>;
     }
@@ -887,18 +886,8 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
     }
 
     renderGame() {
-        const {
-            remainingTime,
-            roundId,
-            gameState,
-            totalBets,
-            ownBets,
-            gameConfigs,
-            viewMode,
-            playResultAnimation,
-            isShowBlink,
-            rate,
-        } = this.state;
+        const { remainingTime, roundId, gameState, totalBets, ownBets, gameConfigs, viewMode, playResultAnimation, isShowBlink, rate } =
+            this.state;
 
         const gameContext = {
             totalBets,

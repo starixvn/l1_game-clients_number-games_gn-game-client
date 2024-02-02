@@ -36,7 +36,7 @@
 
 .cage-bg {
     @extend %result;
-    background-image: url(/images/animated-bingo/cage.png);
+    background-image: url("/static/images/animated-bingo/cage.png");
     background-size: var(--cage-width) var(--cage-height);
 }
 
@@ -47,7 +47,7 @@
 
 .cage-cover {
     @extend %result;
-    background-image: url(/images/animated-bingo/cage-cover.png);
+    background-image: url("/static/images/animated-bingo/cage-cover.png");
 }
 
 .cage-border {
@@ -55,14 +55,14 @@
     position: absolute;
 
     &.purple {
-        background-image: url(/images/animated-bingo/cage-border-purple.png);
+        background-image: url("/static/images/animated-bingo/cage-border-purple.png");
     }
 
     &.blue {
-        background-image: url(/images/animated-bingo/cage-border-blue.png);
+        background-image: url("/static/images/animated-bingo/cage-border-blue.png");
     }
 
     &.red {
-        background-image: url(/images/animated-bingo/cage-border-red.png);
+        background-image: url("/static/images/animated-bingo/cage-border-red.png");
     }
 }

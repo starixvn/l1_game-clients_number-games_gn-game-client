@@ -30,7 +30,7 @@
 
 .player {
     --color: #98cdff;
-    background: url(/images/bac-number/bg-player.svg) no-repeat;
+    background: url("/static/images/bac-number/bg-player.svg") no-repeat;
     width: 178px;
     height: 187px;
     border-bottom-left-radius: 66px;
@@ -45,7 +45,7 @@
 
 .banker {
     --color: #f9bcb9;
-    background: url(/images/bac-number/bg-banker.svg) no-repeat;
+    background: url("/static/images/bac-number/bg-banker.svg") no-repeat;
     width: 178px;
     height: 187px;
     border-bottom-right-radius: 66px;
@@ -59,7 +59,7 @@
 
 .tie {
     --color: #2fc856;
-    background: url(/images/bac-number/bg-tie.svg) no-repeat;
+    background: url("/static/images/bac-number/bg-tie.svg") no-repeat;
     width: 95px;
     height: 172px;
     position: absolute;
