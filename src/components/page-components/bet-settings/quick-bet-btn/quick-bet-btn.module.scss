@@ -33,16 +33,14 @@
             height: 2rem;
             width: 2rem;
             transition: left 100ms ease-in;
-            background: url("/static/images/switch-off.svg") no-repeat center;
+            background: url("/static/images/quickbet-off.svg") no-repeat center;
         }
     }
 
     .toggle-checkbox:checked {
         & + .toggle-btn {
-            // background: linear-gradient(90deg, #109c33 0%, #39ea66 64.29%);
-
             > .quick-bet-icon {
-                background: url("/static/images/switch-on.svg") no-repeat center;
+                background: url("/static/images/quickbet-on.svg") no-repeat center;
             }
         }
     }

@@ -62,6 +62,23 @@
     position: absolute;
     transform: translate(0, 0);
     animation: spin 5s linear infinite;
+
+    .hourglass {
+        position: absolute;
+        right: 0;
+    }
+
+    .rock {
+        position: absolute;
+        bottom: -3rem;
+        left: -18rem;
+    }
+
+    .spaceman {
+        position: absolute;
+        bottom: -3rem;
+        left: -9rem;
+    }
 }
 
 .um-star-tail {
