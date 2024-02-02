@@ -1,11 +1,10 @@
 "use client";
-import Link from "next/link";
 
 import RoundResult from "../../components/game-components/round-result";
 import PercentageCircle from "../../components/game-components/percentage-circle";
 import Style from "./sic-balls.module.scss";
 import { BetOptionData, RoundResultData } from "../../_shared/constants";
-import animationData from "../../../public/images/sic-balls/light-anim.json";
+
 import Lottie from "lottie-react";
 
 const resultData: RoundResultData[] = [
@@ -49,35 +48,29 @@ const betChoiceData: BetOptionData[] = [
 ];
 
 export default function SicBalls() {
-    const options = {
-        animationData: animationData,
-        loop: true,
-    };
-
     return (
         <>
             <div className="round-id">#2345</div>
             <div className="countdown-timer">00:30</div>
             <div className={`relative flex pt-4 justify-around ${Style["result-container"]}`}>
                 <div className="relative">
-                    <img src="/images/sic-balls/bg-light.png" width={120} alt="arrow-bg" />
+                    <img src="/static/images/sic-balls/bg-light.png" width={120} alt="arrow-bg" />
 
                     <div className={Style["result"]}>
-                        <img src="/images/sic-balls/ballOne.png" width={48} alt="arrow-bg" />
+                        <img src="/static/images/sic-balls/ballOne.png" width={48} alt="arrow-bg" />
                     </div>
                 </div>
                 <div className="relative">
-                    <img src="/images/sic-balls/bg-light.png" width={120} alt="arrow-bg" />
+                    <img src="/static/images/sic-balls/bg-light.png" width={120} alt="arrow-bg" />
                     <div className={Style["result"]}>
-                        <img src="/images/sic-balls/ballOne.png" width={48} alt="arrow-bg" />
+                        <img src="/static/images/sic-balls/ballOne.png" width={48} alt="arrow-bg" />
                     </div>
                 </div>
                 <div className="relative">
-                    <img src="/images/sic-balls/bg-light.png" width={120} alt="arrow-bg" />
+                    <img src="/static/images/sic-balls/bg-light.png" width={120} alt="arrow-bg" />
                     <div className={Style["result"]}>
-                        <img src="/images/sic-balls/balls.svg" alt="arrow-bg" />
+                        <img src="/static/images/sic-balls/balls.svg" alt="arrow-bg" />
                     </div>
-                    <Lottie className={Style["light-anim"]} animationData={animationData} />
                 </div>
             </div>
 
@@ -148,7 +141,7 @@ export default function SicBalls() {
                 <div className={Style["sub-betting-items"]}>
                     {betChoiceData.map((item) => (
                         <div className={`${Style[item.betChoice]} ${Style["sub-bet-choice"]}`} key={item.betChoice}>
-                            <img src={`/images/sic-balls/${item.betChoice}.png`} alt="ball" width={32} />
+                            <img src={`/static/images/sic-balls/${item.betChoice}.png`} alt="ball" width={32} />
                             <div className={Style.odds}>{item.odds}</div>
                             <div className={`own-bet ${Style["own-bet"]}`}>
                                 <span className="bet-value">100</span>

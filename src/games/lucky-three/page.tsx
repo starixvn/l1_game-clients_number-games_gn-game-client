@@ -45,7 +45,7 @@ export default function LuckyThree() {
             <div className="countdown-timer">00:30</div>
             <div className={Style["result-container"]}>
                 <div className="flex justify-center">
-                    <img src="/images/next-ball/lottery.png" alt="arrow-bg" />
+                    <img src="/static/images/next-ball/lottery.png" alt="arrow-bg" />
                 </div>
 
                 <div className="flex flex-col">

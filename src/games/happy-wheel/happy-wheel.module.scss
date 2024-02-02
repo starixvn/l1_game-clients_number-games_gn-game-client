@@ -56,21 +56,21 @@
         order: 1;
         width: 85px;
         height: 66px;
-        background: url(/images/happy-wheel/bg-blue.svg) no-repeat;
+        background: url(/static/images/happy-wheel/bg-blue.svg) no-repeat;
     }
 
     &.lucky {
         order: 2;
         width: 130px;
         height: 84px;
-        background: url(/images/happy-wheel/bg-red.svg) no-repeat;
+        background: url(/static/images/happy-wheel/bg-red.svg) no-repeat;
     }
 
     &.twenty-five {
         order: 3;
         width: 83px;
         height: 84px;
-        background: url(/images/happy-wheel/bg-blue-big.svg) no-repeat;
+        background: url(/static/images/happy-wheel/bg-blue-big.svg) no-repeat;
         background-size: contain;
         justify-content: center;
         padding-top: 0;
@@ -80,7 +80,7 @@
         order: 3;
         width: 130px;
         height: 84px;
-        background: url(/images/happy-wheel/bg-red.svg) no-repeat;
+        background: url(/static/images/happy-wheel/bg-red.svg) no-repeat;
     }
 }
 

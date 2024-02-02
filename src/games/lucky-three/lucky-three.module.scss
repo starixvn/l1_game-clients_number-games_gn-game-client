@@ -26,13 +26,13 @@
 
 .even {
     --color: #98cdff;
-    --bg: url(/images/lucky-three/bg-blue.svg) no-repeat;
+    --bg: url(/static/images/lucky-three/bg-blue.svg) no-repeat;
     @extend %main-bet-choice;
 }
 
 .odd {
     --color: #f9bcb9;
-    --bg: url(/images/lucky-three/bg-red.svg) no-repeat;
+    --bg: url(/static/images/lucky-three/bg-red.svg) no-repeat;
     @extend %main-bet-choice;
 }
 
@@ -79,16 +79,16 @@
 }
 
 .red3 {
-    --bg: url(/images/lucky-three/bg-left.svg);
+    --bg: url(/static/images/lucky-three/bg-left.svg);
 }
 
 .red2blue1,
 .red1blue2 {
-    --bg: url(/images/lucky-three/bg-center.svg);
+    --bg: url(/static/images/lucky-three/bg-center.svg);
 }
 
 .blue3 {
-    --bg: url(/images/lucky-three/bg-right.svg);
+    --bg: url(/static/images/lucky-three/bg-right.svg);
 }
 
 .sub-round {

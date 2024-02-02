@@ -1,4 +1,3 @@
-
 import Ball from "../../components/game-components/ball";
 import PercentageCircle from "../../components/game-components/percentage-circle";
 import Style from "./happy-four.module.scss";
@@ -49,7 +48,7 @@ export default function HappyFour() {
             <div className="countdown-timer">00:30</div>
             <div className="relative flex pt-4 justify-around">
                 <div className="flex justify-center">
-                    <img src="/images/next-ball/lottery.png" alt="arrow-bg" />
+                    <img src="/static/images/next-ball/lottery.png" alt="arrow-bg" />
                 </div>
 
                 <div className="flex flex-col items-center justify-center">

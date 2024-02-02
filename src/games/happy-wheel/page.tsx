@@ -54,14 +54,14 @@ export default function HappyWheel() {
             <div className="round-id">#2345</div>
             <div className="countdown-timer">00:30</div>
             <div className={`relative flex pt-4 justify-around ${Style["result-container"]}`}>
-                <img className={Style.wheel} src="/images/happy-wheel/wheel.png" alt="wheel" />
-                <img className={Style["border-active"]} src="/images/happy-wheel/active-border.svg" alt="wheel" width={61} />
+                <img className={Style.wheel} src="/static/images/happy-wheel/wheel.png" alt="wheel" />
+                <img className={Style["border-active"]} src="/static/images/happy-wheel/active-border.svg" alt="wheel" width={61} />
             </div>
 
             <div className={Style["sub-betting-items"]}>
                 {betChoiceData.map((item) => (
                     <div className={`${Style[item.betChoice]} ${Style["sub-bet-choice"]}`} key={item.betChoice}>
-                        <img src={`/images/happy-wheel/option-${item.betChoice}.svg`} alt="bet-choice" />
+                        <img src={`/static/images/happy-wheel/option-${item.betChoice}.svg`} alt="bet-choice" />
                         <div className={Style.odds}>{item.odds}</div>
                         <div className={`own-bet ${Style["own-bet"]}`}>
                             <span className="bet-value">100</span>

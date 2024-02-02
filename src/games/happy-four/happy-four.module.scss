@@ -22,7 +22,7 @@
 
 .even {
     --color: #98cdff;
-    background: url(/images/happy-four/bg-big-blue.svg) no-repeat;
+    background: url(/static/images/happy-four/bg-big-blue.svg) no-repeat;
     width: 176px;
     height: 94px;
     background-size: contain;
@@ -30,7 +30,7 @@
 
 .odd {
     --color: #f9bcb9;
-    background: url(/images/happy-four/bg-big-red.svg) no-repeat;
+    background: url(/static/images/happy-four/bg-big-red.svg) no-repeat;
     width: 176px;
     height: 94px;
     background-size: contain;
@@ -75,7 +75,7 @@
 }
 
 .red3blue1 {
-    --bg: url(/images/happy-four/bg-small-red.svg);
+    --bg: url(/static/images/happy-four/bg-small-red.svg);
     --height: 66px;
     grid-column: 1;
     grid-row: 1;
@@ -83,13 +83,13 @@
 
 .red4 {
     --height: 66px;
-    --bg: url(/images/happy-four/bg-small-blue.svg);
+    --bg: url(/static/images/happy-four/bg-small-blue.svg);
     grid-column: 1;
     grid-row: 2;
 }
 
 .red2blue2 {
-    --bg: url(/images/happy-four/bg-medium-blue.svg);
+    --bg: url(/static/images/happy-four/bg-medium-blue.svg);
     --height: 149px;
     grid-column: 2;
     grid-row: 1 / span 2;
@@ -98,7 +98,7 @@
 }
 
 .red1blue3 {
-    --bg: url(/images/happy-four/bg-small-red.svg);
+    --bg: url(/static/images/happy-four/bg-small-red.svg);
     --height: 66px;
     grid-column: 3;
     grid-row: 1;
@@ -106,7 +106,7 @@
 
 .blue4 {
     --height: 66px;
-    --bg: url(/images/happy-four/bg-small-blue.svg);
+    --bg: url(/static/images/happy-four/bg-small-blue.svg);
     grid-column: 3;
     grid-row: 2;
 

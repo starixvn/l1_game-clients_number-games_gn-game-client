@@ -61,8 +61,8 @@ html {
 
 [data-theme="light"] {
     --page-background-color: #000000;
-    --game-background-image: url("/images/bg-show-result.jpg");
-    --background-image: url("/images/bg-1.jpg");
+    --game-background-image: url("/static/images/bg-show-result.jpg");
+    --background-image: url("/static/images/bg-1.jpg");
     --text-color: #2c2f3e;
 
     --border-color: #c5cbdb;
@@ -236,7 +236,7 @@ body {
             width: 12px;
             height: 12px;
             margin-right: 2px;
-            background: url(/images/coin-outline.svg) no-repeat 50%;
+            background: url(/static/images/coin-outline.svg) no-repeat 50%;
             background-size: contain;
             vertical-align: middle;
         }

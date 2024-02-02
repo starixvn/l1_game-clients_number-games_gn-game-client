@@ -25,7 +25,7 @@ export const UserInfo: React.FC<{ user: User; customizeClass?: string }> = ({ us
                 <div key={user.red} className={`${Styles.balance}`} data-testid="balance">
                     <span>{numberRoundDownWithCommas(user.red ? user.red : 0)}</span>
                     {/* <span>{currencyUser}</span> */}
-                    <img src="/images/icon-coin.svg" className="img-fluid" alt="icon-coin" />
+                    <img src="/static/images/icon-coin.svg" className="img-fluid" alt="icon-coin" />
                 </div>
             </div>
             <div className={Styles["avatar"]}>
