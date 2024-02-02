@@ -2,7 +2,7 @@ import { AnimatedSprite, Container, Stage } from "@pixi/react";
 import { Assets, Resource, Spritesheet, Texture } from "pixi.js";
 import React, { useEffect } from "react";
 
-import Styles from "./animated-bingo.module.scss";
+import Styles from "./cage.module.scss";
 
 export enum CageColor {
     Blue = "blue",
@@ -40,11 +40,11 @@ const Cage: React.FunctionComponent<CageProps> = (cageProps) => {
         };
 
         const loadCageLoopsJson = () => {
-            loadAndSetFrames("/static/images/animated-bingo/cage-balls.json", "loop", setCageLoopFrames);
+            loadAndSetFrames("/static/images/cage/cage-balls.json", "loop", setCageLoopFrames);
         };
 
         const loadDrumBallJson = () => {
-            loadAndSetFrames("/static/images/animated-bingo/ball.json", ballColor, setBallFrames);
+            loadAndSetFrames("/static/images/cage/ball.json", ballColor, setBallFrames);
         };
 
         loadCageLoopsJson();

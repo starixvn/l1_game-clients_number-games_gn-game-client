@@ -7,7 +7,6 @@ import React from "react";
 import { BetOptionData, RoundResultData } from "../../_shared/constants";
 import GameBase from "../../components/game-base";
 import { GameBaseProps, GameBaseState, GatewayGameBaseProps } from "../../components/game-base/type";
-import AnimatedBingo from "../../components/game-components/animated-bingo";
 import Ball from "../../components/game-components/ball";
 import Cage, { BallColor, CageColor } from "../../components/game-components/cage";
 import PercentageCircle from "../../components/game-components/percentage-circle";
@@ -117,10 +116,6 @@ class BacBall extends GameBase<GameBaseProps, GameBaseState<Result, SettlementRe
                 </div>
             </div>
         );
-    }
-
-    renderAnimation() {
-        return <AnimatedBingo />;
     }
 
     onClickPlayer() {

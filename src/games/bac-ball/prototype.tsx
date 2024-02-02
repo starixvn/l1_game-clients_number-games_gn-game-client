@@ -3,7 +3,6 @@ import { Assets, Resource, Spritesheet, Texture } from "pixi.js";
 import React, { useEffect } from "react";
 
 import { BetOptionData, RoundResultData } from "../../_shared/constants";
-import AnimatedBingo from "../../components/game-components/animated-bingo";
 import Ball from "../../components/game-components/ball";
 import Cage, { BallColor, CageColor } from "../../components/game-components/cage";
 import PercentageCircle from "../../components/game-components/percentage-circle";
@@ -114,7 +113,6 @@ export default function BacBallPrototype() {
                     </div>
                 </div>
             </div>
-            <AnimatedBingo />
             <div className={`${Style["betting-zone"]}`}>
                 <div className={Style["left-corner"]}>
                     <div className={Style["winning-effect"]}>

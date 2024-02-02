@@ -12,11 +12,6 @@
 }
 
 .cage-area {
-    --start-positionX: -3rem;
-    --move-step-1: -1rem;
-    --move-step-2: -3.1rem;
-    --move-step-3: -3rem;
-
     --duration-slide-number: 0.75s;
     --delay-time-slide-number: 0.65s;
 
@@ -34,6 +29,17 @@
         transform: scale(0.92);
     }
 
+    &.right {
+        --start-positionX: -3rem;
+        --move-step-1: -1rem;
+        --move-step-2: -3.1rem;
+        --move-step-3: -3rem;
+
+        --rotate-step-1: 90deg;
+        --rotate-step-2: 70deg;
+        --rotate-step-3: 40deg;
+    }
+
     &.left {
         --start-positionX: 3rem;
 
@@ -41,8 +47,16 @@
         --move-step-2: 3.1rem;
         --move-step-3: 3rem;
 
+        --rotate-step-1: -90deg;
+        --rotate-step-2: -70deg;
+        --rotate-step-3: -40deg;
+
         .show-ball-anim {
             transform: scaleX(-1);
+        }
+
+        .number {
+            transform-origin: center left;
         }
     }
 }
@@ -59,7 +73,7 @@
 
 .cage-bg {
     @extend %result;
-    background-image: url("/static/images/animated-bingo/cage.png");
+    background-image: url("/static/images/cage/cage.png");
     background-size: var(--cage-width) var(--cage-height);
 }
 
@@ -70,7 +84,7 @@
 
 .cage-cover {
     @extend %result;
-    background-image: url("/static/images/animated-bingo/cage-cover.png");
+    background-image: url("/static/images/cage/cage-cover.png");
 }
 
 .cage-border {
@@ -78,15 +92,15 @@
     position: absolute;
 
     &.purple {
-        background-image: url("/static/images/animated-bingo/cage-border-purple.png");
+        background-image: url("/static/images/cage/cage-border-purple.png");
     }
 
     &.blue {
-        background-image: url("/static/images/animated-bingo/cage-border-blue.png");
+        background-image: url("/static/images/cage/cage-border-blue.png");
     }
 
     &.red {
-        background-image: url("/static/images/animated-bingo/cage-border-red.png");
+        background-image: url("/static/images/cage/cage-border-red.png");
     }
 }
 
@@ -105,26 +119,26 @@
     transform-style: preserve-3d;
     transform-origin: center right;
     right: var(--start-positionX);
-    animation: slide-left var(--duration-slide-number) var(--delay-time-slide-number) linear forwards;
+    animation: number-slide var(--duration-slide-number) var(--delay-time-slide-number) linear forwards;
 }
 
-@keyframes slide-left {
+@keyframes number-slide {
     0% {
         opacity: 0;
-        transform: rotateY(90deg) translateZ(0.5rem) scale(0.7);
+        transform: rotateY(var(--rotate-step-1)) translateZ(0.5rem) scale(0.7);
         filter: blur(0.6rem);
     }
 
     30% {
         opacity: 0.3;
         filter: blur(0.4rem);
-        transform: rotateY(70deg) translateZ(1rem) scale(0.8);
+        transform: rotateY(var(--rotate-step-2)) translateZ(1rem) scale(0.8);
     }
 
     70% {
         opacity: 0.8;
         filter: blur(0.1rem);
-        transform: rotateY(40deg) translateZ(0.8rem) scale(0.9);
+        transform: rotateY(var(--rotate-step-3)) translateZ(0.8rem) scale(0.9);
     }
 
     80% {
