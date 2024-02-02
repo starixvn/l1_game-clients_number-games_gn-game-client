@@ -6,10 +6,9 @@ import { isMobileOnly, isMobile, isSafari } from "react-device-detect";
 import { AuthorizeResponse, ReCheckInResponse, UMInfo, Response } from "sc-user-service-client/dist/auth";
 import { Props, State } from "./type";
 import { getAppSettings } from "../../../_shared/app-settings";
-import { getLocalStorageItem, localStorageKeys, storeLocalStorageItem } from "../../../_shared/local-storage";
+import { StorageHelper, localStorageKeys, GetLocalizedErrorMessage, buildUrl } from "../../../_shared/helpers";
 import LandscapeMode from "../landscape-mode";
-import { AuthContextProvider } from "../../../_shared/contexts/auth";
-import { GetLocalizedErrorMessage } from "../../../_shared/helpers/notice-helper";
+import { AuthContextProvider } from "../../../_shared/react-contexts";
 import { authorize, getSettingGames, reCheckIn } from "../../../services/auth-service";
 import { updateSignInSMStatus, updateThemeSetting } from "../../../services/user-setting-service";
 import BetSettings from "../../page-components/bet-settings";
@@ -27,7 +26,6 @@ import MsgpackParser from "socket.io-msgpack-parser";
 import { Themes } from "../../../_shared/constants";
 import { AnnouncementModal } from "../../page-components/dashboard/announcement";
 import { ToolbarGuide } from "../hide-toolbar-guide";
-import { buildUrl } from "../../../_shared/helpers/url-helper";
 import Games from "../../../games/games";
 
 const orientationType = { portrait: "portrait", landscape: "landscape" };
@@ -44,9 +42,9 @@ class Dashboard extends React.PureComponent<Props, State> {
 
         this.state = {
             orientation: "",
-            enabledWinningStreakNotification: getLocalStorageItem(localStorageKeys.winningStreakNotification) ?? true,
-            enabledPlaySound: getLocalStorageItem(localStorageKeys.playSound) ?? false,
-            favoriteGames: getLocalStorageItem(localStorageKeys.favoriteGames) ?? [],
+            enabledWinningStreakNotification: StorageHelper.get(localStorageKeys.winningStreakNotification) ?? true,
+            enabledPlaySound: StorageHelper.get(localStorageKeys.playSound) ?? false,
+            favoriteGames: StorageHelper.get(localStorageKeys.favoriteGames) ?? [],
             userStakeLevel: { minBet: 0, maxBet: 0 },
             authorizeInfo: null,
             isShowErrorModal: false,
@@ -67,7 +65,7 @@ class Dashboard extends React.PureComponent<Props, State> {
             settingGames: [],
             openGameId: null,
             openGameName: "",
-            isShowToolbarGuide: getLocalStorageItem(localStorageKeys.toolbarGuide) ?? true,
+            isShowToolbarGuide: StorageHelper.get(localStorageKeys.toolbarGuide) ?? true,
         };
 
         this.handleFirstLogin = this.handleFirstLogin.bind(this);
@@ -100,9 +98,9 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.closeToolbarGuide = this.closeToolbarGuide.bind(this);
 
         const buildId = process.env.buildVersion;
-        const buildVersion = getLocalStorageItem(localStorageKeys.buildVersion) ?? 0;
+        const buildVersion = StorageHelper.get(localStorageKeys.buildVersion) ?? 0;
         if (buildId !== buildVersion) {
-            storeLocalStorageItem(localStorageKeys.buildVersion, buildId);
+            StorageHelper.set(localStorageKeys.buildVersion, buildId);
             buildVersion && location.reload();
         }
     }
@@ -111,7 +109,7 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.setState({
             favoriteGames: favoriteGames,
         });
-        storeLocalStorageItem(localStorageKeys.favoriteGames, favoriteGames);
+        StorageHelper.set(localStorageKeys.favoriteGames, favoriteGames);
     }
 
     updateAuthorizeInfo(authorizeInfo: AuthorizeResponse) {
@@ -304,7 +302,7 @@ class Dashboard extends React.PureComponent<Props, State> {
 
         if (umInfo) {
             this.reCheckInInterval && clearInterval(this.reCheckInInterval);
-            storeLocalStorageItem<UMInfo>(localStorageKeys.umInfo, umInfo);
+            StorageHelper.set(localStorageKeys.umInfo, umInfo);
             setTimeout(() => {
                 setIsUm(true);
             }, 500);
@@ -344,13 +342,13 @@ class Dashboard extends React.PureComponent<Props, State> {
     winningStreakNotificationToggle() {
         const { enabledWinningStreakNotification } = this.state;
         this.setState({ enabledWinningStreakNotification: !enabledWinningStreakNotification });
-        storeLocalStorageItem(localStorageKeys.winningStreakNotification, !enabledWinningStreakNotification);
+        StorageHelper.set(localStorageKeys.winningStreakNotification, !enabledWinningStreakNotification);
     }
 
     playSoundToggle() {
         const { enabledPlaySound } = this.state;
         this.setState({ enabledPlaySound: !enabledPlaySound });
-        storeLocalStorageItem(localStorageKeys.playSound, !enabledPlaySound);
+        StorageHelper.set(localStorageKeys.playSound, !enabledPlaySound);
     }
 
     setEnabledQuickBet(enabled: boolean) {

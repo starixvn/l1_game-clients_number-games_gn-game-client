@@ -2,13 +2,11 @@ import { useTranslation } from "next-i18next";
 import React, { useEffect, useMemo, useState } from "react";
 import { isMobileOnly } from "react-device-detect";
 
-import { getLocalStorageItem, localStorageKeys } from "../../../_shared/local-storage";
+import { StorageHelper, localStorageKeys } from "../../../_shared/helpers/storage-helper";
 import { favoriteGameIdIgnore } from "../../page-components/game-category/constants";
 import { CommonResourceKeys } from "../../../_shared/resources";
 import { GameResourceKeys } from "../../../_shared/resources/game-resource-keys";
-import { useGameActionContext } from "../../../_shared/contexts/game-actions-context";
-import { useGameContext } from "../../../_shared/contexts/game-context/game-context";
-import { useSystemContext } from "../../../_shared/contexts/system";
+import { useGameActionContext, useGameContext, useSystemContext } from "../../../_shared/react-contexts";
 import { PopupType, RebetStorageModel, ViewMode } from "../../game-base/type";
 import Styles from "./game-header.module.scss";
 
@@ -94,7 +92,7 @@ const HeaderRight = ({ isUpdateDisableRebet }) => {
     const { t } = useTranslation();
 
     const rebetStorageKey = localStorageKeys.rebet;
-    const rebetStorage = getLocalStorageItem<RebetStorageModel>(rebetStorageKey) || {};
+    const rebetStorage = StorageHelper.get<RebetStorageModel>(rebetStorageKey) || {};
     const rebetInfo = rebetStorage[gameId];
 
     const rebetClickHandle = (e: React.MouseEvent) => {

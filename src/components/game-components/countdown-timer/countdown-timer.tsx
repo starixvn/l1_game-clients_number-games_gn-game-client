@@ -1,7 +1,7 @@
 import { useTranslation } from "next-i18next";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 
-import { useGameContext } from "../../../_shared/contexts/game-context/game-context";
+import { useGameContext } from "../../../_shared/react-contexts/game-context/game-context";
 import { GameState } from "../../game-base/type";
 import Loader from "../loader";
 import styles from "./countdown-timer.module.scss";

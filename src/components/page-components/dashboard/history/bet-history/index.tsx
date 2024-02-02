@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import RenderCellOnTable, { renderBetBase } from "./bet-row";
 import { getAppSettings } from "../../../../../_shared/app-settings";
-import { useAuthContext } from "../../../../../_shared/contexts/auth";
+import { useAuthContext } from "../../../../../_shared/react-contexts";
 import { clearSession } from "../../../../../services/auth-service";
 import { BetLogs, PropsBetContainer, ResultDetail } from "./bet-history";
 import Loader from "../../../../game-components/loader";

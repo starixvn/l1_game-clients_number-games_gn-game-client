@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useRef, createRef } from "react";
 
-import { useGameActionContext } from "../../../_shared/contexts/game-actions-context";
+import { useGameActionContext } from "../../../_shared/react-contexts";
 import { Tooltip } from "../tooltip";
 import Styles from "./tabs.module.scss";
 

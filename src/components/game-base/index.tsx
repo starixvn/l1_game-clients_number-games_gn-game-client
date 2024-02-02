@@ -7,14 +7,12 @@ import { v4 as uuidv4 } from "uuid";
 
 import { getAppSettings } from "../../_shared/app-settings";
 import { LanguageLocaleMapper } from "../../_shared/constants";
-import { AuthContext } from "../../_shared/contexts/auth";
-import { GameActionsContextProvider } from "../../_shared/contexts/game-actions-context";
-import { GameContextProvider } from "../../_shared/contexts/game-context/game-context";
+import { StorageHelper, localStorageKeys } from "../../_shared/helpers";
+import { AuthContext, GameActionsContextProvider, GameContextProvider } from "../../_shared/react-contexts";
 import MessageTransmitter from "../../_shared/helpers/message-transmitter";
 import { MessageTransmitterType } from "../../_shared/helpers/message-transmitter/type";
 import { GetLocalizedErrorMessage } from "../../_shared/helpers/notice-helper";
 import { buildServerUrl } from "../../_shared/helpers/url-helper";
-import * as LocalStorageManager from "../../_shared/local-storage";
 import { CommonResourceKeys, GameResourceKeys } from "../../_shared/resources";
 import BaseDialog from "../game-components/base-dialog";
 import { ModalType } from "../game-components/base-dialog/type";
@@ -40,7 +38,7 @@ import {
     WinStreakCollectorModel,
 } from "./type";
 
-const { rebet: reBetStorageKey } = LocalStorageManager.localStorageKeys;
+const { rebet: reBetStorageKey } = localStorageKeys;
 
 abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, any>> extends React.PureComponent<P, S> {
     private readonly animationTime = 3000;
@@ -639,14 +637,14 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
     storeOwnBet(roundId: number) {
         const { ownBets } = this.state;
         const gameId = this.props.id;
-        const rebetStorage = LocalStorageManager.getLocalStorageItem<RebetStorageModel>(reBetStorageKey) || {};
+        const rebetStorage = StorageHelper.get<RebetStorageModel>(reBetStorageKey) || {};
 
         rebetStorage[gameId] = {
             roundId,
             betInfo: Object.keys(ownBets).length > 0 ? ownBets : undefined,
         };
 
-        LocalStorageManager.storeLocalStorageItem(reBetStorageKey, rebetStorage);
+        StorageHelper.set(reBetStorageKey, rebetStorage);
     }
 
     openPlaceBetModal(betChoice: string, removeBetChoiceFocus: Function, betOptionElement: HTMLElement, betChoiceElement: HTMLElement) {
@@ -714,8 +712,8 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
     checkRenderRebet() {
         const { roundId } = this.state;
         const gameId = this.props.id;
-        const rebetStorageKey = LocalStorageManager.localStorageKeys.rebet;
-        const rebetStorage = LocalStorageManager.getLocalStorageItem<RebetStorageModel>(rebetStorageKey) || {};
+        const rebetStorageKey = localStorageKeys.rebet;
+        const rebetStorage = StorageHelper.get<RebetStorageModel>(rebetStorageKey) || {};
         const rebetInfo = rebetStorage[gameId];
 
         return rebetInfo?.betInfo !== undefined && rebetInfo?.roundId + 1 === roundId ? true : false;

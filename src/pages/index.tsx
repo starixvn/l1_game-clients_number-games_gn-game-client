@@ -1,17 +1,17 @@
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
-import React, { useEffect, useRef, useState } from "react";
-import { SSOResponse, UMInfo } from "sc-user-service-client/dist/auth";
+import React, { useEffect, useState } from "react";
+import { SSOResponse } from "sc-user-service-client/dist/auth";
 import { getAppSettings } from "../_shared/app-settings";
-
 import { languageMapper } from "../_shared/constants";
-import { getLocalStorageItem, localStorageKeys, storeLocalStorageItem } from "../_shared/local-storage";
+import { StorageHelper, localStorageKeys } from "../_shared/helpers/storage-helper";
 import Dashboard from "../components/page-components/dashboard";
 import SplashScreen from "../components/page-components/splash-screen";
 import UMPage from "../components/page-components/um-page";
 import { sso, verifySession } from "../services/auth-service";
 import * as Sentry from "../_shared/sentry";
+import { usePWAWoker } from "../_shared/react-hooks/use-pwa-worker";
 
 const getUserSession = (token: string) => (token ? sso(token, getAppSettings().appType) : verifySession());
 
@@ -25,6 +25,7 @@ function Home() {
     const { token, lang, gameId } = router.query;
     const { i18n } = useTranslation();
 
+    usePWAWoker();
     useEffect(() => {
         const signIn = async () => {
             const userSession = await getUserSession(token as string);
@@ -35,7 +36,7 @@ function Home() {
             }
 
             if (userSession.isUM) {
-                storeLocalStorageItem<UMInfo>(localStorageKeys.umInfo, userSession.umInfo);
+                StorageHelper.set(localStorageKeys.umInfo, userSession.umInfo);
                 setTimeout(() => {
                     setIsUm(true);
                 }, 500);
@@ -55,7 +56,7 @@ function Home() {
         };
 
         if (router.isReady) {
-            const userSession = getLocalStorageItem<SSOResponse>(localStorageKeys.session);
+            const userSession = StorageHelper.get<SSOResponse>(localStorageKeys.session);
             const locale = languageMapper[(lang as string) ?? userSession?.language] ?? router.locale;
             setLanguage(locale);
             i18n.changeLanguage(locale);
@@ -63,24 +64,6 @@ function Home() {
             signIn();
         }
     }, [router]);
-
-    const workerRef = useRef(null);
-
-    useEffect(() => {
-        try {
-            if (window.Worker) {
-                workerRef.current = new Worker("/worker.js", { type: "module" });
-                workerRef.current.onmessage = (evt) => workerRef.current.postMessage(evt.data);
-            } else {
-                console.log("Your browser doesn't support web workers.");
-            }
-        } catch (error) {
-            console.log(error);
-        }
-        return () => {
-            workerRef.current && workerRef.current.terminate();
-        };
-    }, []);
 
     if (isUM) {
         return <UMPage locale={language} />;

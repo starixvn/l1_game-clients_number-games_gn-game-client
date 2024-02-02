@@ -1,8 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useCountUp } from "react-countup";
-import { useGameActionContext } from "../../../_shared/contexts/game-actions-context";
-import { useGameContext } from "../../../_shared/contexts/game-context/game-context";
-import { useSystemContext } from "../../../_shared/contexts/system";
+import { useGameActionContext, useGameContext, useSystemContext } from "../../../_shared/react-contexts";
 import { formatOdds, numberWithCommas } from "../../../_shared/helpers/number-helper";
 import { GameState } from "../../game-base/type";
 import { Tooltip } from "../tooltip";
@@ -58,11 +56,10 @@ const BetOption: React.FunctionComponent<Props> = ({
         setTotalBet(totalBets?.[choice] ?? 0);
         update(totalBet);
 
-        console.log(`totalBets : ${JSON.stringify(totalBets)}-- choice : ${totalBets?.[choice] ?? 0}`)
-        console.log(`choice : ${choice}`)
+        console.log(`totalBets : ${JSON.stringify(totalBets)}-- choice : ${totalBets?.[choice] ?? 0}`);
+        console.log(`choice : ${choice}`);
 
-        console.log(`totalBet : ${totalBet}`)
-
+        console.log(`totalBet : ${totalBet}`);
     }, [gameState, totalBets?.[choice]]);
 
     const onClickBet = (event: any) => {

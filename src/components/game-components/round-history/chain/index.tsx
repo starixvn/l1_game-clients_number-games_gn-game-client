@@ -1,7 +1,7 @@
 import { useTranslation } from "next-i18next";
 import React, { useEffect, useMemo, useState } from "react";
 
-import { useGameContext } from "../../../../_shared/contexts/game-context/game-context";
+import { useGameContext } from "../../../../_shared/react-contexts";
 import { GameState, Round } from "../../../game-base/type";
 import { ContainerToolTip } from "../dot-tool-tip";
 import { MiniItemNext } from "../dot-next";

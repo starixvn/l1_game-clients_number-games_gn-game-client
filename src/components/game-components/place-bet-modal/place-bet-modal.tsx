@@ -3,8 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { isMobileOnly } from "react-device-detect";
 
 import { GameResourceKeys } from "../../../_shared/resources";
-import { useGameContext } from "../../../_shared/contexts/game-context/game-context";
-import { useSystemContext } from "../../../_shared/contexts/system";
+import { useGameContext, useSystemContext } from "../../../_shared/react-contexts";
 import { formatOdds, numberWithCommas } from "../../../_shared/helpers/number-helper";
 import { adjustPopupPosition, BetFormCss } from "./place-bet-modal-helper";
 import { PlaceBetModalProps } from "./place-bet-modal-type";

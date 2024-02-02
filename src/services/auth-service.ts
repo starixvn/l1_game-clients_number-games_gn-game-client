@@ -1,6 +1,6 @@
 import { SSOResponse } from "sc-user-service-client/dist/auth";
 
-import { getLocalStorageItem, localStorageKeys, removeLocalStorageItem, storeLocalStorageItem } from "../_shared/local-storage";
+import { localStorageKeys, StorageHelper } from "../_shared/helpers";
 import { UserClientCommunication } from "./user-client-communication";
 
 const { auth: authService, userSettings: userSettingsService } = UserClientCommunication.getUserClientInstance();
@@ -9,14 +9,14 @@ export const sso = async (token: string, appType: number): Promise<SSOResponse> 
     const userSession = await authService.sso(token, appType);
 
     if (userSession && userSession.isAuthenticated) {
-        storeLocalStorageItem<SSOResponse>(localStorageKeys.session, userSession);
+        StorageHelper.set(localStorageKeys.session, userSession);
     }
 
     return userSession;
 };
 
 export const verifySession = async (): Promise<SSOResponse> => {
-    const userSession = getLocalStorageItem<SSOResponse>(localStorageKeys.session);
+    const userSession = StorageHelper.get<SSOResponse>(localStorageKeys.session);
 
     if (!userSession) {
         return null;
@@ -28,13 +28,13 @@ export const verifySession = async (): Promise<SSOResponse> => {
         userSession.isUM = verifySessionResponse.isUM;
         userSession.umInfo = verifySessionResponse.umInfo;
 
-        verifySessionResponse.isSuccessful && storeLocalStorageItem<SSOResponse>(localStorageKeys.session, userSession);
+        verifySessionResponse.isSuccessful && StorageHelper.set(localStorageKeys.session, userSession);
     }
 
     return verifySessionResponse.isSuccessful || userSession.isUM ? userSession : null;
 };
 
-export const clearSession = () => removeLocalStorageItem(localStorageKeys.session);
+export const clearSession = () => StorageHelper.remove(localStorageKeys.session);
 
 export const reCheckIn = async (userSession: SSOResponse) => {
     return authService.reCheckIn(userSession?.ss, userSession?.username);

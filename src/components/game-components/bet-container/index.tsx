@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { buildVersion, ChipMapper, systemName } from "../../../_shared/constants";
-import { useSystemContext } from "../../../_shared/contexts/system";
+import { useSystemContext } from "../../../_shared/react-contexts";
 import { GameState } from "./../../game-base/type";
 import OverlayMaskWhite from "../overlay-mask-white";
 import { Props } from "./bet-container";

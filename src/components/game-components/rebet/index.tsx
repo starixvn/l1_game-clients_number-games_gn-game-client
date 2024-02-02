@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { useGameContext } from "../../../_shared/contexts/game-context/game-context";
-import { getLocalStorageItem, localStorageKeys } from "../../../_shared/local-storage";
+import { useGameContext, useGameActionContext, useSystemContext } from "../../../_shared/react-contexts";
+import { StorageHelper, localStorageKeys } from "../../../_shared/helpers/storage-helper";
 import { RebetStorageModel } from "../../game-base/type";
 import Styles from "./rebet.module.scss";
 import { BetState, BetTrackModel, Props } from "./type";
-import { useGameActionContext } from "../../../_shared/contexts/game-actions-context";
 import { useTranslation, Trans } from "next-i18next";
 import { GameResourceKeys } from "../../../_shared/resources/game-resource-keys";
 import { formatOdds, numberWithCommas } from "../../../_shared/helpers/number-helper";
 import { GetLocalizedErrorMessage } from "../../../_shared/helpers/notice-helper";
-import { useSystemContext } from "../../../_shared/contexts/system";
 
 const buildMessage = (notice, apiError, t, gameName) => ({
     gameName: t(`${gameName.toLowerCase()}:${GameResourceKeys.GAME_NAME}`),
@@ -23,7 +21,7 @@ const buildMessage = (notice, apiError, t, gameName) => ({
 const Rebet: React.FC<Props> = (props: Props) => {
     const { onCloseModal } = props;
     const rebetStorageKey = localStorageKeys.rebet;
-    const rebetStorage = getLocalStorageItem<RebetStorageModel>(rebetStorageKey) || {};
+    const rebetStorage = StorageHelper.get<RebetStorageModel>(rebetStorageKey) || {};
     const rebetInfo = rebetStorage[props.gameId];
     const lastBetChoices = rebetInfo.betInfo;
     const { roundId, gameSetting } = useGameContext();

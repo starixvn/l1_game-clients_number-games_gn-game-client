@@ -2,7 +2,7 @@ import { Trans, useTranslation } from "next-i18next";
 import React, { useEffect, useRef, useState } from "react";
 import { isMobileOnly, isIOS } from "react-device-detect";
 
-import { useAuthContext } from "../../../../_shared/contexts/auth";
+import { useAuthContext } from "../../../../_shared/react-contexts";
 import { updateUserQuickBetSetting } from "../../../../services/user-setting-service";
 import BaseDialog from "../../../game-components/base-dialog";
 import { ModalType } from "../../../game-components/base-dialog/type";

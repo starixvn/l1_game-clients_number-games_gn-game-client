@@ -1,12 +1,11 @@
 import { useTheme } from "next-themes";
-import React, { Fragment, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { isIOS, isMobileOnly } from "react-device-detect";
-import { io, Socket } from "socket.io-client";
+import { io } from "socket.io-client";
 import useSound from "use-sound";
-import MsgpackParser from "socket.io-msgpack-parser";
 import { getAppSettings } from "../_shared/app-settings";
-import { getLocalStorageItem, localStorageKeys } from "../_shared/local-storage";
-import { SystemContextProvider } from "../_shared/contexts/system";
+import { StorageHelper, localStorageKeys } from "../_shared/helpers/storage-helper";
+import { SystemContextProvider } from "../_shared/react-contexts";
 import { SocketState } from "../_shared/types";
 import {
     GameCategoryConfig,
@@ -79,7 +78,7 @@ const getCategoryHashTag = (category: string, pageIndex: number) => {
 };
 
 const getUpdatedFavoriteList = (gameId: number, isFavorite: boolean) => {
-    const favorites = getLocalStorageItem<number[]>(localStorageKeys.favoriteGames) ?? [];
+    const favorites = StorageHelper.get<number[]>(localStorageKeys.favoriteGames) ?? [];
     const newFavoriteList = [...favorites];
     const gameIndex = newFavoriteList.indexOf(gameId);
 
@@ -202,7 +201,7 @@ export const Games: React.FC<Props> = ({
 
     const connectSocket = (gameName: string) => {
         const { proxy, enableMsgpackParser } = getAppSettings();
-        const socketUri = buildServerUrl('bacball');
+        const socketUri = buildServerUrl("bacball");
         const socketOption = {
             forceNew: true,
             transports: ["websocket"],

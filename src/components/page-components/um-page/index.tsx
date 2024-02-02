@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { UMInfo } from "sc-user-service-client/dist/auth";
 
-import * as LocalStorageManager from "../../../_shared/local-storage";
+import { StorageHelper, localStorageKeys } from "../../../_shared/helpers/storage-helper";
 import { convertToGMT8, formatDate } from "../../../_shared/helpers/time-helper";
 
 const UMPage: React.FC<{ locale: string }> = ({ locale }) => {
@@ -18,7 +18,7 @@ const UMPage: React.FC<{ locale: string }> = ({ locale }) => {
     useEffect(() => {
         if (router.isReady) {
             const template = "hh:mm dd/MM/yyyy";
-            const umInfo = LocalStorageManager.getLocalStorageItem<UMInfo>(LocalStorageManager.localStorageKeys.umInfo);
+            const umInfo = StorageHelper.get<UMInfo>(localStorageKeys.umInfo);
 
             if (umInfo) {
                 setStartTime(formatDate(convertToGMT8(new Date(umInfo.startTime)), template));

@@ -3,7 +3,7 @@ import React, { useMemo } from "react";
 import { ScoreboardItemNext } from "../../dot-next";
 import { Props } from "./types";
 import { v4 as uuidV4 } from "uuid";
-import { useGameContext } from "../../../../../_shared/contexts/game-context/game-context";
+import { useGameContext } from "../../../../../_shared/react-contexts";
 import { GameBaseProps } from "../../../../game-base/type";
 import { RoundDotGrid } from "../../../round-history/dot";
 import { GetNameFromChoice, GetChoiceValueFromTranslate } from "./dragon.helper";
