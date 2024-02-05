@@ -61,9 +61,9 @@ const Cage: React.FunctionComponent<CageProps> = (cageProps) => {
 
     if (cageLoopFrames && cageLoopFrames.length > 0 && ballFrames && ballFrames.length > 0) {
         return (
-            <div className={`${Styles["cage-area"]} ${isSmall ? Styles["small"] : ""} ${Styles[lidPosition]}`}>
-                <div className={Styles["cage-bg"]}></div>
-                <div className={Styles["cage-balls"]}>
+            <div id="cageArea" className={`${Styles["cage-area"]} ${isSmall ? Styles["small"] : ""} ${Styles[lidPosition]}`}>
+                <div id="cageBg" className={Styles["cage-bg"]}></div>
+                <div id="cageBalls" className={Styles["cage-balls"]}>
                     {playAnim && (
                         <Stage width={130} height={130} options={{ backgroundAlpha: 0 }}>
                             <Container position={[65, 65]}>
@@ -80,10 +80,10 @@ const Cage: React.FunctionComponent<CageProps> = (cageProps) => {
                         </Stage>
                     )}
                 </div>
-                <div className={Styles["cage-cover"]}></div>
-                <div className={`${Styles["cage-border"]} ${Styles[color]}`}>
+                <div id="cageCover" className={Styles["cage-cover"]}></div>
+                <div id="cageBorder" className={`${Styles["cage-border"]} ${Styles[color]}`}>
                     {playAnim && (
-                        <div className={Styles["show-ball-anim"]}>
+                        <div id="cageBallAnim" className={Styles["show-ball-anim"]}>
                             <Stage width={250} height={250} options={{ backgroundAlpha: 0 }}>
                                 <Container position={[85, 86]}>
                                     <AnimatedSprite

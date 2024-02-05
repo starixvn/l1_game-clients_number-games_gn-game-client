@@ -89,7 +89,6 @@ class BacBall extends GameBase<GameBaseProps, GameBaseState<Result, SettlementRe
     }
 
     renderResultBlock() {
-        this.loadWinningPlayerJson();
         return (
             <div className={Style["result-container"]}>
                 <div className={Style["player-container"]}>
@@ -134,6 +133,9 @@ class BacBall extends GameBase<GameBaseProps, GameBaseState<Result, SettlementRe
         const dataBanker = betData[1];
         const dataTie = betData[2];
         const { winningPlayerFrames, winningTieFrames } = this.state;
+        this.loadWinningPlayerJson();
+        this.loadWinningTieJson();
+
         return (
             <div className={`${Style["betting-zone"]}`}>
                 <div className={Style["left-corner"]}>
