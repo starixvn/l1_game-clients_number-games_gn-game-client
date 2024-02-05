@@ -1,18 +1,15 @@
 import React from "react";
 import { isMobileOnly } from "react-device-detect";
 import Auth from "sc-user-service-client/dist/auth";
-import { io, Socket } from "socket.io-client";
-import MsgpackParser from "socket.io-msgpack-parser";
+import { Socket } from "socket.io-client";
 import { v4 as uuidv4 } from "uuid";
 
-import { getAppSettings } from "../../_shared/app-settings";
 import { LanguageLocaleMapper } from "../../_shared/constants";
-import { StorageHelper, initSocketIO, localStorageKeys } from "../../_shared/helpers";
-import { AuthContext, GameActionsContextProvider, GameContextProvider } from "../../_shared/react-contexts";
+import { initSocketIO, localStorageKeys, StorageHelper } from "../../_shared/helpers";
 import MessageTransmitter from "../../_shared/helpers/message-transmitter";
 import { MessageTransmitterType } from "../../_shared/helpers/message-transmitter/type";
 import { GetLocalizedErrorMessage } from "../../_shared/helpers/notice-helper";
-import { buildServerUrl } from "../../_shared/helpers/url-helper";
+import { AuthContext, GameActionsContextProvider, GameContextProvider } from "../../_shared/react-contexts";
 import { CommonResourceKeys, GameResourceKeys } from "../../_shared/resources";
 import BaseDialog from "../game-components/base-dialog";
 import { ModalType } from "../game-components/base-dialog/type";
@@ -92,6 +89,8 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
         disconnectReason: "",
         winningPlayerFrames: [],
         winningTieFrames: [],
+        cageBallsLoopFrames: [],
+        cageBallFrames: {},
     };
 
     constructor(props: P) {

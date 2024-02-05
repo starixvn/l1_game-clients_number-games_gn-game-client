@@ -61,6 +61,11 @@ export type GameBaseProps = {
 } & WithTranslation &
     WithRouterProps;
 
+export interface IBallColor {
+    blue: Texture<Resource>[];
+    red: Texture<Resource>[];
+}
+
 export interface GameBaseState<Result, SettlementResult> {
     signedIn: boolean;
     gameState: GameState;
@@ -100,6 +105,8 @@ export interface GameBaseState<Result, SettlementResult> {
     disconnectReason?: string;
     winningPlayerFrames: Texture<Resource>[];
     winningTieFrames: Texture<Resource>[];
+    cageBallsLoopFrames: Texture<Resource>[];
+    cageBallFrames: IBallColor;
 }
 
 export interface Notice {

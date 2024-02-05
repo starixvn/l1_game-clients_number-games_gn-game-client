@@ -79,6 +79,28 @@ class BacBall extends GameBase<GameBaseProps, GameBaseState<Result, SettlementRe
         this.setState({ winningTieFrames: sprite.animations["highlight-winning-tie"] });
     }
 
+    async loadCageLoopsJson() {
+        const sprite = await Assets.load<Spritesheet>("/static/images/cage/cage-balls.json");
+
+        this.setState({ cageBallsLoopFrames: sprite.animations["loop"] });
+    }
+
+    async loadBallJson() {
+        const sprite = await Assets.load<Spritesheet>("/static/images/cage/ball.json");
+        const blueFrames = sprite.animations["blue"];
+        const redFrames = sprite.animations["red"];
+
+        this.setState({ cageBallFrames: { blue: blueFrames, red: redFrames } });
+    }
+
+    componentDidMount() {
+        super.componentDidMount();
+        this.loadWinningPlayerJson();
+        this.loadWinningTieJson();
+        this.loadCageLoopsJson();
+        this.loadBallJson();
+    }
+
     renderHeaderBlock() {
         return (
             <>
@@ -93,7 +115,13 @@ class BacBall extends GameBase<GameBaseProps, GameBaseState<Result, SettlementRe
             <div className={Style["result-container"]}>
                 <div className={Style["player-container"]}>
                     <div className={Style["lottery-player-container"]}>
-                        <Cage color={CageColor.Blue} ballColor={BallColor.Blue} isSmall={true} />
+                        <Cage
+                            cageBallsLoopFrames={this.state.cageBallsLoopFrames}
+                            cageBallFrames={this.state.cageBallFrames}
+                            color={CageColor.Blue}
+                            ballColor={BallColor.Blue}
+                            isSmall={true}
+                        />
                     </div>
                     <div className={Style["ball-container"]}>
                         <Ball number={38} color="red" />
@@ -110,7 +138,13 @@ class BacBall extends GameBase<GameBaseProps, GameBaseState<Result, SettlementRe
                         <Ball isEmpty />
                     </div>
                     <div className="lottery">
-                        <Cage color={CageColor.Red} ballColor={BallColor.Red} isSmall={true} />
+                        <Cage
+                            cageBallsLoopFrames={this.state.cageBallsLoopFrames}
+                            cageBallFrames={this.state.cageBallFrames}
+                            color={CageColor.Red}
+                            ballColor={BallColor.Red}
+                            isSmall={true}
+                        />
                     </div>
                 </div>
             </div>
@@ -133,8 +167,6 @@ class BacBall extends GameBase<GameBaseProps, GameBaseState<Result, SettlementRe
         const dataBanker = betData[1];
         const dataTie = betData[2];
         const { winningPlayerFrames, winningTieFrames } = this.state;
-        this.loadWinningPlayerJson();
-        this.loadWinningTieJson();
 
         return (
             <div className={`${Style["betting-zone"]}`}>
