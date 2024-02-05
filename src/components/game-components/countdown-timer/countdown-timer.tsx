@@ -61,20 +61,18 @@ const Timer = () => {
     const gameName = ctx.gameSetting.gameName.toLocaleLowerCase();
     const { durations } = ctx.gameSetting;
 
-    const timerProps = {
-        isPlaying: ctx.gameState !== GameState.BeforeStartRound,
-        size: 30,
-        strokeWidth: 3,
-        trailColor: "#fff",
-        trailStrokeWidth: 1,
-        initialRemainingTime: ctx.gameState === GameState.BeforeStartRound ? durations.placingBets : ctx.remainingTime,
-        duration: durations.placingBets,
-        rotation: "counterclockwise" as Rotation,
-    };
-
     return (
         <div className={`${styles.timer} ${styles[gameName]}`}>
-            <CountdownCircleTimer {...timerProps} colors={[[ctx.gameState === GameState.LockingBet ? "#FF7B7B" : "#15E84B", 1]]}>
+            <CountdownCircleTimer
+                isPlaying={ctx.gameState !== GameState.BeforeStartRound}
+                size={30}
+                strokeWidth={3}
+                trailColor={"#fff"}
+                trailStrokeWidth={1}
+                initialRemainingTime={ctx.gameState === GameState.BeforeStartRound ? durations.placingBets : ctx.remainingTime}
+                duration={durations.placingBets}
+                rotation={"counterclockwise" as Rotation}
+                colors={ctx.gameState === GameState.LockingBet ? "#FF7B7B" : "#15E84B"}>
                 {({ remainingTime }) => {
                     if (remainingTime === 0) {
                         return (1).toLocaleString("en-US", { minimumIntegerDigits: 2 });
