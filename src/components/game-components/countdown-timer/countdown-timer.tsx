@@ -1,24 +1,25 @@
 import { useTranslation } from "next-i18next";
-import { CountdownCircleTimer } from "react-countdown-circle-timer";
-
 import { useGameContext } from "../../../_shared/react-contexts/game-context/game-context";
 import { GameState } from "../../game-base/type";
 import Loader from "../loader";
 import styles from "./countdown-timer.module.scss";
+import { useEffect, useState } from "react";
 
 export type Rotation = "clockwise" | "counterclockwise";
 const CountdownTimer: React.FC = () => {
     const { gameState, gameSetting } = useGameContext();
     const gameName = gameSetting.gameName.toLocaleLowerCase();
     const { t } = useTranslation("common");
+
     switch (gameState) {
         case GameState.BeforeStartRound:
-            return <Timer />;
+            return <></>;
         case GameState.InRound:
             return (
                 <>
-                    <Timer />
+                    <SimpleTimer />
                     <GameStatus>
+                        <span>2nd Draw: </span>
                         <div className={styles["start-betting"]}>{t("startBetting")}</div>
                     </GameStatus>
                 </>
@@ -26,8 +27,9 @@ const CountdownTimer: React.FC = () => {
         case GameState.LockingBet:
             return (
                 <>
-                    <Timer />
+                    <SimpleTimer />
                     <GameStatus>
+                        <span>2nd Draw: </span>
                         <div className={styles["no-more-bets"]}>{t("noMoreBets")}</div>
                     </GameStatus>
                 </>
@@ -49,6 +51,7 @@ const CountdownTimer: React.FC = () => {
                 <>
                     <div className={`loader-show-result ${gameName}`}></div>
                     <GameStatus>
+                        <span>2nd Draw: </span>
                         <div className={styles["open-result"]}>{t("openResult")}</div>
                     </GameStatus>
                 </>
@@ -56,30 +59,33 @@ const CountdownTimer: React.FC = () => {
     }
 };
 
-const Timer = () => {
+const SimpleTimer = () => {
     const ctx = useGameContext();
-    const gameName = ctx.gameSetting.gameName.toLocaleLowerCase();
     const { durations } = ctx.gameSetting;
+    const initialRemainingTime = ctx.gameState === GameState.BeforeStartRound ? durations.placingBets : ctx.remainingTime;
+    const [timeLeft, setTimeLeft] = useState(initialRemainingTime);
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setTimeLeft((prevTime) => prevTime - 1);
+            if (timeLeft === 0) {
+                clearInterval(timer);
+            }
+        }, 1000);
+
+        return () => {
+            clearInterval(timer);
+        };
+    }, []);
+
+    const seconds = (timeLeft % 60).toString().padStart(2, "0");
 
     return (
-        <div className={`${styles.timer} ${styles[gameName]}`}>
-            <CountdownCircleTimer
-                isPlaying={ctx.gameState !== GameState.BeforeStartRound}
-                size={30}
-                strokeWidth={3}
-                trailColor={"#fff"}
-                trailStrokeWidth={1}
-                initialRemainingTime={ctx.gameState === GameState.BeforeStartRound ? durations.placingBets : ctx.remainingTime}
-                duration={durations.placingBets}
-                rotation={"counterclockwise" as Rotation}
-                colors={ctx.gameState === GameState.LockingBet ? "#FF7B7B" : "#15E84B"}>
-                {({ remainingTime }) => {
-                    if (remainingTime === 0) {
-                        return (1).toLocaleString("en-US", { minimumIntegerDigits: 2 });
-                    }
-                    return remainingTime.toLocaleString("en-US", { minimumIntegerDigits: 2 });
-                }}
-            </CountdownCircleTimer>
+        <div className={styles.timer}>
+            <div className={`${styles["countdown-timer"]} ${ctx.gameState === GameState.LockingBet ? styles["lock-bet"] : ""}`}>
+                <span>00:</span>
+                <span>{seconds}</span>
+            </div>
         </div>
     );
 };

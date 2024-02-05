@@ -33,7 +33,7 @@ const Header: React.FC<Props> = (props) => {
                     <div className={Styles["header-left"]}>
                         <span className={`icon-back ${Styles["back-to-home"]}`}></span>
                         <a onClick={() => window.location.reload()} className={Styles["site-name"]}>
-                            Bac Ball
+                            <img src="/static/images/bac-number/game-name.svg" alt="game name" />
                         </a>
                     </div>
 

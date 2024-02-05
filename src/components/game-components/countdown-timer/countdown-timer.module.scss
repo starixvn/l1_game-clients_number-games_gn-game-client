@@ -1,44 +1,40 @@
 .timer {
     position: absolute;
-    left: calc(50% - 1.5rem);
-    top: 0.2rem;
+    top: -1.5rem;
     margin: 0.5rem 0;
     font-size: 1.6rem;
-    font-family: var(--font-number);
-    &.kenopower2{
-        @media(min-width: 760px) and (max-width: 810px) {
-            left: calc(50% - .8rem);
-        }        
+
+    svg {
+        display: none;
     }
 }
 
 .game-status {
+    display: flex;
     position: absolute;
-    left: 50%;
-    transform: translate(-50%, 0);
-    bottom: 0.3rem;
-    font-size: 1.4rem;
+    top: 2rem;
+    font-size: 1.1rem;
     line-height: 1.5rem;
+    gap: 0.5rem;
 
     .start-betting {
-        color: #15E84B;
+        color: #05ff00;
     }
     .open-result {
         color: #fff;
     }
     .balanced-betting-pool {
-        color: #29EBD4;
+        color: #29ebd4;
     }
     .no-more-bets {
-        color: #FF7B7B;
+        color: #ff4343;
     }
+}
 
-    &.kenopower2{
-        @media(min-width: 760px) and (max-width: 810px) {
-            width: 9.8rem;
-            text-align: center;
-            left: calc(50% - 4.9rem);
-            transform: unset;
-        }    
-    }
+.countdown-timer {
+    text-shadow: 0px 0px 15px #ffffff;
+}
+
+.lock-bet {
+    color: #ff4343;
 }

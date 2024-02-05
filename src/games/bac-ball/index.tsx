@@ -13,6 +13,7 @@ import PercentageCircle from "../../components/game-components/percentage-circle
 import RoundResult from "../../components/game-components/round-result";
 import { Result, SettlementResult } from "./bac-ball";
 import Style from "./bac-ball.module.scss";
+import CountdownTimer from "../../components/game-components/countdown-timer/countdown-timer";
 
 const betData: BetOptionData[] = [
     {
@@ -102,10 +103,16 @@ class BacBall extends GameBase<GameBaseProps, GameBaseState<Result, SettlementRe
     }
 
     renderHeaderBlock() {
+        const { gameState } = this.state;
+
         return (
             <>
-                <div className="round-id">#2345</div>
-                <div className="countdown-timer">00:30</div>
+                <div id="round-id" className="round-id">
+                    #{this.state.roundId}
+                </div>
+                <div id="countdown-timer" className="countdown-timer">
+                    <CountdownTimer key={gameState} />
+                </div>
             </>
         );
     }

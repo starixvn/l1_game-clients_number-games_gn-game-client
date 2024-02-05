@@ -1,16 +1,11 @@
 .loader-show-result {
     position: absolute;
     left: calc(50% - 1.5rem);
-    top: calc(50% - 2.1rem);
+    top: calc(50% - 1.5rem);
     width: 3rem;
     height: 3rem;
     border: 0 solid transparent;
     border-radius: 50%;
-    &.kenopower2{
-        @media(min-width: 760px) and (max-width: 810px) {
-            left: calc(50% - 1.2rem);
-        }        
-    }
 
     &:before,
     &:after {
@@ -64,7 +59,7 @@
     &:after {
         height: 0.2rem;
         width: 3rem;
-        background-color: #29EBD4;
+        background-color: #29ebd4;
         border-radius: 0.2rem;
         bottom: 0;
         left: 0;
@@ -74,7 +69,7 @@
     &:before {
         height: 0.4rem;
         width: 0.4rem;
-        background-color: #29EBD4;
+        background-color: #29ebd4;
         border-radius: 50%;
         top: 0;
         left: calc(50% - 0.4rem);

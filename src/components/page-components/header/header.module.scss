@@ -1,6 +1,5 @@
 [data-theme="light"] .header {
-    --header-background: #2d4976;
-    --header-background-mobi: linear-gradient(180deg, #ffffff 50%, #eaeaea 100%);
+    --header-background: #000;
     --header-text-color: var(--text-color);
     --header-balance-color: #ffc909;
     --header-border-bottom: #c5c5c5;
@@ -16,9 +15,7 @@
     display: flex;
     align-items: center;
     height: 3.2rem;
-    background: #000;
-
-    // position: fixed;
+    background: var(--header-background);
     top: 0;
     width: 100%;
     z-index: var(--header-index);
@@ -41,11 +38,7 @@
     }
 
     .site-name {
-        font-weight: 500;
-        font-size: 1.5rem;
-        color: var(--site-name-color);
         text-decoration: none;
-        font-family: var(--font-game-name);
 
         &:hover {
             text-decoration: none;
