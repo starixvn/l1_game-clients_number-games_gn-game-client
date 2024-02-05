@@ -1,6 +1,6 @@
 import { AnimatedSprite, Container, Stage } from "@pixi/react";
 import { Resource, Texture } from "pixi.js";
-import React, { useEffect, useMemo } from "react";
+import React, { useMemo } from "react";
 
 import { IBallColor } from "../../game-base/type";
 import Styles from "./cage.module.scss";
@@ -27,27 +27,19 @@ export type CageProps = {
     isSmall: boolean;
     cageBallsLoopFrames: Texture<Resource>[];
     cageBallFrames: IBallColor;
+    isPlayAnim: boolean;
 };
 
 const Cage: React.FunctionComponent<CageProps> = (cageProps) => {
-    const [playAnim, setPlayAnim] = React.useState(false);
-    const { color, ballColor, isSmall, cageBallsLoopFrames, cageBallFrames } = cageProps;
+    const { color, ballColor, isSmall, cageBallsLoopFrames, cageBallFrames, isPlayAnim } = cageProps;
     const lidPosition = color === CageColor.Red ? "left" : "right";
-
-    const renderButtonPlay = () => {
-        return (
-            <button className={Styles["button"]} onClick={() => setPlayAnim(!playAnim)}>
-                {!playAnim ? "Play result" : "Reset result"}
-            </button>
-        );
-    };
 
     return useMemo(() => {
         return (
             <div id="cageArea" className={`${Styles["cage-area"]} ${isSmall ? Styles["small"] : ""} ${Styles[lidPosition]}`}>
                 <div id="cageBg" className={Styles["cage-bg"]}></div>
                 <div id="cageBalls" className={Styles["cage-balls"]}>
-                    {playAnim && (
+                    {cageBallsLoopFrames.length > 0 && (
                         <Stage width={130} height={130} options={{ backgroundAlpha: 0 }}>
                             <Container position={[65, 65]}>
                                 <AnimatedSprite
@@ -57,7 +49,7 @@ const Cage: React.FunctionComponent<CageProps> = (cageProps) => {
                                     isPlaying={true}
                                     initialFrame={0}
                                     animationSpeed={0.6}
-                                    loop={false}
+                                    loop={true}
                                 />
                             </Container>
                         </Stage>
@@ -65,30 +57,33 @@ const Cage: React.FunctionComponent<CageProps> = (cageProps) => {
                 </div>
                 <div id="cageCover" className={Styles["cage-cover"]}></div>
                 <div id="cageBorder" className={`${Styles["cage-border"]} ${Styles[color]}`}>
-                    {playAnim && (
+                    {!isPlayAnim && <div id="cageLid" className={Styles["cage-lid"]} />}
+
+                    {isPlayAnim && (
                         <div id="cageBallAnim" className={Styles["show-ball-anim"]}>
-                            <Stage width={250} height={250} options={{ backgroundAlpha: 0 }}>
-                                <Container position={[85, 86]}>
-                                    <AnimatedSprite
-                                        anchor={0.5}
-                                        textures={cageBallFrames[ballColor]}
-                                        autoUpdate
-                                        isPlaying={true}
-                                        initialFrame={0}
-                                        animationSpeed={0.3}
-                                        loop={false}
-                                    />
-                                </Container>
-                            </Stage>
+                            {cageBallFrames[ballColor].length > 0 && (
+                                <Stage width={250} height={250} options={{ backgroundAlpha: 0 }}>
+                                    <Container position={[85, 86]}>
+                                        <AnimatedSprite
+                                            anchor={0.5}
+                                            textures={cageBallFrames[ballColor]}
+                                            autoUpdate
+                                            isPlaying={true}
+                                            initialFrame={0}
+                                            animationSpeed={0.3}
+                                            loop={false}
+                                        />
+                                    </Container>
+                                </Stage>
+                            )}
                         </div>
                     )}
                 </div>
-                {playAnim && <div className={`${Styles["number"]} ${playAnim ? Styles["show"] : Styles["hide"]}`}>38</div>}
 
-                {renderButtonPlay()}
+                {isPlayAnim && <div className={`${Styles["number"]} ${isPlayAnim ? Styles["show"] : Styles["hide"]}`}>38</div>}
             </div>
         );
-    }, [playAnim]);
+    }, [isPlayAnim]);
 };
 
 export default Cage;

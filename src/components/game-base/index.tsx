@@ -90,7 +90,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
         winningPlayerFrames: [],
         winningTieFrames: [],
         cageBallsLoopFrames: [],
-        cageBallFrames: {},
+        cageBallFrames: { blue: [], red: [] },
     };
 
     constructor(props: P) {

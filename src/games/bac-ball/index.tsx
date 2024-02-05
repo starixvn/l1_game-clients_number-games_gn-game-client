@@ -121,6 +121,7 @@ class BacBall extends GameBase<GameBaseProps, GameBaseState<Result, SettlementRe
                             color={CageColor.Blue}
                             ballColor={BallColor.Blue}
                             isSmall={true}
+                            isPlayAnim={this.state.playResultAnimation}
                         />
                     </div>
                     <div className={Style["ball-container"]}>
@@ -144,6 +145,7 @@ class BacBall extends GameBase<GameBaseProps, GameBaseState<Result, SettlementRe
                             color={CageColor.Red}
                             ballColor={BallColor.Red}
                             isSmall={true}
+                            isPlayAnim={this.state.playResultAnimation}
                         />
                     </div>
                 </div>
