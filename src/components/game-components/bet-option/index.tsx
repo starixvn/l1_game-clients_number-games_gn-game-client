@@ -25,7 +25,6 @@ const BetOption: React.FunctionComponent<Props> = ({
     isShowWinningEffect = false,
     isShowPoolStake = true,
     isShowTooltip = false,
-    isBoostedOdds = false,
 }) => {
     const { totalBets, ownBets, rate, gameSetting } = useGameContext();
     const { openPlaceBetModal, placeBet } = useGameActionContext();
@@ -85,7 +84,7 @@ const BetOption: React.FunctionComponent<Props> = ({
         ${gameState !== GameState.InRound && Styles["disallowed"]}
         ${Styles[gameSetting.gameName.toLocaleLowerCase()]}`;
 
-    const oddsClass = isBoostedOdds ? `${Styles["boosted-odd"]}` : `${Styles["odd"]}`;
+    const oddsClass = `${Styles["odd"]}`;
     const oddsValue = formatOdds(odd, fractionalOddsFormat);
     return (
         <>

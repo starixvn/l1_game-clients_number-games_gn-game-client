@@ -16,7 +16,6 @@ type Props = {
     isShowSlidingChip: boolean;
     toggleAnnouncementModal: () => void;
     betValue: number;
-    isNewPromotion: boolean;
     isShowToolbarGuide: boolean;
 };
 
@@ -29,7 +28,6 @@ const BetSettings: React.FC<Props> = ({
     toggleSlidingChip,
     isShowSlidingChip,
     betValue,
-    isNewPromotion,
     isShowToolbarGuide,
 }) => {
     const { i18n } = useTranslation();
@@ -68,17 +66,7 @@ const BetSettings: React.FC<Props> = ({
                 </div>
             </div>
         );
-    }, [
-        user?.red,
-        updateBetValue,
-        enabledQuickBet,
-        updateEnabledQuickBet,
-        enabledSound,
-        isShowSlidingChip,
-        betValue,
-        isNewPromotion,
-        isShowToolbarGuide,
-    ]);
+    }, [user?.red, updateBetValue, enabledQuickBet, updateEnabledQuickBet, enabledSound, isShowSlidingChip, betValue, isShowToolbarGuide]);
 };
 
 export default BetSettings;

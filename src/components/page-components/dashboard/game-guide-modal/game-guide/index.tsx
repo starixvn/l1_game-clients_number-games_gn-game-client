@@ -12,11 +12,10 @@ type Props = {
     gameId: number;
     userStakeLevel: UserStakeLevel;
     gameConfigs: any;
-    isInPromotionTime: boolean;
     fractionalOddsFormat: boolean;
 };
 const GameGuides: React.FC<Props> = (props) => {
-    const { gameId, userStakeLevel, gameConfigs, isInPromotionTime, fractionalOddsFormat } = props;
+    const { gameId, userStakeLevel, gameConfigs, fractionalOddsFormat } = props;
     const { i18n } = useTranslation();
     const { theme } = useTheme();
     const wrapperRef = useRef<HTMLIFrameElement>();
@@ -27,9 +26,7 @@ const GameGuides: React.FC<Props> = (props) => {
     const minMaxBetParams = `&minBet=${userStakeLevel?.minBet}&maxBet=${userStakeLevel?.maxBet}`;
     const oddsFormatParams = `&fof=${fractionalOddsFormat}`;
     const guideUrl = buildGameGuideUrl();
-    const srcPath = `${guideUrl}/${
-        i18n.language
-    }/?gId=${gameId}&t=${theme}${minMaxBetParams}&p=${isInPromotionTime}&dy=0&v=${Date.now()}${oddsFormatParams}`;
+    const srcPath = `${guideUrl}/${i18n.language}/?gId=${gameId}&t=${theme}${minMaxBetParams}&dy=0&v=${Date.now()}${oddsFormatParams}`;
     const handleResize = () => {
         if (wrapperRef?.current) {
             setHeightGuide(wrapperRef.current.clientHeight);

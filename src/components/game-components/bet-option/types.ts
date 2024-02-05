@@ -16,5 +16,4 @@ export type Props = {
     isShowPoolStake?: boolean;
     isShowTooltip?: boolean;
     tooltipMessage?: string;
-    isBoostedOdds?: boolean;
 };

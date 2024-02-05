@@ -31,27 +31,12 @@ export type State = {
     betValue: number;
     isBlockUI: boolean;
     isShowSlidingChip: boolean;
-    isShowBoostedOdds: boolean;
-    isNewPromotion: boolean;
-    promotionNotifications: [];
-    promotions: Promotion[];
     queryGame: number;
     isJoinGame: boolean;
     settingGames: number[];
     openGameId: number;
     openGameName: string;
     isShowToolbarGuide: boolean;
-};
-
-export type Promotion = {
-    gameId: number;
-    _id: string;
-    endDateTime: string;
-    isDaily: boolean;
-    odds: any;
-    startDateTime: string;
-    status: string;
-    time: string;
 };
 
 export type GameOffer = {

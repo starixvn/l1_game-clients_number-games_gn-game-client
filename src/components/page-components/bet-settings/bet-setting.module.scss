@@ -206,15 +206,6 @@
             transform: translate(-50%, 0);
         }
     }
-
-    .promotion {
-        position: absolute;
-        right: 8rem;
-        top: unset;
-        bottom: 0.5rem;
-        width: 7.4rem;
-        height: 4.9rem;
-    }
 }
 
 .chip-toggle {
@@ -259,65 +250,6 @@
 
     .bet-setting .value {
         z-index: 2;
-    }
-}
-
-.promotion {
-    position: absolute;
-    right: 1rem;
-    top: -6rem;
-    width: 9.7rem;
-    height: 7.5rem;
-    animation-name: show-promotion-animation, hide-promotion-animation;
-    animation-duration: 0.1s, 0.5s;
-    animation-delay: 0s, 10s;
-    animation-fill-mode: forwards, forwards;
-
-    .promo-light {
-        position: absolute;
-        z-index: -1;
-        top: -2rem;
-        animation: rotate 2.5s infinite linear;
-    }
-
-    .promo-img {
-        position: absolute;
-    }
-
-    @keyframes show-promotion-animation {
-        0% {
-            opacity: 0;
-            transform: scale(0);
-        }
-
-        100% {
-            opacity: 1;
-            transform: scale(1);
-        }
-    }
-
-    @keyframes hide-promotion-animation {
-        0% {
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        100% {
-            opacity: 0;
-            transform: scale(0);
-        }
-    }
-
-    @keyframes rotate {
-        0% {
-            transform: rotate(0deg) scale(1);
-        }
-        50% {
-            transform: rotate(180deg) scale(1.3);
-        }
-        100% {
-            transform: rotate(360deg) scale(1);
-        }
     }
 }
 

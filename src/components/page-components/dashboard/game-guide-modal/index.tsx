@@ -17,20 +17,18 @@ export const GameGuideModal: React.FC<{
     onCloseModal: Function;
     userStakeLevel;
     offerGames: number[];
-    promotions: any;
     settingGames: any;
     fractionalOddsFormat: boolean;
-}> = ({ onCloseModal, userStakeLevel, offerGames, promotions, settingGames, fractionalOddsFormat }) => {
-    const [selectedGameId, setSelectedGameId] = useState<number>(getAppSettings().offeredGames.filter((game) => offerGames.includes(game))[0]);
-    const [isInPromotionTime, setIsInPromotionTime] = useState<boolean>(false);
+}> = ({ onCloseModal, userStakeLevel, offerGames, settingGames, fractionalOddsFormat }) => {
+    const [selectedGameId, setSelectedGameId] = useState<number>(
+        getAppSettings().offeredGames.filter((game) => offerGames.includes(game))[0]
+    );
     const [gameConfigs, setGameConfigs] = useState<GameConfigs>();
     const { t } = useTranslation();
     const closeModal = () => {
         onCloseModal();
     };
     useEffect(() => {
-        const promotion = promotions.filter((promotion) => promotion.gameId === selectedGameId);
-        setIsInPromotionTime(promotion.length > 0);
         settingGames.forEach((game) => {
             if (game.gameId === selectedGameId) {
                 setGameConfigs({
@@ -57,7 +55,6 @@ export const GameGuideModal: React.FC<{
                             gameId={selectedGameId}
                             userStakeLevel={userStakeLevel}
                             gameConfigs={gameConfigs}
-                            isInPromotionTime={isInPromotionTime}
                             fractionalOddsFormat={fractionalOddsFormat}
                         />
                     )}

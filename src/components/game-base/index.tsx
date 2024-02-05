@@ -64,7 +64,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
     private userStakeLevelListener: string;
     private disconnectTimeout: NodeJS.Timeout;
 
-    private readonly defaultGameConfig = { odds: {}, minBet: 0, maxBet: 0, maxBetPerChoices: {}, enableFreeBet: false, boostedChoices: [] };
+    private readonly defaultGameConfig = { odds: {}, minBet: 0, maxBet: 0, maxBetPerChoices: {}, enableFreeBet: false };
     protected readonly defaultState = {
         signedIn: false,
         gameState: GameState.None,
@@ -195,7 +195,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
     }
 
     handleOdds({ odds }) {
-        const { values, boostedChoices } = odds;
+        const { values } = odds;
         const { gameConfigs } = this.state;
         const { minBet, maxBet, maxBetPerChoices, enableFreeBet } = gameConfigs;
         const newGameConfigs = {
@@ -204,7 +204,6 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
             maxBet: maxBet,
             maxBetPerChoices: maxBetPerChoices,
             enableFreeBet: enableFreeBet,
-            boostedChoices: boostedChoices,
         };
 
         this.setState({

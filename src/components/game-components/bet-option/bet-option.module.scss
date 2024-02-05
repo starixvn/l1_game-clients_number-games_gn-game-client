@@ -6,11 +6,8 @@
     --bet-option-own-bet-color: #33AA33;
     --bet-option-total-bet-color: #2c2f3e;
     --bet-option-odds-color: #707070;
-    --bet-option-boosted-odds-color: #C72263;
-    --bet-option-boosted-odds-background: rgba(199, 34, 99, 0.2);
 
     --winning-effect-animation-name: blink-animation;
-    --start-boosted-odds-animation: start-boosted-odds;
 }
 
 .container {
@@ -73,27 +70,6 @@
             letter-spacing: unset;
         }
     }
-
-    .boosted-odd {
-        position: absolute;
-        left: 0.5rem;
-        top: 0.2rem;
-        color: var(--bet-option-boosted-odds-color);
-        text-align: left;
-        font-size: 1.2rem;    
-        background-color: var(--bet-option-boosted-odds-background);   
-        padding: 0 0.4rem;
-        border-radius: 0.3rem;
-        border: 1px solid;
-        height: 1.8rem;
-        line-height: 1.7rem; 
-        animation: var(--start-boosted-odds-animation) 2s forwards infinite;       
-        transition: all 0.3s ease;
-
-        @media (min-width: 1136px) {
-            letter-spacing: unset;
-        }
-    }  
 
     .total-bet,
     .own-bet {
@@ -212,15 +188,5 @@
     75%,
     100% {
         background: #395877;
-    }
-}
-
-@keyframes start-boosted-odds {
-    0%, 100% {
-        box-shadow: none;
-    }
-
-    50% {
-        box-shadow: 0 0 5px #C01357, 0 0 8px #FF8DBA inset;   
     }
 }
