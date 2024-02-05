@@ -1,8 +1,11 @@
 import React from "react";
 
 import styles from "./game-container.module.scss";
+import { PropsWithChildren } from "react";
 
-const GameContainer: React.FC<{ children: React.ReactNode }> = ({ children }: { children: React.ReactNode }) => {
+
+
+const GameContainer: React.FC<PropsWithChildren> = ({ children }: PropsWithChildren) => {
     return <div className={styles["game-container"]}>{children}</div>;
 };
 

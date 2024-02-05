@@ -73,7 +73,6 @@ function Home() {
         return <SplashScreen locale={language}></SplashScreen>;
     }
 
-
     return <Dashboard session={session} queryGame={+gameId} setIsUm={setIsUm} directMode={ref === "m_direct" || ref === "d_direct"} />;
 }
 

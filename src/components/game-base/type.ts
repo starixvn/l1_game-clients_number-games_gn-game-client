@@ -3,7 +3,7 @@ import { WithRouterProps } from "next/dist/client/with-router";
 import { Resource, Texture } from "pixi.js";
 import { Socket } from "socket.io-client";
 
-import { SocketState } from "../../_shared/types";
+import { SocketState } from "../../_shared/helpers";
 
 export interface GameConfigs {
     odds: { [key: string]: number };

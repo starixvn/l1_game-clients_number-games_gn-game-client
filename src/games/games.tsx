@@ -1,12 +1,11 @@
 import { useTheme } from "next-themes";
 import React, { useEffect, useRef, useState } from "react";
 import { isIOS, isMobileOnly } from "react-device-detect";
-import { io } from "socket.io-client";
 import useSound from "use-sound";
 import { getAppSettings } from "../_shared/app-settings";
 import { StorageHelper, localStorageKeys } from "../_shared/helpers/storage-helper";
 import { SystemContextProvider } from "../_shared/react-contexts";
-import { SocketState } from "../_shared/types";
+import { SocketState, initSocketIO } from "../_shared/helpers";
 import {
     GameCategoryConfig,
     GameCategoryKeys,
@@ -19,7 +18,6 @@ import { WinningStreakItem } from "../components/page-components/winning-streak/
 import styles from "./games.module.scss";
 import { Props } from "./type";
 import messageTransmitter from "../_shared/helpers/message-transmitter";
-import { buildServerUrl, buildSocketGatewayUrl, buildSocketUrlByGameName, buildUrl } from "../_shared/helpers/url-helper";
 import { AppTypes } from "../_shared/constants";
 import BacBall from "./bac-ball";
 import { GameCategory } from "../components/page-components/game-category";
@@ -200,17 +198,10 @@ export const Games: React.FC<Props> = ({
     };
 
     const connectSocket = (gameName: string) => {
-        const { proxy, enableMsgpackParser } = getAppSettings();
-        const socketUri = buildServerUrl("bacball");
-        const socketOption = {
-            forceNew: true,
-            transports: ["websocket"],
-            path: `/bacball/socket.io`,
-            upgrade: false,
-            // parser: enableMsgpackParser ? MsgpackParser : undefined,
-        };
-
-        const socket = io(socketUri, socketOption);
+        const socket = initSocketIO({
+            namespace: "bacball",
+            path: "bacball/socket.io",
+        });
 
         if (socket) {
             socket.on("connect", () => {
@@ -229,8 +220,6 @@ export const Games: React.FC<Props> = ({
                 GlobalMessageTransmitter.broadcast(message);
             });
         }
-
-        // socketGatewayRef.current = socket;
     };
 
     useEffect(() => {

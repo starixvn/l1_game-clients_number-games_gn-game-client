@@ -4,3 +4,4 @@ export * from "./time-helper";
 export * from "./url-helper";
 export * from "./storage-helper";
 export * from "./message-transmitter/index";
+export * from "./socket-connection";

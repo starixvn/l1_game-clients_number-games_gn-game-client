@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import { getAppSettings } from "../../_shared/app-settings";
 import { LanguageLocaleMapper } from "../../_shared/constants";
-import { StorageHelper, localStorageKeys } from "../../_shared/helpers";
+import { StorageHelper, initSocketIO, localStorageKeys } from "../../_shared/helpers";
 import { AuthContext, GameActionsContextProvider, GameContextProvider } from "../../_shared/react-contexts";
 import MessageTransmitter from "../../_shared/helpers/message-transmitter";
 import { MessageTransmitterType } from "../../_shared/helpers/message-transmitter/type";
@@ -141,26 +141,13 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
             this.props.updateUserStakeLevel(userStakeLevel)
         );
         this.clearDisconnectTimeout();
-        this.socket = this.initSocket();
+        this.socket = this.createGameSocket();
         this.socket && this.socket.off(this.props.gameName).on(this.props.gameName, this.messageTransmitter.broadcast.bind(this));
     }
 
-    protected initSocket() {
-        const { socketInfo } = this.props;
+    protected createGameSocket() {
+        const socket = initSocketIO(this.props.socketInfo);
         const { session } = this.context as any;
-        const { proxy, enableMsgpackParser } = getAppSettings();
-
-        const socketUri = buildServerUrl(socketInfo.namespace);
-        const socketOption = {
-            forceNew: true,
-            transports: ["websocket"],
-            path: `${proxy.path}/${socketInfo.path}/socket.io`,
-            upgrade: false,
-            parser: enableMsgpackParser ? MsgpackParser : undefined,
-        };
-
-        const socket = io(socketUri, socketOption);
-
         socket.on("connect", () => {
             this.clearDisconnectTimeout();
             document.visibilityState !== "hidden" && socket.emit("signin", session);
@@ -893,8 +880,19 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
     }
 
     renderGame() {
-        const { remainingTime, roundRemainingTime, roundId, gameState, totalBets, ownBets, gameConfigs, viewMode, playResultAnimation, isShowBlink, rate } =
-            this.state;
+        const {
+            remainingTime,
+            roundRemainingTime,
+            roundId,
+            gameState,
+            totalBets,
+            ownBets,
+            gameConfigs,
+            viewMode,
+            playResultAnimation,
+            isShowBlink,
+            rate,
+        } = this.state;
 
         const gameContext = {
             totalBets,
