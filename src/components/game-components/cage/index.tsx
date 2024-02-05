@@ -36,9 +36,9 @@ const Cage: React.FunctionComponent<CageProps> = (cageProps) => {
 
     return useMemo(() => {
         return (
-            <div id="cageArea" className={`${Styles["cage-area"]} ${isSmall ? Styles["small"] : ""} ${Styles[lidPosition]}`}>
-                <div id="cageBg" className={Styles["cage-bg"]}></div>
-                <div id="cageBalls" className={Styles["cage-balls"]}>
+            <div className={`${Styles["cage-area"]} ${isSmall ? Styles["small"] : ""} ${Styles[lidPosition]}`}>
+                <div id="cage-bg" className={Styles["cage-bg"]}></div>
+                <div id="cage-balls" className={Styles["cage-balls"]}>
                     {cageBallsLoopFrames.length > 0 && (
                         <Stage width={130} height={130} options={{ backgroundAlpha: 0 }}>
                             <Container position={[65, 65]}>
@@ -55,12 +55,12 @@ const Cage: React.FunctionComponent<CageProps> = (cageProps) => {
                         </Stage>
                     )}
                 </div>
-                <div id="cageCover" className={Styles["cage-cover"]}></div>
-                <div id="cageBorder" className={`${Styles["cage-border"]} ${Styles[color]}`}>
-                    {!isPlayAnim && <div id="cageLid" className={Styles["cage-lid"]} />}
+                <div id="cage-cover" className={Styles["cage-cover"]}></div>
+                <div id="cage-border" className={`${Styles["cage-border"]} ${Styles[color]}`}>
+                    {!isPlayAnim && <div id="cage-lid" className={Styles["cage-lid"]} />}
 
                     {isPlayAnim && (
-                        <div id="cageBallAnim" className={Styles["show-ball-anim"]}>
+                        <div id="show-ball-anim" className={Styles["show-ball-anim"]}>
                             {cageBallFrames[ballColor].length > 0 && (
                                 <Stage width={250} height={250} options={{ backgroundAlpha: 0 }}>
                                     <Container position={[85, 86]}>
@@ -80,7 +80,11 @@ const Cage: React.FunctionComponent<CageProps> = (cageProps) => {
                     )}
                 </div>
 
-                {isPlayAnim && <div className={`${Styles["number"]} ${isPlayAnim ? Styles["show"] : Styles["hide"]}`}>38</div>}
+                {isPlayAnim && (
+                    <div id="result-text" className={`${Styles["number"]} ${isPlayAnim ? Styles["show"] : Styles["hide"]}`}>
+                        38
+                    </div>
+                )}
             </div>
         );
     }, [isPlayAnim]);

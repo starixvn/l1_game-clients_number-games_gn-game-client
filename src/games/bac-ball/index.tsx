@@ -214,45 +214,57 @@ class BacBall extends GameBase<GameBaseProps, GameBaseState<Result, SettlementRe
                     <div className={`flex justify-between pt-5`}>
                         <div className={Style.stake}>
                             <div className={`flex items-center ${Style["total-stakes"]} gap-1`}>
-                                <span className="icon-coin"></span>
-                                <span>{dataPlayer.totalStakes}</span>
+                                <span id="player-coin-icon" className="icon-coin"></span>
+                                <span id="player-total-stakes">{dataPlayer.totalStakes}</span>
                             </div>
                             <div className="flex items-center players gap-1">
-                                <span className="icon-user"></span>
-                                <span>{dataPlayer.players}</span>
+                                <span id="player-user-icon" className="icon-user"></span>
+                                <span id="player-no">{dataPlayer.players}</span>
                             </div>
                         </div>
-                        <div className={Style.percent}>
+                        <div id="player-percent" className={Style.percent}>
                             <PercentageCircle percentage={dataPlayer.percent} />
                         </div>
                     </div>
-                    <div className={`bet-name text-center ${Style["bet-name"]}`}>{dataPlayer.betChoice}</div>
-                    <div className="bet-odds text-center">{dataPlayer.odds}</div>
+                    <div id="player-bet-name" className={`bet-name text-center ${Style["bet-name"]}`}>
+                        {dataPlayer.betChoice}
+                    </div>
+                    <div id="player-odds" className="bet-odds text-center">
+                        {dataPlayer.odds}
+                    </div>
                     <div className={`own-bet ${Style["own-bet"]}`}>
-                        <span className="bet-value">10</span>
+                        <span id="player-own-bet" className="bet-value">
+                            10
+                        </span>
                     </div>
                 </div>
 
                 <div className={`${Style["banker"]} text-white relative`} onClick={this.onClickBanker}>
                     <div className={`flex pt-5 justify-between`}>
-                        <div className={Style.percent}>
+                        <div id="banker-percent" className={Style.percent}>
                             <PercentageCircle percentage={dataBanker.percent} />
                         </div>
                         <div className={Style.stake}>
                             <div className={`flex items-center ${Style["total-stakes"]} gap-1`}>
-                                <span className="icon-coin"></span>
-                                <span>{dataBanker.totalStakes}</span>
+                                <span id="banker-coin-icon" className="icon-coin"></span>
+                                <span id="banker-total-stakes">{dataBanker.totalStakes}</span>
                             </div>
                             <div className="flex items-center players gap-1 justify-end">
-                                <span className="icon-user"></span>
-                                <span>{dataBanker.players}</span>
+                                <span id="banker-user-icon" className="icon-user"></span>
+                                <span id="banker-no">{dataBanker.players}</span>
                             </div>
                         </div>
                     </div>
-                    <div className={`bet-name text-center ${Style["bet-name"]}`}>{dataBanker.betChoice}</div>
-                    <div className="bet-odds text-center">{dataBanker.odds}</div>
+                    <div id="banker-bet-name" className={`bet-name text-center ${Style["bet-name"]}`}>
+                        {dataBanker.betChoice}
+                    </div>
+                    <div id="banker-odds" className="bet-odds text-center">
+                        {dataBanker.odds}
+                    </div>
                     <div className={`own-bet ${Style["own-bet"]}`}>
-                        <span className="bet-value">10</span>
+                        <span id="banker-own-bet" className="bet-value">
+                            10
+                        </span>
                     </div>
                 </div>
 
@@ -272,23 +284,29 @@ class BacBall extends GameBase<GameBaseProps, GameBaseState<Result, SettlementRe
                             </Container>
                         </Stage>
                     )}
-                    <div className={Style.percent}>
+                    <div id="tie-percent" className={Style.percent}>
                         <PercentageCircle percentage={dataTie.percent} />
                     </div>
                     <div className={Style.stake}>
                         <div className={`flex items-center ${Style["total-stakes"]} gap-1 justify-center`}>
-                            <span className="icon-coin"></span>
-                            <span>{dataTie.totalStakes}</span>
+                            <span id="tie-coin-icon" className="icon-coin"></span>
+                            <span id="tie-total-stakes">{dataTie.totalStakes}</span>
                         </div>
                         <div className="flex items-center players gap-1 justify-center">
-                            <span className="icon-user"></span>
-                            <span>{dataTie.players}</span>
+                            <span id="tie-user-icon" className="icon-user"></span>
+                            <span id="tie-no">{dataTie.players}</span>
                         </div>
                     </div>
-                    <div className="bet-name text-center mt-4">{dataTie.betChoice}</div>
-                    <div className="bet-odds text-center">{dataTie.odds}</div>
+                    <div id="tie-bet-name" className="bet-name text-center mt-4">
+                        {dataTie.betChoice}
+                    </div>
+                    <div id="tie-odds" className="bet-odds text-center">
+                        {dataTie.odds}
+                    </div>
                     <div className={`own-bet ${Style["own-bet"]}`}>
-                        <span className="bet-value">10</span>
+                        <span id="tie-own-bet" className="bet-value">
+                            10
+                        </span>
                     </div>
                 </div>
             </div>
