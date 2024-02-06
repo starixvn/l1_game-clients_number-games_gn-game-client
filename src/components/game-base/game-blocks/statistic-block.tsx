@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import { MessageTransmitterType } from "../../../_shared/helpers/message-transmitter/type";
 
-type StatisticBlockProps = {
+export type StatisticBlockProps = {
     messageTransmitter: MessageTransmitterType;
 };
 
-class HistoryItem {
+export class HistoryItem {
     result?: TResult;
     settlementResult?: TSettlementResult;
     roundId?: number;
@@ -19,7 +19,7 @@ export type TSettlementResult = {
     [betChoice: string]: boolean;
 };
 
-type StatisticBlockState = {
+export type StatisticBlockState = {
     roundHistory: Array<HistoryItem>;
 };
 

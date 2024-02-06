@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import { MessageTransmitterType } from "../../../_shared/helpers/message-transmitter/type";
 
-type SlidingChipsBlockProps = {
+export type SlidingChipsBlockProps = {
     messageTransmitter: MessageTransmitterType;
 };
 
-type SlidingChipsBlockState = {};
+export type SlidingChipsBlockState = {};
 
 export class SlidingChipsBlock extends Component<SlidingChipsBlockProps, SlidingChipsBlockState> {
     constructor(props: SlidingChipsBlockProps) {

@@ -1,19 +1,16 @@
 import React, { Component } from "react";
 import { MessageTransmitterType } from "../../../_shared/helpers/message-transmitter/type";
 
-type HeaderBlockProps = {
+export type HeaderBlockProps = {
     messageTransmitter: MessageTransmitterType;
 };
 
-type HeaderBlockState = {
+export type HeaderBlockState = {
     roundId: string;
     drawId: string;
 };
 
 export class HeaderBlock extends Component<HeaderBlockProps, HeaderBlockState> {
-    /**
-     *
-     */
     constructor(props: HeaderBlockProps) {
         super(props);
 

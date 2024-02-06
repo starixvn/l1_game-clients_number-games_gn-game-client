@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { MessageTransmitterType } from "../../../_shared/helpers/message-transmitter/type";
-import { GameBaseProps, GameBaseState } from "../type";
 
 export type BettingBlockProps = {
     messageTransmitter: MessageTransmitterType;

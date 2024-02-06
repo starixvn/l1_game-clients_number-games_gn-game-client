@@ -1,16 +1,17 @@
 import React, { Component } from "react";
 import { MessageTransmitterType } from "../../../_shared/helpers/message-transmitter/type";
 
-type ResultBlockProps = {
+export type ResultBlockProps = {
     messageTransmitter: MessageTransmitterType;
+    getGameState: () => any;
 };
 
-type ResultBlockState = {
+export class ResultBlockState {
     status: Status;
     finish: Finish;
-};
+}
 
-class Status {
+export class Status {
     winningByChoices: {
         [betChoice: string]: number;
     };
@@ -19,7 +20,7 @@ class Status {
     reachMaxWin?: boolean;
 }
 
-class Finish {
+export class Finish {
     result?: TResult;
     settlementResult?: TSettlementResult;
     roundId?: number;
@@ -27,19 +28,16 @@ class Finish {
     static eventName = "finish";
 }
 
-type TResult = {
+export type TResult = {
     [betChoice: string]: any;
 };
 
-type TSettlementResult = {
+export type TSettlementResult = {
     [betChoice: string]: boolean;
 };
 
-export class ResultBlock extends Component<ResultBlockProps, ResultBlockState> {
-    /**
-     *
-     */
-    constructor(props: ResultBlockProps) {
+export class ResultBlock<Props extends ResultBlockProps, State extends ResultBlockState> extends Component<Props, State> {
+    constructor(props: Props) {
         super(props);
 
         this.registerGameEvents();
