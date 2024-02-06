@@ -37,7 +37,13 @@ export class BacBallResultBlock extends ResultBlock<ResultBlockProps, BacBallRes
         // waiting for rounduration class
         const parentState = this.props.getGameState();
 
-        if (!parentState.result || this.state.cageBallsLoopFrames?.length === 0 || this.state.cageBallFrames?.blue?.length === 0) {
+        if (
+            !parentState.result ||
+            this.state == null ||
+            this.state?.cageBallsLoopFrames?.length === 0 ||
+            this.state?.cageBallFrames?.blue?.length === 0 ||
+            this.state?.cageBallFrames?.red?.length === 0
+        ) {
             return <></>;
         }
 

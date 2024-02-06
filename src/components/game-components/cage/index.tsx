@@ -82,7 +82,7 @@ const Cage: React.FunctionComponent<CageProps> = (cageProps) => {
             <div className={`${Styles["cage-area"]} ${isSmall ? Styles["small"] : ""} ${Styles[lidPosition]}`}>
                 <div id="cage-bg" className={Styles["cage-bg"]}></div>
                 <div id="cage-balls" className={Styles["cage-balls"]}>
-                    {cageBallsLoopFrames.length > 0 && (
+                    {cageBallsLoopFrames?.length > 0 && (
                         <Stage width={130} height={130} options={{ backgroundAlpha: 0 }}>
                             <Container position={[65, 65]}>
                                 <AnimatedSprite
