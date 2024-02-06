@@ -1,6 +1,6 @@
 import { AnimatedSprite, Container, Stage } from "@pixi/react";
 import { Resource, Texture } from "pixi.js";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 import { IBallColor } from "../../game-base/type";
 import Styles from "./cage.module.scss";
@@ -27,12 +27,49 @@ export type CageProps = {
     isSmall: boolean;
     cageBallsLoopFrames: Texture<Resource>[];
     cageBallFrames: IBallColor;
-    isPlayAnim: boolean;
+    result: number;
+    isShowResult: boolean;
+    delayShowResultTime?: number;
 };
 
 const Cage: React.FunctionComponent<CageProps> = (cageProps) => {
-    const { color, ballColor, isSmall, cageBallsLoopFrames, cageBallFrames, isPlayAnim } = cageProps;
+    const { color, ballColor, isSmall, cageBallsLoopFrames, cageBallFrames, result, isShowResult, delayShowResultTime } = cageProps;
     const lidPosition = color === CageColor.Red ? "left" : "right";
+    const [isDelayShowResult, setIsDelayShowResult] = useState<boolean>(false);
+
+    useEffect(() => {
+        const timeOut = setTimeout(() => setIsDelayShowResult(true), delayShowResultTime);
+
+        return () => {
+            clearTimeout(timeOut);
+        };
+    }, [isShowResult]);
+
+    const showResult = () => {
+        if (!isDelayShowResult || !isShowResult) {
+            return <></>;
+        }
+
+        return (
+            <div id="show-ball-anim" className={Styles["show-ball-anim"]}>
+                {cageBallFrames[ballColor].length > 0 && (
+                    <Stage width={250} height={250} options={{ backgroundAlpha: 0 }}>
+                        <Container position={[82, 87]}>
+                            <AnimatedSprite
+                                anchor={0.5}
+                                textures={cageBallFrames[ballColor]}
+                                autoUpdate
+                                isPlaying={true}
+                                initialFrame={0}
+                                animationSpeed={0.3}
+                                loop={false}
+                            />
+                        </Container>
+                    </Stage>
+                )}
+            </div>
+        );
+    };
 
     return useMemo(() => {
         return (
@@ -57,37 +94,18 @@ const Cage: React.FunctionComponent<CageProps> = (cageProps) => {
                 </div>
                 <div id="cage-cover" className={Styles["cage-cover"]}></div>
                 <div id="cage-border" className={`${Styles["cage-border"]} ${Styles[color]}`}>
-                    {!isPlayAnim && <div id="cage-lid" className={Styles["cage-lid"]} />}
-
-                    {isPlayAnim && (
-                        <div id="show-ball-anim" className={Styles["show-ball-anim"]}>
-                            {cageBallFrames[ballColor].length > 0 && (
-                                <Stage width={250} height={250} options={{ backgroundAlpha: 0 }}>
-                                    <Container position={[85, 86]}>
-                                        <AnimatedSprite
-                                            anchor={0.5}
-                                            textures={cageBallFrames[ballColor]}
-                                            autoUpdate
-                                            isPlaying={true}
-                                            initialFrame={0}
-                                            animationSpeed={0.3}
-                                            loop={false}
-                                        />
-                                    </Container>
-                                </Stage>
-                            )}
-                        </div>
-                    )}
+                    {!isShowResult && <div id="cage-lid" className={Styles["cage-lid"]} />}
+                    {showResult()}
                 </div>
 
-                {isPlayAnim && (
-                    <div id="result-text" className={`${Styles["number"]} ${isPlayAnim ? Styles["show"] : Styles["hide"]}`}>
-                        38
+                {isShowResult && (
+                    <div id="result-text" className={`${Styles["number"]} ${isShowResult ? Styles["show"] : Styles["hide"]}`}>
+                        {result}
                     </div>
                 )}
             </div>
         );
-    }, [isPlayAnim]);
+    }, [isShowResult, isDelayShowResult]);
 };
 
 export default Cage;

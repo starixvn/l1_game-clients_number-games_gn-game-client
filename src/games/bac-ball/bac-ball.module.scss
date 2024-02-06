@@ -31,55 +31,55 @@
 .player {
     --color: #98cdff;
     background: url("/static/images/bac-number/bg-player.svg") no-repeat;
-    width: 178px;
-    height: 187px;
-    border-bottom-left-radius: 66px;
-    border-top-left-radius: 38px;
-    padding-left: 12px;
-    padding-right: 55px;
+    width: 17.8rem;
+    height: 18.7rem;
+    border-bottom-left-radius: 6.6rem;
+    border-top-left-radius: 3.8rem;
+    padding-left: 1.2rem;
+    padding-right: 5.5rem;
 
     .own-bet {
-        left: -40px;
+        left: -4rem;
     }
 }
 
 .banker {
     --color: #f9bcb9;
     background: url("/static/images/bac-number/bg-banker.svg") no-repeat;
-    width: 178px;
-    height: 187px;
-    border-bottom-right-radius: 66px;
-    border-top-right-radius: 38px;
-    padding-right: 12px;
-    padding-left: 55px;
+    width: 17.8rem;
+    height: 18.7rem;
+    border-bottom-right-radius: 6.6rem;
+    border-top-right-radius: 3.8rem;
+    padding-right: 1.2rem;
+    padding-left: 5.5rem;
     .own-bet {
-        left: 40px;
+        left: 4rem;
     }
 }
 
 .tie {
     --color: #2fc856;
     background: url("/static/images/bac-number/bg-tie.svg") no-repeat;
-    width: 95px;
-    height: 172px;
+    width: 9.5rem;
+    height: 17.2rem;
     position: absolute;
     margin-left: auto;
     margin-right: auto;
-    left: 0;
+    left: 0.1rem;
     right: 0;
-    top: -5px;
-    border-bottom-left-radius: 66px;
-    border-bottom-right-radius: 66px;
+    top: -0.5rem;
+    border-bottom-left-radius: 6.6rem;
+    border-bottom-right-radius: 6.6rem;
 }
 
 .stake {
     color: var(--color);
-    font-size: 12px;
+    font-size: 1.2rem;
     font-weight: 500;
 }
 
 .own-bet {
-    bottom: 15px;
+    bottom: 1.5rem;
 }
 
 %corner-cover {

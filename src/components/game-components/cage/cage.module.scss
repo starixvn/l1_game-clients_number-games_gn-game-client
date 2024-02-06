@@ -49,7 +49,8 @@
         .cage-lid {
             right: auto;
             left: 2.4rem;
-            transform: rotate(90deg);
+            bottom: 2.7rem;
+            transform: scaleX(-1);
         }
     }
 }
@@ -82,8 +83,8 @@
 
 .cage-lid {
     position: absolute;
-    bottom: 2.9rem;
-    right: 2.2rem;
+    bottom: 2.8rem;
+    right: 2.3rem;
     background: url("/static/images/cage/cage-lid.png") center center no-repeat;
     width: 2.4rem;
     height: 2.4rem;

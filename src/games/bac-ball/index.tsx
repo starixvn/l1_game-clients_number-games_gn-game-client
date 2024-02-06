@@ -6,14 +6,14 @@ import React from "react";
 
 import { BetOptionData, RoundResultData } from "../../_shared/constants";
 import GameBase from "../../components/game-base";
-import { GameBaseProps, GameBaseState, GatewayGameBaseProps } from "../../components/game-base/type";
+import { GameBaseProps, GameBaseState, GameState, GatewayGameBaseProps } from "../../components/game-base/type";
 import Ball from "../../components/game-components/ball";
 import Cage, { BallColor, CageColor } from "../../components/game-components/cage";
+import CountdownTimer from "../../components/game-components/countdown-timer/countdown-timer";
 import PercentageCircle from "../../components/game-components/percentage-circle";
 import RoundResult from "../../components/game-components/round-result";
 import { Result, SettlementResult } from "./bac-ball";
 import Style from "./bac-ball.module.scss";
-import CountdownTimer from "../../components/game-components/countdown-timer/countdown-timer";
 
 const betData: BetOptionData[] = [
     {
@@ -118,6 +118,12 @@ class BacBall extends GameBase<GameBaseProps, GameBaseState<Result, SettlementRe
     }
 
     renderResultBlock() {
+        if (!this.state.result) {
+            return <></>;
+        }
+
+        const { player, banker } = this.state.result;
+
         return (
             <div className={Style["result-container"]}>
                 <div className={Style["player-container"]}>
@@ -128,7 +134,8 @@ class BacBall extends GameBase<GameBaseProps, GameBaseState<Result, SettlementRe
                             color={CageColor.Blue}
                             ballColor={BallColor.Blue}
                             isSmall={true}
-                            isPlayAnim={this.state.playResultAnimation}
+                            result={player}
+                            isShowResult={this.state.playResultAnimation}
                         />
                     </div>
                     <div className={Style["ball-container"]}>
@@ -152,7 +159,9 @@ class BacBall extends GameBase<GameBaseProps, GameBaseState<Result, SettlementRe
                             color={CageColor.Red}
                             ballColor={BallColor.Red}
                             isSmall={true}
-                            isPlayAnim={this.state.playResultAnimation}
+                            result={banker}
+                            isShowResult={this.state.playResultAnimation}
+                            delayShowResultTime={1000}
                         />
                     </div>
                 </div>
@@ -176,12 +185,27 @@ class BacBall extends GameBase<GameBaseProps, GameBaseState<Result, SettlementRe
         const dataBanker = betData[1];
         const dataTie = betData[2];
         const { winningPlayerFrames, winningTieFrames } = this.state;
+        const isShowWinningHighlightPlayer =
+            this.state.gameState === GameState.DisplayResult &&
+            this.state.settlementResult &&
+            this.state.settlementResult.player &&
+            winningPlayerFrames.length > 0;
+        const isShowWinningHighlightBanker =
+            this.state.gameState === GameState.DisplayResult &&
+            this.state.settlementResult &&
+            this.state.settlementResult.banker &&
+            winningPlayerFrames.length > 0;
+        const isShowWinningHighlightTie =
+            this.state.gameState === GameState.DisplayResult &&
+            this.state.settlementResult &&
+            this.state.settlementResult.tie &&
+            winningTieFrames.length > 0;
 
         return (
             <div className={`${Style["betting-zone"]}`}>
                 <div className={Style["left-corner"]}>
                     <div className={Style["winning-effect"]}>
-                        {winningPlayerFrames.length > 0 && (
+                        {isShowWinningHighlightPlayer && (
                             <Stage width={210} height={210} options={{ backgroundAlpha: 0 }}>
                                 <Container position={[90, 110]}>
                                     <AnimatedSprite
@@ -200,7 +224,7 @@ class BacBall extends GameBase<GameBaseProps, GameBaseState<Result, SettlementRe
                 </div>
                 <div className={Style["right-corner"]}>
                     <div className={Style["winning-effect"]}>
-                        {winningPlayerFrames.length > 0 && (
+                        {isShowWinningHighlightBanker && (
                             <Stage width={210} height={210} options={{ backgroundAlpha: 0 }}>
                                 <Container position={[90, 108]}>
                                     <AnimatedSprite
@@ -276,7 +300,7 @@ class BacBall extends GameBase<GameBaseProps, GameBaseState<Result, SettlementRe
                 </div>
 
                 <div className={`${Style["tie"]} text-white flex flex-col items-center pt-2 relative`} onClick={this.onClickTie}>
-                    {winningTieFrames.length > 0 && (
+                    {isShowWinningHighlightTie && (
                         <Stage width={210} height={210} options={{ backgroundAlpha: 0 }}>
                             <Container position={[105, 77]}>
                                 <AnimatedSprite
