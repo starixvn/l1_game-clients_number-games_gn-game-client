@@ -1,17 +1,18 @@
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { SSOResponse } from "sc-user-service-client/dist/auth";
 import { getAppSettings } from "../_shared/app-settings";
 import { languageMapper } from "../_shared/constants";
 import { StorageHelper, localStorageKeys } from "../_shared/helpers/storage-helper";
+import { usePWAWoker } from "../_shared/react-hooks/use-pwa-worker";
+import * as Sentry from "../_shared/sentry";
+import { tolgee } from "../_shared/tolgee";
 import Dashboard from "../components/page-components/dashboard";
 import SplashScreen from "../components/page-components/splash-screen";
 import UMPage from "../components/page-components/um-page";
 import { sso, verifySession } from "../services/auth-service";
-import * as Sentry from "../_shared/sentry";
-import { usePWAWoker } from "../_shared/react-hooks/use-pwa-worker";
 
 const getUserSession = (token: string) => (token ? sso(token, getAppSettings().appType) : verifySession());
 
@@ -60,6 +61,7 @@ function Home() {
             const locale = languageMapper[(lang as string) ?? userSession?.language] ?? router.locale;
             setLanguage(locale);
             i18n.changeLanguage(locale);
+            tolgee.changeLanguage(locale);
 
             signIn();
         }

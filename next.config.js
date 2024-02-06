@@ -38,6 +38,8 @@ module.exports = withSentryConfig({
     basePath,
     env: {
         buildVersion: uuidv4(),
+        REACT_APP_TOLGEE_API_URL: "https://tolgee.sabagame.com/",
+        REACT_APP_TOLGEE_API_KEY: "tgpak_gvpw45brha2xg3btoztxeytunvudc5dbn5twqodtonztc",
     },
     async rewrites() {
         return [

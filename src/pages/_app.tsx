@@ -1,10 +1,12 @@
-import "../styles/errors.scss";
-import "../styles/main.scss";
+import { TolgeeProvider } from "@tolgee/react";
 import { appWithTranslation } from "next-i18next";
 import { ThemeProvider } from "next-themes";
 import App, { AppProps } from "next/app";
 import Head from "next/head";
 import { buildVersion, systemName, Themes } from "../_shared/constants";
+import { tolgee } from "../_shared/tolgee";
+import "../styles/errors.scss";
+import "../styles/main.scss";
 
 class SabaNumberApp extends App<AppProps> {
     render() {
@@ -12,8 +14,10 @@ class SabaNumberApp extends App<AppProps> {
 
         return (
             <ThemeProvider defaultTheme={Themes.light}>
-                <AppTilte />
-                <Component {...pageProps} />
+                <TolgeeProvider tolgee={tolgee} fallback="Loading...">
+                    <AppTilte />
+                    <Component {...pageProps} />
+                </TolgeeProvider>
             </ThemeProvider>
         );
     }

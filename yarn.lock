@@ -2279,6 +2279,25 @@
   resolved "http://npm.lumigame.com/@testing-library/user-event/-/user-event-14.5.2.tgz#db7257d727c891905947bd1c1a99da20e03c2ebd"
   integrity sha512-YAh82Wh4TIrxYLmfGcixwD18oIjyC1pFQC2Y01F2lzV2HTMiYrI0nze0FD0ocB//CKS/7jIUgae+adPqxK5yCQ==
 
+"@tolgee/core@5.19.3":
+  version "5.19.3"
+  resolved "http://npm.lumigame.com/@tolgee/core/-/core-5.19.3.tgz#ffed8b88f09913391b4c177d868608e26ebb70ea"
+  integrity sha512-pq1MDvRH/WFpSI4JQkTLCqLV2ejqQZEIieFkxJwHCZWheQqsnEDJs9y9XMpg3nflkSZTfInM4nS6YzqtYLJk4w==
+
+"@tolgee/react@^5.19.3":
+  version "5.19.3"
+  resolved "http://npm.lumigame.com/@tolgee/react/-/react-5.19.3.tgz#182c625b95c741a352abec032a0e49be3c8eb761"
+  integrity sha512-Ve2jwKyS8DuZ1Etr+8bSGxoWO+QdoVAGxXlS4E090ksZHLxwaQzFLWED2lQhGI+53dmMAK24OgBQYgIs6Gx5Hg==
+  dependencies:
+    "@tolgee/web" "5.19.3"
+
+"@tolgee/web@5.19.3":
+  version "5.19.3"
+  resolved "http://npm.lumigame.com/@tolgee/web/-/web-5.19.3.tgz#49aa81c993228c034b2dc949e534726daf164d7a"
+  integrity sha512-2gXKR1Z36e1iodSY+V7U7khwpuPjssCnLUTpAJaOpvpD1qv57B+yMch8/Kpw9Cvmxk/DVqoPTQxfBGidbzNU4A==
+  dependencies:
+    "@tolgee/core" "5.19.3"
+
 "@tootallnate/once@2":
   version "2.0.0"
   resolved "http://npm.lumigame.com/@tootallnate/once/-/once-2.0.0.tgz#f544a148d3ab35801c1f633a7441fd87c2e484bf"
