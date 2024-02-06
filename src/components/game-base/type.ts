@@ -74,6 +74,7 @@ export interface GameBaseState<Result, SettlementResult> {
     gameConfigs: GameConfigs;
     roundHistory: Round<Result, SettlementResult>[];
     roundId: number;
+    drawId: number;
     result?: Result;
     settlementResult?: SettlementResult;
     totalBets: object;

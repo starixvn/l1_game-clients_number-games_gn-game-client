@@ -19,7 +19,6 @@ const CountdownTimer: React.FC = () => {
                 <>
                     <SimpleTimer />
                     <GameStatus>
-                        <span>2nd Draw: </span>
                         <div className={styles["start-betting"]}>{t("startBetting")}</div>
                     </GameStatus>
                 </>
@@ -29,7 +28,6 @@ const CountdownTimer: React.FC = () => {
                 <>
                     <SimpleTimer />
                     <GameStatus>
-                        <span>2nd Draw: </span>
                         <div className={styles["no-more-bets"]}>{t("noMoreBets")}</div>
                     </GameStatus>
                 </>
@@ -51,7 +49,6 @@ const CountdownTimer: React.FC = () => {
                 <>
                     <div className={`loader-show-result ${gameName}`}></div>
                     <GameStatus>
-                        <span>2nd Draw: </span>
                         <div className={styles["open-result"]}>{t("openResult")}</div>
                     </GameStatus>
                 </>
@@ -91,9 +88,18 @@ const SimpleTimer = () => {
 };
 
 const GameStatus: React.FC<{ children: React.ReactNode }> = ({ children }: { children: React.ReactNode }) => {
-    const { gameSetting } = useGameContext();
+    const { gameSetting, drawId } = useGameContext();
     const gameName = gameSetting.gameName.toLocaleLowerCase();
-    return <div className={`${styles["game-status"]} ${styles[gameName]}`}>{children}</div>;
+    const numberOfTurnsPerRound = 4;
+    const turn = drawId % numberOfTurnsPerRound || numberOfTurnsPerRound;
+    console.log("gameName", drawId, turn);
+
+    return (
+        <div className={`${styles["game-status"]} ${styles[gameName]}`}>
+            <span>{turn} Draw:</span>
+            {children}
+        </div>
+    );
 };
 
 export default CountdownTimer;

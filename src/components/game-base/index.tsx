@@ -56,6 +56,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
     protected reBetStorageKey: string;
     protected messageTransmitter: MessageTransmitterType;
     protected authService: Auth;
+    protected turn: number;
     private isConnectFailed = false;
     private playPermissionListener: string;
     private userStakeLevelListener: string;
@@ -70,6 +71,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
         gameConfigs: { ...this.defaultGameConfig },
         roundHistory: [],
         roundId: 0,
+        drawId: 0,
         ownBets: {},
         totalBets: {},
         displayPopup: null,
@@ -191,6 +193,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
         this.messageTransmitter.register("errorCode", this.handleError.bind(this));
         this.messageTransmitter.register("userStakeLevel", this.handleUserStakeLevel.bind(this));
         this.messageTransmitter.register("odds", this.handleOdds.bind(this));
+        this.messageTransmitter.register("drawId", this.handleDrawId.bind(this));
     }
 
     handleOdds({ odds }) {
@@ -419,6 +422,13 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
         }
     }
 
+    handleDrawId = ({ drawId }) => {
+        this.setState({ drawId });
+        const numberOfTurnsPerRound = 4;
+        const turn = drawId % numberOfTurnsPerRound || numberOfTurnsPerRound;
+        this.turn = turn;
+    };
+
     handleRemainingTime({ remainingTime }) {
         const { gameState } = this.state;
         const { durations } = this.props;
@@ -451,6 +461,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
         console.log(`---------------`);
         console.log(`roundTimeCounter: ${this.roundTimeCounter}`);
         console.log(`Turn RemainingTime: ${remainingTime}`);
+        console.log(`Turn : ${this.turn}`);
         const newGameState = this.determineGameState(remainingTime);
         console.log(`GameState: ${GameState[newGameState]}`);
         if (this.state.gameState !== newGameState && !this.isConnectFailed) {
@@ -492,9 +503,6 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
             },
             {
                 condition: durations.beforeStartRound ? nextGameState === GameState.BeforeStartRound : nextGameState === GameState.InRound,
-                state: {
-                    roundId: roundId + 1,
-                },
             },
             {
                 condition: nextGameState === GameState.LockingBet,
@@ -882,6 +890,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
             remainingTime,
             roundRemainingTime,
             roundId,
+            drawId,
             gameState,
             totalBets,
             ownBets,
@@ -897,6 +906,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
             ownBets,
             gameSetting: this.props,
             roundId,
+            drawId,
             gameConfigs,
             gameState,
             roundRemainingTime,
