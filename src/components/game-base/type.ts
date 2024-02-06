@@ -77,7 +77,6 @@ export interface GameBaseState<Result, SettlementResult> {
     drawId: number;
     result?: Result;
     settlementResult?: SettlementResult;
-    totalBets: object;
     ownBets: object;
     displayPopup?: PopupType;
     betPercentage?: object;

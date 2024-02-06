@@ -1,9 +1,7 @@
 import React from "react";
-import { isMobileOnly } from "react-device-detect";
 import Auth from "sc-user-service-client/dist/auth";
 import { Socket } from "socket.io-client";
 import { v4 as uuidv4 } from "uuid";
-
 import { LanguageLocaleMapper } from "../../_shared/constants";
 import { initSocketIO, localStorageKeys, StorageHelper } from "../../_shared/helpers";
 import MessageTransmitter from "../../_shared/helpers/message-transmitter";
@@ -11,31 +9,13 @@ import { MessageTransmitterType } from "../../_shared/helpers/message-transmitte
 import { GetLocalizedErrorMessage } from "../../_shared/helpers/notice-helper";
 import { AuthContext, GameActionsContextProvider, GameContextProvider } from "../../_shared/react-contexts";
 import { CommonResourceKeys, GameResourceKeys } from "../../_shared/resources";
-import BaseDialog from "../game-components/base-dialog";
-import { ModalType } from "../game-components/base-dialog/type";
-import CountdownTimer from "../game-components/countdown-timer/countdown-timer";
 import DisabledModal from "../game-components/disabled-modal";
-import { ConnectFailedMessage, ErrorMessage } from "../game-components/error-message";
+import { ConnectFailedMessage } from "../game-components/error-message";
 import { ConnectFailedReasonKey } from "../game-components/error-message/type";
 import GameContainer from "../game-components/game-container";
-import GameHeader from "../game-components/game-header";
 import GameLoading from "../game-components/game-loading";
-import { Notice } from "../game-components/notice";
-import PlaceBetModal from "../game-components/place-bet-modal/place-bet-modal";
-import Rebet from "../game-components/rebet";
-import {
-    Boundary,
-    GameBaseProps,
-    GameBaseState,
-    GameState,
-    PopupType,
-    Position,
-    RebetStorageModel,
-    ViewMode,
-    WinStreakCollectorModel,
-} from "./type";
-
-const { rebet: reBetStorageKey } = localStorageKeys;
+import { Boundary, GameBaseProps, GameBaseState, GameState, PopupType, Position, ViewMode } from "./type";
+import { SlidingChipsBlock } from "./game-blocks/sliding-chips-block";
 
 abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, any>> extends React.PureComponent<P, S> {
     private readonly animationTime = 3000;
@@ -45,7 +25,6 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
     protected showResultInfoTimeout: NodeJS.Timeout;
     protected showWinningAnimationTimeout: NodeJS.Timeout;
     protected isProcessingBet = false;
-    private winStreakCollector: WinStreakCollectorModel;
     private retryInterval: NodeJS.Timeout;
     protected betPosition: Position;
     protected betOptionBoundary: Boundary;
@@ -53,7 +32,6 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
     protected interval: NodeJS.Timeout;
     protected roundTimeCounter: number;
     protected timeCounter: number;
-    protected reBetStorageKey: string;
     protected messageTransmitter: MessageTransmitterType;
     protected authService: Auth;
     protected turn: number;
@@ -73,7 +51,6 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
         roundId: 0,
         drawId: 0,
         ownBets: {},
-        totalBets: {},
         displayPopup: null,
         betPercentage: {},
         viewMode: this.props.viewMode,
@@ -98,13 +75,11 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
     constructor(props: P) {
         super(props);
         this.messageTransmitter = MessageTransmitter();
-        this.closePopup = this.closePopup.bind(this);
         this.openPopup = this.openPopup.bind(this);
         this.placeBet = this.placeBet.bind(this);
         this.openPlaceBetModal = this.openPlaceBetModal.bind(this);
         this.updateViewMode = this.updateViewMode.bind(this);
         this.playAcceptedBetAnimation = this.playAcceptedBetAnimation.bind(this);
-        this.closeNotice = this.closeNotice.bind(this);
         this.updateUserBalance = this.updateUserBalance.bind(this);
         this.setActiveScoreboardTab = this.setActiveScoreboardTab.bind(this);
     }
@@ -130,6 +105,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
         this.showWinningAnimationTimeout && clearTimeout(this.showWinningAnimationTimeout);
         this.clearRetryInterval();
         this.clearDisconnectTimeout();
+        this.messageTransmitter.clearAllListener();
     }
 
     onStart() {
@@ -185,7 +161,6 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
         this.messageTransmitter.register("finish", this.handleFinish.bind(this));
         this.messageTransmitter.register("status", this.handleStatus.bind(this));
         this.messageTransmitter.register("user", this.handleUserData.bind(this));
-        this.messageTransmitter.register("totalBets", this.handleTotalBet.bind(this));
         this.messageTransmitter.register("ownBets", this.handleOwnBets.bind(this));
         this.messageTransmitter.register("betPercentage", this.handlePercentageBets.bind(this));
         this.messageTransmitter.register("endBet", this.handleEndBet.bind(this));
@@ -369,10 +344,6 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
         this.setState({ acceptedBetQueue });
     }
 
-    handleTotalBet = ({ totalBets }) => {
-        this.setState({ totalBets });
-    };
-
     handleOwnBets = ({ ownBets, gameConfigs }) => {
         gameConfigs && this.setState({ ownBets });
     };
@@ -458,12 +429,12 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
     }
 
     handleGamePlay(remainingTime: number) {
-        console.log(`---------------`);
-        console.log(`roundTimeCounter: ${this.roundTimeCounter}`);
-        console.log(`Turn RemainingTime: ${remainingTime}`);
+        // console.log(`---------------`);
+        // console.log(`roundTimeCounter: ${this.roundTimeCounter}`);
+        // console.log(`Turn RemainingTime: ${remainingTime}`);
         console.log(`Turn : ${this.turn}`);
         const newGameState = this.determineGameState(remainingTime);
-        console.log(`GameState: ${GameState[newGameState]}`);
+        // console.log(`GameState: ${GameState[newGameState]}`);
         if (this.state.gameState !== newGameState && !this.isConnectFailed) {
             const newState = {
                 gameState: newGameState,
@@ -604,7 +575,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
 
         this.isProcessingBet = false;
         this.clearRetryInterval();
-        this.storeOwnBet(finish.roundId);
+        //this.storeOwnBet(finish.roundId);
         roundHistoryClone.unshift(finish);
         roundHistoryClone.length > 100 && roundHistoryClone.pop();
 
@@ -634,19 +605,6 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
         }, this.winningAnimationWaitingTimeInSecond);
 
         this.runGame(durations.wholeTurn);
-    }
-
-    storeOwnBet(roundId: number) {
-        const { ownBets } = this.state;
-        const gameId = this.props.id;
-        const rebetStorage = StorageHelper.get<RebetStorageModel>(reBetStorageKey) || {};
-
-        rebetStorage[gameId] = {
-            roundId,
-            betInfo: Object.keys(ownBets).length > 0 ? ownBets : undefined,
-        };
-
-        StorageHelper.set(reBetStorageKey, rebetStorage);
     }
 
     openPlaceBetModal(betChoice: string, removeBetChoiceFocus: Function, betOptionElement: HTMLElement, betChoiceElement: HTMLElement) {
@@ -703,66 +661,6 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
         this.setState({ viewMode: mode });
     }
 
-    renderErrorMessage() {
-        return (
-            <BaseDialog type={ModalType.Center} isOpen={this.state.displayPopup === PopupType.Error} onCloseModal={this.closePopup}>
-                <ErrorMessage message={this.state.errorMessage} closeModal={this.closePopup}></ErrorMessage>
-            </BaseDialog>
-        );
-    }
-
-    checkRenderRebet() {
-        const { roundId } = this.state;
-        const gameId = this.props.id;
-        const rebetStorageKey = localStorageKeys.rebet;
-        const rebetStorage = StorageHelper.get<RebetStorageModel>(rebetStorageKey) || {};
-        const rebetInfo = rebetStorage[gameId];
-
-        return rebetInfo?.betInfo !== undefined && rebetInfo?.roundId + 1 === roundId ? true : false;
-    }
-
-    renderReBet() {
-        const getBetContainerPosition = () => {
-            const betContainerRef = this.gameBaseContainerRef;
-            const domRect = betContainerRef.current?.getBoundingClientRect();
-            return domRect?.y ?? 0;
-        };
-
-        return (
-            <BaseDialog
-                betContainerPosition={isMobileOnly ? getBetContainerPosition() : null}
-                type={ModalType.Rebet}
-                isOpen={this.state.displayPopup === PopupType.Rebet}
-                onCloseModal={this.closePopup}
-            >
-                <Rebet getOddsByChoice={this.getOddsByChoice.bind(this)} gameId={this.props.id} onCloseModal={this.closePopup} />
-            </BaseDialog>
-        );
-    }
-
-    renderPlaceBet() {
-        const { displayPopup, selectedBetChoice, roundId, removeBetChoiceFocus, betOptionElement, betChoiceElement } = this.state;
-        const { gameName } = this.props;
-
-        return (
-            <PlaceBetModal
-                isOpen={displayPopup === PopupType.PlaceBet}
-                onCloseModal={this.closePopup}
-                onPlaceBet={this.placeBet}
-                gameBaseContainerRef={this.gameBaseContainerRef}
-                betOptionElement={betOptionElement}
-                betChoiceElement={betChoiceElement}
-                removeBetChoiceFocus={removeBetChoiceFocus}
-                betChoiceInfo={{
-                    betChoice: selectedBetChoice,
-                    gameName: gameName,
-                    roundId: roundId,
-                    odd: this.getOddsByChoice(selectedBetChoice),
-                }}
-            />
-        );
-    }
-
     setActiveScoreboardTab = (activeScoreboardTab: number) => {
         this.setState({ activeScoreboardTab });
     };
@@ -772,6 +670,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
             this.setState({ playResultAnimation: false });
         }
     };
+
     getChoiceNameOnHedgeBetMessage(choiceKey) {
         return this.getGameTranslate(choiceKey);
     }
@@ -782,83 +681,11 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
         return t(`${gameName.toLocaleLowerCase()}:${key}`);
     }
 
-    getWinningStreakByOptions = ({ options }) => {
-        return Math.max(...options.map((option) => this.winStreakCollector[option]?.streak ?? 0));
-    };
-
-    getOptionalWinStreakByOptions({ option }) {
-        return "";
-    }
-
     getOddsByChoice(choice: string) {
         const { gameConfigs } = this.state;
         const odds = gameConfigs.odds;
 
         return odds[choice];
-    }
-
-    renderStartRoundAnimation() {
-        return null;
-    }
-
-    renderPopup(popupType: PopupType) {
-        switch (popupType) {
-            case PopupType.Rebet:
-                return this.checkRenderRebet() && this.renderReBet();
-            case PopupType.Error:
-                return this.renderErrorMessage();
-            case PopupType.PlaceBet:
-                return this.renderPlaceBet();
-            default:
-                return null;
-        }
-    }
-
-    closePopup() {
-        this.setState({ displayPopup: null });
-    }
-
-    renderNotice() {
-        const { gameName, message, roundId, duration, minBet, maxBet, errorCode, isWarning, betChoice1, betChoice2 } = this.state.notice;
-        return (
-            <Notice
-                gameName={gameName}
-                roundId={roundId}
-                message={message}
-                duration={duration}
-                minBet={minBet}
-                maxBet={maxBet}
-                errorCode={errorCode}
-                onClose={this.closeNotice}
-                isWarning={isWarning}
-                betChoice1={betChoice1}
-                betChoice2={betChoice2}
-            />
-        );
-    }
-
-    closeNotice() {
-        this.setState({ notice: null });
-    }
-
-    get isShowStartRoundAnimation() {
-        return false;
-    }
-
-    getRoundHistoryTabStyles() {
-        return "";
-    }
-
-    renderGameHeader() {
-        const { gameState } = this.state;
-
-        const gameHeaderProps = {
-            isShowCollapse: [GameState.DisplayResult, GameState.BeforeStartRound].includes(gameState),
-            isUpdateDisableRebet: gameState !== GameState.InRound,
-            countdownTimerComponent: <CountdownTimer key={gameState} />,
-        };
-
-        return <GameHeader {...gameHeaderProps} />;
     }
 
     renderResultSection() {
@@ -869,11 +696,11 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
         return <></>;
     }
 
-    renderResultBlock() {
+    renderMenuButtons() {
         return <></>;
     }
 
-    renderAnimation() {
+    renderResultBlock() {
         return <></>;
     }
 
@@ -881,8 +708,30 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
         return <></>;
     }
 
-    renderRoundResultBlock() {
+    renderScoreboards() {
         return <></>;
+    }
+
+    renderSlidingChips() {
+        return <SlidingChipsBlock messageTransmitter={this.messageTransmitter} />;
+    }
+
+    renderStatistic() {
+        return <></>;
+    }
+
+    getRenderTemplate() {
+        return (
+            <>
+                {this.renderHeaderBlock()}
+                {this.renderMenuButtons()}
+                {this.renderResultBlock()}
+                {this.renderBettingBlock()}
+                {this.renderSlidingChips()}
+                {this.renderStatistic()}
+                {this.renderScoreboards()}
+            </>
+        );
     }
 
     renderGame() {
@@ -921,7 +770,6 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
         const gameActionsContext = {
             placeBet: this.placeBet,
             openPopup: this.openPopup,
-            closePopup: this.closePopup,
             registerMessageHandler: this.messageTransmitter.register,
             unsubscribeMessageHandler: this.messageTransmitter.unsubscribe,
             openPlaceBetModal: this.openPlaceBetModal,
@@ -937,13 +785,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
 
         return (
             <GameContextProvider value={gameContext}>
-                <GameActionsContextProvider value={gameActionsContext}>
-                    {this.renderHeaderBlock()}
-                    {this.renderResultBlock()}
-                    {this.renderAnimation()}
-                    {this.renderBettingBlock()}
-                    {this.renderRoundResultBlock()}
-                </GameActionsContextProvider>
+                <GameActionsContextProvider value={gameActionsContext}>{this.getRenderTemplate()}</GameActionsContextProvider>
             </GameContextProvider>
         );
     }
