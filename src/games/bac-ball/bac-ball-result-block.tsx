@@ -1,12 +1,13 @@
-import { Assets, Spritesheet } from "pixi.js";
+import { Assets, Resource, Spritesheet, Texture } from "pixi.js";
 import { ResultBlock, ResultBlockProps, ResultBlockState } from "../../components/game-base/game-blocks/result-block";
 import Ball from "../../components/game-components/ball";
 import Cage, { BallColor, CageColor } from "../../components/game-components/cage";
 import Style from "./bac-ball.module.scss";
+import { IBallColor } from "../../components/game-base/type";
 
 class BacBallResultBlockState extends ResultBlockState {
-    cageBallFrames = { blue: [], red: [] };
-    cageBallsLoopFrames = [];
+    cageBallFrames: IBallColor = { blue: [], red: [] };
+    cageBallsLoopFrames: Texture<Resource>[] = [];
 }
 
 export class BacBallResultBlock extends ResultBlock<ResultBlockProps, BacBallResultBlockState> {

@@ -2,7 +2,7 @@ import { AnimatedSprite, Container, Stage } from "@pixi/react";
 import { BettingBlock, BettingBlockProps, BettingBlockState } from "../../components/game-base/game-blocks/betting-block";
 import Style from "./bac-ball.module.scss";
 import PercentageCircle from "../../components/game-components/percentage-circle";
-import { Assets, Spritesheet } from "pixi.js";
+import { Assets, Resource, Spritesheet, Texture } from "pixi.js";
 import { BetOptionData } from "../../_shared/constants";
 import { GameState } from "../../components/game-base/type";
 
@@ -26,10 +26,9 @@ const betData: BetOptionData[] = [
         percent: 10,
     },
 ];
-
 class BacBallBettingBlockState extends BettingBlockState {
-    winningPlayerFrames = [];
-    winningTieFrames = [];
+    winningPlayerFrames: Texture<Resource>[] = [];
+    winningTieFrames: Texture<Resource>[] = [];
 }
 
 export class BacBallBettingBlock extends BettingBlock<BettingBlockProps, BacBallBettingBlockState> {

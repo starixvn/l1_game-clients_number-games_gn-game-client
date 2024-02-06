@@ -66,10 +66,6 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
         activeScoreboardTab: 0,
         rate: 1,
         disconnectReason: "",
-        winningPlayerFrames: [],
-        winningTieFrames: [],
-        cageBallsLoopFrames: [],
-        cageBallFrames: { blue: [], red: [] },
     };
 
     constructor(props: P) {

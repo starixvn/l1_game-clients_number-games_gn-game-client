@@ -1,9 +1,9 @@
 import { WithTranslation } from "next-i18next";
 import { WithRouterProps } from "next/dist/client/with-router";
-import { Resource, Texture } from "pixi.js";
 import { Socket } from "socket.io-client";
 
 import { SocketState } from "../../_shared/helpers";
+import { Resource, Texture } from "pixi.js";
 
 export interface GameConfigs {
     odds: { [key: string]: number };
@@ -60,12 +60,6 @@ export type GameBaseProps = {
     isJoinedGame: boolean;
 } & WithTranslation &
     WithRouterProps;
-
-export interface IBallColor {
-    blue: Texture<Resource>[];
-    red: Texture<Resource>[];
-}
-
 export interface GameBaseState<Result, SettlementResult> {
     signedIn: boolean;
     gameState: GameState;
@@ -103,10 +97,6 @@ export interface GameBaseState<Result, SettlementResult> {
     activeScoreboardTab?: number;
     rate: number;
     disconnectReason?: string;
-    winningPlayerFrames: Texture<Resource>[];
-    winningTieFrames: Texture<Resource>[];
-    cageBallsLoopFrames: Texture<Resource>[];
-    cageBallFrames: IBallColor;
 }
 
 export interface Notice {
@@ -200,4 +190,9 @@ export interface Round<R, S> {
     roundId: number;
     result: R;
     settlementResult: S;
+}
+
+export interface IBallColor {
+    blue: Texture<Resource>[];
+    red: Texture<Resource>[];
 }
