@@ -1,11 +1,12 @@
 import { Trans, useTranslation } from "next-i18next";
 import React, { useEffect, useRef, useState } from "react";
-import { isMobileOnly, isIOS } from "react-device-detect";
+import { isIOS, isMobileOnly } from "react-device-detect";
 
 import { useAuthContext } from "../../../../_shared/react-contexts";
 import { updateUserQuickBetSetting } from "../../../../services/user-setting-service";
 import BaseDialog from "../../../game-components/base-dialog";
 import { ModalType } from "../../../game-components/base-dialog/type";
+import TestTranslation from "../../dashboard/register/test-translation";
 import ConfirmMessage from "../confirm-message";
 import Styles from "./quick-bet-btn.module.scss";
 
@@ -78,6 +79,7 @@ export const QuickBetBtn: React.FC<{
         <div className={`${Styles["toggle"]} ${isHeaderSetting ? Styles["header-setting"] : Styles["bet-setting"]} ${deviceClass}`}>
             <div className={Styles["one-click-bet"]} onClick={onClickQuickBet}>
                 {t("common:oneClickTitle")}
+                <TestTranslation />
             </div>
             <div>
                 {!enabledQuickBet && <div className={Styles["ripple-animation"]}></div>}
