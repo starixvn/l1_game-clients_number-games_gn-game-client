@@ -2284,6 +2284,11 @@
   resolved "http://npm.lumigame.com/@tolgee/core/-/core-5.19.3.tgz#ffed8b88f09913391b4c177d868608e26ebb70ea"
   integrity sha512-pq1MDvRH/WFpSI4JQkTLCqLV2ejqQZEIieFkxJwHCZWheQqsnEDJs9y9XMpg3nflkSZTfInM4nS6YzqtYLJk4w==
 
+"@tolgee/format-icu@^5.19.5":
+  version "5.19.5"
+  resolved "http://npm.lumigame.com/@tolgee/format-icu/-/format-icu-5.19.5.tgz#03586a1ccc497c988785138cc784cdcb9c23a0b8"
+  integrity sha512-lX7Yor06za8JmmSc3sH7EAQEnMOlN22NyqkfGsu6hBipbdm0RY181rvKTuMKL++Jgy6NxjtqfB5T7eYjPyihLg==
+
 "@tolgee/react@^5.19.3":
   version "5.19.3"
   resolved "http://npm.lumigame.com/@tolgee/react/-/react-5.19.3.tgz#182c625b95c741a352abec032a0e49be3c8eb761"

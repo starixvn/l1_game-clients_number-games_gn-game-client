@@ -1,12 +1,27 @@
-import { DevTools, FormatSimple, Tolgee } from "@tolgee/react";
-const languageCodes = ["en", "id", "th", "vi", "zh_cn", "zh_tw"];
-const namespaces = ["Common", "SabaNumber"];
+import { FormatIcu } from "@tolgee/format-icu";
+import { BackendFetch, Tolgee } from "@tolgee/react";
+import { InContextTools } from "@tolgee/web/tools";
+import { getAppSettings } from "./app-settings";
 
-export const tolgee = Tolgee().use(DevTools()).use(FormatSimple()).init({
+const languageCodes = ["en", "id", "th", "vi", "zh_cn", "zh_tw"];
+const namespaces = ["SabaNumber", "Common"];
+export const tolgee = Tolgee().use(FormatIcu()).use(BackendFetch()).init({
+    fallbackLanguage: "en",
     defaultLanguage: "en",
     availableLanguages: languageCodes,
-    apiKey: process.env.REACT_APP_TOLGEE_API_KEY,
-    apiUrl: process.env.REACT_APP_TOLGEE_API_URL,
     projectId: "5",
     ns: namespaces,
+    defaultNs: "SabaNumber",
 });
+
+if (!getAppSettings().useTolgeeStatic) {
+    tolgee.addPlugin(
+        InContextTools({
+            credentials: {
+                apiUrl: process.env.REACT_APP_TOLGEE_API_URL,
+                apiKey: process.env.REACT_APP_TOLGEE_API_KEY,
+                projectId: "5",
+            },
+        })
+    );
+}

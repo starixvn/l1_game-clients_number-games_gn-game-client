@@ -23,4 +23,5 @@ export default interface AppSettings {
     enableMsgpackParser: boolean;
     system: string;
     appType: number;
+    useTolgeeStatic: boolean;
 }
