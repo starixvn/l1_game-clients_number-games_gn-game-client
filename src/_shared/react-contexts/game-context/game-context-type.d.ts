@@ -1,7 +1,6 @@
 import { GameBaseProps, GameConfigs, GameState, ViewMode } from "../../components/shared/game-base/type";
 
 export type GameContextModel = {
-    totalBets: object;
     ownBets: object;
     gameSetting: GameBaseProps;
     roundId: number;

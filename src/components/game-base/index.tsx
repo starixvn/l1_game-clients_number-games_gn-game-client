@@ -741,7 +741,6 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
             roundId,
             drawId,
             gameState,
-            totalBets,
             ownBets,
             gameConfigs,
             viewMode,
@@ -751,7 +750,6 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
         } = this.state;
 
         const gameContext = {
-            totalBets,
             ownBets,
             gameSetting: this.props,
             roundId,

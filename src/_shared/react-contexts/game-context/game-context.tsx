@@ -9,7 +9,6 @@ export const GameContext = React.createContext<GameContextModel>({
     gameState: GameState.None,
     roundRemainingTime: 0,
     remainingTime: 0,
-    totalBets: {},
     ownBets: {},
     gameSetting: null,
     gameConfigs: null,

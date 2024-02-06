@@ -26,11 +26,11 @@ const BetOption: React.FunctionComponent<Props> = ({
     isShowPoolStake = true,
     isShowTooltip = false,
 }) => {
-    const { totalBets, ownBets, rate, gameSetting } = useGameContext();
+    const { ownBets, rate, gameSetting } = useGameContext();
     const { openPlaceBetModal, placeBet } = useGameActionContext();
     const { enabledQuickBet, betValue, fractionalOddsFormat } = useSystemContext();
     const [highlightType, updateHighlightType] = useState<HighlightType>(HighlightType.None);
-    const [totalBet, setTotalBet] = useState<number>(totalBets?.[choice] ?? 0);
+    //const [totalBet, setTotalBet] = useState<number>(totalBets?.[choice] ?? 0);
     const totalBetRef = useRef<HTMLDivElement>(null);
     const { start, update } = useCountUp({ ref: totalBetRef, start: 0, end: 0 });
     const betChoiceRef = useRef<HTMLDivElement>(null);
@@ -52,14 +52,14 @@ const BetOption: React.FunctionComponent<Props> = ({
 
         actionByGameState[gameState] && actionByGameState[gameState]();
 
-        setTotalBet(totalBets?.[choice] ?? 0);
-        update(totalBet);
+        // setTotalBet(totalBets?.[choice] ?? 0);
+        //update(totalBet);
 
-        console.log(`totalBets : ${JSON.stringify(totalBets)}-- choice : ${totalBets?.[choice] ?? 0}`);
-        console.log(`choice : ${choice}`);
+        // console.log(`totalBets : ${JSON.stringify(totalBets)}-- choice : ${totalBets?.[choice] ?? 0}`);
+        // console.log(`choice : ${choice}`);
 
-        console.log(`totalBet : ${totalBet}`);
-    }, [gameState, totalBets?.[choice]]);
+        //console.log(`totalBet : ${totalBet}`);
+    }, [gameState]);
 
     const onClickBet = (event: any) => {
         event.preventDefault();
@@ -92,10 +92,7 @@ const BetOption: React.FunctionComponent<Props> = ({
                 <div className={betOptionClasses} onClick={onClickBet}>
                     {isDisplayOdd && <div className={oddsClass}>{odd ? oddsValue : ""}</div>}
                     <div className={Styles["total-bet"]} ref={totalBetRef}>
-                        {isShowPoolStake &&
-                            (gameState === GameState.BalancingBet
-                                ? convertStakeToString(+start, rate)
-                                : convertStakeToString(totalBet, rate))}
+                        {isShowPoolStake && convertStakeToString(+start, rate)}
                     </div>
 
                     {children}
