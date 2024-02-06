@@ -38,12 +38,18 @@ const Cage: React.FunctionComponent<CageProps> = (cageProps) => {
     const [isDelayShowResult, setIsDelayShowResult] = useState<boolean>(false);
 
     useEffect(() => {
-        const timeOut = setTimeout(() => setIsDelayShowResult(true), delayShowResultTime);
+        console.log("isShowResult", isShowResult);
+        let timeOut: NodeJS.Timeout;
+        if (isShowResult) {
+            timeOut = setTimeout(() => setIsDelayShowResult(true), delayShowResultTime);
+        } else {
+            setIsDelayShowResult(false);
+        }
 
         return () => {
             clearTimeout(timeOut);
         };
-    }, [isShowResult]);
+    }, [delayShowResultTime, isShowResult]);
 
     const showResult = () => {
         if (!isDelayShowResult || !isShowResult) {
