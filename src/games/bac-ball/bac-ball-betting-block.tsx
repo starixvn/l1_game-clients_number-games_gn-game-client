@@ -8,10 +8,6 @@ import { FC, useContext, useEffect, useState } from "react";
 import { GameContext } from "../../_shared/react-contexts";
 import { loadPixiAnimations } from "../../_shared/helpers/pixi-resource-loader";
 
-export type BettingBlockProps = {
-    getGameState: () => any;
-};
-
 export interface BetChoice {
     name: string;
     odds: number;
@@ -44,7 +40,7 @@ const betData: BetOptionData[] = [
     },
 ];
 
-export const BacBallBettingBlockFC: FC<BettingBlockProps> = (props) => {
+export const BacBallBettingBlockFC: FC = () => {
     const [winningPlayerFrames, setWinningPlayerFrames] = useState<Texture<Resource>[]>([]);
     const [winningTieFrames, setWinningTieFrames] = useState<Texture<Resource>[]>([]);
     const [totalBets, setTotalBets] = useState<Bet>({ player: 0, banker: 0, tie: 0 });
@@ -74,8 +70,8 @@ export const BacBallBettingBlockFC: FC<BettingBlockProps> = (props) => {
 
     const handleOdds = ({ odds }) => {
         setOdds(odds);
-    }
-    
+    };
+
     const handlePercentageBets = ({ totalBets }) => {
         setPercentageBets(totalBets);
     };
@@ -101,10 +97,11 @@ export const BacBallBettingBlockFC: FC<BettingBlockProps> = (props) => {
 
     if (winningPlayerFrames.length > 0 && winningTieFrames.length > 0) {
         // waiting for rounduration class
-        const parentState = props.getGameState();
-        const isShowWinningHighlightPlayer = gameContext.gameState === GameState.DisplayResult && parentState?.settlementResult?.player;
-        const isShowWinningHighlightBanker = gameContext.gameState === GameState.DisplayResult && parentState?.settlementResult?.banker;
-        const isShowWinningHighlightTie = gameContext.gameState === GameState.DisplayResult && parentState?.settlementResult?.tie;
+        const roundState = gameContext.gameState;
+        const settlementResult = gameContext.settlementResult;
+        const isShowWinningHighlightPlayer = roundState === GameState.DisplayResult && settlementResult["player"];
+        const isShowWinningHighlightBanker = roundState === GameState.DisplayResult && settlementResult["banker"];
+        const isShowWinningHighlightTie = roundState === GameState.DisplayResult && settlementResult["tie"];
 
         return (
             <div className={`${Style["betting-zone"]}`}>

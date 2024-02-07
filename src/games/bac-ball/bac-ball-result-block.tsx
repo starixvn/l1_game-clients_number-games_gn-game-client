@@ -1,20 +1,16 @@
-import { Assets, Resource, Spritesheet, Texture } from "pixi.js";
+import { Resource, Texture } from "pixi.js";
 import Ball from "../../components/game-components/ball";
 import Cage, { BallColor, CageColor } from "../../components/game-components/cage";
 import Style from "./bac-ball.module.scss";
 import { IBallColor } from "../../components/game-base/type";
-import { FC, useEffect, useState } from "react";
-import { MessageTransmitterType } from "../../_shared/helpers/message-transmitter/type";
+import { FC, useContext, useEffect, useState } from "react";
 import { loadPixiAnimations } from "../../_shared/helpers/pixi-resource-loader";
+import { GameContext } from "../../_shared/react-contexts";
 
-export type ResultBlockProps = {
-    messageTransmitter: MessageTransmitterType;
-    getGameState: () => any;
-};
-
-export const BacBallResultBlockFC: FC<ResultBlockProps> = (props) => {
+export const BacBallResultBlockFC: FC = () => {
     const [cageBallFrames, setCageBallFrames] = useState<IBallColor>({ blue: [], red: [] });
     const [cageBallsLoopFrames, setCageBallsLoopFrames] = useState<Texture<Resource>[]>([]);
+    const gameContext = useContext(GameContext);
 
     useEffect(() => {
         if (cageBallFrames.blue.length === 0 && cageBallFrames.red.length === 0) {
@@ -35,18 +31,13 @@ export const BacBallResultBlockFC: FC<ResultBlockProps> = (props) => {
     }, [cageBallsLoopFrames.length]);
 
     // waiting for rounduration class
-    const parentState = props.getGameState();
+    const gameResult = gameContext.result;
 
-    if (
-        !parentState.result ||
-        cageBallsLoopFrames?.length === 0 ||
-        cageBallFrames?.blue?.length === 0 ||
-        cageBallFrames?.red?.length === 0
-    ) {
+    if (!gameResult || cageBallsLoopFrames?.length === 0 || cageBallFrames?.blue?.length === 0 || cageBallFrames?.red?.length === 0) {
         return <></>;
     }
 
-    const { player, banker } = parentState.result;
+    const { player, banker } = gameResult as { player: number; banker: number };
 
     return (
         <div className={Style["result-container"]}>
@@ -59,7 +50,7 @@ export const BacBallResultBlockFC: FC<ResultBlockProps> = (props) => {
                         ballColor={BallColor.Blue}
                         isSmall={true}
                         result={player}
-                        isShowResult={parentState.playResultAnimation}
+                        isShowResult={gameContext.playResultAnimation}
                     />
                 </div>
                 <div className={Style["ball-container"]}>
@@ -84,7 +75,7 @@ export const BacBallResultBlockFC: FC<ResultBlockProps> = (props) => {
                         ballColor={BallColor.Red}
                         isSmall={true}
                         result={banker}
-                        isShowResult={parentState.playResultAnimation}
+                        isShowResult={gameContext.playResultAnimation}
                         delayShowResultTime={1000}
                     />
                 </div>

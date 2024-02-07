@@ -18,6 +18,8 @@ export const GameContext = React.createContext<GameContextModel>({
     supportMD5: false,
     rate: 1,
     messageTransmitter: null,
+    result: null,
+    settlementResult: null,
 });
 GameContext.displayName = "GameContext";
 

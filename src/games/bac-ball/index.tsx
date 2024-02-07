@@ -55,11 +55,11 @@ class BacBall extends GameBase<GameBaseProps, GameBaseState<Result, SettlementRe
     }
 
     renderResultBlock() {
-        return <BacBallResultBlockFC messageTransmitter={this.messageTransmitter} getGameState={() => this.state} />;
+        return <BacBallResultBlockFC />;
     }
 
     renderBettingBlock() {
-        return <BacBallBettingBlockFC getGameState={() => this.state} />;
+        return <BacBallBettingBlockFC />;
     }
 
     renderScoreboards() {

@@ -735,6 +735,8 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
             playResultAnimation,
             isShowBlink,
             rate,
+            result,
+            settlementResult,
         } = this.state;
 
         const gameContext = {
@@ -752,6 +754,8 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
             supportMD5: false,
             rate,
             messageTransmitter: this.messageTransmitter,
+            result,
+            settlementResult,
         };
 
         const gameActionsContext = {

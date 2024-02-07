@@ -15,4 +15,6 @@ export type GameContextModel = {
     supportMD5: boolean;
     rate: number;
     messageTransmitter: MessageTransmitterType;
+    result: object;
+    settlementResult: object;
 };
