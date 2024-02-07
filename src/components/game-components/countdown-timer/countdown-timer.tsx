@@ -7,8 +7,7 @@ import { useEffect, useState } from "react";
 
 export type Rotation = "clockwise" | "counterclockwise";
 const CountdownTimer: React.FC = () => {
-    const { gameState, gameSetting } = useGameContext();
-    const gameName = gameSetting.gameName.toLocaleLowerCase();
+    const { gameState } = useGameContext();
     const { t } = useTranslation("common");
 
     switch (gameState) {
@@ -47,7 +46,7 @@ const CountdownTimer: React.FC = () => {
         default:
             return (
                 <>
-                    <div className={`loader-show-result ${gameName}`}></div>
+                    <div className={`loader-show-result`}></div>
                     <GameStatus>
                         <div className={styles["open-result"]}>{t("openResult")}</div>
                     </GameStatus>
@@ -61,6 +60,7 @@ const SimpleTimer = () => {
     const { durations } = ctx.gameSetting;
     const initialRemainingTime = ctx.gameState === GameState.BeforeStartRound ? durations.placingBets : ctx.remainingTime;
     const [timeLeft, setTimeLeft] = useState(initialRemainingTime);
+    console.log("initialRemainingTime", ctx.remainingTime);
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -88,14 +88,12 @@ const SimpleTimer = () => {
 };
 
 const GameStatus: React.FC<{ children: React.ReactNode }> = ({ children }: { children: React.ReactNode }) => {
-    const { gameSetting, drawId } = useGameContext();
-    const gameName = gameSetting.gameName.toLocaleLowerCase();
+    const { drawId } = useGameContext();
     const numberOfTurnsPerRound = 4;
     const turn = drawId % numberOfTurnsPerRound || numberOfTurnsPerRound;
-    console.log("gameName", drawId, turn);
 
     return (
-        <div className={`${styles["game-status"]} ${styles[gameName]}`}>
+        <div className={`${styles["game-status"]}`}>
             <span>{turn} Draw:</span>
             {children}
         </div>

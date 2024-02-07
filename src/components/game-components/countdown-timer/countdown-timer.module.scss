@@ -1,7 +1,6 @@
 .timer {
     position: absolute;
     top: -1.5rem;
-    margin: 0.5rem 0;
     font-size: 1.6rem;
 
     svg {
@@ -12,7 +11,7 @@
 .game-status {
     display: flex;
     position: absolute;
-    top: 2rem;
+    top: 2.5rem;
     font-size: 1.1rem;
     line-height: 1.5rem;
     gap: 0.5rem;
@@ -33,8 +32,17 @@
 
 .countdown-timer {
     text-shadow: 0px 0px 15px #ffffff;
-}
+    background: url("/static/images/countdown-timer/countdown-placebet.svg") no-repeat center center;
+    width: 8.1rem;
+    height: 3.2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-size: 8.1rem 3.2rem;
+    color: #1ceefc;
 
-.lock-bet {
-    color: #ff4343;
+    &.lock-bet {
+        color: #ff5555;
+        background: url("/static/images/countdown-timer/countdown-blockbet.svg") no-repeat center center;
+    }
 }
