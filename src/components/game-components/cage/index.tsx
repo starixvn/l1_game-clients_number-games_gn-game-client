@@ -59,7 +59,7 @@ const Cage: React.FunctionComponent<CageProps> = (cageProps) => {
             <div id="show-ball-anim" className={Styles["show-ball-anim"]}>
                 {cageBallFrames && cageBallFrames[ballColor].length > 0 && (
                     <Stage width={250} height={250} options={{ backgroundAlpha: 0 }}>
-                        <Container position={[82, 87]}>
+                        <Container position={[82, 85]}>
                             <AnimatedSprite
                                 anchor={0.5}
                                 textures={cageBallFrames[ballColor]}
@@ -99,7 +99,8 @@ const Cage: React.FunctionComponent<CageProps> = (cageProps) => {
                 </div>
                 <div id="cage-cover" className={Styles["cage-cover"]}></div>
                 <div id="cage-border" className={`${Styles["cage-border"]} ${Styles[color]}`}>
-                    {!isShowResult && <div id="cage-lid" className={Styles["cage-lid"]} />}
+                    {!isDelayShowResult && <div id="cage-lid" className={Styles["cage-lid"]} />}
+
                     {showResult()}
                 </div>
 

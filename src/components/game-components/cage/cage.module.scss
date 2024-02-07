@@ -31,6 +31,8 @@
         --delay-time-slide-number: 1.65s;
 
         .show-ball-anim {
+            position: absolute;
+            right: -0.2rem;
             transform: scaleX(-1);
         }
 
@@ -85,7 +87,7 @@
 
 .cage-lid {
     position: absolute;
-    bottom: 1.1rem;
+    bottom: 1.2rem;
     right: 1rem;
     background: url("/static/images/cage/cage-lid.png") center center no-repeat;
     width: 5rem;
@@ -96,6 +98,7 @@
 .cage-border {
     @extend %result;
     position: absolute;
+    background-size: var(--cage-width) var(--cage-height);
 
     &.purple {
         background-image: url("/static/images/cage/cage-border-purple.png");
