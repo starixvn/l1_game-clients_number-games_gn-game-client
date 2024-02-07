@@ -34,11 +34,10 @@ export type CageProps = {
 
 const Cage: React.FunctionComponent<CageProps> = (cageProps) => {
     const { color, ballColor, isSmall, cageBallsLoopFrames, cageBallFrames, result, isShowResult, delayShowResultTime } = cageProps;
-    const lidPosition = color === CageColor.Red ? "left" : "right";
+    const lidPosition = color === CageColor.Blue ? "left" : "right";
     const [isDelayShowResult, setIsDelayShowResult] = useState<boolean>(false);
 
     useEffect(() => {
-        console.log("isShowResult", isShowResult);
         let timeOut: NodeJS.Timeout;
         if (isShowResult) {
             timeOut = setTimeout(() => setIsDelayShowResult(true), delayShowResultTime);
@@ -58,7 +57,7 @@ const Cage: React.FunctionComponent<CageProps> = (cageProps) => {
 
         return (
             <div id="show-ball-anim" className={Styles["show-ball-anim"]}>
-                {cageBallFrames[ballColor].length > 0 && (
+                {cageBallFrames && cageBallFrames[ballColor].length > 0 && (
                     <Stage width={250} height={250} options={{ backgroundAlpha: 0 }}>
                         <Container position={[82, 87]}>
                             <AnimatedSprite

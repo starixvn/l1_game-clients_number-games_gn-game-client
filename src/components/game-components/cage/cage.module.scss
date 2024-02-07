@@ -17,17 +17,6 @@
     }
 
     &.right {
-        --start-positionX: -3rem;
-        --move-step-1: -1rem;
-        --move-step-2: -3.1rem;
-        --move-step-3: -3rem;
-
-        --rotate-step-1: 90deg;
-        --rotate-step-2: 70deg;
-        --rotate-step-3: 40deg;
-    }
-
-    &.left {
         --start-positionX: 3rem;
 
         --move-step-1: 1rem;
@@ -37,6 +26,9 @@
         --rotate-step-1: -90deg;
         --rotate-step-2: -70deg;
         --rotate-step-3: -40deg;
+
+        // display right number after left number show 1s
+        --delay-time-slide-number: 1.65s;
 
         .show-ball-anim {
             transform: scaleX(-1);
@@ -51,6 +43,17 @@
             left: 1rem;
             transform: scaleX(-0.5) scaleY(0.5);
         }
+    }
+
+    &.left {
+        --start-positionX: -3rem;
+        --move-step-1: -1rem;
+        --move-step-2: -3.1rem;
+        --move-step-3: -3rem;
+
+        --rotate-step-1: 90deg;
+        --rotate-step-2: 70deg;
+        --rotate-step-3: 40deg;
     }
 }
 
