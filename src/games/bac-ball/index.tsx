@@ -3,7 +3,7 @@ import { withRouter } from "next/router";
 import React from "react";
 import { RoundResultData } from "../../_shared/constants";
 import GameBase from "../../components/game-base/";
-import { GameBaseProps, GameBaseState, GameState, GatewayGameBaseProps } from "../../components/game-base/type";
+import { GameBaseProps, GameBaseState, GatewayGameBaseProps } from "../../components/game-base/type";
 import CountdownTimer from "../../components/game-components/countdown-timer/countdown-timer";
 import RoundResult from "../../components/game-components/round-result";
 import { Result, SettlementResult } from "./bac-ball";
@@ -50,7 +50,6 @@ class BacBall extends GameBase<GameBaseProps, GameBaseState<Result, SettlementRe
                 <div id="countdown-timer" className="countdown-timer">
                     <CountdownTimer key={gameState} />
                 </div>
-                {/* <HeaderBlock messageTransmitter={this.messageTransmitter} /> */}
             </>
         );
     }
@@ -64,12 +63,7 @@ class BacBall extends GameBase<GameBaseProps, GameBaseState<Result, SettlementRe
     }
 
     renderScoreboards() {
-        return (
-            <>
-                <RoundResult roundId={20} resultData={resultData} />
-                {/* <ScoreboardBlock messageTransmitter={this.messageTransmitter} /> */}
-            </>
-        );
+        return <RoundResult roundId={20} resultData={resultData} />;
     }
 }
 

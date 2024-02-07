@@ -5,6 +5,7 @@ import Style from "./bac-ball.module.scss";
 import { IBallColor } from "../../components/game-base/type";
 import { FC, useEffect, useState } from "react";
 import { MessageTransmitterType } from "../../_shared/helpers/message-transmitter/type";
+import { loadPixiAnimations } from "../../_shared/helpers/pixi-resource-loader";
 
 export type ResultBlockProps = {
     messageTransmitter: MessageTransmitterType;
@@ -17,26 +18,19 @@ export const BacBallResultBlockFC: FC<ResultBlockProps> = (props) => {
 
     useEffect(() => {
         if (cageBallFrames.blue.length === 0 && cageBallFrames.red.length === 0) {
-            const spriteUrl = "/static/images/cage/ball.json";
-            Assets.load<Spritesheet>(spriteUrl).then((sprite) => {
+            loadPixiAnimations("/static/images/cage/ball.json", (sprite) => {
                 const blueFrames = sprite.animations["blue"];
                 const redFrames = sprite.animations["red"];
                 setCageBallFrames({ blue: blueFrames, red: redFrames });
             });
-
-            console.log(spriteUrl);
         }
     }, [cageBallFrames.blue.length, cageBallFrames.red.length]);
 
     useEffect(() => {
         if (cageBallsLoopFrames.length === 0) {
-            const spriteUrl = "/static/images/cage/cage-balls.json";
-
-            Assets.load<Spritesheet>("/static/images/cage/cage-balls.json").then((sprite) => {
+            loadPixiAnimations("/static/images/cage/cage-balls.json", (sprite) => {
                 setCageBallsLoopFrames(sprite.animations["loop"]);
             });
-
-            console.log(spriteUrl);
         }
     }, [cageBallsLoopFrames.length]);
 

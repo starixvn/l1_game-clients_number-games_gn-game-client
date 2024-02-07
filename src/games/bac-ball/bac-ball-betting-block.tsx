@@ -6,6 +6,7 @@ import { BetOptionData } from "../../_shared/constants";
 import { GameState } from "../../components/game-base/type";
 import { FC, useContext, useEffect, useState } from "react";
 import { GameContext } from "../../_shared/react-contexts";
+import { loadPixiAnimations } from "../../_shared/helpers/pixi-resource-loader";
 
 export type BettingBlockProps = {
     getGameState: () => any;
@@ -51,25 +52,17 @@ export const BacBallBettingBlockFC: FC<BettingBlockProps> = (props) => {
 
     useEffect(() => {
         if (winningPlayerFrames.length === 0) {
-            const spriteUrl = "/static/images/bac-number/highlight-winning-player.json";
-
-            Assets.load<Spritesheet>("/static/images/bac-number/highlight-winning-player.json").then((sprite) => {
+            loadPixiAnimations("/static/images/bac-number/highlight-winning-player.json", (sprite) => {
                 setWinningPlayerFrames(sprite.animations["highlight-winning-player"]);
             });
-
-            console.log(spriteUrl);
         }
     }, [winningPlayerFrames.length]);
 
     useEffect(() => {
         if (winningTieFrames.length === 0) {
-            const spriteUrl = "/static/images/bac-number/highlight-winning-tie.json";
-
-            Assets.load<Spritesheet>("/static/images/bac-number/highlight-winning-tie.json").then((sprite) => {
+            loadPixiAnimations("/static/images/bac-number/highlight-winning-tie.json", (sprite) => {
                 setWinningTieFrames(sprite.animations["highlight-winning-tie"]);
             });
-
-            console.log(spriteUrl);
         }
     }, [winningTieFrames.length]);
 
