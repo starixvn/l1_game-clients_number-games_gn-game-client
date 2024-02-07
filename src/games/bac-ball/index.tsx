@@ -7,12 +7,8 @@ import { GameBaseProps, GameBaseState, GameState, GatewayGameBaseProps } from ".
 import CountdownTimer from "../../components/game-components/countdown-timer/countdown-timer";
 import RoundResult from "../../components/game-components/round-result";
 import { Result, SettlementResult } from "./bac-ball";
-import { HeaderBlock } from "../../components/game-base/game-blocks/header-block";
-import { ResultBlock } from "../../components/game-base/game-blocks/result-block";
-import { StatisticBlock } from "../../components/game-base/game-blocks/statistic-block";
-import { ScoreboardBlock } from "../../components/game-base/game-blocks/scoreboard-block";
-import { BacBallBettingBlock } from "./bac-ball-betting-block";
-import { BacBallResultBlock } from "./bac-ball-result-block";
+import { BacBallResultBlockFC } from "./bac-ball-result-block";
+import { BacBallBettingBlockFC } from "./bac-ball-betting-block";
 
 const resultData: RoundResultData[] = [
     {
@@ -54,30 +50,26 @@ class BacBall extends GameBase<GameBaseProps, GameBaseState<Result, SettlementRe
                 <div id="countdown-timer" className="countdown-timer">
                     <CountdownTimer key={gameState} />
                 </div>
-                <HeaderBlock messageTransmitter={this.messageTransmitter} />
+                {/* <HeaderBlock messageTransmitter={this.messageTransmitter} /> */}
             </>
         );
     }
 
     renderResultBlock() {
-        return <BacBallResultBlock messageTransmitter={this.messageTransmitter} getGameState={() => this.state} />;
+        return <BacBallResultBlockFC messageTransmitter={this.messageTransmitter} getGameState={() => this.state} />;
     }
 
     renderBettingBlock() {
-        return <BacBallBettingBlock messageTransmitter={this.messageTransmitter} getGameState={() => this.state} />;
+        return <BacBallBettingBlockFC getGameState={() => this.state} />;
     }
 
     renderScoreboards() {
         return (
             <>
                 <RoundResult roundId={20} resultData={resultData} />
-                <ScoreboardBlock messageTransmitter={this.messageTransmitter} />
+                {/* <ScoreboardBlock messageTransmitter={this.messageTransmitter} /> */}
             </>
         );
-    }
-
-    renderStatistic() {
-        return <StatisticBlock messageTransmitter={this.messageTransmitter} />;
     }
 }
 

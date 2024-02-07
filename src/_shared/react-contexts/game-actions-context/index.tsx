@@ -6,8 +6,6 @@ type GameActionsContextType = {
     placeBet: (betChoice: string, amount: number, betPosition?: Position, betOptionPosition?: Boundary) => void;
     openPopup: (type: PopupType) => void;
     closePopup: () => void;
-    registerMessageHandler: Function;
-    unsubscribeMessageHandler: Function;
     openPlaceBetModal: Function;
     finishProcessingBet: Function;
     updateViewMode: (mode: ViewMode) => void;

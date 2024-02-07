@@ -14,4 +14,5 @@ export type GameContextModel = {
     isShowBlink: boolean;
     supportMD5: boolean;
     rate: number;
+    messageTransmitter: MessageTransmitterType;
 };

@@ -3,7 +3,7 @@ import Auth from "sc-user-service-client/dist/auth";
 import { Socket } from "socket.io-client";
 import { v4 as uuidv4 } from "uuid";
 import { LanguageLocaleMapper } from "../../_shared/constants";
-import { initSocketIO, localStorageKeys, StorageHelper } from "../../_shared/helpers";
+import { initSocketIO } from "../../_shared/helpers";
 import MessageTransmitter from "../../_shared/helpers/message-transmitter";
 import { MessageTransmitterType } from "../../_shared/helpers/message-transmitter/type";
 import { GetLocalizedErrorMessage } from "../../_shared/helpers/notice-helper";
@@ -15,7 +15,6 @@ import { ConnectFailedReasonKey } from "../game-components/error-message/type";
 import GameContainer from "../game-components/game-container";
 import GameLoading from "../game-components/game-loading";
 import { Boundary, GameBaseProps, GameBaseState, GameState, PopupType, Position, ViewMode } from "./type";
-import { SlidingChipsBlock } from "./game-blocks/sliding-chips-block";
 
 abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, any>> extends React.PureComponent<P, S> {
     private readonly animationTime = 3000;
@@ -709,7 +708,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
     }
 
     renderSlidingChips() {
-        return <SlidingChipsBlock messageTransmitter={this.messageTransmitter} />;
+        return <></>;
     }
 
     renderStatistic() {
@@ -759,13 +758,12 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
             isShowBlink,
             supportMD5: false,
             rate,
+            messageTransmitter: this.messageTransmitter,
         };
 
         const gameActionsContext = {
             placeBet: this.placeBet,
             openPopup: this.openPopup,
-            registerMessageHandler: this.messageTransmitter.register,
-            unsubscribeMessageHandler: this.messageTransmitter.unsubscribe,
             openPlaceBetModal: this.openPlaceBetModal,
             updateViewMode: this.updateViewMode,
             playAcceptedBetAnimation: this.playAcceptedBetAnimation,
