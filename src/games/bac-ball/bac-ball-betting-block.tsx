@@ -7,17 +7,7 @@ import { GameState } from "../../components/game-base/type";
 import { FC, useContext, useEffect, useState } from "react";
 import { GameContext } from "../../_shared/react-contexts";
 import { loadPixiAnimations } from "../../_shared/helpers/pixi-resource-loader";
-
-export interface BetChoice {
-    name: string;
-    odds: number;
-    totalBet?: number;
-    totalPlayer?: number;
-    percent?: number;
-}
-export interface Bet {
-    [betChoice: string]: number | any;
-}
+import { BacBallChoice } from "./types";
 
 const betData: BetOptionData[] = [
     {
@@ -43,9 +33,9 @@ const betData: BetOptionData[] = [
 export const BacBallBettingBlock: FC = () => {
     const [winningPlayerFrames, setWinningPlayerFrames] = useState<Texture<Resource>[]>([]);
     const [winningTieFrames, setWinningTieFrames] = useState<Texture<Resource>[]>([]);
-    const [totalBets, setTotalBets] = useState<Bet>({ player: 0, banker: 0, tie: 0 });
-    const [odds, setOdds] = useState<Bet>({});
-    const [percentageBets, setPercentageBets] = useState<Bet>({ player: 0, banker: 0, tie: 0 });
+    const [totalBets, setTotalBets] = useState<BacBallChoice>({ player: 0, banker: 0, tie: 0 });
+    const [odds, setOdds] = useState<BacBallChoice>({ player: 0, banker: 0, tie: 0 });
+    const [percentageBets, setPercentageBets] = useState<BacBallChoice>({ player: 0, banker: 0, tie: 0 });
     const gameContext = useContext(GameContext);
 
     useEffect(() => {

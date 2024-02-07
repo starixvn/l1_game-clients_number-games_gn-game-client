@@ -6,7 +6,7 @@ import GameBase from "../../components/game-base/";
 import { GameBaseProps, GameBaseState, GatewayGameBaseProps } from "../../components/game-base/type";
 import CountdownTimer from "../../components/game-components/countdown-timer/countdown-timer";
 import RoundResult from "../../components/game-components/round-result";
-import { Result, SettlementResult } from "./bac-ball";
+import { BacBallResult, BacBallSettlementResult } from "./types";
 import { BacBallResultBlock } from "./bac-ball-result-block";
 import { BacBallBettingBlock } from "./bac-ball-betting-block";
 
@@ -28,7 +28,7 @@ const resultData: RoundResultData[] = [
     },
 ];
 
-class BacBall extends GameBase<GameBaseProps, GameBaseState<Result, SettlementResult>> {
+class BacBall extends GameBase<GameBaseProps, GameBaseState<BacBallResult, BacBallSettlementResult>> {
     constructor(props: GatewayGameBaseProps) {
         super(props);
 

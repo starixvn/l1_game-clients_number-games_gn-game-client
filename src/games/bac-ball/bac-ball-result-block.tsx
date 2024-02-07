@@ -6,6 +6,7 @@ import { IBallColor } from "../../components/game-base/type";
 import { FC, useContext, useEffect, useState } from "react";
 import { loadPixiAnimations } from "../../_shared/helpers/pixi-resource-loader";
 import { GameContext } from "../../_shared/react-contexts";
+import { BacBallResult } from "./types";
 
 export const BacBallResultBlock: FC = () => {
     const [cageBallFrames, setCageBallFrames] = useState<IBallColor>({ blue: [], red: [] });
@@ -33,7 +34,7 @@ export const BacBallResultBlock: FC = () => {
         return <></>;
     }
 
-    const { player, banker } = gameResult as { player: number; banker: number };
+    const { player, banker } = gameResult as BacBallResult;
 
     return (
         <div className={Style["result-container"]}>
