@@ -51,7 +51,6 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
         drawId: 0,
         ownBets: {},
         displayPopup: null,
-        betPercentage: {},
         viewMode: this.props.viewMode,
         showResultInfo: false,
         acceptedBetQueue: {},
@@ -157,7 +156,6 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
         this.messageTransmitter.register("status", this.handleStatus.bind(this));
         this.messageTransmitter.register("user", this.handleUserData.bind(this));
         this.messageTransmitter.register("ownBets", this.handleOwnBets.bind(this));
-        this.messageTransmitter.register("betPercentage", this.handlePercentageBets.bind(this));
         this.messageTransmitter.register("endBet", this.handleEndBet.bind(this));
         this.messageTransmitter.register("apiError", this.handleApiError.bind(this));
         this.messageTransmitter.register("errorCode", this.handleError.bind(this));
@@ -343,10 +341,6 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
         gameConfigs && this.setState({ ownBets });
     };
 
-    handlePercentageBets = ({ betPercentage }) => {
-        this.setState({ betPercentage });
-    };
-
     handleUserData({ user, gameConfigs }) {
         //this.context.setBalance(user.red);
         gameConfigs && this.setState({ rate: user.rate });
@@ -463,7 +457,6 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
                     isShowBlink: false,
                     playResultAnimation: false,
                     showResultInfo: false,
-                    betPercentage: {},
                     showMD5ResultKey: false,
                 },
             },

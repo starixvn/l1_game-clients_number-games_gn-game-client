@@ -73,7 +73,6 @@ export interface GameBaseState<Result, SettlementResult> {
     settlementResult?: SettlementResult;
     ownBets: object;
     displayPopup?: PopupType;
-    betPercentage?: object;
     errorMessage?: string | string[];
     selectedBetChoice?: string;
     isProcessingBet?: boolean;
