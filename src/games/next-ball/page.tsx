@@ -124,7 +124,7 @@ export default function NextBall() {
                     </div>
                 ))}
             </div>
-            <RoundResult roundId={134} resultData={resultData} />
+            <RoundResult results={resultData} />
         </>
     );
 }

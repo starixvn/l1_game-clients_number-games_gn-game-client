@@ -1,7 +1,6 @@
 import { withTranslation } from "next-i18next";
 import { withRouter } from "next/router";
 import React from "react";
-import { RoundResultData } from "../../_shared/constants";
 import GameBase from "../../components/game-base/";
 import { GameBaseProps, GameBaseState, GatewayGameBaseProps } from "../../components/game-base/type";
 import CountdownTimer from "../../components/game-components/countdown-timer/countdown-timer";
@@ -9,8 +8,9 @@ import RoundResult from "../../components/game-components/round-result";
 import { BacBallResult, BacBallSettlementResult } from "./types";
 import { BacBallResultBlock } from "./bac-ball-result-block";
 import { BacBallBettingBlock } from "./bac-ball-betting-block";
+import { RoundResultData } from "../../_shared/constants";
 
-const resultData: RoundResultData[] = [
+const results: RoundResultData[] = [
     {
         betChoiceShort: "P",
         color: "blue",
@@ -63,7 +63,7 @@ class BacBall extends GameBase<GameBaseProps, GameBaseState<BacBallResult, BacBa
     }
 
     renderScoreboards() {
-        return <RoundResult roundId={20} resultData={resultData} />;
+        return <RoundResult results={results} />;
     }
 }
 
