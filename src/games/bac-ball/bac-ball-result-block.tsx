@@ -7,27 +7,23 @@ import { FC, useContext, useEffect, useState } from "react";
 import { loadPixiAnimations } from "../../_shared/helpers/pixi-resource-loader";
 import { GameContext } from "../../_shared/react-contexts";
 
-export const BacBallResultBlockFC: FC = () => {
+export const BacBallResultBlock: FC = () => {
     const [cageBallFrames, setCageBallFrames] = useState<IBallColor>({ blue: [], red: [] });
     const [cageBallsLoopFrames, setCageBallsLoopFrames] = useState<Texture<Resource>[]>([]);
     const gameContext = useContext(GameContext);
 
     useEffect(() => {
-        if (cageBallFrames.blue.length === 0 && cageBallFrames.red.length === 0) {
-            loadPixiAnimations("/static/images/cage/ball.json", (sprite) => {
-                const blueFrames = sprite.animations["blue"];
-                const redFrames = sprite.animations["red"];
-                setCageBallFrames({ blue: blueFrames, red: redFrames });
-            });
-        }
+        loadPixiAnimations("/static/images/cage/ball.json", (sprite) => {
+            const blueFrames = sprite.animations["blue"];
+            const redFrames = sprite.animations["red"];
+            setCageBallFrames({ blue: blueFrames, red: redFrames });
+        });
     }, [cageBallFrames.blue.length, cageBallFrames.red.length]);
 
     useEffect(() => {
-        if (cageBallsLoopFrames.length === 0) {
-            loadPixiAnimations("/static/images/cage/cage-balls.json", (sprite) => {
-                setCageBallsLoopFrames(sprite.animations["loop"]);
-            });
-        }
+        loadPixiAnimations("/static/images/cage/cage-balls.json", (sprite) => {
+            setCageBallsLoopFrames(sprite.animations["loop"]);
+        });
     }, [cageBallsLoopFrames.length]);
 
     // waiting for rounduration class

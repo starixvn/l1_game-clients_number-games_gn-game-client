@@ -751,7 +751,6 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
             viewMode,
             playResultAnimation,
             isShowBlink,
-            supportMD5: false,
             rate,
             messageTransmitter: this.messageTransmitter,
             result,
@@ -764,10 +763,6 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
             openPlaceBetModal: this.openPlaceBetModal,
             updateViewMode: this.updateViewMode,
             playAcceptedBetAnimation: this.playAcceptedBetAnimation,
-            finishProcessingBet: () => {
-                this.isProcessingBet = false;
-                this.clearRetryInterval();
-            },
             setActiveScoreboardTab: this.setActiveScoreboardTab,
             updateStatusShowResult: this.updateStatusShowResult,
         };

@@ -40,7 +40,7 @@ const betData: BetOptionData[] = [
     },
 ];
 
-export const BacBallBettingBlockFC: FC = () => {
+export const BacBallBettingBlock: FC = () => {
     const [winningPlayerFrames, setWinningPlayerFrames] = useState<Texture<Resource>[]>([]);
     const [winningTieFrames, setWinningTieFrames] = useState<Texture<Resource>[]>([]);
     const [totalBets, setTotalBets] = useState<Bet>({ player: 0, banker: 0, tie: 0 });
@@ -49,19 +49,15 @@ export const BacBallBettingBlockFC: FC = () => {
     const gameContext = useContext(GameContext);
 
     useEffect(() => {
-        if (winningPlayerFrames.length === 0) {
-            loadPixiAnimations("/static/images/bac-number/highlight-winning-player.json", (sprite) => {
-                setWinningPlayerFrames(sprite.animations["highlight-winning-player"]);
-            });
-        }
+        loadPixiAnimations("/static/images/bac-number/highlight-winning-player.json", (sprite) => {
+            setWinningPlayerFrames(sprite.animations["highlight-winning-player"]);
+        });
     }, [winningPlayerFrames.length]);
 
     useEffect(() => {
-        if (winningTieFrames.length === 0) {
-            loadPixiAnimations("/static/images/bac-number/highlight-winning-tie.json", (sprite) => {
-                setWinningTieFrames(sprite.animations["highlight-winning-tie"]);
-            });
-        }
+        loadPixiAnimations("/static/images/bac-number/highlight-winning-tie.json", (sprite) => {
+            setWinningTieFrames(sprite.animations["highlight-winning-tie"]);
+        });
     }, [winningTieFrames.length]);
 
     const handleTotalBet = ({ totalBets }) => {

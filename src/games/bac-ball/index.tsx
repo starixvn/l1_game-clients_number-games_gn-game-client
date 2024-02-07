@@ -7,8 +7,8 @@ import { GameBaseProps, GameBaseState, GatewayGameBaseProps } from "../../compon
 import CountdownTimer from "../../components/game-components/countdown-timer/countdown-timer";
 import RoundResult from "../../components/game-components/round-result";
 import { Result, SettlementResult } from "./bac-ball";
-import { BacBallResultBlockFC } from "./bac-ball-result-block";
-import { BacBallBettingBlockFC } from "./bac-ball-betting-block";
+import { BacBallResultBlock } from "./bac-ball-result-block";
+import { BacBallBettingBlock } from "./bac-ball-betting-block";
 
 const resultData: RoundResultData[] = [
     {
@@ -55,11 +55,11 @@ class BacBall extends GameBase<GameBaseProps, GameBaseState<Result, SettlementRe
     }
 
     renderResultBlock() {
-        return <BacBallResultBlockFC />;
+        return <BacBallResultBlock />;
     }
 
     renderBettingBlock() {
-        return <BacBallBettingBlockFC />;
+        return <BacBallBettingBlock />;
     }
 
     renderScoreboards() {
