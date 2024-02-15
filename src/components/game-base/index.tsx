@@ -14,6 +14,7 @@ import { ConnectFailedMessage } from "../game-components/error-message";
 import { ConnectFailedReasonKey } from "../game-components/error-message/type";
 import GameContainer from "../game-components/game-container";
 import GameLoading from "../game-components/game-loading";
+import { Notice } from "../game-components/notice";
 import { Boundary, GameBaseProps, GameBaseState, GameState, PopupType, Position, ViewMode } from "./type";
 
 abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, any>> extends React.PureComponent<P, S> {
@@ -236,19 +237,17 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
         const message = GetLocalizedErrorMessage(errorCode, isPlaceBet);
         const gameName = this.props.t(`${this.props.gameName.toLowerCase()}:${GameResourceKeys.GAME_NAME}`);
 
-        const { displayPopup } = this.state;
-        displayPopup !== PopupType.Rebet &&
-            this.setState({
-                notice: {
-                    gameName: gameName,
-                    roundId: apiError?.gameRoundId,
-                    message: message,
-                    duration: 3,
-                    minBet: apiError?.minBet,
-                    maxBet: apiError?.maxBet,
-                    errorCode: errorCode,
-                },
-            });
+        this.setState({
+            notice: {
+                gameName: gameName,
+                roundId: apiError?.gameRoundId,
+                message: message,
+                duration: 3,
+                minBet: apiError?.minBet,
+                maxBet: apiError?.maxBet,
+                errorCode: errorCode,
+            },
+        });
     };
 
     handleKickOut(errorCode: string) {
@@ -259,9 +258,8 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
     }
 
     handleBetFailed = ({ notice, kickedOut }) => {
-        const { displayPopup } = this.state;
         const { i18n } = this.props;
-        displayPopup !== PopupType.Rebet && this.setState({ notice: null });
+        this.setState({ notice: null });
         const gameName = this.props.t(`${this.props.gameName.toLowerCase()}:${GameResourceKeys.GAME_NAME}`);
         if (kickedOut?.isDisabledAccount) {
             this.setState({
@@ -281,20 +279,19 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
         } else {
             const isPlaceBet = notice.isPlaceBetFailed ? notice.isPlaceBetFailed : false;
 
-            displayPopup !== PopupType.Rebet &&
-                this.setState({
-                    notice: {
-                        gameName: gameName,
-                        message: GetLocalizedErrorMessage(notice.errorCode, isPlaceBet),
-                        duration: 2,
-                        minBet: notice?.minBet,
-                        maxBet: notice?.maxBet,
-                        errorCode: notice.errorCode,
-                        roundId: notice?.gameRoundId,
-                        betChoice1: notice?.hedgeBetGroup ? this.getChoiceNameOnHedgeBetMessage(notice.hedgeBetGroup[0]) : "",
-                        betChoice2: notice?.hedgeBetGroup ? this.getChoiceNameOnHedgeBetMessage(notice.hedgeBetGroup[1]) : "",
-                    },
-                });
+            this.setState({
+                notice: {
+                    gameName: gameName,
+                    message: GetLocalizedErrorMessage(notice.errorCode, isPlaceBet),
+                    duration: 2,
+                    minBet: notice?.minBet,
+                    maxBet: notice?.maxBet,
+                    errorCode: notice.errorCode,
+                    roundId: notice?.gameRoundId,
+                    betChoice1: notice?.hedgeBetGroup ? this.getChoiceNameOnHedgeBetMessage(notice.hedgeBetGroup[0]) : "",
+                    betChoice2: notice?.hedgeBetGroup ? this.getChoiceNameOnHedgeBetMessage(notice.hedgeBetGroup[1]) : "",
+                },
+            });
         }
     };
 
@@ -308,7 +305,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
         if (endBet === -1) {
             !apiError && this.handleBetFailed({ notice, kickedOut });
         } else {
-            displayPopup !== PopupType.Rebet && this.playAcceptedBetAnimation(endBet, this.betPosition);
+            this.playAcceptedBetAnimation(endBet, this.betPosition);
             playPlaceBetSound();
             ownBets[betChoice] = ownBets[betChoice] ? ownBets[betChoice] + endBet : endBet;
             this.setState({ ownBets: { ...ownBets } });
@@ -467,8 +464,8 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
                 condition: nextGameState === GameState.LockingBet,
                 state: {
                     isShowBlink: true,
-                    displayPopup: [PopupType.Rebet, PopupType.PlaceBet].includes(displayPopup) ? null : displayPopup,
-                    notice: [PopupType.Rebet, PopupType.PlaceBet].includes(displayPopup) ? null : notice,
+                    displayPopup: displayPopup == PopupType.PlaceBet ? null : displayPopup,
+                    notice: displayPopup == PopupType.PlaceBet ? null : notice,
                     result: this.defaultResult ?? result,
                     settlementResult: this.defaultSettlementResult ?? settlementResult,
                 },
@@ -606,9 +603,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
     }
 
     placeBet(betChoice: string, amount: number, betPosition?: Position, betOptionBoundary?: Boundary) {
-        const { displayPopup } = this.state;
-
-        if (this.isProcessingBet && displayPopup !== PopupType.Rebet) {
+        if (this.isProcessingBet) {
             this.setState({ notice: { message: this.props.t("messages:betProcessing"), duration: 2 } });
         } else {
             if (amount > 0) {
@@ -622,7 +617,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
     }
 
     protected sendBetMessage(betChoice: string, amount: number) {
-        this.socket.emit("bet", { betChoice, amount });
+        this.socket.emit("bet", { betChoices: { [betChoice.toLowerCase()]: amount, tie: amount } });
     }
 
     setRetryInterval() {
@@ -667,6 +662,29 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
         const { t, gameName } = this.props;
 
         return t(`${gameName.toLocaleLowerCase()}:${key}`);
+    }
+
+    renderNotice() {
+        const { gameName, message, roundId, duration, minBet, maxBet, errorCode, isWarning, betChoice1, betChoice2 } = this.state.notice;
+        return (
+            <Notice
+                gameName={gameName}
+                roundId={roundId}
+                message={message}
+                duration={duration}
+                minBet={minBet}
+                maxBet={maxBet}
+                errorCode={errorCode}
+                onClose={() => this.closeNotice()}
+                isWarning={isWarning}
+                betChoice1={betChoice1}
+                betChoice2={betChoice2}
+            />
+        );
+    }
+
+    closeNotice() {
+        this.setState({ notice: null });
     }
 
     getOddsByChoice(choice: string) {
@@ -714,6 +732,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
                 {this.renderHeaderBlock()}
                 {this.renderMenuButtons()}
                 {this.renderResultBlock()}
+                {this.state.notice && this.renderNotice()}
                 {this.renderBettingBlock()}
                 {this.renderSlidingChips()}
                 {this.renderStatistic()}
@@ -783,7 +802,15 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
         return (
             <GameContainer>
                 {signedIn ? this.renderGame() : <GameLoading />}
-                {gameState === GameState.Disabled && <DisabledModal disabledMessage={disabledMessage} viewMode={viewMode} />}
+                {gameState === GameState.Disabled && (
+                    <DisabledModal
+                        disableMessage={disabledMessage}
+                        onSubmit={
+                            //TODO: redirect to Saba play lobby
+                            () => window.location.reload()
+                        }
+                    />
+                )}
                 {gameState === GameState.ConnectFailed && (
                     <ConnectFailedMessage
                         gameName={this.props.t(`${this.props.gameName.toLowerCase()}:${GameResourceKeys.GAME_NAME}`)}

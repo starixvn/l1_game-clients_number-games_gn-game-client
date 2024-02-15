@@ -1,6 +1,9 @@
+import { useTranslate } from "@tolgee/react";
 import React, { useEffect, useRef } from "react";
-import { useTranslation, Trans } from "next-i18next";
 import { numberWithCommas } from "../../../_shared/helpers/number-helper";
+import "../../../_shared/helpers/string-helper";
+import BaseDialog from "../base-dialog";
+import { ModalType } from "../base-dialog/type";
 import Styles from "./notice.module.scss";
 interface Props {
     gameName?: string;
@@ -21,7 +24,6 @@ const BaseNotice: React.FC<{ onClose: () => void; duration: number; isOpen?: boo
     onClose,
     duration,
     isOpen = true,
-    isWarning = true,
 }) => {
     const wrapperRef = useRef<HTMLDivElement>(null);
 
@@ -44,12 +46,13 @@ const BaseNotice: React.FC<{ onClose: () => void; duration: number; isOpen?: boo
         };
     }, [wrapperRef]);
 
-    const noticeType = Styles[isWarning ? "warning" : "inform"];
     return (
-        <div ref={wrapperRef} className={`${Styles.notice} ${noticeType}`}>
-            <span className={`icon-close ${Styles["icon-close"]}`} onClick={onClose} data-testid="close-btn"></span>
-            {children}
-        </div>
+        <BaseDialog type={ModalType.Center} isOpen={true}>
+            <div className={`modal-center red-color`}>
+                <span className={`icon-close ${Styles["icon-close"]}`} onClick={onClose} data-testid="close-btn"></span>
+                {children}
+            </div>
+        </BaseDialog>
     );
 };
 
@@ -66,7 +69,8 @@ export const Notice: React.FC<Props> = ({
     errorCode,
     isWarning = true,
 }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslate(["Common", "SabaNumber"]);
+
     const opt = {
         gameName: gameName,
         roundId: roundId,
@@ -79,7 +83,11 @@ export const Notice: React.FC<Props> = ({
 
     return (
         <BaseNotice {...{ onClose, duration, isWarning }}>
-            <Trans t={t}>{t(message, opt)}</Trans>
+            {t({
+                key: message,
+                params: opt,
+                noWrap: true,
+            }).replaceTogleeFormat()}
         </BaseNotice>
     );
 };

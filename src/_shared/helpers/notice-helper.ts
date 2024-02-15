@@ -2,14 +2,14 @@ import ErrorCodeDictionary, { CommonErrorCodeList } from "../constants/error-cod
 
 export const GetLocalizedErrorMessage = (errorCode: string, isPlaceBet = false) => {
     if (!ErrorCodeDictionary[errorCode]) {
-        return "messages:errorOccurred";
+        return "message_error_occurred";
     }
 
     let key = ErrorCodeDictionary[errorCode];
     const isCommonErrorCode = CommonErrorCodeList.includes(ErrorCodeDictionary[errorCode]);
     if (isCommonErrorCode && isPlaceBet) {
-        key = `${key}PlaceBet`;
+        key = `${key}_place_bet`;
     }
 
-    return `messages:${key}`;
+    return key;
 };

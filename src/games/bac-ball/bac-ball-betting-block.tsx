@@ -1,12 +1,12 @@
 import { AnimatedSprite, Container, Stage } from "@pixi/react";
-import Style from "./bac-ball.module.scss";
-import PercentageCircle from "../../components/game-components/percentage-circle";
 import { Resource, Texture } from "pixi.js";
-import { BetOptionData } from "../../_shared/constants";
-import { GameState } from "../../components/game-base/type";
 import { FC, useContext, useEffect, useState } from "react";
-import { GameContext } from "../../_shared/react-contexts";
+import { BetOptionData } from "../../_shared/constants";
 import { loadPixiAnimations } from "../../_shared/helpers/pixi-resource-loader";
+import { GameContext, useGameActionContext } from "../../_shared/react-contexts";
+import { GameState } from "../../components/game-base/type";
+import PercentageCircle from "../../components/game-components/percentage-circle";
+import Style from "./bac-ball.module.scss";
 import { BacBallChoice } from "./types";
 
 const betData: BetOptionData[] = [
@@ -37,6 +37,7 @@ export const BacBallBettingBlock: FC = () => {
     const [odds, setOdds] = useState<BacBallChoice>({ player: 0, banker: 0, tie: 0 });
     const [percentageBets, setPercentageBets] = useState<BacBallChoice>({ player: 0, banker: 0, tie: 0 });
     const gameContext = useContext(GameContext);
+    const gameActionContext = useGameActionContext();
 
     useEffect(() => {
         loadPixiAnimations("/static/images/bac-number/highlight-winning-player.json", (sprite) => {
@@ -67,6 +68,7 @@ export const BacBallBettingBlock: FC = () => {
     gameContext.messageTransmitter.register("totalBets", handlePercentageBets);
 
     const onClickPlayer = () => {
+        gameActionContext.placeBet(betData[0].betChoice, 1);
         console.log("onClickPlayer");
     };
 
@@ -74,6 +76,7 @@ export const BacBallBettingBlock: FC = () => {
         console.log("onClickBanker");
     };
     const onClickTie = () => {
+        gameActionContext.placeBet(betData[2].betChoice, 1);
         console.log("onClickTie");
     };
 

@@ -1,12 +1,12 @@
 import React, { useEffect, useRef } from "react";
-import { isMobileOnly, isIOS } from "react-device-detect";
+import { isIOS, isMobileOnly } from "react-device-detect";
 
 import Styles from "./base-dialog.module.scss";
 import { ModalType } from "./type";
 
 const HeaderHeightInPixel = 55;
 
-type Props = {
+export type Props = {
     isOpen?: boolean;
     onCloseModal?: Function;
     children?: React.ReactNode;

@@ -3,11 +3,11 @@ import React, { useEffect, useMemo, useState } from "react";
 import { isMobileOnly } from "react-device-detect";
 
 import { StorageHelper, localStorageKeys } from "../../../_shared/helpers/storage-helper";
-import { favoriteGameIdIgnore } from "../../page-components/game-category/constants";
+import { useGameActionContext, useGameContext, useSystemContext } from "../../../_shared/react-contexts";
 import { CommonResourceKeys } from "../../../_shared/resources";
 import { GameResourceKeys } from "../../../_shared/resources/game-resource-keys";
-import { useGameActionContext, useGameContext, useSystemContext } from "../../../_shared/react-contexts";
-import { PopupType, RebetStorageModel, ViewMode } from "../../game-base/type";
+import { RebetStorageModel, ViewMode } from "../../game-base/type";
+import { favoriteGameIdIgnore } from "../../page-components/game-category/constants";
 import Styles from "./game-header.module.scss";
 
 export type GameHeaderProps = {
@@ -97,7 +97,6 @@ const HeaderRight = ({ isUpdateDisableRebet }) => {
 
     const rebetClickHandle = (e: React.MouseEvent) => {
         e.stopPropagation();
-        gameActions.openPopup(PopupType.Rebet);
     };
 
     useEffect(() => {

@@ -1,23 +1,10 @@
-@import "../../../styles/components/mini-notice";
+@import "../../../styles/components/modal";
 
-.notice {
-    @extend .mini-notice;
-    left: 8%;
-    right: 8%;
-    padding-left: 3rem;
-    padding-right: 3rem;
-    border-radius: 1rem;
-    box-shadow: 0 0 3.6rem rgba(0, 0, 0, 0.4);
-    color: #2c2f3e;
-
-    &.warning{
-        background: rgba(255, 180, 178, 0.95);
-    }
-
-    &.inform{
-        background: rgb(225, 252, 215);
-        top: 0px;
-    }
+.notice-container{
+    @extend .modal;
+    top: 20%;
+    z-index: var(--popup-guide-history-index);
+    padding: 2rem;
 
     .icon-close {
         position: absolute;
@@ -26,7 +13,7 @@
         background: none;
 
         &:before {
-            color: #5b5b5b;
+            color: #ea1d40;
         }
     }
 }
