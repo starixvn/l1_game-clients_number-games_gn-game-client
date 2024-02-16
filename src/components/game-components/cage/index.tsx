@@ -2,6 +2,7 @@ import { AnimatedSprite, Container, Stage } from "@pixi/react";
 import { Resource, Texture } from "pixi.js";
 import React, { useEffect, useMemo, useState } from "react";
 
+import { loadPixiAnimations } from "../../../_shared/helpers/pixi-resource-loader";
 import { IBallColor } from "../../game-base/type";
 import Styles from "./cage.module.scss";
 
@@ -36,6 +37,13 @@ const Cage: React.FunctionComponent<CageProps> = (cageProps) => {
     const { color, ballColor, isSmall, cageBallsLoopFrames, cageBallFrames, result, isShowResult, delayShowResultTime } = cageProps;
     const lidPosition = color === CageColor.Blue ? "left" : "right";
     const [isDelayShowResult, setIsDelayShowResult] = useState<boolean>(false);
+    const [numberBallFrames, setNumberBallFrames] = useState<Texture<Resource>[]>([]);
+
+    useEffect(() => {
+        loadPixiAnimations("/static/images/cage/number-75.json", (sprite) => {
+            setNumberBallFrames(sprite.animations["number75"]);
+        });
+    }, [numberBallFrames.length]);
 
     useEffect(() => {
         let timeOut: NodeJS.Timeout;
@@ -50,7 +58,7 @@ const Cage: React.FunctionComponent<CageProps> = (cageProps) => {
         };
     }, [delayShowResultTime, isShowResult]);
 
-    const showResult = () => {
+    const showResultBall = () => {
         if (!isDelayShowResult || !isShowResult) {
             return <></>;
         }
@@ -72,6 +80,30 @@ const Cage: React.FunctionComponent<CageProps> = (cageProps) => {
                         </Container>
                     </Stage>
                 )}
+            </div>
+        );
+    };
+
+    const showResultNumber = () => {
+        if (!isDelayShowResult || !isShowResult || numberBallFrames?.length === 0) {
+            return <></>;
+        }
+
+        return (
+            <div id="result-text" className={Styles["number"]}>
+                <Stage width={153} height={153} options={{ backgroundAlpha: 0 }}>
+                    <Container position={[85, 85]}>
+                        <AnimatedSprite
+                            anchor={0.5}
+                            textures={numberBallFrames}
+                            autoUpdate
+                            isPlaying={true}
+                            initialFrame={0}
+                            animationSpeed={0.3}
+                            loop={false}
+                        />
+                    </Container>
+                </Stage>
             </div>
         );
     };
@@ -101,14 +133,16 @@ const Cage: React.FunctionComponent<CageProps> = (cageProps) => {
                 <div id="cage-border" className={`${Styles["cage-border"]} ${Styles[color]}`}>
                     {!isDelayShowResult && <div id="cage-lid" className={Styles["cage-lid"]} />}
 
-                    {showResult()}
+                    {showResultBall()}
                 </div>
 
-                {isShowResult && (
-                    <div id="result-text" className={`${Styles["number"]} ${isShowResult ? Styles["show"] : Styles["hide"]}`}>
-                        {result}
-                    </div>
-                )}
+                {showResultNumber()}
+                {/* {isShowResult && (
+
+                    // <div id="result-text" className={`${Styles["number"]} ${isShowResult ? Styles["show"] : Styles["hide"]}`}>
+                    //     {result}
+                    // </div>
+                )} */}
             </div>
         );
     }, [isShowResult, isDelayShowResult]);
