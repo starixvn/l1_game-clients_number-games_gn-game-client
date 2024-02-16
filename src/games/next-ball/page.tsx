@@ -124,7 +124,7 @@ export default function NextBall() {
                     </div>
                 ))}
             </div>
-            <RoundResult results={resultData} />
+            {/* <RoundResult results={resultData} /> */}
         </>
     );
 }

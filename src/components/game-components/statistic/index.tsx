@@ -46,6 +46,7 @@ export const StatisticFollowPercent: React.FC<PropsFollowPercent> = (props) => {
     const { gameSetting } = useGameContext();
     const gameName = gameSetting.gameName.toLowerCase();
     const { t } = useTranslation(gameName);
+    console.log("statisticRuleEntries", statisticRuleEntries);
 
     return useMemo(() => {
         const statisticResult = calculatePercent(statisticRuleEntries, countSettlementResult(roundHistory), roundHistory.length);

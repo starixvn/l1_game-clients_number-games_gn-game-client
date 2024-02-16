@@ -18,6 +18,12 @@ export interface RoundResultData {
     count: number;
 }
 
+export interface Round {
+    drawId: number;
+    result: any;
+    settlementResult: any;
+}
+
 export const systemName = getAppSettings().system.toLocaleLowerCase();
 
 export const ChipMapper = {

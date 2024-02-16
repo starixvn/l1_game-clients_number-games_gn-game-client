@@ -69,7 +69,7 @@ export default function HappyWheel() {
                     </div>
                 ))}
             </div>
-            <RoundResult results={resultData} />
+            {/* <RoundResult results={resultData} /> */}
         </>
     );
 }

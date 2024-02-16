@@ -8,25 +8,38 @@ import RoundResult from "../../components/game-components/round-result";
 import { BacBallResult, BacBallSettlementResult } from "./types";
 import { BacBallResultBlock } from "./bac-ball-result-block";
 import { BacBallBettingBlock } from "./bac-ball-betting-block";
-import { RoundResultData } from "../../_shared/constants";
+import { StatisticFollowPercent } from "../../components/game-components/statistic";
 
-const results: RoundResultData[] = [
+const statisticData = [
     {
+        betChoice: "player",
         betChoiceShort: "P",
         color: "blue",
-        count: 37,
     },
     {
+        betChoice: "banker",
         betChoiceShort: "B",
         color: "red",
-        count: 15,
     },
     {
+        betChoice: "tie",
         betChoiceShort: "T",
         color: "green",
-        count: 7,
     },
 ];
+
+export const Choices = { player: "player", banker: "banker", tie: "tie" };
+
+export const StatisticRuleEntries = Object.entries({
+    [Choices.player]: (countResult: object, total: number) =>
+        countResult[Choices.player] ? Math.round((countResult[Choices.player] * 100) / total) : 0,
+    [Choices.banker]: (countResult: object, total: number) =>
+        100 -
+        ((countResult[Choices.player] ? Math.round((countResult[Choices.player] * 100) / total) : 0) +
+            (countResult[Choices.tie] ? Math.round((countResult[Choices.tie] * 100) / total) : 0)),
+    [Choices.tie]: (countResult: object, total: number) =>
+        countResult[Choices.tie] ? Math.round((countResult[Choices.tie] * 100) / total) : 0,
+});
 
 class BacBall extends GameBase<GameBaseProps, GameBaseState<BacBallResult, BacBallSettlementResult>> {
     constructor(props: GatewayGameBaseProps) {
@@ -63,7 +76,13 @@ class BacBall extends GameBase<GameBaseProps, GameBaseState<BacBallResult, BacBa
     }
 
     renderScoreboards() {
-        return <RoundResult results={results} />;
+        return <RoundResult roundHistory={this.state.roundHistory} statisticData={statisticData} />;
+        // return (
+        //     <StatisticFollowPercent
+        //         roundHistory={this.state.roundHistory}
+        //         statisticRuleEntries={StatisticRuleEntries}
+        //     ></StatisticFollowPercent>
+        // );
     }
 }
 

@@ -141,7 +141,7 @@ export default function LuckyThree() {
                     </div>
                 ))}
             </div>
-            <RoundResult results={resultData} />
+            {/* <RoundResult results={resultData} /> */}
         </>
     );
 }

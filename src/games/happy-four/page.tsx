@@ -120,7 +120,7 @@ export default function HappyFour() {
                     </div>
                 ))}
             </div>
-            <RoundResult results={resultData} />
+            {/* <RoundResult results={resultData} /> */}
         </>
     );
 }

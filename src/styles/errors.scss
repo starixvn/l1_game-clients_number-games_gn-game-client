@@ -61,7 +61,7 @@
 .um-spaceman {
     position: absolute;
     transform: translate(0, 0);
-    animation: spin 5s linear infinite;
+    animation: spin 9s linear infinite;
 
     .hourglass {
         position: absolute;
@@ -180,10 +180,10 @@
 
 @keyframes spin {
     from {
-        transform: rotate(0deg) translate(-10px) rotate(0deg);
+        transform: rotate(0deg) translate(-5px) rotate(0deg);
     }
     to {
-        transform: rotate(360deg) translate(-10px) rotate(-360deg);
+        transform: rotate(360deg) translate(-5px) rotate(-360deg);
     }
 }
 
