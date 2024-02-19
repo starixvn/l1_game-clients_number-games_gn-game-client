@@ -4,7 +4,6 @@ import React, { FC, useReducer } from "react";
 import GameBase from "../../components/game-base/";
 import { GameBaseProps, GameBaseState } from "../../components/game-base/type";
 import CountdownTimer from "../../components/game-components/countdown-timer/countdown-timer";
-import RoundResult from "../../components/game-components/round-result";
 import { BacBallResult, BacBallSettlementResult } from "./types";
 import { BacBallResultBlockFC } from "./bac-ball-result-block";
 import { BacBallBettingBlockFC } from "./bac-ball-betting-block";
@@ -16,24 +15,6 @@ import {
 } from "../../_shared/react-contexts/game-state-context/game-state-context";
 import { useDetermineGameState, useGetStateByNextGameState } from "../../_shared/react-hooks/use-determine-game-state";
 import { useTimeCounter } from "../../_shared/react-hooks/use-time-counter";
-
-const statisticData = [
-    {
-        betChoice: "player",
-        betChoiceShort: "P",
-        color: "blue",
-    },
-    {
-        betChoice: "banker",
-        betChoiceShort: "B",
-        color: "red",
-    },
-    {
-        betChoice: "tie",
-        betChoiceShort: "T",
-        color: "green",
-    },
-];
 
 export const Choices = { player: "player", banker: "banker", tie: "tie" };
 
@@ -81,13 +62,9 @@ class BacBall extends GameBase<GameBaseProps> {
     }
 
     renderScoreboards() {
-        return <RoundResult roundHistory={this.props.gameStateContextModel.roundHistory} statisticData={statisticData} />;
-        // return (
-        //     <StatisticFollowPercent
-        //         roundHistory={this.state.roundHistory}
-        //         statisticRuleEntries={StatisticRuleEntries}
-        //     ></StatisticFollowPercent>
-        // );
+        const { roundHistory } = this.props.gameStateContextModel;
+
+        return <StatisticFollowPercent roundHistory={roundHistory} statisticRuleEntries={StatisticRuleEntries}></StatisticFollowPercent>;
     }
 }
 
