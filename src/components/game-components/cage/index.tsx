@@ -42,9 +42,10 @@ const Cage: React.FunctionComponent<CageProps> = (cageProps) => {
     const [numberBallFrames, setNumberBallFrames] = useState<Texture<Resource>[]>([]);
 
     useEffect(() => {
-        loadPixiAnimations(`/static/images/cage/number/${result}.json`, (sprite) => {
-            setNumberBallFrames(sprite.animations[animName]);
-        });
+        result &&
+            loadPixiAnimations(`/static/images/cage/number/${result}.json`, (sprite) => {
+                setNumberBallFrames(sprite.animations[animName]);
+            });
     }, [numberBallFrames.length]);
 
     useEffect(() => {
