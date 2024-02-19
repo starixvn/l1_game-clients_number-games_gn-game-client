@@ -3,45 +3,16 @@ import { Resource, Texture } from "pixi.js";
 import { FC, useContext, useEffect, useState } from "react";
 import { BetOptionData } from "../../_shared/constants";
 import { loadPixiAnimations } from "../../_shared/helpers/pixi-resource-loader";
-import { useGameStateContext, useGameStatesDispatch } from "../../_shared/react-contexts/game-state-context/game-state-context";
+import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
 import { GameContext, useGameActionContext } from "../../_shared/react-contexts";
 import { GameState } from "../../components/game-base/type";
 import PercentageCircle from "../../components/game-components/percentage-circle";
 import Style from "./bac-ball.module.scss";
-import { BacBallChoice } from "./types";
-import { GameEventActionType } from "../../_shared/react-contexts/game-state-context/game-event-action";
 
-export type BettingBlockProps = {};
-
-const betData: BetOptionData[] = [
-    {
-        betChoice: "Player",
-        odds: 1.97,
-        players: 37,
-        percent: 55,
-    },
-    {
-        betChoice: "Banker",
-        odds: 1.97,
-        players: 15,
-        percent: 35,
-    },
-    {
-        betChoice: "Tie",
-        odds: 1.97,
-        players: 7,
-        percent: 10,
-    },
-];
-
-export const BacBallBettingBlockFC: FC<BettingBlockProps> = (props) => {
+export const BacBallBettingBlockFC: FC = () => {
     const [winningPlayerFrames, setWinningPlayerFrames] = useState<Texture<Resource>[]>([]);
     const [winningTieFrames, setWinningTieFrames] = useState<Texture<Resource>[]>([]);
-    const [totalBets, setTotalBets] = useState<BacBallChoice>({ player: 0, banker: 0, tie: 0 });
-    const [odds, setOdds] = useState<BacBallChoice>({ player: 0, banker: 0, tie: 0 });
-    const [percentageBets, setPercentageBets] = useState<BacBallChoice>({ player: 0, banker: 0, tie: 0 });
     const gameContext = useContext(GameContext);
-    const dispatch = useGameStatesDispatch();
     const gameActionContext = useGameActionContext();
     const gameStateContextModel = useGameStateContext();
 
@@ -57,74 +28,13 @@ export const BacBallBettingBlockFC: FC<BettingBlockProps> = (props) => {
         }
     }, [winningPlayerFrames.length, winningTieFrames.length]);
 
-    useEffect(() => {
-        let totalBetEventId, oddsEventId, percentageBetId;
-
-        if (gameContext.messageTransmitter) {
-            totalBetEventId = gameContext.messageTransmitter.register("totalBets", handleTotalBet);
-            oddsEventId = gameContext.messageTransmitter.register("odds", handleOdds);
-            percentageBetId = gameContext.messageTransmitter.register("totalBets", handlePercentageBets);
-        }
-
-        return () => {
-            gameContext.messageTransmitter.unsubscribe(totalBetEventId);
-            gameContext.messageTransmitter.unsubscribe(oddsEventId);
-            gameContext.messageTransmitter.unsubscribe(percentageBetId);
-        };
-    });
-
-    const handleTotalBet = ({ totalBets }) => {
-        dispatch({
-            type: GameEventActionType.TOTAL_BET,
-            payload: {
-                totalBets,
-            },
-        });
-        setTotalBets(totalBets);
+    const onClickBet = (choice) => {
+        gameActionContext.placeBet(choice, 1);
     };
 
-    const handleOdds = ({ odds }) => {
-        const { values } = odds;
-        const { gameConfigs } = gameStateContextModel;
-        const { minBet, maxBet, maxBetPerChoices, enableFreeBet } = gameConfigs;
-        const newGameConfigs = {
-            odds: values,
-            minBet: minBet,
-            maxBet: maxBet,
-            maxBetPerChoices: maxBetPerChoices,
-            enableFreeBet: enableFreeBet,
-        };
-
-        dispatch({
-            type: GameEventActionType.ODDS,
-            payload: {
-                gameConfigs: { ...newGameConfigs },
-            },
-        });
-
-        setOdds(odds);
-    };
-
-    const handlePercentageBets = ({ totalBets }) => {
-        setPercentageBets(totalBets);
-    };
-
-    const onClickPlayer = () => {
-        gameActionContext.placeBet(betData[0].betChoice, 1);
-        console.log("onClickPlayer");
-    };
-
-    const onClickBanker = () => {
-        console.log("onClickBanker");
-    };
-    const onClickTie = () => {
-        gameActionContext.placeBet(betData[2].betChoice, 1);
-        console.log("onClickTie");
-    };
-
-    const dataPlayer = betData[0];
-    const dataBanker = betData[1];
-    const dataTie = betData[2];
+    const dataPlayer = { players: 1, betChoice: "player" };
+    const dataBanker = { players: 1, betChoice: "banker" };
+    const dataTie = { players: 1, betChoice: "tie" };
 
     if (winningPlayerFrames.length > 0 && winningTieFrames.length > 0) {
         // waiting for rounduration class
@@ -174,12 +84,17 @@ export const BacBallBettingBlockFC: FC<BettingBlockProps> = (props) => {
                         )}
                     </div>
                 </div>
-                <div className={`${Style["player"]} text-white relative`} onClick={onClickPlayer}>
+                <div
+                    className={`${Style["player"]} text-white relative`}
+                    onClick={() => {
+                        onClickBet("player");
+                    }}
+                >
                     <div className={`flex justify-between pt-5`}>
                         <div className={Style.stake}>
                             <div className={`flex items-center ${Style["total-stakes"]} gap-1`}>
                                 <span id="player-coin-icon" className="icon-coin"></span>
-                                <span id="player-total-stakes">{totalBets["player"]}</span>
+                                <span id="player-total-stakes">{gameStateContextModel?.totalBets["player"]}</span>
                             </div>
                             <div className="flex items-center players gap-1">
                                 <span id="player-user-icon" className="icon-user"></span>
@@ -187,14 +102,14 @@ export const BacBallBettingBlockFC: FC<BettingBlockProps> = (props) => {
                             </div>
                         </div>
                         <div id="player-percent" className={Style.percent}>
-                            <PercentageCircle percentage={percentageBets["player"]} />
+                            <PercentageCircle percentage={50} />
                         </div>
                     </div>
                     <div id="player-bet-name" className={`bet-name text-center ${Style["bet-name"]}`}>
                         {dataPlayer.betChoice}
                     </div>
                     <div id="player-odds" className="bet-odds text-center">
-                        {odds["player"]}
+                        {gameStateContextModel?.gameConfigs?.odds["player"]}
                     </div>
                     <div className={`own-bet ${Style["own-bet"]}`}>
                         <span id="player-own-bet" className="bet-value">
@@ -203,15 +118,20 @@ export const BacBallBettingBlockFC: FC<BettingBlockProps> = (props) => {
                     </div>
                 </div>
 
-                <div className={`${Style["banker"]} text-white relative`} onClick={onClickBanker}>
+                <div
+                    className={`${Style["banker"]} text-white relative`}
+                    onClick={() => {
+                        onClickBet("banker");
+                    }}
+                >
                     <div className={`flex pt-5 justify-between`}>
                         <div id="banker-percent" className={Style.percent}>
-                            <PercentageCircle percentage={percentageBets["banker"]} />
+                            <PercentageCircle percentage={50} />
                         </div>
                         <div className={Style.stake}>
                             <div className={`flex items-center ${Style["total-stakes"]} gap-1`}>
                                 <span id="banker-coin-icon" className="icon-coin"></span>
-                                <span id="banker-total-stakes">{totalBets["banker"]}</span>
+                                <span id="banker-total-stakes">{gameStateContextModel?.totalBets["banker"]}</span>
                             </div>
                             <div className="flex items-center players gap-1 justify-end">
                                 <span id="banker-user-icon" className="icon-user"></span>
@@ -223,7 +143,7 @@ export const BacBallBettingBlockFC: FC<BettingBlockProps> = (props) => {
                         {dataBanker.betChoice}
                     </div>
                     <div id="banker-odds" className="bet-odds text-center">
-                        {odds["banker"]}
+                        {gameStateContextModel?.gameConfigs?.odds["banker"]}
                     </div>
                     <div className={`own-bet ${Style["own-bet"]}`}>
                         <span id="banker-own-bet" className="bet-value">
@@ -232,7 +152,12 @@ export const BacBallBettingBlockFC: FC<BettingBlockProps> = (props) => {
                     </div>
                 </div>
 
-                <div className={`${Style["tie"]} text-white flex flex-col items-center pt-2 relative`} onClick={onClickTie}>
+                <div
+                    className={`${Style["tie"]} text-white flex flex-col items-center pt-2 relative`}
+                    onClick={() => {
+                        onClickBet("tie");
+                    }}
+                >
                     {isShowWinningHighlightTie && (
                         <Stage width={210} height={210} options={{ backgroundAlpha: 0 }}>
                             <Container position={[105, 77]}>
@@ -249,12 +174,12 @@ export const BacBallBettingBlockFC: FC<BettingBlockProps> = (props) => {
                         </Stage>
                     )}
                     <div id="tie-percent" className={Style.percent}>
-                        <PercentageCircle percentage={percentageBets["tie"]} />
+                        <PercentageCircle percentage={50} />
                     </div>
                     <div className={Style.stake}>
                         <div className={`flex items-center ${Style["total-stakes"]} gap-1 justify-center`}>
                             <span id="tie-coin-icon" className="icon-coin"></span>
-                            <span id="tie-total-stakes">{totalBets["tie"]}</span>
+                            <span id="tie-total-stakes">{gameStateContextModel?.totalBets["tie"]}</span>
                         </div>
                         <div className="flex items-center players gap-1 justify-center">
                             <span id="tie-user-icon" className="icon-user"></span>
@@ -265,7 +190,7 @@ export const BacBallBettingBlockFC: FC<BettingBlockProps> = (props) => {
                         {dataTie.betChoice}
                     </div>
                     <div id="tie-odds" className="bet-odds text-center">
-                        {odds["tie"]}
+                        {gameStateContextModel?.gameConfigs?.odds["tie"]}
                     </div>
                     <div className={`own-bet ${Style["own-bet"]}`}>
                         <span id="tie-own-bet" className="bet-value">

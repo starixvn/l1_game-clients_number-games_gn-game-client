@@ -555,7 +555,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     protected sendBetMessage(betChoice: string, amount: number) {
-        this.socket.emit("bet", { betChoices: { [betChoice.toLowerCase()]: amount, tie: amount } });
+        this.socket.emit("bet", { betChoices: { [betChoice.toLowerCase()]: amount } });
     }
 
     setRetryInterval() {

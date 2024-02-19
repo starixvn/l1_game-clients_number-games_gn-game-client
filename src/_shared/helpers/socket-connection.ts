@@ -54,6 +54,9 @@ export function InitSocketIO(
             handleRoundHistory;
         });
 
+        messageTransmitter.register("totalBets", handleTotalBet);
+        messageTransmitter.register("odds", handleOdds);
+
         // this.messageTransmitter.register("finish", this.handleFinish.bind(this));
         // this.messageTransmitter.register("status", this.handleStatus.bind(this));
         // this.messageTransmitter.register("user", this.handleUserData.bind(this));
@@ -70,6 +73,24 @@ export function InitSocketIO(
             type: GameEventActionType.GAME_CONFIGS,
             payload: {
                 gameConfigs,
+            },
+        });
+    };
+
+    const handleTotalBet = ({ totalBets }) => {
+        dispatch({
+            type: GameEventActionType.TOTAL_BET,
+            payload: {
+                totalBets,
+            },
+        });
+    };
+
+    const handleOdds = ({ odds }) => {
+        dispatch({
+            type: GameEventActionType.ODDS,
+            payload: {
+                odds,
             },
         });
     };

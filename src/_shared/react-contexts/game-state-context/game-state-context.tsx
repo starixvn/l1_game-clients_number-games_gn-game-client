@@ -245,7 +245,10 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
         case GameEventActionType.ODDS: {
             return {
                 ...state,
-                gameConfigs,
+                gameConfigs: {
+                    ...state.gameConfigs,
+                    odds: odds,
+                },
             };
         }
 
