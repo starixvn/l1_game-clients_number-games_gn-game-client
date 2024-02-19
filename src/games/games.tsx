@@ -5,7 +5,7 @@ import useSound from "use-sound";
 import { getAppSettings } from "../_shared/app-settings";
 import { StorageHelper, localStorageKeys } from "../_shared/helpers/storage-helper";
 import { SystemContextProvider } from "../_shared/react-contexts";
-import { SocketState, initSocketIO } from "../_shared/helpers";
+import { SocketState } from "../_shared/helpers";
 import {
     GameCategoryConfig,
     GameCategoryKeys,
@@ -114,7 +114,7 @@ export const Games: React.FC<Props> = ({
     updateQueryGames,
     openGameId,
     openGameName,
-    fractionalOddsFormat,
+    fractionalOddsFormat
 }) => {
     const [playPlaceBetSound] = useSound("./static/sounds/place-bet.mp3");
     const urlHashtag = window.location.hash.replace("#", "").split("_");
@@ -124,7 +124,6 @@ export const Games: React.FC<Props> = ({
     const winningStreakRef = useRef(null);
     const { theme } = useTheme();
     location.hash = `#${getCategoryHashTag(queryCategory, selectedPage)}`;
-    // const socketGatewayRef = useRef<Socket>(null);
     const [socketState, setSocketState] = useState<SocketState>(SocketState.None);
     const [isJoinedGame, setIsJoinedGame] = useState(false);
 
@@ -162,9 +161,6 @@ export const Games: React.FC<Props> = ({
             theme,
             userStakeLevel,
             updateUserStakeLevel,
-            // socketGateway: socketGatewayRef.current,
-            socketGatewayState: socketState,
-            retryConnectSocket: connectSocket,
             registerGlobalMessageEvent: registerGlobalMessageEvent,
             unsubscribeGlobalMessageEvent: unsubscribeGlobalMessageEvent,
             finishJoinGame: () => setIsJoinedGame(true),
@@ -197,42 +193,10 @@ export const Games: React.FC<Props> = ({
         history.pushState(null, "", `#${getCategoryHashTag(category, pageIndex)}`);
     };
 
-    const connectSocket = (gameName: string) => {
-        const socket = initSocketIO({
-            namespace: "bacball",
-            path: "bacball/socket.io",
-        });
-
-        if (socket) {
-            socket.on("connect", () => {
-                setSocketState(SocketState.Connected);
-            });
-
-            socket.on("connect_error", () => {
-                setSocketState(SocketState.Error);
-            });
-            socket.on("disconnect", (reason) => {
-                setSocketState(SocketState.Disconnected);
-                console.log(reason);
-            });
-
-            socket.on("message", (message) => {
-                GlobalMessageTransmitter.broadcast(message);
-            });
-        }
-    };
 
     useEffect(() => {
         setIsJoinedGame(false);
     }, [openGameId, isJoinGame]);
-
-    useEffect(() => {
-        connectSocket(openGameName);
-
-        return () => {
-            // socketGatewayRef.current.close();
-        };
-    }, []);
 
     useEffect(() => {
         window.scrollTo(0, 0);

@@ -1,40 +1,54 @@
-import { Resource, Texture } from "pixi.js";
+import { Assets, Resource, Spritesheet, Texture } from "pixi.js";
 import Ball from "../../components/game-components/ball";
 import Cage, { BallColor, CageColor } from "../../components/game-components/cage";
 import Style from "./bac-ball.module.scss";
 import { IBallColor } from "../../components/game-base/type";
-import { FC, useContext, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
+import { MessageTransmitterType } from "../../_shared/helpers/message-transmitter/type";
 import { loadPixiAnimations } from "../../_shared/helpers/pixi-resource-loader";
-import { GameContext } from "../../_shared/react-contexts";
+import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
 import { BacBallResult } from "./types";
 
-export const BacBallResultBlock: FC = () => {
+export type ResultBlockProps = {
+    messageTransmitter: MessageTransmitterType;
+};
+
+export const BacBallResultBlockFC: FC<ResultBlockProps> = (props) => {
     const [cageBallFrames, setCageBallFrames] = useState<IBallColor>({ blue: [], red: [] });
     const [cageBallsLoopFrames, setCageBallsLoopFrames] = useState<Texture<Resource>[]>([]);
-    const gameContext = useContext(GameContext);
+    const gameStateContextModel = useGameStateContext();
 
     useEffect(() => {
-        loadPixiAnimations("/static/images/cage/ball.json", (sprite) => {
-            const blueFrames = sprite.animations["blue"];
-            const redFrames = sprite.animations["red"];
-            setCageBallFrames({ blue: blueFrames, red: redFrames });
-        });
+        if (cageBallFrames.blue.length === 0 && cageBallFrames.red.length === 0) {
+            loadPixiAnimations("/static/images/cage/ball.json", (sprite) => {
+                const blueFrames = sprite.animations["blue"];
+                const redFrames = sprite.animations["red"];
+                setCageBallFrames({ blue: blueFrames, red: redFrames });
+            });
+        }
     }, [cageBallFrames.blue.length, cageBallFrames.red.length]);
 
     useEffect(() => {
-        loadPixiAnimations("/static/images/cage/cage-balls.json", (sprite) => {
-            setCageBallsLoopFrames(sprite.animations["loop"]);
-        });
+        if (cageBallsLoopFrames.length === 0) {
+            loadPixiAnimations("/static/images/cage/cage-balls.json", (sprite) => {
+                setCageBallsLoopFrames(sprite.animations["loop"]);
+            });
+        }
     }, [cageBallsLoopFrames.length]);
 
     // waiting for rounduration class
-    const gameResult = gameContext.result;
+    // const parentState = props.getGameState();
 
-    if (!gameResult || cageBallsLoopFrames?.length === 0 || cageBallFrames?.blue?.length === 0 || cageBallFrames?.red?.length === 0) {
+    if (
+        !gameStateContextModel.result ||
+        cageBallsLoopFrames?.length === 0 ||
+        cageBallFrames?.blue?.length === 0 ||
+        cageBallFrames?.red?.length === 0
+    ) {
         return <></>;
     }
 
-    const { player, banker } = gameResult as BacBallResult;
+    const { player, banker } = gameStateContextModel.result;
 
     return (
         <div className={Style["result-container"]}>
@@ -47,7 +61,7 @@ export const BacBallResultBlock: FC = () => {
                         ballColor={BallColor.Blue}
                         isSmall={true}
                         result={player}
-                        isShowResult={gameContext.playResultAnimation}
+                        isShowResult={gameStateContextModel.playResultAnimation}
                     />
                 </div>
                 <div className={Style["ball-container"]}>
@@ -72,7 +86,7 @@ export const BacBallResultBlock: FC = () => {
                         ballColor={BallColor.Red}
                         isSmall={true}
                         result={banker}
-                        isShowResult={gameContext.playResultAnimation}
+                        isShowResult={gameStateContextModel.playResultAnimation}
                         delayShowResultTime={1000}
                     />
                 </div>

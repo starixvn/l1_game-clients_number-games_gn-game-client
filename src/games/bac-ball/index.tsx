@@ -1,14 +1,18 @@
 import { withTranslation } from "next-i18next";
 import { withRouter } from "next/router";
-import React from "react";
+import React, { FC, useReducer } from "react";
 import GameBase from "../../components/game-base/";
-import { GameBaseProps, GameBaseState, GatewayGameBaseProps } from "../../components/game-base/type";
+import { GameBaseProps, GameBaseState } from "../../components/game-base/type";
 import CountdownTimer from "../../components/game-components/countdown-timer/countdown-timer";
 import RoundResult from "../../components/game-components/round-result";
 import { BacBallResult, BacBallSettlementResult } from "./types";
-import { BacBallResultBlock } from "./bac-ball-result-block";
-import { BacBallBettingBlock } from "./bac-ball-betting-block";
+import { BacBallResultBlockFC } from "./bac-ball-result-block";
+import { BacBallBettingBlockFC } from "./bac-ball-betting-block";
 import { StatisticFollowPercent } from "../../components/game-components/statistic";
+import { GameStateProvider, useGameStateContext, useGameStatesDispatch } from "../../_shared/react-contexts/game-state-context/game-state-context";
+import { useDetermineGameState, useGetStateByNextGameState } from "../../_shared/react-hooks/use-determine-game-state";
+import { useTimeCounter } from "../../_shared/react-hooks/use-time-counter";
+import { Result } from "./bac-ball";
 
 const statisticData = [
     {
@@ -40,12 +44,12 @@ export const StatisticRuleEntries = Object.entries({
     [Choices.tie]: (countResult: object, total: number) =>
         countResult[Choices.tie] ? Math.round((countResult[Choices.tie] * 100) / total) : 0,
 });
+class BacBall extends GameBase<GameBaseProps> {
+    constructor(props: GameBaseProps) {
 
-class BacBall extends GameBase<GameBaseProps, GameBaseState<BacBallResult, BacBallSettlementResult>> {
-    constructor(props: GatewayGameBaseProps) {
         super(props);
-
-        this.state = { ...this.defaultState };
+        // console.log(`props: ${JSON.stringify(props)}`);
+        // this.props.gameStateContextModel = { ...this.defaultState };
     }
 
     componentDidMount() {
@@ -53,30 +57,29 @@ class BacBall extends GameBase<GameBaseProps, GameBaseState<BacBallResult, BacBa
     }
 
     renderHeaderBlock() {
-        const { gameState } = this.state;
-
+        const { roundId } = this.props.gameStateContextModel;
         return (
             <>
                 <div id="round-id" className="round-id">
-                    #{this.state.roundId}
+                    #{roundId}
                 </div>
                 <div id="countdown-timer" className="countdown-timer">
-                    <CountdownTimer key={gameState} />
+                    <CountdownTimer />
                 </div>
             </>
         );
     }
 
     renderResultBlock() {
-        return <BacBallResultBlock />;
+        return <BacBallResultBlockFC messageTransmitter={this.messageTransmitter} />;
     }
 
     renderBettingBlock() {
-        return <BacBallBettingBlock />;
+        return <BacBallBettingBlockFC />;
     }
 
     renderScoreboards() {
-        return <RoundResult roundHistory={this.state.roundHistory} statisticData={statisticData} />;
+        return <RoundResult roundHistory={this.props.gameStateContextModel.roundHistory} statisticData={statisticData} />;
         // return (
         //     <StatisticFollowPercent
         //         roundHistory={this.state.roundHistory}
@@ -86,4 +89,38 @@ class BacBall extends GameBase<GameBaseProps, GameBaseState<BacBallResult, BacBa
     }
 }
 
-export default withRouter(withTranslation()(BacBall));
+const BacBallWrapper = props => {
+    const defaultResult: Result = {
+        player: 0,
+        banker: 0,
+        drawId: 0
+    }
+
+    const defaultSettlementResult = {
+        banker: true,
+        drawId: 0,
+        player: false,
+        tie: false
+    }
+    return (
+        <GameStateProvider defaultResult={defaultResult} defaultSettlementResult={defaultSettlementResult}>
+            <BacBallFC {...props} />
+        </GameStateProvider>
+    );
+};
+
+const BacBallFC = props => {
+    return (
+        <BacBall {...props}
+            {...{
+                dispatch: useGameStatesDispatch(),
+                gameStateContextModel: useGameStateContext(),
+                determineGameState: useDetermineGameState,
+                getTimeCounter: useTimeCounter,
+                getStateByNextGameState: useGetStateByNextGameState
+            }} />
+    );
+};
+
+
+export default withRouter(BacBallWrapper);

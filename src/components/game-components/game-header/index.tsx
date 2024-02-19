@@ -19,7 +19,7 @@ export type GameHeaderProps = {
 export const GameHeader: React.FunctionComponent<GameHeaderProps> = ({ isShowCollapse, isUpdateDisableRebet, countdownTimerComponent }) => {
     const { roundId, gameSetting, viewMode, gameState } = useGameContext();
     const { favoriteGames, setFavorite } = useSystemContext();
-    const { updateViewMode, updateStatusShowResult } = useGameActionContext();
+    const { updateViewMode, renderResultCollapse, updateStatusShowResult } = useGameActionContext();
 
     const { id: gameId, gameName } = gameSetting;
     const [isFavorite, updateFavorite] = useState<boolean>(favoriteGames.includes(gameId));
@@ -78,7 +78,7 @@ export const GameHeader: React.FunctionComponent<GameHeaderProps> = ({ isShowCol
                 </div>
                 {!showCollapseResult && countdownTimerComponent}
                 <HeaderRight isUpdateDisableRebet={isUpdateDisableRebet} />
-                {/* {showCollapseResult && <div className={Styles["header-result"]}>{renderResultCollapse()}</div>} */}
+                {showCollapseResult && <div className={Styles["header-result"]}>{renderResultCollapse()}</div>}
             </div>
         );
     }, [gameState, roundId, viewMode, isFavorite]);

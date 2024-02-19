@@ -24,6 +24,7 @@ class SabaNumberApp extends App<AppProps> {
 }
 
 export const AppTilte = () => {
+
     return (
         <Head>
             <title>New Number Game</title>

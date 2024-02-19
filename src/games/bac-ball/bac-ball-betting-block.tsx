@@ -3,11 +3,16 @@ import { Resource, Texture } from "pixi.js";
 import { FC, useContext, useEffect, useState } from "react";
 import { BetOptionData } from "../../_shared/constants";
 import { loadPixiAnimations } from "../../_shared/helpers/pixi-resource-loader";
+import { useGameStateContext, useGameStatesDispatch } from "../../_shared/react-contexts/game-state-context/game-state-context";
 import { GameContext, useGameActionContext } from "../../_shared/react-contexts";
 import { GameState } from "../../components/game-base/type";
 import PercentageCircle from "../../components/game-components/percentage-circle";
 import Style from "./bac-ball.module.scss";
 import { BacBallChoice } from "./types";
+import { SocketEventActionTypes } from "../../_shared/react-contexts/game-state-context/socket-event-action";
+
+export type BettingBlockProps = {
+};
 
 const betData: BetOptionData[] = [
     {
@@ -30,42 +35,75 @@ const betData: BetOptionData[] = [
     },
 ];
 
-export const BacBallBettingBlock: FC = () => {
+export const BacBallBettingBlockFC: FC<BettingBlockProps> = (props) => {
     const [winningPlayerFrames, setWinningPlayerFrames] = useState<Texture<Resource>[]>([]);
     const [winningTieFrames, setWinningTieFrames] = useState<Texture<Resource>[]>([]);
     const [totalBets, setTotalBets] = useState<BacBallChoice>({ player: 0, banker: 0, tie: 0 });
     const [odds, setOdds] = useState<BacBallChoice>({ player: 0, banker: 0, tie: 0 });
     const [percentageBets, setPercentageBets] = useState<BacBallChoice>({ player: 0, banker: 0, tie: 0 });
     const gameContext = useContext(GameContext);
+    const dispatch = useGameStatesDispatch();
     const gameActionContext = useGameActionContext();
+    const gameStateContextModel = useGameStateContext();
 
     useEffect(() => {
-        loadPixiAnimations("/static/images/bac-number/highlight-winning-player.json", (sprite) => {
-            setWinningPlayerFrames(sprite.animations["highlight-winning-player"]);
-        });
+        if (winningPlayerFrames.length === 0) {
+            loadPixiAnimations("/static/images/bac-number/highlight-winning-player.json", (sprite) => {
+                setWinningPlayerFrames(sprite.animations["highlight-winning-player"]);
+            });
+        }
     }, [winningPlayerFrames.length]);
 
     useEffect(() => {
-        loadPixiAnimations("/static/images/bac-number/highlight-winning-tie.json", (sprite) => {
-            setWinningTieFrames(sprite.animations["highlight-winning-tie"]);
-        });
+        if (winningTieFrames.length === 0) {
+            loadPixiAnimations("/static/images/bac-number/highlight-winning-tie.json", (sprite) => {
+                setWinningTieFrames(sprite.animations["highlight-winning-tie"]);
+            });
+        }
     }, [winningTieFrames.length]);
 
     const handleTotalBet = ({ totalBets }) => {
+        dispatch({
+            type: SocketEventActionTypes.TOTAL_BET,
+            payload: {
+                totalBets
+            }
+        });
         setTotalBets(totalBets);
     };
 
     const handleOdds = ({ odds }) => {
+        const { values } = odds;
+        const { gameConfigs } = gameStateContextModel;
+        const { minBet, maxBet, maxBetPerChoices, enableFreeBet } = gameConfigs;
+        const newGameConfigs = {
+            odds: values,
+            minBet: minBet,
+            maxBet: maxBet,
+            maxBetPerChoices: maxBetPerChoices,
+            enableFreeBet: enableFreeBet,
+        };
+
+        dispatch({
+            type: SocketEventActionTypes.ODDS,
+            payload: {
+                gameConfigs: { ...newGameConfigs }
+            },
+        });
+
+
         setOdds(odds);
-    };
+    }
 
     const handlePercentageBets = ({ totalBets }) => {
         setPercentageBets(totalBets);
     };
 
-    gameContext.messageTransmitter.register("totalBets", handleTotalBet);
-    gameContext.messageTransmitter.register("odds", handleOdds);
-    gameContext.messageTransmitter.register("totalBets", handlePercentageBets);
+    if (gameContext.messageTransmitter) {
+        gameContext.messageTransmitter.register("totalBets", handleTotalBet);
+        gameContext.messageTransmitter.register("odds", handleOdds);
+        gameContext.messageTransmitter.register("totalBets", handlePercentageBets);
+    }
 
     const onClickPlayer = () => {
         gameActionContext.placeBet(betData[0].betChoice, 1);
@@ -86,11 +124,9 @@ export const BacBallBettingBlock: FC = () => {
 
     if (winningPlayerFrames.length > 0 && winningTieFrames.length > 0) {
         // waiting for rounduration class
-        const roundState = gameContext.gameState;
-        const settlementResult = gameContext.settlementResult;
-        const isShowWinningHighlightPlayer = roundState === GameState.DisplayResult && settlementResult["player"];
-        const isShowWinningHighlightBanker = roundState === GameState.DisplayResult && settlementResult["banker"];
-        const isShowWinningHighlightTie = roundState === GameState.DisplayResult && settlementResult["tie"];
+        const isShowWinningHighlightPlayer = gameContext.gameState === GameState.DisplayResult && gameStateContextModel?.settlementResult?.player;
+        const isShowWinningHighlightBanker = gameContext.gameState === GameState.DisplayResult && gameStateContextModel?.settlementResult?.banker;
+        const isShowWinningHighlightTie = gameContext.gameState === GameState.DisplayResult && gameStateContextModel?.settlementResult?.tie;
 
         return (
             <div className={`${Style["betting-zone"]}`}>

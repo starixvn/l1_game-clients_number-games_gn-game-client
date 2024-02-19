@@ -155,7 +155,7 @@ class Dashboard extends React.PureComponent<Props, State> {
     }
 
     async componentDidMount() {
-        console.log("componentDidMount");
+        // console.log("componentDidMount");
         const { session, i18n, directMode } = this.props;
         const authorizeResponse = await authorize(session);
 

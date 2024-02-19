@@ -12,8 +12,7 @@ export type GameContextModel = {
     viewMode: ViewMode;
     playResultAnimation: boolean;
     isShowBlink: boolean;
+    supportMD5: boolean;
     rate: number;
     messageTransmitter: MessageTransmitterType;
-    result: object;
-    settlementResult: object;
 };

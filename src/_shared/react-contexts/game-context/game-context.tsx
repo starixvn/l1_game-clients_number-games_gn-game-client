@@ -15,10 +15,9 @@ export const GameContext = React.createContext<GameContextModel>({
     viewMode: ViewMode.full,
     playResultAnimation: false,
     isShowBlink: false,
+    supportMD5: false,
     rate: 1,
     messageTransmitter: null,
-    result: null,
-    settlementResult: null,
 });
 GameContext.displayName = "GameContext";
 

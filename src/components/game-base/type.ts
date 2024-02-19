@@ -4,6 +4,7 @@ import { Socket } from "socket.io-client";
 
 import { SocketState } from "../../_shared/helpers";
 import { Resource, Texture } from "pixi.js";
+import { GameStateContextModel } from "../../_shared/react-contexts/game-state-context/game-state-context-model";
 
 export interface GameConfigs {
     odds: { [key: string]: number };
@@ -36,12 +37,6 @@ export interface GameSettings {
     durations: GameDurations;
 }
 
-export type GatewayGameBaseProps = {
-    socketGateway: Socket;
-    socketGatewayState: SocketState;
-    retryConnectSocket: () => void;
-} & GameBaseProps;
-
 export type GameBaseProps = {
     id: number;
     gameName: string;
@@ -51,14 +46,19 @@ export type GameBaseProps = {
     playPlaceBetSound: Function;
     viewMode: ViewMode;
     setApiErrorMessage: Function;
+    supportMD5?: boolean;
     userStakeLevel: UserStakeLevel;
     updateUserStakeLevel: Function;
     registerGlobalMessageEvent: Function;
     unsubscribeGlobalMessageEvent: Function;
     finishJoinGame: Function;
     isJoinedGame: boolean;
-} & WithTranslation &
-    WithRouterProps;
+    dispatch: Function;
+    gameStateContextModel: GameStateContextModel<{}, {}>;
+    determineGameState: Function;
+    getTimeCounter: Function;
+    getStateByNextGameState: Function;
+} & WithRouterProps;
 export interface GameBaseState<Result, SettlementResult> {
     signedIn: boolean;
     gameState: GameState;

@@ -2,25 +2,22 @@ import React from "react";
 import Auth from "sc-user-service-client/dist/auth";
 import { Socket } from "socket.io-client";
 import { v4 as uuidv4 } from "uuid";
-import { LanguageLocaleMapper } from "../../_shared/constants";
-import { initSocketIO } from "../../_shared/helpers";
-import MessageTransmitter from "../../_shared/helpers/message-transmitter";
+import { InitSocketIO } from "../../_shared/helpers";
 import { MessageTransmitterType } from "../../_shared/helpers/message-transmitter/type";
 import { GetLocalizedErrorMessage } from "../../_shared/helpers/notice-helper";
 import { AuthContext, GameActionsContextProvider, GameContextProvider } from "../../_shared/react-contexts";
-import { CommonResourceKeys, GameResourceKeys } from "../../_shared/resources";
+import { GameResourceKeys } from "../../_shared/resources";
 import DisabledModal from "../game-components/disabled-modal";
 import { ConnectFailedMessage } from "../game-components/error-message";
 import { ConnectFailedReasonKey } from "../game-components/error-message/type";
 import GameContainer from "../game-components/game-container";
 import GameLoading from "../game-components/game-loading";
 import { Notice } from "../game-components/notice";
-import { Boundary, GameBaseProps, GameBaseState, GameState, PopupType, Position, ViewMode } from "./type";
+import { Boundary, GameBaseProps, GameState, PopupType, Position, ViewMode } from "./type";
+import { SocketEventActionTypes } from "../../_shared/react-contexts/game-state-context/socket-event-action";
 
-abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, any>> extends React.PureComponent<P, S> {
+abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
     private readonly animationTime = 3000;
-    private readonly gameBaseContainerRef = React.createRef<HTMLDivElement>();
-    protected betWin: number;
     protected isUMInFirstLoad = false;
     protected showResultInfoTimeout: NodeJS.Timeout;
     protected showWinningAnimationTimeout: NodeJS.Timeout;
@@ -40,36 +37,9 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
     private userStakeLevelListener: string;
     private disconnectTimeout: NodeJS.Timeout;
 
-    private readonly defaultGameConfig = { odds: {}, minBet: 0, maxBet: 0, maxBetPerChoices: {}, enableFreeBet: false };
-    protected readonly defaultState = {
-        signedIn: false,
-        gameState: GameState.None,
-        roundRemainingTime: 0,
-        remainingTime: 0,
-        gameConfigs: { ...this.defaultGameConfig },
-        roundHistory: [],
-        roundId: 0,
-        drawId: 0,
-        ownBets: {},
-        displayPopup: null,
-        viewMode: this.props.viewMode,
-        showResultInfo: false,
-        acceptedBetQueue: {},
-        showWinningAnimation: false,
-        playResultAnimation: false,
-        isShowBlink: false,
-        notice: null,
-        removeBetChoiceFocus: null,
-        betOptionElement: null,
-        betChoiceElement: null,
-        activeScoreboardTab: 0,
-        rate: 1,
-        disconnectReason: "",
-    };
-
     constructor(props: P) {
         super(props);
-        this.messageTransmitter = MessageTransmitter();
+
         this.openPopup = this.openPopup.bind(this);
         this.placeBet = this.placeBet.bind(this);
         this.openPlaceBetModal = this.openPlaceBetModal.bind(this);
@@ -80,7 +50,6 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
     }
 
     componentDidMount() {
-        this.registerMessageHandler();
         document.addEventListener("visibilitychange", this.onVisibilityChange);
         this.onStart();
     }
@@ -92,7 +61,14 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
     }
 
     onDestroy() {
-        this.setState({ gameState: GameState.None, signedIn: false });
+        this.props.dispatch({
+            type: SocketEventActionTypes.SIGN_IN,
+            payload: {
+                gameState: GameState.None,
+                signedIn: false
+            },
+        });
+
         this.props.unsubscribeGlobalMessageEvent(this.playPermissionListener);
         this.props.unsubscribeGlobalMessageEvent(this.userStakeLevelListener);
         this.interval && clearInterval(this.interval);
@@ -108,33 +84,42 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
 
         this.isConnectFailed = false;
         this.isProcessingBet = false;
+
         this.playPermissionListener = registerGlobalMessageEvent("notPermittedToPlay", this.handleRestrictPermission.bind(this));
         this.userStakeLevelListener = registerGlobalMessageEvent("userStakeLevel", ({ userStakeLevel }) =>
             this.props.updateUserStakeLevel(userStakeLevel)
         );
+
         this.clearDisconnectTimeout();
-        this.socket = this.createGameSocket();
-        this.socket && this.socket.off(this.props.gameName).on(this.props.gameName, this.messageTransmitter.broadcast.bind(this));
+        const { socket, messageTransmitter } = this.createGameSocket();
+        this.socket = socket;
+        this.messageTransmitter = messageTransmitter;
     }
 
     protected createGameSocket() {
-        const socket = initSocketIO(this.props.socketInfo);
         const { session } = this.context as any;
+
+        const { socket, messageTransmitter } = InitSocketIO(
+            this.props.socketInfo,
+            session,
+            this.props.dispatch,
+            this.clearDisconnectTimeout,
+            this.props.gameName,
+            this.isUMInFirstLoad,
+            this.defaultResult,
+            this.defaultSettlementResult,
+            this.props.gameStateContextModel);
+
+
         socket.on("connect", () => {
             this.clearDisconnectTimeout();
-            document.visibilityState !== "hidden" && socket.emit("signin", session);
-        });
-        socket.on("signedIn", () => {
-            this.clearDisconnectTimeout();
-            this.setState({ signedIn: true });
-            this.socket.emit("inGame");
-        });
-        socket.on("connect_error", this.onConnectFailed.bind(this));
-        socket.on("disconnect", () => {
-            this.setState({ gameState: GameState.None, disconnectReason: ConnectFailedReasonKey.lostConnection });
+            this.registerMessageHandler();
+            // document.visibilityState !== "hidden" && socket.emit("signin", session);
         });
 
-        return socket;
+        socket.on("connect_error", this.onConnectFailed.bind(this));
+
+        return { socket, messageTransmitter };
     }
 
     onVisibilityChange = () => {
@@ -144,15 +129,20 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
 
     onConnectFailed() {
         this.onDestroy();
-        this.setState({ gameState: GameState.ConnectFailed, signedIn: false, disconnectReason: ConnectFailedReasonKey.lostConnection });
+        this.props.dispatch({
+            type: SocketEventActionTypes.ERROR_CODE,
+            payload: {
+                disconnectReason: ConnectFailedReasonKey.lostConnection
+            },
+        });
     }
 
     registerMessageHandler() {
-        this.messageTransmitter.register("signedIn", this.handleSignedIn.bind(this));
+        // this.messageTransmitter.register("signedIn", this.handleSignedIn.bind(this));
         this.messageTransmitter.register("um", this.handleUM.bind(this));
         this.messageTransmitter.register("remainingTime", this.handleRemainingTime.bind(this));
-        this.messageTransmitter.register("gameConfigs", this.handleGameConfigs.bind(this));
-        this.messageTransmitter.register("roundHistory", this.handleRoundHistory.bind(this));
+        // this.messageTransmitter.register("gameConfigs", this.handleGameConfigs.bind(this));
+        // this.messageTransmitter.register("roundHistory", this.handleRoundHistory.bind(this));
         this.messageTransmitter.register("finish", this.handleFinish.bind(this));
         this.messageTransmitter.register("status", this.handleStatus.bind(this));
         this.messageTransmitter.register("user", this.handleUserData.bind(this));
@@ -161,60 +151,40 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
         this.messageTransmitter.register("apiError", this.handleApiError.bind(this));
         this.messageTransmitter.register("errorCode", this.handleError.bind(this));
         this.messageTransmitter.register("userStakeLevel", this.handleUserStakeLevel.bind(this));
-        this.messageTransmitter.register("odds", this.handleOdds.bind(this));
         this.messageTransmitter.register("drawId", this.handleDrawId.bind(this));
     }
 
-    handleOdds({ odds }) {
-        const { values } = odds;
-        const { gameConfigs } = this.state;
-        const { minBet, maxBet, maxBetPerChoices, enableFreeBet } = gameConfigs;
-        const newGameConfigs = {
-            odds: values,
-            minBet: minBet,
-            maxBet: maxBet,
-            maxBetPerChoices: maxBetPerChoices,
-            enableFreeBet: enableFreeBet,
-        };
-
-        this.setState({
-            gameConfigs: { ...newGameConfigs },
-        });
-    }
 
     handleError = ({ errorCode }) => {
         if (errorCode === "SB0010" && document.visibilityState !== "hidden") {
-            const time = this.state.signedIn ? 1000 : 5000;
+            const time = this.props.gameStateContextModel.signedIn ? 1000 : 5000;
             this.disconnectTimeout = setTimeout(() => {
                 this.isConnectFailed = true;
-                this.setState({
-                    gameState: GameState.ConnectFailed,
-                    signedIn: false,
-                    disconnectReason: ConnectFailedReasonKey.lostConnection,
+
+                this.props.dispatch({
+                    type: SocketEventActionTypes.ERROR_CODE,
+                    payload: {
+                        disconnectReason: ConnectFailedReasonKey.lostConnection,
+                    },
                 });
             }, time);
         }
     };
 
-    protected handleSignedIn({ signedIn }) {
-        if (signedIn) {
-            this.clearDisconnectTimeout();
-            this.setState({ signedIn: true });
-            this.socket.emit("inGame", this.props.gameName);
-        }
-    }
-
     handleUserStakeLevel({ userStakeLevel }) {
         this.props.updateUserStakeLevel(userStakeLevel);
 
-        this.setState({ notice: { message: this.props.t(`common:${CommonResourceKeys.USER_STAKE_LEVEL_UPDATE}`), duration: 2 } });
+        this.props.dispatch({
+            type: SocketEventActionTypes.USER_STAKE_LEVEL,
+            payload: {},
+        });
     }
 
     protected handleStatus = ({ status }) => {
-        const { win, bet } = status;
-        if (win) {
-            this.betWin = bet;
-        }
+        this.props.dispatch({
+            type: SocketEventActionTypes.STATUS,
+            payload: { status },
+        });
     };
 
     get winningAnimationWaitingTimeInSecond() {
@@ -235,17 +205,24 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
         this.handleKickOut(errorCode.toString());
 
         const message = GetLocalizedErrorMessage(errorCode, isPlaceBet);
-        const gameName = this.props.t(`${this.props.gameName.toLowerCase()}:${GameResourceKeys.GAME_NAME}`);
+        // const gameName = this.props.t(`${this.props.gameName.toLowerCase()}:${GameResourceKeys.GAME_NAME}`);
+        const gameName = `${this.props.gameName.toLowerCase()}:${GameResourceKeys.GAME_NAME}`;
 
-        this.setState({
-            notice: {
-                gameName: gameName,
-                roundId: apiError?.gameRoundId,
-                message: message,
-                duration: 3,
-                minBet: apiError?.minBet,
-                maxBet: apiError?.maxBet,
-                errorCode: errorCode,
+
+        const { displayPopup } = this.props.gameStateContextModel;
+
+        displayPopup !== PopupType.Rebet && this.props.dispatch({
+            type: SocketEventActionTypes.DISPLAY_POPUP,
+            payload: {
+                notice: {
+                    gameName: gameName,
+                    roundId: apiError?.gameRoundId,
+                    message: message,
+                    duration: 3,
+                    minBet: apiError?.minBet,
+                    maxBet: apiError?.maxBet,
+                    errorCode: errorCode,
+                },
             },
         });
     };
@@ -258,49 +235,62 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
     }
 
     handleBetFailed = ({ notice, kickedOut }) => {
-        const { i18n } = this.props;
-        this.setState({ notice: null });
-        const gameName = this.props.t(`${this.props.gameName.toLowerCase()}:${GameResourceKeys.GAME_NAME}`);
+        const { displayPopup } = this.props.gameStateContextModel;
+
+        displayPopup !== PopupType.Rebet && this.props.dispatch({
+            type: SocketEventActionTypes.DISPLAY_POPUP,
+            payload: {
+                notice: null
+            },
+        });;
+        const gameName = `${this.props.gameName.toLowerCase()}:${GameResourceKeys.GAME_NAME}`;
         if (kickedOut?.isDisabledAccount) {
-            this.setState({
-                notice: {
-                    gameName: gameName,
-                    message: GetLocalizedErrorMessage(kickedOut.errorCode),
-                    duration: 2,
-                    errorCode: kickedOut.errorCode,
-                    roundId: kickedOut?.gameRoundId,
+            this.props.dispatch({
+                type: SocketEventActionTypes.KICK_OUT,
+                payload: {
+                    notice, kickedOut
                 },
             });
 
+
             const { router } = this.props;
             setTimeout(() => {
-                router.push("/timeout", "/timeout", { locale: i18n.language });
+                // router.push("/timeout", "/timeout", { locale: i18n.language });
+                router.push("/timeout", "/timeout", { locale: "i18n.language" });
             }, 10000);
         } else {
             const isPlaceBet = notice.isPlaceBetFailed ? notice.isPlaceBetFailed : false;
 
-            this.setState({
-                notice: {
-                    gameName: gameName,
-                    message: GetLocalizedErrorMessage(notice.errorCode, isPlaceBet),
-                    duration: 2,
-                    minBet: notice?.minBet,
-                    maxBet: notice?.maxBet,
-                    errorCode: notice.errorCode,
-                    roundId: notice?.gameRoundId,
-                    betChoice1: notice?.hedgeBetGroup ? this.getChoiceNameOnHedgeBetMessage(notice.hedgeBetGroup[0]) : "",
-                    betChoice2: notice?.hedgeBetGroup ? this.getChoiceNameOnHedgeBetMessage(notice.hedgeBetGroup[1]) : "",
+            displayPopup !== PopupType.Rebet && this.props.dispatch({
+                type: SocketEventActionTypes.DISPLAY_POPUP,
+                payload: {
+                    notice: {
+                        gameName: gameName,
+                        message: GetLocalizedErrorMessage(notice.errorCode, isPlaceBet),
+                        duration: 2,
+                        minBet: notice?.minBet,
+                        maxBet: notice?.maxBet,
+                        errorCode: notice.errorCode,
+                        roundId: notice?.gameRoundId,
+                        betChoice1: notice?.hedgeBetGroup ? this.getChoiceNameOnHedgeBetMessage(notice.hedgeBetGroup[0]) : "",
+                        betChoice2: notice?.hedgeBetGroup ? this.getChoiceNameOnHedgeBetMessage(notice.hedgeBetGroup[1]) : "",
+                    }
                 },
             });
+
         }
     };
 
     handleEndBet = ({ endBet, betChoice, notice, kickedOut, apiError }) => {
         const { playPlaceBetSound } = this.props;
-        const { displayPopup, ownBets } = this.state;
+        const { displayPopup, ownBets } = this.props.gameStateContextModel;
         this.isProcessingBet = false;
         this.clearRetryInterval();
-        this.setState({ notice: null });
+        this.props.dispatch({
+            type: SocketEventActionTypes.DISPLAY_POPUP,
+            payload: { notice: null, },
+        });
+
 
         if (endBet === -1) {
             !apiError && this.handleBetFailed({ notice, kickedOut });
@@ -308,13 +298,16 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
             this.playAcceptedBetAnimation(endBet, this.betPosition);
             playPlaceBetSound();
             ownBets[betChoice] = ownBets[betChoice] ? ownBets[betChoice] + endBet : endBet;
-            this.setState({ ownBets: { ...ownBets } });
+            this.props.dispatch({
+                type: SocketEventActionTypes.OWN_BETS,
+                payload: { ownBetsData: { ownBets: { ...ownBets } } },
+            });
             this.updateUserBalance();
         }
     };
 
     playAcceptedBetAnimation(amount: number, betPosition?: Position) {
-        const { acceptedBetQueue } = this.state;
+        const { acceptedBetQueue } = this.props.gameStateContextModel;
         const key = uuidv4();
         acceptedBetQueue[key] = {
             amount,
@@ -322,33 +315,45 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
             betOptionBoundary: this.betOptionBoundary,
         };
 
-        this.setState({ acceptedBetQueue: { ...acceptedBetQueue } });
+        this.props.dispatch({
+            type: SocketEventActionTypes.ACCEPTED_BET_QUEUE,
+            payload: { acceptedBetQueue: { ...acceptedBetQueue } },
+        });
         setTimeout(() => {
             this.removeAcceptedBetQueue(key);
         }, this.animationTime);
     }
 
     removeAcceptedBetQueue(key: number) {
-        const { acceptedBetQueue } = this.state;
+        const { acceptedBetQueue } = this.props.gameStateContextModel;
         delete acceptedBetQueue[key];
-        this.setState({ acceptedBetQueue });
+        this.props.dispatch({
+            type: SocketEventActionTypes.ACCEPTED_BET_QUEUE,
+            payload: { acceptedBetQueue },
+        });
     }
 
     handleOwnBets = ({ ownBets, gameConfigs }) => {
-        gameConfigs && this.setState({ ownBets });
+        gameConfigs && this.props.dispatch({
+            type: SocketEventActionTypes.OWN_BETS,
+            payload: { ownBetsData: { ownBets } },
+        });
     };
 
     handleUserData({ user, gameConfigs }) {
         //this.context.setBalance(user.red);
-        gameConfigs && this.setState({ rate: user.rate });
+        this.props.dispatch({
+            type: SocketEventActionTypes.USER,
+            payload: { userData: { user, gameConfigs } },
+        });
     }
 
     handleRestrictPermission({ notPermittedToPlay, gameId, userStakeLevel }) {
         if (notPermittedToPlay && gameId === this.props.id) {
             this.onDestroy();
-            this.setState({
-                gameState: GameState.ConnectFailed,
-                disconnectReason: ConnectFailedReasonKey.restrictPlayPermission,
+            this.props.dispatch({
+                type: SocketEventActionTypes.ERROR_CODE,
+                payload: { disconnectReason: ConnectFailedReasonKey.restrictPlayPermission, },
             });
         }
         if (userStakeLevel) {
@@ -357,7 +362,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
     }
 
     handleUM({ um, um_message, remainingTime }) {
-        const { durations, i18n } = this.props;
+        const { durations } = this.props;
         if (um && remainingTime && remainingTime + 1 === durations.wholeTurn) {
             this.isUMInFirstLoad = true;
         } else {
@@ -371,26 +376,38 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
             this.interval && clearInterval(this.interval);
             this.showResultInfoTimeout && clearTimeout(this.showResultInfoTimeout);
             this.showWinningAnimationTimeout && clearTimeout(this.showWinningAnimationTimeout);
-            this.setState({
-                gameState: GameState.Disabled,
-                disabledMessage: um_message[LanguageLocaleMapper[i18n.language]],
-                showResultInfo: false,
+            this.props.dispatch({
+                type: SocketEventActionTypes.UM,
+                payload: {
+                    um_message
+                },
             });
         }
     }
 
     handleDrawId = ({ drawId }) => {
-        this.setState({ drawId });
         const numberOfTurnsPerRound = 4;
         const turn = drawId % numberOfTurnsPerRound || numberOfTurnsPerRound;
         this.turn = turn;
+
+        this.props.dispatch({
+            type: SocketEventActionTypes.DRAW_ID,
+            payload: { drawId },
+        });
     };
 
     handleRemainingTime({ remainingTime }) {
-        const { gameState } = this.state;
+        const { gameState } = this.props.gameStateContextModel;
         const { durations } = this.props;
         if (gameState === GameState.None || !this.isUMInFirstLoad) {
-            this.setState({ roundRemainingTime: remainingTime });
+            this.props.dispatch({
+                type: SocketEventActionTypes.REMAINING_TIME,
+                payload: { remainingTime },
+            });
+            this.props.dispatch({
+                type: SocketEventActionTypes.DRAW_ID,
+                payload: { roundRemainingTime: remainingTime },
+            });
             this.roundTimeCounter = remainingTime;
             const turnRemainingTime = remainingTime % durations.wholeTurn;
             this.runGame(turnRemainingTime === 0 ? durations.wholeTurn : turnRemainingTime);
@@ -418,70 +435,27 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
         // console.log(`---------------`);
         // console.log(`roundTimeCounter: ${this.roundTimeCounter}`);
         // console.log(`Turn RemainingTime: ${remainingTime}`);
-        console.log(`Turn : ${this.turn}`);
-        const newGameState = this.determineGameState(remainingTime);
+        // console.log(`Turn : ${this.turn}`);
+        const newGameState = this.props.determineGameState({ remainingTime, durations: this.props.durations });
         // console.log(`GameState: ${GameState[newGameState]}`);
-        if (this.state.gameState !== newGameState && !this.isConnectFailed) {
+        if (this.props.gameStateContextModel.gameState !== newGameState && !this.isConnectFailed) {
             const newState = {
                 gameState: newGameState,
-                ...this.getStateByNextGameState(newGameState),
+                ...this.props.getStateByNextGameState({
+                    nextGameState: newGameState,
+                    gameStateContextModel: this.props.gameStateContextModel,
+                    durations: this.props.durations,
+                    defaultResult: this.defaultResult,
+                    defaultSettlementResult: this.defaultSettlementResult,
+                    remainingTime: this.timeCounter
+                }),
             };
 
-            this.setState(newState);
+            this.props.dispatch({
+                type: SocketEventActionTypes.SET_NEW_STATE,
+                payload: { newState },
+            });
         }
-    }
-
-    getStateByNextGameState(nextGameState: any): any {
-        const { roundId, displayPopup, notice, removeBetChoiceFocus, result, settlementResult } = this.state;
-        const { durations } = this.props;
-        const timeCounter = this.getTimeCounter(this.timeCounter, nextGameState);
-
-        if (nextGameState === GameState.InRound) {
-            this.betWin = 0;
-        }
-
-        if (nextGameState === GameState.LockingBet) {
-            removeBetChoiceFocus && removeBetChoiceFocus();
-        }
-
-        const newStateDetector = [
-            {
-                condition: [GameState.BeforeStartRound, GameState.InRound].includes(nextGameState),
-                state: {
-                    ownBets: {},
-                    totalBets: {},
-                    showWinningAnimation: false,
-                    isShowBlink: false,
-                    playResultAnimation: false,
-                    showResultInfo: false,
-                    showMD5ResultKey: false,
-                },
-            },
-            {
-                condition: durations.beforeStartRound ? nextGameState === GameState.BeforeStartRound : nextGameState === GameState.InRound,
-            },
-            {
-                condition: nextGameState === GameState.LockingBet,
-                state: {
-                    isShowBlink: true,
-                    displayPopup: displayPopup == PopupType.PlaceBet ? null : displayPopup,
-                    notice: displayPopup == PopupType.PlaceBet ? null : notice,
-                    result: this.defaultResult ?? result,
-                    settlementResult: this.defaultSettlementResult ?? settlementResult,
-                },
-            },
-        ];
-
-        return newStateDetector.reduce(
-            (newState, stateDetector) => {
-                if (stateDetector.condition) {
-                    newState = Object.assign(newState, stateDetector.state);
-                }
-
-                return newState;
-            },
-            { remainingTime: timeCounter }
-        );
     }
 
     async updateUserBalance() {
@@ -493,68 +467,16 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
         // }
     }
 
-    handleGameConfigs({ gameConfigs }) {
-        this.setState({ gameConfigs });
-    }
-
-    determineGameState(remainingTime: number): any {
-        const { durations } = this.props;
-        if (remainingTime > durations.wholeTurn) {
-            return GameState.BalancingBet;
-        }
-
-        if (remainingTime >= durations.wholeTurn - durations.showResult) {
-            return GameState.DisplayResult;
-        }
-
-        if (durations.beforeStartRound && remainingTime > durations.placingBets) {
-            return GameState.BeforeStartRound;
-        }
-
-        if (remainingTime <= durations.placingBets && remainingTime > durations.lockingBet) {
-            return GameState.InRound;
-        }
-
-        if (remainingTime <= durations.lockingBet && remainingTime >= 0) {
-            return GameState.LockingBet;
-        }
-
-        return GameState.None;
-    }
-
-    getTimeCounter(remainingTime: number, gameState: GameState) {
-        const { durations } = this.props;
-
-        switch (gameState) {
-            case GameState.InRound:
-            case GameState.LockingBet:
-                return remainingTime;
-            case GameState.BeforeStartRound:
-                return durations.beforeStartRound;
-            default:
-                return 0;
-        }
-    }
-
-    handleRoundHistory({ roundHistory, roundId }) {
-        const { gameState } = this.state;
-
-        this.setState({
-            roundHistory: roundHistory,
-            roundId: [GameState.DisplayResult, GameState.BalancingBet].includes(gameState) || this.isUMInFirstLoad ? roundId - 1 : roundId,
-            result: gameState === GameState.LockingBet ? this.defaultResult : roundHistory[0]?.result,
-            settlementResult: gameState === GameState.LockingBet ? this.defaultSettlementResult : roundHistory[0]?.settlementResult,
-            playResultAnimation: [GameState.DisplayResult].includes(gameState) || this.isUMInFirstLoad ? false : true,
-            showResultInfo: [GameState.DisplayResult].includes(gameState) || this.isUMInFirstLoad ? true : false,
-        });
-    }
-
     getFinishAnimationDuration() {
         return this.props.durations.resultAnimation * 1000;
     }
 
     handleFinish({ finish }) {
-        const { roundHistory } = this.state;
+        this.props.dispatch({
+            type: SocketEventActionTypes.FINISH,
+            payload: {},
+        });
+        const { roundHistory } = this.props.gameStateContextModel;
         const { durations } = this.props;
         const roundHistoryClone = [...roundHistory];
 
@@ -564,47 +486,64 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
         roundHistoryClone.unshift(finish);
         roundHistoryClone.length > 100 && roundHistoryClone.pop();
 
-        this.setState({
-            playResultAnimation: true,
-            result: finish.result,
-            settlementResult: finish.settlementResult,
-            roundId: finish.roundId,
+        this.props.dispatch({
+            type: SocketEventActionTypes.FINISH,
+            payload: {
+                playResultAnimation: true,
+                result: finish.result,
+                settlementResult: finish.settlementResult,
+                roundId: finish.roundId,
+            },
         });
 
         const animationDuration = this.getFinishAnimationDuration();
 
         this.showResultInfoTimeout = setTimeout(() => {
-            this.setState({
-                showResultInfo: true,
-                isShowBlink: false,
-                roundHistory: roundHistoryClone,
-                playResultAnimation: false,
+            this.props.dispatch({
+                type: SocketEventActionTypes.SHOW_RESULT_INFO_TIME_OUT,
+                payload: {
+                    showResultInfo: true,
+                    isShowBlink: false,
+                    roundHistory: roundHistoryClone,
+                    playResultAnimation: false,
+                },
             });
         }, animationDuration);
 
         this.showWinningAnimationTimeout = setTimeout(() => {
-            this.setState({
-                showWinningAnimation: true,
+            this.props.dispatch({
+                type: SocketEventActionTypes.SHOW_WINNING_ANIMATION,
+                payload: {
+                    showWinningAnimation: true,
+                },
             });
-            this.betWin > 0 && this.updateUserBalance();
+
+            this.props.gameStateContextModel.betWin > 0 && this.updateUserBalance();
         }, this.winningAnimationWaitingTimeInSecond);
 
         this.runGame(durations.wholeTurn);
     }
 
     openPlaceBetModal(betChoice: string, removeBetChoiceFocus: Function, betOptionElement: HTMLElement, betChoiceElement: HTMLElement) {
-        this.setState({
-            displayPopup: PopupType.PlaceBet,
-            selectedBetChoice: betChoice,
-            removeBetChoiceFocus,
-            betOptionElement,
-            betChoiceElement,
+        this.props.dispatch({
+            type: SocketEventActionTypes.PLACE_BET_POPUP,
+            payload: {
+                selectedBetChoice: betChoice,
+                removeBetChoiceFocus,
+                betOptionElement,
+                betChoiceElement,
+            },
         });
+
     }
 
     placeBet(betChoice: string, amount: number, betPosition?: Position, betOptionBoundary?: Boundary) {
-        if (this.isProcessingBet) {
-            this.setState({ notice: { message: this.props.t("messages:betProcessing"), duration: 2 } });
+        const { displayPopup } = this.props.gameStateContextModel;
+        if (this.isProcessingBet && displayPopup !== PopupType.Rebet) {
+            this.props.dispatch({
+                type: SocketEventActionTypes.BET_PROCESSING,
+                payload: {},
+            });
         } else {
             if (amount > 0) {
                 this.betPosition = betPosition;
@@ -637,20 +576,32 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
     }
 
     openPopup(popupType: PopupType) {
-        this.setState({ displayPopup: popupType });
+        this.props.dispatch({
+            type: SocketEventActionTypes.OPEN_POPUP,
+            payload: { displayPopup: popupType },
+        });
     }
 
     updateViewMode(mode: ViewMode) {
-        this.setState({ viewMode: mode });
+        this.props.dispatch({
+            type: SocketEventActionTypes.OPEN_POPUP,
+            payload: { viewMode: mode },
+        });
     }
 
     setActiveScoreboardTab = (activeScoreboardTab: number) => {
-        this.setState({ activeScoreboardTab });
+        this.props.dispatch({
+            type: SocketEventActionTypes.ACTIVE_SCORE_BOARD,
+            payload: { activeScoreboardTab },
+        });
     };
 
     updateStatusShowResult = () => {
-        if (this.state.gameState === GameState.DisplayResult) {
-            this.setState({ playResultAnimation: false });
+        if (this.props.gameStateContextModel.gameState === GameState.DisplayResult) {
+            this.props.dispatch({
+                type: SocketEventActionTypes.PLAY_RESULT_ANIMATION,
+                payload: { playResultAnimation: false },
+            });
         }
     };
 
@@ -659,13 +610,12 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
     }
 
     getGameTranslate(key: string) {
-        const { t, gameName } = this.props;
-
-        return t(`${gameName.toLocaleLowerCase()}:${key}`);
+        const { gameName } = this.props;
+        return `${gameName.toLocaleLowerCase()}:${key}`;
     }
 
     renderNotice() {
-        const { gameName, message, roundId, duration, minBet, maxBet, errorCode, isWarning, betChoice1, betChoice2 } = this.state.notice;
+        const { gameName, message, roundId, duration, minBet, maxBet, errorCode, isWarning, betChoice1, betChoice2 } = this.props.gameStateContextModel.notice;
         return (
             <Notice
                 gameName={gameName}
@@ -688,7 +638,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
     }
 
     getOddsByChoice(choice: string) {
-        const { gameConfigs } = this.state;
+        const { gameConfigs } = this.props.gameStateContextModel;
         const odds = gameConfigs.odds;
 
         return odds[choice];
@@ -732,7 +682,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
                 {this.renderHeaderBlock()}
                 {this.renderMenuButtons()}
                 {this.renderResultBlock()}
-                {this.state.notice && this.renderNotice()}
+                {this.props.gameStateContextModel.notice && this.renderNotice()}
                 {this.renderBettingBlock()}
                 {this.renderSlidingChips()}
                 {this.renderStatistic()}
@@ -754,9 +704,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
             playResultAnimation,
             isShowBlink,
             rate,
-            result,
-            settlementResult,
-        } = this.state;
+        } = this.props.gameStateContextModel;
 
         const gameContext = {
             ownBets,
@@ -770,10 +718,9 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
             viewMode,
             playResultAnimation,
             isShowBlink,
+            supportMD5: false,
             rate,
             messageTransmitter: this.messageTransmitter,
-            result,
-            settlementResult,
         };
 
         const gameActionsContext = {
@@ -782,6 +729,10 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
             openPlaceBetModal: this.openPlaceBetModal,
             updateViewMode: this.updateViewMode,
             playAcceptedBetAnimation: this.playAcceptedBetAnimation,
+            finishProcessingBet: () => {
+                this.isProcessingBet = false;
+                this.clearRetryInterval();
+            },
             setActiveScoreboardTab: this.setActiveScoreboardTab,
             updateStatusShowResult: this.updateStatusShowResult,
         };
@@ -798,7 +749,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
     }
 
     render() {
-        const { signedIn, gameState, disabledMessage, viewMode, disconnectReason } = this.state;
+        const { signedIn, gameState, disabledMessage, viewMode, disconnectReason } = this.props.gameStateContextModel;
         return (
             <GameContainer>
                 {signedIn ? this.renderGame() : <GameLoading />}
@@ -813,7 +764,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
                 )}
                 {gameState === GameState.ConnectFailed && (
                     <ConnectFailedMessage
-                        gameName={this.props.t(`${this.props.gameName.toLowerCase()}:${GameResourceKeys.GAME_NAME}`)}
+                        gameName={`${this.props.gameName.toLowerCase()}:${GameResourceKeys.GAME_NAME}`}
                         onSubmit={
                             ConnectFailedReasonKey.restrictPlayPermission === disconnectReason
                                 ? () => window.location.reload()
@@ -830,3 +781,4 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState<any, an
 GameBase.contextType = AuthContext;
 
 export default GameBase;
+
