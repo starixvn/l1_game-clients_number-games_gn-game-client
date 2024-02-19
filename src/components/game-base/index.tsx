@@ -14,7 +14,7 @@ import GameContainer from "../game-components/game-container";
 import GameLoading from "../game-components/game-loading";
 import { Notice } from "../game-components/notice";
 import { Boundary, GameBaseProps, GameState, PopupType, Position, ViewMode } from "./type";
-import { SocketEventActionTypes } from "../../_shared/react-contexts/game-state-context/socket-event-action";
+import { GameEventActionType } from "../../_shared/react-contexts/game-state-context/game-event-action";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
     private readonly animationTime = 3000;
@@ -62,10 +62,10 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
     onDestroy() {
         this.props.dispatch({
-            type: SocketEventActionTypes.SIGN_IN,
+            type: GameEventActionType.SIGN_IN,
             payload: {
                 gameState: GameState.None,
-                signedIn: false
+                signedIn: false,
             },
         });
 
@@ -108,8 +108,8 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             this.isUMInFirstLoad,
             this.defaultResult,
             this.defaultSettlementResult,
-            this.props.gameStateContextModel);
-
+            this.props.gameStateContextModel
+        );
 
         socket.on("connect", () => {
             this.clearDisconnectTimeout();
@@ -130,9 +130,9 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     onConnectFailed() {
         this.onDestroy();
         this.props.dispatch({
-            type: SocketEventActionTypes.ERROR_CODE,
+            type: GameEventActionType.ERROR_CODE,
             payload: {
-                disconnectReason: ConnectFailedReasonKey.lostConnection
+                disconnectReason: ConnectFailedReasonKey.lostConnection,
             },
         });
     }
@@ -154,7 +154,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.messageTransmitter.register("drawId", this.handleDrawId.bind(this));
     }
 
-
     handleError = ({ errorCode }) => {
         if (errorCode === "SB0010" && document.visibilityState !== "hidden") {
             const time = this.props.gameStateContextModel.signedIn ? 1000 : 5000;
@@ -162,7 +161,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 this.isConnectFailed = true;
 
                 this.props.dispatch({
-                    type: SocketEventActionTypes.ERROR_CODE,
+                    type: GameEventActionType.ERROR_CODE,
                     payload: {
                         disconnectReason: ConnectFailedReasonKey.lostConnection,
                     },
@@ -175,14 +174,14 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.props.updateUserStakeLevel(userStakeLevel);
 
         this.props.dispatch({
-            type: SocketEventActionTypes.USER_STAKE_LEVEL,
+            type: GameEventActionType.USER_STAKE_LEVEL,
             payload: {},
         });
     }
 
     protected handleStatus = ({ status }) => {
         this.props.dispatch({
-            type: SocketEventActionTypes.STATUS,
+            type: GameEventActionType.STATUS,
             payload: { status },
         });
     };
@@ -208,23 +207,23 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         // const gameName = this.props.t(`${this.props.gameName.toLowerCase()}:${GameResourceKeys.GAME_NAME}`);
         const gameName = `${this.props.gameName.toLowerCase()}:${GameResourceKeys.GAME_NAME}`;
 
-
         const { displayPopup } = this.props.gameStateContextModel;
 
-        displayPopup !== PopupType.Rebet && this.props.dispatch({
-            type: SocketEventActionTypes.DISPLAY_POPUP,
-            payload: {
-                notice: {
-                    gameName: gameName,
-                    roundId: apiError?.gameRoundId,
-                    message: message,
-                    duration: 3,
-                    minBet: apiError?.minBet,
-                    maxBet: apiError?.maxBet,
-                    errorCode: errorCode,
+        displayPopup !== PopupType.Rebet &&
+            this.props.dispatch({
+                type: GameEventActionType.DISPLAY_POPUP,
+                payload: {
+                    notice: {
+                        gameName: gameName,
+                        roundId: apiError?.gameRoundId,
+                        message: message,
+                        duration: 3,
+                        minBet: apiError?.minBet,
+                        maxBet: apiError?.maxBet,
+                        errorCode: errorCode,
+                    },
                 },
-            },
-        });
+            });
     };
 
     handleKickOut(errorCode: string) {
@@ -237,21 +236,22 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     handleBetFailed = ({ notice, kickedOut }) => {
         const { displayPopup } = this.props.gameStateContextModel;
 
-        displayPopup !== PopupType.Rebet && this.props.dispatch({
-            type: SocketEventActionTypes.DISPLAY_POPUP,
-            payload: {
-                notice: null
-            },
-        });;
+        displayPopup !== PopupType.Rebet &&
+            this.props.dispatch({
+                type: GameEventActionType.DISPLAY_POPUP,
+                payload: {
+                    notice: null,
+                },
+            });
         const gameName = `${this.props.gameName.toLowerCase()}:${GameResourceKeys.GAME_NAME}`;
         if (kickedOut?.isDisabledAccount) {
             this.props.dispatch({
-                type: SocketEventActionTypes.KICK_OUT,
+                type: GameEventActionType.KICK_OUT,
                 payload: {
-                    notice, kickedOut
+                    notice,
+                    kickedOut,
                 },
             });
-
 
             const { router } = this.props;
             setTimeout(() => {
@@ -261,23 +261,23 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         } else {
             const isPlaceBet = notice.isPlaceBetFailed ? notice.isPlaceBetFailed : false;
 
-            displayPopup !== PopupType.Rebet && this.props.dispatch({
-                type: SocketEventActionTypes.DISPLAY_POPUP,
-                payload: {
-                    notice: {
-                        gameName: gameName,
-                        message: GetLocalizedErrorMessage(notice.errorCode, isPlaceBet),
-                        duration: 2,
-                        minBet: notice?.minBet,
-                        maxBet: notice?.maxBet,
-                        errorCode: notice.errorCode,
-                        roundId: notice?.gameRoundId,
-                        betChoice1: notice?.hedgeBetGroup ? this.getChoiceNameOnHedgeBetMessage(notice.hedgeBetGroup[0]) : "",
-                        betChoice2: notice?.hedgeBetGroup ? this.getChoiceNameOnHedgeBetMessage(notice.hedgeBetGroup[1]) : "",
-                    }
-                },
-            });
-
+            displayPopup !== PopupType.Rebet &&
+                this.props.dispatch({
+                    type: GameEventActionType.DISPLAY_POPUP,
+                    payload: {
+                        notice: {
+                            gameName: gameName,
+                            message: GetLocalizedErrorMessage(notice.errorCode, isPlaceBet),
+                            duration: 2,
+                            minBet: notice?.minBet,
+                            maxBet: notice?.maxBet,
+                            errorCode: notice.errorCode,
+                            roundId: notice?.gameRoundId,
+                            betChoice1: notice?.hedgeBetGroup ? this.getChoiceNameOnHedgeBetMessage(notice.hedgeBetGroup[0]) : "",
+                            betChoice2: notice?.hedgeBetGroup ? this.getChoiceNameOnHedgeBetMessage(notice.hedgeBetGroup[1]) : "",
+                        },
+                    },
+                });
         }
     };
 
@@ -287,10 +287,9 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.isProcessingBet = false;
         this.clearRetryInterval();
         this.props.dispatch({
-            type: SocketEventActionTypes.DISPLAY_POPUP,
-            payload: { notice: null, },
+            type: GameEventActionType.DISPLAY_POPUP,
+            payload: { notice: null },
         });
-
 
         if (endBet === -1) {
             !apiError && this.handleBetFailed({ notice, kickedOut });
@@ -299,7 +298,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             playPlaceBetSound();
             ownBets[betChoice] = ownBets[betChoice] ? ownBets[betChoice] + endBet : endBet;
             this.props.dispatch({
-                type: SocketEventActionTypes.OWN_BETS,
+                type: GameEventActionType.OWN_BETS,
                 payload: { ownBetsData: { ownBets: { ...ownBets } } },
             });
             this.updateUserBalance();
@@ -316,7 +315,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         };
 
         this.props.dispatch({
-            type: SocketEventActionTypes.ACCEPTED_BET_QUEUE,
+            type: GameEventActionType.ACCEPTED_BET_QUEUE,
             payload: { acceptedBetQueue: { ...acceptedBetQueue } },
         });
         setTimeout(() => {
@@ -328,22 +327,23 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         const { acceptedBetQueue } = this.props.gameStateContextModel;
         delete acceptedBetQueue[key];
         this.props.dispatch({
-            type: SocketEventActionTypes.ACCEPTED_BET_QUEUE,
+            type: GameEventActionType.ACCEPTED_BET_QUEUE,
             payload: { acceptedBetQueue },
         });
     }
 
     handleOwnBets = ({ ownBets, gameConfigs }) => {
-        gameConfigs && this.props.dispatch({
-            type: SocketEventActionTypes.OWN_BETS,
-            payload: { ownBetsData: { ownBets } },
-        });
+        gameConfigs &&
+            this.props.dispatch({
+                type: GameEventActionType.OWN_BETS,
+                payload: { ownBetsData: { ownBets } },
+            });
     };
 
     handleUserData({ user, gameConfigs }) {
         //this.context.setBalance(user.red);
         this.props.dispatch({
-            type: SocketEventActionTypes.USER,
+            type: GameEventActionType.USER,
             payload: { userData: { user, gameConfigs } },
         });
     }
@@ -352,8 +352,8 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         if (notPermittedToPlay && gameId === this.props.id) {
             this.onDestroy();
             this.props.dispatch({
-                type: SocketEventActionTypes.ERROR_CODE,
-                payload: { disconnectReason: ConnectFailedReasonKey.restrictPlayPermission, },
+                type: GameEventActionType.ERROR_CODE,
+                payload: { disconnectReason: ConnectFailedReasonKey.restrictPlayPermission },
             });
         }
         if (userStakeLevel) {
@@ -377,9 +377,9 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             this.showResultInfoTimeout && clearTimeout(this.showResultInfoTimeout);
             this.showWinningAnimationTimeout && clearTimeout(this.showWinningAnimationTimeout);
             this.props.dispatch({
-                type: SocketEventActionTypes.UM,
+                type: GameEventActionType.UM,
                 payload: {
-                    um_message
+                    um_message,
                 },
             });
         }
@@ -391,7 +391,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.turn = turn;
 
         this.props.dispatch({
-            type: SocketEventActionTypes.DRAW_ID,
+            type: GameEventActionType.DRAW_ID,
             payload: { drawId },
         });
     };
@@ -401,11 +401,11 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         const { durations } = this.props;
         if (gameState === GameState.None || !this.isUMInFirstLoad) {
             this.props.dispatch({
-                type: SocketEventActionTypes.REMAINING_TIME,
+                type: GameEventActionType.REMAINING_TIME,
                 payload: { remainingTime },
             });
             this.props.dispatch({
-                type: SocketEventActionTypes.DRAW_ID,
+                type: GameEventActionType.DRAW_ID,
                 payload: { roundRemainingTime: remainingTime },
             });
             this.roundTimeCounter = remainingTime;
@@ -447,12 +447,12 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                     durations: this.props.durations,
                     defaultResult: this.defaultResult,
                     defaultSettlementResult: this.defaultSettlementResult,
-                    remainingTime: this.timeCounter
+                    remainingTime: this.timeCounter,
                 }),
             };
 
             this.props.dispatch({
-                type: SocketEventActionTypes.SET_NEW_STATE,
+                type: GameEventActionType.SET_NEW_STATE,
                 payload: { newState },
             });
         }
@@ -473,7 +473,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
     handleFinish({ finish }) {
         this.props.dispatch({
-            type: SocketEventActionTypes.FINISH,
+            type: GameEventActionType.FINISH,
             payload: {},
         });
         const { roundHistory } = this.props.gameStateContextModel;
@@ -487,7 +487,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         roundHistoryClone.length > 100 && roundHistoryClone.pop();
 
         this.props.dispatch({
-            type: SocketEventActionTypes.FINISH,
+            type: GameEventActionType.FINISH,
             payload: {
                 playResultAnimation: true,
                 result: finish.result,
@@ -500,7 +500,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
         this.showResultInfoTimeout = setTimeout(() => {
             this.props.dispatch({
-                type: SocketEventActionTypes.SHOW_RESULT_INFO_TIME_OUT,
+                type: GameEventActionType.SHOW_RESULT_INFO_TIME_OUT,
                 payload: {
                     showResultInfo: true,
                     isShowBlink: false,
@@ -512,7 +512,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
         this.showWinningAnimationTimeout = setTimeout(() => {
             this.props.dispatch({
-                type: SocketEventActionTypes.SHOW_WINNING_ANIMATION,
+                type: GameEventActionType.SHOW_WINNING_ANIMATION,
                 payload: {
                     showWinningAnimation: true,
                 },
@@ -526,7 +526,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
     openPlaceBetModal(betChoice: string, removeBetChoiceFocus: Function, betOptionElement: HTMLElement, betChoiceElement: HTMLElement) {
         this.props.dispatch({
-            type: SocketEventActionTypes.PLACE_BET_POPUP,
+            type: GameEventActionType.PLACE_BET_POPUP,
             payload: {
                 selectedBetChoice: betChoice,
                 removeBetChoiceFocus,
@@ -534,14 +534,13 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 betChoiceElement,
             },
         });
-
     }
 
     placeBet(betChoice: string, amount: number, betPosition?: Position, betOptionBoundary?: Boundary) {
         const { displayPopup } = this.props.gameStateContextModel;
         if (this.isProcessingBet && displayPopup !== PopupType.Rebet) {
             this.props.dispatch({
-                type: SocketEventActionTypes.BET_PROCESSING,
+                type: GameEventActionType.BET_PROCESSING,
                 payload: {},
             });
         } else {
@@ -577,21 +576,21 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
     openPopup(popupType: PopupType) {
         this.props.dispatch({
-            type: SocketEventActionTypes.OPEN_POPUP,
+            type: GameEventActionType.OPEN_POPUP,
             payload: { displayPopup: popupType },
         });
     }
 
     updateViewMode(mode: ViewMode) {
         this.props.dispatch({
-            type: SocketEventActionTypes.OPEN_POPUP,
+            type: GameEventActionType.OPEN_POPUP,
             payload: { viewMode: mode },
         });
     }
 
     setActiveScoreboardTab = (activeScoreboardTab: number) => {
         this.props.dispatch({
-            type: SocketEventActionTypes.ACTIVE_SCORE_BOARD,
+            type: GameEventActionType.ACTIVE_SCORE_BOARD,
             payload: { activeScoreboardTab },
         });
     };
@@ -599,7 +598,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     updateStatusShowResult = () => {
         if (this.props.gameStateContextModel.gameState === GameState.DisplayResult) {
             this.props.dispatch({
-                type: SocketEventActionTypes.PLAY_RESULT_ANIMATION,
+                type: GameEventActionType.PLAY_RESULT_ANIMATION,
                 payload: { playResultAnimation: false },
             });
         }
@@ -615,7 +614,8 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     renderNotice() {
-        const { gameName, message, roundId, duration, minBet, maxBet, errorCode, isWarning, betChoice1, betChoice2 } = this.props.gameStateContextModel.notice;
+        const { gameName, message, roundId, duration, minBet, maxBet, errorCode, isWarning, betChoice1, betChoice2 } =
+            this.props.gameStateContextModel.notice;
         return (
             <Notice
                 gameName={gameName}
@@ -781,4 +781,3 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 GameBase.contextType = AuthContext;
 
 export default GameBase;
-

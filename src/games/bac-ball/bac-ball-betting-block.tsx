@@ -9,10 +9,9 @@ import { GameState } from "../../components/game-base/type";
 import PercentageCircle from "../../components/game-components/percentage-circle";
 import Style from "./bac-ball.module.scss";
 import { BacBallChoice } from "./types";
-import { SocketEventActionTypes } from "../../_shared/react-contexts/game-state-context/socket-event-action";
+import { GameEventActionType } from "../../_shared/react-contexts/game-state-context/game-event-action";
 
-export type BettingBlockProps = {
-};
+export type BettingBlockProps = {};
 
 const betData: BetOptionData[] = [
     {
@@ -64,10 +63,10 @@ export const BacBallBettingBlockFC: FC<BettingBlockProps> = (props) => {
 
     const handleTotalBet = ({ totalBets }) => {
         dispatch({
-            type: SocketEventActionTypes.TOTAL_BET,
+            type: GameEventActionType.TOTAL_BET,
             payload: {
-                totalBets
-            }
+                totalBets,
+            },
         });
         setTotalBets(totalBets);
     };
@@ -85,15 +84,14 @@ export const BacBallBettingBlockFC: FC<BettingBlockProps> = (props) => {
         };
 
         dispatch({
-            type: SocketEventActionTypes.ODDS,
+            type: GameEventActionType.ODDS,
             payload: {
-                gameConfigs: { ...newGameConfigs }
+                gameConfigs: { ...newGameConfigs },
             },
         });
 
-
         setOdds(odds);
-    }
+    };
 
     const handlePercentageBets = ({ totalBets }) => {
         setPercentageBets(totalBets);
@@ -124,8 +122,10 @@ export const BacBallBettingBlockFC: FC<BettingBlockProps> = (props) => {
 
     if (winningPlayerFrames.length > 0 && winningTieFrames.length > 0) {
         // waiting for rounduration class
-        const isShowWinningHighlightPlayer = gameContext.gameState === GameState.DisplayResult && gameStateContextModel?.settlementResult?.player;
-        const isShowWinningHighlightBanker = gameContext.gameState === GameState.DisplayResult && gameStateContextModel?.settlementResult?.banker;
+        const isShowWinningHighlightPlayer =
+            gameContext.gameState === GameState.DisplayResult && gameStateContextModel?.settlementResult?.player;
+        const isShowWinningHighlightBanker =
+            gameContext.gameState === GameState.DisplayResult && gameStateContextModel?.settlementResult?.banker;
         const isShowWinningHighlightTie = gameContext.gameState === GameState.DisplayResult && gameStateContextModel?.settlementResult?.tie;
 
         return (

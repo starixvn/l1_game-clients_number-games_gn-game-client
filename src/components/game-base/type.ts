@@ -5,6 +5,7 @@ import { Socket } from "socket.io-client";
 import { SocketState } from "../../_shared/helpers";
 import { Resource, Texture } from "pixi.js";
 import { GameStateContextModel } from "../../_shared/react-contexts/game-state-context/game-state-context-model";
+import { GameEventAction } from "../../_shared/react-contexts/game-state-context/game-event-action";
 
 export interface GameConfigs {
     odds: { [key: string]: number };
@@ -53,7 +54,7 @@ export type GameBaseProps = {
     unsubscribeGlobalMessageEvent: Function;
     finishJoinGame: Function;
     isJoinedGame: boolean;
-    dispatch: Function;
+    dispatch: (action: GameEventAction) => {};
     gameStateContextModel: GameStateContextModel<{}, {}>;
     determineGameState: Function;
     getTimeCounter: Function;

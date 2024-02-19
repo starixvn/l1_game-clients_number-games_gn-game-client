@@ -4,7 +4,7 @@ import MsgpackParser from "socket.io-msgpack-parser";
 import { getAppSettings } from "../app-settings";
 import { buildServerUrl } from "../helpers";
 import { ConnectFailedReasonKey } from "../../components/game-components/error-message/type";
-import { SocketEventActionTypes } from "../react-contexts/game-state-context/socket-event-action";
+import { GameEventActionType } from "../react-contexts/game-state-context/game-event-action";
 import { useGameStateContext, useGameStatesDispatch } from "../react-contexts/game-state-context/game-state-context";
 import { MessageTransmitterType } from "./message-transmitter/type";
 import MessageTransmitter from "./message-transmitter";
@@ -67,7 +67,7 @@ export function InitSocketIO(
 
     const handleGameConfigs = ({ gameConfigs }) => {
         dispatch({
-            type: SocketEventActionTypes.GAME_CONFIGS,
+            type: GameEventActionType.GAME_CONFIGS,
             payload: {
                 gameConfigs,
             },
@@ -76,7 +76,7 @@ export function InitSocketIO(
 
     const handleSignedIn = () => {
         dispatch({
-            type: SocketEventActionTypes.SIGN_IN,
+            type: GameEventActionType.SIGN_IN,
             payload: {
                 signedIn: true,
             },
@@ -90,7 +90,7 @@ export function InitSocketIO(
         const { gameState } = gameStateContextModel;
 
         dispatch({
-            type: SocketEventActionTypes.ROUND_HISTORY,
+            type: GameEventActionType.ROUND_HISTORY,
             payload: {
                 roundHistory: roundHistory,
                 roundId: [GameState.DisplayResult, GameState.BalancingBet].includes(gameState) || isUMInFirstLoad ? roundId - 1 : roundId,
@@ -108,7 +108,7 @@ export function InitSocketIO(
             registerMessageHandler();
             socket.emit("signin", session);
             dispatch({
-                type: SocketEventActionTypes.CONNECT,
+                type: GameEventActionType.CONNECT,
                 payload: {
                     isConnect: true,
                 },
@@ -124,7 +124,7 @@ export function InitSocketIO(
         socket.on("disconnect", () => {
             messageTransmitter.clearAllListener();
             dispatch({
-                type: SocketEventActionTypes.DISCONNECT,
+                type: GameEventActionType.DISCONNECT,
                 payload: {},
             });
         });
