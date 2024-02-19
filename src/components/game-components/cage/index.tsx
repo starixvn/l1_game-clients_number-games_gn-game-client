@@ -36,12 +36,14 @@ export type CageProps = {
 const Cage: React.FunctionComponent<CageProps> = (cageProps) => {
     const { color, ballColor, isSmall, cageBallsLoopFrames, cageBallFrames, result, isShowResult, delayShowResultTime } = cageProps;
     const lidPosition = color === CageColor.Blue ? "left" : "right";
+    const animName = result <= 9 ? `number0${result}` : `number${result}`;
+
     const [isDelayShowResult, setIsDelayShowResult] = useState<boolean>(false);
     const [numberBallFrames, setNumberBallFrames] = useState<Texture<Resource>[]>([]);
 
     useEffect(() => {
-        loadPixiAnimations("/static/images/cage/number/43.json", (sprite) => {
-            setNumberBallFrames(sprite.animations["number43"]);
+        loadPixiAnimations(`/static/images/cage/number/${result}.json`, (sprite) => {
+            setNumberBallFrames(sprite.animations[animName]);
         });
     }, [numberBallFrames.length]);
 
