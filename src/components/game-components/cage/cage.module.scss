@@ -98,7 +98,7 @@
 .number {
     grid-area: container;
     place-self: center center;
-    position: relative;
+    position: absolute;
     z-index: 10;
     transform: scale(0.92);
 }
