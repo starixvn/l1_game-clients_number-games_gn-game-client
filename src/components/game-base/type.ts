@@ -1,8 +1,4 @@
-import { WithTranslation } from "next-i18next";
 import { WithRouterProps } from "next/dist/client/with-router";
-import { Socket } from "socket.io-client";
-
-import { SocketState } from "../../_shared/helpers";
 import { Resource, Texture } from "pixi.js";
 import { GameStateContextModel } from "../../_shared/react-contexts/game-state-context/game-state-context-model";
 import { GameEventAction } from "../../_shared/react-contexts/game-state-context/game-event-action";
@@ -45,7 +41,6 @@ export type GameBaseProps = {
     durations: GameDurations;
     notifyWinStreak: Function;
     playPlaceBetSound: Function;
-    viewMode: ViewMode;
     setApiErrorMessage: Function;
     supportMD5?: boolean;
     userStakeLevel: UserStakeLevel;
@@ -76,7 +71,6 @@ export interface GameBaseState<Result, SettlementResult> {
     errorMessage?: string | string[];
     selectedBetChoice?: string;
     isProcessingBet?: boolean;
-    viewMode: ViewMode;
     disabledMessage?: string;
     showResultInfo: boolean;
     acceptedBetQueue: {

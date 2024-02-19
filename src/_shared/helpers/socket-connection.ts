@@ -46,14 +46,8 @@ export function InitSocketIO(
         // this.messageTransmitter.register("um", this.handleUM.bind(this));
         // this.messageTransmitter.register("remainingTime", this.handleRemainingTime.bind(this));
 
-        messageTransmitter.register("gameConfigs", () => {
-            handleGameConfigs;
-        });
-
-        messageTransmitter.register("roundHistory", () => {
-            handleRoundHistory;
-        });
-
+        messageTransmitter.register("gameConfigs", handleGameConfigs);
+        messageTransmitter.register("roundHistory", handleRoundHistory);
         messageTransmitter.register("totalBets", handleTotalBet);
         messageTransmitter.register("odds", handleOdds);
 

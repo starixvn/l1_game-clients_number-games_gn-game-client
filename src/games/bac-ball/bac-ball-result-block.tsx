@@ -7,16 +7,15 @@ import { FC, useEffect, useState } from "react";
 import { MessageTransmitterType } from "../../_shared/helpers/message-transmitter/type";
 import { loadPixiAnimations } from "../../_shared/helpers/pixi-resource-loader";
 import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
-import { BacBallResult } from "./types";
 
 export type ResultBlockProps = {
     messageTransmitter: MessageTransmitterType;
 };
 
-export const BacBallResultBlockFC: FC<ResultBlockProps> = (props) => {
+export const BacBallResultBlock: FC<ResultBlockProps> = (props) => {
     const [cageBallFrames, setCageBallFrames] = useState<IBallColor>({ blue: [], red: [] });
     const [cageBallsLoopFrames, setCageBallsLoopFrames] = useState<Texture<Resource>[]>([]);
-    const gameStateContextModel = useGameStateContext();
+    const gameStateContext = useGameStateContext();
 
     useEffect(() => {
         if (cageBallFrames.blue.length === 0 && cageBallFrames.red.length === 0) {
@@ -26,21 +25,19 @@ export const BacBallResultBlockFC: FC<ResultBlockProps> = (props) => {
                 setCageBallFrames({ blue: blueFrames, red: redFrames });
             });
         }
-    }, [cageBallFrames.blue.length, cageBallFrames.red.length]);
 
-    useEffect(() => {
         if (cageBallsLoopFrames.length === 0) {
             loadPixiAnimations("/static/images/cage/cage-balls.json", (sprite) => {
                 setCageBallsLoopFrames(sprite.animations["loop"]);
             });
         }
-    }, [cageBallsLoopFrames.length]);
+    }, [cageBallFrames.blue.length, cageBallFrames.red.length, cageBallsLoopFrames.length]);
 
     // waiting for rounduration class
     // const parentState = props.getGameState();
 
     if (
-        !gameStateContextModel.result ||
+        !gameStateContext.result ||
         cageBallsLoopFrames?.length === 0 ||
         cageBallFrames?.blue?.length === 0 ||
         cageBallFrames?.red?.length === 0
@@ -48,7 +45,7 @@ export const BacBallResultBlockFC: FC<ResultBlockProps> = (props) => {
         return <></>;
     }
 
-    const { player, banker } = gameStateContextModel.result;
+    const { player, banker } = gameStateContext.result;
 
     return (
         <div className={Style["result-container"]}>
@@ -61,7 +58,7 @@ export const BacBallResultBlockFC: FC<ResultBlockProps> = (props) => {
                         ballColor={BallColor.Blue}
                         isSmall={true}
                         result={player}
-                        isShowResult={gameStateContextModel.playResultAnimation}
+                        isShowResult={gameStateContext.playResultAnimation}
                     />
                 </div>
                 <div className={Style["ball-container"]}>
@@ -86,7 +83,7 @@ export const BacBallResultBlockFC: FC<ResultBlockProps> = (props) => {
                         ballColor={BallColor.Red}
                         isSmall={true}
                         result={banker}
-                        isShowResult={gameStateContextModel.playResultAnimation}
+                        isShowResult={gameStateContext.playResultAnimation}
                         delayShowResultTime={1000}
                     />
                 </div>

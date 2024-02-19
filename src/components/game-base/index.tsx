@@ -138,11 +138,8 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     registerMessageHandler() {
-        // this.messageTransmitter.register("signedIn", this.handleSignedIn.bind(this));
         this.messageTransmitter.register("um", this.handleUM.bind(this));
         this.messageTransmitter.register("remainingTime", this.handleRemainingTime.bind(this));
-        // this.messageTransmitter.register("gameConfigs", this.handleGameConfigs.bind(this));
-        // this.messageTransmitter.register("roundHistory", this.handleRoundHistory.bind(this));
         this.messageTransmitter.register("finish", this.handleFinish.bind(this));
         this.messageTransmitter.register("status", this.handleStatus.bind(this));
         this.messageTransmitter.register("user", this.handleUserData.bind(this));

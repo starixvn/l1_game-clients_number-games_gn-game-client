@@ -5,8 +5,8 @@ import GameBase from "../../components/game-base/";
 import { GameBaseProps, GameBaseState } from "../../components/game-base/type";
 import CountdownTimer from "../../components/game-components/countdown-timer/countdown-timer";
 import { BacBallResult, BacBallSettlementResult } from "./types";
-import { BacBallResultBlockFC } from "./bac-ball-result-block";
-import { BacBallBettingBlockFC } from "./bac-ball-betting-block";
+import { BacBallResultBlock } from "./bac-ball-result-block";
+import { BacBallBettingBlock } from "./bac-ball-betting-block";
 import { StatisticFollowPercent } from "../../components/game-components/statistic";
 import {
     GameStateProvider,
@@ -54,11 +54,11 @@ class BacBall extends GameBase<GameBaseProps> {
     }
 
     renderResultBlock() {
-        return <BacBallResultBlockFC messageTransmitter={this.messageTransmitter} />;
+        return <BacBallResultBlock messageTransmitter={this.messageTransmitter} />;
     }
 
     renderBettingBlock() {
-        return <BacBallBettingBlockFC />;
+        return <BacBallBettingBlock />;
     }
 
     renderScoreboards() {

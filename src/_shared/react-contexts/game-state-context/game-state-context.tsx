@@ -6,7 +6,7 @@ import { LanguageLocaleMapper } from "../../constants";
 import { GetLocalizedErrorMessage } from "../../helpers/notice-helper";
 import { GameStateContextModel, initialGameStateContextModel } from "./game-state-context-model";
 
-const GameStateContext = createContext(null);
+const GameStateContext = createContext({} as GameStateContextModel<any, any>);
 
 const GameStateDispatchContext = createContext(null);
 
