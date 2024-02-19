@@ -46,20 +46,32 @@ export const BacBallBettingBlockFC: FC<BettingBlockProps> = (props) => {
     const gameStateContextModel = useGameStateContext();
 
     useEffect(() => {
-        if (winningPlayerFrames.length === 0) {
+        if (winningPlayerFrames.length === 0 || winningTieFrames.length === 0) {
             loadPixiAnimations("/static/images/bac-number/highlight-winning-player.json", (sprite) => {
                 setWinningPlayerFrames(sprite.animations["highlight-winning-player"]);
             });
-        }
-    }, [winningPlayerFrames.length]);
 
-    useEffect(() => {
-        if (winningTieFrames.length === 0) {
             loadPixiAnimations("/static/images/bac-number/highlight-winning-tie.json", (sprite) => {
                 setWinningTieFrames(sprite.animations["highlight-winning-tie"]);
             });
         }
-    }, [winningTieFrames.length]);
+    }, [winningPlayerFrames.length, winningTieFrames.length]);
+
+    useEffect(() => {
+        let totalBetEventId, oddsEventId, percentageBetId;
+
+        if (gameContext.messageTransmitter) {
+            totalBetEventId = gameContext.messageTransmitter.register("totalBets", handleTotalBet);
+            oddsEventId = gameContext.messageTransmitter.register("odds", handleOdds);
+            percentageBetId = gameContext.messageTransmitter.register("totalBets", handlePercentageBets);
+        }
+
+        return () => {
+            gameContext.messageTransmitter.unsubscribe(totalBetEventId);
+            gameContext.messageTransmitter.unsubscribe(oddsEventId);
+            gameContext.messageTransmitter.unsubscribe(percentageBetId);
+        };
+    });
 
     const handleTotalBet = ({ totalBets }) => {
         dispatch({
@@ -96,12 +108,6 @@ export const BacBallBettingBlockFC: FC<BettingBlockProps> = (props) => {
     const handlePercentageBets = ({ totalBets }) => {
         setPercentageBets(totalBets);
     };
-
-    if (gameContext.messageTransmitter) {
-        gameContext.messageTransmitter.register("totalBets", handleTotalBet);
-        gameContext.messageTransmitter.register("odds", handleOdds);
-        gameContext.messageTransmitter.register("totalBets", handlePercentageBets);
-    }
 
     const onClickPlayer = () => {
         gameActionContext.placeBet(betData[0].betChoice, 1);
