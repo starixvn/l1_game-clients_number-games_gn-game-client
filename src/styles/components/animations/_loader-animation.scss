@@ -1,11 +1,11 @@
 .loader-show-result {
     position: absolute;
-    left: calc(50% - 1.5rem);
-    top: calc(50% - 1.5rem);
-    width: 3rem;
-    height: 3rem;
-    border: 0 solid transparent;
+    top: -2rem;
+
+    width: 4rem;
+    height: 4rem;
     border-radius: 50%;
+    // border: 1px solid #535353cc;
 
     &:before,
     &:after {

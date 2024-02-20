@@ -18,6 +18,7 @@ const CountdownTimer = () => {
         case GameState.InRound:
             return (
                 <>
+                    {/* <div className={`loader-show-result`}></div> */}
                     <SimpleTimer />
                     <GameStatus>
                         <div className={styles["start-betting"]}>{t("startBetting")}</div>
@@ -43,7 +44,7 @@ const CountdownTimer = () => {
                 </>
             );
         case GameState.None:
-            return <Loader />;
+            return <div className={`loader-show-result`}></div>;
 
         default:
             return (
@@ -82,7 +83,6 @@ const SimpleTimer = () => {
     return (
         <div className={styles.timer}>
             <div className={`${styles["countdown-timer"]} ${gameState === GameState.LockingBet ? styles["lock-bet"] : ""}`}>
-                <span>00:</span>
                 <span>{seconds}</span>
             </div>
         </div>

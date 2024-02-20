@@ -19,6 +19,7 @@
 }
 
 .category-container {
+    display: none;
     background: var(--game-category-background);
     overflow-x: auto;
     overflow-y: hidden;
