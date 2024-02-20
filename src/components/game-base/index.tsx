@@ -8,6 +8,7 @@ import { GetLocalizedErrorMessage } from "../../_shared/helpers/notice-helper";
 import { AuthContext, AuthContextModel, GameActionsContextProvider, GameContextProvider } from "../../_shared/react-contexts";
 import { GameEventActionType } from "../../_shared/react-contexts/game-state-context/game-event-action";
 import { GameResourceKeys } from "../../_shared/resources";
+import { getBalance } from "../../services/auth-service";
 import ConfirmBet from "../game-components/confirm-bet";
 import DisabledModal from "../game-components/disabled-modal";
 import { ConnectFailedMessage } from "../game-components/error-message";
@@ -18,7 +19,6 @@ import { Notice } from "../game-components/notice";
 import ConfirmDialog from "../game-components/submit-dialog";
 import BetSettings from "../page-components/bet-settings";
 import { Boundary, GameBaseProps, GameState, PopupType, Position, ViewMode } from "./type";
-import { getBalance } from "../../services/auth-service";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
     private readonly animationTime = 3000;
@@ -683,7 +683,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     renderScoreboards() {
-        if (this.props.gameStateContextModel.showConfirmBet) return null;
         return <></>;
     }
 

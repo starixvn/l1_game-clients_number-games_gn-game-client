@@ -35,12 +35,19 @@ const ConfirmBet: React.FC<Props> = ({}: Props) => {
 
     return (
         <div className={Styles["confirm-bet-container"]}>
-            <button className={`btn-red ${Styles["btn-cancel"]}`} onClick={() => onCancel()} type="button" data-testid="btn-cancel-bet">
-                {t({ key: "cancel" })}
-            </button>
-            <button className={`btn-red ${Styles["btn-confirm"]}`} onClick={() => onConfirm()} type="button" data-testid="btn-confirm-bet">
-                {t({ key: "confirm" })}
-            </button>
+            <div className={Styles["back-ground"]}>
+                <button className={`btn-red ${Styles["btn-cancel"]}`} onClick={() => onCancel()} type="button" data-testid="btn-cancel-bet">
+                    {t({ key: "cancel" })}
+                </button>
+                <button
+                    className={`btn-red ${Styles["btn-confirm"]}`}
+                    onClick={() => onConfirm()}
+                    type="button"
+                    data-testid="btn-confirm-bet"
+                >
+                    {t({ key: "confirm" })}
+                </button>
+            </div>
         </div>
     );
 };

@@ -1,7 +1,14 @@
 .confirm-bet-container {
-    height: 4rem;
-    display: flex;
-    justify-content: space-evenly;
+    height: 0rem;
+
+    .back-ground {
+        display: flex;
+        justify-content: space-evenly;
+        height: 4rem;
+        backface-visibility: hidden;
+        background-color: black;
+        width: 100%;
+    }
 
     .btn-cancel {
         background: #332229;

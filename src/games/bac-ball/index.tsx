@@ -58,9 +58,6 @@ class BacBall extends GameBase<GameBaseProps> {
     }
 
     renderScoreboards() {
-        if (!super.renderScoreboards()) {
-            return;
-        }
         const { roundHistory } = this.props.gameStateContextModel;
 
         return <StatisticFollowPercent roundHistory={roundHistory} statisticRuleEntries={StatisticRuleEntries}></StatisticFollowPercent>;
