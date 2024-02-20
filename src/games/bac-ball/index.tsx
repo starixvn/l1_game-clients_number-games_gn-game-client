@@ -31,8 +31,6 @@ export const StatisticRuleEntries = Object.entries({
 class BacBall extends GameBase<GameBaseProps> {
     constructor(props: GameBaseProps) {
         super(props);
-        // console.log(`props: ${JSON.stringify(props)}`);
-        // this.props.gameStateContextModel = { ...this.defaultState };
     }
 
     componentDidMount() {

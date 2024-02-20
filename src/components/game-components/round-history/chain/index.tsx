@@ -32,10 +32,9 @@ const RoundDotWrapper = <R, S>({ children, renderRoundDetail, targetName, gameSt
 
 const ChainRoundHistory = <R, S>(props: Props<R, S>) => {
     const { gameState, roundHistory, renderRoundDetail, renderGameDot } = props;
-    const { gameSetting } = useGameContext();
+    const { gameName } = useGameContext();
     const { isShowBlink } = useGameStateContext();
-    const gameName = gameSetting.gameName.toLowerCase();
-    const { t } = useTranslation(gameName);
+    const { t } = useTranslation(gameName.toLowerCase());
 
     return useMemo(() => {
         const numberOfItems = isShowBlink ? 19 : 20;

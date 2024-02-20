@@ -1,11 +1,7 @@
 import React, { useContext } from "react";
-import { GameContextModel } from "./game-context-type";
+import { GamePropsContext } from "../../../components/game-base/type";
 
-export const GameContext = React.createContext<GameContextModel>({
-    ownBets: {},
-    rate: 1,
-    gameSetting: {},
-});
+export const GameContext = React.createContext<GamePropsContext>({});
 GameContext.displayName = "GameContext";
 
 export const GameContextProvider = GameContext.Provider;

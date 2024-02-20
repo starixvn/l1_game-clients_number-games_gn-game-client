@@ -60,7 +60,7 @@ const CountdownTimer = () => {
 
 const SimpleTimer = () => {
     const ctx = useGameContext();
-    const { durations } = ctx.gameSetting;
+    const { durations } = ctx;
     const { gameState, remainingTime } = useGameStateContext();
     const initialRemainingTime = gameState === GameState.BeforeStartRound ? durations.placingBets : remainingTime;
     const [timeLeft, setTimeLeft] = useState(initialRemainingTime);

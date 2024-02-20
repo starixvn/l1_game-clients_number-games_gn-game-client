@@ -4,7 +4,6 @@ import { useGameContext } from "../../../_shared/react-contexts/game-context/gam
 import Styles from "./loader.module.scss";
 
 export default function Loader() {
-    const { gameSetting } = useGameContext();
-    const gameName = gameSetting?.gameName?.toLocaleLowerCase();
+    const gameName = useGameContext()?.gameName?.toLocaleLowerCase();
     return <div className={`${Styles["loader"]} ${Styles[gameName]}`} data-testid="loader"></div>;
 }

@@ -47,7 +47,7 @@ export interface GameStateContextModel<Result, SettlementResult> {
     betOptionElement?: HTMLElement;
     betChoiceElement?: HTMLElement;
     activeScoreboardTab?: number;
-    rate: number;
+    rate?: number;
     disconnectReason?: string;
     winningPlayerFrames: Texture<Resource>[];
     winningTieFrames: Texture<Resource>[];

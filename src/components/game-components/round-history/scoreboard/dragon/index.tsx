@@ -4,7 +4,7 @@ import { ScoreboardItemNext } from "../../dot-next";
 import { Props } from "./types";
 import { v4 as uuidV4 } from "uuid";
 import { useGameContext } from "../../../../../_shared/react-contexts";
-import { GameBaseProps } from "../../../../game-base/type";
+import { GameBaseProps, GamePropsContext } from "../../../../game-base/type";
 import { RoundDotGrid } from "../../../round-history/dot";
 import { GetNameFromChoice, GetChoiceValueFromTranslate } from "./dragon.helper";
 import Styles from "../round-history.module.scss";
@@ -31,10 +31,10 @@ const getScoreboardDotDetails: React.FC<{
     row: number;
     roundId: number;
     translateDotTextMapping: object;
-    gameSetting: GameBaseProps;
+    gameProps: GameBaseProps;
     settlementResult: any;
     choices: [];
-}> = ({ col, row, roundId, translateDotTextMapping, gameSetting, settlementResult, choices }) => {
+}> = ({ col, row, roundId, translateDotTextMapping, gameProps: gameSetting, settlementResult, choices }) => {
     const choiceName = GetNameFromChoice({ settlementResult, choices });
     return (
         <RoundDotGrid
@@ -54,7 +54,7 @@ const drawDragonTailHistory = <R, S>(
     getDotDetails: Function,
     conditionChangeDot: Function,
     translateDotTextMapping?: object,
-    gameSetting?: GameBaseProps,
+    gameProps?: GamePropsContext,
     listChoiceChangeDotDetails?: string[]
 ) => {
     let col = 1,
@@ -93,7 +93,7 @@ const drawDragonTailHistory = <R, S>(
             row: row,
             roundId: round?.roundId,
             translateDotTextMapping: translateDotTextMapping,
-            gameSetting: gameSetting,
+            gameSetting: gameProps,
             settlementResult: round?.settlementResult,
             choices: listChoiceChangeDotDetails,
         });
@@ -128,7 +128,7 @@ const ScoreboardDragon = <R, S>(props: Props<R, S>) => {
     const getDotDetails = dotDetails?.getDotDetails ?? getScoreboardDotDetails;
     const conditionChangeDotDetails = dotDetails?.conditionChangeDot ?? conditionChangeDotDefault;
 
-    const { gameSetting } = useGameContext();
+    const gameProps = useGameContext();
     const { isShowBlink } = useGameStateContext();
     const isShowDotBlink = props?.isShowBlink ?? isShowBlink;
     return useMemo(() => {
@@ -140,7 +140,7 @@ const ScoreboardDragon = <R, S>(props: Props<R, S>) => {
                     getDotDetails,
                     conditionChangeDotDetails,
                     translateDotTextMapping,
-                    gameSetting,
+                    gameProps,
                     dotDetails?.choice
                 )}
             </div>

@@ -15,7 +15,6 @@ import GameLoading from "../game-components/game-loading";
 import { Notice } from "../game-components/notice";
 import { Boundary, GameBaseProps, GameState, PopupType, Position, ViewMode } from "./type";
 import { GameEventActionType } from "../../_shared/react-contexts/game-state-context/game-event-action";
-import { GameContextModel } from "../../_shared/react-contexts/game-context/game-context-type";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
     private readonly animationTime = 3000;
@@ -699,14 +698,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     renderGame() {
-        const { ownBets, rate } = this.props.gameStateContextModel;
-
-        const gameContext: GameContextModel = {
-            ownBets,
-            gameSetting: this.props,
-            rate,
-        };
-
         const gameActionsContext = {
             placeBet: this.placeBet,
             openPopup: this.openPopup,
@@ -722,7 +713,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         };
 
         return (
-            <GameContextProvider value={gameContext}>
+            <GameContextProvider value={this.props}>
                 <GameActionsContextProvider value={gameActionsContext}>{this.getRenderTemplate()}</GameActionsContextProvider>
             </GameContextProvider>
         );

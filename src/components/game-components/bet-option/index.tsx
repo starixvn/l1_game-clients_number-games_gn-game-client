@@ -6,6 +6,7 @@ import { GameState } from "../../game-base/type";
 import { Tooltip } from "../tooltip";
 import Styles from "./bet-option.module.scss";
 import { HighlightType, Props } from "./types";
+import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 
 const HighlightClassNameMapper = {
     [HighlightType.Background]: "highlight-winning",
@@ -26,7 +27,8 @@ const BetOption: React.FunctionComponent<Props> = ({
     isShowPoolStake = true,
     isShowTooltip = false,
 }) => {
-    const { ownBets, rate, gameSetting } = useGameContext();
+    const { gameName } = useGameContext();
+    const { ownBets, rate } = useGameStateContext();
     const { openPlaceBetModal, placeBet } = useGameActionContext();
     const { enabledQuickBet, betValue, fractionalOddsFormat } = useSystemContext();
     const [highlightType, updateHighlightType] = useState<HighlightType>(HighlightType.None);
@@ -82,7 +84,7 @@ const BetOption: React.FunctionComponent<Props> = ({
         ${isHighlight && Styles[HighlightClassNameMapper[highlightType]]} 
         ${isHighlight && isShowWinningEffect && Styles["winning-effect"]} 
         ${gameState !== GameState.InRound && Styles["disallowed"]}
-        ${Styles[gameSetting.gameName.toLocaleLowerCase()]}`;
+        ${Styles[gameName.toLocaleLowerCase()]}`;
 
     const oddsClass = `${Styles["odd"]}`;
     const oddsValue = formatOdds(odd, fractionalOddsFormat);

@@ -18,12 +18,11 @@ export type GameHeaderProps = {
 };
 
 export const GameHeader: React.FunctionComponent<GameHeaderProps> = ({ isShowCollapse, isUpdateDisableRebet, countdownTimerComponent }) => {
-    const { gameSetting } = useGameContext();
     const { roundId } = useGameStateContext();
     const { favoriteGames, setFavorite } = useSystemContext();
     const { updateViewMode, renderResultCollapse, updateStatusShowResult } = useGameActionContext();
 
-    const { id: gameId, gameName } = gameSetting;
+    const { id: gameId, gameName } = useGameContext();
     const [isFavorite, updateFavorite] = useState<boolean>(favoriteGames.includes(gameId));
     const { t } = useTranslation([gameName.toLowerCase()]);
 
@@ -83,9 +82,8 @@ export const GameHeader: React.FunctionComponent<GameHeaderProps> = ({ isShowCol
 };
 
 const HeaderRight = ({ isUpdateDisableRebet }) => {
-    const { gameSetting, ownBets } = useGameContext();
-    const { roundId } = useGameStateContext();
-    const { id: gameId } = gameSetting;
+    const { roundId, ownBets } = useGameStateContext();
+    const { id: gameId } = useGameContext();
     const [disabledRebet, updateDisableRebet] = useState<boolean>(false);
     const { t } = useTranslation();
 

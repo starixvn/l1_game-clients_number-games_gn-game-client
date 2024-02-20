@@ -34,27 +34,30 @@ export interface GameSettings {
     durations: GameDurations;
 }
 
-export type GameBaseProps = {
-    id: number;
-    gameName: string;
-    socketInfo: SocketInfo;
-    durations: GameDurations;
-    notifyWinStreak: Function;
-    playPlaceBetSound: Function;
-    setApiErrorMessage: Function;
+export type GamePropsContext = {
+    id?: number;
+    gameName?: string;
+    socketInfo?: SocketInfo;
+    durations?: GameDurations;
+    notifyWinStreak?: Function;
+    playPlaceBetSound?: Function;
+    setApiErrorMessage?: Function;
     supportMD5?: boolean;
-    userStakeLevel: UserStakeLevel;
-    updateUserStakeLevel: Function;
-    registerGlobalMessageEvent: Function;
-    unsubscribeGlobalMessageEvent: Function;
-    finishJoinGame: Function;
-    isJoinedGame: boolean;
-    dispatch: (action: GameEventAction) => {};
-    gameStateContextModel: GameStateContextModel<{}, {}>;
-    determineGameState: Function;
-    getTimeCounter: Function;
-    getStateByNextGameState: Function;
-} & WithRouterProps;
+    userStakeLevel?: UserStakeLevel;
+    updateUserStakeLevel?: Function;
+    registerGlobalMessageEvent?: Function;
+    unsubscribeGlobalMessageEvent?: Function;
+    finishJoinGame?: Function;
+    isJoinedGame?: boolean;
+    dispatch?: (action: GameEventAction) => {};
+    gameStateContextModel?: GameStateContextModel<{}, {}>;
+    determineGameState?: Function;
+    getTimeCounter?: Function;
+    getStateByNextGameState?: Function;
+};
+
+export type GameBaseProps = GamePropsContext & WithRouterProps;
+
 export interface GameBaseState<Result, SettlementResult> {
     signedIn: boolean;
     gameState: GameState;

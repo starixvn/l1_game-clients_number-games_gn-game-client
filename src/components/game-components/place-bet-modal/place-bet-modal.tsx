@@ -19,10 +19,10 @@ const defaultCss: BetFormCss = {
 
 const PlaceBetModal: React.FC<PlaceBetModalProps> = (props) => {
     const wrapperRef = useRef<HTMLDivElement>(null);
-    const { gameSetting } = useGameContext();
+    const { gameName: gameSettingName } = useGameContext();
     const { roundId } = useGameStateContext();
     const { betValue, fractionalOddsFormat } = useSystemContext();
-    const { t } = useTranslation([gameSetting.gameName.toLocaleLowerCase(), "common"]);
+    const { t } = useTranslation([gameSettingName.toLocaleLowerCase(), "common"]);
     const { betChoiceInfo } = props,
         { betChoice, odd, gameName } = betChoiceInfo;
 
