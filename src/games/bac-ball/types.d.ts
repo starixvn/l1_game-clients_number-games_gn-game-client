@@ -1,5 +1,3 @@
-import { GameBaseState } from "../../components/game-base/type";
-
 export type BacBallSettlementResult = {
     banker: boolean;
     drawId: number;
@@ -20,5 +18,3 @@ export type BacBallChoice = {
 };
 
 export type Odd = {};
-
-export interface BacBallState<BacBallResult, BacBallSettlementResult> extends GameBaseState<any, any> {}

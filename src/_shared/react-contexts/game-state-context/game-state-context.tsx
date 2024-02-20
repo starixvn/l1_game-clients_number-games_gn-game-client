@@ -72,7 +72,7 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
         viewMode,
         activeScoreboardTab,
         playResultAnimation,
-        newState,
+        newGameState,
         showResultInfo,
         isShowBlink,
         enabledQuickBet,
@@ -83,9 +83,8 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
     } = payload;
 
     // console.log("payload: ", JSON.stringify(payload));
-    const { gameState, isUMInFirstLoad } = state;
 
-    if (type !== GameEventActionType.TOTAL_BET && type !== GameEventActionType.SET_NEW_STATE) {
+    if (type !== GameEventActionType.TOTAL_BET && type !== GameEventActionType.SET_NEW_GAME_STATE) {
         console.log(`\x1B[31m SocketEventActionTypes : ${type}`);
     }
 
@@ -113,7 +112,7 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
             return {
                 ...state,
                 isConnect: false,
-                gameState: RoundState.None,
+                roundState: RoundState.None,
                 disconnectReason: ConnectFailedReasonKey.lostConnection,
             };
         }
@@ -121,7 +120,7 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
         case GameEventActionType.UM: {
             return {
                 ...state,
-                gameState: RoundState.Disabled,
+                roundState: RoundState.Disabled,
                 disabledMessage: um_message[LanguageLocaleMapper["en"]], // TO DO: remove hard code
                 showResultInfo: false,
             };
@@ -239,7 +238,7 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
         case GameEventActionType.ERROR_CODE: {
             return {
                 ...state,
-                gameState: RoundState.ConnectFailed,
+                roundState: RoundState.ConnectFailed,
                 signedIn: false,
                 disconnectReason,
             };
@@ -304,10 +303,10 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
             };
         }
 
-        case GameEventActionType.SET_NEW_STATE: {
+        case GameEventActionType.SET_NEW_GAME_STATE: {
             return {
                 ...state,
-                ...newState,
+                ...newGameState,
             };
         }
 

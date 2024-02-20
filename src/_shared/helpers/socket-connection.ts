@@ -109,17 +109,18 @@ export function InitSocketIO(
     };
 
     const handleRoundHistory = ({ roundHistory, roundId }) => {
-        const { gameState } = gameStateContextModel;
+        const { roundState } = gameStateContextModel;
 
         dispatch({
             type: GameEventActionType.ROUND_HISTORY,
             payload: {
                 roundHistory: roundHistory,
-                roundId: [RoundState.DisplayResult, RoundState.BalancingBet].includes(gameState) || isUMInFirstLoad ? roundId - 1 : roundId,
-                result: gameState === RoundState.LockingBet ? defaultResult : roundHistory[0]?.result,
-                settlementResult: gameState === RoundState.LockingBet ? defaultSettlementResult : roundHistory[0]?.settlementResult,
-                playResultAnimation: [RoundState.DisplayResult].includes(gameState) || isUMInFirstLoad ? false : true,
-                showResultInfo: [RoundState.DisplayResult].includes(gameState) || isUMInFirstLoad ? true : false,
+                roundId:
+                    [RoundState.DisplayResult, RoundState.BalancingBet].includes(roundState) || isUMInFirstLoad ? roundId - 1 : roundId,
+                result: roundState === RoundState.LockingBet ? defaultResult : roundHistory[0]?.result,
+                settlementResult: roundState === RoundState.LockingBet ? defaultSettlementResult : roundHistory[0]?.settlementResult,
+                playResultAnimation: [RoundState.DisplayResult].includes(roundState) || isUMInFirstLoad ? false : true,
+                showResultInfo: [RoundState.DisplayResult].includes(roundState) || isUMInFirstLoad ? true : false,
             },
         });
     };

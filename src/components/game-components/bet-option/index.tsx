@@ -16,7 +16,7 @@ const HighlightClassNameMapper = {
 const convertStakeToString = (amount: number, rate: number) => (amount ? numberWithCommas(amount / rate, 1) : "");
 
 const BetOption: React.FunctionComponent<Props> = ({
-    gameState,
+    roundState,
     choice,
     odd,
     children,
@@ -52,7 +52,7 @@ const BetOption: React.FunctionComponent<Props> = ({
             },
         };
 
-        actionByGameState[gameState] && actionByGameState[gameState]();
+        actionByGameState[roundState] && actionByGameState[roundState]();
 
         // setTotalBet(totalBets?.[choice] ?? 0);
         //update(totalBet);
@@ -61,7 +61,7 @@ const BetOption: React.FunctionComponent<Props> = ({
         // console.log(`choice : ${choice}`);
 
         //console.log(`totalBet : ${totalBet}`);
-    }, [gameState]);
+    }, [roundState]);
 
     const onClickBet = (event: any) => {
         event.preventDefault();
@@ -83,7 +83,7 @@ const BetOption: React.FunctionComponent<Props> = ({
     const betOptionClasses = `${Styles["bet-option"]} ${isFocusChoice ? Styles["focus"] : ""} 
         ${isHighlight && Styles[HighlightClassNameMapper[highlightType]]} 
         ${isHighlight && isShowWinningEffect && Styles["winning-effect"]} 
-        ${gameState !== RoundState.InRound && Styles["disallowed"]}
+        ${roundState !== RoundState.InRound && Styles["disallowed"]}
         ${Styles[gameName.toLocaleLowerCase()]}`;
 
     const oddsClass = `${Styles["odd"]}`;

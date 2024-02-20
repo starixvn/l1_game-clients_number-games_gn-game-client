@@ -48,11 +48,11 @@ export const BacBallBettingBlock: FC = () => {
     if (winningPlayerFrames.length > 0 && winningTieFrames.length > 0) {
         // waiting for rounduration class
         const isShowWinningHighlightPlayer =
-            gameStateContext?.gameState === RoundState.DisplayResult && gameStateContext?.settlementResult?.player;
+            gameStateContext?.roundState === RoundState.DisplayResult && gameStateContext?.settlementResult?.player;
         const isShowWinningHighlightBanker =
-            gameStateContext?.gameState === RoundState.DisplayResult && gameStateContext?.settlementResult?.banker;
+            gameStateContext?.roundState === RoundState.DisplayResult && gameStateContext?.settlementResult?.banker;
         const isShowWinningHighlightTie =
-            gameStateContext?.gameState === RoundState.DisplayResult && gameStateContext?.settlementResult?.tie;
+            gameStateContext?.roundState === RoundState.DisplayResult && gameStateContext?.settlementResult?.tie;
 
         return (
             <div className={`${Style["betting-zone"]}`}>

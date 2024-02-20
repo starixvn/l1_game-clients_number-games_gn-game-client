@@ -1,7 +1,7 @@
 import { RoundState, PopupType } from "../../components/game-base/type";
 import { useTimeCounter } from "./use-time-counter";
 
-export function useDetermineGameState({ roundRemainingTime, remainingTime, durations }) {
+export function useDetermineRoundState({ roundRemainingTime, remainingTime, durations }) {
     if (roundRemainingTime > durations.wholeRound - durations.switchRoundAnimation) {
         return RoundState.SwitchRound;
     }
@@ -29,9 +29,9 @@ export function useDetermineGameState({ roundRemainingTime, remainingTime, durat
     return RoundState.None;
 }
 
-export function useGetStateByNextGameState({
+export function useNextRoundState({
     gameStateContextModel,
-    nextGameState,
+    nextRoundState,
     durations,
     defaultResult,
     defaultSettlementResult,
@@ -45,26 +45,26 @@ export function useGetStateByNextGameState({
         const timeCounter = getTimeCounter({
             remainingTime,
             durations: durations,
-            gameState: nextGameState,
+            roundState: nextRoundState,
         });
 
         // if (nextGameState === RoundState.InRound) {
         //     this.betWin = 0;
         // }
 
-        if (nextGameState === RoundState.LockingBet) {
+        if (nextRoundState === RoundState.LockingBet) {
             // removeBetChoiceFocus && removeBetChoiceFocus();
         }
 
         const newStateDetector = [
             {
-                condition: nextGameState === RoundState.InRound,
+                condition: nextRoundState === RoundState.InRound,
                 state: {
                     betWin: 0,
                 },
             },
             {
-                condition: [RoundState.BeforeStartRound, RoundState.InRound].includes(nextGameState),
+                condition: [RoundState.BeforeStartRound, RoundState.InRound].includes(nextRoundState),
                 state: {
                     ownBets: {},
                     totalBets: {},
@@ -77,11 +77,11 @@ export function useGetStateByNextGameState({
             },
             {
                 condition: durations.beforeStartRound
-                    ? nextGameState === RoundState.BeforeStartRound
-                    : nextGameState === RoundState.InRound,
+                    ? nextRoundState === RoundState.BeforeStartRound
+                    : nextRoundState === RoundState.InRound,
             },
             {
-                condition: nextGameState === RoundState.LockingBet,
+                condition: nextRoundState === RoundState.LockingBet,
                 state: {
                     isShowBlink: true,
                     displayPopup: [PopupType.Rebet, PopupType.PlaceBet].includes(displayPopup) ? null : displayPopup,

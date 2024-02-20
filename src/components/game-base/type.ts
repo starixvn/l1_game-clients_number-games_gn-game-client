@@ -52,49 +52,12 @@ export type GamePropsContext = {
     isJoinedGame?: boolean;
     dispatch?: (action: GameEventAction) => {};
     gameStateContextModel?: GameStateContextModel<{}, {}>;
-    determineGameState?: Function;
+    determineRoundState?: Function;
     getTimeCounter?: Function;
-    getStateByNextGameState?: Function;
+    getNextRoundState?: Function;
 };
 
 export type GameBaseProps = GamePropsContext & WithRouterProps;
-
-export interface GameBaseState<Result, SettlementResult> {
-    signedIn: boolean;
-    gameState: RoundState;
-    roundRemainingTime: number;
-    remainingTime: number;
-    gameConfigs: GameConfigs;
-    roundHistory: Round<Result, SettlementResult>[];
-    roundId: number;
-    drawId: number;
-    result?: Result;
-    settlementResult?: SettlementResult;
-    ownBets: object;
-    displayPopup?: PopupType;
-    errorMessage?: string | string[];
-    selectedBetChoice?: string;
-    isProcessingBet?: boolean;
-    disabledMessage?: string;
-    showResultInfo: boolean;
-    acceptedBetQueue: {
-        [key: number]: {
-            amount: number;
-            betPosition: Position;
-            betOptionBoundary: Boundary;
-        };
-    };
-    showWinningAnimation: boolean;
-    playResultAnimation: boolean;
-    isShowBlink: boolean;
-    notice: Notice;
-    removeBetChoiceFocus?: Function;
-    betOptionElement?: HTMLElement;
-    betChoiceElement?: HTMLElement;
-    activeScoreboardTab?: number;
-    rate: number;
-    disconnectReason?: string;
-}
 
 export interface Notice {
     gameName?: string;

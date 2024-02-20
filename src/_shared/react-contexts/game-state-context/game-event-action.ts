@@ -25,7 +25,7 @@ export enum GameEventActionType {
     DISPLAY_POPUP = "DISPLAY_POPUP",
     ACCEPTED_BET_QUEUE = "ACCEPTED_BET_QUEUE",
     ROUND_REMAINING_TIME = "ROUND_REMAINING_TIME",
-    SET_NEW_STATE = "SET_NEW_STATE",
+    SET_NEW_GAME_STATE = "SET_NEW_GAME_STATE",
     SHOW_WINNING_ANIMATION = "SHOW_WINNING_ANIMATION",
     PLACE_BET_POPUP = "PLACE_BET_POPUP",
     BET_PROCESSING = "BET_PROCESSING",
@@ -92,10 +92,10 @@ export interface GameEventPayload {
     viewMode?: ViewMode;
     activeScoreboardTab?: Number;
     playResultAnimation?: boolean;
-    newState?: any;
+    newGameState?: any;
     showResultInfo?: boolean;
     isShowBlink?: boolean;
-    gameState?: RoundState;
+    roundState?: RoundState;
     roundRemainingTime?: number;
     selectedChip?: number;
     showConfirmBet?: boolean;

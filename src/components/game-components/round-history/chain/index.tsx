@@ -9,14 +9,14 @@ import Styles from "./styles.module.scss";
 import { Props, PropsDot } from "./types";
 import { useGameStateContext } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
 
-const RoundDotWrapper = <R, S>({ children, renderRoundDetail, targetName, gameState }: PropsDot<R, S>) => {
+const RoundDotWrapper = <R, S>({ children, renderRoundDetail, targetName, roundState }: PropsDot<R, S>) => {
     const [isOpenTooltip, setIsOpenTooltip] = useState(false);
     const toggleTooltip = () => setIsOpenTooltip(!isOpenTooltip);
     useEffect(() => {
-        if (gameState === RoundState.LockingBet) {
+        if (roundState === RoundState.LockingBet) {
             setIsOpenTooltip(false);
         }
-    }, [gameState]);
+    }, [roundState]);
 
     return (
         <div className={`${Styles["dot-wrapper"]}`} onClick={toggleTooltip} data-testid="dot-wrapper">
@@ -31,7 +31,7 @@ const RoundDotWrapper = <R, S>({ children, renderRoundDetail, targetName, gameSt
 };
 
 const ChainRoundHistory = <R, S>(props: Props<R, S>) => {
-    const { gameState, roundHistory, renderRoundDetail, renderGameDot } = props;
+    const { roundState, roundHistory, renderRoundDetail, renderGameDot } = props;
     const { gameName } = useGameContext();
     const { isShowBlink } = useGameStateContext();
     const { t } = useTranslation(gameName.toLowerCase());
@@ -46,7 +46,7 @@ const ChainRoundHistory = <R, S>(props: Props<R, S>) => {
                         key={round.roundId}
                         renderRoundDetail={renderRoundDetail(round, t)}
                         targetName={`${gameName}-${round.roundId}`}
-                        gameState={gameState}
+                        roundState={roundState}
                     >
                         {renderGameDot(round, isShowBlink, index, numberOfItems)}
                     </RoundDotWrapper>

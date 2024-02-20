@@ -11,7 +11,7 @@ export type Props = {
     children: React.ReactNode;
     isHighlight: boolean;
     isDisplayOdd?: boolean;
-    gameState: RoundState;
+    roundState: RoundState;
     isShowWinningEffect: boolean;
     isShowPoolStake?: boolean;
     isShowTooltip?: boolean;

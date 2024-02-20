@@ -17,17 +17,17 @@ const BetContainer: React.FC<Props> = (props) => {
     }, [betValue]);
 
     useEffect(() => {
-        if (props.gameState === RoundState.InRound) {
+        if (props.roundState === RoundState.InRound) {
             setCustomStyle({ cursor: `url(${cursorImage}), auto` });
         } else {
             setCustomStyle({ cursor: "not-allowed" });
         }
-    }, [props.gameState, cursorImage]);
+    }, [props.roundState, cursorImage]);
 
     return (
         <div className={Styles["bet-container"]} style={customStyle}>
             {props.children}
-            {RoundState.LockingBet === props.gameState && <OverlayMaskWhite />}
+            {RoundState.LockingBet === props.roundState && <OverlayMaskWhite />}
         </div>
     );
 };

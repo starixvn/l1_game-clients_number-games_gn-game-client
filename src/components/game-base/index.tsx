@@ -68,7 +68,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.props.dispatch({
             type: GameEventActionType.SIGN_IN,
             payload: {
-                gameState: RoundState.None,
+                roundState: RoundState.None,
                 signedIn: false,
             },
         });
@@ -395,9 +395,9 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     };
 
     handleRemainingTime({ remainingTime }) {
-        const { gameState } = this.props.gameStateContextModel;
+        const { roundState } = this.props.gameStateContextModel;
         const { durations } = this.props;
-        if (gameState === RoundState.None || !this.isUMInFirstLoad) {
+        if (roundState === RoundState.None || !this.isUMInFirstLoad) {
             this.props.dispatch({
                 type: GameEventActionType.REMAINING_TIME,
                 payload: { remainingTime },
@@ -431,13 +431,13 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         // console.log(`roundTimeCounter: ${this.roundTimeCounter}`);
         // console.log(`Turn RemainingTime: ${remainingTime}`);
         // console.log(`Turn : ${this.turn}`);
-        const newGameState = this.props.determineGameState({ roundRemainingTime: this.roundTimeCounter, remainingTime, durations: this.props.durations });
-        // console.log(`RoundState: ${RoundState[newGameState]}`);
-        if (this.props.gameStateContextModel.gameState !== newGameState && !this.isConnectFailed) {
-            const newState = {
-                gameState: newGameState,
-                ...this.props.getStateByNextGameState({
-                    nextGameState: newGameState,
+        const newRoundState = this.props.determineRoundState({ roundRemainingTime: this.roundTimeCounter, remainingTime, durations: this.props.durations });
+        // console.log(`RoundState: ${RoundState[newRoundState]}`);
+        if (this.props.gameStateContextModel.roundState !== newRoundState && !this.isConnectFailed) {
+            const newGameState = {
+                roundState: newRoundState,
+                ...this.props.getNextRoundState({
+                    nextRoundState: newRoundState,
                     gameStateContextModel: this.props.gameStateContextModel,
                     durations: this.props.durations,
                     defaultResult: this.defaultResult,
@@ -447,8 +447,8 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             };
 
             this.props.dispatch({
-                type: GameEventActionType.SET_NEW_STATE,
-                payload: { newState },
+                type: GameEventActionType.SET_NEW_GAME_STATE,
+                payload: { newGameState },
             });
         }
     }
@@ -601,7 +601,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     };
 
     updateStatusShowResult = () => {
-        if (this.props.gameStateContextModel.gameState === RoundState.DisplayResult) {
+        if (this.props.gameStateContextModel.roundState === RoundState.DisplayResult) {
             this.props.dispatch({
                 type: GameEventActionType.PLAY_RESULT_ANIMATION,
                 payload: { playResultAnimation: false },
@@ -772,11 +772,11 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     render() {
-        const { signedIn, gameState, disabledMessage, disconnectReason } = this.props.gameStateContextModel;
+        const { signedIn, roundState, disabledMessage, disconnectReason } = this.props.gameStateContextModel;
         return (
             <GameContainer>
                 {signedIn ? this.renderGame() : <GameLoading />}
-                {gameState === RoundState.Disabled && (
+                {roundState === RoundState.Disabled && (
                     <DisabledModal
                         disableMessage={disabledMessage}
                         onSubmit={
@@ -785,7 +785,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                         }
                     />
                 )}
-                {gameState === RoundState.ConnectFailed && (
+                {roundState === RoundState.ConnectFailed && (
                     <ConnectFailedMessage
                         gameName={`${this.props.gameName.toLowerCase()}:${GameResourceKeys.GAME_NAME}`}
                         onSubmit={

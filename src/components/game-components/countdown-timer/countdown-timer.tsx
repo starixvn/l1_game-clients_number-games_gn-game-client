@@ -8,11 +8,11 @@ import { useGameStateContext } from "../../../_shared/react-contexts/game-state-
 
 export type Rotation = "clockwise" | "counterclockwise";
 const CountdownTimer = () => {
-    const { gameState } = useGameStateContext();
+    const { roundState } = useGameStateContext();
     const { t } = useTranslation("common");
-    console.log(`RoundState: ${RoundState[gameState]}`);
+    console.log(`RoundState: ${RoundState[roundState]}`);
 
-    switch (gameState) {
+    switch (roundState) {
         case RoundState.BeforeStartRound:
             return <></>;
         case RoundState.InRound:
@@ -61,8 +61,8 @@ const CountdownTimer = () => {
 const SimpleTimer = () => {
     const ctx = useGameContext();
     const { durations } = ctx;
-    const { gameState, remainingTime } = useGameStateContext();
-    const initialRemainingTime = gameState === RoundState.BeforeStartRound ? durations.placingBets : remainingTime;
+    const { roundState, remainingTime } = useGameStateContext();
+    const initialRemainingTime = roundState === RoundState.BeforeStartRound ? durations.placingBets : remainingTime;
     const [timeLeft, setTimeLeft] = useState(initialRemainingTime);
 
     useEffect(() => {
@@ -82,7 +82,7 @@ const SimpleTimer = () => {
 
     return (
         <div className={styles.timer}>
-            <div className={`${styles["countdown-timer"]} ${gameState === RoundState.LockingBet ? styles["lock-bet"] : ""}`}>
+            <div className={`${styles["countdown-timer"]} ${roundState === RoundState.LockingBet ? styles["lock-bet"] : ""}`}>
                 <span>{seconds}</span>
             </div>
         </div>

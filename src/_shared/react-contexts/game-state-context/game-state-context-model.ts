@@ -15,7 +15,7 @@ import { MessageTransmitterType } from "../../helpers/message-transmitter/type";
 export interface GameStateContextModel<Result, SettlementResult> {
     isConnect: boolean;
     signedIn: boolean;
-    gameState: RoundState;
+    roundState: RoundState;
     roundRemainingTime: number;
     remainingTime: number;
     gameConfigs: GameConfigs;
@@ -70,7 +70,7 @@ export const initialGameStateContextModel = ({ defaultResult, defaultSettlementR
     return {
         isConnect: false,
         signedIn: false,
-        gameState: RoundState.None,
+        roundState: RoundState.None,
         roundRemainingTime: 0,
         remainingTime: 0,
         roundHistory: [],
