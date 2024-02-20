@@ -386,12 +386,11 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
     handleDrawId = ({ drawId }) => {
         const numberOfTurnsPerRound = 4;
-        const turn = drawId % numberOfTurnsPerRound || numberOfTurnsPerRound;
-        this.turn = turn;
+        const turnCounter = drawId % numberOfTurnsPerRound === 0 ? numberOfTurnsPerRound : drawId % numberOfTurnsPerRound;
 
         this.props.dispatch({
             type: GameEventActionType.DRAW_ID,
-            payload: { drawId },
+            payload: { drawId, turnCounter },
         });
     };
 
@@ -403,12 +402,9 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 type: GameEventActionType.REMAINING_TIME,
                 payload: { remainingTime },
             });
-            this.props.dispatch({
-                type: GameEventActionType.DRAW_ID,
-                payload: { roundRemainingTime: remainingTime },
-            });
+
             this.roundTimeCounter = remainingTime;
-            const turnRemainingTime = remainingTime % durations.wholeTurn;
+            const turnRemainingTime = remainingTime % durations.wholeTurn - durations.switchRoundAnimation;
             this.runGame(turnRemainingTime === 0 ? durations.wholeTurn : turnRemainingTime);
         }
     }
@@ -435,7 +431,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         // console.log(`roundTimeCounter: ${this.roundTimeCounter}`);
         // console.log(`Turn RemainingTime: ${remainingTime}`);
         // console.log(`Turn : ${this.turn}`);
-        const newGameState = this.props.determineGameState({ remainingTime, durations: this.props.durations });
+        const newGameState = this.props.determineGameState({ roundRemainingTime: this.roundTimeCounter, remainingTime, durations: this.props.durations });
         // console.log(`GameState: ${GameState[newGameState]}`);
         if (this.props.gameStateContextModel.gameState !== newGameState && !this.isConnectFailed) {
             const newState = {

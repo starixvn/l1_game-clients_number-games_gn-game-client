@@ -91,13 +91,9 @@ const SimpleTimer = () => {
 
 const GameStatus: React.FC<{ children: React.ReactNode }> = ({ children }: { children: React.ReactNode }) => {
     const gameStateContextModel = useGameStateContext();
-    const { drawId } = gameStateContextModel;
-    const numberOfTurnsPerRound = 4;
-    const turn = drawId % numberOfTurnsPerRound || numberOfTurnsPerRound;
-
     return (
         <div className={`${styles["game-status"]}`}>
-            <span>{turn} Draw:</span>
+            <span>{gameStateContextModel.turnCounter} Draw:</span>
             {children}
         </div>
     );

@@ -63,6 +63,7 @@ export interface GameStateContextModel<Result, SettlementResult> {
     selectedChip: number;
     showConfirmBet: boolean;
     showConfirmDialog: boolean;
+    turnCounter: number;
 }
 
 export const initialGameStateContextModel = ({ defaultResult, defaultSettlementResult }) => {
@@ -113,5 +114,6 @@ export const initialGameStateContextModel = ({ defaultResult, defaultSettlementR
         selectedChip: 1,
         showConfirmBet: false,
         showConfirmDialog: false,
+        turnCounter: 1,
     };
 };

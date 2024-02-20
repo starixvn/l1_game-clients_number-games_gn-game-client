@@ -101,6 +101,7 @@ export interface GameEventPayload {
     showConfirmBet?: boolean;
     showConfirmDialog?: boolean;
     enabledQuickBet?: boolean;
+    turnCounter?: number;
 }
 
 export interface GameEventAction {

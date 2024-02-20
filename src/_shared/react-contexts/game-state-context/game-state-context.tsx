@@ -79,6 +79,7 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
         selectedChip,
         showConfirmBet,
         showConfirmDialog,
+        turnCounter
     } = payload;
 
     // console.log("payload: ", JSON.stringify(payload));
@@ -256,7 +257,7 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
                 ...state,
                 gameConfigs: {
                     ...state.gameConfigs,
-                    odds: odds,
+                    odds,
                 },
             };
         }
@@ -264,14 +265,15 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
         case GameEventActionType.DRAW_ID: {
             return {
                 ...state,
-                drawId: drawId,
+                drawId,
+                turnCounter
             };
         }
 
         case GameEventActionType.TOTAL_BET: {
             return {
                 ...state,
-                totalBets: totalBets,
+                totalBets,
             };
         }
 

@@ -20,6 +20,7 @@ export enum GameState {
     BeforeStartRound,
     BalancingBet,
     ConnectFailed,
+    SwitchRound,
 }
 export enum PopupType {
     Rebet,
@@ -120,12 +121,14 @@ export interface SocketInfo {
 }
 
 export interface GameDurations {
+    wholeRound: number;
     wholeTurn: number;
     placingBets: number;
     lockingBet: number;
     showResult: number;
     resultAnimation: number;
     beforeStartRound: number;
+    switchRoundAnimation: number;
 }
 
 export interface RebetStorageModel {

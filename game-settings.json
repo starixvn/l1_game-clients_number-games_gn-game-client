@@ -14,7 +14,8 @@
             "lockingBet": 3,
             "showResult": 5,
             "resultAnimation": 3,
-            "beforeStartRound": 2
+            "beforeStartRound": 2,
+            "switchRoundAnimation": 2
         }
     }
 }

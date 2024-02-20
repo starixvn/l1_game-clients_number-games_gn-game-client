@@ -1,8 +1,11 @@
 import { GameState, PopupType } from "../../components/game-base/type";
-import { useGameStateContext } from "../react-contexts/game-state-context/game-state-context";
 import { useTimeCounter } from "./use-time-counter";
 
-export function useDetermineGameState({ remainingTime, durations }) {
+export function useDetermineGameState({ roundRemainingTime, remainingTime, durations }) {
+    if (roundRemainingTime > durations.wholeRound - durations.switchRoundAnimation) {
+        return GameState.SwitchRound;
+    }
+
     if (remainingTime > durations.wholeTurn) {
         return GameState.BalancingBet;
     }
