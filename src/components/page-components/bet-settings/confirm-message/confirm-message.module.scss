@@ -9,6 +9,7 @@
 .error-message-container {
     padding: 1.8rem 1.5rem;
     font-size: 1.6rem;
+    background-color: var(--popup-background);
 
     @media (min-device-width: 768px) {
         position: absolute;

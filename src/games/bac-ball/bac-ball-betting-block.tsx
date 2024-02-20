@@ -108,7 +108,9 @@ export const BacBallBettingBlock: FC = () => {
                             </div>
                             <div className="flex items-center players gap-1">
                                 <span id="player-user-icon" className="icon-user"></span>
-                                <span id="player-no">{dataPlayer.players}</span>
+                                <span id="player-no" className="player-value">
+                                    {dataPlayer.players}
+                                </span>
                             </div>
                         </div>
                         <div id="player-percent" className={Style.percent}>
@@ -149,7 +151,9 @@ export const BacBallBettingBlock: FC = () => {
                             </div>
                             <div className="flex items-center players gap-1 justify-end">
                                 <span id="banker-user-icon" className="icon-user"></span>
-                                <span id="banker-no">{dataBanker.players}</span>
+                                <span id="banker-no" className="player-value">
+                                    {dataBanker.players}
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -201,7 +205,9 @@ export const BacBallBettingBlock: FC = () => {
                         </div>
                         <div className="flex items-center players gap-1 justify-center">
                             <span id="tie-user-icon" className="icon-user"></span>
-                            <span id="tie-no">{dataTie.players}</span>
+                            <span id="tie-no" className="player-value">
+                                {dataTie.players}
+                            </span>
                         </div>
                     </div>
                     <div id="tie-bet-name" className="bet-name text-center mt-4">

@@ -114,7 +114,7 @@ export const Games: React.FC<Props> = ({
     updateQueryGames,
     openGameId,
     openGameName,
-    fractionalOddsFormat
+    fractionalOddsFormat,
 }) => {
     const [playPlaceBetSound] = useSound("./static/sounds/place-bet.mp3");
     const urlHashtag = window.location.hash.replace("#", "").split("_");
@@ -193,7 +193,6 @@ export const Games: React.FC<Props> = ({
         history.pushState(null, "", `#${getCategoryHashTag(category, pageIndex)}`);
     };
 
-
     useEffect(() => {
         setIsJoinedGame(false);
     }, [openGameId, isJoinGame]);
@@ -228,6 +227,11 @@ export const Games: React.FC<Props> = ({
                     selectedCategory={selectedCategory}
                 />
                 <div className={`${styles["game-list"]} ${isMobileOnly ? styles[isIOS ? "ios-device" : "android-device"] : ""}`}>
+                    <div className="star-field">
+                        <div className="layer"></div>
+                        <div className="layer"></div>
+                        <div className="layer"></div>
+                    </div>
                     {renderListGames()}
                 </div>
             </SystemContextProvider>

@@ -26,6 +26,7 @@ import { ToolbarGuide } from "../hide-toolbar-guide";
 import Styles from "./dashboard.module.scss";
 import { GameGuideModal } from "./game-guide-modal";
 import NameGenerator from "./register/name-generator";
+import Footer from "../../game-components/footer";
 
 class Dashboard extends React.PureComponent<Props, State> {
     private notificationSocket: Socket = null;
@@ -404,6 +405,8 @@ class Dashboard extends React.PureComponent<Props, State> {
                         fractionalOddsFormat={authorizeInfo.user?.fractionalOddsFormat}
                     />
 
+                    <Footer />
+
                     {isShowHistory && (
                         <HistoryModal
                             onCloseModal={this.toggleHistoryModal}
@@ -439,9 +442,9 @@ class Dashboard extends React.PureComponent<Props, State> {
                             </BaseDialog>
                         </div>
                     )}
-                    {isMobileOnly && isSafari && (
+                    {/* {isMobileOnly && isSafari && (
                         <ToolbarGuide isShowToolbarGuide={isShowToolbarGuide} onCloseGuide={this.closeToolbarGuide}></ToolbarGuide>
-                    )}
+                    )} */}
                 </div>
             </AuthContextProvider>
         );

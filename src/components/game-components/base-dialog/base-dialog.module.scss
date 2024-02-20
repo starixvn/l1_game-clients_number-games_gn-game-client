@@ -5,18 +5,12 @@
 
 .popup {
     cursor: auto;
-    position: fixed;
+    position: absolute;
     padding: 1.6rem;
-    background: var(--popup-background);
-    border: 1px solid var(--popup-border);
     box-shadow: 0px -6px 30px rgba(0, 0, 0, 0.5);
     border-radius: 0.5rem 0.5rem 0 0;
     color: var(--popup-color);
     z-index: var(--popup-index);
-
-    @media (min-width: 768px) {
-        position: absolute;
-    }
 
     &.modal-full {
         top: 3.8rem;
@@ -27,23 +21,6 @@
         padding-right: 0;
         box-shadow: var(--popup-bet-form-shadow);
         z-index: var(--popup-guide-history-index);
-
-        @media (min-device-width: 768px) {
-            position: fixed;
-            top: 8.6rem;
-            border-radius: 0.5rem;
-        }
-
-        @media (min-width: 900px) {
-            left: calc(50% - 43.5rem);
-            right: auto;
-            width: 87rem;
-            margin: auto;
-        }
-
-        @media (min-width: 768px) {
-            bottom: 8.5rem;
-        }
     }
 
     &.modal-rebet {

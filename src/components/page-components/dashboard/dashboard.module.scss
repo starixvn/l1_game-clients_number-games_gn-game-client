@@ -9,6 +9,11 @@
     margin-left: auto;
     margin-right: auto;
     background: var(--page-background-color) var(--game-background-image) no-repeat top center fixed;
+
+    @media screen and (orientation: portrait) {
+        max-width: 100%;
+        background-size: cover;
+    }
 }
 
 .container-modal {
