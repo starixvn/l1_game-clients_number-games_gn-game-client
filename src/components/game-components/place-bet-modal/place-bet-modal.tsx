@@ -8,6 +8,7 @@ import { formatOdds, numberWithCommas } from "../../../_shared/helpers/number-he
 import { adjustPopupPosition, BetFormCss } from "./place-bet-modal-helper";
 import { PlaceBetModalProps } from "./place-bet-modal-type";
 import Styles from "./place-bet-modal.module.scss";
+import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 
 const defaultCss: BetFormCss = {
     position: {
@@ -18,7 +19,8 @@ const defaultCss: BetFormCss = {
 
 const PlaceBetModal: React.FC<PlaceBetModalProps> = (props) => {
     const wrapperRef = useRef<HTMLDivElement>(null);
-    const { roundId, gameSetting } = useGameContext();
+    const { gameSetting } = useGameContext();
+    const { roundId } = useGameStateContext();
     const { betValue, fractionalOddsFormat } = useSystemContext();
     const { t } = useTranslation([gameSetting.gameName.toLocaleLowerCase(), "common"]);
     const { betChoiceInfo } = props,

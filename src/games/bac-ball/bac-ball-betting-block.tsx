@@ -1,10 +1,9 @@
 import { AnimatedSprite, Container, Stage } from "@pixi/react";
 import { Resource, Texture } from "pixi.js";
-import { FC, useContext, useEffect, useState } from "react";
-import { BetOptionData } from "../../_shared/constants";
+import { FC, useEffect, useState } from "react";
 import { loadPixiAnimations } from "../../_shared/helpers/pixi-resource-loader";
 import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
-import { GameContext, useGameActionContext } from "../../_shared/react-contexts";
+import { useGameActionContext } from "../../_shared/react-contexts";
 import { GameState } from "../../components/game-base/type";
 import PercentageCircle from "../../components/game-components/percentage-circle";
 import Style from "./bac-ball.module.scss";
@@ -12,7 +11,6 @@ import Style from "./bac-ball.module.scss";
 export const BacBallBettingBlock: FC = () => {
     const [winningPlayerFrames, setWinningPlayerFrames] = useState<Texture<Resource>[]>([]);
     const [winningTieFrames, setWinningTieFrames] = useState<Texture<Resource>[]>([]);
-    const gameContext = useContext(GameContext);
     const gameActionContext = useGameActionContext();
     const gameStateContext = useGameStateContext();
 
@@ -39,10 +37,11 @@ export const BacBallBettingBlock: FC = () => {
     if (winningPlayerFrames.length > 0 && winningTieFrames.length > 0) {
         // waiting for rounduration class
         const isShowWinningHighlightPlayer =
-            gameContext.gameState === GameState.DisplayResult && gameStateContext?.settlementResult?.player;
+            gameStateContext?.gameState === GameState.DisplayResult && gameStateContext?.settlementResult?.player;
         const isShowWinningHighlightBanker =
-            gameContext.gameState === GameState.DisplayResult && gameStateContext?.settlementResult?.banker;
-        const isShowWinningHighlightTie = gameContext.gameState === GameState.DisplayResult && gameStateContext?.settlementResult?.tie;
+            gameStateContext?.gameState === GameState.DisplayResult && gameStateContext?.settlementResult?.banker;
+        const isShowWinningHighlightTie =
+            gameStateContext?.gameState === GameState.DisplayResult && gameStateContext?.settlementResult?.tie;
 
         return (
             <div className={`${Style["betting-zone"]}`}>

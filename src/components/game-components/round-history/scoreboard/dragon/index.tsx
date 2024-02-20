@@ -8,6 +8,7 @@ import { GameBaseProps } from "../../../../game-base/type";
 import { RoundDotGrid } from "../../../round-history/dot";
 import { GetNameFromChoice, GetChoiceValueFromTranslate } from "./dragon.helper";
 import Styles from "../round-history.module.scss";
+import { useGameStateContext } from "../../../../../_shared/react-contexts/game-state-context/game-state-context";
 
 const rowTotal = 7;
 const conditionChangeDotDefault = ({ settlementResult, choices }) => {
@@ -127,7 +128,8 @@ const ScoreboardDragon = <R, S>(props: Props<R, S>) => {
     const getDotDetails = dotDetails?.getDotDetails ?? getScoreboardDotDetails;
     const conditionChangeDotDetails = dotDetails?.conditionChangeDot ?? conditionChangeDotDefault;
 
-    const { isShowBlink, gameSetting } = useGameContext();
+    const { gameSetting } = useGameContext();
+    const { isShowBlink } = useGameStateContext();
     const isShowDotBlink = props?.isShowBlink ?? isShowBlink;
     return useMemo(() => {
         return (

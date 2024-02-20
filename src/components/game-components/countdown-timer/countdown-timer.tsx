@@ -81,7 +81,7 @@ const SimpleTimer = () => {
 
     return (
         <div className={styles.timer}>
-            <div className={`${styles["countdown-timer"]} ${ctx.gameState === GameState.LockingBet ? styles["lock-bet"] : ""}`}>
+            <div className={`${styles["countdown-timer"]} ${gameState === GameState.LockingBet ? styles["lock-bet"] : ""}`}>
                 <span>00:</span>
                 <span>{seconds}</span>
             </div>

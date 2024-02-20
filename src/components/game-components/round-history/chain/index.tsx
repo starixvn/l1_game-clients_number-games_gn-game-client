@@ -7,6 +7,7 @@ import { ContainerToolTip } from "../dot-tool-tip";
 import { MiniItemNext } from "../dot-next";
 import Styles from "./styles.module.scss";
 import { Props, PropsDot } from "./types";
+import { useGameStateContext } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
 
 const RoundDotWrapper = <R, S>({ children, renderRoundDetail, targetName, gameState }: PropsDot<R, S>) => {
     const [isOpenTooltip, setIsOpenTooltip] = useState(false);
@@ -31,7 +32,8 @@ const RoundDotWrapper = <R, S>({ children, renderRoundDetail, targetName, gameSt
 
 const ChainRoundHistory = <R, S>(props: Props<R, S>) => {
     const { gameState, roundHistory, renderRoundDetail, renderGameDot } = props;
-    const { gameSetting, isShowBlink } = useGameContext();
+    const { gameSetting } = useGameContext();
+    const { isShowBlink } = useGameStateContext();
     const gameName = gameSetting.gameName.toLowerCase();
     const { t } = useTranslation(gameName);
 

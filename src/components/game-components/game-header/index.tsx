@@ -9,6 +9,7 @@ import { GameResourceKeys } from "../../../_shared/resources/game-resource-keys"
 import { RebetStorageModel, ViewMode } from "../../game-base/type";
 import { favoriteGameIdIgnore } from "../../page-components/game-category/constants";
 import Styles from "./game-header.module.scss";
+import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 
 export type GameHeaderProps = {
     isShowCollapse: boolean;
@@ -17,7 +18,8 @@ export type GameHeaderProps = {
 };
 
 export const GameHeader: React.FunctionComponent<GameHeaderProps> = ({ isShowCollapse, isUpdateDisableRebet, countdownTimerComponent }) => {
-    const { roundId, gameSetting, viewMode, gameState } = useGameContext();
+    const { gameSetting } = useGameContext();
+    const { roundId } = useGameStateContext();
     const { favoriteGames, setFavorite } = useSystemContext();
     const { updateViewMode, renderResultCollapse, updateStatusShowResult } = useGameActionContext();
 
@@ -39,20 +41,16 @@ export const GameHeader: React.FunctionComponent<GameHeaderProps> = ({ isShowCol
         const onHeaderClick = (e: React.MouseEvent) => {
             e.stopPropagation();
             if (isMobileOnly) {
-                const mode = viewMode === ViewMode.full ? ViewMode.collapse : ViewMode.full;
+                const mode = ViewMode.full;
                 updateViewMode(mode);
                 updateStatusShowResult();
             }
         };
 
-        const showCollapseResult = isShowCollapse && viewMode === ViewMode.collapse;
+        const showCollapseResult = false;
 
         return (
-            <div
-                data-testid="header"
-                className={`${Styles.header} ${viewMode === ViewMode.collapse ? Styles["border-radius-bottom"] : ""}`}
-                onClick={onHeaderClick}
-            >
+            <div data-testid="header" className={`${Styles.header}`} onClick={onHeaderClick}>
                 <div className={Styles["header-left"]}>
                     <div className={Styles["header-overlay"]}></div>
                     {!favoriteGameIdIgnore.includes(gameId) ? (
@@ -81,12 +79,12 @@ export const GameHeader: React.FunctionComponent<GameHeaderProps> = ({ isShowCol
                 {showCollapseResult && <div className={Styles["header-result"]}>{renderResultCollapse()}</div>}
             </div>
         );
-    }, [gameState, roundId, viewMode, isFavorite]);
+    }, [roundId, isFavorite]);
 };
 
 const HeaderRight = ({ isUpdateDisableRebet }) => {
-    const gameActions = useGameActionContext();
-    const { roundId, gameState, gameSetting, ownBets, viewMode } = useGameContext();
+    const { gameSetting, ownBets } = useGameContext();
+    const { roundId } = useGameStateContext();
     const { id: gameId } = gameSetting;
     const [disabledRebet, updateDisableRebet] = useState<boolean>(false);
     const { t } = useTranslation();
@@ -101,7 +99,7 @@ const HeaderRight = ({ isUpdateDisableRebet }) => {
 
     useEffect(() => {
         isUpdateDisableRebet && updateDisableRebet(true);
-    }, [gameState]);
+    }, []);
 
     useEffect(() => {
         updateDisableRebet(rebetInfo?.betInfo === undefined || rebetInfo?.roundId + 1 !== roundId);
@@ -109,7 +107,7 @@ const HeaderRight = ({ isUpdateDisableRebet }) => {
 
     return (
         <div className={Styles["header-right"]}>
-            {viewMode !== ViewMode.collapse && (
+            {
                 <button
                     className={Styles.rebet}
                     disabled={disabledRebet || Object.keys(ownBets).length !== 0}
@@ -118,7 +116,7 @@ const HeaderRight = ({ isUpdateDisableRebet }) => {
                 >
                     {t(CommonResourceKeys.REBET)}
                 </button>
-            )}
+            }
         </div>
     );
 };

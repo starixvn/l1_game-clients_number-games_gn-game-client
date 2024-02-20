@@ -15,6 +15,7 @@ import GameLoading from "../game-components/game-loading";
 import { Notice } from "../game-components/notice";
 import { Boundary, GameBaseProps, GameState, PopupType, Position, ViewMode } from "./type";
 import { GameEventActionType } from "../../_shared/react-contexts/game-state-context/game-event-action";
+import { GameContextModel } from "../../_shared/react-contexts/game-context/game-context-type";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
     private readonly animationTime = 3000;
@@ -611,6 +612,10 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     renderNotice() {
+        if (this.props?.gameStateContextModel?.notice == null) {
+            return <></>;
+        }
+
         const { gameName, message, roundId, duration, minBet, maxBet, errorCode, isWarning, betChoice1, betChoice2 } =
             this.props.gameStateContextModel.notice;
         return (
@@ -679,7 +684,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 {this.renderHeaderBlock()}
                 {this.renderMenuButtons()}
                 {this.renderResultBlock()}
-                {this.props.gameStateContextModel.notice && this.renderNotice()}
+                {this.renderNotice()}
                 {this.renderBettingBlock()}
                 {this.renderSlidingChips()}
                 {this.renderStatistic()}
@@ -689,35 +694,12 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     renderGame() {
-        const {
-            remainingTime,
-            roundRemainingTime,
-            roundId,
-            drawId,
-            gameState,
-            ownBets,
-            gameConfigs,
-            viewMode,
-            playResultAnimation,
-            isShowBlink,
-            rate,
-        } = this.props.gameStateContextModel;
+        const { ownBets, rate } = this.props.gameStateContextModel;
 
-        const gameContext = {
+        const gameContext: GameContextModel = {
             ownBets,
             gameSetting: this.props,
-            roundId,
-            drawId,
-            gameConfigs,
-            gameState,
-            roundRemainingTime,
-            remainingTime,
-            viewMode,
-            playResultAnimation,
-            isShowBlink,
-            supportMD5: false,
             rate,
-            messageTransmitter: this.messageTransmitter,
         };
 
         const gameActionsContext = {
