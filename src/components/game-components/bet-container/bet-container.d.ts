@@ -1,7 +1,7 @@
-import { GameState } from "../game-base/type";
+import { RoundState } from "../game-base/type";
 
 type Props = {
-    gameState: GameState;
+    gameState: RoundState;
     children: React.ReactNode;
 };
 

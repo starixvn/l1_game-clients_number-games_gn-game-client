@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { buildVersion, ChipMapper, systemName } from "../../../_shared/constants";
 import { useSystemContext } from "../../../_shared/react-contexts";
-import { GameState } from "./../../game-base/type";
+import { RoundState } from "./../../game-base/type";
 import OverlayMaskWhite from "../overlay-mask-white";
 import { Props } from "./bet-container";
 import Styles from "./bet-container.module.scss";
@@ -17,7 +17,7 @@ const BetContainer: React.FC<Props> = (props) => {
     }, [betValue]);
 
     useEffect(() => {
-        if (props.gameState === GameState.InRound) {
+        if (props.gameState === RoundState.InRound) {
             setCustomStyle({ cursor: `url(${cursorImage}), auto` });
         } else {
             setCustomStyle({ cursor: "not-allowed" });
@@ -27,7 +27,7 @@ const BetContainer: React.FC<Props> = (props) => {
     return (
         <div className={Styles["bet-container"]} style={customStyle}>
             {props.children}
-            {GameState.LockingBet === props.gameState && <OverlayMaskWhite />}
+            {RoundState.LockingBet === props.gameState && <OverlayMaskWhite />}
         </div>
     );
 };

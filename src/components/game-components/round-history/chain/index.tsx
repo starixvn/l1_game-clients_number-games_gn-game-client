@@ -2,7 +2,7 @@ import { useTranslation } from "next-i18next";
 import React, { useEffect, useMemo, useState } from "react";
 
 import { useGameContext } from "../../../../_shared/react-contexts";
-import { GameState, Round } from "../../../game-base/type";
+import { RoundState, Round } from "../../../game-base/type";
 import { ContainerToolTip } from "../dot-tool-tip";
 import { MiniItemNext } from "../dot-next";
 import Styles from "./styles.module.scss";
@@ -13,7 +13,7 @@ const RoundDotWrapper = <R, S>({ children, renderRoundDetail, targetName, gameSt
     const [isOpenTooltip, setIsOpenTooltip] = useState(false);
     const toggleTooltip = () => setIsOpenTooltip(!isOpenTooltip);
     useEffect(() => {
-        if (gameState === GameState.LockingBet) {
+        if (gameState === RoundState.LockingBet) {
             setIsOpenTooltip(false);
         }
     }, [gameState]);

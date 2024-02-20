@@ -5,7 +5,7 @@ import { loadPixiAnimations } from "../../_shared/helpers/pixi-resource-loader";
 import { useGameActionContext } from "../../_shared/react-contexts";
 import { GameEventActionType } from "../../_shared/react-contexts/game-state-context/game-event-action";
 import { useGameStateContext, useGameStatesDispatch } from "../../_shared/react-contexts/game-state-context/game-state-context";
-import { GameState } from "../../components/game-base/type";
+import { RoundState } from "../../components/game-base/type";
 import PercentageCircle from "../../components/game-components/percentage-circle";
 import Style from "./bac-ball.module.scss";
 
@@ -48,11 +48,11 @@ export const BacBallBettingBlock: FC = () => {
     if (winningPlayerFrames.length > 0 && winningTieFrames.length > 0) {
         // waiting for rounduration class
         const isShowWinningHighlightPlayer =
-            gameStateContext?.gameState === GameState.DisplayResult && gameStateContext?.settlementResult?.player;
+            gameStateContext?.gameState === RoundState.DisplayResult && gameStateContext?.settlementResult?.player;
         const isShowWinningHighlightBanker =
-            gameStateContext?.gameState === GameState.DisplayResult && gameStateContext?.settlementResult?.banker;
+            gameStateContext?.gameState === RoundState.DisplayResult && gameStateContext?.settlementResult?.banker;
         const isShowWinningHighlightTie =
-            gameStateContext?.gameState === GameState.DisplayResult && gameStateContext?.settlementResult?.tie;
+            gameStateContext?.gameState === RoundState.DisplayResult && gameStateContext?.settlementResult?.tie;
 
         return (
             <div className={`${Style["betting-zone"]}`}>

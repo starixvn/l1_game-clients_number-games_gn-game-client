@@ -4,7 +4,7 @@ import { getAppSettings } from "../app-settings";
 import { buildServerUrl } from "../helpers";
 import { GameEventActionType } from "../react-contexts/game-state-context/game-event-action";
 import { GameStateContextModel } from "../react-contexts/game-state-context/game-state-context-model";
-import { GameState, SocketInfo } from "./../../components/game-base/type";
+import { RoundState, SocketInfo } from "./../../components/game-base/type";
 import MessageTransmitter from "./message-transmitter";
 
 export function InitSocketIO(
@@ -115,11 +115,11 @@ export function InitSocketIO(
             type: GameEventActionType.ROUND_HISTORY,
             payload: {
                 roundHistory: roundHistory,
-                roundId: [GameState.DisplayResult, GameState.BalancingBet].includes(gameState) || isUMInFirstLoad ? roundId - 1 : roundId,
-                result: gameState === GameState.LockingBet ? defaultResult : roundHistory[0]?.result,
-                settlementResult: gameState === GameState.LockingBet ? defaultSettlementResult : roundHistory[0]?.settlementResult,
-                playResultAnimation: [GameState.DisplayResult].includes(gameState) || isUMInFirstLoad ? false : true,
-                showResultInfo: [GameState.DisplayResult].includes(gameState) || isUMInFirstLoad ? true : false,
+                roundId: [RoundState.DisplayResult, RoundState.BalancingBet].includes(gameState) || isUMInFirstLoad ? roundId - 1 : roundId,
+                result: gameState === RoundState.LockingBet ? defaultResult : roundHistory[0]?.result,
+                settlementResult: gameState === RoundState.LockingBet ? defaultSettlementResult : roundHistory[0]?.settlementResult,
+                playResultAnimation: [RoundState.DisplayResult].includes(gameState) || isUMInFirstLoad ? false : true,
+                showResultInfo: [RoundState.DisplayResult].includes(gameState) || isUMInFirstLoad ? true : false,
             },
         });
     };

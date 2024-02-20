@@ -11,7 +11,7 @@ export interface GameConfigs {
     enableFreeBet: boolean;
 }
 
-export enum GameState {
+export enum RoundState {
     None,
     Disabled,
     InRound,
@@ -61,7 +61,7 @@ export type GameBaseProps = GamePropsContext & WithRouterProps;
 
 export interface GameBaseState<Result, SettlementResult> {
     signedIn: boolean;
-    gameState: GameState;
+    gameState: RoundState;
     roundRemainingTime: number;
     remainingTime: number;
     gameConfigs: GameConfigs;

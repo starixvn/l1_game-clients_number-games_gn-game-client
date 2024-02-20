@@ -2,7 +2,7 @@ import { Resource, Texture } from "pixi.js";
 import {
     Boundary,
     GameConfigs,
-    GameState,
+    RoundState,
     IBallColor,
     Notice,
     PopupType,
@@ -15,7 +15,7 @@ import { MessageTransmitterType } from "../../helpers/message-transmitter/type";
 export interface GameStateContextModel<Result, SettlementResult> {
     isConnect: boolean;
     signedIn: boolean;
-    gameState: GameState;
+    gameState: RoundState;
     roundRemainingTime: number;
     remainingTime: number;
     gameConfigs: GameConfigs;
@@ -70,7 +70,7 @@ export const initialGameStateContextModel = ({ defaultResult, defaultSettlementR
     return {
         isConnect: false,
         signedIn: false,
-        gameState: GameState.None,
+        gameState: RoundState.None,
         roundRemainingTime: 0,
         remainingTime: 0,
         roundHistory: [],

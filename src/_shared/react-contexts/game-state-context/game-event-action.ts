@@ -1,4 +1,4 @@
-import { GameConfigs, GameDurations, GameState, PopupType, ViewMode } from "../../../components/game-base/type";
+import { GameConfigs, GameDurations, RoundState, PopupType, ViewMode } from "../../../components/game-base/type";
 
 export enum GameEventActionType {
     CONNECT = "CONNECT",
@@ -95,7 +95,7 @@ export interface GameEventPayload {
     newState?: any;
     showResultInfo?: boolean;
     isShowBlink?: boolean;
-    gameState?: GameState;
+    gameState?: RoundState;
     roundRemainingTime?: number;
     selectedChip?: number;
     showConfirmBet?: boolean;

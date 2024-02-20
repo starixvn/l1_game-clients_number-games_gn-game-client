@@ -1,6 +1,6 @@
 import { useTranslation } from "next-i18next";
 import { useGameContext } from "../../../_shared/react-contexts/game-context/game-context";
-import { GameState } from "../../game-base/type";
+import { RoundState } from "../../game-base/type";
 import Loader from "../loader";
 import styles from "./countdown-timer.module.scss";
 import { useEffect, useState } from "react";
@@ -10,12 +10,12 @@ export type Rotation = "clockwise" | "counterclockwise";
 const CountdownTimer = () => {
     const { gameState } = useGameStateContext();
     const { t } = useTranslation("common");
-    console.log(`GameState: ${GameState[gameState]}`);
+    console.log(`RoundState: ${RoundState[gameState]}`);
 
     switch (gameState) {
-        case GameState.BeforeStartRound:
+        case RoundState.BeforeStartRound:
             return <></>;
-        case GameState.InRound:
+        case RoundState.InRound:
             return (
                 <>
                     {/* <div className={`loader-show-result`}></div> */}
@@ -25,7 +25,7 @@ const CountdownTimer = () => {
                     </GameStatus>
                 </>
             );
-        case GameState.LockingBet:
+        case RoundState.LockingBet:
             return (
                 <>
                     <SimpleTimer />
@@ -34,7 +34,7 @@ const CountdownTimer = () => {
                     </GameStatus>
                 </>
             );
-        case GameState.BalancingBet:
+        case RoundState.BalancingBet:
             return (
                 <>
                     <div className="loader-balance-pool"></div>
@@ -43,7 +43,7 @@ const CountdownTimer = () => {
                     </GameStatus>
                 </>
             );
-        case GameState.None:
+        case RoundState.None:
             return <div className={`loader-show-result`}></div>;
 
         default:
@@ -62,7 +62,7 @@ const SimpleTimer = () => {
     const ctx = useGameContext();
     const { durations } = ctx;
     const { gameState, remainingTime } = useGameStateContext();
-    const initialRemainingTime = gameState === GameState.BeforeStartRound ? durations.placingBets : remainingTime;
+    const initialRemainingTime = gameState === RoundState.BeforeStartRound ? durations.placingBets : remainingTime;
     const [timeLeft, setTimeLeft] = useState(initialRemainingTime);
 
     useEffect(() => {
@@ -82,7 +82,7 @@ const SimpleTimer = () => {
 
     return (
         <div className={styles.timer}>
-            <div className={`${styles["countdown-timer"]} ${gameState === GameState.LockingBet ? styles["lock-bet"] : ""}`}>
+            <div className={`${styles["countdown-timer"]} ${gameState === RoundState.LockingBet ? styles["lock-bet"] : ""}`}>
                 <span>{seconds}</span>
             </div>
         </div>

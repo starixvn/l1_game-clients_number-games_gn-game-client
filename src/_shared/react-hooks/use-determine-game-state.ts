@@ -1,32 +1,32 @@
-import { GameState, PopupType } from "../../components/game-base/type";
+import { RoundState, PopupType } from "../../components/game-base/type";
 import { useTimeCounter } from "./use-time-counter";
 
 export function useDetermineGameState({ roundRemainingTime, remainingTime, durations }) {
     if (roundRemainingTime > durations.wholeRound - durations.switchRoundAnimation) {
-        return GameState.SwitchRound;
+        return RoundState.SwitchRound;
     }
 
     if (remainingTime > durations.wholeTurn) {
-        return GameState.BalancingBet;
+        return RoundState.BalancingBet;
     }
 
     if (remainingTime >= durations.wholeTurn - durations.showResult) {
-        return GameState.DisplayResult;
+        return RoundState.DisplayResult;
     }
 
     if (durations.beforeStartRound && remainingTime > durations.placingBets) {
-        return GameState.BeforeStartRound;
+        return RoundState.BeforeStartRound;
     }
 
     if (remainingTime <= durations.placingBets && remainingTime > durations.lockingBet) {
-        return GameState.InRound;
+        return RoundState.InRound;
     }
 
     if (remainingTime <= durations.lockingBet && remainingTime >= 0) {
-        return GameState.LockingBet;
+        return RoundState.LockingBet;
     }
 
-    return GameState.None;
+    return RoundState.None;
 }
 
 export function useGetStateByNextGameState({
@@ -48,23 +48,23 @@ export function useGetStateByNextGameState({
             gameState: nextGameState,
         });
 
-        // if (nextGameState === GameState.InRound) {
+        // if (nextGameState === RoundState.InRound) {
         //     this.betWin = 0;
         // }
 
-        if (nextGameState === GameState.LockingBet) {
+        if (nextGameState === RoundState.LockingBet) {
             // removeBetChoiceFocus && removeBetChoiceFocus();
         }
 
         const newStateDetector = [
             {
-                condition: nextGameState === GameState.InRound,
+                condition: nextGameState === RoundState.InRound,
                 state: {
                     betWin: 0,
                 },
             },
             {
-                condition: [GameState.BeforeStartRound, GameState.InRound].includes(nextGameState),
+                condition: [RoundState.BeforeStartRound, RoundState.InRound].includes(nextGameState),
                 state: {
                     ownBets: {},
                     totalBets: {},
@@ -76,10 +76,12 @@ export function useGetStateByNextGameState({
                 },
             },
             {
-                condition: durations.beforeStartRound ? nextGameState === GameState.BeforeStartRound : nextGameState === GameState.InRound,
+                condition: durations.beforeStartRound
+                    ? nextGameState === RoundState.BeforeStartRound
+                    : nextGameState === RoundState.InRound,
             },
             {
-                condition: nextGameState === GameState.LockingBet,
+                condition: nextGameState === RoundState.LockingBet,
                 state: {
                     isShowBlink: true,
                     displayPopup: [PopupType.Rebet, PopupType.PlaceBet].includes(displayPopup) ? null : displayPopup,

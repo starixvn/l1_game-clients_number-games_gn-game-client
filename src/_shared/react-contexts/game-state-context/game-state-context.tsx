@@ -1,5 +1,5 @@
 import { createContext, useContext, useReducer } from "react";
-import { GameState, PopupType } from "../../../components/game-base/type";
+import { RoundState, PopupType } from "../../../components/game-base/type";
 import { ConnectFailedReasonKey } from "../../../components/game-components/error-message/type";
 import { LanguageLocaleMapper } from "../../constants";
 import { GetLocalizedErrorMessage } from "../../helpers/notice-helper";
@@ -113,7 +113,7 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
             return {
                 ...state,
                 isConnect: false,
-                gameState: GameState.None,
+                gameState: RoundState.None,
                 disconnectReason: ConnectFailedReasonKey.lostConnection,
             };
         }
@@ -121,7 +121,7 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
         case GameEventActionType.UM: {
             return {
                 ...state,
-                gameState: GameState.Disabled,
+                gameState: RoundState.Disabled,
                 disabledMessage: um_message[LanguageLocaleMapper["en"]], // TO DO: remove hard code
                 showResultInfo: false,
             };
@@ -239,7 +239,7 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
         case GameEventActionType.ERROR_CODE: {
             return {
                 ...state,
-                gameState: GameState.ConnectFailed,
+                gameState: RoundState.ConnectFailed,
                 signedIn: false,
                 disconnectReason,
             };

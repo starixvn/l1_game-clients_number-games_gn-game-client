@@ -1,11 +1,11 @@
-import { GameState } from "../../components/game-base/type";
+import { RoundState } from "../../components/game-base/type";
 
 export function useTimeCounter({ remainingTime, durations, gameState }) {
     switch (gameState) {
-        case GameState.InRound:
-        case GameState.LockingBet:
+        case RoundState.InRound:
+        case RoundState.LockingBet:
             return remainingTime;
-        case GameState.BeforeStartRound:
+        case RoundState.BeforeStartRound:
             return durations.beforeStartRound;
         default:
             return 0;

@@ -1,4 +1,4 @@
-import { GameState } from "../../game-base/type";
+import { RoundState } from "../../game-base/type";
 
 export enum HighlightType {
     None,
@@ -11,7 +11,7 @@ export type Props = {
     children: React.ReactNode;
     isHighlight: boolean;
     isDisplayOdd?: boolean;
-    gameState: GameState;
+    gameState: RoundState;
     isShowWinningEffect: boolean;
     isShowPoolStake?: boolean;
     isShowTooltip?: boolean;

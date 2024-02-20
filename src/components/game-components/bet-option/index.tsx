@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useCountUp } from "react-countup";
 import { useGameActionContext, useGameContext, useSystemContext } from "../../../_shared/react-contexts";
 import { formatOdds, numberWithCommas } from "../../../_shared/helpers/number-helper";
-import { GameState } from "../../game-base/type";
+import { RoundState } from "../../game-base/type";
 import { Tooltip } from "../tooltip";
 import Styles from "./bet-option.module.scss";
 import { HighlightType, Props } from "./types";
@@ -41,13 +41,13 @@ const BetOption: React.FunctionComponent<Props> = ({
 
     useEffect(() => {
         const actionByGameState = {
-            [GameState.LockingBet]: () => {
+            [RoundState.LockingBet]: () => {
                 updateHighlightType(HighlightType.None);
             },
-            [GameState.InRound]: () => {
+            [RoundState.InRound]: () => {
                 updateHighlightType(HighlightType.Background);
             },
-            [GameState.BeforeStartRound]: () => {
+            [RoundState.BeforeStartRound]: () => {
                 updateHighlightType(HighlightType.Background);
             },
         };
@@ -83,7 +83,7 @@ const BetOption: React.FunctionComponent<Props> = ({
     const betOptionClasses = `${Styles["bet-option"]} ${isFocusChoice ? Styles["focus"] : ""} 
         ${isHighlight && Styles[HighlightClassNameMapper[highlightType]]} 
         ${isHighlight && isShowWinningEffect && Styles["winning-effect"]} 
-        ${gameState !== GameState.InRound && Styles["disallowed"]}
+        ${gameState !== RoundState.InRound && Styles["disallowed"]}
         ${Styles[gameName.toLocaleLowerCase()]}`;
 
     const oddsClass = `${Styles["odd"]}`;

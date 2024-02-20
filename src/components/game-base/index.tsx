@@ -18,7 +18,7 @@ import GameLoading from "../game-components/game-loading";
 import { Notice } from "../game-components/notice";
 import ConfirmDialog from "../game-components/submit-dialog";
 import BetSettings from "../page-components/bet-settings";
-import { Boundary, GameBaseProps, GameState, PopupType, Position, ViewMode } from "./type";
+import { Boundary, GameBaseProps, RoundState, PopupType, Position, ViewMode } from "./type";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
     private readonly animationTime = 3000;
@@ -68,7 +68,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.props.dispatch({
             type: GameEventActionType.SIGN_IN,
             payload: {
-                gameState: GameState.None,
+                gameState: RoundState.None,
                 signedIn: false,
             },
         });
@@ -397,7 +397,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     handleRemainingTime({ remainingTime }) {
         const { gameState } = this.props.gameStateContextModel;
         const { durations } = this.props;
-        if (gameState === GameState.None || !this.isUMInFirstLoad) {
+        if (gameState === RoundState.None || !this.isUMInFirstLoad) {
             this.props.dispatch({
                 type: GameEventActionType.REMAINING_TIME,
                 payload: { remainingTime },
@@ -432,7 +432,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         // console.log(`Turn RemainingTime: ${remainingTime}`);
         // console.log(`Turn : ${this.turn}`);
         const newGameState = this.props.determineGameState({ roundRemainingTime: this.roundTimeCounter, remainingTime, durations: this.props.durations });
-        // console.log(`GameState: ${GameState[newGameState]}`);
+        // console.log(`RoundState: ${RoundState[newGameState]}`);
         if (this.props.gameStateContextModel.gameState !== newGameState && !this.isConnectFailed) {
             const newState = {
                 gameState: newGameState,
@@ -601,7 +601,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     };
 
     updateStatusShowResult = () => {
-        if (this.props.gameStateContextModel.gameState === GameState.DisplayResult) {
+        if (this.props.gameStateContextModel.gameState === RoundState.DisplayResult) {
             this.props.dispatch({
                 type: GameEventActionType.PLAY_RESULT_ANIMATION,
                 payload: { playResultAnimation: false },
@@ -776,7 +776,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         return (
             <GameContainer>
                 {signedIn ? this.renderGame() : <GameLoading />}
-                {gameState === GameState.Disabled && (
+                {gameState === RoundState.Disabled && (
                     <DisabledModal
                         disableMessage={disabledMessage}
                         onSubmit={
@@ -785,7 +785,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                         }
                     />
                 )}
-                {gameState === GameState.ConnectFailed && (
+                {gameState === RoundState.ConnectFailed && (
                     <ConnectFailedMessage
                         gameName={`${this.props.gameName.toLowerCase()}:${GameResourceKeys.GAME_NAME}`}
                         onSubmit={
