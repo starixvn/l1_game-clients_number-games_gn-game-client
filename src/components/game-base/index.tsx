@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 import { InitSocketIO } from "../../_shared/helpers";
 import { MessageTransmitterType } from "../../_shared/helpers/message-transmitter/type";
 import { GetLocalizedErrorMessage } from "../../_shared/helpers/notice-helper";
-import { AuthContext, GameActionsContextProvider, GameContextProvider } from "../../_shared/react-contexts";
+import { AuthContext, AuthContextModel, GameActionsContextProvider, GameContextProvider } from "../../_shared/react-contexts";
 import { GameEventActionType } from "../../_shared/react-contexts/game-state-context/game-event-action";
 import { GameResourceKeys } from "../../_shared/resources";
 import ConfirmBet from "../game-components/confirm-bet";
@@ -18,6 +18,7 @@ import { Notice } from "../game-components/notice";
 import ConfirmDialog from "../game-components/submit-dialog";
 import BetSettings from "../page-components/bet-settings";
 import { Boundary, GameBaseProps, GameState, PopupType, Position, ViewMode } from "./type";
+import { getBalance } from "../../services/auth-service";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
     private readonly animationTime = 3000;
@@ -229,7 +230,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     handleKickOut(errorCode: string) {
         (errorCode === "1001" || errorCode === "1002") &&
             setTimeout(() => {
-                // this.context.signOut();
+                (this.context as AuthContextModel)?.signOut();
             }, 10000);
     }
 
@@ -255,7 +256,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
             const { router } = this.props;
             setTimeout(() => {
-                // router.push("/timeout", "/timeout", { locale: i18n.language });
                 router.push("/timeout", "/timeout", { locale: "i18n.language" });
             }, 10000);
         } else {
@@ -341,7 +341,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     };
 
     handleUserData({ user, gameConfigs }) {
-        //this.context.setBalance(user.red);
+        (this.context as AuthContextModel)?.setBalance(user.red);
         this.props.dispatch({
             type: GameEventActionType.USER,
             payload: { userData: { user, gameConfigs } },
@@ -459,12 +459,13 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     async updateUserBalance() {
-        // const balanceResponse = await getBalance(this.context.session);
-        // if (balanceResponse.isSuccessful) {
-        //     this.context.setBalance(balanceResponse.balance);
-        // } else {
-        //     this.props.setApiErrorMessage(balanceResponse.errorCode);
-        // }
+        const authContext = this.context as AuthContextModel;
+        const balanceResponse = await getBalance(authContext?.session);
+        if (balanceResponse.isSuccessful) {
+            authContext?.setBalance(balanceResponse.balance);
+        } else {
+            this.props.setApiErrorMessage(balanceResponse.errorCode);
+        }
     }
 
     getFinishAnimationDuration() {
@@ -768,7 +769,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     render() {
-        const { signedIn, gameState, disabledMessage, viewMode, disconnectReason } = this.props.gameStateContextModel;
+        const { signedIn, gameState, disabledMessage, disconnectReason } = this.props.gameStateContextModel;
         return (
             <GameContainer>
                 {signedIn ? this.renderGame() : <GameLoading />}
