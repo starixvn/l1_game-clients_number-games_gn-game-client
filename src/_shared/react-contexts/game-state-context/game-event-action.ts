@@ -37,6 +37,7 @@ export enum GameEventActionType {
     TOGLE_QUICK_BET = "TOGLE_QUICK_BET",
     SET_SELECT_CHIP = "SET_SELECT_CHIP",
     SHOW_CONFIRM_BET = "SHOW_CONFIRM_BET",
+    SHOW_CONFIRM_DIALOG = "SHOW_CONFIRM_DIALOG",
 }
 
 export interface GameEventPayload {
@@ -98,6 +99,7 @@ export interface GameEventPayload {
     roundRemainingTime?: number;
     selectedChip?: number;
     showConfirmBet?: boolean;
+    showConfirmDialog?: boolean;
     enabledQuickBet?: boolean;
 }
 

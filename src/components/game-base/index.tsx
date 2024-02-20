@@ -15,6 +15,7 @@ import { ConnectFailedReasonKey } from "../game-components/error-message/type";
 import GameContainer from "../game-components/game-container";
 import GameLoading from "../game-components/game-loading";
 import { Notice } from "../game-components/notice";
+import ConfirmDialog from "../game-components/submit-dialog";
 import BetSettings from "../page-components/bet-settings";
 import { Boundary, GameBaseProps, GameState, PopupType, Position, ViewMode } from "./type";
 
@@ -684,6 +685,40 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     renderConfirmBet() {
         if (!this.props.gameStateContextModel.showConfirmBet) return null;
         return <ConfirmBet />;
+    }
+
+    renderConfirmDialog() {
+        if (!this.props.gameStateContextModel.showConfirmDialog) {
+            return null;
+        }
+
+        return (
+            <ConfirmDialog
+                title={<>Insufficient Funds</>}
+                content={<>Outstanding Balance: 500</>}
+                subContent={<>Want to Bet?</>}
+                onCloseModal={() => {
+                    this.props.dispatch({
+                        type: GameEventActionType.SHOW_CONFIRM_DIALOG,
+                        payload: {
+                            showConfirmDialog: false,
+                        },
+                    });
+
+                    console.log("close");
+                }}
+                onSubmit={() => {
+                    this.props.dispatch({
+                        type: GameEventActionType.SHOW_CONFIRM_DIALOG,
+                        payload: {
+                            showConfirmDialog: false,
+                        },
+                    });
+
+                    console.log("yes");
+                }}
+            />
+        );
     }
 
     renderStatistic() {

@@ -78,6 +78,7 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
         enabledQuickBet,
         selectedChip,
         showConfirmBet,
+        showConfirmDialog,
     } = payload;
 
     // console.log("payload: ", JSON.stringify(payload));
@@ -390,6 +391,14 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
                 showConfirmBet,
             };
         }
+
+        case GameEventActionType.SHOW_CONFIRM_DIALOG: {
+            return {
+                ...state,
+                showConfirmDialog,
+            };
+        }
+
         default: {
             throw Error("Unknown action: " + action.type);
         }

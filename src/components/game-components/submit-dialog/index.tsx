@@ -6,7 +6,7 @@ import Styles from "./submit-dialog.module.scss";
 
 type SubmitDialogProps = { onSubmit?: Function; title; content; subContent };
 
-export const SubmitDialog: React.FC<Props & SubmitDialogProps> = ({
+export const ConfirmDialog: React.FC<Props & SubmitDialogProps> = ({
     onCloseModal = null,
     isOpen = true,
     type = ModalType.Full,
@@ -46,7 +46,7 @@ export const SubmitDialog: React.FC<Props & SubmitDialogProps> = ({
                         className={`btn-red ${Styles["btn-yes"]}`}
                         onClick={() => onCloseModal()}
                         type="button"
-                        data-testid="btn-submit-gallery"
+                        data-testid="btn-no-summit-dialog"
                     >
                         {t({ key: "no" })}
                     </button>
@@ -54,7 +54,7 @@ export const SubmitDialog: React.FC<Props & SubmitDialogProps> = ({
                         className={`btn-red ${Styles["btn-no"]}`}
                         onClick={() => onSubmit()}
                         type="button"
-                        data-testid="btn-submit-gallery"
+                        data-testid="btn-yes-summit-dialog"
                     >
                         {t({ key: "yes" })}
                     </button>
@@ -64,4 +64,4 @@ export const SubmitDialog: React.FC<Props & SubmitDialogProps> = ({
     );
 };
 
-export default SubmitDialog;
+export default ConfirmDialog;
