@@ -3,21 +3,22 @@ import { isMobileOnly } from "react-device-detect";
 import Slider from "react-slick";
 import useSound from "use-sound";
 import { ChipLabelMapper, ChipMapper, ChipValuesBySystem as ChipValues, systemName } from "../../../../_shared/constants";
+import { StorageHelper, localStorageKeys } from "../../../../_shared/helpers";
+import { GameEventActionType } from "../../../../_shared/react-contexts/game-state-context/game-event-action";
+import { useGameStateContext, useGameStatesDispatch } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
 import Styles from "./chip-slider.module.scss";
 
 const SlidingTimeInMillisecond = 100;
 let isSwipe = true;
 
-export const ChipSlider: React.FC<{
-    updateBetValue: Function;
-    enabledSound: boolean;
-    enabledQuickBet: boolean;
-    toggleSlidingChip: Function;
-    betValue: number;
-}> = ({ updateBetValue, enabledSound, enabledQuickBet, toggleSlidingChip, betValue }) => {
+export const ChipSlider: React.FC<{}> = () => {
+    const gameStateContext = useGameStateContext();
+    const dispatch = useGameStatesDispatch();
+    const enabledSound = StorageHelper.get(localStorageKeys.playSound) ?? false;
+    const { enabledQuickBet } = gameStateContext;
     const [enabledPrevBtn, setEnabledPrevBtn] = useState(false);
     const [enabledNextBtn, setEnabledNextBtn] = useState(true);
-    const [selectedChip, setSelectedChip] = useState(betValue);
+    const [selectedChip, setSelectedChip] = useState(gameStateContext.selectedChip);
     const [isSliding, setIsSliding] = useState(false);
     let sliderRef = null;
     const [playSound] = useSound("./static/sounds/chip-click.mp3");
@@ -47,7 +48,12 @@ export const ChipSlider: React.FC<{
     const handleSelectChip = (chipValue: number) => {
         setSelectedChip(chipValue);
         updateArrowsByChipValue(chipValue);
-        updateBetValue(chipValue);
+        dispatch({
+            type: GameEventActionType.SET_SELECT_CHIP,
+            payload: {
+                selectedChip: chipValue,
+            },
+        });
         enabledSound && playSound();
     };
 

@@ -1,13 +1,4 @@
-import { withTranslation } from "next-i18next";
 import { withRouter } from "next/router";
-import React, { FC, useReducer } from "react";
-import GameBase from "../../components/game-base/";
-import { GameBaseProps, GameBaseState } from "../../components/game-base/type";
-import CountdownTimer from "../../components/game-components/countdown-timer/countdown-timer";
-import { BacBallResult, BacBallSettlementResult } from "./types";
-import { BacBallResultBlock } from "./bac-ball-result-block";
-import { BacBallBettingBlock } from "./bac-ball-betting-block";
-import { StatisticFollowPercent } from "../../components/game-components/statistic";
 import {
     GameStateProvider,
     useGameStateContext,
@@ -15,6 +6,13 @@ import {
 } from "../../_shared/react-contexts/game-state-context/game-state-context";
 import { useDetermineGameState, useGetStateByNextGameState } from "../../_shared/react-hooks/use-determine-game-state";
 import { useTimeCounter } from "../../_shared/react-hooks/use-time-counter";
+import GameBase from "../../components/game-base/";
+import { GameBaseProps } from "../../components/game-base/type";
+import CountdownTimer from "../../components/game-components/countdown-timer/countdown-timer";
+import { StatisticFollowPercent } from "../../components/game-components/statistic";
+import { BacBallBettingBlock } from "./bac-ball-betting-block";
+import { BacBallResultBlock } from "./bac-ball-result-block";
+import { BacBallResult, BacBallSettlementResult } from "./types";
 
 export const Choices = { player: "player", banker: "banker", tie: "tie" };
 
@@ -60,6 +58,9 @@ class BacBall extends GameBase<GameBaseProps> {
     }
 
     renderScoreboards() {
+        if (!super.renderScoreboards()) {
+            return;
+        }
         const { roundHistory } = this.props.gameStateContextModel;
 
         return <StatisticFollowPercent roundHistory={roundHistory} statisticRuleEntries={StatisticRuleEntries}></StatisticFollowPercent>;

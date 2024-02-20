@@ -2,8 +2,9 @@ import { AnimatedSprite, Container, Stage } from "@pixi/react";
 import { Resource, Texture } from "pixi.js";
 import { FC, useEffect, useState } from "react";
 import { loadPixiAnimations } from "../../_shared/helpers/pixi-resource-loader";
-import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
 import { useGameActionContext } from "../../_shared/react-contexts";
+import { GameEventActionType } from "../../_shared/react-contexts/game-state-context/game-event-action";
+import { useGameStateContext, useGameStatesDispatch } from "../../_shared/react-contexts/game-state-context/game-state-context";
 import { GameState } from "../../components/game-base/type";
 import PercentageCircle from "../../components/game-components/percentage-circle";
 import Style from "./bac-ball.module.scss";
@@ -13,6 +14,7 @@ export const BacBallBettingBlock: FC = () => {
     const [winningTieFrames, setWinningTieFrames] = useState<Texture<Resource>[]>([]);
     const gameActionContext = useGameActionContext();
     const gameStateContext = useGameStateContext();
+    const dispatch = useGameStatesDispatch();
 
     useEffect(() => {
         if (winningPlayerFrames.length === 0 || winningTieFrames.length === 0) {
@@ -27,7 +29,18 @@ export const BacBallBettingBlock: FC = () => {
     }, [winningPlayerFrames.length, winningTieFrames.length]);
 
     const onClickBet = (choice) => {
-        gameActionContext.placeBet(choice, 1);
+        //TODO: validate bet
+        if (gameStateContext.enabledQuickBet) {
+            gameActionContext.placeBet(choice, gameStateContext.selectedChip);
+            return;
+        } else {
+            dispatch({
+                type: GameEventActionType.SHOW_CONFIRM_BET,
+                payload: {
+                    showConfirmBet: true,
+                },
+            });
+        }
     };
 
     const dataPlayer = { players: 1, betChoice: "player" };

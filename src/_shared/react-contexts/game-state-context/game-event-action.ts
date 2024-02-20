@@ -34,6 +34,9 @@ export enum GameEventActionType {
     ACTIVE_SCORE_BOARD = "ACTIVE_SCORE_BOARD",
     PLAY_RESULT_ANIMATION = "PLAY_RESULT_ANIMATION",
     SHOW_RESULT_INFO_TIME_OUT = "SHOW_RESULT_INFO_TIME_OUT",
+    TOGLE_QUICK_BET = "TOGLE_QUICK_BET",
+    SET_SELECT_CHIP = "SET_SELECT_CHIP",
+    SHOW_CONFIRM_BET = "SHOW_CONFIRM_BET",
 }
 
 export interface GameEventPayload {
@@ -93,6 +96,9 @@ export interface GameEventPayload {
     isShowBlink?: boolean;
     gameState?: GameState;
     roundRemainingTime?: number;
+    selectedChip?: number;
+    showConfirmBet?: boolean;
+    enabledQuickBet?: boolean;
 }
 
 export interface GameEventAction {

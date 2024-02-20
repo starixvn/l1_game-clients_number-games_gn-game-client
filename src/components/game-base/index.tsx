@@ -6,15 +6,17 @@ import { InitSocketIO } from "../../_shared/helpers";
 import { MessageTransmitterType } from "../../_shared/helpers/message-transmitter/type";
 import { GetLocalizedErrorMessage } from "../../_shared/helpers/notice-helper";
 import { AuthContext, GameActionsContextProvider, GameContextProvider } from "../../_shared/react-contexts";
+import { GameEventActionType } from "../../_shared/react-contexts/game-state-context/game-event-action";
 import { GameResourceKeys } from "../../_shared/resources";
+import ConfirmBet from "../game-components/confirm-bet";
 import DisabledModal from "../game-components/disabled-modal";
 import { ConnectFailedMessage } from "../game-components/error-message";
 import { ConnectFailedReasonKey } from "../game-components/error-message/type";
 import GameContainer from "../game-components/game-container";
 import GameLoading from "../game-components/game-loading";
 import { Notice } from "../game-components/notice";
+import BetSettings from "../page-components/bet-settings";
 import { Boundary, GameBaseProps, GameState, PopupType, Position, ViewMode } from "./type";
-import { GameEventActionType } from "../../_shared/react-contexts/game-state-context/game-event-action";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
     private readonly animationTime = 3000;
@@ -671,11 +673,17 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     renderScoreboards() {
+        if (this.props.gameStateContextModel.showConfirmBet) return null;
         return <></>;
     }
 
     renderSlidingChips() {
-        return <></>;
+        return <BetSettings></BetSettings>;
+    }
+
+    renderConfirmBet() {
+        if (!this.props.gameStateContextModel.showConfirmBet) return null;
+        return <ConfirmBet />;
     }
 
     renderStatistic() {
@@ -691,6 +699,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 {this.renderNotice()}
                 {this.renderBettingBlock()}
                 {this.renderSlidingChips()}
+                {this.renderConfirmBet()}
                 {this.renderStatistic()}
                 {this.renderScoreboards()}
             </>

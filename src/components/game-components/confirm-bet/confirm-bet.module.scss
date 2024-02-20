@@ -1,0 +1,37 @@
+.confirm-bet-container {
+    height: 4rem;
+    display: flex;
+    justify-content: space-evenly;
+
+    .btn-cancel {
+        background: #332229;
+        border-radius: 2.3rem;
+        color: #ff5449;
+        font-size: 1.2rem;
+        font-weight: 700;
+        line-height: 1.4rem;
+        width: 13rem;
+        height: 3.4rem;
+        :hover:enabled {
+            background: #332229;
+        }
+    }
+    .btn-cancel:hover:enabled {
+        background: #332229;
+    }
+
+    .btn-confirm {
+        background: #1f2f2f;
+        border-radius: 2.3rem;
+        color: #0caf60;
+        font-size: 1.2rem;
+        font-weight: 700;
+        line-height: 1.4rem;
+        width: 13rem;
+        height: 3.4rem;
+    }
+
+    .btn-confirm:hover:enabled {
+        background: #1f2f2f;
+    }
+}

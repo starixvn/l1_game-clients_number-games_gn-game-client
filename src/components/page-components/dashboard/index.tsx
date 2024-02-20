@@ -9,7 +9,6 @@ import { buildUrl, GetLocalizedErrorMessage, localStorageKeys, StorageHelper } f
 import { AuthContextProvider } from "../../../_shared/react-contexts";
 import { authorize, createNickname, getSettingGames, reCheckIn } from "../../../services/auth-service";
 import { updateSignInSMStatus, updateThemeSetting } from "../../../services/user-setting-service";
-import BetSettings from "../../page-components/bet-settings";
 import { Props, State } from "./type";
 
 import { io, Socket } from "socket.io-client";
@@ -77,7 +76,6 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.toggleGuideModal = this.toggleGuideModal.bind(this);
         this.updateFavoriteGames = this.updateFavoriteGames.bind(this);
         this.setEnabledQuickBet = this.setEnabledQuickBet.bind(this);
-        this.setBetValue = this.setBetValue.bind(this);
         this.handleUpdateUserStakeLevel = this.handleUpdateUserStakeLevel.bind(this);
         this.signOut = this.signOut.bind(this);
         this.toggleSlidingChip = this.toggleSlidingChip.bind(this);
@@ -290,10 +288,6 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.setState({ enabledQuickBet: enabled });
     }
 
-    setBetValue(value: number) {
-        this.setState({ betValue: value });
-    }
-
     closeDialog() {
         this.setState({ isShowErrorModal: false });
         this.isKickOut && this.signOut();
@@ -408,18 +402,6 @@ class Dashboard extends React.PureComponent<Props, State> {
                         openGameId={openGameId}
                         openGameName={openGameName}
                         fractionalOddsFormat={authorizeInfo.user?.fractionalOddsFormat}
-                    />
-                    <BetSettings
-                        enabledQuickBet={enabledQuickBet}
-                        updateEnabledQuickBet={this.setEnabledQuickBet}
-                        updateBetValue={this.setBetValue}
-                        enabledSound={enabledPlaySound}
-                        user={authorizeInfo.user}
-                        toggleSlidingChip={this.toggleSlidingChip}
-                        isShowSlidingChip={isShowSlidingChip}
-                        toggleAnnouncementModal={this.toggleAnnouncementModal}
-                        betValue={betValue}
-                        isShowToolbarGuide={isShowToolbarGuide}
                     />
 
                     {isShowHistory && (

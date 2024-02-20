@@ -1,21 +1,30 @@
 import { Trans, useTranslation } from "next-i18next";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { isIOS, isMobileOnly } from "react-device-detect";
-
+import { StorageHelper, localStorageKeys } from "../../../../_shared/helpers";
 import { useAuthContext } from "../../../../_shared/react-contexts";
+import { GameEventActionType } from "../../../../_shared/react-contexts/game-state-context/game-event-action";
+import { useGameStateContext, useGameStatesDispatch } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
 import { updateUserQuickBetSetting } from "../../../../services/user-setting-service";
 import BaseDialog from "../../../game-components/base-dialog";
 import { ModalType } from "../../../game-components/base-dialog/type";
 import ConfirmMessage from "../confirm-message";
 import Styles from "./quick-bet-btn.module.scss";
 
-export const QuickBetBtn: React.FC<{
-    enabledQuickBet: boolean;
-    updateEnabledQuickBet: Function;
-    isHeaderSetting: boolean;
-    isShowToolbarGuide: boolean;
-}> = ({ enabledQuickBet, updateEnabledQuickBet, isHeaderSetting, isShowToolbarGuide }) => {
-    const [isShowModalConfirm, setIsShowPopup] = useState(false);
+export const QuickBetBtn = () => {
+    const gameStateContext = useGameStateContext();
+    const dispatch = useGameStatesDispatch();
+    const { enabledQuickBet, showConfirmBet } = gameStateContext;
+    const isShowToolbarGuide = StorageHelper.get(localStorageKeys.toolbarGuide) ?? true;
+    const updateEnabledQuickBet = (value) =>
+        dispatch({
+            type: GameEventActionType.TOGLE_QUICK_BET,
+            payload: {
+                enabledQuickBet: value,
+            },
+        });
+
+    const [isShowModalConfirm, setIsShowModalConfirm] = useState(false);
     const [isShowTooltip, setIsShowTooltip] = useState(true);
     const tooltipRef = useRef<HTMLDivElement>(null);
     let deviceClass = "";
@@ -33,7 +42,7 @@ export const QuickBetBtn: React.FC<{
     };
 
     const closeModal = () => {
-        setIsShowPopup(false);
+        setIsShowModalConfirm(false);
     };
 
     useEffect(() => {
@@ -54,7 +63,7 @@ export const QuickBetBtn: React.FC<{
 
     const onClickQuickBet = () => {
         if (!enabledQuickBet) {
-            setIsShowPopup(true);
+            setIsShowModalConfirm(true);
         } else {
             updateEnabledQuickBet(false);
             updateUserQuickBetSetting(authContext.session, false);
@@ -74,8 +83,10 @@ export const QuickBetBtn: React.FC<{
     const toolTipPositionClass = isMobileOnly ? `bottom ${Styles["isMobile"]}` : "top",
         toolTipClass = `popover-custom ${toolTipPositionClass} ${Styles["hint-one-click-bet"]} `;
 
-    return (
-        <div className={`${Styles["toggle"]} ${isHeaderSetting ? Styles["header-setting"] : Styles["bet-setting"]} ${deviceClass}`}>
+    return showConfirmBet ? (
+        <></>
+    ) : (
+        <div className={`${Styles["toggle"]} ${Styles["bet-setting"]} ${deviceClass}`}>
             <div className={Styles["one-click-bet"]} onClick={onClickQuickBet}>
                 {t("common:oneClickTitle")}
             </div>

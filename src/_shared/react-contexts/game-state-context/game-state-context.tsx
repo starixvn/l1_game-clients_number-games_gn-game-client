@@ -1,9 +1,9 @@
 import { createContext, useContext, useReducer } from "react";
 import { GameState, PopupType } from "../../../components/game-base/type";
-import { GameEventAction, GameEventActionType } from "./game-event-action";
 import { ConnectFailedReasonKey } from "../../../components/game-components/error-message/type";
 import { LanguageLocaleMapper } from "../../constants";
 import { GetLocalizedErrorMessage } from "../../helpers/notice-helper";
+import { GameEventAction, GameEventActionType } from "./game-event-action";
 import { GameStateContextModel, initialGameStateContextModel } from "./game-state-context-model";
 
 const GameStateContext = createContext({ rate: 1 } as GameStateContextModel<any, any>);
@@ -75,6 +75,9 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
         newState,
         showResultInfo,
         isShowBlink,
+        enabledQuickBet,
+        selectedChip,
+        showConfirmBet,
     } = payload;
 
     // console.log("payload: ", JSON.stringify(payload));
@@ -187,9 +190,14 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
         }
 
         case GameEventActionType.OWN_BETS: {
+            if (ownBetsData) {
+                return {
+                    ...state,
+                    ownBets: ownBetsData.ownBets,
+                };
+            }
             return {
                 ...state,
-                ownBets: ownBetsData.ownBets,
             };
         }
 
@@ -362,6 +370,26 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
             };
         }
 
+        case GameEventActionType.SET_SELECT_CHIP: {
+            return {
+                ...state,
+                selectedChip,
+            };
+        }
+
+        case GameEventActionType.TOGLE_QUICK_BET: {
+            return {
+                ...state,
+                enabledQuickBet,
+            };
+        }
+
+        case GameEventActionType.SHOW_CONFIRM_BET: {
+            return {
+                ...state,
+                showConfirmBet,
+            };
+        }
         default: {
             throw Error("Unknown action: " + action.type);
         }
