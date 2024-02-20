@@ -3,12 +3,12 @@ import { Resource, Texture } from "pixi.js";
 import {
     Boundary,
     GameConfigs,
-    RoundState,
     IBallColor,
     Notice,
     PopupType,
     Position,
     Round,
+    RoundState,
     ViewMode,
 } from "../../../components/game-base/type";
 import { MessageTransmitterType } from "../../helpers/message-transmitter/type";
@@ -66,6 +66,7 @@ export interface GameStateContextModel<Result, SettlementResult> {
     showConfirmBet: boolean;
     showConfirmDialog: boolean;
     turnCounter: number;
+    notConfirmOwnBets: object;
 }
 
 export const initialGameStateContextModel = ({ defaultResult, defaultSettlementResult }) => {
@@ -118,5 +119,6 @@ export const initialGameStateContextModel = ({ defaultResult, defaultSettlementR
         showConfirmBet: false,
         showConfirmDialog: false,
         turnCounter: 1,
+        notConfirmOwnBets: {},
     };
 };

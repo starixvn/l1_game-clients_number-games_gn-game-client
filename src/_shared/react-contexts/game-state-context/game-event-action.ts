@@ -1,4 +1,4 @@
-import { GameConfigs, GameDurations, RoundState, PopupType, ViewMode } from "../../../components/game-base/type";
+import { GameConfigs, GameDurations, PopupType, RoundState, ViewMode } from "../../../components/game-base/type";
 
 export enum GameEventActionType {
     CONNECT = "CONNECT",
@@ -39,6 +39,7 @@ export enum GameEventActionType {
     SET_SELECT_CHIP = "SET_SELECT_CHIP",
     SHOW_CONFIRM_BET = "SHOW_CONFIRM_BET",
     SHOW_CONFIRM_DIALOG = "SHOW_CONFIRM_DIALOG",
+    NOT_CONFIRM_OWN_BETS = "NOT_CONFIRM_OWN_BETS",
 }
 
 export interface GameEventPayload {
@@ -104,6 +105,7 @@ export interface GameEventPayload {
     showConfirmDialog?: boolean;
     enabledQuickBet?: boolean;
     turnCounter?: number;
+    notConfirmOwnBets?: any;
 }
 
 export interface GameEventAction {

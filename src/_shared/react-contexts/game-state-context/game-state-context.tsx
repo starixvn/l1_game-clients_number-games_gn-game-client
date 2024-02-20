@@ -82,6 +82,7 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
         showConfirmBet,
         showConfirmDialog,
         turnCounter,
+        notConfirmOwnBets,
     } = payload;
 
     // console.log("payload: ", JSON.stringify(payload));
@@ -406,6 +407,13 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
             return {
                 ...state,
                 showConfirmDialog,
+            };
+        }
+
+        case GameEventActionType.NOT_CONFIRM_OWN_BETS: {
+            return {
+                ...state,
+                notConfirmOwnBets,
             };
         }
 

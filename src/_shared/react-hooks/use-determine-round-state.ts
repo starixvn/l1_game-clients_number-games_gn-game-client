@@ -1,4 +1,4 @@
-import { RoundState, PopupType } from "../../components/game-base/type";
+import { PopupType, RoundState } from "../../components/game-base/type";
 import { useTimeCounter } from "./use-time-counter";
 
 export function useDetermineRoundState({ roundRemainingTime, remainingTime, durations }) {
@@ -84,6 +84,8 @@ export function useNextRoundState({
                     notice: [PopupType.Rebet, PopupType.PlaceBet].includes(displayPopup) ? null : notice,
                     result: defaultResult ?? result,
                     settlementResult: defaultSettlementResult ?? settlementResult,
+                    notConfirmOwnBets: {},
+                    showConfirmBet: false,
                 },
             },
         ];

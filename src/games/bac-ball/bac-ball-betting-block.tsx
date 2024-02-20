@@ -3,7 +3,6 @@ import { Resource, Texture } from "pixi.js";
 import { FC, useEffect, useState } from "react";
 import { loadPixiAnimations } from "../../_shared/helpers/pixi-resource-loader";
 import { useGameActionContext } from "../../_shared/react-contexts";
-import { GameEventActionType } from "../../_shared/react-contexts/game-state-context/game-event-action";
 import { useGameStateContext, useGameStatesDispatch } from "../../_shared/react-contexts/game-state-context/game-state-context";
 import { RoundState } from "../../components/game-base/type";
 import PercentageCircle from "../../components/game-components/percentage-circle";
@@ -28,18 +27,43 @@ export const BacBallBettingBlock: FC = () => {
         }
     }, [winningPlayerFrames.length, winningTieFrames.length]);
 
-    const onClickBet = (choice) => {
-        if (gameStateContext.enabledQuickBet) {
-            gameActionContext.placeBet(choice, gameStateContext.selectedChip);
-        } else {
-            dispatch({
-                type: GameEventActionType.SHOW_CONFIRM_BET,
-                payload: {
-                    showConfirmBet: true,
-                },
-            });
-        }
-    };
+    const onClickBet = (choice) => gameActionContext.placeBet(choice, gameStateContext.selectedChip);
+
+    const playerOwnBetsValue = gameStateContext?.ownBets["player"] ?? 0;
+    const playerNotConfirmOwnBetsValue = gameStateContext?.notConfirmOwnBets["player"] ?? 0;
+    const playerOwnBets = playerOwnBetsValue + playerNotConfirmOwnBetsValue;
+    const playerOwnBetsRender =
+        playerOwnBets != 0 ? (
+            <span id="player-own-bet" className="bet-value">
+                {playerOwnBets ?? playerOwnBets}
+            </span>
+        ) : (
+            <></>
+        );
+
+    const bankerOwnBetsValue = gameStateContext?.ownBets["banker"] ?? 0;
+    const bankerNotConfirmOwnBetsValue = gameStateContext?.notConfirmOwnBets["banker"] ?? 0;
+    const bankerOwnBets = bankerOwnBetsValue + bankerNotConfirmOwnBetsValue;
+    const bankerOwnBetsRender =
+        bankerOwnBets != 0 ? (
+            <span id="banker-own-bet" className="bet-value">
+                {bankerOwnBets ?? bankerOwnBets}
+            </span>
+        ) : (
+            <></>
+        );
+
+    const tieOwnBetsValue = gameStateContext?.ownBets["tie"] ?? 0;
+    const tieNotConfirmOwnBetsValue = gameStateContext?.notConfirmOwnBets["tie"] ?? 0;
+    const tieOwnBets = tieOwnBetsValue + tieNotConfirmOwnBetsValue;
+    const tieOwnBetsRender =
+        tieOwnBets != 0 ? (
+            <span id="tie-own-bet" className="bet-value">
+                {tieOwnBets ?? tieOwnBets}
+            </span>
+        ) : (
+            <></>
+        );
 
     const dataPlayer = { players: 1, betChoice: "player" };
     const dataBanker = { players: 1, betChoice: "banker" };
@@ -123,15 +147,7 @@ export const BacBallBettingBlock: FC = () => {
                     <div id="player-odds" className="bet-odds text-center">
                         {gameStateContext?.gameConfigs?.odds["player"]}
                     </div>
-                    <div className={`own-bet ${Style["own-bet"]}`}>
-                        {gameStateContext?.ownBets["player"] ? (
-                            <span id="player-own-bet" className="bet-value">
-                                {gameStateContext?.ownBets["player"]}
-                            </span>
-                        ) : (
-                            <></>
-                        )}
-                    </div>
+                    <div className={`own-bet ${Style["own-bet"]}`}>{playerOwnBetsRender}</div>
                 </div>
 
                 <div
@@ -163,15 +179,7 @@ export const BacBallBettingBlock: FC = () => {
                     <div id="banker-odds" className="bet-odds text-center">
                         {gameStateContext?.gameConfigs?.odds["banker"]}
                     </div>
-                    <div className={`own-bet ${Style["own-bet"]}`}>
-                        {gameStateContext?.ownBets["banker"] ? (
-                            <span id="banker-own-bet" className="bet-value">
-                                {gameStateContext?.ownBets["banker"]}
-                            </span>
-                        ) : (
-                            <></>
-                        )}
-                    </div>
+                    <div className={`own-bet ${Style["own-bet"]}`}>{bankerOwnBetsRender}</div>
                 </div>
 
                 <div
@@ -216,15 +224,7 @@ export const BacBallBettingBlock: FC = () => {
                     <div id="tie-odds" className="bet-odds text-center">
                         {gameStateContext?.gameConfigs?.odds["tie"]}
                     </div>
-                    <div className={`own-bet ${Style["own-bet"]}`}>
-                        {gameStateContext?.ownBets["tie"] ? (
-                            <span id="tie-own-bet" className="bet-value">
-                                {gameStateContext?.ownBets["tie"]}
-                            </span>
-                        ) : (
-                            <></>
-                        )}
-                    </div>
+                    <div className={`own-bet ${Style["own-bet"]}`}>{tieOwnBetsRender}</div>
                 </div>
             </div>
         );

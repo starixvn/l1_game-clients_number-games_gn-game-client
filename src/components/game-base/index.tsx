@@ -2,6 +2,7 @@ import React from "react";
 import Auth from "sc-user-service-client/dist/auth";
 import { Socket } from "socket.io-client";
 import { v4 as uuidv4 } from "uuid";
+import { confirmBetChoice } from "../../_shared/constants";
 import { InitSocketIO } from "../../_shared/helpers";
 import { MessageTransmitterType } from "../../_shared/helpers/message-transmitter/type";
 import { GetLocalizedErrorMessage } from "../../_shared/helpers/notice-helper";
@@ -18,7 +19,7 @@ import GameLoading from "../game-components/game-loading";
 import { Notice } from "../game-components/notice";
 import ConfirmDialog from "../game-components/submit-dialog";
 import BetSettings from "../page-components/bet-settings";
-import { Boundary, GameBaseProps, RoundState, PopupType, Position, ViewMode } from "./type";
+import { Boundary, GameBaseProps, PopupType, Position, RoundState, ViewMode } from "./type";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
     private readonly animationTime = 3000;
@@ -403,7 +404,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             });
 
             this.roundTimeCounter = remainingTime;
-            const turnRemainingTime = remainingTime % durations.wholeTurn - durations.switchRoundAnimation;
+            const turnRemainingTime = (remainingTime % durations.wholeTurn) - durations.switchRoundAnimation;
             this.runGame(turnRemainingTime === 0 ? durations.wholeTurn : turnRemainingTime);
         }
     }
@@ -429,7 +430,11 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         // console.log(`---------------`);
         // console.log(`roundTimeCounter: ${this.roundTimeCounter}`);
         // console.log(`Turn RemainingTime: ${remainingTime}`);
-        const newRoundState = this.props.determineRoundState({ roundRemainingTime: this.roundTimeCounter, remainingTime, durations: this.props.durations });
+        const newRoundState = this.props.determineRoundState({
+            roundRemainingTime: this.roundTimeCounter,
+            remainingTime,
+            durations: this.props.durations,
+        });
         // console.log(`RoundState: ${RoundState[newRoundState]}`);
         if (this.props.gameStateContextModel.roundState !== newRoundState && !this.isConnectFailed) {
             const newGameState = {
@@ -531,15 +536,50 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     placeBet(betChoice: string, amount: number, betPosition?: Position, betOptionBoundary?: Boundary) {
-        const { displayPopup } = this.props.gameStateContextModel;
-        const betValue = this.props.gameStateContextModel.selectedChip;
-        const ownBets = this.props.gameStateContextModel.ownBets;
-        const tempBets = { ownBets, ...{ [betChoice]: betValue } };
-        //TODO: validate bet
+        const gameStateContext = this.props.gameStateContextModel;
+        const notConfirmOwnBets = gameStateContext.notConfirmOwnBets;
 
-        // if (!validateBet(tempBets)) {
-        //     return;
-        // }
+        if (betChoice == confirmBetChoice && notConfirmOwnBets) {
+            //TODO: validate notConfirmOwnBets bet
+            const betChoices = {};
+            Object.entries(notConfirmOwnBets).forEach(([key, value]) => {
+                betChoices[key] = value;
+            });
+
+            this.socket.emit("bet", { betChoices });
+
+            this.props.dispatch({
+                type: GameEventActionType.NOT_CONFIRM_OWN_BETS,
+                payload: { notConfirmOwnBets: {} },
+            });
+
+            return;
+        }
+
+        if (gameStateContext.roundState != RoundState.InRound) {
+            // validate bet not in round
+            return;
+        }
+
+        if (!gameStateContext.enabledQuickBet) {
+            !gameStateContext.showConfirmBet &&
+                this.props.dispatch({
+                    type: GameEventActionType.SHOW_CONFIRM_BET,
+                    payload: {
+                        showConfirmBet: true,
+                    },
+                });
+
+            notConfirmOwnBets[betChoice] = (notConfirmOwnBets[betChoice] ?? 0) + gameStateContext.selectedChip;
+
+            this.props.dispatch({
+                type: GameEventActionType.NOT_CONFIRM_OWN_BETS,
+                payload: { notConfirmOwnBets },
+            });
+            return;
+        }
+
+        const { displayPopup } = this.props.gameStateContextModel;
 
         if (this.isProcessingBet && displayPopup !== PopupType.Rebet) {
             this.props.dispatch({

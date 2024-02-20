@@ -90,3 +90,5 @@ export const buildVersion = process.env.buildVersion;
 export const AppTypes = {
     mobile: 1,
 };
+
+export const confirmBetChoice = "confirm";

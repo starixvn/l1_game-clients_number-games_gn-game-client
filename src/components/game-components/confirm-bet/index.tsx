@@ -1,6 +1,7 @@
 import { useTranslate } from "@tolgee/react";
 import React, { useEffect } from "react";
-import { useSystemContext } from "../../../_shared/react-contexts";
+import { confirmBetChoice } from "../../../_shared/constants";
+import { useGameActionContext } from "../../../_shared/react-contexts";
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 import { useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import Styles from "./confirm-bet.module.scss";
@@ -8,8 +9,8 @@ import Styles from "./confirm-bet.module.scss";
 export type Props = {};
 
 const ConfirmBet: React.FC<Props> = ({}: Props) => {
-    const systemContext = useSystemContext();
     const dispatch = useGameStatesDispatch();
+    const gameActionContext = useGameActionContext();
 
     const { t } = useTranslate(["SabaNumber"]);
     useEffect(() => {
@@ -23,6 +24,11 @@ const ConfirmBet: React.FC<Props> = ({}: Props) => {
                 showConfirmBet: false,
             },
         });
+
+        dispatch({
+            type: GameEventActionType.NOT_CONFIRM_OWN_BETS,
+            payload: { notConfirmOwnBets: {} },
+        });
     };
     const onConfirm = () => {
         dispatch({
@@ -31,6 +37,8 @@ const ConfirmBet: React.FC<Props> = ({}: Props) => {
                 showConfirmBet: false,
             },
         });
+
+        gameActionContext.placeBet(confirmBetChoice, 0);
     };
 
     return (
