@@ -636,7 +636,12 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     closeNotice() {
-        this.setState({ notice: null });
+        this.props.dispatch({
+            type: GameEventActionType.DISPLAY_POPUP,
+            payload: {
+                notice: null,
+            },
+        });
     }
 
     getOddsByChoice(choice: string) {
