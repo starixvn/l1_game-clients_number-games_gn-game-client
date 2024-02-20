@@ -29,10 +29,8 @@ export const BacBallBettingBlock: FC = () => {
     }, [winningPlayerFrames.length, winningTieFrames.length]);
 
     const onClickBet = (choice) => {
-        //TODO: validate bet
         if (gameStateContext.enabledQuickBet) {
             gameActionContext.placeBet(choice, gameStateContext.selectedChip);
-            return;
         } else {
             dispatch({
                 type: GameEventActionType.SHOW_CONFIRM_BET,
@@ -124,9 +122,13 @@ export const BacBallBettingBlock: FC = () => {
                         {gameStateContext?.gameConfigs?.odds["player"]}
                     </div>
                     <div className={`own-bet ${Style["own-bet"]}`}>
-                        <span id="player-own-bet" className="bet-value">
-                            10
-                        </span>
+                        {gameStateContext?.ownBets["player"] ? (
+                            <span id="player-own-bet" className="bet-value">
+                                {gameStateContext?.ownBets["player"]}
+                            </span>
+                        ) : (
+                            <></>
+                        )}
                     </div>
                 </div>
 
@@ -158,9 +160,13 @@ export const BacBallBettingBlock: FC = () => {
                         {gameStateContext?.gameConfigs?.odds["banker"]}
                     </div>
                     <div className={`own-bet ${Style["own-bet"]}`}>
-                        <span id="banker-own-bet" className="bet-value">
-                            10
-                        </span>
+                        {gameStateContext?.ownBets["banker"] ? (
+                            <span id="banker-own-bet" className="bet-value">
+                                {gameStateContext?.ownBets["banker"]}
+                            </span>
+                        ) : (
+                            <></>
+                        )}
                     </div>
                 </div>
 
@@ -205,9 +211,13 @@ export const BacBallBettingBlock: FC = () => {
                         {gameStateContext?.gameConfigs?.odds["tie"]}
                     </div>
                     <div className={`own-bet ${Style["own-bet"]}`}>
-                        <span id="tie-own-bet" className="bet-value">
-                            10
-                        </span>
+                        {gameStateContext?.ownBets["tie"] ? (
+                            <span id="tie-own-bet" className="bet-value">
+                                {gameStateContext?.ownBets["tie"]}
+                            </span>
+                        ) : (
+                            <></>
+                        )}
                     </div>
                 </div>
             </div>

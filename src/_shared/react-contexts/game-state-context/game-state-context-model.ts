@@ -109,7 +109,7 @@ export const initialGameStateContextModel = ({ defaultResult, defaultSettlementR
         messageTransmitter: undefined,
         result: defaultResult,
         settlementResult: defaultSettlementResult,
-        enabledQuickBet: false,
+        enabledQuickBet: true,
         selectedChip: 1,
         showConfirmBet: false,
         showConfirmDialog: false,

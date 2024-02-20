@@ -1,14 +1,11 @@
-import { GameState, SocketInfo } from "./../../components/game-base/type";
 import { io } from "socket.io-client";
 import MsgpackParser from "socket.io-msgpack-parser";
 import { getAppSettings } from "../app-settings";
 import { buildServerUrl } from "../helpers";
-import { ConnectFailedReasonKey } from "../../components/game-components/error-message/type";
 import { GameEventActionType } from "../react-contexts/game-state-context/game-event-action";
-import { useGameStateContext, useGameStatesDispatch } from "../react-contexts/game-state-context/game-state-context";
-import { MessageTransmitterType } from "./message-transmitter/type";
-import MessageTransmitter from "./message-transmitter";
 import { GameStateContextModel } from "../react-contexts/game-state-context/game-state-context-model";
+import { GameState, SocketInfo } from "./../../components/game-base/type";
+import MessageTransmitter from "./message-transmitter";
 
 export function InitSocketIO(
     socketInfo: SocketInfo,
@@ -49,6 +46,7 @@ export function InitSocketIO(
         messageTransmitter.register("gameConfigs", handleGameConfigs);
         messageTransmitter.register("roundHistory", handleRoundHistory);
         messageTransmitter.register("totalBets", handleTotalBet);
+        messageTransmitter.register("ownBets", handleOwnBets);
         messageTransmitter.register("odds", handleOdds);
 
         // this.messageTransmitter.register("finish", this.handleFinish.bind(this));
@@ -67,6 +65,15 @@ export function InitSocketIO(
             type: GameEventActionType.GAME_CONFIGS,
             payload: {
                 gameConfigs,
+            },
+        });
+    };
+
+    const handleOwnBets = ({ ownBets }) => {
+        dispatch({
+            type: GameEventActionType.OWN_BETS,
+            payload: {
+                ownBets,
             },
         });
     };

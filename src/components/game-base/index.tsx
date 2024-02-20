@@ -281,9 +281,9 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         }
     };
 
-    handleEndBet = ({ endBet, betChoice, notice, kickedOut, apiError }) => {
+    handleEndBet = ({ endBet, ownBets, betChoice, notice, kickedOut, apiError }) => {
         const { playPlaceBetSound } = this.props;
-        const { displayPopup, ownBets } = this.props.gameStateContextModel;
+        const { displayPopup } = this.props.gameStateContextModel;
         this.isProcessingBet = false;
         this.clearRetryInterval();
         this.props.dispatch({
@@ -296,10 +296,9 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         } else {
             this.playAcceptedBetAnimation(endBet, this.betPosition);
             playPlaceBetSound();
-            ownBets[betChoice] = ownBets[betChoice] ? ownBets[betChoice] + endBet : endBet;
             this.props.dispatch({
                 type: GameEventActionType.OWN_BETS,
-                payload: { ownBetsData: { ownBets: { ...ownBets } } },
+                payload: { ownBetsData: { ownBets } },
             });
             this.updateUserBalance();
         }
@@ -539,6 +538,15 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
     placeBet(betChoice: string, amount: number, betPosition?: Position, betOptionBoundary?: Boundary) {
         const { displayPopup } = this.props.gameStateContextModel;
+        const betValue = this.props.gameStateContextModel.selectedChip;
+        const ownBets = this.props.gameStateContextModel.ownBets;
+        const tempBets = { ownBets, ...{ [betChoice]: betValue } };
+        //TODO: validate bet
+
+        // if (!validateBet(tempBets)) {
+        //     return;
+        // }
+
         if (this.isProcessingBet && displayPopup !== PopupType.Rebet) {
             this.props.dispatch({
                 type: GameEventActionType.BET_PROCESSING,
