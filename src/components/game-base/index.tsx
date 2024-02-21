@@ -456,15 +456,16 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     handleGamePlay(remainingTime: number) {
-        // console.log(`---------------`);
-        // console.log(`roundTimeCounter: ${this.roundTimeCounter}`);
-        // console.log(`Turn RemainingTime: ${remainingTime}`);
+        console.log(`---------------`);
+        console.log(`roundTimeCounter: ${this.roundTimeCounter}`);
+        console.log(`Turn RemainingTime: ${remainingTime}`);
+
         const newRoundState = this.props.determineRoundState({
             roundRemainingTime: this.roundTimeCounter,
             remainingTime,
             durations: this.props.durations,
         });
-        // console.log(`RoundState: ${RoundState[newRoundState]}`);
+
         if (this.props.gameStateContextModel.roundState !== newRoundState && !this.isConnectFailed) {
             const newGameState = {
                 roundState: newRoundState,
@@ -474,7 +475,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                     durations: this.props.durations,
                     defaultResult: this.defaultResult,
                     defaultSettlementResult: this.defaultSettlementResult,
-                    remainingTime: this.timeCounter,
+                    remainingTime,
                 }),
             };
 
