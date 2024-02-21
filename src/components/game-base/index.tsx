@@ -21,7 +21,7 @@ import ConfirmDialog from "../game-components/submit-dialog";
 import BetSettings from "../page-components/bet-settings";
 import { Boundary, GameBaseProps, PopupType, Position, RoundState, ViewMode } from "./type";
 import MessageTransmitter from "../../_shared/helpers/message-transmitter/index";
-import { messageEventType } from "./game-message-handler";
+import { GameMessageHandler, messageEventType } from "./game-message-handler";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
     private readonly animationTime = 3000;
@@ -42,6 +42,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     private playPermissionListener: string;
     private userStakeLevelListener: string;
     private disconnectTimeout: NodeJS.Timeout;
+    private gameMessageHandler: GameMessageHandler;
 
     constructor(props: P) {
         super(props);
@@ -66,12 +67,10 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     onDestroy() {
-        this.socket.disconnect();
         this.props.dispatch({
-            type: GameEventActionType.SIGN_IN,
+            type: GameEventActionType.SIGN_OUT,
             payload: {
                 roundState: RoundState.None,
-                signedIn: false,
             },
         });
 
@@ -89,6 +88,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.messageTransmitter?.clearAllListener();
         this.messageTransmitter = MessageTransmitter();
         const { registerGlobalMessageEvent } = this.props;
+        this.gameMessageHandler = new GameMessageHandler(this.props.dispatch, this.messageTransmitter);
         this.isConnectFailed = false;
         this.isProcessingBet = false;
         this.clearDisconnectTimeout();
@@ -101,20 +101,9 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     protected connectGameService() {
-        const { session } = this.context as any;
+        const { session } = this.context as AuthContextModel;
 
-        const { socket } = InitSocketIO(
-            this.props.socketInfo,
-            session,
-            this.props.dispatch,
-            this.clearDisconnectTimeout,
-            this.props.gameName,
-            this.isUMInFirstLoad,
-            this.defaultResult,
-            this.defaultSettlementResult,
-            this.props.gameStateContextModel,
-            this.messageTransmitter
-        );
+        const { socket } = InitSocketIO(this.props.socketInfo, session, this.props.gameName, this.gameMessageHandler);
 
         this.socket = socket;
     }
@@ -125,7 +114,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     };
 
     onConnectFailed() {
-        console.log("disconnect game service");
         this.onDestroy();
         this.props.dispatch({
             type: GameEventActionType.DISCONNECT_ERROR,
@@ -135,15 +123,28 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         });
     }
 
+    onSocketDisconnect() {
+        this.onDestroy();
+        this.props.dispatch({
+            type: GameEventActionType.DISCONNECT,
+            payload: {},
+        });
+    }
+
     onGameServiceConnected() {
-        console.log("connected game service");
         this.clearDisconnectTimeout();
+        this.props.dispatch({
+            type: GameEventActionType.CONNECT,
+            payload: {
+                isConnect: true,
+            },
+        });
     }
 
     registerMessageHandler() {
         this.messageTransmitter.register(messageEventType.SOCKET_CONNECTED, this.onGameServiceConnected.bind(this));
         this.messageTransmitter.register(messageEventType.SOCKET_CONNECT_ERROR, this.onConnectFailed.bind(this));
-        this.messageTransmitter.register(messageEventType.SOCKET_DISCONNETED, this.onConnectFailed.bind(this));
+        this.messageTransmitter.register(messageEventType.SOCKET_DISCONNETED, this.onSocketDisconnect.bind(this));
         this.messageTransmitter.register(messageEventType.UNDER_MAINTENANCE, this.handleUM.bind(this));
         this.messageTransmitter.register(messageEventType.REMAINING_TIME, this.handleRemainingTime.bind(this));
         this.messageTransmitter.register(messageEventType.FINISH, this.handleFinish.bind(this));
@@ -155,6 +156,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.messageTransmitter.register(messageEventType.ERROR_CODE, this.handleError.bind(this));
         this.messageTransmitter.register(messageEventType.USER_STAKE_LEVEL, this.handleUserStakeLevel.bind(this));
         this.messageTransmitter.register(messageEventType.DRAW_ID, this.handleDrawId.bind(this));
+        this.messageTransmitter.register(messageEventType.ROUND_HISTORY, this.handleRoundHistory.bind(this));
     }
 
     handleError = ({ errorCode }) => {
@@ -171,6 +173,22 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 });
             }, time);
         }
+    };
+
+    handleRoundHistory = ({ roundHistory, roundId }) => {
+        const { roundState } = this.props.gameStateContextModel;
+
+        this.props.dispatch({
+            type: GameEventActionType.ROUND_HISTORY,
+            payload: {
+                roundHistory: roundHistory,
+                roundId: [RoundState.DisplayResult].includes(roundState) || this.isUMInFirstLoad ? roundId - 1 : roundId,
+                result: roundState === RoundState.LockingBet ? this.defaultResult : roundHistory[0]?.result,
+                settlementResult: roundState === RoundState.LockingBet ? this.defaultSettlementResult : roundHistory[0]?.settlementResult,
+                playResultAnimation: [RoundState.DisplayResult].includes(roundState) || this.isUMInFirstLoad ? false : true,
+                showResultInfo: [RoundState.DisplayResult].includes(roundState) || this.isUMInFirstLoad ? true : false,
+            },
+        });
     };
 
     handleUserStakeLevel({ userStakeLevel }) {
@@ -408,9 +426,10 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             });
 
             this.roundTimeCounter = remainingTime;
-            const turnRemainingTime = remainingTime >= wholeRound - showResult - beforeStartRound - switchRoundAnimation ?
-                remainingTime % durations.wholeTurn - durations.switchRoundAnimation :
-                remainingTime % durations.wholeTurn;
+            const turnRemainingTime =
+                remainingTime >= wholeRound - showResult - beforeStartRound - switchRoundAnimation
+                    ? (remainingTime % durations.wholeTurn) - durations.switchRoundAnimation
+                    : remainingTime % durations.wholeTurn;
 
             this.runGame(turnRemainingTime === 0 ? durations.wholeTurn : turnRemainingTime);
         }
@@ -421,11 +440,14 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
         this.interval && clearInterval(this.interval);
         this.interval = setInterval(() => {
-            const newRoundState = this.props.determineRoundState({ roundRemainingTime: this.roundTimeCounter, remainingTime: this.timeCounter, durations: this.props.durations });
+            const newRoundState = this.props.determineRoundState({
+                roundRemainingTime: this.roundTimeCounter,
+                remainingTime: this.timeCounter,
+                durations: this.props.durations,
+            });
             this.roundTimeCounter = this.roundTimeCounter - 1;
             if (this.timeCounter > 0 && newRoundState !== RoundState.SwitchRound) {
                 this.timeCounter = this.timeCounter - 1;
-
             }
             this.handleGamePlay(this.timeCounter);
         }, 1000);

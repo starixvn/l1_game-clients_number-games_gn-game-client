@@ -107,7 +107,14 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
         case GameEventActionType.SIGN_IN: {
             return {
                 ...state,
-                signedIn,
+                signedIn: true,
+            };
+        }
+
+        case GameEventActionType.SIGN_OUT: {
+            return {
+                ...state,
+                signedIn: false,
             };
         }
 

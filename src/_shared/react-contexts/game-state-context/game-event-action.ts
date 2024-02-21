@@ -4,6 +4,7 @@ export enum GameEventActionType {
     CONNECT = "CONNECT",
     CONNECT_ERROR = "CONNECT_ERROR",
     SIGN_IN = "SIGN_IN",
+    SIGN_OUT = "SIGN_OUT",
     DISCONNECT = "DISCONNECT",
     UM = "UM",
     REMAINING_TIME = "REMAINING_TIME",
@@ -44,6 +45,7 @@ export enum GameEventActionType {
 
 export interface GameEventPayload {
     signedIn?: boolean;
+    isConnect?: boolean;
     remainingTime?: number;
     um?: boolean;
     um_message?: string[];
