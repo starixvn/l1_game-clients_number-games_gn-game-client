@@ -6,7 +6,8 @@ import { buildServerUrl } from "../helpers";
 import { GameEventActionType } from "../react-contexts/game-state-context/game-event-action";
 import { GameStateContextModel } from "../react-contexts/game-state-context/game-state-context-model";
 import { RoundState, SocketInfo } from "./../../components/game-base/type";
-import MessageTransmitter from "./message-transmitter";
+import { messageEventType } from "../../components/game-base/game-message-handler";
+import { MessageTransmitterType } from "./message-transmitter/type";
 
 export function InitSocketIO(
     socketInfo: SocketInfo,
@@ -17,14 +18,10 @@ export function InitSocketIO(
     isUMInFirstLoad: boolean,
     defaultResult: any,
     defaultSettlementResult: any,
-    gameStateContextModel: GameStateContextModel<{}, {}>
+    gameStateContextModel: GameStateContextModel<{}, {}>,
+    messageTransmitter: MessageTransmitterType
 ) {
     const { proxy, enableMsgpackParser } = getAppSettings();
-    // const dispatch = useGameStatesDispatch();
-    // const gameStateContextModel = useGameStateContext();
-
-    const messageTransmitter = MessageTransmitter();
-
     const socketUri = buildServerUrl(socketInfo.namespace);
     const socketOption = {
         forceNew: true,
@@ -37,29 +34,12 @@ export function InitSocketIO(
     const socket = io(socketUri, socketOption);
 
     const registerMessageHandler = () => {
-        messageTransmitter.register("signedIn", ({ signedIn }) => {
-            signedIn && handleSignedIn();
-        });
-
-        // this.messageTransmitter.register("um", this.handleUM.bind(this));
-        // this.messageTransmitter.register("remainingTime", this.handleRemainingTime.bind(this));
-
-        messageTransmitter.register("gameConfigs", handleGameConfigs);
-        messageTransmitter.register("roundHistory", handleRoundHistory);
-        messageTransmitter.register("totalBets", handleTotalBet);
-        messageTransmitter.register("ownBets", handleOwnBets);
-        messageTransmitter.register("odds", handleOdds);
-        messageTransmitter.register("roundData", handleRoundData);
-
-        // this.messageTransmitter.register("finish", this.handleFinish.bind(this));
-        // this.messageTransmitter.register("status", this.handleStatus.bind(this));
-        // this.messageTransmitter.register("user", this.handleUserData.bind(this));
-        // this.messageTransmitter.register("ownBets", this.handleOwnBets.bind(this));
-        // this.messageTransmitter.register("endBet", this.handleEndBet.bind(this));
-        // this.messageTransmitter.register("apiError", this.handleApiError.bind(this));
-        // this.messageTransmitter.register("errorCode", this.handleError.bind(this));
-        // this.messageTransmitter.register("userStakeLevel", this.handleUserStakeLevel.bind(this));
-        // this.messageTransmitter.register("drawId", this.handleDrawId.bind(this));
+        messageTransmitter.register(messageEventType.GAME_CONFIG, handleGameConfigs);
+        messageTransmitter.register(messageEventType.ROUND_HISTORY, handleRoundHistory);
+        messageTransmitter.register(messageEventType.TOTAL_BETS, handleTotalBet);
+        messageTransmitter.register(messageEventType.OWN_BETS, handleOwnBets);
+        messageTransmitter.register(messageEventType.ODDS, handleOdds);
+        messageTransmitter.register(messageEventType.ROUND_DATA, handleRoundData);
     };
 
     const handleGameConfigs = ({ gameConfigs }) => {
@@ -136,9 +116,10 @@ export function InitSocketIO(
     };
 
     if (socket) {
+        registerMessageHandler();
         socket.off(gameName).on(gameName, messageTransmitter.broadcast);
         socket.on("connect", () => {
-            registerMessageHandler();
+            messageTransmitter.broadcast({ connect: true });
             socket.emit("signin", session);
             dispatch({
                 type: GameEventActionType.CONNECT,
@@ -148,14 +129,17 @@ export function InitSocketIO(
             });
         });
 
-        socket.on("signedIn", () => handleSignedIn());
+        socket.on("signedIn", () => {
+            messageTransmitter.broadcast({ signedIn: true });
+            handleSignedIn();
+        });
 
         socket.on("connect_error", () => {
+            messageTransmitter.broadcast({ connect_error: true });
             messageTransmitter.clearAllListener();
-            // this.onConnectFailed.bind(this);
         });
         socket.on("disconnect", () => {
-            messageTransmitter.clearAllListener();
+            messageTransmitter.broadcast({ disconnect: true });
             dispatch({
                 type: GameEventActionType.DISCONNECT,
                 payload: {},
@@ -163,7 +147,7 @@ export function InitSocketIO(
         });
     }
 
-    return { socket, messageTransmitter };
+    return { socket };
 }
 
 export enum SocketState {

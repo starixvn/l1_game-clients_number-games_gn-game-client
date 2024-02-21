@@ -22,7 +22,9 @@ export default function messageTransmitter() {
 
     const broadcast = (message: any) => {
         for (const listener of listeners) {
-            message[listener.messageKey] && listener.handleMessage(message);
+            if (message[listener.messageKey]) {
+                listener.handleMessage(message);
+            }
         }
     };
 

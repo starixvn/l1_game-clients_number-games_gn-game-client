@@ -245,7 +245,7 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
             };
         }
 
-        case GameEventActionType.ERROR_CODE: {
+        case GameEventActionType.DISCONNECT_ERROR: {
             return {
                 ...state,
                 roundState: RoundState.ConnectFailed,
