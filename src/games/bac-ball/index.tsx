@@ -14,7 +14,6 @@ import { StatisticFollowPercent } from "../../components/game-components/statist
 import { BacBallBettingBlock } from "./bac-ball-betting-block";
 import { BacBallResultBlock } from "./bac-ball-result-block";
 import { BacBallResult, BacBallSettlementResult } from "./types";
-import { JSX } from "react";
 
 export const Choices = { player: "player", banker: "banker", tie: "tie" };
 

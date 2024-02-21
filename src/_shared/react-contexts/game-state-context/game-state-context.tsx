@@ -1,5 +1,4 @@
 import { createContext, useContext, useReducer } from "react";
-
 import { PopupType, RoundState } from "../../../components/game-base/type";
 import { ConnectFailedReasonKey } from "../../../components/game-components/error-message/type";
 import { LanguageLocaleMapper } from "../../constants";
@@ -88,7 +87,7 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
     // console.log("payload: ", JSON.stringify(payload));
 
     if (type !== GameEventActionType.TOTAL_BET && type !== GameEventActionType.SET_NEW_GAME_STATE) {
-        console.log(`\x1B[31m SocketEventActionTypes : ${type}`);
+        console.log(`\x1B[31mGameEventActionType: ${type}`);
     }
 
     switch (type) {

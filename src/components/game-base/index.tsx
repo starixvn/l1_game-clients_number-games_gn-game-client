@@ -500,10 +500,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     handleFinish({ finish }) {
-        this.props.dispatch({
-            type: GameEventActionType.FINISH,
-            payload: {},
-        });
         const { roundHistory } = this.props.gameStateContextModel;
         const { durations } = this.props;
         const roundHistoryClone = [...roundHistory];
