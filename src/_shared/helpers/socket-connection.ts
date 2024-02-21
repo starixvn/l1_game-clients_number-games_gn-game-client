@@ -115,8 +115,7 @@ export function InitSocketIO(
             type: GameEventActionType.ROUND_HISTORY,
             payload: {
                 roundHistory: roundHistory,
-                roundId:
-                    [RoundState.DisplayResult, RoundState.BalancingBet].includes(roundState) || isUMInFirstLoad ? roundId - 1 : roundId,
+                roundId: [RoundState.DisplayResult].includes(roundState) || isUMInFirstLoad ? roundId - 1 : roundId,
                 result: roundState === RoundState.LockingBet ? defaultResult : roundHistory[0]?.result,
                 settlementResult: roundState === RoundState.LockingBet ? defaultSettlementResult : roundHistory[0]?.settlementResult,
                 playResultAnimation: [RoundState.DisplayResult].includes(roundState) || isUMInFirstLoad ? false : true,

@@ -18,7 +18,6 @@ export enum RoundState {
     LockingBet,
     DisplayResult,
     BeforeStartRound,
-    BalancingBet,
     ConnectFailed,
     SwitchRound,
 }

@@ -34,15 +34,7 @@ const CountdownTimer = () => {
                     </GameStatus>
                 </>
             );
-        case RoundState.BalancingBet:
-            return (
-                <>
-                    <div className="loader-balance-pool"></div>
-                    <GameStatus>
-                        <div className={styles["balanced-betting-pool"]}>{t("balancedBettingPool")}</div>
-                    </GameStatus>
-                </>
-            );
+
         case RoundState.None:
             return <div className={`loader-show-result`}></div>;
 

@@ -6,10 +6,6 @@ export function useDetermineRoundState({ roundRemainingTime, remainingTime, dura
         return RoundState.SwitchRound;
     }
 
-    if (remainingTime > durations.wholeTurn) {
-        return RoundState.BalancingBet;
-    }
-
     if (remainingTime >= durations.wholeTurn - durations.showResult) {
         return RoundState.DisplayResult;
     }

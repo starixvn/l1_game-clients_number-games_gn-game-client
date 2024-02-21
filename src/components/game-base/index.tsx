@@ -35,7 +35,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     protected timeCounter: number;
     protected messageTransmitter: MessageTransmitterType;
     protected authService: Auth;
-    protected turn: number;
     private isConnectFailed = false;
     private playPermissionListener: string;
     private userStakeLevelListener: string;
@@ -430,7 +429,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         // console.log(`---------------`);
         // console.log(`roundTimeCounter: ${this.roundTimeCounter}`);
         // console.log(`Turn RemainingTime: ${remainingTime}`);
-        // console.log(`Turn : ${this.turn}`);
         const newRoundState = this.props.determineRoundState({ roundRemainingTime: this.roundTimeCounter, remainingTime, durations: this.props.durations });
         // console.log(`RoundState: ${RoundState[newRoundState]}`);
         if (this.props.gameStateContextModel.roundState !== newRoundState && !this.isConnectFailed) {
