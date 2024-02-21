@@ -8,6 +8,7 @@ export enum GameEventActionType {
     UM = "UM",
     REMAINING_TIME = "REMAINING_TIME",
     GAME_CONFIGS = "GAME_CONFIGS",
+    ROUND_DATA = "ROUND_DATA",
     ROUND_HISTORY = "ROUND_HISTORY",
     FINISH = "FINISH",
     STATUS = "STATUS",
@@ -46,6 +47,7 @@ export interface GameEventPayload {
     um?: boolean;
     um_message?: string[];
     gameConfigs?: GameConfigs;
+    roundData?: any;
     roundHistory?: any;
     roundId?: number;
     result?: any;

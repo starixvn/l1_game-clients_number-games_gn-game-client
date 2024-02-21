@@ -1,4 +1,5 @@
 import { Resource, Texture } from "pixi.js";
+
 import {
     Boundary,
     GameConfigs,
@@ -19,6 +20,7 @@ export interface GameStateContextModel<Result, SettlementResult> {
     roundRemainingTime: number;
     remainingTime: number;
     gameConfigs: GameConfigs;
+    roundData: any;
     roundHistory: Round<Result, SettlementResult>[];
     roundId: number;
     result?: Result;
@@ -73,6 +75,7 @@ export const initialGameStateContextModel = ({ defaultResult, defaultSettlementR
         roundState: RoundState.None,
         roundRemainingTime: 0,
         remainingTime: 0,
+        roundData: {},
         roundHistory: [],
         roundId: 0,
         ownBets: {},

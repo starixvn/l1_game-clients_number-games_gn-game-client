@@ -65,7 +65,6 @@ const Cage: React.FunctionComponent<CageProps> = (cageProps) => {
         if (!isDelayShowResult || !isShowResult) {
             return <></>;
         }
-
         return (
             <div id="show-ball-anim" className={Styles["show-ball-anim"]}>
                 {cageBallFrames && cageBallFrames[ballColor].length > 0 && (
@@ -140,12 +139,6 @@ const Cage: React.FunctionComponent<CageProps> = (cageProps) => {
                 </div>
 
                 {showResultNumber()}
-                {/* {isShowResult && (
-
-                    // <div id="result-text" className={`${Styles["number"]} ${isShowResult ? Styles["show"] : Styles["hide"]}`}>
-                    //     {result}
-                    // </div>
-                )} */}
             </div>
         );
     }, [isShowResult, isDelayShowResult]);

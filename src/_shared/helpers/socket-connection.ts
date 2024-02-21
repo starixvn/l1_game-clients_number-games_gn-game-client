@@ -1,5 +1,6 @@
 import { io } from "socket.io-client";
 import MsgpackParser from "socket.io-msgpack-parser";
+
 import { getAppSettings } from "../app-settings";
 import { buildServerUrl } from "../helpers";
 import { GameEventActionType } from "../react-contexts/game-state-context/game-event-action";
@@ -48,6 +49,7 @@ export function InitSocketIO(
         messageTransmitter.register("totalBets", handleTotalBet);
         messageTransmitter.register("ownBets", handleOwnBets);
         messageTransmitter.register("odds", handleOdds);
+        messageTransmitter.register("roundData", handleRoundData);
 
         // this.messageTransmitter.register("finish", this.handleFinish.bind(this));
         // this.messageTransmitter.register("status", this.handleStatus.bind(this));
@@ -120,6 +122,15 @@ export function InitSocketIO(
                 settlementResult: roundState === RoundState.LockingBet ? defaultSettlementResult : roundHistory[0]?.settlementResult,
                 playResultAnimation: [RoundState.DisplayResult].includes(roundState) || isUMInFirstLoad ? false : true,
                 showResultInfo: [RoundState.DisplayResult].includes(roundState) || isUMInFirstLoad ? true : false,
+            },
+        });
+    };
+
+    const handleRoundData = ({ roundData }) => {
+        dispatch({
+            type: GameEventActionType.ROUND_DATA,
+            payload: {
+                roundData,
             },
         });
     };

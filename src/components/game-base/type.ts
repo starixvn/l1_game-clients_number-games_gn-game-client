@@ -1,7 +1,8 @@
 import { WithRouterProps } from "next/dist/client/with-router";
 import { Resource, Texture } from "pixi.js";
-import { GameStateContextModel } from "../../_shared/react-contexts/game-state-context/game-state-context-model";
+
 import { GameEventAction } from "../../_shared/react-contexts/game-state-context/game-event-action";
+import { GameStateContextModel } from "../../_shared/react-contexts/game-state-context/game-state-context-model";
 
 export interface GameConfigs {
     odds: { [key: string]: number };
@@ -156,4 +157,9 @@ export interface Round<R, S> {
 export interface IBallColor {
     blue: Texture<Resource>[];
     red: Texture<Resource>[];
+}
+
+export enum BallColor {
+    BLUE = "blue",
+    RED = "red",
 }

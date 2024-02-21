@@ -1,5 +1,6 @@
 import { createContext, useContext, useReducer } from "react";
-import { RoundState, PopupType } from "../../../components/game-base/type";
+
+import { PopupType, RoundState } from "../../../components/game-base/type";
 import { ConnectFailedReasonKey } from "../../../components/game-components/error-message/type";
 import { LanguageLocaleMapper } from "../../constants";
 import { GetLocalizedErrorMessage } from "../../helpers/notice-helper";
@@ -41,6 +42,7 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
         remainingTime,
         um_message,
         gameConfigs,
+        roundData,
         roundHistory,
         roundId,
         defaultResult,
@@ -79,7 +81,7 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
         selectedChip,
         showConfirmBet,
         showConfirmDialog,
-        turnCounter
+        turnCounter,
     } = payload;
 
     // console.log("payload: ", JSON.stringify(payload));
@@ -139,6 +141,13 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
             return {
                 ...state,
                 gameConfigs: gameConfigs,
+            };
+        }
+
+        case GameEventActionType.ROUND_DATA: {
+            return {
+                ...state,
+                roundData,
             };
         }
 
@@ -265,7 +274,7 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
             return {
                 ...state,
                 drawId,
-                turnCounter
+                turnCounter,
             };
         }
 
