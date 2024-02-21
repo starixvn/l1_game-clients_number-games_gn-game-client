@@ -45,7 +45,7 @@ export const BacBallResultBlock: FC<ResultBlockProps> = (props) => {
             for (let i = 0; i < existedPlayerBalls.length; i++) {
                 updatedPlayerList[i] = playerBalls?.length > 0 && playerBalls[i] ? playerBalls[i] : existedPlayerBalls[i];
             }
-            updatedPlayerList[turnCounter - 1] = result.player;
+            result && result.player && (updatedPlayerList[turnCounter - 1] = result.player);
             setExistedPlayerBalls(updatedPlayerList);
         } else {
             setExistedPlayerBalls([0, 0, 0, 0]);
@@ -58,7 +58,7 @@ export const BacBallResultBlock: FC<ResultBlockProps> = (props) => {
             for (let i = 0; i < existedBankerBalls.length; i++) {
                 updatedBankerList[i] = bankerBalls?.length > 0 && bankerBalls[i] ? bankerBalls[i] : existedBankerBalls[i];
             }
-            updatedBankerList[turnCounter - 1] = result.banker;
+            result && result.banker && (updatedBankerList[turnCounter - 1] = result.banker);
             setExistedBankerBalls(updatedBankerList);
         } else {
             setExistedBankerBalls([0, 0, 0, 0]);
