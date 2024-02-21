@@ -59,6 +59,11 @@
     &.lock-bet {
         color: #ff5555;
 
+        > span {
+            transform: scale(0);
+            animation: scale 1s infinite cubic-bezier(0.18, 0.89, 0.32, 1.28);
+        }
+
         &:before {
             background: url("/static/images/countdown-timer/countdown-blockbet.svg") no-repeat center center;
         }
@@ -68,5 +73,11 @@
 @keyframes spin {
     to {
         transform: rotate(360deg);
+    }
+}
+
+@keyframes scale {
+    to {
+        transform: scale(1);
     }
 }

@@ -7,6 +7,7 @@ import { buildVersion, systemName, Themes } from "../_shared/constants";
 import { tolgee } from "../_shared/tolgee";
 import "../styles/errors.scss";
 import "../styles/main.scss";
+import Loading from "../components/page-components/loading";
 
 class SabaNumberApp extends App<AppProps> {
     render() {
@@ -14,7 +15,7 @@ class SabaNumberApp extends App<AppProps> {
 
         return (
             <ThemeProvider defaultTheme={Themes.light}>
-                <TolgeeProvider tolgee={tolgee} fallback="Loading...">
+                <TolgeeProvider tolgee={tolgee} fallback={<Loading />}>
                     <AppTilte />
                     <Component {...pageProps} />
                 </TolgeeProvider>
@@ -24,7 +25,6 @@ class SabaNumberApp extends App<AppProps> {
 }
 
 export const AppTilte = () => {
-
     return (
         <Head>
             <title>New Number Game</title>
