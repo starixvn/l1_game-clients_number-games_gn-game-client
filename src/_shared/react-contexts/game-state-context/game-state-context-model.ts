@@ -118,7 +118,7 @@ export const initialGameStateContextModel = ({ defaultResult, defaultSettlementR
         selectedChip: 1,
         showConfirmBet: false,
         showConfirmDialog: false,
-        turnCounter: 1,
+        turnCounter: 0,
         notConfirmOwnBets: {},
     };
 };

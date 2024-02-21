@@ -1,16 +1,15 @@
 import { useTranslation } from "next-i18next";
-import { useGameContext } from "../../../_shared/react-contexts/game-context/game-context";
-import { RoundState } from "../../game-base/type";
-import Loader from "../loader";
-import styles from "./countdown-timer.module.scss";
 import { useEffect, useState } from "react";
+
+import { useGameContext } from "../../../_shared/react-contexts/game-context/game-context";
 import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
+import { RoundState } from "../../game-base/type";
+import styles from "./countdown-timer.module.scss";
 
 export type Rotation = "clockwise" | "counterclockwise";
 const CountdownTimer = () => {
     const { roundState } = useGameStateContext();
     const { t } = useTranslation("common");
-    console.log(`RoundState: ${RoundState[roundState]}`);
 
     switch (roundState) {
         case RoundState.BeforeStartRound:

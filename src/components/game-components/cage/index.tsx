@@ -42,11 +42,18 @@ const Cage: React.FunctionComponent<CageProps> = (cageProps) => {
     const [numberBallFrames, setNumberBallFrames] = useState<Texture<Resource>[]>([]);
 
     useEffect(() => {
-        result &&
-            loadPixiAnimations(`/static/images/cage/number/${result}.json`, (sprite) => {
+        if (!result) {
+            return;
+        }
+
+        const handleLoadResource = async () => {
+            await loadPixiAnimations(`/static/images/cage/number/${result}.json`, (sprite) => {
                 setNumberBallFrames(sprite.animations[animName]);
             });
-    }, [numberBallFrames.length]);
+        };
+
+        handleLoadResource();
+    }, [result, animName]);
 
     useEffect(() => {
         let timeOut: NodeJS.Timeout;
@@ -65,6 +72,7 @@ const Cage: React.FunctionComponent<CageProps> = (cageProps) => {
         if (!isDelayShowResult || !isShowResult) {
             return <></>;
         }
+
         return (
             <div id="show-ball-anim" className={Styles["show-ball-anim"]}>
                 {cageBallFrames && cageBallFrames[ballColor].length > 0 && (
@@ -91,10 +99,12 @@ const Cage: React.FunctionComponent<CageProps> = (cageProps) => {
             return <></>;
         }
 
+        const currentTime = Date.now();
+
         return (
-            <div id="result-text" className={Styles["number"]}>
-                <Stage width={153} height={153} options={{ backgroundAlpha: 0 }}>
-                    <Container position={[82, 85]}>
+            <div key={currentTime} id="result-text" className={Styles["number"]}>
+                <Stage key={currentTime} width={153} height={153} options={{ backgroundAlpha: 0 }}>
+                    <Container key={currentTime} position={[82, 85]}>
                         <AnimatedSprite
                             anchor={0.5}
                             textures={numberBallFrames}
@@ -141,7 +151,7 @@ const Cage: React.FunctionComponent<CageProps> = (cageProps) => {
                 {showResultNumber()}
             </div>
         );
-    }, [isShowResult, isDelayShowResult]);
+    }, [isShowResult, isDelayShowResult, numberBallFrames]);
 };
 
 export default Cage;

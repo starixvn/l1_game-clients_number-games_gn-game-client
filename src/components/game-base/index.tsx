@@ -2,8 +2,10 @@ import React from "react";
 import Auth from "sc-user-service-client/dist/auth";
 import { Socket } from "socket.io-client";
 import { v4 as uuidv4 } from "uuid";
+
 import { confirmBetChoice } from "../../_shared/constants";
 import { InitSocketIO } from "../../_shared/helpers";
+import MessageTransmitter from "../../_shared/helpers/message-transmitter";
 import { MessageTransmitterType } from "../../_shared/helpers/message-transmitter/type";
 import { GetLocalizedErrorMessage } from "../../_shared/helpers/notice-helper";
 import { AuthContext, AuthContextModel, GameActionsContextProvider, GameContextProvider } from "../../_shared/react-contexts";
@@ -19,9 +21,8 @@ import GameLoading from "../game-components/game-loading";
 import { Notice } from "../game-components/notice";
 import ConfirmDialog from "../game-components/submit-dialog";
 import BetSettings from "../page-components/bet-settings";
-import { Boundary, GameBaseProps, PopupType, Position, RoundState, ViewMode } from "./type";
-import MessageTransmitter from "../../_shared/helpers/message-transmitter/index";
 import { GameMessageHandler, messageEventType } from "./game-message-handler";
+import { Boundary, GameBaseProps, PopupType, Position, RoundState, ViewMode } from "./type";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
     private readonly animationTime = 3000;
@@ -183,7 +184,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             payload: {
                 roundHistory: roundHistory,
                 roundId: [RoundState.DisplayResult].includes(roundState) || this.isUMInFirstLoad ? roundId - 1 : roundId,
-                result: roundState === RoundState.LockingBet ? this.defaultResult : roundHistory[0]?.result,
                 settlementResult: roundState === RoundState.LockingBet ? this.defaultSettlementResult : roundHistory[0]?.settlementResult,
                 playResultAnimation: [RoundState.DisplayResult].includes(roundState) || this.isUMInFirstLoad ? false : true,
                 showResultInfo: [RoundState.DisplayResult].includes(roundState) || this.isUMInFirstLoad ? true : false,

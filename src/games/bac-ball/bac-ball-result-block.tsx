@@ -19,74 +19,101 @@ export const BacBallResultBlock: FC<ResultBlockProps> = (props) => {
     const [existedPlayerBalls, setExistedPlayerBalls] = useState<Array<number>>([0, 0, 0, 0]);
     const [existedBankerBalls, setExistedBankerBalls] = useState([0, 0, 0, 0]);
     const gameStateContext = useGameStateContext();
-    const { result, roundData, drawId, turnCounter } = gameStateContext;
-    // const turn = drawId % 4 === 0 ? 4 : drawId % 4;
-    const { bankerBalls, playerBalls } = roundData as any;
+    const { result, roundData, turnCounter } = gameStateContext;
 
     useEffect(() => {
-        if (cageBallFrames.blue.length === 0 && cageBallFrames.red.length === 0) {
-            loadPixiAnimations("/static/images/cage/ball.json", (sprite) => {
-                const blueFrames = sprite.animations["blue"];
-                const redFrames = sprite.animations["red"];
-                setCageBallFrames({ blue: blueFrames, red: redFrames });
-            });
-        }
+        const handleLoadResource = async () => {
+            if (cageBallFrames.blue.length === 0 && cageBallFrames.red.length === 0) {
+                loadPixiAnimations("/static/images/cage/ball.json", (sprite) => {
+                    const blueFrames = sprite.animations["blue"];
+                    const redFrames = sprite.animations["red"];
+                    setCageBallFrames({ blue: blueFrames, red: redFrames });
+                });
+            }
 
-        if (cageBallsLoopFrames.length === 0) {
-            loadPixiAnimations("/static/images/cage/cage-balls.json", (sprite) => {
-                setCageBallsLoopFrames(sprite.animations["loop"]);
-            });
-        }
+            if (cageBallsLoopFrames.length === 0) {
+                loadPixiAnimations("/static/images/cage/cage-balls.json", (sprite) => {
+                    setCageBallsLoopFrames(sprite.animations["loop"]);
+                });
+            }
+        };
+
+        handleLoadResource();
     }, [cageBallFrames.blue.length, cageBallFrames.red.length, cageBallsLoopFrames.length]);
 
     useEffect(() => {
-        const updatedPlayerList = [];
-        if (turnCounter !== 1) {
-            for (let i = 0; i < existedPlayerBalls.length; i++) {
-                updatedPlayerList[i] = playerBalls?.length > 0 && playerBalls[i] ? playerBalls[i] : existedPlayerBalls[i];
-            }
-            result && result.player && (updatedPlayerList[turnCounter - 1] = result.player);
-            setExistedPlayerBalls(updatedPlayerList);
-        } else {
-            setExistedPlayerBalls([0, 0, 0, 0]);
+        if (!roundData?.playerBalls?.length && !roundData?.bankerBalls?.length) {
+            return;
         }
-    }, [turnCounter, playerBalls]);
+
+        const updatedPlayerList = [...existedPlayerBalls];
+        const updatedBankerList = [...existedBankerBalls];
+        const { playerBalls, bankerBalls } = roundData;
+
+        for (let i = 0; i < existedPlayerBalls.length; i++) {
+            if (playerBalls?.length > 0 && playerBalls[i]) {
+                updatedPlayerList[i] = playerBalls[i];
+            }
+        }
+        setExistedPlayerBalls(updatedPlayerList);
+
+        for (let i = 0; i < existedBankerBalls.length; i++) {
+            if (playerBalls?.length > 0 && playerBalls[i]) {
+                updatedBankerList[i] = bankerBalls[i];
+            }
+        }
+        setExistedBankerBalls(updatedBankerList);
+    }, [roundData]);
 
     useEffect(() => {
-        const updatedBankerList = [];
-        if (turnCounter !== 1) {
-            for (let i = 0; i < existedBankerBalls.length; i++) {
-                updatedBankerList[i] = bankerBalls?.length > 0 && bankerBalls[i] ? bankerBalls[i] : existedBankerBalls[i];
-            }
-            result && result.banker && (updatedBankerList[turnCounter - 1] = result.banker);
+        if (!result) {
+            return;
+        }
+        const updatedPlayerList = [...existedPlayerBalls];
+        const updatedBankerList = [...existedBankerBalls];
+
+        if (result.player) {
+            updatedPlayerList[turnCounter - 1] = result.player;
+            setExistedPlayerBalls(updatedPlayerList);
+        }
+
+        if (result.banker) {
+            updatedBankerList[turnCounter - 1] = result.banker;
             setExistedBankerBalls(updatedBankerList);
-        } else {
+        }
+    }, [result]);
+
+    useEffect(() => {
+        if (turnCounter === 1) {
+            setExistedPlayerBalls([0, 0, 0, 0]);
             setExistedBankerBalls([0, 0, 0, 0]);
         }
-    }, [turnCounter, bankerBalls]);
+    }, [turnCounter]);
 
-    if (!result || cageBallsLoopFrames?.length === 0 || cageBallFrames?.blue?.length === 0 || cageBallFrames?.red?.length === 0) {
+    if (cageBallsLoopFrames?.length === 0 || cageBallFrames?.blue?.length === 0 || cageBallFrames?.red?.length === 0) {
         return <></>;
     }
 
     const bankerDelayTime = 1000;
 
-    const renderBalls = (updatedPlayerList) => {
+    const renderBalls = (updatedResultList) => {
         return (
             <div>
-                {updatedPlayerList.map((result, index) => {
-                    const order = index + 1;
+                {updatedResultList.map((result, index) => {
                     const props: any = {};
-                    if (result && turnCounter !== order) {
+
+                    if (result > 0) {
                         props.number = result;
-                    } else if (turnCounter === order) {
+                        props.delayTime = 0;
+                    } else if (turnCounter === index + 1) {
+                        props.number = result;
                         props.isLoading = true;
-                        props.number = result;
-                    } else if (result === 0) {
+                        props.delayTime = 2000;
+                    } else {
                         props.isEmpty = true;
                     }
 
-                    return <Ball key={order} {...props} />;
+                    return <Ball key={index} {...props} />;
                 })}
             </div>
         );
@@ -102,7 +129,7 @@ export const BacBallResultBlock: FC<ResultBlockProps> = (props) => {
                         color={CageColor.Blue}
                         ballColor={BallColor.Blue}
                         isSmall={true}
-                        result={result.player}
+                        result={result?.player}
                         isShowResult={gameStateContext.playResultAnimation}
                     />
                 </div>
@@ -117,7 +144,7 @@ export const BacBallResultBlock: FC<ResultBlockProps> = (props) => {
                         color={CageColor.Red}
                         ballColor={BallColor.Red}
                         isSmall={true}
-                        result={result.banker}
+                        result={result?.banker}
                         isShowResult={gameStateContext.playResultAnimation}
                         delayShowResultTime={bankerDelayTime}
                     />

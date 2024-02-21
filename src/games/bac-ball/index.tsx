@@ -1,4 +1,5 @@
 import { withRouter } from "next/router";
+
 import {
     GameStateProvider,
     useGameStateContext,
@@ -70,11 +71,7 @@ class BacBall extends GameBase<GameBaseProps> {
 }
 
 const BacBallWrapper = (props) => {
-    const defaultResult: BacBallResult = {
-        player: 0,
-        banker: 0,
-        drawId: 0,
-    };
+    const defaultResult: BacBallResult = null;
 
     const defaultSettlementResult: BacBallSettlementResult = {
         banker: true,

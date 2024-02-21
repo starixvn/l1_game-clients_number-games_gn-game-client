@@ -1,15 +1,28 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { useBallColor } from "../../../_shared/react-hooks/use-ball-color";
 import Styles from "./ball.module.scss";
 
 const Ball = (props: any) => {
-    const { number, isLoading, isEmpty } = props;
+    const { number, isLoading, isEmpty, delayTime } = props;
+
     const color = useBallColor({ number });
+    const [isDelayShowResult, setIsDelayShowResult] = useState<boolean>(false);
+
+    useEffect(() => {
+        let timeOut: NodeJS.Timeout;
+        if (!isDelayShowResult) {
+            timeOut = setTimeout(() => setIsDelayShowResult(true), delayTime);
+        }
+
+        return () => {
+            clearTimeout(timeOut);
+        };
+    }, [delayTime, isDelayShowResult]);
 
     return (
         <div className={`${Styles.ball} ${isLoading || isEmpty ? Styles["ball-border-gray"] : Styles["ball-border-black"]}`}>
-            {props.number != null && (
+            {props.number != null && isDelayShowResult && (
                 <div className={`${Styles["ball-bg"]} ${Styles[color]}`}>
                     <span className={Styles["ball-number"]}>{number}</span>
                 </div>

@@ -6,9 +6,9 @@ export type BacBallSettlementResult = {
 };
 
 export type BacBallResult = {
-    player: number;
-    banker: number;
-    drawId: number;
+    player?: number;
+    banker?: number;
+    drawId?: number;
 };
 
 export type BacBallChoice = {
