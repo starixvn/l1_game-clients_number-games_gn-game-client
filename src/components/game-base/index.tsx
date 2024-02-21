@@ -399,6 +399,8 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     handleRemainingTime({ remainingTime }) {
         const { roundState } = this.props.gameStateContextModel;
         const { durations } = this.props;
+        const { wholeRound, showResult, beforeStartRound, switchRoundAnimation } = durations;
+
         if (roundState === RoundState.None || !this.isUMInFirstLoad) {
             this.props.dispatch({
                 type: GameEventActionType.REMAINING_TIME,
@@ -406,26 +408,29 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             });
 
             this.roundTimeCounter = remainingTime;
-            const turnRemainingTime = (remainingTime % durations.wholeTurn) - durations.switchRoundAnimation;
+            const turnRemainingTime = remainingTime >= wholeRound - showResult - beforeStartRound - switchRoundAnimation ?
+                remainingTime % durations.wholeTurn - durations.switchRoundAnimation :
+                remainingTime % durations.wholeTurn;
+
             this.runGame(turnRemainingTime === 0 ? durations.wholeTurn : turnRemainingTime);
         }
     }
 
     runGame(remainingTime: number) {
-        const { durations } = this.props;
-        const turnRemainingTime = remainingTime % durations.wholeTurn;
-        this.timeCounter = turnRemainingTime === 0 ? durations.wholeTurn : turnRemainingTime;
+        this.timeCounter = remainingTime;
 
         this.interval && clearInterval(this.interval);
         this.interval = setInterval(() => {
-            if (this.timeCounter > 0) {
+            const newRoundState = this.props.determineRoundState({ roundRemainingTime: this.roundTimeCounter, remainingTime: this.timeCounter, durations: this.props.durations });
+            this.roundTimeCounter = this.roundTimeCounter - 1;
+            if (this.timeCounter > 0 && newRoundState !== RoundState.SwitchRound) {
                 this.timeCounter = this.timeCounter - 1;
-                this.roundTimeCounter = this.roundTimeCounter - 1;
+
             }
             this.handleGamePlay(this.timeCounter);
         }, 1000);
 
-        this.handleGamePlay(turnRemainingTime === 0 ? durations.wholeTurn : turnRemainingTime);
+        this.handleGamePlay(remainingTime);
     }
 
     handleGamePlay(remainingTime: number) {

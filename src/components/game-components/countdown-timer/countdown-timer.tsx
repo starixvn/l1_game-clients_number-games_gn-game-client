@@ -14,6 +14,7 @@ const CountdownTimer = () => {
 
     switch (roundState) {
         case RoundState.BeforeStartRound:
+        case RoundState.SwitchRound:
             return <></>;
         case RoundState.InRound:
             return (

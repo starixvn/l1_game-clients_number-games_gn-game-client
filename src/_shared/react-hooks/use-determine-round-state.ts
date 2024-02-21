@@ -2,23 +2,28 @@ import { PopupType, RoundState } from "../../components/game-base/type";
 import { useTimeCounter } from "./use-time-counter";
 
 export function useDetermineRoundState({ roundRemainingTime, remainingTime, durations }) {
-    if (roundRemainingTime > durations.wholeRound - durations.switchRoundAnimation) {
+    const { wholeRound, wholeTurn, showResult, beforeStartRound, placingBets, lockingBet, switchRoundAnimation } = durations;
+
+    if (
+        roundRemainingTime < wholeRound - showResult - beforeStartRound &&
+        roundRemainingTime >= wholeRound - showResult - beforeStartRound - switchRoundAnimation
+    ) {
         return RoundState.SwitchRound;
     }
 
-    if (remainingTime >= durations.wholeTurn - durations.showResult) {
+    if (remainingTime >= wholeTurn - showResult) {
         return RoundState.DisplayResult;
     }
 
-    if (durations.beforeStartRound && remainingTime > durations.placingBets) {
+    if (durations.beforeStartRound && remainingTime > placingBets) {
         return RoundState.BeforeStartRound;
     }
 
-    if (remainingTime <= durations.placingBets && remainingTime > durations.lockingBet) {
+    if (remainingTime <= placingBets && remainingTime > lockingBet) {
         return RoundState.InRound;
     }
 
-    if (remainingTime <= durations.lockingBet && remainingTime >= 0) {
+    if (remainingTime <= lockingBet && remainingTime >= 0) {
         return RoundState.LockingBet;
     }
 
