@@ -13,6 +13,7 @@ import { StatisticFollowPercent } from "../../components/game-components/statist
 import { BacBallBettingBlock } from "./bac-ball-betting-block";
 import { BacBallResultBlock } from "./bac-ball-result-block";
 import { BacBallResult, BacBallSettlementResult } from "./types";
+import { JSX } from "react";
 
 export const Choices = { player: "player", banker: "banker", tie: "tie" };
 
@@ -57,10 +58,14 @@ class BacBall extends GameBase<GameBaseProps> {
         return <BacBallBettingBlock />;
     }
 
-    renderScoreboards() {
+    renderStatistic() {
         const { roundHistory } = this.props.gameStateContextModel;
 
         return <StatisticFollowPercent roundHistory={roundHistory} statisticRuleEntries={StatisticRuleEntries}></StatisticFollowPercent>;
+    }
+
+    renderScoreboards() {
+        return <img className="mt-1" src="/static/images/scoreboard.png" />;
     }
 }
 

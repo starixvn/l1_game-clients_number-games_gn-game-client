@@ -128,7 +128,9 @@ export const BacBallBettingBlock: FC = () => {
                         <div className={Style.stake}>
                             <div className={`flex items-center ${Style["total-stakes"]} gap-1`}>
                                 <span id="player-coin-icon" className="icon-coin"></span>
-                                <span id="player-total-stakes">{gameStateContext?.totalBets["player"]}</span>
+                                <span id="player-total-stakes" className="stakes-value">
+                                    {gameStateContext?.totalBets["player"]}
+                                </span>
                             </div>
                             <div className="flex items-center players gap-1">
                                 <span id="player-user-icon" className="icon-user"></span>
@@ -163,7 +165,9 @@ export const BacBallBettingBlock: FC = () => {
                         <div className={Style.stake}>
                             <div className={`flex items-center ${Style["total-stakes"]} gap-1`}>
                                 <span id="banker-coin-icon" className="icon-coin"></span>
-                                <span id="banker-total-stakes">{gameStateContext?.totalBets["banker"]}</span>
+                                <span id="banker-total-stakes" className="stakes-value">
+                                    {gameStateContext?.totalBets["banker"]}
+                                </span>
                             </div>
                             <div className="flex items-center players gap-1 justify-end">
                                 <span id="banker-user-icon" className="icon-user"></span>
@@ -207,9 +211,11 @@ export const BacBallBettingBlock: FC = () => {
                         <PercentageCircle percentage={50} />
                     </div>
                     <div className={Style.stake}>
-                        <div className={`flex items-center ${Style["total-stakes"]} gap-1 justify-center`}>
+                        <div className={`flex items-center ${Style["total-stakes"]} gap-1 justify-center mt-1`}>
                             <span id="tie-coin-icon" className="icon-coin"></span>
-                            <span id="tie-total-stakes">{gameStateContext?.totalBets["tie"]}</span>
+                            <span id="tie-total-stakes" className="stakes-value">
+                                {gameStateContext?.totalBets["tie"]}
+                            </span>
                         </div>
                         <div className="flex items-center players gap-1 justify-center">
                             <span id="tie-user-icon" className="icon-user"></span>
@@ -218,7 +224,7 @@ export const BacBallBettingBlock: FC = () => {
                             </span>
                         </div>
                     </div>
-                    <div id="tie-bet-name" className="bet-name text-center mt-4">
+                    <div id="tie-bet-name" className="bet-name text-center mt-3">
                         {dataTie.betChoice}
                     </div>
                     <div id="tie-odds" className="bet-odds text-center">

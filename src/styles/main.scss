@@ -132,11 +132,7 @@ body {
     font: 500 1.4rem/1.5 var(--font-family);
     color: var(--text-color);
     overscroll-behavior: contain;
-    background-size: auto;
-
-    @media screen and (orientation: portrait) {
-        background-size: cover;
-    }
+    background-size: cover;
 }
 
 .no-scroll-html {
@@ -208,8 +204,10 @@ body {
     line-height: 1;
 }
 
-.players .players-value {
+.player-value,
+.stakes-value {
     height: 1.8rem;
+    line-height: 1.7;
 }
 
 .copyright {
