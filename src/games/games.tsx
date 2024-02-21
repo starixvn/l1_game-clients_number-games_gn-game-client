@@ -17,7 +17,6 @@ import { WinningStreak } from "../components/page-components/winning-streak";
 import { WinningStreakItem } from "../components/page-components/winning-streak/winning-streak.type";
 import styles from "./games.module.scss";
 import { Props } from "./type";
-import messageTransmitter from "../_shared/helpers/message-transmitter";
 import { AppTypes } from "../_shared/constants";
 import BacBall from "./bac-ball";
 import { GameCategory } from "../components/page-components/game-category";
@@ -87,16 +86,6 @@ const getUpdatedFavoriteList = (gameId: number, isFavorite: boolean) => {
     return newFavoriteList;
 };
 
-const GlobalMessageTransmitter = messageTransmitter();
-
-const registerGlobalMessageEvent = (messageKey: string, handler: Function) => {
-    GlobalMessageTransmitter.register(messageKey, handler);
-};
-
-const unsubscribeGlobalMessageEvent = (listenerId: string) => {
-    GlobalMessageTransmitter.unsubscribe(listenerId);
-};
-
 export const Games: React.FC<Props> = ({
     enabledQuickBet,
     betValue,
@@ -161,8 +150,6 @@ export const Games: React.FC<Props> = ({
             theme,
             userStakeLevel,
             updateUserStakeLevel,
-            registerGlobalMessageEvent: registerGlobalMessageEvent,
-            unsubscribeGlobalMessageEvent: unsubscribeGlobalMessageEvent,
             finishJoinGame: () => setIsJoinedGame(true),
             isJoinedGame: isJoinedGame,
         };

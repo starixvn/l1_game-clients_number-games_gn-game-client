@@ -20,6 +20,7 @@ export enum GameEventActionType {
     API_ERROR = "API_ERROR",
     DISCONNECT_ERROR = "DISCONNECT_ERROR",
     USER_STAKE_LEVEL = "USER_STAKE_LEVEL",
+    NOTICE_USER_STAKE_LEVEL = "NOTICE_USER_STAKE_LEVEL",
     ODDS = "ODDS",
     DRAW_ID = "DRAW_ID",
     TOTAL_BET = "TOTAL_BET",
@@ -80,7 +81,10 @@ export interface GameEventPayload {
     };
     apiError?: any;
     errorCode?: string;
-    userStakeLevel?: any;
+    userStakeLevel?: {
+        minBet: number;
+        maxBet: number;
+    };
     odds?: any;
     drawId?: number;
     totalBets?: any;

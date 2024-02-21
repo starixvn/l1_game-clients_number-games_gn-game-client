@@ -67,6 +67,10 @@ export interface GameStateContextModel<Result, SettlementResult> {
     showConfirmDialog: boolean;
     turnCounter: number;
     notConfirmOwnBets: object;
+    userStakeLevel: {
+        minBet: number;
+        maxBet: number;
+    };
 }
 
 export const initialGameStateContextModel = ({ defaultResult, defaultSettlementResult }) => {
@@ -120,5 +124,9 @@ export const initialGameStateContextModel = ({ defaultResult, defaultSettlementR
         showConfirmDialog: false,
         turnCounter: 0,
         notConfirmOwnBets: {},
+        userStakeLevel: {
+            minBet: 1,
+            maxBet: 200_000,
+        },
     };
 };

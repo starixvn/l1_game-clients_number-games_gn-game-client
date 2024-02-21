@@ -40,8 +40,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     protected messageTransmitter: MessageTransmitterType;
     protected authService: Auth;
     private isConnectFailed = false;
-    private playPermissionListener: string;
-    private userStakeLevelListener: string;
     private disconnectTimeout: NodeJS.Timeout;
     private gameMessageHandler: GameMessageHandler;
 
@@ -75,8 +73,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             },
         });
 
-        this.props.unsubscribeGlobalMessageEvent(this.playPermissionListener);
-        this.props.unsubscribeGlobalMessageEvent(this.userStakeLevelListener);
         this.interval && clearInterval(this.interval);
         this.showResultInfoTimeout && clearTimeout(this.showResultInfoTimeout);
         this.showWinningAnimationTimeout && clearTimeout(this.showWinningAnimationTimeout);
@@ -88,16 +84,11 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     onStart() {
         this.messageTransmitter?.clearAllListener();
         this.messageTransmitter = MessageTransmitter();
-        const { registerGlobalMessageEvent } = this.props;
         this.gameMessageHandler = new GameMessageHandler(this.props.dispatch, this.messageTransmitter);
         this.isConnectFailed = false;
         this.isProcessingBet = false;
         this.clearDisconnectTimeout();
         this.registerMessageHandler();
-        this.playPermissionListener = registerGlobalMessageEvent("notPermittedToPlay", this.handleRestrictPermission.bind(this));
-        this.userStakeLevelListener = registerGlobalMessageEvent("userStakeLevel", ({ userStakeLevel }) =>
-            this.props.updateUserStakeLevel(userStakeLevel)
-        );
         this.connectGameService();
     }
 
@@ -158,6 +149,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.messageTransmitter.register(messageEventType.USER_STAKE_LEVEL, this.handleUserStakeLevel.bind(this));
         this.messageTransmitter.register(messageEventType.DRAW_ID, this.handleDrawId.bind(this));
         this.messageTransmitter.register(messageEventType.ROUND_HISTORY, this.handleRoundHistory.bind(this));
+        this.messageTransmitter.register(messageEventType.NOT_PERMITTED_TO_PLAY, this.handleRestrictPermission.bind(this));
     }
 
     handleError = ({ errorCode }) => {
@@ -191,13 +183,19 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         });
     };
 
-    handleUserStakeLevel({ userStakeLevel }) {
+    handleUserStakeLevel({ userStakeLevel, hasNotice = true }) {
         this.props.updateUserStakeLevel(userStakeLevel);
 
         this.props.dispatch({
             type: GameEventActionType.USER_STAKE_LEVEL,
-            payload: {},
+            payload: { userStakeLevel },
         });
+
+        hasNotice &&
+            this.props.dispatch({
+                type: GameEventActionType.NOTICE_USER_STAKE_LEVEL,
+                payload: {},
+            });
     }
 
     protected handleStatus = ({ status }) => {
@@ -301,6 +299,19 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         }
     };
 
+    handleRestrictPermission = ({ notPermittedToPlay, gameId, userStakeLevel }) => {
+        if (notPermittedToPlay && gameId === this.props.id) {
+            this.onDestroy();
+            this.props.dispatch({
+                type: GameEventActionType.DISCONNECT_ERROR,
+                payload: { disconnectReason: ConnectFailedReasonKey.restrictPlayPermission },
+            });
+        }
+        if (userStakeLevel) {
+            this.handleUserStakeLevel({ userStakeLevel });
+        }
+    };
+
     handleEndBet = ({ endBet, ownBets, betChoice, notice, kickedOut, apiError }) => {
         const { playPlaceBetSound } = this.props;
         const { displayPopup } = this.props.gameStateContextModel;
@@ -365,19 +376,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             type: GameEventActionType.USER,
             payload: { userData: { user, gameConfigs } },
         });
-    }
-
-    handleRestrictPermission({ notPermittedToPlay, gameId, userStakeLevel }) {
-        if (notPermittedToPlay && gameId === this.props.id) {
-            this.onDestroy();
-            this.props.dispatch({
-                type: GameEventActionType.DISCONNECT_ERROR,
-                payload: { disconnectReason: ConnectFailedReasonKey.restrictPlayPermission },
-            });
-        }
-        if (userStakeLevel) {
-            this.props.updateUserStakeLevel(userStakeLevel);
-        }
     }
 
     handleUM({ um, um_message, remainingTime }) {

@@ -3,7 +3,7 @@ import MsgpackParser from "socket.io-msgpack-parser";
 import { getAppSettings } from "../app-settings";
 import { buildServerUrl } from "../helpers";
 import { SocketInfo } from "./../../components/game-base/type";
-import { GameMessageHandler } from "../../components/game-base/game-message-handler";
+import { GameMessageHandler, messageEventType } from "../../components/game-base/game-message-handler";
 
 export function InitSocketIO(socketInfo: SocketInfo, session: any, gameName: string, gameMessageHandler: GameMessageHandler) {
     const { proxy, enableMsgpackParser } = getAppSettings();
@@ -22,6 +22,13 @@ export function InitSocketIO(socketInfo: SocketInfo, session: any, gameName: str
         gameMessageHandler.registerSocketEvents();
 
         socket.off(gameName).on(gameName, gameMessageHandler.broadcastGameMessage);
+        socket.off("message").on("message", (message) => {
+            if (message[messageEventType.USER_STAKE_LEVEL]) {
+                gameMessageHandler.broadcastGameMessage({ ...message, hasNotice: false });
+            } else {
+                gameMessageHandler.broadcastGameMessage(message);
+            }
+        });
 
         socket.on("connect", () => {
             socket.emit("signin", session);

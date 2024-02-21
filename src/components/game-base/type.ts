@@ -10,6 +10,7 @@ export interface GameConfigs {
     maxBet: number;
     maxBetPerChoices: any;
     enableFreeBet: boolean;
+    chips: string[];
 }
 
 export enum RoundState {
@@ -46,8 +47,6 @@ export type GamePropsContext = {
     supportMD5?: boolean;
     userStakeLevel?: UserStakeLevel;
     updateUserStakeLevel?: Function;
-    registerGlobalMessageEvent?: Function;
-    unsubscribeGlobalMessageEvent?: Function;
     finishJoinGame?: Function;
     isJoinedGame?: boolean;
     dispatch?: (action: GameEventAction) => {};

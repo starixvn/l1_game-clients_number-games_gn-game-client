@@ -22,6 +22,7 @@ export const messageEventType = {
     SOCKET_DISCONNETED: "disconnect",
     ROUND_DATA: "roundData",
     SIGNED_IN: "signedIn",
+    NOT_PERMITTED_TO_PLAY: "notPermittedToPlay",
 };
 
 export class GameMessageHandler {

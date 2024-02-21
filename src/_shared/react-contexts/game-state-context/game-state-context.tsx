@@ -263,6 +263,13 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
         case GameEventActionType.USER_STAKE_LEVEL: {
             return {
                 ...state,
+                userStakeLevel,
+            };
+        }
+
+        case GameEventActionType.NOTICE_USER_STAKE_LEVEL: {
+            return {
+                ...state,
                 notice: { message: "CommonResourceKeys.USER_STAKE_LEVEL_UPDATE" },
             };
         }

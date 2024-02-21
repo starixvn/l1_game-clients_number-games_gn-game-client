@@ -3,7 +3,7 @@ import { isIOS, isMobileOnly } from "react-device-detect";
 import { StorageHelper, localStorageKeys } from "../../../_shared/helpers";
 import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import Styles from "./bet-setting.module.scss";
-import { ChipSlider } from "./chip-slider";
+import { ChipSlider } from "../../game-components/chip-slider";
 import { QuickBetBtn } from "./quick-bet-btn";
 
 const BetSettings = () => {
