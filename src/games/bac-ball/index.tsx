@@ -30,6 +30,7 @@ export const StatisticRuleEntries = Object.entries({
     [Choices.tie]: (countResult: object, total: number) =>
         countResult[Choices.tie] ? Math.round((countResult[Choices.tie] * 100) / total) : 0,
 });
+
 class BacBall extends GameBase<GameBaseProps> {
     constructor(props: GameBaseProps) {
         const gameMessageHandler = new GameMessageHandler(props.dispatch);

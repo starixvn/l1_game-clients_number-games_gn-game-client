@@ -127,13 +127,14 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
         this.disconnectTimeout = setTimeout(() => {
             this.isConnectFailed = true;
-
-            this.props.dispatch({
-                type: GameEventActionType.DISCONNECT_ERROR,
-                payload: {
-                    disconnectReason: ConnectFailedReasonKey.lostConnection,
-                },
-            });
+            if (!this.props.gameStateContextModel.signedIn) {
+                this.props.dispatch({
+                    type: GameEventActionType.DISCONNECT_ERROR,
+                    payload: {
+                        disconnectReason: ConnectFailedReasonKey.lostConnection,
+                    },
+                });
+            }
         }, time);
     }
 
