@@ -1,22 +1,22 @@
-import { AppTypes } from "../../../_shared/constants";
+import { AppTypes, GameIds } from "../../../_shared/constants";
 import { getAppSettings } from "../../../_shared/app-settings";
 
 export const GamesInOnePage = 20;
 
 export const GameCategoryConfig = {
     [AppTypes.mobile]: {
-        hot: [1001],
-        newNumberGames: [1001, 1112, 1113, 1114, 1115, 1116],
+        game: [GameIds.BacBall],
+        newNumberGames: [GameIds.HappyFour, GameIds.HappyWheel, GameIds.LuckyThree, GameIds.NextBall, GameIds.SicBalls],
     },
 };
 
 export enum GameCategoryType {
-    hot,
+    game,
     newNumberGames,
 }
 
 const SystemGameCategory = {
-    ["GN"]: [GameCategoryType.hot, GameCategoryType.newNumberGames],
+    ["GN"]: [GameCategoryType.game, GameCategoryType.newNumberGames],
 };
 
 export const favoriteGameIdIgnore = []; // TODO: Consider later

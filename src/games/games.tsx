@@ -17,7 +17,7 @@ import { WinningStreak } from "../components/page-components/winning-streak";
 import { WinningStreakItem } from "../components/page-components/winning-streak/winning-streak.type";
 import styles from "./games.module.scss";
 import { Props } from "./type";
-import { AppTypes } from "../_shared/constants";
+import { AppTypes, GameIds } from "../_shared/constants";
 import BacBall from "./bac-ball";
 import { GameCategory } from "../components/page-components/game-category";
 import { ViewMode } from "../components/game-base/type";
@@ -33,8 +33,8 @@ const getRenderGames = (selectedCategory: GameCategoryType, selectedPage: number
         return GameCategoryConfig[AppTypes.mobile].newNumberGames;
     }
 
-    if (selectedCategory === GameCategoryType.hot) {
-        return GameCategoryConfig[AppTypes.mobile].hot;
+    if (selectedCategory === GameCategoryType.game) {
+        return GameCategoryConfig[AppTypes.mobile].game;
     }
     const tabGames = GameCategoryConfig[getAppSettings().appType][GameCategoryType[selectedCategory]];
 
@@ -56,14 +56,14 @@ const getCategoryByGameId = (gameId: number) => {
 };
 
 const getDefaultCategory = () => {
-    return "hot";
+    return "game";
 };
 
 const getCategoryByQueryGameId = (gameId: number) => {
     return (
         GameCategoryKeys.find(
             (category) =>
-                category !== "hot" &&
+                category !== "game" &&
                 GameCategoryConfig[getAppSettings().appType][category] &&
                 GameCategoryConfig[getAppSettings().appType][category].includes(gameId)
         ) ?? getDefaultCategory()
@@ -155,17 +155,17 @@ export const Games: React.FC<Props> = ({
         };
 
         switch (gameId) {
-            case 1001:
+            case GameIds.BacBall:
                 return <BacBall key={`game-${gameId}`} {...gameProps} />;
-            case 1112:
+            case GameIds.HappyFour:
                 return <HappyFour key={`game-${gameId}`} />;
-            case 1113:
+            case GameIds.HappyWheel:
                 return <HappyWheel key={`game-${gameId}`} />;
-            case 1114:
+            case GameIds.LuckyThree:
                 return <LuckyThree key={`game-${gameId}`} />;
-            case 1115:
+            case GameIds.NextBall:
                 return <NextBall key={`game-${gameId}`} />;
-            case 1116:
+            case GameIds.SicBalls:
                 return <SicBalls key={`game-${gameId}`} />;
 
             default:

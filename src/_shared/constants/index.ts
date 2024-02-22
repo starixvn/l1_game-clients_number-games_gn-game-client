@@ -92,3 +92,12 @@ export const AppTypes = {
 };
 
 export const confirmBetChoice = "confirm";
+
+export const GameIds = {
+    BacBall: 1001,
+    HappyFour: 1112,
+    HappyWheel: 1113,
+    LuckyThree: 1114,
+    NextBall: 1115,
+    SicBalls: 1116,
+};

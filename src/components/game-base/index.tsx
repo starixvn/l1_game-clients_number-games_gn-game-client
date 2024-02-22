@@ -73,9 +73,9 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             },
         });
 
-        this.interval && clearInterval(this.interval);
-        this.showResultInfoTimeout && clearTimeout(this.showResultInfoTimeout);
-        this.showWinningAnimationTimeout && clearTimeout(this.showWinningAnimationTimeout);
+        clearInterval(this.interval);
+        clearTimeout(this.showResultInfoTimeout);
+        clearTimeout(this.showWinningAnimationTimeout);
         this.clearRetryInterval();
         this.clearDisconnectTimeout();
         this.messageTransmitter.clearAllListener();
@@ -89,13 +89,14 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.isProcessingBet = false;
         this.clearDisconnectTimeout();
         this.registerMessageHandler();
-        this.connectGameService();
+        this.connectToGameService();
     }
 
-    protected connectGameService() {
+    protected connectToGameService() {
         const { session } = this.context as AuthContextModel;
+        const { socketInfo, gameName } = this.props;
 
-        const { socket } = InitSocketIO(this.props.socketInfo, session, this.props.gameName, this.gameMessageHandler);
+        const { socket } = InitSocketIO(socketInfo, session, gameName, this.gameMessageHandler);
 
         this.socket = socket;
     }
@@ -634,11 +635,11 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     clearRetryInterval() {
-        this.retryInterval && clearInterval(this.retryInterval);
+        clearInterval(this.retryInterval);
     }
 
     clearDisconnectTimeout() {
-        this.disconnectTimeout && clearTimeout(this.disconnectTimeout);
+        clearTimeout(this.disconnectTimeout);
     }
 
     openPopup(popupType: PopupType) {
