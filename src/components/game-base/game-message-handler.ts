@@ -38,6 +38,14 @@ export class GameMessageHandler {
     };
 
     broadcastGameMessage = (message) => {
+        if (message[messageEventType.USER_STAKE_LEVEL]) {
+            this.messageTransmitter.broadcast({ ...message, hasNotice: false });
+        } else {
+            this.messageTransmitter.broadcast(message);
+        }
+    };
+
+    broadcastGameEvent = (message) => {
         this.messageTransmitter.broadcast(message);
     };
 
