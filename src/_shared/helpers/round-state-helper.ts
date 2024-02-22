@@ -1,21 +1,25 @@
 import { PopupType, RoundState } from "../../components/game-base/type";
-import { useTimeCounter } from "./use-time-counter";
 
-export function useDetermineRoundState({ roundRemainingTime, remainingTime, durations }) {
-    const { wholeRound, wholeTurn, showResult, beforeStartRound, placingBets, lockingBet, switchRoundAnimation } = durations;
-
-    if (
-        roundRemainingTime < wholeRound - showResult - beforeStartRound &&
-        roundRemainingTime >= wholeRound - showResult - beforeStartRound - switchRoundAnimation
-    ) {
-        return RoundState.SwitchRound;
+export function getTimeCounter({ remainingTime, durations, roundState }) {
+    switch (roundState) {
+        case RoundState.InRound:
+        case RoundState.LockingBet:
+            return remainingTime;
+        case RoundState.BeforeStartRound:
+            return durations.beforeStartRound;
+        default:
+            return 0;
     }
+}
 
-    if (remainingTime >= wholeTurn - showResult) {
+export function determineRoundBaseState({ wholeRound, remainingTime, durations }) {
+    const { showResult, beforeStartRound, placingBets, lockingBet } = durations;
+
+    if (remainingTime >= wholeRound - showResult) {
         return RoundState.DisplayResult;
     }
 
-    if (durations.beforeStartRound && remainingTime > placingBets) {
+    if (beforeStartRound && remainingTime > placingBets) {
         return RoundState.BeforeStartRound;
     }
 
@@ -30,7 +34,20 @@ export function useDetermineRoundState({ roundRemainingTime, remainingTime, dura
     return RoundState.None;
 }
 
-export function useNextRoundState({
+export function determineTurnBaseState({ roundRemainingTime, remainingTime, durations }) {
+    const { wholeRound, wholeTurn, showResult, beforeStartRound, switchRoundAnimation } = durations;
+
+    if (
+        roundRemainingTime < wholeRound - showResult - beforeStartRound &&
+        roundRemainingTime >= wholeRound - showResult - beforeStartRound - switchRoundAnimation
+    ) {
+        return RoundState.SwitchRound;
+    }
+
+    return determineRoundBaseState({ wholeRound: wholeTurn, remainingTime, durations });
+}
+
+export function getNextRoundState({
     gameStateContextModel,
     nextRoundState,
     durations,
@@ -40,22 +57,13 @@ export function useNextRoundState({
 }) {
     // const gameStateContextModel = useGameStateContext();
     if (gameStateContextModel) {
-        const { displayPopup, notice, removeBetChoiceFocus, result, settlementResult } = gameStateContextModel;
+        const { displayPopup, notice, result, settlementResult } = gameStateContextModel;
 
-        const getTimeCounter = useTimeCounter;
         const timeCounter = getTimeCounter({
             remainingTime,
             durations: durations,
             roundState: nextRoundState,
         });
-
-        // if (nextGameState === RoundState.InRound) {
-        //     this.betWin = 0;
-        // }
-
-        if (nextRoundState === RoundState.LockingBet) {
-            // removeBetChoiceFocus && removeBetChoiceFocus();
-        }
 
         const newStateDetector = [
             {
@@ -73,7 +81,6 @@ export function useNextRoundState({
                     isShowBlink: false,
                     playResultAnimation: false,
                     showResultInfo: false,
-                    showMD5ResultKey: false,
                 },
             },
             {

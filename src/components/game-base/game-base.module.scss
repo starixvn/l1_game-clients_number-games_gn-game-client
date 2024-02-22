@@ -7,9 +7,6 @@
     --mini-round-history-background: #c5dbfe;
 }
 
-[data-theme="light"] .md5-section {
-    --md5-bg-color: #dce2f3;
-}
 
 .bet-options {
     position: relative;
@@ -61,69 +58,6 @@
 
     @media print, screen and (min-width: 992px) {
         font-size: 1.4rem;
-    }
-}
-
-.md5-section {
-    background-color: var(--md5-bg-color);
-    font-size: 1.2rem;
-    padding: 0.2rem 0.6rem 0;
-    display: flex;
-    justify-content: space-between;
-    cursor: pointer !important;
-
-    .blue {
-        color: #2e73c3;
-    }
-
-    .red {
-        color: #ff4352;
-    }
-
-    .text {
-        &.md5-key {
-            animation: fadeIn 0.3s linear forwards;
-            animation-delay: 0;
-        }
-        &.md5-result {
-            animation: shakeX 0.3s linear forwards;
-            animation-delay: 0;
-        }
-    }
-    .copy-box {
-        position: relative;
-        cursor: pointer;
-        width: 4rem;
-        height: 1.6rem;
-        .copy-text {
-            position: relative;
-            display: block;
-            text-align: center;
-            z-index: 2;
-            font-size: 1rem;
-            color: #fff;
-        }
-
-        &:before {
-            content: "";
-            background: linear-gradient(180deg, #f19f0a 0%, #b77406 100%);
-            position: absolute;
-            top: 0;
-            right: 0;
-            left: 0;
-            bottom: 0;
-            border-radius: 5px;
-        }
-        &:after {
-            content: "";
-            background: linear-gradient(180deg, #ffc964 0%, #ee9505 100%);
-            position: absolute;
-            top: 0.1rem;
-            right: 0.1rem;
-            left: 0.1rem;
-            bottom: 0.1rem;
-            border-radius: 5px;
-        }
     }
 }
 

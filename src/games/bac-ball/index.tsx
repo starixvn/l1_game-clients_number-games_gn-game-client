@@ -5,8 +5,7 @@ import {
     useGameStateContext,
     useGameStatesDispatch,
 } from "../../_shared/react-contexts/game-state-context/game-state-context";
-import { useDetermineRoundState, useNextRoundState } from "../../_shared/react-hooks/use-determine-round-state";
-import { useTimeCounter } from "../../_shared/react-hooks/use-time-counter";
+import { determineTurnBaseState, getNextRoundState, getTimeCounter } from "../../_shared/helpers/round-state-helper";
 import GameBase from "../../components/game-base/";
 import { GameBaseProps } from "../../components/game-base/type";
 import CountdownTimer from "../../components/game-components/countdown-timer/countdown-timer";
@@ -92,9 +91,9 @@ const BacBallFC = (props) => {
             {...{
                 dispatch: useGameStatesDispatch(),
                 gameStateContextModel: useGameStateContext(),
-                determineRoundState: useDetermineRoundState,
-                getTimeCounter: useTimeCounter,
-                getNextRoundState: useNextRoundState,
+                determineRoundState: determineTurnBaseState,
+                getTimeCounter: getTimeCounter,
+                getNextRoundState: getNextRoundState,
             }}
         />
     );

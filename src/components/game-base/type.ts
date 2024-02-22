@@ -44,7 +44,6 @@ export type GamePropsContext = {
     notifyWinStreak?: Function;
     playPlaceBetSound?: Function;
     setApiErrorMessage?: Function;
-    supportMD5?: boolean;
     userStakeLevel?: UserStakeLevel;
     updateUserStakeLevel?: Function;
     finishJoinGame?: Function;

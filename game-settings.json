@@ -2,7 +2,6 @@
     "1001": {
         "id": 1001,
         "gameName": "BacBall",
-        "supportMD5": false,
         "socketInfo": {
             "namespace": "bacball",
             "path": "bacball"
