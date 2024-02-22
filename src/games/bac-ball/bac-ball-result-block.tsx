@@ -15,7 +15,7 @@ export const BacBallResultBlock: FC = () => {
     const [existedPlayerBalls, setExistedPlayerBalls] = useState<Array<number>>([0, 0, 0, 0]);
     const [existedBankerBalls, setExistedBankerBalls] = useState([0, 0, 0, 0]);
     const gameStateContext = useGameStateContext();
-    const { result, roundData, turnCounter } = gameStateContext;
+    const { result, roundData, turnCounter, drawId } = gameStateContext;
     let playerBallColor = useBallColor({ number: result?.player });
     let bankerBallColor = useBallColor({ number: result?.banker });
 
@@ -64,7 +64,7 @@ export const BacBallResultBlock: FC = () => {
     }, [roundData]);
 
     useEffect(() => {
-        if (!result) {
+        if (!result || drawId !== result.drawId) {
             return;
         }
 
@@ -104,7 +104,7 @@ export const BacBallResultBlock: FC = () => {
                     if (result > 0 && turnCounter !== index + 1) {
                         props.number = result;
                         props.delayTime = 0;
-                        props.joinGame = true;
+                        props.joinGame = gameStateContext.signedIn;
                     } else if (result > 0) {
                         props.number = result;
                         props.isLoading = true;

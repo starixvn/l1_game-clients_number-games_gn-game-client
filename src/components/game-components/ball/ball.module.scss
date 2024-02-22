@@ -80,7 +80,8 @@ $delay-zoom-in-time: 2.8s;
     animation: zoom-in $zoom-in-time $delay-zoom-in-time linear forwards;
 
     &.display-right-now {
-        animation: zoom-in $zoom-in-time 0 linear forwards;
+        animation: none;
+        transform: scale(1);
     }
 
     &::after {
