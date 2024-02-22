@@ -181,7 +181,7 @@ class Dashboard extends React.PureComponent<Props, State> {
             this.handleRecheckInResponse(reCheckInResponse);
         }, 60 * 1000);
 
-        // this.connectNotificationSocket();
+        this.connectNotificationSocket();
         await this.updateBetSettingGames();
     }
 

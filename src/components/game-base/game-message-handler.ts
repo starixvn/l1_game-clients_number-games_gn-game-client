@@ -19,7 +19,7 @@ export const messageEventType = {
     DRAW_ID: "drawId",
     SOCKET_CONNECT_ERROR: "connect_error",
     SOCKET_CONNECTED: "connect",
-    SOCKET_DISCONNETED: "disconnect",
+    SOCKET_DISCONNECTED: "disconnect",
     ROUND_DATA: "roundData",
     SIGNED_IN: "signedIn",
     NOT_PERMITTED_TO_PLAY: "notPermittedToPlay",

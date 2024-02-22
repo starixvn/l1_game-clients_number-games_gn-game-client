@@ -56,6 +56,7 @@ const UMPage: React.FC<{ locale: string }> = ({ locale }) => {
             <p className="highlight">{t("um:umContentStart")}</p>
             <p className="highlight txt-bold">{t("um:umContent").toString().replace("{0}", startTime).replace("{1}", endTime)}</p>
             <p>{t("um:umNotice")}</p>
+            <button>Back</button>
         </div>
     );
 };

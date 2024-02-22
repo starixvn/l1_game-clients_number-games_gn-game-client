@@ -155,7 +155,7 @@ export const BacBallBettingBlock: FC = () => {
                         {dataPlayer.betChoice}
                     </div>
                     <div id="player-odds" className="bet-odds text-center">
-                        {gameStateContext?.gameConfigs?.odds["player"]}
+                        {gameStateContext?.gameConfigs?.odds?.["player"]}
                     </div>
                     <div className={`own-bet ${Style["own-bet"]}`}>{playerOwnBetsRender}</div>
                 </div>
@@ -189,7 +189,7 @@ export const BacBallBettingBlock: FC = () => {
                         {dataBanker.betChoice}
                     </div>
                     <div id="banker-odds" className="bet-odds text-center">
-                        {gameStateContext?.gameConfigs?.odds["banker"]}
+                        {gameStateContext?.gameConfigs?.odds?.["banker"]}
                     </div>
                     <div className={`own-bet ${Style["own-bet"]}`}>{bankerOwnBetsRender}</div>
                 </div>
@@ -236,7 +236,7 @@ export const BacBallBettingBlock: FC = () => {
                         {dataTie.betChoice}
                     </div>
                     <div id="tie-odds" className="bet-odds text-center">
-                        {gameStateContext?.gameConfigs?.odds["tie"]}
+                        {gameStateContext?.gameConfigs?.odds?.["tie"]}
                     </div>
                     <div className={`own-bet ${Style["own-bet"]}`}>{tieOwnBetsRender}</div>
                 </div>

@@ -23,21 +23,14 @@ export const Chip: React.FC<{ value: number; onClickChip: Function }> = ({ value
         return value < 1000 ? value.toString() : `${value / 1000}K`;
     };
 
-    const onError = ({ currentTarget }) => {
-        const defaultImagePath = `/static/images/chips/gn/${defaultChip}.svg`;
-        currentTarget.onerror = null;
-        currentTarget.src = defaultImagePath;
-    };
-
     return (
         <div key={value} className={getChipClassName()} onClick={() => onClickChip(value)}>
             <img
-                src={`/static/images/chips/${systemName}/${ChipMapper[systemName][value]}.svg`}
+                src={`/static/images/chips/${systemName}/${ChipMapper[systemName][value] || defaultChip}.svg`}
                 className={`img-fluid ${Styles["chip"]}`}
                 width="60"
                 height="62"
                 alt="Chip"
-                onError={onError}
             />
             <span className={Styles["value"]}>{getChipValueString()}</span>
         </div>

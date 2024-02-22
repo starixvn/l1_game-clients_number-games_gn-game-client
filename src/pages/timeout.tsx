@@ -39,6 +39,7 @@ const TimeOut = () => {
                 <p>{t("sessionTimeout-1")} </p>
                 <p>{t("sessionTimeout-2")}</p>
             </p>
+            <button>Back</button>
         </div>
     );
 };

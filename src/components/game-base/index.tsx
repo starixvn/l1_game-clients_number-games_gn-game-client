@@ -124,10 +124,17 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
     onSocketDisconnect() {
         this.onDestroy();
-        this.props.dispatch({
-            type: GameEventActionType.DISCONNECT,
-            payload: {},
-        });
+        const time = this.props.gameStateContextModel.signedIn ? 1000 : 5000;
+        this.disconnectTimeout = setTimeout(() => {
+            this.isConnectFailed = true;
+
+            this.props.dispatch({
+                type: GameEventActionType.DISCONNECT_ERROR,
+                payload: {
+                    disconnectReason: ConnectFailedReasonKey.lostConnection,
+                },
+            });
+        }, time);
     }
 
     onGameServiceConnected() {
@@ -143,7 +150,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     registerMessageHandler() {
         this.messageTransmitter.register(messageEventType.SOCKET_CONNECTED, this.onGameServiceConnected.bind(this));
         this.messageTransmitter.register(messageEventType.SOCKET_CONNECT_ERROR, this.onConnectFailed.bind(this));
-        this.messageTransmitter.register(messageEventType.SOCKET_DISCONNETED, this.onSocketDisconnect.bind(this));
+        this.messageTransmitter.register(messageEventType.SOCKET_DISCONNECTED, this.onSocketDisconnect.bind(this));
         this.messageTransmitter.register(messageEventType.UNDER_MAINTENANCE, this.handleUM.bind(this));
         this.messageTransmitter.register(messageEventType.REMAINING_TIME, this.handleRemainingTime.bind(this));
         this.messageTransmitter.register(messageEventType.FINISH, this.handleFinish.bind(this));
@@ -152,28 +159,11 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.messageTransmitter.register(messageEventType.OWN_BETS, this.handleOwnBets.bind(this));
         this.messageTransmitter.register(messageEventType.END_BET, this.handleEndBet.bind(this));
         this.messageTransmitter.register(messageEventType.API_ERROR, this.handleApiError.bind(this));
-        this.messageTransmitter.register(messageEventType.ERROR_CODE, this.handleError.bind(this));
         this.messageTransmitter.register(messageEventType.USER_STAKE_LEVEL, this.handleUserStakeLevel.bind(this));
         this.messageTransmitter.register(messageEventType.DRAW_ID, this.handleDrawId.bind(this));
         this.messageTransmitter.register(messageEventType.ROUND_HISTORY, this.handleRoundHistory.bind(this));
         this.messageTransmitter.register(messageEventType.NOT_PERMITTED_TO_PLAY, this.handleRestrictPermission.bind(this));
     }
-
-    handleError = ({ errorCode }) => {
-        if (errorCode === "SB0010" && document.visibilityState !== "hidden") {
-            const time = this.props.gameStateContextModel.signedIn ? 1000 : 5000;
-            this.disconnectTimeout = setTimeout(() => {
-                this.isConnectFailed = true;
-
-                this.props.dispatch({
-                    type: GameEventActionType.DISCONNECT_ERROR,
-                    payload: {
-                        disconnectReason: ConnectFailedReasonKey.lostConnection,
-                    },
-                });
-            }, time);
-        }
-    };
 
     handleRoundHistory = ({ roundHistory, roundId }) => {
         const { dispatch, gameStateContextModel } = this.props;
@@ -307,8 +297,8 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         }
     };
 
-    handleRestrictPermission = ({ notPermittedToPlay, gameId, userStakeLevel }) => {
-        if (notPermittedToPlay && gameId === this.props.id) {
+    handleRestrictPermission = ({ notPermittedToPlay, userStakeLevel }) => {
+        if (notPermittedToPlay) {
             this.onDestroy();
             this.props.dispatch({
                 type: GameEventActionType.DISCONNECT_ERROR,

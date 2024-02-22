@@ -51,13 +51,15 @@ export const ChipSlider: React.FC<{}> = () => {
     };
 
     const handleSelectChip = (chipValue: number) => {
-        dispatch({
-            type: GameEventActionType.SET_SELECT_CHIP,
-            payload: {
-                selectedChip: chipValue,
-            },
-        });
-        enabledSound && playSound();
+        if (selectedChip !== chipValue) {
+            dispatch({
+                type: GameEventActionType.SET_SELECT_CHIP,
+                payload: {
+                    selectedChip: chipValue,
+                },
+            });
+            enabledSound && playSound();
+        }
     };
 
     const updateArrowsByChipValue = (chipValue: number) => {

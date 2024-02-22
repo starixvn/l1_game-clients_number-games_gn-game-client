@@ -118,15 +118,6 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
             };
         }
 
-        case GameEventActionType.DISCONNECT: {
-            return {
-                ...state,
-                isConnect: false,
-                roundState: RoundState.None,
-                disconnectReason: ConnectFailedReasonKey.lostConnection,
-            };
-        }
-
         case GameEventActionType.UM: {
             return {
                 ...state,
