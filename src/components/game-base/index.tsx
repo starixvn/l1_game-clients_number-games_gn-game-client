@@ -176,9 +176,10 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     };
 
     handleRoundHistory = ({ roundHistory, roundId }) => {
-        const { roundState } = this.props.gameStateContextModel;
+        const { dispatch, gameStateContextModel } = this.props;
+        const { roundState } = gameStateContextModel;
 
-        this.props.dispatch({
+        dispatch({
             type: GameEventActionType.ROUND_HISTORY,
             payload: {
                 roundHistory: roundHistory,
@@ -260,7 +261,8 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     handleBetFailed = ({ notice, kickedOut }) => {
-        const { displayPopup } = this.props.gameStateContextModel;
+        const { gameStateContextModel, dispatch, router, gameName } = this.props;
+        const { displayPopup } = gameStateContextModel;
 
         displayPopup !== PopupType.Rebet &&
             this.props.dispatch({
@@ -269,9 +271,9 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                     notice: null,
                 },
             });
-        const gameName = `${this.props.gameName.toLowerCase()}:${GameResourceKeys.GAME_NAME}`;
+
         if (kickedOut?.isDisabledAccount) {
-            this.props.dispatch({
+            dispatch({
                 type: GameEventActionType.KICK_OUT,
                 payload: {
                     notice,
@@ -279,7 +281,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 },
             });
 
-            const { router } = this.props;
             setTimeout(() => {
                 router.push("/timeout", "/timeout", { locale: "i18n.language" });
             }, 10000);
@@ -287,11 +288,11 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             const isPlaceBet = notice.isPlaceBetFailed ? notice.isPlaceBetFailed : false;
 
             displayPopup !== PopupType.Rebet &&
-                this.props.dispatch({
+                dispatch({
                     type: GameEventActionType.DISPLAY_POPUP,
                     payload: {
                         notice: {
-                            gameName: gameName,
+                            gameName: `${gameName.toLowerCase()}:${GameResourceKeys.GAME_NAME}`,
                             message: GetLocalizedErrorMessage(notice.errorCode, isPlaceBet),
                             duration: 2,
                             minBet: notice?.minBet,
@@ -421,10 +422,10 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     };
 
     handleRemainingTime({ remainingTime }) {
-        const { durations, gameStateContextModel, } = this.props;
+        const { durations, gameStateContextModel, dispatch } = this.props;
 
         if (gameStateContextModel.roundState === RoundState.None || !this.isUMInFirstLoad) {
-            this.props.dispatch({
+            dispatch({
                 type: GameEventActionType.REMAINING_TIME,
                 payload: { remainingTime },
             });
@@ -437,16 +438,20 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
     runGame(remainingTime: number) {
         this.timeCounter = remainingTime;
+        const { durations } = this.props;
+        const { wholeRound } = durations;
 
         this.interval && clearInterval(this.interval);
         this.interval = setInterval(() => {
             const newRoundState = this.roundStateHandler.determineRoundBaseState({
                 roundRemainingTime: this.roundTimeCounter,
-                wholeRound: this.props.durations.wholeRound,
+                wholeRound: wholeRound,
                 remainingTime: this.timeCounter,
-                durations: this.props.durations,
+                durations,
             });
+
             this.roundTimeCounter = this.roundTimeCounter - 1;
+
             if (this.timeCounter > 0 && newRoundState !== RoundState.SwitchRound) {
                 this.timeCounter = this.timeCounter - 1;
             }
@@ -461,27 +466,28 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         // console.log(`roundTimeCounter: ${this.roundTimeCounter}`);
         // console.log(`Turn RemainingTime: ${remainingTime}`);
 
+        const { durations, dispatch, gameStateContextModel } = this.props;
         const newRoundState = this.roundStateHandler.determineRoundBaseState({
             roundRemainingTime: this.roundTimeCounter,
-            wholeRound: this.props.durations.wholeRound,
+            wholeRound: durations.wholeRound,
             remainingTime,
-            durations: this.props.durations,
+            durations,
         });
 
-        if (this.props.gameStateContextModel.roundState !== newRoundState && !this.isConnectFailed) {
+        if (gameStateContextModel.roundState !== newRoundState && !this.isConnectFailed) {
             const newGameState = {
                 roundState: newRoundState,
                 ...this.gameStateHandler.getNextRoundState({
                     nextRoundState: newRoundState,
-                    gameStateContextModel: this.props.gameStateContextModel,
-                    durations: this.props.durations,
+                    gameStateContextModel,
+                    durations,
                     defaultResult: this.defaultResult,
                     defaultSettlementResult: this.defaultSettlementResult,
                     remainingTime,
                 }),
             };
 
-            this.props.dispatch({
+            dispatch({
                 type: GameEventActionType.SET_NEW_GAME_STATE,
                 payload: { newGameState },
             });
@@ -503,8 +509,8 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     handleFinish({ finish }) {
-        const { roundHistory } = this.props.gameStateContextModel;
-        const { durations } = this.props;
+        const { gameStateContextModel, durations, dispatch } = this.props;
+        const { roundHistory } = gameStateContextModel;
         const roundHistoryClone = [...roundHistory];
 
         this.isProcessingBet = false;
@@ -513,7 +519,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         roundHistoryClone.unshift(finish);
         roundHistoryClone.length > 100 && roundHistoryClone.pop();
 
-        this.props.dispatch({
+        dispatch({
             type: GameEventActionType.FINISH,
             payload: {
                 playResultAnimation: true,
@@ -526,7 +532,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         const animationDuration = this.getFinishAnimationDuration();
 
         this.showResultInfoTimeout = setTimeout(() => {
-            this.props.dispatch({
+            dispatch({
                 type: GameEventActionType.SHOW_RESULT_INFO_TIME_OUT,
                 payload: {
                     showResultInfo: true,
@@ -538,14 +544,14 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         }, animationDuration);
 
         this.showWinningAnimationTimeout = setTimeout(() => {
-            this.props.dispatch({
+            dispatch({
                 type: GameEventActionType.SHOW_WINNING_ANIMATION,
                 payload: {
                     showWinningAnimation: true,
                 },
             });
 
-            this.props.gameStateContextModel.betWin > 0 && this.updateUserBalance();
+            gameStateContextModel.betWin > 0 && this.updateUserBalance();
         }, this.winningAnimationWaitingTimeInSecond);
 
         this.runGame(this.roundStateHandler.getWholeRoundDuration({ durations }));
