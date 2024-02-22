@@ -110,12 +110,18 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     protected connectToGameService() {
+        this.disconnectGameService();
         const { session } = this.context as AuthContextModel;
         const { socketInfo, gameName } = this.props;
 
         const { socket } = InitSocketIO(socketInfo, session, gameName, this.gameMessageHandler);
 
         this.socket = socket;
+    }
+
+    protected disconnectGameService() {
+        this.socket?.disconnect();
+        this.socket = null;
     }
 
     onVisibilityChange = () => {
@@ -138,16 +144,14 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         const time = this.props.gameStateContextModel.signedIn ? 1000 : 5000;
 
         this.disconnectTimeout = setTimeout(() => {
-            if (!this.props.gameStateContextModel.signedIn) {
-                this.isConnectFailed = true;
+            this.isConnectFailed = true;
 
-                this.props.dispatch({
-                    type: GameEventActionType.DISCONNECT_ERROR,
-                    payload: {
-                        disconnectReason: ConnectFailedReasonKey.lostConnection,
-                    },
-                });
-            }
+            this.props.dispatch({
+                type: GameEventActionType.DISCONNECT_ERROR,
+                payload: {
+                    disconnectReason: ConnectFailedReasonKey.lostConnection,
+                },
+            });
         }, time);
     }
 
@@ -360,7 +364,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         const { acceptedBetQueue } = this.props.gameStateContextModel;
         const key = uuidv4();
         acceptedBetQueue[key] = {
-            amount
+            amount,
         };
 
         this.props.dispatch({
@@ -653,7 +657,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             payload: { displayPopup: popupType },
         });
     }
-
 
     setActiveScoreboardTab = (activeScoreboardTab: number) => {
         this.props.dispatch({
