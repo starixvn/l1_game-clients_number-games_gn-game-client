@@ -8,7 +8,6 @@ export default function messageTransmitter() {
     const register = (messageKey: string, handleMessage: Function) => {
         const listenerId = uuidv4();
         listeners.push({ messageKey, listenerId, handleMessage });
-
         return listenerId;
     };
 
@@ -18,7 +17,9 @@ export default function messageTransmitter() {
         listenerIndex >= 0 && listeners.splice(listenerIndex, 1);
     };
 
-    const clearAllListener = () => (listeners = []);
+    const clearAllListener = () => {
+        listeners = [];
+    };
 
     const broadcast = (message: any) => {
         for (const listener of listeners) {

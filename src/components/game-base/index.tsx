@@ -4,7 +4,6 @@ import { Socket } from "socket.io-client";
 import { v4 as uuidv4 } from "uuid";
 import { confirmBetChoice } from "../../_shared/constants";
 import { InitSocketIO } from "../../_shared/helpers";
-import MessageTransmitter from "../../_shared/helpers/message-transmitter";
 import { MessageTransmitterType } from "../../_shared/helpers/message-transmitter/type";
 import { GetLocalizedErrorMessage } from "../../_shared/helpers/notice-helper";
 import { AuthContext, AuthContextModel, GameActionsContextProvider, GameContextProvider } from "../../_shared/react-contexts";
@@ -46,11 +45,20 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     private roundStateHandler: IRoundStateHandler;
     private gameStateHandler: IGameStateHandler;
 
-    constructor(props: P, roundStateHandler: IRoundStateHandler, gameStateHandler: IGameStateHandler) {
+    constructor(
+        props: P,
+        roundStateHandler: IRoundStateHandler,
+        gameStateHandler: IGameStateHandler,
+        messageTransmitter: MessageTransmitterType,
+        gameMessageHandler: GameMessageHandler
+    ) {
         super(props);
 
         this.roundStateHandler = roundStateHandler;
         this.gameStateHandler = gameStateHandler;
+        this.messageTransmitter = messageTransmitter;
+        this.gameMessageHandler = gameMessageHandler;
+
         this.openPopup = this.openPopup.bind(this);
         this.placeBet = this.placeBet.bind(this);
         this.openPlaceBetModal = this.openPlaceBetModal.bind(this);
@@ -82,13 +90,10 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         clearTimeout(this.showWinningAnimationTimeout);
         this.clearRetryInterval();
         this.clearDisconnectTimeout();
-        this.messageTransmitter.clearAllListener();
     }
 
     onStart() {
-        this.messageTransmitter?.clearAllListener();
-        this.messageTransmitter = MessageTransmitter();
-        this.gameMessageHandler = new GameMessageHandler(this.props.dispatch, this.messageTransmitter);
+        this.messageTransmitter.clearAllListener();
 
         this.props.dispatch({
             type: GameEventActionType.SET_MESSAGE_TRANSMITTER,
@@ -131,15 +136,18 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     onSocketDisconnect() {
         this.onDestroy();
         const time = this.props.gameStateContextModel.signedIn ? 1000 : 5000;
-        this.disconnectTimeout = setTimeout(() => {
-            this.isConnectFailed = true;
 
-            this.props.dispatch({
-                type: GameEventActionType.DISCONNECT_ERROR,
-                payload: {
-                    disconnectReason: ConnectFailedReasonKey.lostConnection,
-                },
-            });
+        this.disconnectTimeout = setTimeout(() => {
+            if (!this.props.gameStateContextModel.signedIn) {
+                this.isConnectFailed = true;
+
+                this.props.dispatch({
+                    type: GameEventActionType.DISCONNECT_ERROR,
+                    payload: {
+                        disconnectReason: ConnectFailedReasonKey.lostConnection,
+                    },
+                });
+            }
         }, time);
     }
 
@@ -387,10 +395,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             this.isUMInFirstLoad = false;
         }
 
-        if (
-            um &&
-            (this.timeCounter <= durations.placingBets + durations.beforeStartRound + 1 || remainingTime + 1 === wholeRound)
-        ) {
+        if (um && (this.timeCounter <= durations.placingBets + durations.beforeStartRound + 1 || remainingTime + 1 === wholeRound)) {
             this.interval && clearInterval(this.interval);
             this.showResultInfoTimeout && clearTimeout(this.showResultInfoTimeout);
             this.showWinningAnimationTimeout && clearTimeout(this.showWinningAnimationTimeout);
@@ -627,9 +632,9 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         clearInterval(this.retryInterval);
     }
 
-    clearDisconnectTimeout() {
+    clearDisconnectTimeout = () => {
         clearTimeout(this.disconnectTimeout);
-    }
+    };
 
     openPopup(popupType: PopupType) {
         this.props.dispatch({

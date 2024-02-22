@@ -14,6 +14,8 @@ import { BacBallResultBlock } from "./bac-ball-result-block";
 import { BacBallResult, BacBallSettlementResult } from "./types";
 import { TurnStateHandler } from "../../components/turn-base/turn-state-handler";
 import { GameStateHandler } from "../../components/game-base/game-state-handler";
+import MessageTransmitter from "../../_shared/helpers/message-transmitter";
+import { GameMessageHandler } from "../../components/game-base/game-message-handler";
 
 export const Choices = { player: "player", banker: "banker", tie: "tie" };
 
@@ -29,7 +31,10 @@ export const StatisticRuleEntries = Object.entries({
 });
 class BacBall extends GameBase<GameBaseProps> {
     constructor(props: GameBaseProps) {
-        super(props, new TurnStateHandler(), new GameStateHandler());
+        const messageTransmitter = MessageTransmitter();
+        const gameMessageHandler = new GameMessageHandler(props.dispatch, messageTransmitter);
+
+        super(props, new TurnStateHandler(), new GameStateHandler(), messageTransmitter, gameMessageHandler);
     }
 
     componentDidMount() {
@@ -78,7 +83,7 @@ const BacBallFC = (props) => {
             {...props}
             {...{
                 dispatch: useGameStatesDispatch(),
-                gameStateContextModel: useGameStateContext()
+                gameStateContextModel: useGameStateContext(),
             }}
         />
     );
