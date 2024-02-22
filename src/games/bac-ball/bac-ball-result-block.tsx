@@ -4,9 +4,10 @@ import { FC, useEffect, useState } from "react";
 import { MessageTransmitterType } from "../../_shared/helpers/message-transmitter/type";
 import { loadPixiAnimations } from "../../_shared/helpers/pixi-resource-loader";
 import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
+import { useBallColor } from "../../_shared/react-hooks/use-ball-color";
 import { IBallColor, RoundState } from "../../components/game-base/type";
 import Ball from "../../components/game-components/ball";
-import Cage, { BallColor, CageColor } from "../../components/game-components/cage";
+import Cage, { CageColor } from "../../components/game-components/cage";
 import Style from "./bac-ball.module.scss";
 
 export type ResultBlockProps = {
@@ -20,6 +21,8 @@ export const BacBallResultBlock: FC<ResultBlockProps> = (props) => {
     const [existedBankerBalls, setExistedBankerBalls] = useState([0, 0, 0, 0]);
     const gameStateContext = useGameStateContext();
     const { result, roundData, turnCounter } = gameStateContext;
+    let playerBallColor = useBallColor({ number: result?.player });
+    let bankerBallColor = useBallColor({ number: result?.banker });
 
     useEffect(() => {
         const handleLoadResource = async () => {
@@ -69,6 +72,7 @@ export const BacBallResultBlock: FC<ResultBlockProps> = (props) => {
         if (!result) {
             return;
         }
+
         const updatedPlayerList = [...existedPlayerBalls];
         const updatedBankerList = [...existedBankerBalls];
 
@@ -105,6 +109,7 @@ export const BacBallResultBlock: FC<ResultBlockProps> = (props) => {
                     if (result > 0 && turnCounter !== index + 1) {
                         props.number = result;
                         props.delayTime = 0;
+                        props.joinGame = true;
                     } else if (result > 0) {
                         props.number = result;
                         props.isLoading = true;
@@ -124,8 +129,8 @@ export const BacBallResultBlock: FC<ResultBlockProps> = (props) => {
                     <Cage
                         cageBallsLoopFrames={cageBallsLoopFrames}
                         cageBallFrames={cageBallFrames}
-                        color={CageColor.Blue}
-                        ballColor={BallColor.Blue}
+                        color={CageColor.BLUE}
+                        ballColor={playerBallColor}
                         isSmall={true}
                         result={result?.player}
                         isShowResult={gameStateContext.roundState === RoundState.DisplayResult}
@@ -139,8 +144,8 @@ export const BacBallResultBlock: FC<ResultBlockProps> = (props) => {
                     <Cage
                         cageBallsLoopFrames={cageBallsLoopFrames}
                         cageBallFrames={cageBallFrames}
-                        color={CageColor.Red}
-                        ballColor={BallColor.Red}
+                        color={CageColor.RED}
+                        ballColor={bankerBallColor}
                         isSmall={true}
                         result={result?.banker}
                         isShowResult={gameStateContext.roundState === RoundState.DisplayResult}

@@ -62,11 +62,11 @@ $delay-zoom-in-time: 2.8s;
 }
 
 .red {
-    --bg: url("/static/images/ball/ball-blue.png") no-repeat;
+    --bg: url("/static/images/ball/ball-red.png") no-repeat;
 }
 
 .blue {
-    --bg: url("/static/images/ball/ball-red.png") no-repeat;
+    --bg: url("/static/images/ball/ball-blue.png") no-repeat;
 }
 
 .ball-bg {
@@ -78,6 +78,10 @@ $delay-zoom-in-time: 2.8s;
     transform: scale(0);
     text-align: center;
     animation: zoom-in $zoom-in-time $delay-zoom-in-time linear forwards;
+
+    &.display-right-now {
+        animation: zoom-in $zoom-in-time 0 linear forwards;
+    }
 
     &::after {
         content: "";

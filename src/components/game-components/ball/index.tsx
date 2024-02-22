@@ -4,10 +4,11 @@ import { useBallColor } from "../../../_shared/react-hooks/use-ball-color";
 import Styles from "./ball.module.scss";
 
 const Ball = (props: any) => {
-    const { number, isLoading, delayTime } = props;
+    const { number, isLoading, delayTime, joinGame } = props;
 
     const color = useBallColor({ number });
     const [isDelayShowResult, setIsDelayShowResult] = useState<boolean>(false);
+    const ballStyleName = `${Styles["ball-bg"]} ${Styles[color]} ${joinGame ? Styles["display-right-now"] : ""}`;
 
     useEffect(() => {
         let timeOut: NodeJS.Timeout;
@@ -23,7 +24,7 @@ const Ball = (props: any) => {
     return (
         <div className={`${Styles.ball} ${Styles["ball-border-gray"]} ${delayTime > 0 ? Styles["delay"] : ""}`}>
             {props.number != null && isDelayShowResult && (
-                <div className={`${Styles["ball-bg"]} ${Styles[color]}`}>
+                <div className={ballStyleName}>
                     <span className={Styles["ball-number"]}>{number > 0 ? number : ""}</span>
                 </div>
             )}

@@ -7,19 +7,14 @@ import { IBallColor } from "../../game-base/type";
 import Styles from "./cage.module.scss";
 
 export enum CageColor {
-    Blue = "blue",
-    Red = "red",
-    Purple = "purple",
-}
-
-export enum BallColor {
-    Blue = "blue",
-    Red = "red",
+    BLUE = "blue",
+    RED = "red",
+    PURPLE = "purple",
 }
 
 export enum CagePosition {
-    Left = "left",
-    Right = "right",
+    LEFT = "left",
+    RIGHT = "right",
 }
 
 export type CageProps = {
@@ -35,11 +30,13 @@ export type CageProps = {
 
 const Cage: React.FunctionComponent<CageProps> = (cageProps) => {
     const { color, ballColor, isSmall, cageBallsLoopFrames, cageBallFrames, result, isShowResult, delayShowResultTime } = cageProps;
-    const lidPosition = color === CageColor.Blue ? "left" : "right";
+    const lidPosition = color === CageColor.BLUE ? "left" : "right";
     const animName = result <= 9 ? `number0${result}` : `number${result}`;
 
     const [isDelayShowResult, setIsDelayShowResult] = useState<boolean>(false);
     const [numberBallFrames, setNumberBallFrames] = useState<Texture<Resource>[]>([]);
+
+    const currentTime = Date.now();
 
     useEffect(() => {
         if (!result) {
@@ -75,9 +72,9 @@ const Cage: React.FunctionComponent<CageProps> = (cageProps) => {
 
         return (
             <div id="show-ball-anim" className={Styles["show-ball-anim"]}>
-                {cageBallFrames && cageBallFrames[ballColor].length > 0 && (
-                    <Stage width={250} height={250} options={{ backgroundAlpha: 0 }}>
-                        <Container position={[82, 85]}>
+                {cageBallFrames && cageBallFrames[ballColor]?.length > 0 && (
+                    <Stage key={currentTime} width={250} height={250} options={{ backgroundAlpha: 0 }}>
+                        <Container key={currentTime} position={[82, 85]}>
                             <AnimatedSprite
                                 anchor={0.5}
                                 textures={cageBallFrames[ballColor]}
@@ -98,8 +95,6 @@ const Cage: React.FunctionComponent<CageProps> = (cageProps) => {
         if (!isDelayShowResult || !isShowResult || numberBallFrames?.length === 0) {
             return <></>;
         }
-
-        const currentTime = Date.now();
 
         return (
             <div key={currentTime} id="result-text" className={Styles["number"]}>
