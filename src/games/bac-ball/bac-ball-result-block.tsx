@@ -4,7 +4,7 @@ import { FC, useEffect, useState } from "react";
 import { MessageTransmitterType } from "../../_shared/helpers/message-transmitter/type";
 import { loadPixiAnimations } from "../../_shared/helpers/pixi-resource-loader";
 import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
-import { IBallColor } from "../../components/game-base/type";
+import { IBallColor, RoundState } from "../../components/game-base/type";
 import Ball from "../../components/game-components/ball";
 import Cage, { BallColor, CageColor } from "../../components/game-components/cage";
 import Style from "./bac-ball.module.scss";
@@ -24,7 +24,7 @@ export const BacBallResultBlock: FC<ResultBlockProps> = (props) => {
     useEffect(() => {
         const handleLoadResource = async () => {
             if (cageBallFrames.blue.length === 0 && cageBallFrames.red.length === 0) {
-                loadPixiAnimations("/static/images/cage/ball.json", (sprite) => {
+                await loadPixiAnimations("/static/images/cage/ball.json", (sprite) => {
                     const blueFrames = sprite.animations["blue"];
                     const redFrames = sprite.animations["red"];
                     setCageBallFrames({ blue: blueFrames, red: redFrames });
@@ -32,7 +32,7 @@ export const BacBallResultBlock: FC<ResultBlockProps> = (props) => {
             }
 
             if (cageBallsLoopFrames.length === 0) {
-                loadPixiAnimations("/static/images/cage/cage-balls.json", (sprite) => {
+                await loadPixiAnimations("/static/images/cage/cage-balls.json", (sprite) => {
                     setCageBallsLoopFrames(sprite.animations["loop"]);
                 });
             }
@@ -98,14 +98,14 @@ export const BacBallResultBlock: FC<ResultBlockProps> = (props) => {
 
     const renderBalls = (updatedResultList) => {
         return (
-            <div>
+            <div className="flex gap-2 justify-center flex-col">
                 {updatedResultList.map((result, index) => {
                     const props: any = {};
 
-                    if (result > 0) {
+                    if (result > 0 && turnCounter !== index + 1) {
                         props.number = result;
                         props.delayTime = 0;
-                    } else if (turnCounter === index + 1) {
+                    } else if (result > 0) {
                         props.number = result;
                         props.isLoading = true;
                         props.delayTime = 2000;
@@ -130,7 +130,7 @@ export const BacBallResultBlock: FC<ResultBlockProps> = (props) => {
                         ballColor={BallColor.Blue}
                         isSmall={true}
                         result={result?.player}
-                        isShowResult={gameStateContext.playResultAnimation}
+                        isShowResult={gameStateContext.roundState === RoundState.DisplayResult}
                     />
                 </div>
                 <div className={Style["ball-container"]}>{renderBalls(existedPlayerBalls)}</div>
@@ -145,7 +145,7 @@ export const BacBallResultBlock: FC<ResultBlockProps> = (props) => {
                         ballColor={BallColor.Red}
                         isSmall={true}
                         result={result?.banker}
-                        isShowResult={gameStateContext.playResultAnimation}
+                        isShowResult={gameStateContext.roundState === RoundState.DisplayResult}
                         delayShowResultTime={bankerDelayTime}
                     />
                 </div>

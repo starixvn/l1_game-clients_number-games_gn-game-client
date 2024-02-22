@@ -1,6 +1,7 @@
 import { AnimatedSprite, Container, Stage } from "@pixi/react";
 import { Resource, Texture } from "pixi.js";
 import { FC, useEffect, useState } from "react";
+
 import { loadPixiAnimations } from "../../_shared/helpers/pixi-resource-loader";
 import { useGameActionContext } from "../../_shared/react-contexts";
 import { useGameStateContext, useGameStatesDispatch } from "../../_shared/react-contexts/game-state-context/game-state-context";
@@ -17,13 +18,17 @@ export const BacBallBettingBlock: FC = () => {
 
     useEffect(() => {
         if (winningPlayerFrames.length === 0 || winningTieFrames.length === 0) {
-            loadPixiAnimations("/static/images/bac-number/highlight-winning-player.json", (sprite) => {
-                setWinningPlayerFrames(sprite.animations["highlight-winning-player"]);
-            });
+            const handleLoadResource = async () => {
+                await loadPixiAnimations("/static/images/bac-number/highlight-winning-player.json", (sprite) => {
+                    setWinningPlayerFrames(sprite.animations["highlight-winning-player"]);
+                });
 
-            loadPixiAnimations("/static/images/bac-number/highlight-winning-tie.json", (sprite) => {
-                setWinningTieFrames(sprite.animations["highlight-winning-tie"]);
-            });
+                await loadPixiAnimations("/static/images/bac-number/highlight-winning-tie.json", (sprite) => {
+                    setWinningTieFrames(sprite.animations["highlight-winning-tie"]);
+                });
+            };
+
+            handleLoadResource();
         }
     }, [winningPlayerFrames.length, winningTieFrames.length]);
 
