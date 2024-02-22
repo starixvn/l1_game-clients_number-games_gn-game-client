@@ -1,3 +1,4 @@
+import MessageTransmitter from "../../_shared/helpers/message-transmitter";
 import { MessageTransmitterType } from "../../_shared/helpers/message-transmitter/type";
 import { GameEventActionType } from "../../_shared/react-contexts/game-state-context/game-event-action";
 
@@ -28,17 +29,27 @@ export const messageEventType = {
 };
 
 export class GameMessageHandler {
-    constructor(private dispatch: Function, private messageTransmitter: MessageTransmitterType) {}
+    constructor(private dispatch: Function, private messageTransmitter?: MessageTransmitterType) {
+        this.messageTransmitter = messageTransmitter ?? MessageTransmitter();
+    }
 
     registerSocketEvents = () => {
-        this.messageTransmitter.register(messageEventType.GAME_CONFIG, this.handleGameConfigs);
-        this.messageTransmitter.register(messageEventType.TOTAL_BETS, this.handleTotalBet);
-        this.messageTransmitter.register(messageEventType.OWN_BETS, this.handleOwnBets);
-        this.messageTransmitter.register(messageEventType.ODDS, this.handleOdds);
-        this.messageTransmitter.register(messageEventType.ROUND_DATA, this.handleRoundData);
-        this.messageTransmitter.register(messageEventType.SIGNED_IN, this.handleSignedIn);
-        this.messageTransmitter.register(messageEventType.BET_PERCENTAGE, this.handleBetPercentage);
-        this.messageTransmitter.register(messageEventType.PLAYER_BET_COUNT, this.handlePlayerBetCount);
+        this.register(messageEventType.GAME_CONFIG, this.handleGameConfigs);
+        this.register(messageEventType.TOTAL_BETS, this.handleTotalBet);
+        this.register(messageEventType.OWN_BETS, this.handleOwnBets);
+        this.register(messageEventType.ODDS, this.handleOdds);
+        this.register(messageEventType.ROUND_DATA, this.handleRoundData);
+        this.register(messageEventType.SIGNED_IN, this.handleSignedIn);
+        this.register(messageEventType.BET_PERCENTAGE, this.handleBetPercentage);
+        this.register(messageEventType.PLAYER_BET_COUNT, this.handlePlayerBetCount);
+    };
+
+    getMessageTransmitter() {
+        return this.messageTransmitter;
+    }
+
+    register = (eventType: string, handler: Function) => {
+        this.messageTransmitter.register(eventType, handler);
     };
 
     broadcastGameMessage = (message) => {
@@ -121,5 +132,9 @@ export class GameMessageHandler {
                 playerBetCount,
             },
         });
+    };
+
+    clearAllHandlers = () => {
+        this.messageTransmitter.clearAllListener();
     };
 }

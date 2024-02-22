@@ -31,12 +31,10 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     protected showWinningAnimationTimeout: NodeJS.Timeout;
     protected isProcessingBet = false;
     private retryInterval: NodeJS.Timeout;
-
     protected socket: Socket;
     protected interval: NodeJS.Timeout;
     protected roundTimeCounter: number;
     protected timeCounter: number;
-    protected messageTransmitter: MessageTransmitterType;
     protected authService: Auth;
     private isConnectFailed = false;
     private disconnectTimeout: NodeJS.Timeout;
@@ -48,14 +46,12 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         props: P,
         roundStateHandler: IRoundStateHandler,
         gameStateHandler: IGameStateHandler,
-        messageTransmitter: MessageTransmitterType,
         gameMessageHandler: GameMessageHandler
     ) {
         super(props);
 
         this.roundStateHandler = roundStateHandler;
         this.gameStateHandler = gameStateHandler;
-        this.messageTransmitter = messageTransmitter;
         this.gameMessageHandler = gameMessageHandler;
 
         this.openPopup = this.openPopup.bind(this);
@@ -91,7 +87,9 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     onStart() {
-        this.messageTransmitter.clearAllListener();
+        this.socket?.disconnect();
+        this.socket = null;
+        this.gameMessageHandler.clearAllHandlers();
         this.isConnectFailed = false;
         this.isProcessingBet = false;
         this.clearDisconnectTimeout();
@@ -100,18 +98,12 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     protected connectToGameService() {
-        this.disconnectGameService();
         const { session } = this.context as AuthContextModel;
         const { socketInfo, gameName } = this.props;
 
         const { socket } = InitSocketIO(socketInfo, session, gameName, this.gameMessageHandler);
 
         this.socket = socket;
-    }
-
-    protected disconnectGameService() {
-        this.socket?.disconnect();
-        this.socket = null;
     }
 
     onVisibilityChange = () => {
@@ -156,21 +148,21 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     registerMessageHandler() {
-        this.messageTransmitter.register(messageEventType.SOCKET_CONNECTED, this.onGameServiceConnected.bind(this));
-        this.messageTransmitter.register(messageEventType.SOCKET_CONNECT_ERROR, this.onConnectFailed.bind(this));
-        this.messageTransmitter.register(messageEventType.SOCKET_DISCONNECTED, this.onSocketDisconnect.bind(this));
-        this.messageTransmitter.register(messageEventType.UNDER_MAINTENANCE, this.handleUM.bind(this));
-        this.messageTransmitter.register(messageEventType.REMAINING_TIME, this.handleRemainingTime.bind(this));
-        this.messageTransmitter.register(messageEventType.FINISH, this.handleFinish.bind(this));
-        this.messageTransmitter.register(messageEventType.STATUS, this.handleStatus.bind(this));
-        this.messageTransmitter.register(messageEventType.USER, this.handleUserData.bind(this));
-        this.messageTransmitter.register(messageEventType.OWN_BETS, this.handleOwnBets.bind(this));
-        this.messageTransmitter.register(messageEventType.END_BET, this.handleEndBet.bind(this));
-        this.messageTransmitter.register(messageEventType.API_ERROR, this.handleApiError.bind(this));
-        this.messageTransmitter.register(messageEventType.USER_STAKE_LEVEL, this.handleUserStakeLevel.bind(this));
-        this.messageTransmitter.register(messageEventType.DRAW_ID, this.handleDrawId.bind(this));
-        this.messageTransmitter.register(messageEventType.ROUND_HISTORY, this.handleRoundHistory.bind(this));
-        this.messageTransmitter.register(messageEventType.NOT_PERMITTED_TO_PLAY, this.handleRestrictPermission.bind(this));
+        this.gameMessageHandler.register(messageEventType.SOCKET_CONNECTED, this.onGameServiceConnected.bind(this));
+        this.gameMessageHandler.register(messageEventType.SOCKET_CONNECT_ERROR, this.onConnectFailed.bind(this));
+        this.gameMessageHandler.register(messageEventType.SOCKET_DISCONNECTED, this.onSocketDisconnect.bind(this));
+        this.gameMessageHandler.register(messageEventType.UNDER_MAINTENANCE, this.handleUM.bind(this));
+        this.gameMessageHandler.register(messageEventType.REMAINING_TIME, this.handleRemainingTime.bind(this));
+        this.gameMessageHandler.register(messageEventType.FINISH, this.handleFinish.bind(this));
+        this.gameMessageHandler.register(messageEventType.STATUS, this.handleStatus.bind(this));
+        this.gameMessageHandler.register(messageEventType.USER, this.handleUserData.bind(this));
+        this.gameMessageHandler.register(messageEventType.OWN_BETS, this.handleOwnBets.bind(this));
+        this.gameMessageHandler.register(messageEventType.END_BET, this.handleEndBet.bind(this));
+        this.gameMessageHandler.register(messageEventType.API_ERROR, this.handleApiError.bind(this));
+        this.gameMessageHandler.register(messageEventType.USER_STAKE_LEVEL, this.handleUserStakeLevel.bind(this));
+        this.gameMessageHandler.register(messageEventType.DRAW_ID, this.handleDrawId.bind(this));
+        this.gameMessageHandler.register(messageEventType.ROUND_HISTORY, this.handleRoundHistory.bind(this));
+        this.gameMessageHandler.register(messageEventType.NOT_PERMITTED_TO_PLAY, this.handleRestrictPermission.bind(this));
     }
 
     handleDrawId = ({ drawId }) => {

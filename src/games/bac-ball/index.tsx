@@ -32,10 +32,9 @@ export const StatisticRuleEntries = Object.entries({
 });
 class BacBall extends GameBase<GameBaseProps> {
     constructor(props: GameBaseProps) {
-        const messageTransmitter = MessageTransmitter();
-        const gameMessageHandler = new GameMessageHandler(props.dispatch, messageTransmitter);
+        const gameMessageHandler = new GameMessageHandler(props.dispatch);
 
-        super(props, new TurnStateHandler(), new GameStateHandler(), messageTransmitter, gameMessageHandler);
+        super(props, new TurnStateHandler(), new GameStateHandler(), gameMessageHandler);
     }
 
     componentDidMount() {
@@ -43,7 +42,7 @@ class BacBall extends GameBase<GameBaseProps> {
     }
 
     renderResultBlock() {
-        return <BacBallResultBlock messageTransmitter={this.messageTransmitter} />;
+        return <BacBallResultBlock />;
     }
 
     renderBettingBlock() {

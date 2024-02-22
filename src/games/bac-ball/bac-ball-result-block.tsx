@@ -1,7 +1,6 @@
 import { Resource, Texture } from "pixi.js";
 import { FC, useEffect, useState } from "react";
 
-import { MessageTransmitterType } from "../../_shared/helpers/message-transmitter/type";
 import { loadPixiAnimations } from "../../_shared/helpers/pixi-resource-loader";
 import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
 import { useBallColor } from "../../_shared/react-hooks/use-ball-color";
@@ -10,11 +9,7 @@ import Ball from "../../components/game-components/ball";
 import Cage, { CageColor } from "../../components/game-components/cage";
 import Style from "./bac-ball.module.scss";
 
-export type ResultBlockProps = {
-    messageTransmitter: MessageTransmitterType;
-};
-
-export const BacBallResultBlock: FC<ResultBlockProps> = (props) => {
+export const BacBallResultBlock: FC = () => {
     const [cageBallFrames, setCageBallFrames] = useState<IBallColor>({ blue: [], red: [] });
     const [cageBallsLoopFrames, setCageBallsLoopFrames] = useState<Texture<Resource>[]>([]);
     const [existedPlayerBalls, setExistedPlayerBalls] = useState<Array<number>>([0, 0, 0, 0]);
