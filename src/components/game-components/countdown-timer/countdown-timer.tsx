@@ -2,11 +2,9 @@ import { useTranslation } from "next-i18next";
 import { useEffect, useState } from "react";
 
 import { useGameContext } from "../../../_shared/react-contexts/game-context/game-context";
-import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
+import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import { RoundState } from "../../game-base/type";
 import styles from "./countdown-timer.module.scss";
-import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
-import { messageEventType } from "../../game-base/game-message-handler";
 
 export type Rotation = "clockwise" | "counterclockwise";
 const CountdownTimer = () => {
@@ -85,19 +83,7 @@ const SimpleTimer = () => {
 
 const GameStatus: React.FC<{ children: React.ReactNode }> = ({ children }: { children: React.ReactNode }) => {
     const gameStateContextModel = useGameStateContext();
-    const dispatch = useGameStatesDispatch();
 
-    const handleDrawId = ({ drawId }) => {
-        const numberOfTurnsPerRound = 4;
-        const turnCounter = drawId % numberOfTurnsPerRound === 0 ? numberOfTurnsPerRound : drawId % numberOfTurnsPerRound;
-
-        dispatch({
-            type: GameEventActionType.DRAW_ID,
-            payload: { drawId, turnCounter },
-        });
-    };
-
-    gameStateContextModel.messageTransmitter.register(messageEventType.DRAW_ID, handleDrawId);
     return (
         <div className={`${styles["game-status"]}`}>
             <span>{gameStateContextModel.turnCounter} Draw:</span>

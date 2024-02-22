@@ -174,9 +174,20 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.messageTransmitter.register(messageEventType.END_BET, this.handleEndBet.bind(this));
         this.messageTransmitter.register(messageEventType.API_ERROR, this.handleApiError.bind(this));
         this.messageTransmitter.register(messageEventType.USER_STAKE_LEVEL, this.handleUserStakeLevel.bind(this));
+        this.messageTransmitter.register(messageEventType.DRAW_ID, this.handleDrawId.bind(this));
         this.messageTransmitter.register(messageEventType.ROUND_HISTORY, this.handleRoundHistory.bind(this));
         this.messageTransmitter.register(messageEventType.NOT_PERMITTED_TO_PLAY, this.handleRestrictPermission.bind(this));
     }
+
+    handleDrawId = ({ drawId }) => {
+        const numberOfTurnsPerRound = 4;
+        const turnCounter = drawId % numberOfTurnsPerRound === 0 ? numberOfTurnsPerRound : drawId % numberOfTurnsPerRound;
+
+        this.props.dispatch({
+            type: GameEventActionType.DRAW_ID,
+            payload: { drawId, turnCounter },
+        });
+    };
 
     handleRoundHistory = ({ roundHistory, roundId }) => {
         const { dispatch, gameStateContextModel } = this.props;
