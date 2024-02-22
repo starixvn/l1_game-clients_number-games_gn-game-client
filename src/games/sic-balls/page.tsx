@@ -1,11 +1,8 @@
 "use client";
 
-import RoundResult from "../../components/game-components/round-result";
+import { BetOptionData, RoundResultData } from "../../_shared/constants";
 import PercentageCircle from "../../components/game-components/percentage-circle";
 import Style from "./sic-balls.module.scss";
-import { BetOptionData, RoundResultData } from "../../_shared/constants";
-
-import Lottie from "lottie-react";
 
 const resultData: RoundResultData[] = [
     {
@@ -78,7 +75,7 @@ export default function SicBalls() {
                 <div className={`${Style["big"]} text-white p-2 relative`}>
                     <div className={`flex justify-between`}>
                         <div className={Style.percent}>
-                            <PercentageCircle percentage={55} />
+                            <PercentageCircle percentage={55} color="#2fc856" />
                         </div>
                         <div className={Style.stake}>
                             <div className={`flex items-center ${Style["total-stakes"]} gap-1`}>
@@ -111,7 +108,7 @@ export default function SicBalls() {
                             </div>
                         </div>
                         <div className={Style.percent}>
-                            <PercentageCircle percentage={45} />
+                            <PercentageCircle percentage={45} color="#2fc856" />
                         </div>
                     </div>
                     <div className={`${Style["bet-info"]} text-center`}>[6-136]</div>

@@ -1,10 +1,8 @@
-import Link from "next/link";
-import RoundResult from "../../components/game-components/round-result";
+import { BetOptionData, RoundResultData } from "../../_shared/constants";
 import Ball from "../../components/game-components/ball";
+import Dot from "../../components/game-components/dot";
 import PercentageCircle from "../../components/game-components/percentage-circle";
 import Style from "./lucky-three.module.scss";
-import { BetOptionData, RoundResultData } from "../../_shared/constants";
-import Dot from "../../components/game-components/dot";
 
 const resultData: RoundResultData[] = [
     {
@@ -85,7 +83,7 @@ export default function LuckyThree() {
                 <div className={`${Style["odd"]} text-white relative`}>
                     <div className={`flex justify-between`}>
                         <div className={Style.percent}>
-                            <PercentageCircle percentage={55} />
+                            <PercentageCircle percentage={55} color="#2fc856" />
                         </div>
                         <div className={Style.stake}>
                             <div className={`flex items-center ${Style["total-stakes"]} gap-1`}>
@@ -118,7 +116,7 @@ export default function LuckyThree() {
                             </div>
                         </div>
                         <div className={Style.percent}>
-                            <PercentageCircle percentage={45} />
+                            <PercentageCircle percentage={45} color="#2fc856" />
                         </div>
                     </div>
                     <div className={`${Style["bet-info"]} text-center`}>[6-136]</div>

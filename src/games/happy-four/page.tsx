@@ -1,9 +1,8 @@
+import { BetOptionData, RoundResultData } from "../../_shared/constants";
 import Ball from "../../components/game-components/ball";
+import Dot from "../../components/game-components/dot";
 import PercentageCircle from "../../components/game-components/percentage-circle";
 import Style from "./happy-four.module.scss";
-import Dot from "../../components/game-components/dot";
-import RoundResult from "../../components/game-components/round-result";
-import { BetOptionData, RoundResultData } from "../../_shared/constants";
 
 const resultData: RoundResultData[] = [
     {
@@ -66,7 +65,7 @@ export default function HappyFour() {
                 <div className={`${Style["odd"]} text-white p-2 relative`}>
                     <div className={`flex justify-between`}>
                         <div className={Style.percent}>
-                            <PercentageCircle percentage={55} />
+                            <PercentageCircle percentage={55} color="#2fc856" />
                         </div>
                         <div className={Style.stake}>
                             <div className={`flex items-center ${Style["total-stakes"]} gap-1`}>
@@ -98,7 +97,7 @@ export default function HappyFour() {
                             </div>
                         </div>
                         <div className={Style.percent}>
-                            <PercentageCircle percentage={45} />
+                            <PercentageCircle percentage={45} color="#2fc856" />
                         </div>
                     </div>
                     <div className={`bet-name text-center mt-[-8px] ${Style["bet-name"]}`}>EVEN</div>

@@ -148,7 +148,7 @@ export const BacBallBettingBlock: FC = () => {
                             </div>
                         </div>
                         <div id="player-percent" className={Style.percent}>
-                            <PercentageCircle percentage={betPercentage["player"]} />
+                            <PercentageCircle percentage={betPercentage["player"]} color="#98cdff" />
                         </div>
                     </div>
                     <div id="player-bet-name" className={`bet-name text-center ${Style["bet-name"]}`}>
@@ -168,7 +168,7 @@ export const BacBallBettingBlock: FC = () => {
                 >
                     <div className={`flex pt-5 justify-between`}>
                         <div id="banker-percent" className={Style.percent}>
-                            <PercentageCircle percentage={betPercentage["banker"]} />
+                            <PercentageCircle percentage={betPercentage["banker"]} color="#f9bcb9" />
                         </div>
                         <div className={Style.stake}>
                             <div className={`flex items-center ${Style["total-stakes"]} gap-1`}>
@@ -216,7 +216,7 @@ export const BacBallBettingBlock: FC = () => {
                         </Stage>
                     )}
                     <div id="tie-percent" className={Style.percent}>
-                        <PercentageCircle percentage={betPercentage["tie"]} />
+                        <PercentageCircle percentage={betPercentage["tie"]} color="#2fc856" />
                     </div>
                     <div className={Style.stake}>
                         <div className={`flex items-center ${Style["total-stakes"]} gap-1 justify-center mt-1`}>

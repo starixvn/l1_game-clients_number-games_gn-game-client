@@ -1,8 +1,7 @@
-import RoundResult from "../../components/game-components/round-result";
+import { RoundResultData } from "../../_shared/constants";
 import Ball from "../../components/game-components/ball";
 import PercentageCircle from "../../components/game-components/percentage-circle";
 import Style from "./next-ball.module.scss";
-import { RoundResultData } from "../../_shared/constants";
 
 interface BetOptionData {
     betChoice: string;
@@ -103,7 +102,7 @@ export default function NextBall() {
                     >
                         <div className={`flex justify-between ${Style["bet-choice-info"]}`}>
                             <div className={Style.percent}>
-                                <PercentageCircle percentage={items.percent} />
+                                <PercentageCircle percentage={items.percent} color="#2fc856" />
                             </div>
                             <div className={Style.stake}>
                                 <div className={`flex items-center ${Style["total-stakes"]} gap-1`}>
