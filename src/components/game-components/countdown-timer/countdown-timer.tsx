@@ -68,7 +68,7 @@ const SimpleTimer = () => {
         return () => {
             clearInterval(timer);
         };
-    }, []);
+    }, [timeLeft]);
 
     const seconds = (timeLeft % 60).toString().padStart(2, "0");
 
@@ -83,6 +83,7 @@ const SimpleTimer = () => {
 
 const GameStatus: React.FC<{ children: React.ReactNode }> = ({ children }: { children: React.ReactNode }) => {
     const gameStateContextModel = useGameStateContext();
+
     return (
         <div className={`${styles["game-status"]}`}>
             <span>{gameStateContextModel.turnCounter} Draw:</span>

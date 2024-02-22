@@ -25,6 +25,7 @@ import { GameMessageHandler, messageEventType } from "./game-message-handler";
 import { Boundary, GameBaseProps, PopupType, Position, RoundState, ViewMode } from "./type";
 import { IRoundStateHandler } from "../round-base/round-state-handler";
 import { IGameStateHandler } from "./game-state-handler";
+import { GameHeader } from "../game-components/game-header";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
     private readonly animationTime = 3000;
@@ -55,7 +56,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.openPopup = this.openPopup.bind(this);
         this.placeBet = this.placeBet.bind(this);
         this.openPlaceBetModal = this.openPlaceBetModal.bind(this);
-        this.updateViewMode = this.updateViewMode.bind(this);
         this.playAcceptedBetAnimation = this.playAcceptedBetAnimation.bind(this);
         this.updateUserBalance = this.updateUserBalance.bind(this);
         this.setActiveScoreboardTab = this.setActiveScoreboardTab.bind(this);
@@ -275,7 +275,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 router.push("/timeout", "/timeout", { locale: "i18n.language" });
             }, 10000);
         } else {
-            const isPlaceBet = notice.isPlaceBetFailed ? notice.isPlaceBetFailed : false;
+            const isPlaceBet = notice.isPlaceBetFailed ?? false;
 
             displayPopup !== PopupType.Rebet &&
                 dispatch({
@@ -312,7 +312,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
     handleEndBet = ({ endBet, ownBets, betChoice, notice, kickedOut, apiError }) => {
         const { playPlaceBetSound } = this.props;
-        const { displayPopup } = this.props.gameStateContextModel;
         this.isProcessingBet = false;
         this.clearRetryInterval();
         this.props.dispatch({
@@ -648,12 +647,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         });
     }
 
-    updateViewMode(mode: ViewMode) {
-        this.props.dispatch({
-            type: GameEventActionType.OPEN_POPUP,
-            payload: { viewMode: mode },
-        });
-    }
 
     setActiveScoreboardTab = (activeScoreboardTab: number) => {
         this.props.dispatch({
@@ -725,7 +718,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     renderHeaderBlock() {
-        return <></>;
+        return <GameHeader />;
     }
 
     renderMenuButtons() {
@@ -812,7 +805,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             placeBet: this.placeBet,
             openPopup: this.openPopup,
             openPlaceBetModal: this.openPlaceBetModal,
-            updateViewMode: this.updateViewMode,
             playAcceptedBetAnimation: this.playAcceptedBetAnimation,
             finishProcessingBet: () => {
                 this.isProcessingBet = false;

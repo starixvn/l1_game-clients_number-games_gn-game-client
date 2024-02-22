@@ -36,19 +36,6 @@ class BacBall extends GameBase<GameBaseProps> {
         super.componentDidMount();
     }
 
-    renderHeaderBlock() {
-        const { roundId } = this.props.gameStateContextModel;
-        return (
-            <>
-                <div id="round-id" className="round-id">
-                    #{roundId}
-                </div>
-                <div id="countdown-timer" className="countdown-timer">
-                    <CountdownTimer />
-                </div>
-            </>
-        );
-    }
 
     renderResultBlock() {
         return <BacBallResultBlock messageTransmitter={this.messageTransmitter} />;
