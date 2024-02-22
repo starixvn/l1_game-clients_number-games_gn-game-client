@@ -27,6 +27,8 @@ html {
     --primary-color: #ff8b20;
 
     // buttons
+    --btn-red-background: #ea1d40;
+    --btn-red-background-hover: #f84362;
 
     // z-index
     --bet-setting-index: 300;
@@ -168,7 +170,7 @@ body {
 }
 
 .round-id {
-    padding-left: 1.2rem;
+    padding-left: 0.8rem;
     line-height: 3.2rem;
     font-size: 1.2rem;
     color: white;

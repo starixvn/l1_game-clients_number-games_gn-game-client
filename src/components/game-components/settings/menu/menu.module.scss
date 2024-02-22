@@ -3,9 +3,7 @@
     display: flex;
     align-items: center;
     -webkit-tap-highlight-color: transparent;
-    @media(max-width: 767px) {
-        justify-self: flex-end;
-    }    
+    padding-right: 0.8rem;
 
     &:hover {
         cursor: pointer;
@@ -13,62 +11,28 @@
 }
 
 .menu-toggle-btn {
-    min-width: 4rem;
-    @media(max-width: 767px) {
-        text-align: right;
-    } 
+    height: 3.2rem;
+    width: 3.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(33, 45, 61, 0.4);
+    border-radius: 1rem;
+    border: none;
 }
 
 .dropdown-menu {
-    min-width: 16.2rem;
-    top: 1.7rem;
+    min-width: 4rem;
+    top: 3.7rem;
 
     .dropdown-item {
         display: flex;
-        justify-content: space-between;
+        justify-content: center;
     }
-}
-
-%icon-menu {
-    display: inline-block;
-    width: 2rem;
-    height: 2rem;
-    background-repeat: no-repeat;
-    background-image: url("/static/images/setting-sprites.png?v=3");
-    background-image: -webkit-image-set(
-        url("/static/images/setting-sprites.png?v=3") 1x,
-        url("/static/images/setting-sprites@2x.png?v=3") 2x,
-        url("/static/images/setting-sprites@3x.png?v=3") 3x
-    );
-    background-image: image-set(
-        url("/static/images/setting-sprites.png?v=3") 1x,
-        url("/static/images/setting-sprites@2x.png?v=3") 2x,
-        url("/static/images/setting-sprites@3x.png?v=3") 3x
-    );
-    position: relative;
-    top: 2px;
 }
 
 .icon-menu {
     color: #fff;
-    font-size: 3.2rem;
-    line-height: 3.2rem;
-}
-
-// .desktop-style {
-//     .icon-menu::before {
-//         color: #fff;
-//     }
-// }
-
-.icon-menu-light {
-    @extend %icon-menu;
-    background-position: -106px -85px;
-}
-
-.icon-menu-dark {
-    @extend %icon-menu;
-    background-position: -102px -58px;
 }
 
 .toggle-button {

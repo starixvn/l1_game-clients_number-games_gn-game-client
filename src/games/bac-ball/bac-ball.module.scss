@@ -31,7 +31,8 @@
     --color: #98cdff;
     background: url("/static/images/bac-number/bg-player.svg") no-repeat;
     width: 17.8rem;
-    height: 18.7rem;
+    height: 18.8rem;
+    background-size: 17.8rem 18.8rem;
     border-bottom-left-radius: 6.6rem;
     border-top-left-radius: 3.8rem;
     padding-left: 1.2rem;
@@ -46,7 +47,8 @@
     --color: #f9bcb9;
     background: url("/static/images/bac-number/bg-banker.svg") no-repeat;
     width: 17.8rem;
-    height: 18.7rem;
+    height: 18.8rem;
+    background-size: 17.8rem 18.8rem;
     border-bottom-right-radius: 6.6rem;
     border-top-right-radius: 3.8rem;
     padding-right: 1.2rem;
@@ -61,6 +63,7 @@
     background: url("/static/images/bac-number/bg-tie.svg") no-repeat;
     width: 9.5rem;
     height: 17.2rem;
+    background-size: 9.5rem 17.2rem;
     position: absolute;
     margin-left: auto;
     margin-right: auto;

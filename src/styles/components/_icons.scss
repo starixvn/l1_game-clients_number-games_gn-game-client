@@ -14,9 +14,20 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-history:before {
+    content: "\e90a";
+}
+
+.icon-menu:before {
+    content: "\e90b";
+}
+
+.icon-music:before {
+    content: "\e90c";
+}
+
 .icon-warning:before {
     content: "\e908";
-    color: #fff;
 }
 .icon-close:before {
     content: "\e909";
@@ -39,7 +50,6 @@
 }
 .icon-guide:before {
     content: "\e901";
-    color: #fff;
 }
 .icon-home:before {
     content: "\e902";
@@ -47,9 +57,7 @@
 }
 .icon-sound-off:before {
     content: "\e903";
-    color: #fff;
 }
 .icon-sound-on:before {
     content: "\e904";
-    color: #fff;
 }

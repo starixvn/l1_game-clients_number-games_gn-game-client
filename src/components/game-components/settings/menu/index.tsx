@@ -8,14 +8,15 @@ import Styles from "./menu.module.scss";
 const dropdownItemClassName = "dropdown-item";
 
 export const Menu: React.FC<{
-    handleToggleNotification: Function;
-    enabledNotification: boolean;
     handleToggleGuideModal: Function;
-}> = ({ handleToggleNotification, enabledNotification, handleToggleGuideModal }) => {
+    enabledSound: boolean;
+    onToggleSound: Function;
+}> = ({ handleToggleGuideModal, enabledSound, onToggleSound }) => {
     const { t } = useTranslation([ResourceTypes.COMMON]);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const wrapperRef = useRef<HTMLDivElement>(null);
     const toggleBtnRef = useRef<HTMLDivElement>(null);
+    const toggleSoundBtnRef = useRef<HTMLDivElement>(null);
     const specialClassByDevice = !isMobileOnly ? "desktop-style" : "";
 
     const openGuide = () => {
@@ -51,20 +52,28 @@ export const Menu: React.FC<{
             <div className="dropdown">
                 <div className={`dropdown-menu right ${Styles["dropdown-menu"]} ${dropdownOpen ? "show" : ""}`}>
                     <div className={`${dropdownItemClassName} ${Styles[dropdownItemClassName]}`}>
-                        <div className={Styles["label"]}>{t("winningStreakNotification")}</div>
-                        <div className={Styles["toggle-button"]}>
-                            <input
-                                id="toggle-notification"
-                                className={Styles["toggle-checkbox"]}
-                                type={"checkbox"}
-                                onChange={() => handleToggleNotification()}
-                                checked={enabledNotification}
-                            />
-                            <label className={Styles["toggle-btn"]} htmlFor="toggle-notification"></label>
-                        </div>
+                        <span className="icon-music"></span>
+                    </div>
+                    <div
+                        className={`${dropdownItemClassName} ${Styles[dropdownItemClassName]}`}
+                        ref={toggleSoundBtnRef}
+                        id="sound-settings"
+                        onClick={() => onToggleSound()}
+                    >
+                        <span
+                            className={
+                                enabledSound ? `icon-sound-on ${Styles["icon-sound-on"]}` : `icon-sound-off ${Styles["icon-sound-off"]}`
+                            }
+                        ></span>
+
+                        <Tooltip message={`${t("sound")}: ${enabledSound ? t("on") : t("off")}`} hoverWrapper={toggleSoundBtnRef} />
+                    </div>
+
+                    <div className={`${dropdownItemClassName} ${Styles[dropdownItemClassName]}`}>
+                        <span className="icon-history"></span>
                     </div>
                     <div className={`${dropdownItemClassName} ${Styles[dropdownItemClassName]}`} onClick={openGuide}>
-                        {t(CommonResourceKeys.GUIDE_POPUP_TITLE)}
+                        <span className="icon-guide"></span>
                     </div>
                 </div>
             </div>
