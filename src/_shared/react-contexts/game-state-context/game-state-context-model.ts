@@ -35,9 +35,6 @@ export interface GameStateContextModel<Result, SettlementResult> {
     playResultAnimation: boolean;
     isShowBlink: boolean;
     notice: Notice;
-    removeBetChoiceFocus?: Function;
-    betOptionElement?: HTMLElement;
-    betChoiceElement?: HTMLElement;
     activeScoreboardTab?: number;
     rate?: number;
     disconnectReason?: string;
@@ -83,9 +80,6 @@ export const initialGameStateContextModel = ({ defaultResult, defaultSettlementR
         playResultAnimation: false,
         isShowBlink: false,
         notice: null,
-        removeBetChoiceFocus: null,
-        betOptionElement: null,
-        betChoiceElement: null,
         activeScoreboardTab: 0,
         rate: 1,
         disconnectReason: "",

@@ -68,10 +68,6 @@ const BetOption: React.FunctionComponent<Props> = ({
 
     };
 
-    const removeBetChoiceFocus = () => {
-        setIsFocusChoice(false);
-    };
-
     const betOptionClasses = `${Styles["bet-option"]} ${isFocusChoice ? Styles["focus"] : ""} 
         ${isHighlight && Styles[HighlightClassNameMapper[highlightType]]} 
         ${isHighlight && isShowWinningEffect && Styles["winning-effect"]} 

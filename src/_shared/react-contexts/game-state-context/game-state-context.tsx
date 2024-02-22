@@ -61,9 +61,6 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
         disconnectReason,
         showWinningAnimation,
         selectedBetChoice,
-        removeBetChoiceFocus,
-        betOptionElement,
-        betChoiceElement,
         displayPopup,
         viewMode,
         activeScoreboardTab,
@@ -338,10 +335,7 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
             return {
                 ...state,
                 displayPopup: PopupType.PlaceBet,
-                selectedBetChoice,
-                removeBetChoiceFocus,
-                betOptionElement,
-                betChoiceElement,
+                selectedBetChoice
             };
         }
 

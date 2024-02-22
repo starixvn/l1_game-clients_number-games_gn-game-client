@@ -98,9 +98,6 @@ export interface GameEventPayload {
     disconnectReason?: string;
     showWinningAnimation?: boolean;
     selectedBetChoice?: string;
-    removeBetChoiceFocus?: Function;
-    betOptionElement?: HTMLElement;
-    betChoiceElement?: HTMLElement;
     displayPopup?: PopupType;
     viewMode?: ViewMode;
     activeScoreboardTab?: Number;
