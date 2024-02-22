@@ -1,0 +1,25 @@
+.scoreboard {
+    display: grid;
+}
+
+.scoreboard-item {
+    display: flex;
+    justify-content: center;
+    border: 1px solid;
+}
+
+.top-left {
+    border-top-left-radius: 30%;
+}
+
+.bottom-left {
+    border-bottom-left-radius: 30%;
+}
+
+.top-right {
+    border-top-right-radius: 30%;
+}
+
+.bottom-right {
+    border-bottom-right-radius: 30%;
+}

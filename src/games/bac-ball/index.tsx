@@ -1,21 +1,22 @@
 import { withRouter } from "next/router";
 
+import MessageTransmitter from "../../_shared/helpers/message-transmitter";
 import {
     GameStateProvider,
     useGameStateContext,
     useGameStatesDispatch,
 } from "../../_shared/react-contexts/game-state-context/game-state-context";
 import GameBase from "../../components/game-base/";
+import { GameMessageHandler } from "../../components/game-base/game-message-handler";
+import { GameStateHandler } from "../../components/game-base/game-state-handler";
 import { GameBaseProps } from "../../components/game-base/type";
-import CountdownTimer from "../../components/game-components/countdown-timer/countdown-timer";
+import Scoreboard from "../../components/game-components/round-history/scoreboard";
 import { StatisticFollowPercent } from "../../components/game-components/statistic";
+import { TurnStateHandler } from "../../components/turn-base/turn-state-handler";
 import { BacBallBettingBlock } from "./bac-ball-betting-block";
 import { BacBallResultBlock } from "./bac-ball-result-block";
+import { BacBallBeadRoadCharacterElement, BacBallBeadRoadValueElement } from "./scoreboard-elements";
 import { BacBallResult, BacBallSettlementResult } from "./types";
-import { TurnStateHandler } from "../../components/turn-base/turn-state-handler";
-import { GameStateHandler } from "../../components/game-base/game-state-handler";
-import MessageTransmitter from "../../_shared/helpers/message-transmitter";
-import { GameMessageHandler } from "../../components/game-base/game-message-handler";
 
 export const Choices = { player: "player", banker: "banker", tie: "tie" };
 
@@ -41,7 +42,6 @@ class BacBall extends GameBase<GameBaseProps> {
         super.componentDidMount();
     }
 
-
     renderResultBlock() {
         return <BacBallResultBlock messageTransmitter={this.messageTransmitter} />;
     }
@@ -57,7 +57,27 @@ class BacBall extends GameBase<GameBaseProps> {
     }
 
     renderScoreboards() {
-        return <img className="mt-1" src="/static/images/scoreboard.png" />;
+        const { roundHistory } = this.props.gameStateContextModel;
+
+        return (
+            <>
+                <Scoreboard
+                    rounds={roundHistory}
+                    element={BacBallBeadRoadCharacterElement}
+                    arrange={BacBallBeadRoadCharacterElement.arrange}
+                    column={18}
+                    row={6}
+                />
+                <br />
+                <Scoreboard
+                    rounds={roundHistory}
+                    element={BacBallBeadRoadValueElement}
+                    arrange={BacBallBeadRoadValueElement.arrange}
+                    column={18}
+                    row={6}
+                />
+            </>
+        );
     }
 }
 

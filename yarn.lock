@@ -7979,6 +7979,11 @@ saxes@^6.0.0:
   dependencies:
     xmlchars "^2.2.0"
 
+sc-scoreboards@1.0.6:
+  version "1.0.6"
+  resolved "http://npm.lumigame.com/sc-scoreboards/-/sc-scoreboards-1.0.6.tgz#16ca7911e023d8048c9d6dc759fded675184d264"
+  integrity sha512-T7PmqNI03oK4RHm1y9xi59f79NAoSYOOYRfaCNfSJv6f6aPB9v8SG5xtG05fxLCwosyhhDrBtjvZW44EkTY40Q==
+
 sc-user-service-client@1.4.1:
   version "1.4.1"
   resolved "http://npm.lumigame.com/sc-user-service-client/-/sc-user-service-client-1.4.1.tgz#13fe016f34a125785371252051dab15fd55dae48"
