@@ -96,7 +96,7 @@ export const BacBallResultBlock: FC<ResultBlockProps> = (props) => {
 
     const bankerDelayTime = 1000;
 
-    const renderBalls = (updatedResultList) => {
+    const renderBalls = (updatedResultList: Array<number>, delayTime = 0) => {
         return (
             <div className="flex gap-2 justify-center flex-col">
                 {updatedResultList.map((result, index) => {
@@ -108,9 +108,7 @@ export const BacBallResultBlock: FC<ResultBlockProps> = (props) => {
                     } else if (result > 0) {
                         props.number = result;
                         props.isLoading = true;
-                        props.delayTime = 2000;
-                    } else {
-                        props.isEmpty = true;
+                        props.delayTime = delayTime;
                     }
 
                     return <Ball key={index} {...props} />;
@@ -136,7 +134,7 @@ export const BacBallResultBlock: FC<ResultBlockProps> = (props) => {
                 <div className={Style["ball-container"]}>{renderBalls(existedPlayerBalls)}</div>
             </div>
             <div className={Style["player-container"]}>
-                <div className={Style["ball-container"]}>{renderBalls(existedBankerBalls)}</div>
+                <div className={Style["ball-container"]}>{renderBalls(existedBankerBalls, bankerDelayTime)}</div>
                 <div className="lottery">
                     <Cage
                         cageBallsLoopFrames={cageBallsLoopFrames}

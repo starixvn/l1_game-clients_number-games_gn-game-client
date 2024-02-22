@@ -111,7 +111,7 @@ const Cage: React.FunctionComponent<CageProps> = (cageProps) => {
                             autoUpdate
                             isPlaying={true}
                             initialFrame={0}
-                            animationSpeed={0.6}
+                            animationSpeed={0.5}
                             loop={false}
                         />
                     </Container>
@@ -134,7 +134,7 @@ const Cage: React.FunctionComponent<CageProps> = (cageProps) => {
                                     autoUpdate
                                     isPlaying={true}
                                     initialFrame={0}
-                                    animationSpeed={0.6}
+                                    animationSpeed={0.5}
                                     loop={true}
                                 />
                             </Container>
