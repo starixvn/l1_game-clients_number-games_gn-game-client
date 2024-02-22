@@ -1,0 +1,40 @@
+import { RoundState } from "../game-base/type";
+
+export interface IRoundStateHandler {
+    determineRoundBaseState({ roundRemainingTime, wholeRound, remainingTime, durations }): RoundState;
+    getRemainingTime({ remainingTime, durations }): number;
+    getWholeRoundDuration({ durations }): number;
+}
+
+export class RoundStateHandler implements IRoundStateHandler {
+    constructor() {}
+
+    determineRoundBaseState({ roundRemainingTime, wholeRound, remainingTime, durations }): RoundState {
+        const { showResult, beforeStartRound, placingBets, lockingBet } = durations;
+
+        if (remainingTime >= wholeRound - showResult) {
+            return RoundState.DisplayResult;
+        }
+
+        if (beforeStartRound && remainingTime > placingBets) {
+            return RoundState.BeforeStartRound;
+        }
+
+        if (remainingTime <= placingBets && remainingTime > lockingBet) {
+            return RoundState.InRound;
+        }
+
+        if (remainingTime <= lockingBet && remainingTime >= 0) {
+            return RoundState.LockingBet;
+        }
+
+        return RoundState.None;
+    }
+
+    getRemainingTime({ remainingTime, durations }): number {
+        return remainingTime;
+    }
+    getWholeRoundDuration({ durations }) {
+        return durations.wholeRound;
+    }
+}

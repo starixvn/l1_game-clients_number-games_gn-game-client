@@ -50,9 +50,6 @@ export type GamePropsContext = {
     isJoinedGame?: boolean;
     dispatch?: (action: GameEventAction) => {};
     gameStateContextModel?: GameStateContextModel<{}, {}>;
-    determineRoundState?: Function;
-    getTimeCounter?: Function;
-    getNextRoundState?: Function;
 };
 
 export type GameBaseProps = GamePropsContext & WithRouterProps;

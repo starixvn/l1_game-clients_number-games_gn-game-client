@@ -23,6 +23,8 @@ import ConfirmDialog from "../game-components/submit-dialog";
 import BetSettings from "../page-components/bet-settings";
 import { GameMessageHandler, messageEventType } from "./game-message-handler";
 import { Boundary, GameBaseProps, PopupType, Position, RoundState, ViewMode } from "./type";
+import { IRoundStateHandler } from "../round-base/round-state-handler";
+import { IGameStateHandler } from "./game-state-handler";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
     private readonly animationTime = 3000;
@@ -42,10 +44,14 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     private isConnectFailed = false;
     private disconnectTimeout: NodeJS.Timeout;
     private gameMessageHandler: GameMessageHandler;
+    private roundStateHandler: IRoundStateHandler;
+    private gameStateHandler: IGameStateHandler;
 
-    constructor(props: P) {
+    constructor(props: P, roundStateHandler: IRoundStateHandler, gameStateHandler: IGameStateHandler) {
         super(props);
 
+        this.roundStateHandler = roundStateHandler;
+        this.gameStateHandler = gameStateHandler;
         this.openPopup = this.openPopup.bind(this);
         this.placeBet = this.placeBet.bind(this);
         this.openPlaceBetModal = this.openPlaceBetModal.bind(this);
@@ -381,7 +387,8 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
     handleUM({ um, um_message, remainingTime }) {
         const { durations } = this.props;
-        if (um && remainingTime && remainingTime + 1 === durations.wholeTurn) {
+        const wholeRound = this.roundStateHandler.getWholeRoundDuration({ durations });
+        if (um && remainingTime && remainingTime + 1 === wholeRound) {
             this.isUMInFirstLoad = true;
         } else {
             this.isUMInFirstLoad = false;
@@ -389,7 +396,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
         if (
             um &&
-            (this.timeCounter <= durations.placingBets + durations.beforeStartRound + 1 || remainingTime + 1 === durations.wholeTurn)
+            (this.timeCounter <= durations.placingBets + durations.beforeStartRound + 1 || remainingTime + 1 === wholeRound)
         ) {
             this.interval && clearInterval(this.interval);
             this.showResultInfoTimeout && clearTimeout(this.showResultInfoTimeout);
@@ -414,23 +421,17 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     };
 
     handleRemainingTime({ remainingTime }) {
-        const { roundState } = this.props.gameStateContextModel;
-        const { durations } = this.props;
-        const { wholeRound, showResult, beforeStartRound, switchRoundAnimation } = durations;
+        const { durations, gameStateContextModel, } = this.props;
 
-        if (roundState === RoundState.None || !this.isUMInFirstLoad) {
+        if (gameStateContextModel.roundState === RoundState.None || !this.isUMInFirstLoad) {
             this.props.dispatch({
                 type: GameEventActionType.REMAINING_TIME,
                 payload: { remainingTime },
             });
 
             this.roundTimeCounter = remainingTime;
-            const turnRemainingTime =
-                remainingTime >= wholeRound - showResult - beforeStartRound - switchRoundAnimation
-                    ? (remainingTime % durations.wholeTurn) - durations.switchRoundAnimation
-                    : remainingTime % durations.wholeTurn;
 
-            this.runGame(turnRemainingTime === 0 ? durations.wholeTurn : turnRemainingTime);
+            this.runGame(this.roundStateHandler.getRemainingTime({ remainingTime, durations }));
         }
     }
 
@@ -439,8 +440,9 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
         this.interval && clearInterval(this.interval);
         this.interval = setInterval(() => {
-            const newRoundState = this.props.determineRoundState({
+            const newRoundState = this.roundStateHandler.determineRoundBaseState({
                 roundRemainingTime: this.roundTimeCounter,
+                wholeRound: this.props.durations.wholeRound,
                 remainingTime: this.timeCounter,
                 durations: this.props.durations,
             });
@@ -459,8 +461,9 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         // console.log(`roundTimeCounter: ${this.roundTimeCounter}`);
         // console.log(`Turn RemainingTime: ${remainingTime}`);
 
-        const newRoundState = this.props.determineRoundState({
+        const newRoundState = this.roundStateHandler.determineRoundBaseState({
             roundRemainingTime: this.roundTimeCounter,
+            wholeRound: this.props.durations.wholeRound,
             remainingTime,
             durations: this.props.durations,
         });
@@ -468,7 +471,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         if (this.props.gameStateContextModel.roundState !== newRoundState && !this.isConnectFailed) {
             const newGameState = {
                 roundState: newRoundState,
-                ...this.props.getNextRoundState({
+                ...this.gameStateHandler.getNextRoundState({
                     nextRoundState: newRoundState,
                     gameStateContextModel: this.props.gameStateContextModel,
                     durations: this.props.durations,
@@ -545,7 +548,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             this.props.gameStateContextModel.betWin > 0 && this.updateUserBalance();
         }, this.winningAnimationWaitingTimeInSecond);
 
-        this.runGame(durations.wholeTurn);
+        this.runGame(this.roundStateHandler.getWholeRoundDuration({ durations }));
     }
 
     openPlaceBetModal(betChoice: string, removeBetChoiceFocus: Function, betOptionElement: HTMLElement, betChoiceElement: HTMLElement) {

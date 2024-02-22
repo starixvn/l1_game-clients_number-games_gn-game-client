@@ -5,7 +5,6 @@ import {
     useGameStateContext,
     useGameStatesDispatch,
 } from "../../_shared/react-contexts/game-state-context/game-state-context";
-import { determineTurnBaseState, getNextRoundState, getTimeCounter } from "../../_shared/helpers/round-state-helper";
 import GameBase from "../../components/game-base/";
 import { GameBaseProps } from "../../components/game-base/type";
 import CountdownTimer from "../../components/game-components/countdown-timer/countdown-timer";
@@ -13,6 +12,8 @@ import { StatisticFollowPercent } from "../../components/game-components/statist
 import { BacBallBettingBlock } from "./bac-ball-betting-block";
 import { BacBallResultBlock } from "./bac-ball-result-block";
 import { BacBallResult, BacBallSettlementResult } from "./types";
+import { TurnStateHandler } from "../../components/turn-base/turn-state-handler";
+import { GameStateHandler } from "../../components/game-base/game-state-handler";
 
 export const Choices = { player: "player", banker: "banker", tie: "tie" };
 
@@ -28,7 +29,7 @@ export const StatisticRuleEntries = Object.entries({
 });
 class BacBall extends GameBase<GameBaseProps> {
     constructor(props: GameBaseProps) {
-        super(props);
+        super(props, new TurnStateHandler(), new GameStateHandler());
     }
 
     componentDidMount() {
@@ -90,10 +91,7 @@ const BacBallFC = (props) => {
             {...props}
             {...{
                 dispatch: useGameStatesDispatch(),
-                gameStateContextModel: useGameStateContext(),
-                determineRoundState: determineTurnBaseState,
-                getTimeCounter: getTimeCounter,
-                getNextRoundState: getNextRoundState,
+                gameStateContextModel: useGameStateContext()
             }}
         />
     );
