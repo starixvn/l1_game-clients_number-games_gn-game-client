@@ -1,6 +1,5 @@
 import { useTranslate } from "@tolgee/react";
 import { withRouter } from "next/router";
-
 import {
     GameStateProvider,
     useGameStateContext,
@@ -91,6 +90,7 @@ const BacBallWrapper = (props) => {
         player: false,
         tie: false,
     };
+
     return (
         <GameStateProvider defaultResult={defaultResult} defaultSettlementResult={defaultSettlementResult}>
             <BacBallFC {...props} />

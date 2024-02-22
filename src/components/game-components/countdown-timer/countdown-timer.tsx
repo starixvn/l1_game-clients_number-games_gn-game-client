@@ -68,7 +68,7 @@ const SimpleTimer = () => {
         return () => {
             clearInterval(timer);
         };
-    }, [timeLeft]);
+    }, []);
 
     const seconds = (timeLeft % 60).toString().padStart(2, "0");
 
