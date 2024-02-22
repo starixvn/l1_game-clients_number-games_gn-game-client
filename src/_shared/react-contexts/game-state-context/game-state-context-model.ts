@@ -29,6 +29,7 @@ export interface GameStateContextModel<Result, SettlementResult> {
     ownBets: object;
     displayPopup?: PopupType;
     betPercentage?: object;
+    playerBetCount?: object;
     errorMessage?: string | string[];
     selectedBetChoice?: string;
     isProcessingBet?: boolean;
@@ -87,6 +88,7 @@ export const initialGameStateContextModel = ({ defaultResult, defaultSettlementR
         totalBets: {},
         displayPopup: null,
         betPercentage: {},
+        playerBetCount: {},
         showResultInfo: false,
         acceptedBetQueue: {},
         showWinningAnimation: false,

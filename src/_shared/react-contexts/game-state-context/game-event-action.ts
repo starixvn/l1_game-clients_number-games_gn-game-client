@@ -16,6 +16,7 @@ export enum GameEventActionType {
     USER = "USER",
     OWN_BETS = "OWN_BETS",
     BET_PERCENTAGE = "BET_PERCENTAGE",
+    PLAYER_BET_COUNT = "PLAYER_BET_COUNT",
     END_BET = "END_BET",
     API_ERROR = "API_ERROR",
     DISCONNECT_ERROR = "DISCONNECT_ERROR",
@@ -71,7 +72,8 @@ export interface GameEventPayload {
         ownBets?: any;
         gameConfigs?: any;
     };
-    betPercentage?: number;
+    betPercentage?: {};
+    playerBetCount?: {};
     endBetData?: {
         endBet?: number;
         betChoice?: any;

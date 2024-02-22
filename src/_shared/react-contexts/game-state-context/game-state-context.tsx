@@ -52,6 +52,7 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
         userData,
         ownBetsData,
         betPercentage,
+        playerBetCount,
         endBetData,
         apiError,
         errorCode,
@@ -222,6 +223,13 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
             return {
                 ...state,
                 betPercentage: betPercentage,
+            };
+        }
+
+        case GameEventActionType.PLAYER_BET_COUNT: {
+            return {
+                ...state,
+                playerBetCount: playerBetCount,
             };
         }
 

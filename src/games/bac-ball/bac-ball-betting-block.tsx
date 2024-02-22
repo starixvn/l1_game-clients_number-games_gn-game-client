@@ -74,6 +74,9 @@ export const BacBallBettingBlock: FC = () => {
     const dataBanker = { players: 1, betChoice: "banker" };
     const dataTie = { players: 1, betChoice: "tie" };
 
+    const betPercentage = gameStateContext?.betPercentage ?? { player: 0, banker: 0, tie: 0 };
+    const playerBetCount = gameStateContext?.playerBetCount ?? { player: 0, banker: 0, tie: 0 };
+
     if (winningPlayerFrames.length > 0 && winningTieFrames.length > 0) {
         // waiting for rounduration class
         const isShowWinningHighlightPlayer =
@@ -140,12 +143,12 @@ export const BacBallBettingBlock: FC = () => {
                             <div className="flex items-center players gap-1">
                                 <span id="player-user-icon" className="icon-user"></span>
                                 <span id="player-no" className="player-value">
-                                    {dataPlayer.players}
+                                    {playerBetCount["player"]}
                                 </span>
                             </div>
                         </div>
                         <div id="player-percent" className={Style.percent}>
-                            <PercentageCircle percentage={50} />
+                            <PercentageCircle percentage={betPercentage["player"]} />
                         </div>
                     </div>
                     <div id="player-bet-name" className={`bet-name text-center ${Style["bet-name"]}`}>
@@ -165,7 +168,7 @@ export const BacBallBettingBlock: FC = () => {
                 >
                     <div className={`flex pt-5 justify-between`}>
                         <div id="banker-percent" className={Style.percent}>
-                            <PercentageCircle percentage={50} />
+                            <PercentageCircle percentage={betPercentage["banker"]} />
                         </div>
                         <div className={Style.stake}>
                             <div className={`flex items-center ${Style["total-stakes"]} gap-1`}>
@@ -177,7 +180,7 @@ export const BacBallBettingBlock: FC = () => {
                             <div className="flex items-center players gap-1 justify-end">
                                 <span id="banker-user-icon" className="icon-user"></span>
                                 <span id="banker-no" className="player-value">
-                                    {dataBanker.players}
+                                    {playerBetCount["banker"]}
                                 </span>
                             </div>
                         </div>
@@ -213,7 +216,7 @@ export const BacBallBettingBlock: FC = () => {
                         </Stage>
                     )}
                     <div id="tie-percent" className={Style.percent}>
-                        <PercentageCircle percentage={50} />
+                        <PercentageCircle percentage={betPercentage["tie"]} />
                     </div>
                     <div className={Style.stake}>
                         <div className={`flex items-center ${Style["total-stakes"]} gap-1 justify-center mt-1`}>
@@ -225,7 +228,7 @@ export const BacBallBettingBlock: FC = () => {
                         <div className="flex items-center players gap-1 justify-center">
                             <span id="tie-user-icon" className="icon-user"></span>
                             <span id="tie-no" className="player-value">
-                                {dataTie.players}
+                                {playerBetCount["tie"]}
                             </span>
                         </div>
                     </div>

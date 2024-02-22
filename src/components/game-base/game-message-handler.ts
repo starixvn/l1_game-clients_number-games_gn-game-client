@@ -23,6 +23,8 @@ export const messageEventType = {
     ROUND_DATA: "roundData",
     SIGNED_IN: "signedIn",
     NOT_PERMITTED_TO_PLAY: "notPermittedToPlay",
+    BET_PERCENTAGE: "betPercentage",
+    PLAYER_BET_COUNT: "playerBetCount",
 };
 
 export class GameMessageHandler {
@@ -35,6 +37,8 @@ export class GameMessageHandler {
         this.messageTransmitter.register(messageEventType.ODDS, this.handleOdds);
         this.messageTransmitter.register(messageEventType.ROUND_DATA, this.handleRoundData);
         this.messageTransmitter.register(messageEventType.SIGNED_IN, this.handleSignedIn);
+        this.messageTransmitter.register(messageEventType.BET_PERCENTAGE, this.handleBetPercentage);
+        this.messageTransmitter.register(messageEventType.PLAYER_BET_COUNT, this.handlePlayerBetCount);
     };
 
     broadcastGameMessage = (message) => {
@@ -97,6 +101,24 @@ export class GameMessageHandler {
             type: GameEventActionType.ROUND_DATA,
             payload: {
                 roundData,
+            },
+        });
+    };
+
+    handleBetPercentage = ({ betPercentage }) => {
+        this.dispatch({
+            type: GameEventActionType.BET_PERCENTAGE,
+            payload: {
+                betPercentage,
+            },
+        });
+    };
+
+    handlePlayerBetCount = ({ playerBetCount }) => {
+        this.dispatch({
+            type: GameEventActionType.PLAYER_BET_COUNT,
+            payload: {
+                playerBetCount,
             },
         });
     };
