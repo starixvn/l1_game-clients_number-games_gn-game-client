@@ -451,10 +451,9 @@ class Dashboard extends React.PureComponent<Props, State> {
     }
 
     autoCreateNickname = async () => {
-        console.log(`begin autoCreateNickname `);
         const { session } = this.props;
         const nickname = NameGenerator.generateName();
-        const maxAvatarId = 88;
+        const maxAvatarId = 87;
         const selectedAvatarId = randomInteger(1, maxAvatarId);
         const response = await createNickname(session, nickname, selectedAvatarId);
         const authorizeResponse = response as any;
@@ -463,7 +462,6 @@ class Dashboard extends React.PureComponent<Props, State> {
             Object.assign(authorizeResponse.user, { settings: { theme: Themes.light } });
             this.handleRegister(authorizeResponse);
         } else {
-            console.log(`autoCreateNickname failed: ${authorizeResponse?.errorCode}`);
             this.props.router.push("/timeout", "/timeout", { locale: this.props.i18n.language });
         }
     };
