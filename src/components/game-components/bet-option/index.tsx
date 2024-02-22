@@ -29,7 +29,6 @@ const BetOption: React.FunctionComponent<Props> = ({
 }) => {
     const { gameName } = useGameContext();
     const { ownBets, rate } = useGameStateContext();
-    const { openPlaceBetModal, placeBet } = useGameActionContext();
     const { enabledQuickBet, betValue, fractionalOddsFormat } = useSystemContext();
     const [highlightType, updateHighlightType] = useState<HighlightType>(HighlightType.None);
     //const [totalBet, setTotalBet] = useState<number>(totalBets?.[choice] ?? 0);
@@ -65,15 +64,8 @@ const BetOption: React.FunctionComponent<Props> = ({
 
     const onClickBet = (event: any) => {
         event.preventDefault();
-        const betChoiceRect = betChoiceRef.current.getBoundingClientRect();
 
-        if (enabledQuickBet) {
-            placeBet(choice, betValue);
-        } else {
-            setIsFocusChoice(true);
-            const betOptionElement = totalBetRef.current.nextElementSibling;
-            openPlaceBetModal(choice, removeBetChoiceFocus, betOptionElement, betChoiceRef.current);
-        }
+
     };
 
     const removeBetChoiceFocus = () => {

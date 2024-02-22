@@ -43,8 +43,6 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
         roundData,
         roundHistory,
         roundId,
-        defaultResult,
-        defaultSettlementResult,
         result,
         settlementResult,
         status,
@@ -52,16 +50,13 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
         ownBetsData,
         betPercentage,
         playerBetCount,
-        endBetData,
         apiError,
-        errorCode,
         userStakeLevel,
         odds,
         drawId,
         totalBets,
         kickedOut,
         notice,
-        signedIn,
         acceptedBetQueue,
         disconnectReason,
         showWinningAnimation,
@@ -82,7 +77,7 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
         showConfirmDialog,
         turnCounter,
         notConfirmOwnBets,
-        messageTransmitter
+        umFirstLoading
     } = payload;
 
     // console.log("payload: ", JSON.stringify(payload));
@@ -429,10 +424,10 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
             };
         }
 
-        case GameEventActionType.SET_MESSAGE_TRANSMITTER: {
+        case GameEventActionType.SET_UM_FIRST_LOADING: {
             return {
                 ...state,
-                messageTransmitter,
+                umFirstLoading
             };
         }
 

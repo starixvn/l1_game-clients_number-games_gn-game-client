@@ -27,7 +27,6 @@ import { GameHeader } from "../game-components/game-header";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
     private readonly animationTime = 3000;
-    protected isUMInFirstLoad = false;
     protected showResultInfoTimeout: NodeJS.Timeout;
     protected showWinningAnimationTimeout: NodeJS.Timeout;
     protected isProcessingBet = false;
@@ -61,7 +60,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
         this.openPopup = this.openPopup.bind(this);
         this.placeBet = this.placeBet.bind(this);
-        this.openPlaceBetModal = this.openPlaceBetModal.bind(this);
         this.playAcceptedBetAnimation = this.playAcceptedBetAnimation.bind(this);
         this.updateUserBalance = this.updateUserBalance.bind(this);
         this.setActiveScoreboardTab = this.setActiveScoreboardTab.bind(this);
@@ -94,14 +92,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
     onStart() {
         this.messageTransmitter.clearAllListener();
-
-        this.props.dispatch({
-            type: GameEventActionType.SET_MESSAGE_TRANSMITTER,
-            payload: {
-                messageTransmitter: this.messageTransmitter,
-            },
-        });
-
         this.isConnectFailed = false;
         this.isProcessingBet = false;
         this.clearDisconnectTimeout();
@@ -195,16 +185,16 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
     handleRoundHistory = ({ roundHistory, roundId }) => {
         const { dispatch, gameStateContextModel } = this.props;
-        const { roundState } = gameStateContextModel;
+        const { roundState, isUMInFirstLoad } = gameStateContextModel;
 
         dispatch({
             type: GameEventActionType.ROUND_HISTORY,
             payload: {
                 roundHistory: roundHistory,
-                roundId: [RoundState.DisplayResult].includes(roundState) || this.isUMInFirstLoad ? roundId - 1 : roundId,
+                roundId: [RoundState.DisplayResult].includes(roundState) || isUMInFirstLoad ? roundId - 1 : roundId,
                 settlementResult: roundState === RoundState.LockingBet ? this.defaultSettlementResult : roundHistory[0]?.settlementResult,
-                playResultAnimation: [RoundState.DisplayResult].includes(roundState) || this.isUMInFirstLoad ? false : true,
-                showResultInfo: [RoundState.DisplayResult].includes(roundState) || this.isUMInFirstLoad ? true : false,
+                playResultAnimation: [RoundState.DisplayResult].includes(roundState) || isUMInFirstLoad ? false : true,
+                showResultInfo: [RoundState.DisplayResult].includes(roundState) || isUMInFirstLoad ? true : false,
             },
         });
     };
@@ -404,11 +394,11 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     handleUM({ um, um_message, remainingTime }) {
         const { durations } = this.props;
         const wholeRound = this.roundStateHandler.getWholeRoundDuration({ durations });
-        if (um && remainingTime && remainingTime + 1 === wholeRound) {
-            this.isUMInFirstLoad = true;
-        } else {
-            this.isUMInFirstLoad = false;
-        }
+
+        this.props.dispatch({
+            type: GameEventActionType.SET_UM_FIRST_LOADING,
+            payload: { umFirstLoading: um && remainingTime && remainingTime + 1 === wholeRound },
+        });
 
         if (um && (this.timeCounter <= durations.placingBets + durations.beforeStartRound + 1 || remainingTime + 1 === wholeRound)) {
             this.interval && clearInterval(this.interval);
@@ -426,7 +416,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     handleRemainingTime({ remainingTime }) {
         const { durations, gameStateContextModel, dispatch } = this.props;
 
-        if (gameStateContextModel.roundState === RoundState.None || !this.isUMInFirstLoad) {
+        if (gameStateContextModel.roundState === RoundState.None || !gameStateContextModel.isUMInFirstLoad) {
             dispatch({
                 type: GameEventActionType.REMAINING_TIME,
                 payload: { remainingTime },
@@ -557,18 +547,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         }, this.winningAnimationWaitingTimeInSecond);
 
         this.runGame(this.roundStateHandler.getWholeRoundDuration({ durations }));
-    }
-
-    openPlaceBetModal(betChoice: string, removeBetChoiceFocus: Function, betOptionElement: HTMLElement, betChoiceElement: HTMLElement) {
-        this.props.dispatch({
-            type: GameEventActionType.PLACE_BET_POPUP,
-            payload: {
-                selectedBetChoice: betChoice,
-                removeBetChoiceFocus,
-                betOptionElement,
-                betChoiceElement,
-            },
-        });
     }
 
     placeBet(betChoice: string, amount: number) {
@@ -814,7 +792,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         const gameActionsContext = {
             placeBet: this.placeBet,
             openPopup: this.openPopup,
-            openPlaceBetModal: this.openPlaceBetModal,
             playAcceptedBetAnimation: this.playAcceptedBetAnimation,
             finishProcessingBet: () => {
                 this.isProcessingBet = false;
