@@ -1,6 +1,6 @@
 import { useTranslate } from "@tolgee/react";
 import React, { useEffect } from "react";
-import { confirmBetChoice } from "../../../_shared/constants";
+import { confirmBet } from "../../../_shared/constants";
 import { useGameActionContext } from "../../../_shared/react-contexts";
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 import { useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
@@ -38,7 +38,7 @@ const ConfirmBet: React.FC<Props> = ({ }: Props) => {
             },
         });
 
-        gameActionContext.placeBet(confirmBetChoice, 0);
+        gameActionContext.placeBet(confirmBet, 0);
     };
 
     return (

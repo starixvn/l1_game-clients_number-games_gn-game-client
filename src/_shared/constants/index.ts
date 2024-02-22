@@ -91,7 +91,7 @@ export const AppTypes = {
     mobile: 1,
 };
 
-export const confirmBetChoice = "confirm";
+export const confirmBet = "confirmBet";
 
 export const GameIds = {
     BacBall: 1001,

@@ -80,14 +80,14 @@ export const Notice: React.FC<Props> = ({
         betChoice1,
         betChoice2,
     };
-
-    return (
-        <BaseNotice {...{ onClose, duration, isWarning }}>
-            {t({
-                key: message,
-                params: opt,
-                noWrap: true,
-            }).replaceTogleeFormat()}
-        </BaseNotice>
-    );
+    const tt = t({
+        key: message,
+        params: opt,
+    });
+    const tran = t({
+        key: message,
+        params: opt,
+        noWrap: true,
+    }).replaceTogleeFormat();
+    return <BaseNotice {...{ onClose, duration, isWarning }}>{tran}</BaseNotice>;
 };

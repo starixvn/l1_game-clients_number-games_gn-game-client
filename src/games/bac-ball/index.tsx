@@ -1,6 +1,6 @@
+import { useTranslate } from "@tolgee/react";
 import { withRouter } from "next/router";
 
-import MessageTransmitter from "../../_shared/helpers/message-transmitter";
 import {
     GameStateProvider,
     useGameStateContext,
@@ -35,6 +35,7 @@ class BacBall extends GameBase<GameBaseProps> {
         const gameMessageHandler = new GameMessageHandler(props.dispatch);
 
         super(props, new TurnStateHandler(), new GameStateHandler(), gameMessageHandler);
+        this.hedgeBetGroup = ["player", "banker"];
     }
 
     componentDidMount() {
@@ -97,12 +98,15 @@ const BacBallWrapper = (props) => {
 };
 
 const BacBallFC = (props) => {
+    const { t } = useTranslate([`${props.gameName}`, "Common", "SabaNumber"]);
+
     return (
         <BacBall
             {...props}
             {...{
                 dispatch: useGameStatesDispatch(),
                 gameStateContextModel: useGameStateContext(),
+                translate: t,
             }}
         />
     );

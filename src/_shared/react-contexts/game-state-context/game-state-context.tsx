@@ -1,3 +1,4 @@
+import { useTranslate } from "@tolgee/react";
 import { createContext, useContext, useReducer } from "react";
 import { PopupType, RoundState } from "../../../components/game-base/type";
 import { LanguageLocaleMapper } from "../../constants";
@@ -8,18 +9,20 @@ import { GameStateContextModel, initialGameStateContextModel } from "./game-stat
 const GameStateContext = createContext({ rate: 1 } as GameStateContextModel<any, any>);
 
 const GameStateDispatchContext = createContext(null);
+const GameTranslateContext = createContext(null);
 
 export function GameStateProvider({ children, defaultResult, defaultSettlementResult }) {
     const [gameStateContextModel, dispatch] = useReducer(
         gameStateReducer,
         initialGameStateContextModel({ defaultResult, defaultSettlementResult })
     );
-
     return (
         <GameStateContext.Provider value={gameStateContextModel}>
             <GameStateDispatchContext.Provider value={dispatch}>
-                {/* {console.log(`gameStateContextModel: ${JSON.stringify(gameStateContextModel)}`)} */}
-                {children}
+                <GameTranslateContext.Provider value={useTranslate}>
+                    {/* {console.log(`gameStateContextModel: ${JSON.stringify(gameStateContextModel)}`)} */}
+                    {children}
+                </GameTranslateContext.Provider>
             </GameStateDispatchContext.Provider>
         </GameStateContext.Provider>
     );
@@ -32,6 +35,10 @@ export function useGameStateContext() {
 export function useGameStatesDispatch() {
     // console.log('useGameStatesDispatch');
     return useContext(GameStateDispatchContext);
+}
+
+export function useGameTranslateContext() {
+    return useContext(GameTranslateContext);
 }
 
 function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEventAction) {

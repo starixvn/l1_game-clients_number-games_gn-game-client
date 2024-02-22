@@ -3,5 +3,5 @@ interface String {
 }
 
 String.prototype.replaceTogleeFormat = function () {
-    return this.replace("%", "").replace("(%", "(").replace("#%", "#");
+    return this.replaceAll("%", "").replaceAll("(%", "(").replaceAll("#%", "#");
 };

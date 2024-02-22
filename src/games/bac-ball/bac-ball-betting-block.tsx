@@ -1,10 +1,10 @@
 import { AnimatedSprite, Container, Stage } from "@pixi/react";
 import { Resource, Texture } from "pixi.js";
-import { FC, useEffect, useState } from "react";
-
+import { FC, useCallback, useEffect, useMemo, useState } from "react";
+import { numberWithCommas } from "../../_shared/helpers";
 import { loadPixiAnimations } from "../../_shared/helpers/pixi-resource-loader";
 import { useGameActionContext } from "../../_shared/react-contexts";
-import { useGameStateContext, useGameStatesDispatch } from "../../_shared/react-contexts/game-state-context/game-state-context";
+import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
 import { RoundState } from "../../components/game-base/type";
 import PercentageCircle from "../../components/game-components/percentage-circle";
 import Style from "./bac-ball.module.scss";
@@ -14,7 +14,6 @@ export const BacBallBettingBlock: FC = () => {
     const [winningTieFrames, setWinningTieFrames] = useState<Texture<Resource>[]>([]);
     const gameActionContext = useGameActionContext();
     const gameStateContext = useGameStateContext();
-    const dispatch = useGameStatesDispatch();
 
     useEffect(() => {
         if (winningPlayerFrames.length === 0 || winningTieFrames.length === 0) {
@@ -32,43 +31,64 @@ export const BacBallBettingBlock: FC = () => {
         }
     }, [winningPlayerFrames.length, winningTieFrames.length]);
 
-    const onClickBet = (choice) => gameActionContext.placeBet(choice, gameStateContext.selectedChip);
+    const onClickBet = useCallback(
+        (choice) => gameActionContext.placeBet(choice, gameStateContext.selectedChip),
+        [gameActionContext, gameStateContext.selectedChip]
+    );
+
+    const convertStakeToString = (amount: number, rate: number) => (amount ? numberWithCommas(amount / rate, 1) : "");
+    const rate = gameStateContext.rate;
+
+    const playerTotalBet = gameStateContext?.totalBets["player"] ?? 0;
+    const playerTotalBetRender = convertStakeToString(playerTotalBet, rate);
+
+    const bankerTotalBet = gameStateContext?.totalBets["banker"] ?? 0;
+    const bankerTotalBetRender = convertStakeToString(bankerTotalBet, rate);
+
+    const tieTotalBet = gameStateContext?.totalBets["tie"] ?? 0;
+    const tieTotalBetRender = convertStakeToString(tieTotalBet, rate);
 
     const playerOwnBetsValue = gameStateContext?.ownBets["player"] ?? 0;
     const playerNotConfirmOwnBetsValue = gameStateContext?.notConfirmOwnBets["player"] ?? 0;
     const playerOwnBets = playerOwnBetsValue + playerNotConfirmOwnBetsValue;
-    const playerOwnBetsRender =
-        playerOwnBets != 0 ? (
+
+    const playerOwnBetsRender = useMemo(() => {
+        return playerOwnBets != 0 ? (
             <span id="player-own-bet" className="bet-value">
-                {playerOwnBets ?? playerOwnBets}
+                {playerOwnBets}
             </span>
         ) : (
             <></>
         );
+    }, [playerOwnBets]);
 
     const bankerOwnBetsValue = gameStateContext?.ownBets["banker"] ?? 0;
     const bankerNotConfirmOwnBetsValue = gameStateContext?.notConfirmOwnBets["banker"] ?? 0;
     const bankerOwnBets = bankerOwnBetsValue + bankerNotConfirmOwnBetsValue;
-    const bankerOwnBetsRender =
-        bankerOwnBets != 0 ? (
+
+    const bankerOwnBetsRender = useMemo(() => {
+        return bankerOwnBets != 0 ? (
             <span id="banker-own-bet" className="bet-value">
-                {bankerOwnBets ?? bankerOwnBets}
+                {bankerOwnBets}
             </span>
         ) : (
             <></>
         );
+    }, [bankerOwnBets]);
 
     const tieOwnBetsValue = gameStateContext?.ownBets["tie"] ?? 0;
     const tieNotConfirmOwnBetsValue = gameStateContext?.notConfirmOwnBets["tie"] ?? 0;
     const tieOwnBets = tieOwnBetsValue + tieNotConfirmOwnBetsValue;
-    const tieOwnBetsRender =
-        tieOwnBets != 0 ? (
+
+    const tieOwnBetsRender = useMemo(() => {
+        return tieOwnBets != 0 ? (
             <span id="tie-own-bet" className="bet-value">
-                {tieOwnBets ?? tieOwnBets}
+                {tieOwnBets}
             </span>
         ) : (
             <></>
         );
+    }, [tieOwnBets]);
 
     const dataPlayer = { players: 1, betChoice: "player" };
     const dataBanker = { players: 1, betChoice: "banker" };
@@ -137,7 +157,7 @@ export const BacBallBettingBlock: FC = () => {
                             <div className={`flex items-center ${Style["total-stakes"]} gap-1`}>
                                 <span id="player-coin-icon" className="icon-coin"></span>
                                 <span id="player-total-stakes" className="stakes-value">
-                                    {gameStateContext?.totalBets["player"]}
+                                    {playerTotalBetRender}
                                 </span>
                             </div>
                             <div className="flex items-center players gap-1">
@@ -174,7 +194,7 @@ export const BacBallBettingBlock: FC = () => {
                             <div className={`flex items-center ${Style["total-stakes"]} gap-1`}>
                                 <span id="banker-coin-icon" className="icon-coin"></span>
                                 <span id="banker-total-stakes" className="stakes-value">
-                                    {gameStateContext?.totalBets["banker"]}
+                                    {bankerTotalBetRender}
                                 </span>
                             </div>
                             <div className="flex items-center players gap-1 justify-end">
@@ -222,7 +242,7 @@ export const BacBallBettingBlock: FC = () => {
                         <div className={`flex items-center ${Style["total-stakes"]} gap-1 justify-center mt-1`}>
                             <span id="tie-coin-icon" className="icon-coin"></span>
                             <span id="tie-total-stakes" className="stakes-value">
-                                {gameStateContext?.totalBets["tie"]}
+                                {tieTotalBetRender}
                             </span>
                         </div>
                         <div className="flex items-center players gap-1 justify-center">
