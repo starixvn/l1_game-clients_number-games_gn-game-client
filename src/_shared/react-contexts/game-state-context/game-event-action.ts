@@ -1,6 +1,4 @@
-import { GameMessageHandler } from "../../../components/game-base/game-message-handler";
 import { GameConfigs, GameDurations, PopupType, RoundState, ViewMode } from "../../../components/game-base/type";
-import { MessageTransmitterType } from "../../helpers/message-transmitter/type";
 
 export enum GameEventActionType {
     CONNECT = "CONNECT",
@@ -113,7 +111,6 @@ export interface GameEventPayload {
     enabledQuickBet?: boolean;
     turnCounter?: number;
     notConfirmOwnBets?: any;
-    messageTransmitter?: MessageTransmitterType;
     umFirstLoading?: boolean;
 }
 

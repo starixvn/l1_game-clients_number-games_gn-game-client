@@ -1,8 +1,5 @@
 import { Resource, Texture } from "pixi.js";
-
-import { Boundary, GameConfigs, IBallColor, Notice, PopupType, Position, Round, RoundState } from "../../../components/game-base/type";
-import { GameMessageHandler } from "../../../components/game-base/game-message-handler";
-import { MessageTransmitterType } from "../../helpers/message-transmitter/type";
+import { GameConfigs, IBallColor, Notice, PopupType, Round, RoundState } from "../../../components/game-base/type";
 
 export interface GameStateContextModel<Result, SettlementResult> {
     isConnect: boolean;
@@ -56,7 +53,6 @@ export interface GameStateContextModel<Result, SettlementResult> {
         minBet: number;
         maxBet: number;
     };
-    messageTransmitter: MessageTransmitterType;
 }
 
 export const initialGameStateContextModel = ({ defaultResult, defaultSettlementResult }) => {
@@ -110,6 +106,5 @@ export const initialGameStateContextModel = ({ defaultResult, defaultSettlementR
             minBet: 1,
             maxBet: 200_000,
         },
-        messageTransmitter: null,
     };
 };
