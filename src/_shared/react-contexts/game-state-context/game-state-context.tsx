@@ -1,6 +1,5 @@
 import { createContext, useContext, useReducer } from "react";
 import { PopupType, RoundState } from "../../../components/game-base/type";
-import { ConnectFailedReasonKey } from "../../../components/game-components/error-message/type";
 import { LanguageLocaleMapper } from "../../constants";
 import { GetLocalizedErrorMessage } from "../../helpers/notice-helper";
 import { GameEventAction, GameEventActionType } from "./game-event-action";
@@ -83,6 +82,7 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
         showConfirmDialog,
         turnCounter,
         notConfirmOwnBets,
+        messageTransmitter
     } = payload;
 
     // console.log("payload: ", JSON.stringify(payload));
@@ -428,6 +428,14 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
                 notConfirmOwnBets,
             };
         }
+
+        case GameEventActionType.SET_MESSAGE_TRANSMITTER: {
+            return {
+                ...state,
+                messageTransmitter,
+            };
+        }
+
 
         default: {
             throw Error("Unknown action: " + action.type);

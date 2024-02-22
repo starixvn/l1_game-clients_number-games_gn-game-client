@@ -1,16 +1,7 @@
 import { Resource, Texture } from "pixi.js";
 
-import {
-    Boundary,
-    GameConfigs,
-    IBallColor,
-    Notice,
-    PopupType,
-    Position,
-    Round,
-    RoundState,
-    ViewMode,
-} from "../../../components/game-base/type";
+import { Boundary, GameConfigs, IBallColor, Notice, PopupType, Position, Round, RoundState } from "../../../components/game-base/type";
+import { GameMessageHandler } from "../../../components/game-base/game-message-handler";
 import { MessageTransmitterType } from "../../helpers/message-transmitter/type";
 
 export interface GameStateContextModel<Result, SettlementResult> {
@@ -38,8 +29,6 @@ export interface GameStateContextModel<Result, SettlementResult> {
     acceptedBetQueue: {
         [key: number]: {
             amount: number;
-            betPosition: Position;
-            betOptionBoundary: Boundary;
         };
     };
     showWinningAnimation: boolean;
@@ -60,8 +49,6 @@ export interface GameStateContextModel<Result, SettlementResult> {
     betWin: number;
     kickedOut: any;
     drawId: number;
-    viewMode: ViewMode;
-    messageTransmitter: MessageTransmitterType;
     enabledQuickBet: boolean;
     selectedChip: number;
     showConfirmBet: boolean;
@@ -72,6 +59,7 @@ export interface GameStateContextModel<Result, SettlementResult> {
         minBet: number;
         maxBet: number;
     };
+    messageTransmitter: MessageTransmitterType;
 }
 
 export const initialGameStateContextModel = ({ defaultResult, defaultSettlementResult }) => {
@@ -116,8 +104,6 @@ export const initialGameStateContextModel = ({ defaultResult, defaultSettlementR
         betWin: 0,
         kickedOut: {},
         drawId: 0,
-        viewMode: ViewMode.full,
-        messageTransmitter: undefined,
         result: defaultResult,
         settlementResult: defaultSettlementResult,
         enabledQuickBet: true,
@@ -130,5 +116,6 @@ export const initialGameStateContextModel = ({ defaultResult, defaultSettlementR
             minBet: 1,
             maxBet: 200_000,
         },
+        messageTransmitter: null,
     };
 };

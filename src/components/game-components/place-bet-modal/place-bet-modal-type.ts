@@ -9,7 +9,7 @@ type BetChoiceInfo = {
 
 export type PlaceBetModalProps = {
     isOpen: boolean;
-    onPlaceBet: (betChoice: string, amount: number, betPosition: Position) => void;
+    onPlaceBet: (betChoice: string, amount: number) => void;
     betChoiceInfo: BetChoiceInfo;
     onCloseModal: Function;
     betContainerPosition?: any;

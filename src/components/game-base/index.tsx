@@ -2,7 +2,6 @@ import React from "react";
 import Auth from "sc-user-service-client/dist/auth";
 import { Socket } from "socket.io-client";
 import { v4 as uuidv4 } from "uuid";
-
 import { confirmBetChoice } from "../../_shared/constants";
 import { InitSocketIO } from "../../_shared/helpers";
 import MessageTransmitter from "../../_shared/helpers/message-transmitter";
@@ -22,7 +21,7 @@ import { Notice } from "../game-components/notice";
 import ConfirmDialog from "../game-components/submit-dialog";
 import BetSettings from "../page-components/bet-settings";
 import { GameMessageHandler, messageEventType } from "./game-message-handler";
-import { Boundary, GameBaseProps, PopupType, Position, RoundState, ViewMode } from "./type";
+import { GameBaseProps, PopupType, RoundState } from "./type";
 import { IRoundStateHandler } from "../round-base/round-state-handler";
 import { IGameStateHandler } from "./game-state-handler";
 import { GameHeader } from "../game-components/game-header";
@@ -34,8 +33,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     protected showWinningAnimationTimeout: NodeJS.Timeout;
     protected isProcessingBet = false;
     private retryInterval: NodeJS.Timeout;
-    protected betPosition: Position;
-    protected betOptionBoundary: Boundary;
+
     protected socket: Socket;
     protected interval: NodeJS.Timeout;
     protected roundTimeCounter: number;
@@ -91,6 +89,14 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.messageTransmitter?.clearAllListener();
         this.messageTransmitter = MessageTransmitter();
         this.gameMessageHandler = new GameMessageHandler(this.props.dispatch, this.messageTransmitter);
+
+        this.props.dispatch({
+            type: GameEventActionType.SET_MESSAGE_TRANSMITTER,
+            payload: {
+                messageTransmitter: this.messageTransmitter,
+            },
+        });
+
         this.isConnectFailed = false;
         this.isProcessingBet = false;
         this.clearDisconnectTimeout();
@@ -160,7 +166,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.messageTransmitter.register(messageEventType.END_BET, this.handleEndBet.bind(this));
         this.messageTransmitter.register(messageEventType.API_ERROR, this.handleApiError.bind(this));
         this.messageTransmitter.register(messageEventType.USER_STAKE_LEVEL, this.handleUserStakeLevel.bind(this));
-        this.messageTransmitter.register(messageEventType.DRAW_ID, this.handleDrawId.bind(this));
         this.messageTransmitter.register(messageEventType.ROUND_HISTORY, this.handleRoundHistory.bind(this));
         this.messageTransmitter.register(messageEventType.NOT_PERMITTED_TO_PLAY, this.handleRestrictPermission.bind(this));
     }
@@ -322,7 +327,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         if (endBet === -1) {
             !apiError && this.handleBetFailed({ notice, kickedOut });
         } else {
-            this.playAcceptedBetAnimation(endBet, this.betPosition);
+            this.playAcceptedBetAnimation(endBet);
             playPlaceBetSound();
             this.props.dispatch({
                 type: GameEventActionType.OWN_BETS,
@@ -332,13 +337,11 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         }
     };
 
-    playAcceptedBetAnimation(amount: number, betPosition?: Position) {
+    playAcceptedBetAnimation(amount: number) {
         const { acceptedBetQueue } = this.props.gameStateContextModel;
         const key = uuidv4();
         acceptedBetQueue[key] = {
-            amount,
-            betPosition: betPosition ? { ...betPosition } : null,
-            betOptionBoundary: this.betOptionBoundary,
+            amount
         };
 
         this.props.dispatch({
@@ -399,16 +402,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             });
         }
     }
-
-    handleDrawId = ({ drawId }) => {
-        const numberOfTurnsPerRound = 4;
-        const turnCounter = drawId % numberOfTurnsPerRound === 0 ? numberOfTurnsPerRound : drawId % numberOfTurnsPerRound;
-
-        this.props.dispatch({
-            type: GameEventActionType.DRAW_ID,
-            payload: { drawId, turnCounter },
-        });
-    };
 
     handleRemainingTime({ remainingTime }) {
         const { durations, gameStateContextModel, dispatch } = this.props;
@@ -558,7 +551,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         });
     }
 
-    placeBet(betChoice: string, amount: number, betPosition?: Position, betOptionBoundary?: Boundary) {
+    placeBet(betChoice: string, amount: number) {
         const gameStateContext = this.props.gameStateContextModel;
         const notConfirmOwnBets = gameStateContext.notConfirmOwnBets;
 
@@ -611,8 +604,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             });
         } else {
             if (amount > 0) {
-                this.betPosition = betPosition;
-                this.betOptionBoundary = betOptionBoundary;
                 this.isProcessingBet = true;
                 this.setRetryInterval();
                 this.sendBetMessage(betChoice, amount);

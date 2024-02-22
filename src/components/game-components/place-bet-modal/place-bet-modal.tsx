@@ -84,11 +84,7 @@ const PlaceBetModal: React.FC<PlaceBetModalProps> = (props) => {
         event.preventDefault();
         closeModal();
 
-        const betOptionsRect = props.betOptionElement.getBoundingClientRect();
-        props.onPlaceBet(props.betChoiceInfo.betChoice, betValue, {
-            x: betOptionsRect.left + betOptionsRect.width / 2,
-            y: betOptionsRect.top + 30,
-        });
+        props.onPlaceBet(props.betChoiceInfo.betChoice, betValue);
     };
 
     const bettypeName = `bettype-${betChoiceInfo.betChoice}`;
@@ -111,9 +107,8 @@ const PlaceBetModal: React.FC<PlaceBetModalProps> = (props) => {
                 </div>
             )}
             <div
-                className={`${Styles["popup-content"]} ${subTitle ? Styles["has-subtitle"] : ""} ${
-                    !title ? Styles["has-empty-title"] : ""
-                }`}
+                className={`${Styles["popup-content"]} ${subTitle ? Styles["has-subtitle"] : ""} ${!title ? Styles["has-empty-title"] : ""
+                    }`}
             >
                 <div className={Styles["place-bet-container"]}>
                     <div className={`w-100 ${Styles["general-info"]}`}>

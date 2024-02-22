@@ -8,13 +8,13 @@ import Styles from "./confirm-bet.module.scss";
 
 export type Props = {};
 
-const ConfirmBet: React.FC<Props> = ({}: Props) => {
+const ConfirmBet: React.FC<Props> = ({ }: Props) => {
     const dispatch = useGameStatesDispatch();
     const gameActionContext = useGameActionContext();
 
     const { t } = useTranslate(["SabaNumber"]);
     useEffect(() => {
-        return () => {};
+        return () => { };
     }, []);
 
     const onCancel = () => {
