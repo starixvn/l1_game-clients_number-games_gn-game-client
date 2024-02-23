@@ -221,7 +221,7 @@ export const BacBallBettingBlock: FC = () => {
                     }}
                 >
                     {isShowWinningHighlightTie && (
-                        <Stage width={210} height={210} options={{ backgroundAlpha: 0 }}>
+                        <Stage width={210} height={210} options={{ backgroundAlpha: 0 }} className="absolute">
                             <Container position={[105, 77]}>
                                 <AnimatedSprite
                                     anchor={0.5}
