@@ -4,17 +4,20 @@ import { FC, useEffect, useState } from "react";
 import { loadPixiAnimations } from "../../_shared/helpers/pixi-resource-loader";
 import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
 import { IBallColor, RoundState } from "../../components/game-base/type";
-import Ball from "../../components/game-components/ball";
 import Cage, { CageColor, CagePosition } from "../../components/game-components/cage";
+import { BacBallResultSlotContainer } from "./bac-ball-result-slot-container";
 import Style from "./bac-ball.module.scss";
+
+export enum BacBallBetOptions {
+    PLAYER = "player",
+    BANKER = "banker",
+}
 
 export const BacBallResultBlock: FC = () => {
     const [cageBallFrames, setCageBallFrames] = useState<IBallColor>({ blue: [], red: [], blue2: [], red2: [] });
     const [cageBallsLoopFrames, setCageBallsLoopFrames] = useState<Texture<Resource>[]>([]);
-    const [existedPlayerBalls, setExistedPlayerBalls] = useState<Array<number>>([0, 0, 0, 0]);
-    const [existedBankerBalls, setExistedBankerBalls] = useState([0, 0, 0, 0]);
     const gameStateContext = useGameStateContext();
-    const { result, roundData, turnCounter, drawId } = gameStateContext;
+    const { result } = gameStateContext;
 
     useEffect(() => {
         const handleLoadResource = async () => {
@@ -49,83 +52,17 @@ export const BacBallResultBlock: FC = () => {
         cageBallsLoopFrames.length,
     ]);
 
-    useEffect(() => {
-        if (!roundData?.playerBalls?.length && !roundData?.bankerBalls?.length) {
-            return;
-        }
-
-        const updatedPlayerList = [...existedPlayerBalls];
-        const updatedBankerList = [...existedBankerBalls];
-        const { playerBalls, bankerBalls } = roundData;
-
-        for (let i = 0; i < existedPlayerBalls.length; i++) {
-            if (playerBalls?.length > 0 && playerBalls[i]) {
-                updatedPlayerList[i] = playerBalls[i];
-            }
-        }
-        setExistedPlayerBalls(updatedPlayerList);
-
-        for (let i = 0; i < existedBankerBalls.length; i++) {
-            if (playerBalls?.length > 0 && playerBalls[i]) {
-                updatedBankerList[i] = bankerBalls[i];
-            }
-        }
-        setExistedBankerBalls(updatedBankerList);
-    }, [roundData]);
-
-    useEffect(() => {
-        if (!result || drawId !== result.drawId) {
-            return;
-        }
-
-        const updatedPlayerList = [...existedPlayerBalls];
-        const updatedBankerList = [...existedBankerBalls];
-
-        if (result.player) {
-            updatedPlayerList[turnCounter - 1] = result.player;
-            setExistedPlayerBalls(updatedPlayerList);
-        }
-
-        if (result.banker) {
-            updatedBankerList[turnCounter - 1] = result.banker;
-            setExistedBankerBalls(updatedBankerList);
-        }
-    }, [result]);
-
-    useEffect(() => {
-        if (turnCounter === 1) {
-            setExistedPlayerBalls([0, 0, 0, 0]);
-            setExistedBankerBalls([0, 0, 0, 0]);
-        }
-    }, [turnCounter]);
-
-    if (cageBallsLoopFrames?.length === 0 || cageBallFrames?.blue?.length === 0 || cageBallFrames?.red?.length === 0) {
+    if (
+        cageBallsLoopFrames?.length === 0 ||
+        cageBallFrames?.blue?.length === 0 ||
+        cageBallFrames?.red?.length === 0 ||
+        cageBallFrames?.blue2?.length === 0 ||
+        cageBallFrames?.red2?.length === 0
+    ) {
         return <></>;
     }
 
     const bankerDelayTime = 1000;
-
-    const renderBalls = (updatedResultList: Array<number>, delayTime = 0) => {
-        return (
-            <div className="flex gap-2 justify-center flex-col">
-                {updatedResultList.map((result, index) => {
-                    const props: any = {};
-
-                    if (result > 0 && turnCounter !== index + 1) {
-                        props.number = result;
-                        props.delayTime = 0;
-                        props.joinGame = gameStateContext.signedIn;
-                    } else if (result > 0) {
-                        props.number = result;
-                        props.isLoading = true;
-                        props.delayTime = delayTime;
-                    }
-
-                    return <Ball key={index} {...props} />;
-                })}
-            </div>
-        );
-    };
 
     return (
         <div className={Style["result-container"]}>
@@ -141,10 +78,10 @@ export const BacBallResultBlock: FC = () => {
                         isShowResult={gameStateContext.roundState === RoundState.DisplayResult}
                     />
                 </div>
-                <div className={Style["ball-container"]}>{renderBalls(existedPlayerBalls)}</div>
+                <BacBallResultSlotContainer delayTime={0} betChoice={BacBallBetOptions.PLAYER} />
             </div>
             <div className={Style["player-container"]}>
-                <div className={Style["ball-container"]}>{renderBalls(existedBankerBalls, bankerDelayTime)}</div>
+                <BacBallResultSlotContainer delayTime={bankerDelayTime} betChoice={BacBallBetOptions.BANKER} />
                 <div className="lottery">
                     <Cage
                         cageBallsLoopFrames={cageBallsLoopFrames}

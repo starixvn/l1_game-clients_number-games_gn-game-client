@@ -29,7 +29,7 @@ export type CageProps = {
     position: string;
 };
 
-const Cage: React.FunctionComponent<CageProps> = (cageProps) => {
+const Cage: React.FC<CageProps> = (cageProps) => {
     const { position, isSmall, cageBallsLoopFrames, cageBallFrames, result, isShowResult, delayShowResultTime, color } = cageProps;
     const animName = result <= 9 ? `number0${result}` : `number${result}`;
     const ballColor = `${useBallColor({ number: result })}${position === CagePosition.LEFT ? "" : "2"}`;
