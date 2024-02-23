@@ -16,10 +16,22 @@ export type ScoreboardItemProps<Round> = {
 };
 
 export class Scoreboard<Round> extends Component<ScoreboardProps<Round>> {
-    private renderElement(round: Round, props: Attributes | HTMLAttributes<unknown>) {
+    private renderElement(round: Round, props: Attributes | HTMLAttributes<unknown>): ReactNode {
         const { element } = this.props;
 
         return <div {...props}>{createElement(element, { round, scoreboard: this })}</div>;
+    }
+
+    private getExtendClassName(column: number, row: number): string {
+        return column === 1 && row === 1
+            ? styles["top-left"]
+            : column === 1 && row === this.props.row
+            ? styles["bottom-left"]
+            : column === this.props.column && row === 1
+            ? styles["top-right"]
+            : column === this.props.column && row === this.props.row
+            ? styles["bottom-right"]
+            : "";
     }
 
     render(): ReactNode {
@@ -27,7 +39,7 @@ export class Scoreboard<Round> extends Component<ScoreboardProps<Round>> {
         const arranged = this.props.arrange(rounds, this);
 
         return (
-            <div className={className}>
+            <div className={className} data-testid="scoreboard">
                 <div className={styles.scoreboard}>
                     {arranged.map((round: Round, index: number) => {
                         const column = (index / this.props.row + 1) >> 0;
@@ -36,16 +48,7 @@ export class Scoreboard<Round> extends Component<ScoreboardProps<Round>> {
                             gridColumnStart: column,
                             gridRowStart: row,
                         };
-                        const extendClassName =
-                            column === 1 && row === 1
-                                ? styles["top-left"]
-                                : column === 1 && row === this.props.row
-                                ? styles["bottom-left"]
-                                : column === this.props.column && row === 1
-                                ? styles["top-right"]
-                                : column === this.props.column && row === this.props.row
-                                ? styles["bottom-right"]
-                                : "";
+                        const extendClassName = this.getExtendClassName(column, row);
 
                         return this.renderElement(round, {
                             className: `${styles["scoreboard-item"]} ${extendClassName}`,

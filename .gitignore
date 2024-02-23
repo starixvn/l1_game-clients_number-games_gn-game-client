@@ -29,7 +29,6 @@ yarn-error.log*
 .vercel
 
 *.orig
-*.snap
 
 # stryker temp files
 stryker-tmp
