@@ -154,6 +154,8 @@ export interface Round<R, S> {
 export interface IBallColor {
     blue: Texture<Resource>[];
     red: Texture<Resource>[];
+    blue2: Texture<Resource>[];
+    red2: Texture<Resource>[];
 }
 
 export enum BallColor {

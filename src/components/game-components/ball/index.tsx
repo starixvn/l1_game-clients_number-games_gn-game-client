@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { useBallColor } from "../../../_shared/react-hooks/use-ball-color";
+import { useBallColor } from "../../../_shared/helpers/ball-color-helper";
 import Styles from "./ball.module.scss";
 
 const Ball = (props: any) => {
@@ -22,11 +22,9 @@ const Ball = (props: any) => {
     }, [delayTime, isDelayShowResult]);
 
     return (
-        <div className={`${Styles.ball} ${Styles["ball-border-gray"]} ${delayTime > 0 ? Styles["delay"] : ""}`}>
+        <div className={`${Styles.ball} ${delayTime > 0 ? Styles["delay"] : ""}`}>
             {props.number != null && isDelayShowResult && (
-                <div className={ballStyleName}>
-                    <span className={Styles["ball-number"]}>{number > 0 ? number : ""}</span>
-                </div>
+                <div className={ballStyleName}>{number > 0 && <span className={Styles["ball-number"]}>{number}</span>}</div>
             )}
 
             {isLoading && (

@@ -8,11 +8,13 @@ $zoom-in-time: 0.5s;
 $delay-zoom-in-time: 2.8s;
 
 .ball {
-    width: 3.4rem;
-    height: 3.4rem;
     position: relative;
     z-index: 1;
+    width: 3.4rem;
+    height: 3.4rem;
     border-radius: 50%;
+    border: 1px solid #9c9c9c;
+    background-color: #000;
 
     &.delay {
         $delay-all-anim: 1s;
@@ -30,15 +32,6 @@ $delay-zoom-in-time: 2.8s;
             animation: outer ($outer-time) ($delay-outer-time + $delay-all-anim) linear forwards;
         }
     }
-}
-
-.ball-border-gray {
-    border: 1px solid #9c9c9c;
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
-.ball-border-black {
-    border: 1px solid #000;
 }
 
 .ball-img {
@@ -70,13 +63,16 @@ $delay-zoom-in-time: 2.8s;
 }
 
 .ball-bg {
-    width: 3.2rem;
-    height: 3.2rem;
+    width: 3.4rem;
+    height: 3.4rem;
     position: relative;
+    top: -0.1rem;
+    left: -0.1rem;
     z-index: 2;
-    transform-origin: center center;
     transform: scale(0);
     text-align: center;
+    border-radius: 50%;
+    transform-origin: center center;
     animation: zoom-in $zoom-in-time $delay-zoom-in-time linear forwards;
 
     &.display-right-now {
@@ -97,17 +93,20 @@ $delay-zoom-in-time: 2.8s;
 }
 
 .loading {
-    width: 100%;
-    height: 100%;
+    position: absolute;
+    top: 0.1rem;
+    left: 0.1rem;
+    width: 3rem;
+    height: 3rem;
 }
 
 .circle-ring {
     position: absolute;
-    width: 100%;
-    height: 100%;
+    width: 3rem;
+    height: 3rem;
     inset: 0;
     transform: rotate(-90deg);
-    background: #302b34;
+    background: #000;
     border-radius: 50%;
 }
 
@@ -164,7 +163,7 @@ $delay-zoom-in-time: 2.8s;
 }
 
 @keyframes zoom-in {
-    0% {
+    from {
         transform: scale(1.2) translateZ(0) perspective(1px) rotate(0.05deg);
     }
 

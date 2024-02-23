@@ -2,6 +2,7 @@ import { AnimatedSprite, Container, Stage } from "@pixi/react";
 import { Resource, Texture } from "pixi.js";
 import React, { useEffect, useMemo, useState } from "react";
 
+import { useBallColor } from "../../../_shared/helpers/ball-color-helper";
 import { loadPixiAnimations } from "../../../_shared/helpers/pixi-resource-loader";
 import { IBallColor } from "../../game-base/type";
 import Styles from "./cage.module.scss";
@@ -19,24 +20,23 @@ export enum CagePosition {
 
 export type CageProps = {
     color: string;
-    ballColor: string;
     isSmall: boolean;
     cageBallsLoopFrames: Texture<Resource>[];
     cageBallFrames: IBallColor;
     result: number;
     isShowResult: boolean;
     delayShowResultTime?: number;
+    position: string;
 };
 
 const Cage: React.FunctionComponent<CageProps> = (cageProps) => {
-    const { color, ballColor, isSmall, cageBallsLoopFrames, cageBallFrames, result, isShowResult, delayShowResultTime } = cageProps;
-    const lidPosition = color === CageColor.BLUE ? "left" : "right";
+    const { position, isSmall, cageBallsLoopFrames, cageBallFrames, result, isShowResult, delayShowResultTime, color } = cageProps;
     const animName = result <= 9 ? `number0${result}` : `number${result}`;
+    const ballColor = `${useBallColor({ number: result })}${position === CagePosition.LEFT ? "" : "2"}`;
+    const currentTime = Date.now();
 
     const [isDelayShowResult, setIsDelayShowResult] = useState<boolean>(false);
     const [numberBallFrames, setNumberBallFrames] = useState<Texture<Resource>[]>([]);
-
-    const currentTime = Date.now();
 
     useEffect(() => {
         if (!result) {
@@ -117,7 +117,7 @@ const Cage: React.FunctionComponent<CageProps> = (cageProps) => {
 
     return useMemo(() => {
         return (
-            <div className={`${Styles["cage-area"]} ${isSmall ? Styles["small"] : ""} ${Styles[lidPosition]}`}>
+            <div className={`${Styles["cage-area"]} ${isSmall ? Styles["small"] : ""} ${Styles[position]}`}>
                 <div id="cage-bg" className={Styles["cage-bg"]}></div>
                 <div id="cage-balls" className={Styles["cage-balls"]}>
                     {cageBallsLoopFrames?.length > 0 && (
@@ -139,10 +139,8 @@ const Cage: React.FunctionComponent<CageProps> = (cageProps) => {
                 <div id="cage-cover" className={Styles["cage-cover"]}></div>
                 <div id="cage-border" className={`${Styles["cage-border"]} ${Styles[color]}`}>
                     {!isDelayShowResult && <div id="cage-lid" className={Styles["cage-lid"]} />}
-
                     {showResultBall()}
                 </div>
-
                 {showResultNumber()}
             </div>
         );

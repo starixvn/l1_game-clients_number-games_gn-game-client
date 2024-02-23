@@ -3,29 +3,33 @@ import { FC, useEffect, useState } from "react";
 
 import { loadPixiAnimations } from "../../_shared/helpers/pixi-resource-loader";
 import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
-import { useBallColor } from "../../_shared/react-hooks/use-ball-color";
 import { IBallColor, RoundState } from "../../components/game-base/type";
 import Ball from "../../components/game-components/ball";
-import Cage, { CageColor } from "../../components/game-components/cage";
+import Cage, { CageColor, CagePosition } from "../../components/game-components/cage";
 import Style from "./bac-ball.module.scss";
 
 export const BacBallResultBlock: FC = () => {
-    const [cageBallFrames, setCageBallFrames] = useState<IBallColor>({ blue: [], red: [] });
+    const [cageBallFrames, setCageBallFrames] = useState<IBallColor>({ blue: [], red: [], blue2: [], red2: [] });
     const [cageBallsLoopFrames, setCageBallsLoopFrames] = useState<Texture<Resource>[]>([]);
     const [existedPlayerBalls, setExistedPlayerBalls] = useState<Array<number>>([0, 0, 0, 0]);
     const [existedBankerBalls, setExistedBankerBalls] = useState([0, 0, 0, 0]);
     const gameStateContext = useGameStateContext();
     const { result, roundData, turnCounter, drawId } = gameStateContext;
-    let playerBallColor = useBallColor({ number: result?.player });
-    let bankerBallColor = useBallColor({ number: result?.banker });
 
     useEffect(() => {
         const handleLoadResource = async () => {
-            if (cageBallFrames.blue.length === 0 && cageBallFrames.red.length === 0) {
+            if (
+                cageBallFrames.blue.length === 0 &&
+                cageBallFrames.red.length === 0 &&
+                cageBallFrames.blue2.length === 0 &&
+                cageBallFrames.red2.length === 0
+            ) {
                 await loadPixiAnimations("/static/images/cage/ball.json", (sprite) => {
                     const blueFrames = sprite.animations["blue"];
                     const redFrames = sprite.animations["red"];
-                    setCageBallFrames({ blue: blueFrames, red: redFrames });
+                    const blue2Frames = sprite.animations["blue2"];
+                    const red2Frames = sprite.animations["red2"];
+                    setCageBallFrames({ blue: blueFrames, red: redFrames, blue2: blue2Frames, red2: red2Frames });
                 });
             }
 
@@ -37,7 +41,13 @@ export const BacBallResultBlock: FC = () => {
         };
 
         handleLoadResource();
-    }, [cageBallFrames.blue.length, cageBallFrames.red.length, cageBallsLoopFrames.length]);
+    }, [
+        cageBallFrames.blue.length,
+        cageBallFrames.red.length,
+        cageBallFrames.blue2.length,
+        cageBallFrames.red2.length,
+        cageBallsLoopFrames.length,
+    ]);
 
     useEffect(() => {
         if (!roundData?.playerBalls?.length && !roundData?.bankerBalls?.length) {
@@ -125,7 +135,7 @@ export const BacBallResultBlock: FC = () => {
                         cageBallsLoopFrames={cageBallsLoopFrames}
                         cageBallFrames={cageBallFrames}
                         color={CageColor.BLUE}
-                        ballColor={playerBallColor}
+                        position={CagePosition.LEFT}
                         isSmall={true}
                         result={result?.player}
                         isShowResult={gameStateContext.roundState === RoundState.DisplayResult}
@@ -140,7 +150,7 @@ export const BacBallResultBlock: FC = () => {
                         cageBallsLoopFrames={cageBallsLoopFrames}
                         cageBallFrames={cageBallFrames}
                         color={CageColor.RED}
-                        ballColor={bankerBallColor}
+                        position={CagePosition.RIGHT}
                         isSmall={true}
                         result={result?.banker}
                         isShowResult={gameStateContext.roundState === RoundState.DisplayResult}
