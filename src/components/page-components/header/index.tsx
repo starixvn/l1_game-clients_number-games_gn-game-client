@@ -1,6 +1,5 @@
 import React from "react";
 import { User } from "sc-user-service-client/dist/auth";
-import { Settings } from "../../game-components/settings";
 import { UserInfo } from "../user-info";
 import Styles from "./header.module.scss";
 
@@ -38,23 +37,6 @@ const Header: React.FC<Props> = (props) => {
                     </div>
 
                     <div className={Styles["header-right"]}>
-                        {
-                            <Settings
-                                enabledSound={props.enabledSound}
-                                enabledNotification={props.enabledNotification}
-                                onToggleSound={props.onToggleSound}
-                                onToggleNotification={props.onToggleNotification}
-                                toggleHistoryModal={props.toggleHistoryModal}
-                                toggleGuideModal={props.toggleGuideModal}
-                                toggleAnnouncementModal={props.toggleAnnouncementModal}
-                                favoriteGames={props.favoriteGames}
-                                offerGames={props.offerGames}
-                                updateFavoriteGames={props.updateFavoriteGames}
-                                enabledQuickBet={props.enabledQuickBet}
-                                updateEnabledQuickBet={props.updateEnabledQuickBet}
-                                isShowToolbarGuide={props.isShowToolbarGuide}
-                            />
-                        }
                         <UserInfo user={props.user} />
                     </div>
                 </div>

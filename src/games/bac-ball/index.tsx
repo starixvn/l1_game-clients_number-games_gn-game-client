@@ -10,7 +10,7 @@ import { GameMessageHandler } from "../../components/game-base/game-message-hand
 import { GameStateHandler } from "../../components/game-base/game-state-handler";
 import { GameBaseProps } from "../../components/game-base/type";
 import Scoreboard from "../../components/game-components/round-history/scoreboard";
-import { StatisticFollowPercent } from "../../components/game-components/statistic";
+import { PercentageStatistic } from "../../components/game-components/statistic";
 import { TurnStateHandler } from "../../components/turn-base/turn-state-handler";
 import { BacBallBettingBlock } from "./bac-ball-betting-block";
 import { BacBallResultBlock } from "./bac-ball-result-block";
@@ -53,7 +53,7 @@ class BacBall extends GameBase<GameBaseProps> {
     renderStatistic() {
         const { roundHistory } = this.props.gameStateContextModel;
 
-        return <StatisticFollowPercent roundHistory={roundHistory} statisticRuleEntries={StatisticRuleEntries}></StatisticFollowPercent>;
+        return <PercentageStatistic roundHistory={roundHistory} statisticRuleEntries={StatisticRuleEntries}></PercentageStatistic>;
     }
 
     renderScoreboards() {

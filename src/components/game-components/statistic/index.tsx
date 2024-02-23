@@ -4,7 +4,7 @@ import React, { useMemo } from "react";
 import { useGameContext } from "../../../_shared/react-contexts";
 import { Round } from "../../game-base/type";
 import Styles from "./statistic.module.scss";
-import { Props, PropsFollowPercent } from "./types";
+import { Props, PercentageStatisticProps } from "./types";
 
 export const countSettlementResult = (roundHistory: Round<any, any>[]) => {
     return roundHistory.reduce((result, { settlementResult }) => {
@@ -41,7 +41,7 @@ const StatisticItem: React.FC<Props> = (props) => {
     );
 };
 
-export const StatisticFollowPercent: React.FC<PropsFollowPercent> = (props) => {
+export const PercentageStatistic: React.FC<PercentageStatisticProps> = (props) => {
     const { statisticRuleEntries, roundHistory, activeScoreboardTab } = props;
     const { gameName } = useGameContext();
     const { t } = useTranslation(gameName.toLowerCase());

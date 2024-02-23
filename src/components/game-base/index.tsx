@@ -23,6 +23,7 @@ import { IRoundStateHandler } from "../round-base/round-state-handler";
 import { GameMessageHandler, messageEventType } from "./game-message-handler";
 import { IGameStateHandler } from "./game-state-handler";
 import { GameBaseProps, PopupType, RoundState } from "./type";
+import { Settings } from "../game-components/settings";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
     private readonly animationTime = 3000;
@@ -843,7 +844,23 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     renderHeaderBlock() {
-        return <GameHeader />;
+        return (
+            <>
+                <GameHeader />
+                <Settings
+                    enabledSound={false}
+                    onToggleSound={() => {
+                        console.log("onToggleSound");
+                    }}
+                    toggleHistoryModal={() => {
+                        console.log("toggleHistoryModal");
+                    }}
+                    toggleGuideModal={() => {
+                        console.log("toggleGuideModal");
+                    }}
+                />
+            </>
+        );
     }
 
     renderMenuButtons() {

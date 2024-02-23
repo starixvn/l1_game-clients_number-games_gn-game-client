@@ -5,7 +5,7 @@ export type Props = {
     value: string | number;
 };
 
-export type PropsFollowPercent = {
+export type PercentageStatisticProps = {
     roundHistory: Round<any, any>[];
     statisticRuleEntries: [string, (countResult: object, total: number) => number][];
     activeScoreboardTab?: number;
