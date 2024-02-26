@@ -26,6 +26,11 @@ function Home() {
     const { token, lang, gameId, ref } = router.query;
     const { i18n } = useTranslation();
 
+    const isDirectMode = () => {
+        const validRefs = ["m_direct", "d_direct"];
+        return validRefs.includes(ref?.toString());
+    };
+
     usePWAWoker();
     useEffect(() => {
         const signIn = async () => {
@@ -75,7 +80,7 @@ function Home() {
         return <SplashScreen locale={language}></SplashScreen>;
     }
 
-    return <Dashboard session={session} queryGame={+gameId} setIsUm={setIsUm} directMode={ref === "m_direct" || ref === "d_direct"} />;
+    return <Dashboard session={session} queryGame={+gameId} setIsUm={setIsUm} directMode={isDirectMode()} />;
 }
 
 export const getStaticProps = async ({ locale }) => {

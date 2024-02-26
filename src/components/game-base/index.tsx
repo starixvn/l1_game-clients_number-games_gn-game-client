@@ -552,7 +552,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
     async placeBet(betChoice: string, amount: number) {
         const gameStateContext = this.props.gameStateContextModel;
-        const systemContext = this.props.systemContext;
+        const systemContext = this.props.systemContextModel;
 
         if (gameStateContext.enabledQuickBet) {
             const { displayPopup } = this.props.gameStateContextModel;

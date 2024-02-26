@@ -67,7 +67,7 @@ export const ChipSlider: React.FC<{}> = () => {
     const updateArrowsByChipValue = (chipValue: number) => {
         const chipIndex = chipValues.indexOf(chipValue);
 
-        chipIndex === 0 ? setEnabledPrevBtn(false) : setEnabledPrevBtn(true);
+        chipIndex <= 0 ? setEnabledPrevBtn(false) : setEnabledPrevBtn(true);
         chipIndex === chipValues.length - 1 ? setEnabledNextBtn(false) : setEnabledNextBtn(true);
     };
 
@@ -136,26 +136,28 @@ export const ChipSlider: React.FC<{}> = () => {
             }
         },
     };
-    return chipValues?.length > 0 ? (
+    return (
         <React.Fragment>
             <span
                 className={`${Styles["icon-prev"]} ${!enabledPrevBtn && Styles["disabled"]} ${enabledQuickBet ? Styles["quick-bet"] : ""}`}
                 onClick={onClickPrev}
             ></span>
-            <Slider
-                ref={(c) => {
-                    sliderRef = c;
-                }}
-                {...SliderSetting}
-            >
-                {chipValues.map((value) => (
-                    <Chip key={+value} value={+value} onClickChip={onClickChip} />
-                ))}
-            </Slider>
+            {chipValues?.length > 0 && (
+                <Slider
+                    ref={(c) => {
+                        sliderRef = c;
+                    }}
+                    {...SliderSetting}
+                >
+                    {chipValues.map((value) => (
+                        <Chip key={+value} value={+value} onClickChip={onClickChip} />
+                    ))}
+                </Slider>
+            )}
             <span
                 className={`${Styles["icon-next"]} ${!enabledNextBtn && Styles["disabled"]} ${enabledQuickBet ? Styles["quick-bet"] : ""}`}
                 onClick={onClickNext}
             ></span>
         </React.Fragment>
-    ) : null;
+    );
 };

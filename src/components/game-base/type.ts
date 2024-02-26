@@ -51,7 +51,7 @@ export type GamePropsContext = {
     isJoinedGame?: boolean;
     dispatch?: (action: GameEventAction) => {};
     gameStateContextModel?: GameStateContextModel<{}, {}>;
-    systemContext?: SystemContextModel;
+    systemContextModel?: SystemContextModel;
     translate?: any;
     hedgeBetGroups?: [];
 };
