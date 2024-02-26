@@ -16,8 +16,7 @@ export enum BacBallBetOptions {
 export const BacBallResultBlock: FC = () => {
     const [cageBallFrames, setCageBallFrames] = useState<IBallColor>({ blue: [], red: [], blue2: [], red2: [] });
     const [cageBallsLoopFrames, setCageBallsLoopFrames] = useState<Texture<Resource>[]>([]);
-    const gameStateContext = useGameStateContext();
-    const { result } = gameStateContext;
+    const { result, roundState } = useGameStateContext();
 
     useEffect(() => {
         const handleLoadResource = async () => {
@@ -75,7 +74,7 @@ export const BacBallResultBlock: FC = () => {
                         position={CagePosition.LEFT}
                         isSmall={true}
                         result={result?.player}
-                        isShowResult={gameStateContext.roundState === RoundState.DisplayResult}
+                        isShowResult={roundState === RoundState.DisplayResult}
                     />
                 </div>
                 <BacBallResultSlotContainer delayTime={0} betChoice={BacBallBetOptions.PLAYER} />
@@ -90,7 +89,7 @@ export const BacBallResultBlock: FC = () => {
                         position={CagePosition.RIGHT}
                         isSmall={true}
                         result={result?.banker}
-                        isShowResult={gameStateContext.roundState === RoundState.DisplayResult}
+                        isShowResult={roundState === RoundState.DisplayResult}
                         delayShowResultTime={bankerDelayTime}
                     />
                 </div>

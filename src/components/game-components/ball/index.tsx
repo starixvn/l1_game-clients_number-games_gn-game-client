@@ -24,7 +24,13 @@ const Ball = (props: any) => {
     return (
         <div className={`${Styles.ball} ${delayTime > 0 ? Styles["delay"] : ""}`}>
             {props.number != null && isDelayShowResult && (
-                <div className={ballStyleName}>{number > 0 && <span className={Styles["ball-number"]}>{number}</span>}</div>
+                <div className={ballStyleName}>
+                    {number > 0 && (
+                        <span id="ball-number" className={Styles["ball-number"]}>
+                            {number}
+                        </span>
+                    )}
+                </div>
             )}
 
             {isLoading && (

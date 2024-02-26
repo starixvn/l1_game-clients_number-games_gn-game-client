@@ -1,12 +1,14 @@
 import { AnimatedSprite, Container, Stage } from "@pixi/react";
 import { Resource, Texture } from "pixi.js";
 import { FC, useCallback, useEffect, useMemo, useState } from "react";
+
 import { numberWithCommas } from "../../_shared/helpers";
 import { loadPixiAnimations } from "../../_shared/helpers/pixi-resource-loader";
 import { useGameActionContext, useSystemContext } from "../../_shared/react-contexts";
 import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
 import { RoundState } from "../../components/game-base/type";
 import PercentageCircle from "../../components/game-components/percentage-circle";
+import { WinningResultEffect } from "../../components/game-components/winning-result-effect";
 import Style from "./bac-ball.module.scss";
 
 export const BacBallBettingBlock: FC = () => {
@@ -99,13 +101,19 @@ export const BacBallBettingBlock: FC = () => {
     const playerBetCount = gameStateContext?.playerBetCount ?? { player: 0, banker: 0, tie: 0 };
 
     if (winningPlayerFrames.length > 0 && winningTieFrames.length > 0) {
-        // waiting for rounduration class
+        // waiting for round duration class
         const isShowWinningHighlightPlayer =
-            gameStateContext?.roundState === RoundState.DisplayResult && gameStateContext?.settlementResult?.player;
+            gameStateContext?.roundState === RoundState.DisplayResult &&
+            gameStateContext?.settlementResult?.player &&
+            gameStateContext?.showResultInfo;
         const isShowWinningHighlightBanker =
-            gameStateContext?.roundState === RoundState.DisplayResult && gameStateContext?.settlementResult?.banker;
+            gameStateContext?.roundState === RoundState.DisplayResult &&
+            gameStateContext?.settlementResult?.banker &&
+            gameStateContext?.showResultInfo;
         const isShowWinningHighlightTie =
-            gameStateContext?.roundState === RoundState.DisplayResult && gameStateContext?.settlementResult?.tie;
+            gameStateContext?.roundState === RoundState.DisplayResult &&
+            gameStateContext?.settlementResult?.tie &&
+            gameStateContext?.showResultInfo;
 
         return (
             <div className={`${Style["betting-zone"]}`}>
@@ -261,6 +269,8 @@ export const BacBallBettingBlock: FC = () => {
                     </div>
                     <div className={`own-bet ${Style["own-bet"]}`}>{tieOwnBetsRender}</div>
                 </div>
+
+                <WinningResultEffect />
             </div>
         );
     }

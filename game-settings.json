@@ -12,7 +12,7 @@
             "placingBets": 25,
             "lockingBet": 3,
             "showResult": 7,
-            "resultAnimation": 3,
+            "resultAnimation": 4,
             "beforeStartRound": 2,
             "switchRoundAnimation": 2
         }

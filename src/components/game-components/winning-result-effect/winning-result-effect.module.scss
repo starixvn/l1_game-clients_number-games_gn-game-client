@@ -1,0 +1,45 @@
+.winning-result-container {
+    position: absolute;
+    bottom: 50%;
+    left: 0;
+    z-index: 3;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.winning-result {
+    background-color: #092339;
+    height: 3.1rem;
+    padding: 0.6rem;
+    border-radius: 3rem;
+    color: #ffc909;
+    opacity: 0;
+    font-size: 1.8rem;
+    font-weight: bold;
+    animation: fade-in 0.3 ease-in forwards, move-up 2s 1s ease-out forwards;
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(0.5rem) scale(0);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes move-up {
+    from {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    to {
+        transform: translateY(-10.5rem) scale(0.8);
+        opacity: 0;
+    }
+}
