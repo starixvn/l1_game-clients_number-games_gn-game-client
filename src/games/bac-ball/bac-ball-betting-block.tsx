@@ -115,52 +115,40 @@ export const BacBallBettingBlock: FC = () => {
             gameStateContext?.settlementResult?.tie &&
             gameStateContext?.showResultInfo;
 
+        const prevResult = gameStateContext?.roundHistory[0]?.settlementResult;
+        const isHighlightPrevResultPlayer = gameStateContext?.roundState === RoundState.InRound && prevResult?.player;
+        const isHighlightPrevResultBanker = gameStateContext?.roundState === RoundState.InRound && prevResult?.banker;
+        const isHighlightPrevResultTie = gameStateContext?.roundState === RoundState.InRound && prevResult?.tie;
+
         return (
             <div className={`${Style["betting-zone"]}`}>
-                <div className={Style["left-corner"]}>
-                    <div className={Style["winning-effect"]}>
-                        {isShowWinningHighlightPlayer && (
-                            <Stage width={210} height={210} options={{ backgroundAlpha: 0 }}>
-                                <Container position={[90, 110]}>
-                                    <AnimatedSprite
-                                        anchor={0.5}
-                                        textures={winningPlayerFrames}
-                                        autoUpdate
-                                        isPlaying={true}
-                                        initialFrame={0}
-                                        animationSpeed={0.2}
-                                        loop={true}
-                                    />
-                                </Container>
-                            </Stage>
-                        )}
-                    </div>
-                </div>
-                <div className={Style["right-corner"]}>
-                    <div className={Style["winning-effect"]}>
-                        {isShowWinningHighlightBanker && (
-                            <Stage width={210} height={210} options={{ backgroundAlpha: 0 }}>
-                                <Container position={[90, 108]}>
-                                    <AnimatedSprite
-                                        anchor={0.5}
-                                        textures={winningPlayerFrames}
-                                        autoUpdate
-                                        isPlaying={true}
-                                        initialFrame={0}
-                                        animationSpeed={0.2}
-                                        loop={true}
-                                    />
-                                </Container>
-                            </Stage>
-                        )}
-                    </div>
-                </div>
+                <div className={Style["left-corner"]}></div>
+                <div className={Style["right-corner"]}></div>
                 <div
                     className={`${Style["player"]} text-white relative`}
                     onClick={() => {
                         onClickBet("player");
                     }}
                 >
+                    {isShowWinningHighlightPlayer && (
+                        <div className={Style["winning-effect"]}>
+                            <Stage width={210} height={210} options={{ backgroundAlpha: 0 }}>
+                                <Container position={[90, 95]}>
+                                    <AnimatedSprite
+                                        anchor={0.5}
+                                        textures={winningPlayerFrames}
+                                        autoUpdate
+                                        isPlaying={true}
+                                        initialFrame={0}
+                                        animationSpeed={0.2}
+                                        loop={true}
+                                    />
+                                </Container>
+                            </Stage>
+                        </div>
+                    )}
+
+                    {isHighlightPrevResultPlayer && <div className={Style["highlight-prev-result-player"]}></div>}
                     <div className={`flex justify-between pt-5`}>
                         <div className={Style.stake}>
                             <div className={`flex items-center ${Style["total-stakes"]} gap-1`}>
@@ -195,6 +183,24 @@ export const BacBallBettingBlock: FC = () => {
                         onClickBet("banker");
                     }}
                 >
+                    {isShowWinningHighlightBanker && (
+                        <div className={Style["winning-effect"]}>
+                            <Stage width={210} height={210} options={{ backgroundAlpha: 0 }}>
+                                <Container position={[90, 95]}>
+                                    <AnimatedSprite
+                                        anchor={0.5}
+                                        textures={winningPlayerFrames}
+                                        autoUpdate
+                                        isPlaying={true}
+                                        initialFrame={0}
+                                        animationSpeed={0.2}
+                                        loop={true}
+                                    />
+                                </Container>
+                            </Stage>
+                        </div>
+                    )}
+                    {isHighlightPrevResultBanker && <div className={`${Style["highlight-prev-result-player"]} ${Style["reverse"]}`}></div>}
                     <div className={`flex pt-5 justify-between`}>
                         <div id="banker-percent" className={Style.percent}>
                             <PercentageCircle percentage={betPercentage["banker"]} color="#f9bcb9" />
@@ -244,6 +250,7 @@ export const BacBallBettingBlock: FC = () => {
                             </Container>
                         </Stage>
                     )}
+                    {isHighlightPrevResultTie && <div className={Style["highlight-prev-result-tie"]}></div>}
                     <div id="tie-percent" className={Style.percent}>
                         <PercentageCircle percentage={betPercentage["tie"]} color="#2fc856" />
                     </div>

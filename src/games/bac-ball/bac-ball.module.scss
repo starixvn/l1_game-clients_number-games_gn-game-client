@@ -27,6 +27,11 @@
     display: flex;
 }
 
+.winning-effect {
+    position: absolute;
+    top: 0;
+}
+
 .player {
     --color: #98cdff;
     background: url("/static/images/bac-number/bg-player.svg") no-repeat;
@@ -40,6 +45,10 @@
 
     .own-bet {
         left: -4rem;
+    }
+
+    .winning-effect {
+        left: 0;
     }
 }
 
@@ -55,6 +64,11 @@
     padding-left: 5.5rem;
     .own-bet {
         left: 4rem;
+    }
+
+    .winning-effect {
+        right: 0;
+        transform: scaleX(-1);
     }
 }
 
@@ -90,32 +104,18 @@
     width: 13rem;
     height: 2.5rem;
     z-index: 100;
-
-    .winning-effect {
-        position: relative;
-    }
 }
 
 .left-corner {
     @extend %corner-cover;
     left: -1.3rem;
     transform: rotate(-8deg);
-
-    .winning-effect {
-        left: 0;
-        transform: rotate(8deg);
-    }
 }
 
 .right-corner {
     @extend %corner-cover;
     right: 0;
     transform: rotate(8deg);
-
-    .winning-effect {
-        right: -1.3rem;
-        transform: scaleX(-1) rotate(8deg);
-    }
 }
 
 .lottery-player-container {
@@ -130,4 +130,26 @@
 
 .bet-name {
     margin-top: 3.2rem;
+}
+
+.highlight-prev-result-player {
+    background: url(/static//images/bac-number/winning-previous-player.svg) no-repeat center center;
+    height: 18.6rem;
+    width: 17.8rem;
+    position: absolute;
+    left: 0;
+    top: 0.1rem;
+
+    &.reverse {
+        transform: scaleX(-1);
+    }
+}
+
+.highlight-prev-result-tie {
+    background: url(/static//images/bac-number/winning-previous-tie.svg) no-repeat center center;
+    width: 9.5rem;
+    height: 17.2rem;
+    position: absolute;
+    left: 0;
+    top: 0;
 }
