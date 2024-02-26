@@ -7,15 +7,15 @@ import { useTranslation } from "next-i18next";
 import { isMobileOnly, isIOS, browserVersion } from "react-device-detect";
 import Styles from "./game-guide.module.scss";
 import { buildGameGuideUrl } from "../../../../../_shared/helpers/url-helper";
+import { useAuthContext } from "../../../../../_shared/react-contexts";
 
 type Props = {
     gameId: number;
     userStakeLevel: UserStakeLevel;
     gameConfigs: any;
-    fractionalOddsFormat: boolean;
 };
 const GameGuides: React.FC<Props> = (props) => {
-    const { gameId, userStakeLevel, gameConfigs, fractionalOddsFormat } = props;
+    const { gameId, userStakeLevel, gameConfigs } = props;
     const { i18n } = useTranslation();
     const { theme } = useTheme();
     const wrapperRef = useRef<HTMLIFrameElement>();
@@ -24,7 +24,8 @@ const GameGuides: React.FC<Props> = (props) => {
     const [heightGuide, setHeightGuide] = useState<number>(0);
     const [widthGuide, setWidthGuide] = useState<number>(0);
     const minMaxBetParams = `&minBet=${userStakeLevel?.minBet}&maxBet=${userStakeLevel?.maxBet}`;
-    const oddsFormatParams = `&fof=${fractionalOddsFormat}`;
+    const { fractionalOddsFormat } = useAuthContext();
+    const oddsFormatParams = `&fof=${fractionalOddsFormat ?? false}`;
     const guideUrl = buildGameGuideUrl();
     const srcPath = `${guideUrl}/${i18n.language}/?gId=${gameId}&t=${theme}${minMaxBetParams}&dy=0&v=${Date.now()}${oddsFormatParams}`;
     const handleResize = () => {

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useCountUp } from "react-countup";
-import { useGameContext, useSystemContext } from "../../../_shared/react-contexts";
+import { useAuthContext, useGameContext } from "../../../_shared/react-contexts";
 import { formatOdds, numberWithCommas } from "../../../_shared/helpers/number-helper";
 import { RoundState } from "../../game-base/type";
 import { Tooltip } from "../tooltip";
@@ -29,7 +29,7 @@ const BetOption: React.FunctionComponent<Props> = ({
 }) => {
     const { gameName } = useGameContext();
     const { ownBets, rate } = useGameStateContext();
-    const { fractionalOddsFormat } = useSystemContext();
+    const { fractionalOddsFormat } = useAuthContext();
     const [highlightType, updateHighlightType] = useState<HighlightType>(HighlightType.None);
     //const [totalBet, setTotalBet] = useState<number>(totalBets?.[choice] ?? 0);
     const totalBetRef = useRef<HTMLDivElement>(null);

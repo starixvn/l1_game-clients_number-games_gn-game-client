@@ -5,6 +5,7 @@ export type AuthContextModel = {
     session: SSOResponse;
     setBalance: (balance: number) => void;
     signOut: () => void;
+    fractionalOddsFormat: boolean;
 };
 
 export const AuthContext = React.createContext<AuthContextModel>(null);

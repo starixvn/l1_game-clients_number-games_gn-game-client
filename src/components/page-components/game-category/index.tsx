@@ -35,14 +35,12 @@ export const GameCategory: React.FC<{
     selectedCategory: GameCategoryType;
     selectedPage: number;
     selectCategoryPage: Function;
-    favoriteGames: number[];
-}> = ({ selectedCategory, selectCategoryPage, favoriteGames, selectedPage }) => {
+}> = ({ selectedCategory, selectCategoryPage, selectedPage }) => {
     const { t } = useTranslation();
     const wrapperRef = useRef<HTMLDivElement>(null);
 
     const categoryPage = GameCategoryKeys.reduce((result, category) => {
-        const categoryLength =
-            category !== "favorite" ? GameCategoryConfig[getAppSettings().appType][category].length : favoriteGames.length;
+        const categoryLength = category !== "favorite" ? GameCategoryConfig[getAppSettings().appType][category].length : 0;
 
         result[category] = Math.ceil(categoryLength / GamesInOnePage);
 

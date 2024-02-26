@@ -1,20 +1,16 @@
 import { UserStakeLevel } from "../components/game-base/type";
 
 export type Props = {
-    betValue: number;
     enabledQuickBet: boolean;
     enabledWinningStreakNotification: boolean;
     enabledPlaySound: boolean;
     setApiErrorMessage: Function;
     userStakeLevel: UserStakeLevel;
     updateUserStakeLevel: Function;
-    updateFavoriteGames: Function;
-    favoriteGames: number[];
     queryGame: number;
     userOfferGames: number[];
     updateQueryGames: (gameId: number, isJoinGame: boolean, isClearOpenGameId: boolean) => void;
     isJoinGame: boolean;
     openGameId: number;
     openGameName: string;
-    fractionalOddsFormat: boolean;
 };

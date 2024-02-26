@@ -22,7 +22,6 @@ import { ModalType } from "../../game-components/base-dialog/type";
 import { HistoryModal } from "../../page-components/dashboard/history";
 import Register from "../../page-components/dashboard/register";
 import Header from "../header";
-import { ToolbarGuide } from "../hide-toolbar-guide";
 import Styles from "./dashboard.module.scss";
 import { GameGuideModal } from "./game-guide-modal";
 import NameGenerator from "./register/name-generator";
@@ -32,7 +31,6 @@ class Dashboard extends React.PureComponent<Props, State> {
     private notificationSocket: Socket = null;
     private reCheckInInterval: NodeJS.Timeout;
     private isKickOut = false;
-    private readonly minutesToMillisecond = 60000;
 
     constructor(props: Props) {
         super(props);
@@ -40,7 +38,6 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.state = {
             enabledWinningStreakNotification: StorageHelper.get(localStorageKeys.winningStreakNotification) ?? true,
             enabledPlaySound: StorageHelper.get(localStorageKeys.playSound) ?? false,
-            favoriteGames: StorageHelper.get(localStorageKeys.favoriteGames) ?? [],
             userStakeLevel: { minBet: 0, maxBet: 0 },
             authorizeInfo: null,
             isShowErrorModal: false,
@@ -49,7 +46,6 @@ class Dashboard extends React.PureComponent<Props, State> {
             isShowGuide: false,
             isShowAnnouncement: false,
             enabledQuickBet: false,
-            betValue: 1,
             isBlockUI: false,
             queryGame: this.props.queryGame,
             isJoinGame: false,
@@ -74,7 +70,6 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.handleShowApiErrorMessage = this.handleShowApiErrorMessage.bind(this);
         this.toggleHistoryModal = this.toggleHistoryModal.bind(this);
         this.toggleGuideModal = this.toggleGuideModal.bind(this);
-        this.updateFavoriteGames = this.updateFavoriteGames.bind(this);
         this.setEnabledQuickBet = this.setEnabledQuickBet.bind(this);
         this.handleUpdateUserStakeLevel = this.handleUpdateUserStakeLevel.bind(this);
         this.signOut = this.signOut.bind(this);
@@ -89,13 +84,6 @@ class Dashboard extends React.PureComponent<Props, State> {
             StorageHelper.set(localStorageKeys.buildVersion, buildId);
             buildVersion && location.reload();
         }
-    }
-
-    updateFavoriteGames(favoriteGames: number[]) {
-        this.setState({
-            favoriteGames: favoriteGames,
-        });
-        StorageHelper.set(localStorageKeys.favoriteGames, favoriteGames);
     }
 
     updateAuthorizeInfo(authorizeInfo: AuthorizeResponse) {
@@ -339,12 +327,9 @@ class Dashboard extends React.PureComponent<Props, State> {
             isShowErrorModal,
             isShowHistory,
             isShowGuide,
-            isShowAnnouncement,
             userStakeLevel,
-            favoriteGames,
             authorizeInfo,
             enabledQuickBet,
-            betValue,
             isBlockUI,
             queryGame,
             isJoinGame,
@@ -357,6 +342,7 @@ class Dashboard extends React.PureComponent<Props, State> {
             session: this.props.session,
             setBalance: this.updateUserBalance,
             signOut: this.signOut,
+            fractionalOddsFormat: authorizeInfo.user?.fractionalOddsFormat ?? false,
         };
         const offerGames: number[] = authorizeInfo?.user?.offerGames?.map((game: any) => game?.gameId) ?? [];
         return (
@@ -371,30 +357,24 @@ class Dashboard extends React.PureComponent<Props, State> {
                         toggleHistoryModal={this.toggleHistoryModal}
                         toggleGuideModal={this.toggleGuideModal}
                         toggleAnnouncementModal={this.toggleAnnouncementModal}
-                        favoriteGames={favoriteGames}
                         offerGames={offerGames}
-                        updateFavoriteGames={this.updateFavoriteGames}
                         enabledQuickBet={enabledQuickBet}
                         updateEnabledQuickBet={this.setEnabledQuickBet}
                         isShowToolbarGuide={isShowToolbarGuide}
                     />
                     <Games
                         enabledQuickBet={enabledQuickBet}
-                        betValue={betValue}
                         enabledWinningStreakNotification={enabledWinningStreakNotification}
                         enabledPlaySound={enabledPlaySound}
                         setApiErrorMessage={this.handleShowApiErrorMessage}
                         userStakeLevel={userStakeLevel}
                         updateUserStakeLevel={this.handleUpdateUserStakeLevel}
-                        updateFavoriteGames={this.updateFavoriteGames}
-                        favoriteGames={favoriteGames}
                         userOfferGames={offerGames}
                         queryGame={queryGame}
                         updateQueryGames={this.updateQueryGame}
                         isJoinGame={isJoinGame}
                         openGameId={openGameId}
                         openGameName={openGameName}
-                        fractionalOddsFormat={authorizeInfo.user?.fractionalOddsFormat}
                     />
 
                     <Footer />
@@ -412,7 +392,6 @@ class Dashboard extends React.PureComponent<Props, State> {
                             onCloseModal={this.toggleGuideModal}
                             offerGames={offerGames}
                             settingGames={settingGames}
-                            fractionalOddsFormat={authorizeInfo.user?.fractionalOddsFormat}
                         />
                     )}
                     {isShowErrorModal && (

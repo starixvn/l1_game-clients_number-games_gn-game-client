@@ -26,7 +26,7 @@ import NextBall from "./next-ball/page";
 import LuckyThree from "./lucky-three/page";
 
 let gamesOrder = [];
-const getRenderGames = (selectedCategory: GameCategoryType, selectedPage: number, favoriteGames: number[], userOfferGames: number[]) => {
+const getRenderGames = (selectedCategory: GameCategoryType, selectedPage: number, userOfferGames: number[]) => {
     if (selectedCategory === GameCategoryType.newNumberGames) {
         return GameCategoryConfig[AppTypes.mobile].newNumberGames;
     }
@@ -36,7 +36,7 @@ const getRenderGames = (selectedCategory: GameCategoryType, selectedPage: number
     }
     const tabGames = GameCategoryConfig[getAppSettings().appType][GameCategoryType[selectedCategory]];
 
-    gamesOrder = getAppSettings().offeredGames.filter((gameId) => !favoriteGames.includes(gameId) && tabGames.includes(gameId));
+    gamesOrder = getAppSettings().offeredGames.filter((gameId) => tabGames.includes(gameId));
 
     const startIndex = gamesOrder.length > (selectedPage - 1) * GamesInOnePage ? (selectedPage - 1) * GamesInOnePage : 0;
 
@@ -78,7 +78,6 @@ export const Games: React.FC<Props> = ({
     setApiErrorMessage,
     userStakeLevel,
     updateUserStakeLevel,
-    favoriteGames,
     queryGame,
     userOfferGames,
     isJoinGame,
@@ -96,12 +95,7 @@ export const Games: React.FC<Props> = ({
     const [isJoinedGame, setIsJoinedGame] = useState(false);
 
     const renderListGames = () => {
-        const renderGames = getRenderGames(
-            selectedCategory,
-            selectedPage,
-            favoriteGames.filter((game) => !favoriteGameIdIgnore.includes(game)),
-            userOfferGames
-        );
+        const renderGames = getRenderGames(selectedCategory, selectedPage, userOfferGames);
 
         return renderGames.map((gameId, index) => getGameComponentById(gameId, index));
     };
@@ -169,12 +163,7 @@ export const Games: React.FC<Props> = ({
         <div className={`game-container game-wrapper ${styles["open-chips"]}`}>
             <SystemContextProvider>
                 {enabledWinningStreakNotification && <WinningStreak ref={winningStreakRef}></WinningStreak>}
-                <GameCategory
-                    favoriteGames={favoriteGames}
-                    selectedPage={selectedPage}
-                    selectCategoryPage={selectCategoryPage}
-                    selectedCategory={selectedCategory}
-                />
+                <GameCategory selectedPage={selectedPage} selectCategoryPage={selectCategoryPage} selectedCategory={selectedCategory} />
                 <div className={`${styles["game-list"]} ${isMobileOnly ? styles[isIOS ? "ios-device" : "android-device"] : ""}`}>
                     <div className="star-field">
                         <div className="layer"></div>

@@ -111,7 +111,6 @@ export class StorageHelper {
 
 export const localStorageKeys = {
     session: buildLocalStorageKey("auth-data"),
-    favoriteGames: buildLocalStorageKey("favorite-game"),
     rebet: buildLocalStorageKey("rebet"),
     umInfo: buildLocalStorageKey("um_info"),
     loginStatus: buildLocalStorageKey("login-status"),

@@ -12,8 +12,6 @@ type Props = {
     toggleHistoryModal: Function;
     toggleGuideModal: Function;
     toggleAnnouncementModal: Function;
-    updateFavoriteGames: Function;
-    favoriteGames: number[];
     offerGames: number[];
     enabledQuickBet?: boolean;
     updateEnabledQuickBet?: Function;
