@@ -19,11 +19,11 @@ export const UserInfo: React.FC<{ user: User; customizeClass?: string }> = ({ us
     return (
         <div className={`${Styles["user"]} ${customizeClass ? Styles[customizeClass] : ""} ${deviceClass}`}>
             <div className={Styles["info"]}>
-                <div className={Styles["user-name"]} data-testid="user-name">
+                <div id="user-info_user-name" className={Styles["user-name"]} data-testid="user-name">
                     {user.name}
                 </div>
                 <div key={user.red} className={`${Styles.balance}`} data-testid="balance">
-                    <span>{numberRoundDownWithCommas(user.red ? user.red : 0)}</span>
+                    <span id="user-info_balance">{numberRoundDownWithCommas(user.red ? user.red : 0)}</span>
                     {/* <span>{currencyUser}</span> */}
                     <img src="/static/images/icon-coin.svg" className="img-fluid" alt="icon-coin" />
                 </div>

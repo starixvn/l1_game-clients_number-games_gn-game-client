@@ -15,8 +15,12 @@ export const Settings: React.FC<Props> = ({ onToggleSound, enabledSound, toggleG
         return (
             <div className={styles["settings-container"]}>
                 <div className={`${styles["setting-right"]} ${styles[getLogoName()]}`}>
+                    <button className={styles[ButtonSettingClassName]}>
+                        <span id="icon-pf" className="icon-pf" />
+                    </button>
+
                     <button className={styles[ButtonSettingClassName]} onClick={handleBackToHome}>
-                        <span className="icon-home" />
+                        <span id="icon-home" className="icon-home" />
                     </button>
 
                     <Menu handleToggleGuideModal={toggleGuideModal} enabledSound={enabledSound} onToggleSound={onToggleSound} />

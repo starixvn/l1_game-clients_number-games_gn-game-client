@@ -30,9 +30,9 @@ const Header: React.FC<Props> = (props) => {
             <div className="game-container d-flex">
                 <div className={Styles["header-container"]}>
                     <div className={Styles["header-left"]}>
-                        <span className={`icon-back ${Styles["back-to-home"]}`}></span>
+                        <span id="btn-back-home" className={`icon-back ${Styles["back-to-home"]}`}></span>
                         <a onClick={() => window.location.reload()} className={Styles["site-name"]}>
-                            <img src="/static/images/bac-number/game-name.svg" alt="game name" />
+                            <img id="img-game-name" src="/static/images/bac-number/game-name.svg" alt="game name" />
                         </a>
                     </div>
 

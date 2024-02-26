@@ -14,16 +14,34 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-music-off:before {
+    content: "\e90d";
+    color: #fff;
+}
+
+.icon-music-on:before {
+    content: "\e90e";
+    color: #fff;
+}
+
+.icon-pf:before {
+    content: "\e90f";
+    color: #fff;
+}
+
 .icon-history:before {
     content: "\e90a";
+    color: #fff;
 }
 
 .icon-menu:before {
     content: "\e90b";
+    color: #fff;
 }
 
 .icon-music:before {
     content: "\e90c";
+    color: #fff;
 }
 
 .icon-warning:before {
@@ -50,6 +68,7 @@
 }
 .icon-guide:before {
     content: "\e901";
+    color: #fff;
 }
 .icon-home:before {
     content: "\e902";
@@ -57,7 +76,9 @@
 }
 .icon-sound-off:before {
     content: "\e903";
+    color: #fff;
 }
 .icon-sound-on:before {
     content: "\e904";
+    color: #fff;
 }

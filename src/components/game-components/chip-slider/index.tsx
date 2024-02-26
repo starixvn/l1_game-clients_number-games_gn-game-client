@@ -139,6 +139,7 @@ export const ChipSlider: React.FC<{}> = () => {
     return (
         <React.Fragment>
             <span
+                id="icon-chip-slider-pre"
                 className={`${Styles["icon-prev"]} ${!enabledPrevBtn && Styles["disabled"]} ${enabledQuickBet ? Styles["quick-bet"] : ""}`}
                 onClick={onClickPrev}
             ></span>
@@ -155,6 +156,7 @@ export const ChipSlider: React.FC<{}> = () => {
                 </Slider>
             )}
             <span
+                id="icon-chip-slider-next"
                 className={`${Styles["icon-next"]} ${!enabledNextBtn && Styles["disabled"]} ${enabledQuickBet ? Styles["quick-bet"] : ""}`}
                 onClick={onClickNext}
             ></span>

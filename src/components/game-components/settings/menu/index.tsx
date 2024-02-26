@@ -52,7 +52,7 @@ export const Menu: React.FC<{
             <div className="dropdown">
                 <div className={`dropdown-menu right ${Styles["dropdown-menu"]} ${dropdownOpen ? "show" : ""}`}>
                     <div className={`${dropdownItemClassName} ${Styles[dropdownItemClassName]}`}>
-                        <span className="icon-music"></span>
+                        <span id="icon-music-on" className={`icon-music-on ${Styles["menu-icon"]}`}></span>
                     </div>
                     <div
                         className={`${dropdownItemClassName} ${Styles[dropdownItemClassName]}`}
@@ -61,19 +61,16 @@ export const Menu: React.FC<{
                         onClick={() => onToggleSound()}
                     >
                         <span
-                            className={
-                                enabledSound ? `icon-sound-on ${Styles["icon-sound-on"]}` : `icon-sound-off ${Styles["icon-sound-off"]}`
-                            }
+                            id={enabledSound ? `icon-sound-on` : `icon-sound-off`}
+                            className={enabledSound ? `icon-sound-on ${Styles["menu-icon"]}` : `icon-sound-off ${Styles["menu-icon"]}`}
                         ></span>
-
-                        <Tooltip message={`${t("sound")}: ${enabledSound ? t("on") : t("off")}`} hoverWrapper={toggleSoundBtnRef} />
                     </div>
 
                     <div className={`${dropdownItemClassName} ${Styles[dropdownItemClassName]}`}>
-                        <span className="icon-history"></span>
+                        <span id="icon-history" className={`icon-history ${Styles["menu-icon"]}`}></span>
                     </div>
                     <div className={`${dropdownItemClassName} ${Styles[dropdownItemClassName]}`} onClick={openGuide}>
-                        <span className="icon-guide"></span>
+                        <span id="icon-guide" className={`icon-guide ${Styles["menu-icon"]}`}></span>
                     </div>
                 </div>
             </div>

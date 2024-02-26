@@ -91,7 +91,6 @@ export const QuickBetBtn = () => {
                 {t("common:oneClickTitle")}
             </div>
             <div>
-                {!enabledQuickBet && <div className={Styles["ripple-animation"]}></div>}
                 <input
                     className={Styles["toggle-checkbox"]}
                     id="toggle-quickbet"
@@ -100,7 +99,7 @@ export const QuickBetBtn = () => {
                     checked={!!enabledQuickBet}
                     onChange={onClickQuickBet}
                 />
-                <label className={Styles["toggle-btn"]} htmlFor="toggle-quickbet">
+                <label id="icon-quickbet" className={Styles["toggle-btn"]} htmlFor="toggle-quickbet">
                     <div className={Styles["quick-bet-icon"]}></div>
                 </label>
             </div>
@@ -118,10 +117,10 @@ export const QuickBetBtn = () => {
                         <Trans t={t}>{t("common:oneClickHintMsg")}</Trans>
                     </div>
                     <div className={Styles.action}>
-                        <button className={`btn-grey ${Styles["btn"]}`} onClick={closeHintTooltip}>
+                        <button id="btn-cancel-quickbet" className={`btn-grey ${Styles["btn"]}`} onClick={closeHintTooltip}>
                             {t("common:dismiss")}
                         </button>
-                        <button className={`btn-red ${Styles["btn"]}`} onClick={handleTurnOn}>
+                        <button id="btn-on-quickbet" className={`btn-red ${Styles["btn"]}`} onClick={handleTurnOn}>
                             {t("common:turnOn")}
                         </button>
                     </div>

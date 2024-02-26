@@ -22,17 +22,13 @@
 }
 
 .dropdown-menu {
-    min-width: 4rem;
+    min-width: 4.8rem;
     top: 3.7rem;
 
     .dropdown-item {
         display: flex;
         justify-content: center;
     }
-}
-
-.icon-menu {
-    color: #fff;
 }
 
 .toggle-button {
@@ -85,4 +81,15 @@
             }
         }
     }
+}
+
+.menu-icon {
+    height: 3.2rem;
+    width: 3.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #212d3d66;
+    border-radius: 1rem;
+    border: none;
 }
