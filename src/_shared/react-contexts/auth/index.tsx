@@ -1,7 +1,8 @@
 import React from "react";
-import { SSOResponse } from "sc-user-service-client/dist/auth";
+import { AuthorizeResponse, SSOResponse } from "sc-user-service-client/dist/auth";
 
 export type AuthContextModel = {
+    authorizeInfo: AuthorizeResponse;
     session: SSOResponse;
     setBalance: (balance: number) => void;
     signOut: () => void;

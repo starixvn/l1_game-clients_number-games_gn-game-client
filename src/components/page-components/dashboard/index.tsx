@@ -2,7 +2,6 @@ import { Trans, withTranslation } from "next-i18next";
 import Head from "next/head";
 import { withRouter } from "next/router";
 import React from "react";
-import { isMobileOnly, isSafari } from "react-device-detect";
 import { AuthorizeResponse, ReCheckInResponse } from "sc-user-service-client/dist/auth";
 import { getAppSettings } from "../../../_shared/app-settings";
 import { buildUrl, GetLocalizedErrorMessage, localStorageKeys, StorageHelper } from "../../../_shared/helpers";
@@ -19,13 +18,13 @@ import Games from "../../../games/games";
 import { UserStakeLevel } from "../../game-base/type";
 import BaseDialog from "../../game-components/base-dialog";
 import { ModalType } from "../../game-components/base-dialog/type";
+import Footer from "../../game-components/footer";
 import { HistoryModal } from "../../page-components/dashboard/history";
 import Register from "../../page-components/dashboard/register";
 import Header from "../header";
 import Styles from "./dashboard.module.scss";
 import { GameGuideModal } from "./game-guide-modal";
 import NameGenerator from "./register/name-generator";
-import Footer from "../../game-components/footer";
 
 class Dashboard extends React.PureComponent<Props, State> {
     private notificationSocket: Socket = null;
@@ -339,6 +338,7 @@ class Dashboard extends React.PureComponent<Props, State> {
             isShowToolbarGuide,
         } = this.state;
         const authContextValue = {
+            authorizeInfo: authorizeInfo,
             session: this.props.session,
             setBalance: this.updateUserBalance,
             signOut: this.signOut,

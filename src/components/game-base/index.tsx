@@ -8,6 +8,7 @@ import { GetLocalizedErrorMessage } from "../../_shared/helpers/notice-helper";
 import { AuthContext, AuthContextModel, GameActionsContextProvider, GameContextProvider } from "../../_shared/react-contexts";
 import { GameEventActionType } from "../../_shared/react-contexts/game-state-context/game-event-action";
 import { GameResourceKeys } from "../../_shared/resources";
+import { Notice as NoticeData } from "../../components/game-base/type";
 import { getBalance } from "../../services/auth-service";
 import ConfirmBet from "../game-components/confirm-bet";
 import DisabledModal from "../game-components/disabled-modal";
@@ -17,13 +18,15 @@ import GameContainer from "../game-components/game-container";
 import { GameHeader } from "../game-components/game-header";
 import GameLoading from "../game-components/game-loading";
 import { Notice } from "../game-components/notice";
+
+import { getValidateMinMaxBetResult, validateHedgeBet } from "../../_shared/helpers/validate-bet-helper";
+import { Settings } from "../game-components/settings";
 import ConfirmDialog from "../game-components/submit-dialog";
 import BetSettings from "../page-components/bet-settings";
 import { IRoundStateHandler } from "../round-base/round-state-handler";
+import { DummyHandler, GameErrorHandler, GameMessageHandler, PlayerHandler, messageEventType } from "./handlers";
 import { IGameStateHandler } from "./handlers/game-state-handler";
 import { GameBaseProps, RoundState } from "./type";
-import { Settings } from "../game-components/settings";
-import { DummyHandler, PlayerHandler, GameMessageHandler, messageEventType, GameErrorHandler } from "./handlers";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
     private readonly animationTime = 3000;
@@ -451,7 +454,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.runGame(this.roundStateHandler.getWholeRoundDuration({ durations }));
     }
 
-    async placeBet(betChoice: string, amount: number) {
+    placeBet(betChoice: string, amount: number) {
         const gameStateContext = this.props.gameStateContextModel;
         const systemContext = this.props.systemContextModel;
 
@@ -470,7 +473,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             }
             return;
         }
-        const validate = await this.validateNotConfirmBet(betChoice, amount);
+        const validate = this.validateNotConfirmBet(betChoice, amount);
         if (!validate) {
             console.log("fail");
             return;
@@ -499,144 +502,69 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         });
     }
 
-    private async validateNotConfirmBet(betChoice: string, amount: number): Promise<boolean> {
+    private validateNotConfirmBet(betChoice: string, amount: number): boolean {
         const gameStateContext = this.props.gameStateContextModel;
         const notConfirmOwnBets = gameStateContext.notConfirmOwnBets;
 
-        //compose ValidationCriteria
-        //1. Validate the betting time of a current sub-round
+        const ownBets = gameStateContext.ownBets;
+        const sendNotice = (notice) =>
+            this.props.dispatch({
+                type: GameEventActionType.DISPLAY_POPUP,
+                payload: {
+                    notice,
+                },
+            });
+
+        const getNotice = (errorCode: string, args?): NoticeData => {
+            return {
+                gameName: this.props.gameName,
+                message: GetLocalizedErrorMessage(errorCode),
+                duration: 2,
+                errorCode: errorCode,
+                betChoice1: this.getChoiceNameOnHedgeBet(this.hedgeBetGroup[0]),
+                betChoice2: this.getChoiceNameOnHedgeBet(this.hedgeBetGroup[1]),
+                ...args,
+            };
+        };
+
         if (gameStateContext.roundState != RoundState.InRound) {
-            this.props.dispatch({
-                type: GameEventActionType.DISPLAY_POPUP,
-                payload: {
-                    notice: {
-                        gameName: this.props.gameName,
-                        message: GetLocalizedErrorMessage("SB1905"),
-                        duration: 2,
-                        errorCode: "SB1905",
-                    },
-                },
-            });
-
-            return false;
-        }
-        //2.Validate hedge bet
-        const hedgeBetGroup = this.hedgeBetGroup;
-
-        const betTracks = { ...gameStateContext.ownBets, ...gameStateContext.notConfirmOwnBets };
-        betTracks[betChoice] = (betTracks[betChoice] ?? 0) + amount;
-
-        const isInvalid = Object.keys(betTracks).some(
-            (betKey) => betTracks[betKey] && hedgeBetGroup.includes(betKey) && hedgeBetGroup.includes(betChoice) && betKey !== betChoice
-        );
-
-        if (isInvalid) {
-            this.props.dispatch({
-                type: GameEventActionType.DISPLAY_POPUP,
-                payload: {
-                    notice: {
-                        gameName: this.props.gameName,
-                        message: GetLocalizedErrorMessage("SB1939"),
-                        duration: 2,
-                        errorCode: "SB1939",
-                        betChoice1: this.getChoiceNameOnHedgeBet(hedgeBetGroup[0]),
-                        betChoice2: this.getChoiceNameOnHedgeBet(hedgeBetGroup[1]),
-                    },
-                },
-            });
-
+            sendNotice(getNotice("SB1905"));
             return false;
         }
 
-        //3. Check account balance thỏa bet
-        const authContext = this.context as AuthContextModel;
-        const balanceResponse = await getBalance(authContext?.session);
-        if (balanceResponse.isSuccessful) {
-            authContext?.setBalance(balanceResponse.balance);
-
-            if (amount > balanceResponse.balance) {
-                //TODO: handle special case Insufficient Funds
-                return false;
-            } else {
-                console.log("get balance success");
-            }
-        } else {
-            this.props.setApiErrorMessage(balanceResponse.errorCode);
+        if (validateHedgeBet(this.hedgeBetGroup, ownBets, notConfirmOwnBets, betChoice, amount)) {
+            sendNotice(getNotice("SB1939"));
             return false;
         }
-
-        //4. Validate min/max bet per choice
-        //5. Validate max bet per round
-
-        const gameConfigs = gameStateContext.gameConfigs;
-        const maxBet = Math.min(gameStateContext.userStakeLevel.maxBet, gameConfigs.maxBet);
-        const minBet = Math.max(gameStateContext.userStakeLevel.minBet, gameConfigs.minBet);
-        const maxBetPerChoice = Math.min(gameStateContext.userStakeLevel.maxBet, gameConfigs.maxBetPerChoices[betChoice]);
+        const balance = (this.context as AuthContextModel).authorizeInfo.user.red;
         let totalAmount = 0;
-        Object.entries(notConfirmOwnBets).forEach(([key, value]) => {
-            totalAmount += value;
-        });
-        Object.entries(gameStateContext.ownBets).forEach(([key, value]) => {
-            totalAmount += value;
-        });
-        let isReachMinBet = amount < minBet;
-        if (betChoice == confirmBet) {
-            isReachMinBet = totalAmount < minBet;
-        }
+        totalAmount += Object.values(notConfirmOwnBets).reduce((a, b) => a + b, 0);
+        totalAmount += Object.values(ownBets).reduce((a, b) => a + b, 0);
 
-        if (isReachMinBet) {
+        if (balance < totalAmount + amount) {
             this.props.dispatch({
-                type: GameEventActionType.DISPLAY_POPUP,
+                type: GameEventActionType.SHOW_CONFIRM_DIALOG,
                 payload: {
-                    notice: {
-                        gameName: this.props.gameName,
-                        message: GetLocalizedErrorMessage("SB1909"),
-                        duration: 2,
-                        errorCode: "SB1909",
-                        minBet,
-                    },
+                    showConfirmDialog: true,
                 },
             });
 
             return false;
         }
 
-        //TODO: handle special case: Reach max bet
-
-        if (amount > maxBetPerChoice || notConfirmOwnBets[betChoice] + amount > maxBetPerChoice) {
-            this.props.dispatch({
-                type: GameEventActionType.DISPLAY_POPUP,
-                payload: {
-                    notice: {
-                        gameName: this.props.gameName,
-                        message: GetLocalizedErrorMessage("SB1910"),
-                        duration: 2,
-                        errorCode: "SB1910",
-                        maxBet: maxBetPerChoice,
-                    },
-                },
-            });
-            return false;
+        const { errorCode, args } = getValidateMinMaxBetResult(
+            gameStateContext.gameConfigs,
+            gameStateContext.userStakeLevel,
+            notConfirmOwnBets,
+            betChoice,
+            amount,
+            totalAmount
+        );
+        if (errorCode == "0") {
+            return true;
         }
-
-        if (amount > maxBet || totalAmount + amount > maxBet) {
-            this.props.dispatch({
-                type: GameEventActionType.DISPLAY_POPUP,
-                payload: {
-                    notice: {
-                        gameName: this.props.gameName,
-                        message: GetLocalizedErrorMessage("SB1911"),
-                        duration: 2,
-                        errorCode: "SB1911",
-                        maxBet,
-                    },
-                },
-            });
-
-            return false;
-        }
-
-        return true;
+        sendNotice(getNotice(errorCode, args));
+        return false;
     }
 
     private sendConfirmBet() {
@@ -801,6 +729,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 {this.renderNotice()}
                 {this.renderBettingBlock()}
                 {this.renderSlidingChips()}
+                {this.renderConfirmDialog()}
                 {this.renderConfirmBet()}
                 {this.renderStatistic()}
                 {this.renderScoreboards()}
