@@ -22,18 +22,19 @@ export const BacBallBettingBlock: FC = () => {
     useEffect(() => {
         if (winningPlayerFrames.length === 0 || winningTieFrames.length === 0) {
             const handleLoadResource = async () => {
+                console.log("load BacBallBettingBlock pixi");
                 await loadPixiAnimations("/static/images/bac-number/highlight-winning-player.json", (sprite) => {
-                    setWinningPlayerFrames(sprite.animations["highlight-winning-player"]);
+                    setWinningPlayerFrames((playerFrames) => (playerFrames = sprite.animations["highlight-winning-player"]));
                 });
 
                 await loadPixiAnimations("/static/images/bac-number/highlight-winning-tie.json", (sprite) => {
-                    setWinningTieFrames(sprite.animations["highlight-winning-tie"]);
+                    setWinningTieFrames((tieFrames) => (tieFrames = sprite.animations["highlight-winning-tie"]));
                 });
             };
 
             handleLoadResource();
         }
-    }, [winningPlayerFrames.length, winningTieFrames.length]);
+    }, [winningPlayerFrames, winningTieFrames]);
 
     const onClickBet = useCallback(
         (choice) => gameActionContext.placeBet(choice, systemContext.selectedChip),
@@ -43,17 +44,17 @@ export const BacBallBettingBlock: FC = () => {
     const convertStakeToString = (amount: number, rate: number) => (amount ? numberWithCommas(amount / rate, 1) : "");
     const rate = gameStateContext.rate;
 
-    const playerTotalBet = gameStateContext?.totalBets["player"] ?? 0;
+    const playerTotalBet = gameStateContext?.totalBets[BacBallBetOptions.PLAYER] ?? 0;
     const playerTotalBetRender = convertStakeToString(playerTotalBet, rate);
 
-    const bankerTotalBet = gameStateContext?.totalBets["banker"] ?? 0;
+    const bankerTotalBet = gameStateContext?.totalBets[BacBallBetOptions.BANKER] ?? 0;
     const bankerTotalBetRender = convertStakeToString(bankerTotalBet, rate);
 
-    const tieTotalBet = gameStateContext?.totalBets["tie"] ?? 0;
+    const tieTotalBet = gameStateContext?.totalBets[BacBallBetOptions.TIE] ?? 0;
     const tieTotalBetRender = convertStakeToString(tieTotalBet, rate);
 
-    const playerOwnBetsValue = gameStateContext?.ownBets["player"] ?? 0;
-    const playerNotConfirmOwnBetsValue = gameStateContext?.notConfirmOwnBets["player"] ?? 0;
+    const playerOwnBetsValue = gameStateContext?.ownBets[BacBallBetOptions.PLAYER] ?? 0;
+    const playerNotConfirmOwnBetsValue = gameStateContext?.notConfirmOwnBets[BacBallBetOptions.PLAYER] ?? 0;
     const playerOwnBets = playerOwnBetsValue + playerNotConfirmOwnBetsValue;
 
     const playerOwnBetsRender = useMemo(() => {
@@ -66,8 +67,8 @@ export const BacBallBettingBlock: FC = () => {
         );
     }, [playerOwnBets]);
 
-    const bankerOwnBetsValue = gameStateContext?.ownBets["banker"] ?? 0;
-    const bankerNotConfirmOwnBetsValue = gameStateContext?.notConfirmOwnBets["banker"] ?? 0;
+    const bankerOwnBetsValue = gameStateContext?.ownBets[BacBallBetOptions.BANKER] ?? 0;
+    const bankerNotConfirmOwnBetsValue = gameStateContext?.notConfirmOwnBets[BacBallBetOptions.BANKER] ?? 0;
     const bankerOwnBets = bankerOwnBetsValue + bankerNotConfirmOwnBetsValue;
 
     const bankerOwnBetsRender = useMemo(() => {
@@ -80,8 +81,8 @@ export const BacBallBettingBlock: FC = () => {
         );
     }, [bankerOwnBets]);
 
-    const tieOwnBetsValue = gameStateContext?.ownBets["tie"] ?? 0;
-    const tieNotConfirmOwnBetsValue = gameStateContext?.notConfirmOwnBets["tie"] ?? 0;
+    const tieOwnBetsValue = gameStateContext?.ownBets[BacBallBetOptions.TIE] ?? 0;
+    const tieNotConfirmOwnBetsValue = gameStateContext?.notConfirmOwnBets[BacBallBetOptions.TIE] ?? 0;
     const tieOwnBets = tieOwnBetsValue + tieNotConfirmOwnBetsValue;
 
     const tieOwnBetsRender = useMemo(() => {
@@ -94,9 +95,9 @@ export const BacBallBettingBlock: FC = () => {
         );
     }, [tieOwnBets]);
 
-    const dataPlayer = { players: 1, betChoice: "player" };
-    const dataBanker = { players: 1, betChoice: "banker" };
-    const dataTie = { players: 1, betChoice: "tie" };
+    const dataPlayer = { players: 1, betChoice: BacBallBetOptions.PLAYER };
+    const dataBanker = { players: 1, betChoice: BacBallBetOptions.BANKER };
+    const dataTie = { players: 1, betChoice: BacBallBetOptions.TIE };
 
     const betPercentage = gameStateContext?.betPercentage ?? { player: 0, banker: 0, tie: 0 };
     const playerBetCount = gameStateContext?.playerBetCount ?? { player: 0, banker: 0, tie: 0 };
@@ -130,7 +131,7 @@ export const BacBallBettingBlock: FC = () => {
                 <div className={Style["left-corner"]}></div>
                 <div className={Style["right-corner"]}></div>
                 <div
-                    className={`${Style["player"]} text-white relative`}
+                    className={`${Style[BacBallBetOptions.PLAYER]} text-white relative`}
                     onClick={() => {
                         onClickBet(BacBallBetOptions.PLAYER);
                     }}
@@ -165,25 +166,25 @@ export const BacBallBettingBlock: FC = () => {
                             <div className="flex items-center players gap-1">
                                 <span id="player-user-icon" className="icon-user"></span>
                                 <span id="player-no" className="player-value">
-                                    {playerBetCount["player"]}
+                                    {playerBetCount[BacBallBetOptions.PLAYER]}
                                 </span>
                             </div>
                         </div>
                         <div id="player-percent" className={Style.percent}>
-                            <PercentageCircle percentage={betPercentage["player"]} color="#98cdff" />
+                            <PercentageCircle percentage={betPercentage[BacBallBetOptions.PLAYER]} color="#98cdff" />
                         </div>
                     </div>
                     <div id="player-bet-name" className={`bet-name text-center ${Style["bet-name"]}`}>
                         {dataPlayer.betChoice}
                     </div>
                     <div id="player-odds" className="bet-odds text-center">
-                        {gameStateContext?.gameConfigs?.odds?.["player"]}
+                        {gameStateContext?.gameConfigs?.odds?.[BacBallBetOptions.PLAYER]}
                     </div>
                     <div className={`own-bet ${Style["own-bet"]}`}>{playerOwnBetsRender}</div>
                 </div>
 
                 <div
-                    className={`${Style["banker"]} text-white relative`}
+                    className={`${Style[BacBallBetOptions.BANKER]} text-white relative`}
                     onClick={() => {
                         onClickBet(BacBallBetOptions.BANKER);
                     }}
@@ -210,7 +211,7 @@ export const BacBallBettingBlock: FC = () => {
                     )}
                     <div className={`flex pt-5 justify-between`}>
                         <div id="banker-percent" className={Style.percent}>
-                            <PercentageCircle percentage={betPercentage["banker"]} color="#f9bcb9" />
+                            <PercentageCircle percentage={betPercentage[BacBallBetOptions.BANKER]} color="#f9bcb9" />
                         </div>
                         <div className={Style.stake}>
                             <div className={`flex items-center ${Style["total-stakes"]} gap-1`}>
@@ -222,7 +223,7 @@ export const BacBallBettingBlock: FC = () => {
                             <div className="flex items-center players gap-1 justify-end">
                                 <span id="banker-user-icon" className="icon-user"></span>
                                 <span id="banker-no" className="player-value">
-                                    {playerBetCount["banker"]}
+                                    {playerBetCount[BacBallBetOptions.BANKER]}
                                 </span>
                             </div>
                         </div>
@@ -231,13 +232,13 @@ export const BacBallBettingBlock: FC = () => {
                         {dataBanker.betChoice}
                     </div>
                     <div id="banker-odds" className="bet-odds text-center">
-                        {gameStateContext?.gameConfigs?.odds?.["banker"]}
+                        {gameStateContext?.gameConfigs?.odds?.[BacBallBetOptions.BANKER]}
                     </div>
                     <div className={`own-bet ${Style["own-bet"]}`}>{bankerOwnBetsRender}</div>
                 </div>
 
                 <div
-                    className={`${Style["tie"]} text-white flex flex-col items-center pt-2 relative`}
+                    className={`${Style[BacBallBetOptions.TIE]} text-white flex flex-col items-center pt-2 relative`}
                     onClick={() => {
                         onClickBet(BacBallBetOptions.TIE);
                     }}
@@ -259,7 +260,7 @@ export const BacBallBettingBlock: FC = () => {
                     )}
                     {isShowHighlightPrevResult(BacBallBetOptions.TIE) && <div className={Style["highlight-prev-result-tie"]}></div>}
                     <div id="tie-percent" className={Style.percent}>
-                        <PercentageCircle percentage={betPercentage["tie"]} color="#2fc856" />
+                        <PercentageCircle percentage={betPercentage[BacBallBetOptions.TIE]} color="#2fc856" />
                     </div>
                     <div className={Style.stake}>
                         <div className={`flex items-center ${Style["total-stakes"]} gap-1 justify-center mt-1`}>
@@ -271,7 +272,7 @@ export const BacBallBettingBlock: FC = () => {
                         <div className="flex items-center players gap-1 justify-center">
                             <span id="tie-user-icon" className="icon-user"></span>
                             <span id="tie-no" className="player-value">
-                                {playerBetCount["tie"]}
+                                {playerBetCount[BacBallBetOptions.TIE]}
                             </span>
                         </div>
                     </div>
@@ -279,7 +280,7 @@ export const BacBallBettingBlock: FC = () => {
                         {dataTie.betChoice}
                     </div>
                     <div id="tie-odds" className="bet-odds text-center">
-                        {gameStateContext?.gameConfigs?.odds?.["tie"]}
+                        {gameStateContext?.gameConfigs?.odds?.[BacBallBetOptions.TIE]}
                     </div>
                     <div className={`own-bet ${Style["own-bet"]}`}>{tieOwnBetsRender}</div>
                 </div>

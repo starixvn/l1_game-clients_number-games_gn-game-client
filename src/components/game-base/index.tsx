@@ -961,7 +961,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         };
 
         return (
-            <GameContextProvider value={this.props}>
+            <GameContextProvider value={{ ...this.props, gameMessageHandler: this.gameMessageHandler }}>
                 <GameActionsContextProvider value={gameActionsContext}>{this.getRenderTemplate()}</GameActionsContextProvider>
             </GameContextProvider>
         );

@@ -7,7 +7,7 @@ export const loadPixiAnimations = async (spriteUrl: string, onLoaded: (sprite: S
         const sprite = await Assets.load<Spritesheet>(spriteUrl);
 
         cachedAnimations[spriteUrl] = sprite;
-        // console.log(spriteUrl);
+        console.log(spriteUrl);
     }
 
     onLoaded(cachedAnimations[spriteUrl]);

@@ -4,6 +4,7 @@ import { Resource, Texture } from "pixi.js";
 import { GameEventAction } from "../../_shared/react-contexts/game-state-context/game-event-action";
 import { GameStateContextModel } from "../../_shared/react-contexts/game-state-context/game-state-context-model";
 import { SystemContextModel } from "../../_shared/react-contexts";
+import { GameMessageHandler } from "./game-message-handler";
 
 export interface GameConfigs {
     odds: { [key: string]: number };
@@ -54,6 +55,7 @@ export type GamePropsContext = {
     systemContextModel?: SystemContextModel;
     translate?: any;
     hedgeBetGroups?: [];
+    gameMessageHandler: GameMessageHandler;
 };
 
 export type GameBaseProps = GamePropsContext & WithRouterProps;

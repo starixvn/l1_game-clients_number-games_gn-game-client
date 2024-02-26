@@ -35,7 +35,7 @@ class BacBall extends GameBase<GameBaseProps> {
         const gameMessageHandler = new GameMessageHandler(props.dispatch);
 
         super(props, new TurnStateHandler(), new GameStateHandler(), gameMessageHandler);
-        this.hedgeBetGroup = ["player", "banker"];
+        this.hedgeBetGroup = [Choices.player, Choices.banker];
     }
 
     componentDidMount() {
