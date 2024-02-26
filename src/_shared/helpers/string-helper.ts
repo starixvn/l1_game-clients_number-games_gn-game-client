@@ -1,7 +1,7 @@
 interface String {
-    replaceTogleeFormat(): string;
+    replaceTolgeeFormat(): string;
 }
 
-String.prototype.replaceTogleeFormat = function () {
+String.prototype.replaceTolgeeFormat = function () {
     return this.replaceAll("%", "").replaceAll("(%", "(").replaceAll("#%", "#");
 };

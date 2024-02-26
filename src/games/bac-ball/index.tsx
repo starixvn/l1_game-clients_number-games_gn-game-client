@@ -16,6 +16,7 @@ import { BacBallBettingBlock } from "./bac-ball-betting-block";
 import { BacBallResultBlock } from "./bac-ball-result-block";
 import { BacBallBeadRoadCharacterElement, BacBallBeadRoadValueElement } from "./scoreboard-elements";
 import { BacBallResult, BacBallSettlementResult } from "./types";
+import { useSystemContext } from "../../_shared/react-contexts";
 
 export const Choices = { player: "player", banker: "banker", tie: "tie" };
 
@@ -107,6 +108,7 @@ const BacBallFC = (props) => {
             {...{
                 dispatch: useGameStatesDispatch(),
                 gameStateContextModel: useGameStateContext(),
+                systemContextModel: useSystemContext(),
                 translate: t,
             }}
         />

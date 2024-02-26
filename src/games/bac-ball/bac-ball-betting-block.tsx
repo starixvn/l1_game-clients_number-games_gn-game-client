@@ -3,7 +3,7 @@ import { Resource, Texture } from "pixi.js";
 import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { numberWithCommas } from "../../_shared/helpers";
 import { loadPixiAnimations } from "../../_shared/helpers/pixi-resource-loader";
-import { useGameActionContext } from "../../_shared/react-contexts";
+import { useGameActionContext, useSystemContext } from "../../_shared/react-contexts";
 import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
 import { RoundState } from "../../components/game-base/type";
 import PercentageCircle from "../../components/game-components/percentage-circle";
@@ -14,6 +14,7 @@ export const BacBallBettingBlock: FC = () => {
     const [winningTieFrames, setWinningTieFrames] = useState<Texture<Resource>[]>([]);
     const gameActionContext = useGameActionContext();
     const gameStateContext = useGameStateContext();
+    const systemContext = useSystemContext();
 
     useEffect(() => {
         if (winningPlayerFrames.length === 0 || winningTieFrames.length === 0) {
@@ -32,8 +33,8 @@ export const BacBallBettingBlock: FC = () => {
     }, [winningPlayerFrames.length, winningTieFrames.length]);
 
     const onClickBet = useCallback(
-        (choice) => gameActionContext.placeBet(choice, gameStateContext.selectedChip),
-        [gameActionContext, gameStateContext.selectedChip]
+        (choice) => gameActionContext.placeBet(choice, systemContext.selectedChip),
+        [gameActionContext, systemContext.selectedChip]
     );
 
     const convertStakeToString = (amount: number, rate: number) => (amount ? numberWithCommas(amount / rate, 1) : "");

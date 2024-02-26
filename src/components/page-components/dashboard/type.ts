@@ -30,7 +30,6 @@ export type State = {
     enabledQuickBet: boolean;
     betValue: number;
     isBlockUI: boolean;
-    isShowSlidingChip: boolean;
     queryGame: number;
     isJoinGame: boolean;
     settingGames: number[];

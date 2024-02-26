@@ -1,6 +1,6 @@
 @import "../../../styles/components/modal";
 
-.notice-container{
+.notice-container {
     @extend .modal;
     top: 20%;
     z-index: var(--popup-guide-history-index);
@@ -16,4 +16,8 @@
             color: #ea1d40;
         }
     }
+}
+
+.notice-content {
+    white-space: pre-wrap;
 }

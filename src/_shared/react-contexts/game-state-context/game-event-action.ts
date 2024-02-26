@@ -24,7 +24,6 @@ export enum GameEventActionType {
     ODDS = "ODDS",
     DRAW_ID = "DRAW_ID",
     TOTAL_BET = "TOTAL_BET",
-    KICK_OUT = "KICK_OUT",
     DISPLAY_POPUP = "DISPLAY_POPUP",
     ACCEPTED_BET_QUEUE = "ACCEPTED_BET_QUEUE",
     ROUND_REMAINING_TIME = "ROUND_REMAINING_TIME",
@@ -38,7 +37,6 @@ export enum GameEventActionType {
     PLAY_RESULT_ANIMATION = "PLAY_RESULT_ANIMATION",
     SHOW_RESULT_INFO_TIME_OUT = "SHOW_RESULT_INFO_TIME_OUT",
     TOGLE_QUICK_BET = "TOGLE_QUICK_BET",
-    SET_SELECT_CHIP = "SET_SELECT_CHIP",
     SHOW_CONFIRM_BET = "SHOW_CONFIRM_BET",
     SHOW_CONFIRM_DIALOG = "SHOW_CONFIRM_DIALOG",
     NOT_CONFIRM_OWN_BETS = "NOT_CONFIRM_OWN_BETS",
@@ -105,7 +103,6 @@ export interface GameEventPayload {
     isShowBlink?: boolean;
     roundState?: RoundState;
     roundRemainingTime?: number;
-    selectedChip?: number;
     showConfirmBet?: boolean;
     showConfirmDialog?: boolean;
     enabledQuickBet?: boolean;

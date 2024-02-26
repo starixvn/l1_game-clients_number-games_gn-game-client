@@ -3,6 +3,7 @@ import { Resource, Texture } from "pixi.js";
 
 import { GameEventAction } from "../../_shared/react-contexts/game-state-context/game-event-action";
 import { GameStateContextModel } from "../../_shared/react-contexts/game-state-context/game-state-context-model";
+import { SystemContextModel } from "../../_shared/react-contexts";
 
 export interface GameConfigs {
     odds: { [key: string]: number };
@@ -50,6 +51,7 @@ export type GamePropsContext = {
     isJoinedGame?: boolean;
     dispatch?: (action: GameEventAction) => {};
     gameStateContextModel?: GameStateContextModel<{}, {}>;
+    systemContext?: SystemContextModel;
     translate?: any;
     hedgeBetGroups?: [];
 };
@@ -68,6 +70,7 @@ export interface Notice {
     isWarning?: boolean;
     betChoice1?: string;
     betChoice2?: string;
+    onClose?: () => void;
 }
 
 export interface APIError extends Notice {

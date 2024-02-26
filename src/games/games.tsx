@@ -3,9 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { isIOS, isMobileOnly } from "react-device-detect";
 import useSound from "use-sound";
 import { getAppSettings } from "../_shared/app-settings";
-import { StorageHelper, localStorageKeys } from "../_shared/helpers/storage-helper";
 import { SystemContextProvider } from "../_shared/react-contexts";
-import { SocketState } from "../_shared/helpers";
 import {
     GameCategoryConfig,
     GameCategoryKeys,
@@ -74,36 +72,18 @@ const getCategoryHashTag = (category: string, pageIndex: number) => {
     return pageIndex > 1 ? `${category}_${pageIndex - 1}` : category;
 };
 
-const getUpdatedFavoriteList = (gameId: number, isFavorite: boolean) => {
-    const favorites = StorageHelper.get<number[]>(localStorageKeys.favoriteGames) ?? [];
-    const newFavoriteList = [...favorites];
-    const gameIndex = newFavoriteList.indexOf(gameId);
-
-    gameIndex >= 0 && newFavoriteList.splice(gameIndex, 1);
-
-    isFavorite && newFavoriteList.push(gameId);
-
-    return newFavoriteList;
-};
-
 export const Games: React.FC<Props> = ({
-    enabledQuickBet,
-    betValue,
     enabledWinningStreakNotification,
     enabledPlaySound,
     setApiErrorMessage,
     userStakeLevel,
     updateUserStakeLevel,
-    updateFavoriteGames,
     favoriteGames,
     queryGame,
     userOfferGames,
-    isShowSlidingChip,
     isJoinGame,
     updateQueryGames,
     openGameId,
-    openGameName,
-    fractionalOddsFormat,
 }) => {
     const [playPlaceBetSound] = useSound("./static/sounds/place-bet.mp3");
     const urlHashtag = window.location.hash.replace("#", "").split("_");
@@ -113,14 +93,7 @@ export const Games: React.FC<Props> = ({
     const winningStreakRef = useRef(null);
     const { theme } = useTheme();
     location.hash = `#${getCategoryHashTag(queryCategory, selectedPage)}`;
-    const [socketState, setSocketState] = useState<SocketState>(SocketState.None);
     const [isJoinedGame, setIsJoinedGame] = useState(false);
-
-    const setFavorite = (gameId: number, isFavorite: boolean) => {
-        const newFavoriteList = getUpdatedFavoriteList(gameId, isFavorite);
-
-        updateFavoriteGames(newFavoriteList);
-    };
 
     const renderListGames = () => {
         const renderGames = getRenderGames(
@@ -193,19 +166,8 @@ export const Games: React.FC<Props> = ({
     }, [queryGame]);
 
     return (
-        <div className={`game-container game-wrapper ${isShowSlidingChip ? styles["open-chips"] : styles["close-chips"]}`}>
-            <SystemContextProvider
-                value={{
-                    setFavorite,
-                    favoriteGames,
-                    enabledPlaySound,
-                    gamesOrder,
-                    userStakeLevel,
-                    enabledQuickBet,
-                    betValue,
-                    fractionalOddsFormat,
-                }}
-            >
+        <div className={`game-container game-wrapper ${styles["open-chips"]}`}>
+            <SystemContextProvider>
                 {enabledWinningStreakNotification && <WinningStreak ref={winningStreakRef}></WinningStreak>}
                 <GameCategory
                     favoriteGames={favoriteGames}

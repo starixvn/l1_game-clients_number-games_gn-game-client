@@ -62,7 +62,6 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
         odds,
         drawId,
         totalBets,
-        kickedOut,
         notice,
         acceptedBetQueue,
         disconnectReason,
@@ -76,12 +75,11 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
         showResultInfo,
         isShowBlink,
         enabledQuickBet,
-        selectedChip,
         showConfirmBet,
         showConfirmDialog,
         turnCounter,
         notConfirmOwnBets,
-        umFirstLoading
+        umFirstLoading,
     } = payload;
 
     // console.log("payload: ", JSON.stringify(payload));
@@ -268,7 +266,7 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
         case GameEventActionType.NOTICE_USER_STAKE_LEVEL: {
             return {
                 ...state,
-                notice: { message: "CommonResourceKeys.USER_STAKE_LEVEL_UPDATE" },
+                notice: { message: "message_bet_limit_change" },
             };
         }
 
@@ -294,19 +292,6 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
             return {
                 ...state,
                 totalBets,
-            };
-        }
-
-        case GameEventActionType.KICK_OUT: {
-            return {
-                ...state,
-                notice: {
-                    gameName: "gameName",
-                    message: GetLocalizedErrorMessage(kickedOut.errorCode),
-                    duration: 2,
-                    errorCode: kickedOut.errorCode,
-                    roundId: kickedOut?.gameRoundId,
-                },
             };
         }
 
@@ -342,7 +327,7 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
             return {
                 ...state,
                 displayPopup: PopupType.PlaceBet,
-                selectedBetChoice
+                selectedBetChoice,
             };
         }
 
@@ -390,13 +375,6 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
             };
         }
 
-        case GameEventActionType.SET_SELECT_CHIP: {
-            return {
-                ...state,
-                selectedChip,
-            };
-        }
-
         case GameEventActionType.TOGLE_QUICK_BET: {
             return {
                 ...state,
@@ -428,10 +406,9 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
         case GameEventActionType.SET_UM_FIRST_LOADING: {
             return {
                 ...state,
-                umFirstLoading
+                umFirstLoading,
             };
         }
-
 
         default: {
             throw Error("Unknown action: " + action.type);

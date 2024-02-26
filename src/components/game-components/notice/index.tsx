@@ -1,10 +1,11 @@
 import { useTranslate } from "@tolgee/react";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import { numberWithCommas } from "../../../_shared/helpers/number-helper";
 import "../../../_shared/helpers/string-helper";
 import BaseDialog from "../base-dialog";
 import { ModalType } from "../base-dialog/type";
 import Styles from "./notice.module.scss";
+
 interface Props {
     gameName?: string;
     roundId?: number;
@@ -23,31 +24,15 @@ const BaseNotice: React.FC<{ onClose: () => void; duration: number; isOpen?: boo
     children,
     onClose,
     duration,
-    isOpen = true,
 }) => {
-    const wrapperRef = useRef<HTMLDivElement>(null);
-
     useEffect(() => {
         const timer = setTimeout(onClose, duration * 1000);
 
         return () => clearTimeout(timer);
     }, []);
 
-    useEffect(() => {
-        function handleClickOutside(event) {
-            if (isOpen && wrapperRef && wrapperRef.current && !wrapperRef.current.contains(event.target)) {
-                onClose && onClose();
-            }
-        }
-
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, [wrapperRef]);
-
     return (
-        <BaseDialog type={ModalType.Center} isOpen={true}>
+        <BaseDialog type={ModalType.Center} isOpen={true} onCloseModal={onClose}>
             <div className={`modal-center red-color`}>
                 <span className={`icon-close ${Styles["icon-close"]}`} onClick={onClose} data-testid="close-btn"></span>
                 {children}
@@ -74,20 +59,23 @@ export const Notice: React.FC<Props> = ({
     const opt = {
         gameName: gameName,
         roundId: roundId,
+        gameRoundId: roundId,
         minBet: numberWithCommas(+minBet),
         maxBet: numberWithCommas(+maxBet),
         errorCode: errorCode,
         betChoice1,
         betChoice2,
     };
-    const tt = t({
-        key: message,
-        params: opt,
-    });
-    const tran = t({
-        key: message,
-        params: opt,
-        noWrap: true,
-    }).replaceTogleeFormat();
-    return <BaseNotice {...{ onClose, duration, isWarning }}>{tran}</BaseNotice>;
+
+    return (
+        <BaseNotice {...{ onClose, duration, isWarning }}>
+            <div className={Styles["notice-content"]}>
+                {t({
+                    key: message,
+                    params: opt,
+                    noWrap: true,
+                }).replaceTolgeeFormat()}
+            </div>
+        </BaseNotice>
+    );
 };

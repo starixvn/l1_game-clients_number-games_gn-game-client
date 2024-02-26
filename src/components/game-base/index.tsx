@@ -230,10 +230,10 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     handleApiError = ({ apiError }) => {
         const isPlaceBet = apiError.isPlaceBetFailed ? apiError.isPlaceBetFailed : false;
         const errorCode = apiError.errorCode;
-        this.handleKickOut(errorCode.toString());
+        const isKickOutError = this.isKickOutError(errorCode.toString());
+        const onClose = isKickOutError ? (this.context as AuthContextModel)?.signOut : null;
 
         const message = GetLocalizedErrorMessage(errorCode, isPlaceBet);
-        // const gameName = this.props.t(`${this.props.gameName.toLowerCase()}:${GameResourceKeys.GAME_NAME}`);
         const gameName = `${this.props.gameName.toLowerCase()}:${GameResourceKeys.GAME_NAME}`;
 
         const { displayPopup } = this.props.gameStateContextModel;
@@ -246,24 +246,33 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                         gameName: gameName,
                         roundId: apiError?.gameRoundId,
                         message: message,
-                        duration: 3,
+                        duration: isKickOutError ? 10 : 3,
                         minBet: apiError?.minBet,
                         maxBet: apiError?.maxBet,
                         errorCode: errorCode,
+                        onClose,
                     },
                 },
             });
     };
 
-    handleKickOut(errorCode: string) {
-        (errorCode === "1001" || errorCode === "1002") &&
-            setTimeout(() => {
-                (this.context as AuthContextModel)?.signOut();
-            }, 10000);
-    }
+    isKickOutError = (errorCode: string) => {
+        return errorCode === "1001" || errorCode === "1002";
+    };
+
+    getNoticeKickedOut = (errorCode: string) => {
+        return {
+            gameName: "gameName",
+            message: GetLocalizedErrorMessage(errorCode),
+            duration: 10,
+            errorCode: errorCode,
+            roundId: 0,
+            onClose: (this.context as AuthContextModel)?.signOut,
+        };
+    };
 
     handleBetFailed = ({ notice, kickedOut }) => {
-        const { gameStateContextModel, dispatch, router, gameName } = this.props;
+        const { gameStateContextModel, dispatch, gameName } = this.props;
         const { displayPopup } = gameStateContextModel;
 
         displayPopup !== PopupType.Rebet &&
@@ -276,27 +285,20 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
         if (kickedOut?.isDisabledAccount) {
             dispatch({
-                type: GameEventActionType.KICK_OUT,
+                type: GameEventActionType.DISPLAY_POPUP,
                 payload: {
-                    notice,
-                    kickedOut,
+                    notice: this.getNoticeKickedOut(kickedOut.errorCode),
                 },
             });
-
-            setTimeout(() => {
-                router.push("/timeout", "/timeout", { locale: "i18n.language" });
-            }, 10000);
         } else {
-            const isPlaceBet = notice.isPlaceBetFailed ?? false;
-
             displayPopup !== PopupType.Rebet &&
                 dispatch({
                     type: GameEventActionType.DISPLAY_POPUP,
                     payload: {
                         notice: {
                             gameName: `${gameName.toLowerCase()}:${GameResourceKeys.GAME_NAME}`,
-                            message: GetLocalizedErrorMessage(notice.errorCode, isPlaceBet),
-                            duration: 2,
+                            message: GetLocalizedErrorMessage(notice.errorCode),
+                            duration: 3,
                             minBet: notice?.minBet,
                             maxBet: notice?.maxBet,
                             errorCode: notice.errorCode,
@@ -550,6 +552,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
     async placeBet(betChoice: string, amount: number) {
         const gameStateContext = this.props.gameStateContextModel;
+        const systemContext = this.props.systemContext;
 
         if (gameStateContext.enabledQuickBet) {
             const { displayPopup } = this.props.gameStateContextModel;
@@ -589,7 +592,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
         const notConfirmOwnBets = gameStateContext.notConfirmOwnBets;
 
-        notConfirmOwnBets[betChoice] = (notConfirmOwnBets[betChoice] ?? 0) + gameStateContext.selectedChip;
+        notConfirmOwnBets[betChoice] = (notConfirmOwnBets[betChoice] ?? 0) + systemContext.selectedChip;
 
         this.props.dispatch({
             type: GameEventActionType.NOT_CONFIRM_OWN_BETS,
@@ -804,8 +807,9 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             return <></>;
         }
 
-        const { gameName, message, roundId, duration, minBet, maxBet, errorCode, isWarning, betChoice1, betChoice2 } =
+        const { gameName, message, roundId, duration, minBet, maxBet, errorCode, isWarning, betChoice1, betChoice2, onClose } =
             this.props.gameStateContextModel.notice;
+        const onCloseNotice = onClose || (() => this.closeNotice());
         return (
             <Notice
                 gameName={gameName}
@@ -815,7 +819,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 minBet={minBet}
                 maxBet={maxBet}
                 errorCode={errorCode}
-                onClose={() => this.closeNotice()}
+                onClose={onCloseNotice}
                 isWarning={isWarning}
                 betChoice1={betChoice1}
                 betChoice2={betChoice2}

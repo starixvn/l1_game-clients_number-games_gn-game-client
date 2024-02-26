@@ -51,7 +51,6 @@ class Dashboard extends React.PureComponent<Props, State> {
             enabledQuickBet: false,
             betValue: 1,
             isBlockUI: false,
-            isShowSlidingChip: isMobileOnly ? false : true,
             queryGame: this.props.queryGame,
             isJoinGame: false,
             settingGames: [],
@@ -79,7 +78,6 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.setEnabledQuickBet = this.setEnabledQuickBet.bind(this);
         this.handleUpdateUserStakeLevel = this.handleUpdateUserStakeLevel.bind(this);
         this.signOut = this.signOut.bind(this);
-        this.toggleSlidingChip = this.toggleSlidingChip.bind(this);
         this.toggleAnnouncementModal = this.toggleAnnouncementModal.bind(this);
         this.updateQueryGame = this.updateQueryGame.bind(this);
         this.openGame = this.openGame.bind(this);
@@ -315,10 +313,6 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.setState({ settingGames: betSettings.settingGames as any });
     }
 
-    toggleSlidingChip() {
-        isMobileOnly && this.setState({ isShowSlidingChip: !this.state.isShowSlidingChip });
-    }
-
     toggleAnnouncementModal() {
         this.setState({ isShowAnnouncement: !this.state.isShowAnnouncement });
     }
@@ -352,7 +346,6 @@ class Dashboard extends React.PureComponent<Props, State> {
             enabledQuickBet,
             betValue,
             isBlockUI,
-            isShowSlidingChip,
             queryGame,
             isJoinGame,
             settingGames,
@@ -397,7 +390,6 @@ class Dashboard extends React.PureComponent<Props, State> {
                         favoriteGames={favoriteGames}
                         userOfferGames={offerGames}
                         queryGame={queryGame}
-                        isShowSlidingChip={isShowSlidingChip}
                         updateQueryGames={this.updateQueryGame}
                         isJoinGame={isJoinGame}
                         openGameId={openGameId}
