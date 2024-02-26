@@ -12,7 +12,7 @@ export type ScoreboardProps<Round> = {
 
 export type ScoreboardItemProps<Round> = {
     round: Round;
-    scoreboard: Scoreboard<Round>;
+    scoreboard?: Scoreboard<Round>;
 };
 
 export class Scoreboard<Round> extends Component<ScoreboardProps<Round>> {
