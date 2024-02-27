@@ -1,0 +1,18 @@
+import { BaseProps } from "./types";
+import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
+
+export const OwnBet: React.FC<BaseProps> = ({ gameName, choice, className }) => {
+    const gameStateContext = useGameStateContext();
+    const ownBet = gameStateContext?.ownBets?.[choice] ?? 0;
+    const notConfirmOwnBets = gameStateContext?.notConfirmOwnBets?.[choice] ?? 0;
+    const ownBetValue = ownBet + notConfirmOwnBets;
+    return (
+        ownBetValue > 0 && (
+            <div className={className}>
+                <span id={`${gameName}-${choice}-own-bet`} className="bet-value">
+                    {ownBetValue}
+                </span>
+            </div>
+        )
+    );
+};

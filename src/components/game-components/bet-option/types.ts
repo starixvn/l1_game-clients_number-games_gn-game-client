@@ -1,19 +1,42 @@
-import { RoundState } from "../../game-base/type";
-
 export enum HighlightType {
     None,
     Background,
 }
 
-export type Props = {
+export type BetOptionProps = BaseProps & {
+    betChoiceComponent?: JSX.Element;
+    betPercentageComponent?: JSX.Element;
+    oddsComponent?: JSX.Element;
+    ownBetComponent?: JSX.Element;
+    playerBetCountComponent?: JSX.Element;
+    totalBetComponent?: JSX.Element;
+    highlightWinningComponent?: JSX.Element;
+    highlightPrevResultComponent?: JSX.Element;
+    renderComponents?: ({
+        totalBet,
+        playerBetCount,
+        betPercentage,
+        betChoice,
+        odds,
+        ownBet,
+        highlightWinning,
+        highlightPrevResult,
+    }: {
+        totalBet?: JSX.Element;
+        playerBetCount?: JSX.Element;
+        betPercentage?: JSX.Element;
+        betChoice?: JSX.Element;
+        odds?: JSX.Element;
+        ownBet?;
+        highlightWinning?: JSX.Element;
+        highlightPrevResult?: JSX.Element;
+    }) => JSX.Element;
+    onClickBet: any;
+};
+
+export type BaseProps = {
+    gameName?: string;
     choice: string;
-    odd: number;
-    children: React.ReactNode;
-    isHighlight: boolean;
-    isDisplayOdd?: boolean;
-    roundState: RoundState;
-    isShowWinningEffect: boolean;
-    isShowPoolStake?: boolean;
-    isShowTooltip?: boolean;
-    tooltipMessage?: string;
+    children?: React.ReactNode;
+    className?: string;
 };
