@@ -5,7 +5,7 @@
 
     display: grid;
     position: relative;
-    width: 32.4rem;
+    width: 32.8rem;
     background-color: var(--background-color);
     border: 0.1rem solid var(--border-scoreboard-color);
 
@@ -40,7 +40,9 @@
 .scoreboard-item {
     display: flex;
     justify-content: center;
+    align-items: center;
+    width: 1.8rem;
+    height: 1.8rem;
     border-top: 1px solid var(--border-item-color);
     border-right: 1px solid var(--border-item-color);
-    padding: 0.1rem 0;
 }

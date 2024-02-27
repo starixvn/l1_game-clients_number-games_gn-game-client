@@ -50,7 +50,7 @@ export const PercentageStatistic: React.FC<PercentageStatisticProps> = (props) =
         const statisticResult = calculatePercent(statisticRuleEntries, countSettlementResult(roundHistory), roundHistory.length);
 
         return (
-            <div className={`${Styles["statistic-container"]} flex`}>
+            <div className={`${Styles["statistic-container"]} flex`} id="bar-statistic">
                 {Object.keys(statisticResult).map((choice) => (
                     <StatisticItem key={choice} value={`${statisticResult[choice]}%`}>
                         <span className={`${Styles[choice]} ${Styles[gameName]}`}>{t(choice).charAt(0).toUpperCase()}</span>

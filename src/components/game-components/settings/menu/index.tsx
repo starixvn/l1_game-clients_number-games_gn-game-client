@@ -42,6 +42,7 @@ export const Menu: React.FC<{
             <div
                 ref={toggleBtnRef}
                 className={`${Styles["menu-toggle-btn"]}`}
+                id="icon-menu"
                 onClick={() => {
                     setDropdownOpen(!dropdownOpen);
                 }}
