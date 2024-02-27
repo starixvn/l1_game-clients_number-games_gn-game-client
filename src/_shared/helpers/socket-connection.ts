@@ -3,7 +3,7 @@ import MsgpackParser from "socket.io-msgpack-parser";
 import { getAppSettings } from "../app-settings";
 import { buildServerUrl } from "../helpers";
 import { SocketInfo } from "./../../components/game-base/type";
-import { GameMessageHandler } from "../../components/game-base/handlers";
+import { GameMessageHandler, messageEventType } from "../../components/game-base/handlers";
 
 export function InitSocketIO(socketInfo: SocketInfo, session: any, gameName: string, gameMessageHandler: GameMessageHandler) {
     const { proxy, enableMsgpackParser } = getAppSettings();
@@ -26,21 +26,21 @@ export function InitSocketIO(socketInfo: SocketInfo, session: any, gameName: str
             gameMessageHandler.broadcastGameMessage(message);
         });
 
-        socket.on("connect", () => {
+        socket.on(messageEventType.SOCKET_CONNECTED, () => {
             socket.emit("signin", session);
-            gameMessageHandler.broadcastGameEvent({ connect: true });
+            gameMessageHandler.broadcastGameEvent({ [messageEventType.SOCKET_CONNECTED]: true });
         });
 
-        socket.on("signedIn", () => {
+        socket.on(messageEventType.SIGNED_IN, () => {
             socket.emit("inGame", gameName);
-            gameMessageHandler.broadcastGameEvent({ signedIn: true });
+            gameMessageHandler.broadcastGameEvent({ [messageEventType.SIGNED_IN]: true });
         });
 
-        socket.on("connect_error", () => {
-            gameMessageHandler.broadcastGameEvent({ connect_error: true });
+        socket.on(messageEventType.SOCKET_CONNECT_ERROR, () => {
+            gameMessageHandler.broadcastGameEvent({ [messageEventType.SOCKET_CONNECT_ERROR]: true });
         });
-        socket.on("disconnect", () => {
-            gameMessageHandler.broadcastGameEvent({ disconnect: true });
+        socket.on(messageEventType.SOCKET_DISCONNECTED, () => {
+            gameMessageHandler.broadcastGameEvent({ [messageEventType.SOCKET_DISCONNECTED]: true });
         });
     }
 

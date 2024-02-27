@@ -84,14 +84,14 @@ export default function NextBall() {
                 </div>
 
                 <div className={Style["ball-container"]}>
-                    <Ball number={38} color="red" />
-                    <Ball number={27} color="blue" />
-                    <Ball number={64} color="blue" />
-                    <Ball number={1} color="red" />
-                    <Ball isLoading />
-                    <Ball isEmpty />
-                    <Ball isEmpty />
-                    <Ball isEmpty />
+                    <Ball number={38} />
+                    <Ball number={27} />
+                    <Ball number={64} />
+                    <Ball number={1} />
+                    <Ball number={1} />
+                    <Ball number={1} />
+                    <Ball number={1} />
+                    <Ball number={1} />
                 </div>
             </div>
             <div className={`${Style["bet-choice-container"]}`}>

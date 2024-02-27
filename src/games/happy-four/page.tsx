@@ -52,10 +52,10 @@ export default function HappyFour() {
 
                 <div className="flex flex-col items-center justify-center">
                     <div className="mx-auto pt-3 flex gap-2 justify-center">
-                        <Ball number={38} color="red" />
-                        <Ball isLoading />
-                        <Ball isEmpty />
-                        <Ball isEmpty />
+                        <Ball number={38} />
+                        <Ball number={38} />
+                        <Ball number={38} />
+                        <Ball number={38} />
                     </div>
                     <div className={Style["total-number"]}>38</div>
                 </div>
