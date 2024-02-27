@@ -74,6 +74,7 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
         turnCounter,
         notConfirmOwnBets,
         umFirstLoading,
+        isProcessingBet
     } = payload;
 
     // console.log("payload: ", JSON.stringify(payload));
@@ -90,11 +91,13 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
             };
         }
 
-        case GameEventActionType.CONNECT_ERROR: {
+        case GameEventActionType.DISCONNECT: {
             return {
                 ...state,
+                isConnect: false,
             };
         }
+
         case GameEventActionType.SIGN_IN: {
             return {
                 ...state,
@@ -315,6 +318,7 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
         case GameEventActionType.BET_PROCESSING: {
             return {
                 ...state,
+                isProcessingBet,
                 notice: { message: "messages:betProcessing", duration: 2 },
             };
         }

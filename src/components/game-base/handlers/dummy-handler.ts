@@ -1,10 +1,10 @@
 import { useEffect } from "react";
-import { GameEventActionType } from "../../_shared/react-contexts/game-state-context/game-event-action";
-import { useGameStateContext, useGameStatesDispatch } from "../../_shared/react-contexts/game-state-context/game-state-context";
-import { messageEventType } from "./handlers";
-import { RoundState } from "./type";
+import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
+import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
+import { messageEventType } from ".";
+import { RoundState } from "../type";
 
-const DummyHandler = ({ gameMessageHandler }) => {
+export const DummyHandler = ({ gameMessageHandler }) => {
     const gameStateContext = useGameStateContext();
     const dispatch = useGameStatesDispatch();
 
@@ -29,5 +29,3 @@ const DummyHandler = ({ gameMessageHandler }) => {
 
     return null;
 };
-
-export default DummyHandler;

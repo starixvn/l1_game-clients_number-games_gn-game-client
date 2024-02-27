@@ -2,7 +2,7 @@ import { GameConfigs, GameDurations, Notice, RoundState } from "../../../compone
 
 export enum GameEventActionType {
     CONNECT = "CONNECT",
-    CONNECT_ERROR = "CONNECT_ERROR",
+    DISCONNECT = "DISCONNECT",
     SIGN_IN = "SIGN_IN",
     SIGN_OUT = "SIGN_OUT",
     UM = "UM",
@@ -101,6 +101,7 @@ export interface GameEventPayload {
     turnCounter?: number;
     notConfirmOwnBets?: any;
     umFirstLoading?: boolean;
+    isProcessingBet?: boolean;
 }
 
 export interface GameEventAction {

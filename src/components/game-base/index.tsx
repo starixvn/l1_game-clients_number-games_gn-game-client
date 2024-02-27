@@ -23,8 +23,7 @@ import { IRoundStateHandler } from "../round-base/round-state-handler";
 import { IGameStateHandler } from "./handlers/game-state-handler";
 import { GameBaseProps, RoundState } from "./type";
 import { Settings } from "../game-components/settings";
-import { PlayerHandler, GameMessageHandler, messageEventType, GameErrorHandler } from "./handlers";
-import DummyHandler from "./dummy-handler";
+import { DummyHandler, PlayerHandler, GameMessageHandler, messageEventType, GameErrorHandler } from "./handlers";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
     private readonly animationTime = 3000;
@@ -38,7 +37,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     protected timeCounter: number;
     protected authService: Auth;
     protected hedgeBetGroup: string[] = [];
-    private isConnectFailed = false;
     private disconnectTimeout: NodeJS.Timeout;
     private gameMessageHandler: GameMessageHandler;
     private roundStateHandler: IRoundStateHandler;
@@ -110,7 +108,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.socket?.disconnect();
         this.socket = null;
         this.gameMessageHandler.clearAllHandlers();
-        this.isConnectFailed = false;
+        this.props.dispatch({ type: GameEventActionType.DISCONNECT, payload: {} });
         this.isProcessingBet = false;
         this.clearDisconnectTimeout();
         this.registerHandlers();
@@ -146,7 +144,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         const time = this.props.gameStateContextModel.signedIn ? 1000 : 5000;
 
         this.disconnectTimeout = setTimeout(() => {
-            this.isConnectFailed = true;
+            this.props.dispatch({ type: GameEventActionType.DISCONNECT, payload: {} });
             if (!this.props.gameStateContextModel.signedIn) {
                 this.props.dispatch({
                     type: GameEventActionType.DISCONNECT_ERROR,
@@ -370,7 +368,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             durations,
         });
 
-        if (gameStateContextModel.roundState !== newRoundState && !this.isConnectFailed) {
+        if (gameStateContextModel.roundState !== newRoundState && gameStateContextModel.isConnect) {
             const newGameState = {
                 roundState: newRoundState,
                 ...this.gameStateHandler.getNextRoundState({
