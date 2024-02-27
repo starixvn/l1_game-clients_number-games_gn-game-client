@@ -450,9 +450,9 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     handleGamePlay(remainingTime: number) {
-        console.log(`---------------`);
-        console.log(`roundTimeCounter: ${this.roundTimeCounter}`);
-        console.log(`Turn RemainingTime: ${remainingTime}`);
+        // console.log(`---------------`);
+        // console.log(`roundTimeCounter: ${this.roundTimeCounter}`);
+        // console.log(`Turn RemainingTime: ${remainingTime}`);
 
         const { durations, dispatch, gameStateContextModel } = this.props;
 

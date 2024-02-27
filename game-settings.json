@@ -9,11 +9,11 @@
         "durations": {
             "wholeRound": 142,
             "wholeTurn": 35,
-            "placingBets": 25,
+            "placingBets": 22,
             "lockingBet": 3,
             "showResult": 9,
             "resultAnimation": 4,
-            "beforeStartRound": 2,
+            "beforeStartRound": 1,
             "switchRoundAnimation": 2
         }
     }

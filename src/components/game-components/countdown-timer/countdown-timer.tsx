@@ -1,6 +1,5 @@
 import { useTranslation } from "next-i18next";
 import { useEffect, useState } from "react";
-import { useGameContext } from "../../../_shared/react-contexts/game-context/game-context";
 import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import { RoundState } from "../../game-base/type";
 import styles from "./countdown-timer.module.scss";
