@@ -24,6 +24,7 @@ import { GameMessageHandler, messageEventType } from "./game-message-handler";
 import { IGameStateHandler } from "./game-state-handler";
 import { GameBaseProps, PopupType, RoundState } from "./type";
 import { Settings } from "../game-components/settings";
+import { GameErrorHandler } from "./game-error-handler";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
     private readonly animationTime = 3000;
@@ -42,18 +43,27 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     private gameMessageHandler: GameMessageHandler;
     private roundStateHandler: IRoundStateHandler;
     private gameStateHandler: IGameStateHandler;
+    private gameErrorHandler: GameErrorHandler;
 
     constructor(
         props: P,
         roundStateHandler: IRoundStateHandler,
         gameStateHandler: IGameStateHandler,
-        gameMessageHandler: GameMessageHandler
+        gameMessageHandler: GameMessageHandler,
+        gameErrorHandler?: GameErrorHandler
     ) {
         super(props);
 
         this.roundStateHandler = roundStateHandler;
         this.gameStateHandler = gameStateHandler;
         this.gameMessageHandler = gameMessageHandler;
+        this.gameErrorHandler =
+            gameErrorHandler ??
+            new GameErrorHandler({
+                dispatch: props.dispatch,
+                gameMessageHandler: this.gameMessageHandler,
+                gameName: this.props.gameName,
+            });
 
         this.openPopup = this.openPopup.bind(this);
         this.placeBet = this.placeBet.bind(this);
@@ -94,7 +104,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.isConnectFailed = false;
         this.isProcessingBet = false;
         this.clearDisconnectTimeout();
-        this.registerMessageHandler();
+        this.registerHandlers();
         this.connectToGameService();
     }
 
@@ -149,7 +159,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         });
     }
 
-    registerMessageHandler() {
+    registerHandlers() {
         this.gameMessageHandler.register(messageEventType.SOCKET_CONNECTED, this.onGameServiceConnected.bind(this));
         this.gameMessageHandler.register(messageEventType.SOCKET_CONNECT_ERROR, this.onConnectFailed.bind(this));
         this.gameMessageHandler.register(messageEventType.SOCKET_DISCONNECTED, this.onSocketDisconnect.bind(this));
@@ -160,11 +170,11 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.gameMessageHandler.register(messageEventType.USER, this.handleUserData.bind(this));
         this.gameMessageHandler.register(messageEventType.OWN_BETS, this.handleOwnBets.bind(this));
         this.gameMessageHandler.register(messageEventType.END_BET, this.handleEndBet.bind(this));
-        this.gameMessageHandler.register(messageEventType.API_ERROR, this.handleApiError.bind(this));
         this.gameMessageHandler.register(messageEventType.USER_STAKE_LEVEL, this.handleUserStakeLevel.bind(this));
         this.gameMessageHandler.register(messageEventType.DRAW_ID, this.handleDrawId.bind(this));
         this.gameMessageHandler.register(messageEventType.ROUND_HISTORY, this.handleRoundHistory.bind(this));
         this.gameMessageHandler.register(messageEventType.NOT_PERMITTED_TO_PLAY, this.handleRestrictPermission.bind(this));
+        this.gameErrorHandler.registerEvents((this.context as AuthContextModel)?.signOut);
     }
 
     handleDrawId = ({ drawId }) => {
@@ -226,39 +236,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     get defaultSettlementResult() {
         return null;
     }
-
-    handleApiError = ({ apiError }) => {
-        const isPlaceBet = apiError.isPlaceBetFailed ? apiError.isPlaceBetFailed : false;
-        const errorCode = apiError.errorCode;
-        const isKickOutError = this.isKickOutError(errorCode.toString());
-        const onClose = isKickOutError ? (this.context as AuthContextModel)?.signOut : null;
-
-        const message = GetLocalizedErrorMessage(errorCode, isPlaceBet);
-        const gameName = `${this.props.gameName.toLowerCase()}:${GameResourceKeys.GAME_NAME}`;
-
-        const { displayPopup } = this.props.gameStateContextModel;
-
-        displayPopup !== PopupType.Rebet &&
-            this.props.dispatch({
-                type: GameEventActionType.DISPLAY_POPUP,
-                payload: {
-                    notice: {
-                        gameName: gameName,
-                        roundId: apiError?.gameRoundId,
-                        message: message,
-                        duration: isKickOutError ? 10 : 3,
-                        minBet: apiError?.minBet,
-                        maxBet: apiError?.maxBet,
-                        errorCode: errorCode,
-                        onClose,
-                    },
-                },
-            });
-    };
-
-    isKickOutError = (errorCode: string) => {
-        return errorCode === "1001" || errorCode === "1002";
-    };
 
     getNoticeKickedOut = (errorCode: string) => {
         return {
