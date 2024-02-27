@@ -68,7 +68,6 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
         showWinningAnimation,
         selectedBetChoice,
         displayPopup,
-        viewMode,
         activeScoreboardTab,
         playResultAnimation,
         newGameState,
@@ -341,13 +340,6 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
             return {
                 ...state,
                 displayPopup,
-            };
-        }
-
-        case GameEventActionType.VIEW_MODE: {
-            return {
-                ...state,
-                viewMode,
             };
         }
 

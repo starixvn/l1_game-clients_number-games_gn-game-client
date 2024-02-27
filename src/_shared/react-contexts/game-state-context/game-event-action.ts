@@ -1,4 +1,4 @@
-import { GameConfigs, GameDurations, Notice, PopupType, RoundState, ViewMode } from "../../../components/game-base/type";
+import { GameConfigs, GameDurations, Notice, PopupType, RoundState } from "../../../components/game-base/type";
 
 export enum GameEventActionType {
     CONNECT = "CONNECT",
@@ -32,7 +32,6 @@ export enum GameEventActionType {
     PLACE_BET_POPUP = "PLACE_BET_POPUP",
     BET_PROCESSING = "BET_PROCESSING",
     OPEN_POPUP = "OPEN_POPUP",
-    VIEW_MODE = "VIEW_MODE",
     ACTIVE_SCORE_BOARD = "ACTIVE_SCORE_BOARD",
     PLAY_RESULT_ANIMATION = "PLAY_RESULT_ANIMATION",
     SHOW_RESULT_INFO_TIME_OUT = "SHOW_RESULT_INFO_TIME_OUT",
@@ -95,7 +94,6 @@ export interface GameEventPayload {
     showWinningAnimation?: boolean;
     selectedBetChoice?: string;
     displayPopup?: PopupType;
-    viewMode?: ViewMode;
     activeScoreboardTab?: Number;
     playResultAnimation?: boolean;
     newGameState?: any;

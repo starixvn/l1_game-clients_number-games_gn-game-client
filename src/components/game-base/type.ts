@@ -133,10 +133,6 @@ export interface WinStreakCollectorModel {
         isStopStreak: boolean;
     };
 }
-export enum ViewMode {
-    full,
-    collapse,
-}
 
 export interface Position {
     x: number;

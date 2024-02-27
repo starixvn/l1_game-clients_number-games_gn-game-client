@@ -18,7 +18,6 @@ import { Props } from "./type";
 import { AppTypes, GameIds } from "../_shared/constants";
 import BacBall from "./bac-ball";
 import { GameCategory } from "../components/page-components/game-category";
-import { ViewMode } from "../components/game-base/type";
 import HappyFour from "./happy-four/page";
 import HappyWheel from "./happy-wheel/page";
 import SicBalls from "./sic-balls/page";
@@ -97,19 +96,14 @@ export const Games: React.FC<Props> = ({
     const renderListGames = () => {
         const renderGames = getRenderGames(selectedCategory, selectedPage, userOfferGames);
 
-        return renderGames.map((gameId, index) => getGameComponentById(gameId, index));
+        return renderGames.map((gameId) => getGameComponentById(gameId));
     };
 
-    const getGameComponentById = (gameId: number, index: number) => {
+    const getGameComponentById = (gameId: number) => {
         const { gameSettings } = getAppSettings();
-        let viewMode = isMobileOnly && index !== 0 ? ViewMode.collapse : ViewMode.full;
-        if (openGameId && isMobileOnly) {
-            viewMode = gameId === openGameId ? ViewMode.full : ViewMode.collapse;
-        }
 
         const gameProps = {
             ...gameSettings[gameId],
-            viewMode,
             notifyWinStreak: (winningStreak: WinningStreakItem) =>
                 enabledWinningStreakNotification && winningStreakRef?.current && winningStreakRef.current.addWinningStreak(winningStreak),
             playPlaceBetSound: () => enabledPlaySound && playPlaceBetSound(),
