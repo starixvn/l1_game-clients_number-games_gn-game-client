@@ -50,9 +50,9 @@ export default function LuckyThree() {
                     <div className={Style["sub-round"]}>
                         <div className={`${Style["sub-round-title"]}`}>1st</div>
                         <div className="mx-auto flex gap-2 justify-center">
-                            <Ball number={12} color="blue" />
-                            <Ball number={32} color="blue" />
-                            <Ball number={21} color="red" />
+                            <Ball number={12} />
+                            <Ball number={32} />
+                            <Ball number={21} />
                         </div>
                         <div className={Style["total-number"]}>38</div>
                     </div>
@@ -60,9 +60,9 @@ export default function LuckyThree() {
                     <div className={Style["sub-round"]}>
                         <div className={`${Style["sub-round-title"]}`}>2nd</div>
                         <div className="mx-auto flex gap-2 justify-center">
-                            <Ball number={64} color="blue" />
-                            <Ball number={59} color="blue" />
-                            <Ball number={74} color="red" />
+                            <Ball number={64} />
+                            <Ball number={59} />
+                            <Ball number={74} />
                         </div>
                         <div className={Style["total-number"]}>197</div>
                     </div>
@@ -70,9 +70,9 @@ export default function LuckyThree() {
                     <div className={Style["sub-round"]}>
                         <div className={`${Style["sub-round-title"]} ${Style["is-drawing"]}`}>3rd</div>
                         <div className="mx-auto flex gap-2 justify-center">
-                            <Ball isLoading />
-                            <Ball isLoading />
-                            <Ball isLoading />
+                            <Ball number={64} />
+                            <Ball number={64} />
+                            <Ball number={64} />
                         </div>
                         <div className={Style["total-number"]}></div>
                     </div>
