@@ -1,6 +1,5 @@
 import { useTranslation } from "next-i18next";
 import { useEffect, useState } from "react";
-
 import { useGameContext } from "../../../_shared/react-contexts/game-context/game-context";
 import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import { RoundState } from "../../game-base/type";
@@ -51,11 +50,8 @@ const CountdownTimer = () => {
 };
 
 const SimpleTimer = () => {
-    const ctx = useGameContext();
-    const { durations } = ctx;
     const { roundState, remainingTime } = useGameStateContext();
-    const initialRemainingTime = roundState === RoundState.BeforeStartRound ? durations.placingBets : remainingTime;
-    const [timeLeft, setTimeLeft] = useState(initialRemainingTime);
+    const [timeLeft, setTimeLeft] = useState(remainingTime);
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -68,10 +64,12 @@ const SimpleTimer = () => {
         return () => {
             clearInterval(timer);
         };
-    }, []);
+    }, [timeLeft]);
+
 
     const seconds = (timeLeft % 60).toString().padStart(2, "0");
 
+    // console.log(`SimpleTimer : ${seconds}`);
     return (
         <div className={styles.timer}>
             <div className={`${styles["countdown-timer"]} ${roundState === RoundState.LockingBet ? styles["lock-bet"] : ""}`}>

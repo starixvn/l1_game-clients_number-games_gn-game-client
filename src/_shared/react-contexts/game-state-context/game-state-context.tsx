@@ -7,7 +7,6 @@ import { GameEventAction, GameEventActionType } from "./game-event-action";
 import { GameStateContextModel, initialGameStateContextModel } from "./game-state-context-model";
 
 const GameStateContext = createContext({ rate: 1 } as GameStateContextModel<any, any>);
-
 const GameStateDispatchContext = createContext(null);
 const GameTranslateContext = createContext(null);
 
@@ -33,7 +32,6 @@ export function useGameStateContext() {
 }
 
 export function useGameStatesDispatch() {
-    // console.log('useGameStatesDispatch');
     return useContext(GameStateDispatchContext);
 }
 

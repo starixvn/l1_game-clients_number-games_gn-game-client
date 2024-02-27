@@ -415,16 +415,10 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     handleRemainingTime({ remainingTime }) {
-        const { durations, gameStateContextModel, dispatch } = this.props;
+        const { durations, gameStateContextModel } = this.props;
 
         if (gameStateContextModel.roundState === RoundState.None || !gameStateContextModel.isUMInFirstLoad) {
-            dispatch({
-                type: GameEventActionType.REMAINING_TIME,
-                payload: { remainingTime },
-            });
-
             this.roundTimeCounter = remainingTime;
-
             this.runGame(this.roundStateHandler.getRemainingTime({ remainingTime, durations }));
         }
     }
@@ -448,6 +442,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             if (this.timeCounter > 0 && newRoundState !== RoundState.SwitchRound) {
                 this.timeCounter = this.timeCounter - 1;
             }
+
             this.handleGamePlay(this.timeCounter);
         }, 1000);
 
@@ -455,11 +450,17 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     handleGamePlay(remainingTime: number) {
-        // console.log(`---------------`);
-        // console.log(`roundTimeCounter: ${this.roundTimeCounter}`);
-        // console.log(`Turn RemainingTime: ${remainingTime}`);
+        console.log(`---------------`);
+        console.log(`roundTimeCounter: ${this.roundTimeCounter}`);
+        console.log(`Turn RemainingTime: ${remainingTime}`);
 
         const { durations, dispatch, gameStateContextModel } = this.props;
+
+        dispatch({
+            type: GameEventActionType.REMAINING_TIME,
+            payload: { remainingTime },
+        });
+
         const newRoundState = this.roundStateHandler.determineRoundBaseState({
             roundRemainingTime: this.roundTimeCounter,
             wholeRound: durations.wholeRound,
