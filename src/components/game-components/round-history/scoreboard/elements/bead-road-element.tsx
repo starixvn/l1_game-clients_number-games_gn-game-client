@@ -19,15 +19,11 @@ export abstract class BeadRoadElement<Round> extends Component<ScoreboardItemPro
 
     abstract renderElement(round: Round): ReactNode;
 
-    abstract renderEmpty(): ReactNode;
-
     render(): ReactNode {
         const { round } = this.props;
 
         if (round) {
             return this.renderElement(round);
         }
-
-        return this.renderEmpty();
     }
 }

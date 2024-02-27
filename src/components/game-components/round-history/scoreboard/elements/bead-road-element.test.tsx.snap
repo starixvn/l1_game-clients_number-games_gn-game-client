@@ -6,8 +6,4 @@ exports[`BeadRoadElement render and the round has value should match the snapsho
 </div>
 `;
 
-exports[`BeadRoadElement render and the round is null should match the snapshot 1`] = `
-<div>
-  empty
-</div>
-`;
+exports[`BeadRoadElement render and the round is null should match the snapshot 1`] = `<div />`;

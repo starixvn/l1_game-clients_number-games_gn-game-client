@@ -2,21 +2,21 @@ import { Swiper, SwiperSlide } from "swiper/react";
 
 import "swiper/css";
 import "swiper/css/pagination";
-import Style from "./scoreboard-swipe.module.scss";
 
-import Scoreboard from "../round-history/scoreboard";
-import { BacBallBeadRoadCharacterElement, BacBallBeadRoadValueElement } from "../../../games/bac-ball/scoreboard-elements";
+import { BacBallBeadRoadValueElement, BacBallBigRoadConverter, BacBallBigRoadElement } from "../../../games/bac-ball/scoreboard-elements";
 import { Round } from "../../game-base/type";
+import Scoreboard from "../round-history/scoreboard";
 
 const ScoreboardSwipe: React.FC<{ roundHistory: Round<any, any>[] }> = ({ roundHistory }) => {
+    const settlements = roundHistory.map((round) => round.settlementResult);
+
     return (
         <Swiper slidesPerView={"auto"} spaceBetween={10} className="mySwiper">
             <SwiperSlide>
                 <Scoreboard
-                    rounds={roundHistory}
-                    element={BacBallBeadRoadCharacterElement}
-                    arrange={BacBallBeadRoadCharacterElement.arrange}
-                    column={18}
+                    rounds={settlements}
+                    element={BacBallBigRoadElement}
+                    arrange={BacBallBigRoadElement.arrange(BacBallBigRoadConverter.instance)}
                     row={6}
                 />
             </SwiperSlide>

@@ -1,0 +1,135 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BacBallBeadRoadCharacterElement render when the round result is banker should match the snapshot 1`] = `
+<div>
+  <span
+    class="banker"
+  >
+    B
+  </span>
+</div>
+`;
+
+exports[`BacBallBeadRoadCharacterElement render when the round result is null should match the snapshot 1`] = `<div />`;
+
+exports[`BacBallBeadRoadCharacterElement render when the round result is player should match the snapshot 1`] = `
+<div>
+  <span
+    class="player"
+  >
+    P
+  </span>
+</div>
+`;
+
+exports[`BacBallBeadRoadCharacterElement render when the round result is tie should match the snapshot 1`] = `
+<div>
+  <span
+    class="tie"
+  >
+    T
+  </span>
+</div>
+`;
+
+exports[`BacBallBeadRoadValueElement render when the round result is banker should match the snapshot 1`] = `
+<div>
+  <span
+    class="banker value"
+  >
+    2
+  </span>
+</div>
+`;
+
+exports[`BacBallBeadRoadValueElement render when the round result is null should match the snapshot 1`] = `<div />`;
+
+exports[`BacBallBeadRoadValueElement render when the round result is player should match the snapshot 1`] = `
+<div>
+  <span
+    class="player value"
+  >
+    1
+  </span>
+</div>
+`;
+
+exports[`BacBallBeadRoadValueElement render when the round result is tie should match the snapshot 1`] = `
+<div>
+  <span
+    class="tie value"
+  >
+    2
+  </span>
+</div>
+`;
+
+exports[`BacBallBigRoadElement render when the round result is banker only should match the snapshot 1`] = `
+<div>
+  <span
+    class="banker "
+  />
+</div>
+`;
+
+exports[`BacBallBigRoadElement render when the round result is banker with more tie should match the snapshot 1`] = `
+<div>
+  <span
+    class="banker big-road-tie"
+  >
+    2
+  </span>
+</div>
+`;
+
+exports[`BacBallBigRoadElement render when the round result is banker with single tie should match the snapshot 1`] = `
+<div>
+  <span
+    class="banker big-road-tie"
+  />
+</div>
+`;
+
+exports[`BacBallBigRoadElement render when the round result is multiple tie should match the snapshot 1`] = `
+<div>
+  <span
+    class="tie"
+  >
+    2
+  </span>
+</div>
+`;
+
+exports[`BacBallBigRoadElement render when the round result is player only should match the snapshot 1`] = `
+<div>
+  <span
+    class="player "
+  />
+</div>
+`;
+
+exports[`BacBallBigRoadElement render when the round result is player with more tie should match the snapshot 1`] = `
+<div>
+  <span
+    class="player big-road-tie"
+  >
+    2
+  </span>
+</div>
+`;
+
+exports[`BacBallBigRoadElement render when the round result is player with single tie should match the snapshot 1`] = `
+<div>
+  <span
+    class="player big-road-tie"
+  />
+</div>
+`;
+
+exports[`BacBallBigRoadElement render when the round result is tie only should match the snapshot 1`] = `
+<div>
+  <span
+    class="tie"
+  />
+</div>
+`;

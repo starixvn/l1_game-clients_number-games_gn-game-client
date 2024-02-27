@@ -21,6 +21,7 @@ const configs = {
     transformIgnorePatterns: ["/node_modules/", "^.+\\.module\\.(css|sass|scss)$"],
     testResultsProcessor: "jest-sonar-reporter",
     resetMocks: false,
+    snapshotResolver: "./__mocks__/snapshot.ts",
 };
 
 export default configs;

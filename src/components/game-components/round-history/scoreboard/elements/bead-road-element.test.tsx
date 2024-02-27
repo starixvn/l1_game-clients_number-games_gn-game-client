@@ -6,9 +6,6 @@ class BeadRoadStub extends BeadRoadElement<number> {
     renderElement(round: number): ReactNode {
         return round;
     }
-    renderEmpty(): ReactNode {
-        return "empty";
-    }
 }
 
 describe(BeadRoadElement.name, () => {
