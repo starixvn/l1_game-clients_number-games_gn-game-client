@@ -1,9 +1,9 @@
-import { GetLocalizedErrorMessage } from "../../_shared/helpers";
-import { GameEventActionType } from "../../_shared/react-contexts/game-state-context/game-event-action";
-import { GameResourceKeys } from "../../_shared/resources";
+import { GetLocalizedErrorMessage } from "../../../_shared/helpers";
+import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
+import { GameResourceKeys } from "../../../_shared/resources";
 import { GameMessageHandler, messageEventType } from "./game-message-handler";
 
-export type GameErrorProps = {
+export type GameErrorHandlerProps = {
     gameName: string;
     dispatch: Function;
     gameMessageHandler: GameMessageHandler;
@@ -20,7 +20,7 @@ export interface ApiError {
 }
 
 export class GameErrorHandler {
-    constructor(private props: GameErrorProps) {}
+    constructor(private props: GameErrorHandlerProps) {}
 
     registerEvents = (signOut: Function) => {
         this.props.gameMessageHandler.register(messageEventType.API_ERROR, ({ apiError }) => {

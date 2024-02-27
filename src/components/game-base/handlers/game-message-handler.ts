@@ -1,6 +1,6 @@
-import MessageTransmitter from "../../_shared/helpers/message-transmitter";
-import { MessageTransmitterType } from "../../_shared/helpers/message-transmitter/type";
-import { GameEventActionType } from "../../_shared/react-contexts/game-state-context/game-event-action";
+import MessageTransmitter from "../../../_shared/helpers/message-transmitter";
+import { MessageTransmitterType } from "../../../_shared/helpers/message-transmitter/type";
+import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 
 export const messageEventType = {
     GAME_CONFIG: "gameConfigs",
@@ -26,6 +26,7 @@ export const messageEventType = {
     NOT_PERMITTED_TO_PLAY: "notPermittedToPlay",
     BET_PERCENTAGE: "betPercentage",
     PLAYER_BET_COUNT: "playerBetCount",
+    GAME_DESTROY: "gameDestroy",
 };
 
 export class GameMessageHandler {

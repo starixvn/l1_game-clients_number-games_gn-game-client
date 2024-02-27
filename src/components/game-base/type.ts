@@ -4,7 +4,7 @@ import { Resource, Texture } from "pixi.js";
 import { GameEventAction } from "../../_shared/react-contexts/game-state-context/game-event-action";
 import { GameStateContextModel } from "../../_shared/react-contexts/game-state-context/game-state-context-model";
 import { SystemContextModel } from "../../_shared/react-contexts";
-import { GameMessageHandler } from "./game-message-handler";
+import { GameMessageHandler } from "./handlers/game-message-handler";
 
 export interface GameConfigs {
     odds: { [key: string]: number };

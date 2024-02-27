@@ -1,4 +1,4 @@
-import { RoundState } from "./type";
+import { RoundState } from "../type";
 
 export interface IGameStateHandler {
     getNextRoundState({ gameStateContextModel, nextRoundState, durations, defaultResult, defaultSettlementResult, remainingTime });

@@ -20,11 +20,10 @@ import { Notice } from "../game-components/notice";
 import ConfirmDialog from "../game-components/submit-dialog";
 import BetSettings from "../page-components/bet-settings";
 import { IRoundStateHandler } from "../round-base/round-state-handler";
-import { GameMessageHandler, messageEventType } from "./game-message-handler";
-import { IGameStateHandler } from "./game-state-handler";
+import { IGameStateHandler } from "./handlers/game-state-handler";
 import { GameBaseProps, RoundState } from "./type";
 import { Settings } from "../game-components/settings";
-import { GameErrorHandler } from "./game-error-handler";
+import { PlayerHandler, GameMessageHandler, messageEventType, GameErrorHandler } from "./handlers";
 import DummyHandler from "./dummy-handler";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
@@ -45,13 +44,15 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     private roundStateHandler: IRoundStateHandler;
     private gameStateHandler: IGameStateHandler;
     private gameErrorHandler: GameErrorHandler;
+    private playerHandler: PlayerHandler;
 
     constructor(
         props: P,
         roundStateHandler: IRoundStateHandler,
         gameStateHandler: IGameStateHandler,
         gameMessageHandler: GameMessageHandler,
-        gameErrorHandler?: GameErrorHandler
+        gameErrorHandler?: GameErrorHandler,
+        playerHandler?: PlayerHandler
     ) {
         super(props);
 
@@ -61,6 +62,14 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.gameErrorHandler =
             gameErrorHandler ??
             new GameErrorHandler({
+                dispatch: props.dispatch,
+                gameMessageHandler: this.gameMessageHandler,
+                gameName: this.props.gameName,
+            });
+
+        this.playerHandler =
+            playerHandler ??
+            new PlayerHandler({
                 dispatch: props.dispatch,
                 gameMessageHandler: this.gameMessageHandler,
                 gameName: this.props.gameName,
@@ -166,26 +175,10 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.gameMessageHandler.register(messageEventType.UNDER_MAINTENANCE, this.handleUM.bind(this));
         this.gameMessageHandler.register(messageEventType.REMAINING_TIME, this.handleRemainingTime.bind(this));
         this.gameMessageHandler.register(messageEventType.FINISH, this.handleFinish.bind(this));
-        this.gameMessageHandler.register(messageEventType.USER, this.handleUserData.bind(this));
         this.gameMessageHandler.register(messageEventType.END_BET, this.handleEndBet.bind(this));
-        this.gameMessageHandler.register(messageEventType.USER_STAKE_LEVEL, this.handleUserStakeLevel.bind(this));
-        this.gameMessageHandler.register(messageEventType.NOT_PERMITTED_TO_PLAY, this.handleRestrictPermission.bind(this));
+        this.gameMessageHandler.register(messageEventType.GAME_DESTROY, this.onDestroy.bind(this));
+        this.playerHandler.registerEvents((this.context as AuthContextModel)?.setBalance);
         this.gameErrorHandler.registerEvents((this.context as AuthContextModel)?.signOut);
-    }
-
-    handleUserStakeLevel({ userStakeLevel, hasNotice = true }) {
-        this.props.updateUserStakeLevel(userStakeLevel);
-
-        this.props.dispatch({
-            type: GameEventActionType.USER_STAKE_LEVEL,
-            payload: { userStakeLevel },
-        });
-
-        hasNotice &&
-            this.props.dispatch({
-                type: GameEventActionType.NOTICE_USER_STAKE_LEVEL,
-                payload: {},
-            });
     }
 
     get winningAnimationWaitingTimeInSecond() {
@@ -221,7 +214,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             },
         });
 
-
         if (kickedOut?.isDisabledAccount) {
             dispatch({
                 type: GameEventActionType.DISPLAY_POPUP,
@@ -246,19 +238,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                     },
                 },
             });
-        }
-    };
-
-    handleRestrictPermission = ({ notPermittedToPlay, userStakeLevel }) => {
-        if (notPermittedToPlay) {
-            this.onDestroy();
-            this.props.dispatch({
-                type: GameEventActionType.DISCONNECT_ERROR,
-                payload: { disconnectReason: ConnectFailedReasonKey.restrictPlayPermission },
-            });
-        }
-        if (userStakeLevel) {
-            this.handleUserStakeLevel({ userStakeLevel });
         }
     };
 
@@ -311,14 +290,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.props.dispatch({
             type: GameEventActionType.ACCEPTED_BET_QUEUE,
             payload: { acceptedBetQueue },
-        });
-    }
-
-    handleUserData({ user, gameConfigs }) {
-        (this.context as AuthContextModel)?.setBalance(user.red);
-        this.props.dispatch({
-            type: GameEventActionType.USER,
-            payload: { userData: { user, gameConfigs } },
         });
     }
 

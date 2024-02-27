@@ -3,7 +3,7 @@ import MsgpackParser from "socket.io-msgpack-parser";
 import { getAppSettings } from "../app-settings";
 import { buildServerUrl } from "../helpers";
 import { SocketInfo } from "./../../components/game-base/type";
-import { GameMessageHandler } from "../../components/game-base/game-message-handler";
+import { GameMessageHandler } from "../../components/game-base/handlers";
 
 export function InitSocketIO(socketInfo: SocketInfo, session: any, gameName: string, gameMessageHandler: GameMessageHandler) {
     const { proxy, enableMsgpackParser } = getAppSettings();

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { GameEventActionType } from "../../_shared/react-contexts/game-state-context/game-event-action";
 import { useGameStateContext, useGameStatesDispatch } from "../../_shared/react-contexts/game-state-context/game-state-context";
-import { messageEventType } from "./game-message-handler";
+import { messageEventType } from "./handlers";
 import { RoundState } from "./type";
 
 const DummyHandler = ({ gameMessageHandler }) => {
