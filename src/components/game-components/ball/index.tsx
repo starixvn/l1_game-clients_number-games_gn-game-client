@@ -1,14 +1,29 @@
-import React, { useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 
 import { useBallColor } from "../../../_shared/helpers/ball-color-helper";
 import Styles from "./ball.module.scss";
 
-const Ball = (props: any) => {
-    const { number, isLoading, delayTime, joinGame } = props;
+export enum BallStatus {
+    NONE = 0,
+    LOADING,
+    SHOW,
+}
+export interface IBall {
+    number: number;
+    status?: BallStatus;
+    delayTime?: number;
+}
+
+const Ball: FC<IBall> = (props) => {
+    const { number, delayTime, status } = props;
 
     const color = useBallColor({ number });
+    const ballStyleName = `${Styles["ball-bg"]} ${Styles[color]} ${status === BallStatus.SHOW ? Styles["display-right-now"] : ""}`;
+
+    const delayStyle = delayTime > 0 ? Styles["delay"] : "";
+    const blurStyle = status === BallStatus.NONE ? Styles.blur : Styles.active;
+
     const [isDelayShowResult, setIsDelayShowResult] = useState<boolean>(false);
-    const ballStyleName = `${Styles["ball-bg"]} ${Styles[color]} ${joinGame ? Styles["display-right-now"] : ""}`;
 
     useEffect(() => {
         let timeOut: NodeJS.Timeout;
@@ -22,25 +37,20 @@ const Ball = (props: any) => {
     }, [delayTime, isDelayShowResult]);
 
     return (
-        <div className={`${Styles.ball} ${delayTime > 0 ? Styles["delay"] : ""}`}>
-            {props.number != null && isDelayShowResult && (
+        <div className={`${Styles.ball} ${blurStyle} ${delayStyle}`}>
+            {isDelayShowResult && number > 0 && (
                 <div className={ballStyleName}>
-                    {number > 0 && (
+                    {
                         <span id="ball-number" className={Styles["ball-number"]}>
                             {number}
                         </span>
-                    )}
+                    }
                 </div>
             )}
 
-            {isLoading && (
-                <div className={Styles.loading}>
-                    <svg className={Styles["circle-ring"]}>
-                        <circle id="after" cx="50%" cy="50%" r="47.2%" strokeDasharray="90.12870025634766" strokeLinecap="butt"></circle>
-                    </svg>
-                    <div className={Styles["circle-outer"]}></div>
-                </div>
-            )}
+            <div className={`${Styles.loading} ${isDelayShowResult && number > 0 ? Styles["hide"] : ""}`}>
+                {status === BallStatus.LOADING && <div className={Styles["loading-icon"]}></div>}
+            </div>
         </div>
     );
 };

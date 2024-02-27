@@ -1,5 +1,5 @@
-import { useGameStateContext } from "../react-contexts/game-state-context/game-state-context";
 import { RoundState } from "../../components/game-base/type";
+import { useGameStateContext } from "../react-contexts/game-state-context/game-state-context";
 
 export function useWinningHighLightResult({ betChoice }) {
     const gameStateContext = useGameStateContext();
@@ -13,7 +13,10 @@ export function useShowHighlightPrevResult({ betChoice }) {
     const { roundState, roundHistory } = gameStateContext;
 
     if (roundHistory[0]) {
-        return [RoundState.BeforeStartRound, RoundState.InRound].includes(roundState) && roundHistory[0].settlementResult[betChoice];
+        return (
+            [RoundState.SwitchRound, RoundState.BeforeStartRound, RoundState.InRound].includes(roundState) &&
+            roundHistory[0].settlementResult[betChoice]
+        );
     }
 
     return false;

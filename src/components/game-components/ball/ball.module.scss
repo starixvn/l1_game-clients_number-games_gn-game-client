@@ -1,11 +1,9 @@
-$loading-time: 2s;
-$delay-loading-time: 0s;
+$delay-all-anim: 1.2s;
 
-$outer-time: 2s;
-$delay-outer-time: 1s;
+$zoom-in-duration: 0.5s;
+$zoom-in-delay-time: 1s;
 
-$zoom-in-time: 0.5s;
-$delay-zoom-in-time: 2.8s;
+$loading-duration: 1.6s;
 
 .ball {
     position: relative;
@@ -14,23 +12,19 @@ $delay-zoom-in-time: 2.8s;
     height: 3.4rem;
     border-radius: 50%;
     border: 1px solid #9c9c9c;
-    background-color: #000;
 
     &.delay {
-        $delay-all-anim: 1s;
-
         .ball-bg {
-            animation: zoom-in ($zoom-in-time) ($delay-zoom-in-time + $delay-all-anim) linear forwards;
+            animation: zoom-in ($zoom-in-duration) ($zoom-in-delay-time + $delay-all-anim) linear forwards;
         }
+    }
 
-        .circle-ring circle {
-            animation: loading ($loading-time) ($delay-loading-time + $delay-all-anim) linear forwards,
-                fadeOut 0.2s ($loading-time + $delay-all-anim) linear forwards;
-        }
+    &.blur {
+        opacity: 0.6;
+    }
 
-        .circle-outer {
-            animation: outer ($outer-time) ($delay-outer-time + $delay-all-anim) linear forwards;
-        }
+    &.active {
+        opacity: 1;
     }
 }
 
@@ -41,17 +35,17 @@ $delay-zoom-in-time: 2.8s;
 }
 
 .ball-number {
-    font-size: 1.4rem;
-    height: 3.2rem;
-    font-weight: bold;
-    color: #2c2f3e;
-    text-align: center;
+    position: absolute;
+    z-index: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    position: absolute;
-    z-index: 1;
+    height: 3.2rem;
     width: 100%;
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #2c2f3e;
+    text-align: center;
 }
 
 .red {
@@ -63,17 +57,17 @@ $delay-zoom-in-time: 2.8s;
 }
 
 .ball-bg {
-    width: 3.4rem;
-    height: 3.4rem;
     position: relative;
     top: -0.1rem;
     left: -0.1rem;
     z-index: 2;
+    width: 3.4rem;
+    height: 3.4rem;
     transform: scale(0);
     text-align: center;
     border-radius: 50%;
     transform-origin: center center;
-    animation: zoom-in $zoom-in-time $delay-zoom-in-time linear forwards;
+    animation: zoom-in $zoom-in-duration $zoom-in-delay-time ease-in-out forwards;
 
     &.display-right-now {
         animation: none;
@@ -94,71 +88,41 @@ $delay-zoom-in-time: 2.8s;
 
 .loading {
     position: absolute;
-    top: 0.1rem;
-    left: 0.1rem;
-    width: 3rem;
-    height: 3rem;
-}
-
-.circle-ring {
-    position: absolute;
-    width: 3rem;
-    height: 3rem;
-    inset: 0;
-    transform: rotate(-90deg);
-    background: #000;
+    top: 0.3rem;
+    left: 0.3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 2.6rem;
+    height: 2.6rem;
     border-radius: 50%;
+
+    &.hide {
+        animation: fade-out 0.6s linear forwards;
+    }
 }
 
-.circle-ring circle {
-    stroke-dashoffset: 85;
-    animation: loading $loading-time $delay-loading-time linear forwards, fadeOut 0.2s $loading-time linear forwards;
-    stroke: rgba(201, 201, 201, 0.4);
-    stroke-width: 3px;
-    fill: transparent;
-    opacity: 1;
-}
-
-.circle-outer {
+.loading-icon {
     position: absolute;
-    z-index: -1;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(240, 234, 234, 0.6);
+    width: 2.8rem;
+    height: 2.8rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-width: 2px;
     border-radius: 50%;
+    border-style: solid;
+    border-color: transparent hsla(0, 0%, 100%, 0.3);
     opacity: 1;
-    backface-visibility: hidden;
-    transform: scale(0) translateZ(0);
-    animation: outer $outer-time $delay-outer-time linear forwards;
+    animation: spin $loading-duration linear infinite;
 }
 
-@keyframes fadeOut {
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
     to {
-        opacity: 0;
-    }
-}
-
-@keyframes loading {
-    to {
-        stroke-dashoffset: 0;
-    }
-}
-
-@keyframes outer {
-    0% {
-        transform: scale(0) translateZ(0);
-    }
-
-    80% {
-        opacity: 0.2;
-        transform: scale(1.8);
-    }
-
-    100% {
-        opacity: 0;
-        transform: scale(0);
+        transform: rotate(359deg);
     }
 }
 
@@ -169,5 +133,11 @@ $delay-zoom-in-time: 2.8s;
 
     to {
         transform: scale(1) translateZ(0) perspective(1px) rotate(0.05deg);
+    }
+}
+
+@keyframes fade-out {
+    to {
+        opacity: 0;
     }
 }
