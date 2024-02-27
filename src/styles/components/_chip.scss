@@ -3,7 +3,6 @@
     --chip-width: calc(4rem * var(--ratio));
     --chip-height: calc(4.174rem * var(--ratio));
     --chip-value-font-size: calc(2rem * var(--ratio));
-    
 
     position: relative;
     display: grid !important;
@@ -15,13 +14,7 @@
     height: var(--chip-height);
     border-radius: 50%;
     outline: none;
-    margin-top: .8rem;
-
-    @media(min-width: 768px) {
-        --chip-width: calc(4.6rem * var(--ratio));
-        --chip-height: calc(4.8rem * var(--ratio));
-        margin-top: 0;
-    }
+    margin-top: 0.8rem;
 
     .chip {
         grid-area: 1/1;
