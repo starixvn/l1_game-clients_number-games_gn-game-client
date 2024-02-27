@@ -55,7 +55,7 @@ export type GamePropsContext = {
     systemContextModel?: SystemContextModel;
     translate?: any;
     hedgeBetGroups?: [];
-    gameMessageHandler: GameMessageHandler;
+    gameMessageHandler?: GameMessageHandler;
 };
 
 export type GameBaseProps = GamePropsContext & WithRouterProps;
