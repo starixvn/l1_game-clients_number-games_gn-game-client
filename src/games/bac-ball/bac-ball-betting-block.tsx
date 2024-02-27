@@ -10,6 +10,7 @@ import { RoundState } from "../../components/game-base/type";
 import PercentageCircle from "../../components/game-components/percentage-circle";
 import { WinningResultEffect } from "../../components/game-components/winning-result-effect";
 import Style from "./bac-ball.module.scss";
+import { BacBallBetOptions } from "./types";
 
 export const BacBallBettingBlock: FC = () => {
     const [winningPlayerFrames, setWinningPlayerFrames] = useState<Texture<Resource>[]>([]);
@@ -100,26 +101,30 @@ export const BacBallBettingBlock: FC = () => {
     const betPercentage = gameStateContext?.betPercentage ?? { player: 0, banker: 0, tie: 0 };
     const playerBetCount = gameStateContext?.playerBetCount ?? { player: 0, banker: 0, tie: 0 };
 
+    const isShowWinningHighlightResult = (betChoice: string) => {
+        if (!gameStateContext) {
+            return false;
+        }
+
+        const { roundState, settlementResult, showResultInfo } = gameStateContext;
+
+        return roundState === RoundState.DisplayResult && settlementResult && settlementResult[betChoice] && showResultInfo;
+    };
+
+    const isShowHighlightPrevResult = (betChoice: string) => {
+        if (!gameStateContext || !gameStateContext.roundHistory[0]) {
+            return false;
+        }
+
+        const prevResult = gameStateContext.roundHistory[0].settlementResult;
+
+        return (
+            (gameStateContext.roundState === RoundState.BeforeStartRound || gameStateContext.roundState === RoundState.InRound) &&
+            prevResult[betChoice]
+        );
+    };
+
     if (winningPlayerFrames.length > 0 && winningTieFrames.length > 0) {
-        // waiting for round duration class
-        const isShowWinningHighlightPlayer =
-            gameStateContext?.roundState === RoundState.DisplayResult &&
-            gameStateContext?.settlementResult?.player &&
-            gameStateContext?.showResultInfo;
-        const isShowWinningHighlightBanker =
-            gameStateContext?.roundState === RoundState.DisplayResult &&
-            gameStateContext?.settlementResult?.banker &&
-            gameStateContext?.showResultInfo;
-        const isShowWinningHighlightTie =
-            gameStateContext?.roundState === RoundState.DisplayResult &&
-            gameStateContext?.settlementResult?.tie &&
-            gameStateContext?.showResultInfo;
-
-        const prevResult = gameStateContext?.roundHistory[0]?.settlementResult;
-        const isHighlightPrevResultPlayer = gameStateContext?.roundState === RoundState.InRound && prevResult?.player;
-        const isHighlightPrevResultBanker = gameStateContext?.roundState === RoundState.InRound && prevResult?.banker;
-        const isHighlightPrevResultTie = gameStateContext?.roundState === RoundState.InRound && prevResult?.tie;
-
         return (
             <div className={`${Style["betting-zone"]}`}>
                 <div className={Style["left-corner"]}></div>
@@ -127,10 +132,10 @@ export const BacBallBettingBlock: FC = () => {
                 <div
                     className={`${Style["player"]} text-white relative`}
                     onClick={() => {
-                        onClickBet("player");
+                        onClickBet(BacBallBetOptions.PLAYER);
                     }}
                 >
-                    {isShowWinningHighlightPlayer && (
+                    {isShowWinningHighlightResult(BacBallBetOptions.PLAYER) && (
                         <div className={Style["winning-effect"]}>
                             <Stage width={210} height={210} options={{ backgroundAlpha: 0 }}>
                                 <Container position={[90, 95]}>
@@ -148,7 +153,7 @@ export const BacBallBettingBlock: FC = () => {
                         </div>
                     )}
 
-                    {isHighlightPrevResultPlayer && <div className={Style["highlight-prev-result-player"]}></div>}
+                    {isShowHighlightPrevResult(BacBallBetOptions.PLAYER) && <div className={Style["highlight-prev-result-player"]}></div>}
                     <div className={`flex justify-between pt-5`}>
                         <div className={Style.stake}>
                             <div className={`flex items-center ${Style["total-stakes"]} gap-1`}>
@@ -180,10 +185,10 @@ export const BacBallBettingBlock: FC = () => {
                 <div
                     className={`${Style["banker"]} text-white relative`}
                     onClick={() => {
-                        onClickBet("banker");
+                        onClickBet(BacBallBetOptions.BANKER);
                     }}
                 >
-                    {isShowWinningHighlightBanker && (
+                    {isShowWinningHighlightResult(BacBallBetOptions.BANKER) && (
                         <div className={Style["winning-effect"]}>
                             <Stage width={210} height={210} options={{ backgroundAlpha: 0 }}>
                                 <Container position={[90, 95]}>
@@ -200,7 +205,9 @@ export const BacBallBettingBlock: FC = () => {
                             </Stage>
                         </div>
                     )}
-                    {isHighlightPrevResultBanker && <div className={`${Style["highlight-prev-result-player"]} ${Style["reverse"]}`}></div>}
+                    {isShowHighlightPrevResult(BacBallBetOptions.BANKER) && (
+                        <div className={`${Style["highlight-prev-result-player"]} ${Style["reverse"]}`}></div>
+                    )}
                     <div className={`flex pt-5 justify-between`}>
                         <div id="banker-percent" className={Style.percent}>
                             <PercentageCircle percentage={betPercentage["banker"]} color="#f9bcb9" />
@@ -232,10 +239,10 @@ export const BacBallBettingBlock: FC = () => {
                 <div
                     className={`${Style["tie"]} text-white flex flex-col items-center pt-2 relative`}
                     onClick={() => {
-                        onClickBet("tie");
+                        onClickBet(BacBallBetOptions.TIE);
                     }}
                 >
-                    {isShowWinningHighlightTie && (
+                    {isShowWinningHighlightResult(BacBallBetOptions.TIE) && (
                         <Stage width={210} height={210} options={{ backgroundAlpha: 0 }} className="absolute">
                             <Container position={[105, 77]}>
                                 <AnimatedSprite
@@ -250,7 +257,7 @@ export const BacBallBettingBlock: FC = () => {
                             </Container>
                         </Stage>
                     )}
-                    {isHighlightPrevResultTie && <div className={Style["highlight-prev-result-tie"]}></div>}
+                    {isShowHighlightPrevResult(BacBallBetOptions.TIE) && <div className={Style["highlight-prev-result-tie"]}></div>}
                     <div id="tie-percent" className={Style.percent}>
                         <PercentageCircle percentage={betPercentage["tie"]} color="#2fc856" />
                     </div>
