@@ -34,6 +34,8 @@ export class GameMessageHandler {
     }
 
     registerSocketEvents = () => {
+        this.register(messageEventType.DRAW_ID, this.handleDrawId);
+        this.register(messageEventType.STATUS, this.handleStatus);
         this.register(messageEventType.GAME_CONFIG, this.handleGameConfigs);
         this.register(messageEventType.TOTAL_BETS, this.handleTotalBet);
         this.register(messageEventType.OWN_BETS, this.handleOwnBets);
@@ -131,6 +133,23 @@ export class GameMessageHandler {
             payload: {
                 playerBetCount,
             },
+        });
+    };
+
+    handleStatus = ({ status }) => {
+        this.dispatch({
+            type: GameEventActionType.STATUS,
+            payload: { status },
+        });
+    };
+
+    handleDrawId = ({ drawId }) => {
+        const numberOfTurnsPerRound = 4;
+        const turnCounter = drawId % numberOfTurnsPerRound === 0 ? numberOfTurnsPerRound : drawId % numberOfTurnsPerRound;
+
+        this.dispatch({
+            type: GameEventActionType.DRAW_ID,
+            payload: { drawId, turnCounter },
         });
     };
 

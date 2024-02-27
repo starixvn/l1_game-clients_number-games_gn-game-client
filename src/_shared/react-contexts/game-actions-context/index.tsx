@@ -3,7 +3,6 @@ import React, { useContext } from "react";
 type GameActionsContextType = {
     placeBet: (betChoice: string, amount: number) => void;
     finishProcessingBet: Function;
-    renderResultCollapse: () => React.ReactElement;
     setActiveScoreboardTab: Function;
     updateStatusShowResult: Function;
 };

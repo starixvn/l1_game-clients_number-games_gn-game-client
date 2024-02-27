@@ -25,6 +25,7 @@ import { IGameStateHandler } from "./game-state-handler";
 import { GameBaseProps, RoundState } from "./type";
 import { Settings } from "../game-components/settings";
 import { GameErrorHandler } from "./game-error-handler";
+import DummyHandler from "./dummy-handler";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
     private readonly animationTime = 3000;
@@ -165,42 +166,12 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.gameMessageHandler.register(messageEventType.UNDER_MAINTENANCE, this.handleUM.bind(this));
         this.gameMessageHandler.register(messageEventType.REMAINING_TIME, this.handleRemainingTime.bind(this));
         this.gameMessageHandler.register(messageEventType.FINISH, this.handleFinish.bind(this));
-        this.gameMessageHandler.register(messageEventType.STATUS, this.handleStatus.bind(this));
         this.gameMessageHandler.register(messageEventType.USER, this.handleUserData.bind(this));
-        this.gameMessageHandler.register(messageEventType.OWN_BETS, this.handleOwnBets.bind(this));
         this.gameMessageHandler.register(messageEventType.END_BET, this.handleEndBet.bind(this));
         this.gameMessageHandler.register(messageEventType.USER_STAKE_LEVEL, this.handleUserStakeLevel.bind(this));
-        this.gameMessageHandler.register(messageEventType.DRAW_ID, this.handleDrawId.bind(this));
-        this.gameMessageHandler.register(messageEventType.ROUND_HISTORY, this.handleRoundHistory.bind(this));
         this.gameMessageHandler.register(messageEventType.NOT_PERMITTED_TO_PLAY, this.handleRestrictPermission.bind(this));
         this.gameErrorHandler.registerEvents((this.context as AuthContextModel)?.signOut);
     }
-
-    handleDrawId = ({ drawId }) => {
-        const numberOfTurnsPerRound = 4;
-        const turnCounter = drawId % numberOfTurnsPerRound === 0 ? numberOfTurnsPerRound : drawId % numberOfTurnsPerRound;
-
-        this.props.dispatch({
-            type: GameEventActionType.DRAW_ID,
-            payload: { drawId, turnCounter },
-        });
-    };
-
-    handleRoundHistory = ({ roundHistory, roundId }) => {
-        const { dispatch, gameStateContextModel } = this.props;
-        const { roundState, isUMInFirstLoad } = gameStateContextModel;
-
-        dispatch({
-            type: GameEventActionType.ROUND_HISTORY,
-            payload: {
-                roundHistory: roundHistory,
-                roundId: [RoundState.DisplayResult].includes(roundState) || isUMInFirstLoad ? roundId - 1 : roundId,
-                settlementResult: roundState === RoundState.LockingBet ? this.defaultSettlementResult : roundHistory[0]?.settlementResult,
-                playResultAnimation: [RoundState.DisplayResult].includes(roundState) || isUMInFirstLoad ? false : true,
-                showResultInfo: [RoundState.DisplayResult].includes(roundState) || isUMInFirstLoad ? true : false,
-            },
-        });
-    };
 
     handleUserStakeLevel({ userStakeLevel, hasNotice = true }) {
         this.props.updateUserStakeLevel(userStakeLevel);
@@ -216,13 +187,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 payload: {},
             });
     }
-
-    protected handleStatus = ({ status }) => {
-        this.props.dispatch({
-            type: GameEventActionType.STATUS,
-            payload: { status },
-        });
-    };
 
     get winningAnimationWaitingTimeInSecond() {
         return this.props.durations.showResult * 1000;
@@ -314,7 +278,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             playPlaceBetSound();
             this.props.dispatch({
                 type: GameEventActionType.OWN_BETS,
-                payload: { ownBetsData: { ownBets } },
+                payload: { ownBets },
             });
             this.updateUserBalance();
         }
@@ -350,14 +314,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         });
     }
 
-    handleOwnBets = ({ ownBets, gameConfigs }) => {
-        gameConfigs &&
-            this.props.dispatch({
-                type: GameEventActionType.OWN_BETS,
-                payload: { ownBetsData: { ownBets } },
-            });
-    };
-
     handleUserData({ user, gameConfigs }) {
         (this.context as AuthContextModel)?.setBalance(user.red);
         this.props.dispatch({
@@ -390,8 +346,9 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
     handleRemainingTime({ remainingTime }) {
         const { durations, gameStateContextModel } = this.props;
+        const { roundState, isUMInFirstLoad } = gameStateContextModel;
 
-        if (gameStateContextModel.roundState === RoundState.None || !gameStateContextModel.isUMInFirstLoad) {
+        if (roundState === RoundState.None || !isUMInFirstLoad) {
             this.roundTimeCounter = remainingTime;
             this.runGame(this.roundStateHandler.getRemainingTime({ remainingTime, durations }));
         }
@@ -530,7 +487,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         const systemContext = this.props.systemContextModel;
 
         if (gameStateContext.enabledQuickBet) {
-
             if (this.isProcessingBet) {
                 this.props.dispatch({
                     type: GameEventActionType.BET_PROCESSING,
@@ -577,7 +533,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     private async validateNotConfirmBet(betChoice: string, amount: number): Promise<boolean> {
         const gameStateContext = this.props.gameStateContextModel;
         const notConfirmOwnBets = gameStateContext.notConfirmOwnBets;
-        let isValidateSuccess = true;
+
         //compose ValidationCriteria
         //1. Validate the betting time of a current sub-round
         if (gameStateContext.roundState != RoundState.InRound) {
@@ -879,6 +835,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 {this.renderConfirmBet()}
                 {this.renderStatistic()}
                 {this.renderScoreboards()}
+                {<DummyHandler gameMessageHandler={this.gameMessageHandler} />}
             </>
         );
     }

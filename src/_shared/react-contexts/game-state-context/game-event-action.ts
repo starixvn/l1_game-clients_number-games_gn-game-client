@@ -63,10 +63,7 @@ export interface GameEventPayload {
         user?: any;
         gameConfigs?: any;
     };
-    ownBetsData?: {
-        ownBets?: any;
-        gameConfigs?: any;
-    };
+    ownBets?: any;
     betPercentage?: {};
     playerBetCount?: {};
     endBetData?: {

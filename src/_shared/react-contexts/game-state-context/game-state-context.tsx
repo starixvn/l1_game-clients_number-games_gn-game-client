@@ -51,7 +51,7 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
         settlementResult,
         status,
         userData,
-        ownBetsData,
+        ownBets,
         betPercentage,
         playerBetCount,
         apiError,
@@ -78,9 +78,9 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
 
     // console.log("payload: ", JSON.stringify(payload));
 
-    if (type !== GameEventActionType.TOTAL_BET && type !== GameEventActionType.SET_NEW_GAME_STATE) {
-        console.log(`\x1B[31mGameEventActionType: ${type}`);
-    }
+    // if (type !== GameEventActionType.TOTAL_BET && type !== GameEventActionType.SET_NEW_GAME_STATE) {
+    //     console.log(`\x1B[31mGameEventActionType: ${type}`);
+    // }
 
     switch (type) {
         case GameEventActionType.CONNECT: {
@@ -190,14 +190,9 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
         }
 
         case GameEventActionType.OWN_BETS: {
-            if (ownBetsData) {
-                return {
-                    ...state,
-                    ownBets: ownBetsData.ownBets,
-                };
-            }
             return {
                 ...state,
+                ownBets,
             };
         }
 
