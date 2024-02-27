@@ -17,6 +17,7 @@ import { BacBallResultBlock } from "./bac-ball-result-block";
 import { BacBallBeadRoadCharacterElement, BacBallBeadRoadValueElement } from "./scoreboard-elements";
 import { BacBallResult, BacBallSettlementResult } from "./types";
 import { useSystemContext } from "../../_shared/react-contexts";
+import ScoreboardSwipe from "../../components/game-components/scoreboard-swipe";
 
 export const Choices = { player: "player", banker: "banker", tie: "tie" };
 
@@ -60,25 +61,7 @@ class BacBall extends GameBase<GameBaseProps> {
     renderScoreboards() {
         const { roundHistory } = this.props.gameStateContextModel;
 
-        return (
-            <>
-                <Scoreboard
-                    rounds={roundHistory}
-                    element={BacBallBeadRoadCharacterElement}
-                    arrange={BacBallBeadRoadCharacterElement.arrange}
-                    column={18}
-                    row={6}
-                />
-                <br />
-                <Scoreboard
-                    rounds={roundHistory}
-                    element={BacBallBeadRoadValueElement}
-                    arrange={BacBallBeadRoadValueElement.arrange}
-                    column={18}
-                    row={6}
-                />
-            </>
-        );
+        return <ScoreboardSwipe roundHistory={roundHistory} />;
     }
 }
 
