@@ -1,4 +1,4 @@
-import { PopupType, RoundState } from "./type";
+import { RoundState } from "./type";
 
 export interface IGameStateHandler {
     getNextRoundState({ gameStateContextModel, nextRoundState, durations, defaultResult, defaultSettlementResult, remainingTime });
@@ -44,8 +44,7 @@ export class GameStateHandler implements IGameStateHandler {
                     condition: nextRoundState === RoundState.LockingBet,
                     state: {
                         isShowBlink: true,
-                        displayPopup: [PopupType.Rebet, PopupType.PlaceBet].includes(displayPopup) ? null : displayPopup,
-                        notice: [PopupType.Rebet, PopupType.PlaceBet].includes(displayPopup) ? null : notice,
+                        notice,
                         result: defaultResult ?? result,
                         settlementResult: defaultSettlementResult ?? settlementResult,
                         notConfirmOwnBets: {},

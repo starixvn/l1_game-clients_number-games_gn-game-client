@@ -1,6 +1,6 @@
 import { useTranslate } from "@tolgee/react";
 import { createContext, useContext, useReducer } from "react";
-import { PopupType, RoundState } from "../../../components/game-base/type";
+import { RoundState } from "../../../components/game-base/type";
 import { LanguageLocaleMapper } from "../../constants";
 import { GetLocalizedErrorMessage } from "../../helpers/notice-helper";
 import { GameEventAction, GameEventActionType } from "./game-event-action";
@@ -19,7 +19,6 @@ export function GameStateProvider({ children, defaultResult, defaultSettlementRe
         <GameStateContext.Provider value={gameStateContextModel}>
             <GameStateDispatchContext.Provider value={dispatch}>
                 <GameTranslateContext.Provider value={useTranslate}>
-                    {/* {console.log(`gameStateContextModel: ${JSON.stringify(gameStateContextModel)}`)} */}
                     {children}
                 </GameTranslateContext.Provider>
             </GameStateDispatchContext.Provider>
@@ -64,8 +63,6 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
         acceptedBetQueue,
         disconnectReason,
         showWinningAnimation,
-        selectedBetChoice,
-        displayPopup,
         activeScoreboardTab,
         playResultAnimation,
         newGameState,
@@ -320,24 +317,10 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
             };
         }
 
-        case GameEventActionType.PLACE_BET_POPUP: {
-            return {
-                ...state,
-                displayPopup: PopupType.PlaceBet,
-                selectedBetChoice,
-            };
-        }
-
         case GameEventActionType.BET_PROCESSING: {
             return {
                 ...state,
                 notice: { message: "messages:betProcessing", duration: 2 },
-            };
-        }
-        case GameEventActionType.OPEN_POPUP: {
-            return {
-                ...state,
-                displayPopup,
             };
         }
 

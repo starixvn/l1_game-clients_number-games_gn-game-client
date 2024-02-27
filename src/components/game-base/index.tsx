@@ -22,7 +22,7 @@ import BetSettings from "../page-components/bet-settings";
 import { IRoundStateHandler } from "../round-base/round-state-handler";
 import { GameMessageHandler, messageEventType } from "./game-message-handler";
 import { IGameStateHandler } from "./game-state-handler";
-import { GameBaseProps, PopupType, RoundState } from "./type";
+import { GameBaseProps, RoundState } from "./type";
 import { Settings } from "../game-components/settings";
 import { GameErrorHandler } from "./game-error-handler";
 
@@ -65,7 +65,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 gameName: this.props.gameName,
             });
 
-        this.openPopup = this.openPopup.bind(this);
         this.placeBet = this.placeBet.bind(this);
         this.playAcceptedBetAnimation = this.playAcceptedBetAnimation.bind(this);
         this.updateUserBalance = this.updateUserBalance.bind(this);
@@ -249,16 +248,15 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     };
 
     handleBetFailed = ({ notice, kickedOut }) => {
-        const { gameStateContextModel, dispatch, gameName } = this.props;
-        const { displayPopup } = gameStateContextModel;
+        const { dispatch, gameName } = this.props;
 
-        displayPopup !== PopupType.Rebet &&
-            this.props.dispatch({
-                type: GameEventActionType.DISPLAY_POPUP,
-                payload: {
-                    notice: null,
-                },
-            });
+        this.props.dispatch({
+            type: GameEventActionType.DISPLAY_POPUP,
+            payload: {
+                notice: null,
+            },
+        });
+
 
         if (kickedOut?.isDisabledAccount) {
             dispatch({
@@ -268,23 +266,22 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 },
             });
         } else {
-            displayPopup !== PopupType.Rebet &&
-                dispatch({
-                    type: GameEventActionType.DISPLAY_POPUP,
-                    payload: {
-                        notice: {
-                            gameName: `${gameName.toLowerCase()}:${GameResourceKeys.GAME_NAME}`,
-                            message: GetLocalizedErrorMessage(notice.errorCode),
-                            duration: 3,
-                            minBet: notice?.minBet,
-                            maxBet: notice?.maxBet,
-                            errorCode: notice.errorCode,
-                            roundId: notice?.gameRoundId,
-                            betChoice1: notice?.hedgeBetGroup ? this.getChoiceNameOnHedgeBet(notice.hedgeBetGroup[0]) : "",
-                            betChoice2: notice?.hedgeBetGroup ? this.getChoiceNameOnHedgeBet(notice.hedgeBetGroup[1]) : "",
-                        },
+            dispatch({
+                type: GameEventActionType.DISPLAY_POPUP,
+                payload: {
+                    notice: {
+                        gameName: `${gameName.toLowerCase()}:${GameResourceKeys.GAME_NAME}`,
+                        message: GetLocalizedErrorMessage(notice.errorCode),
+                        duration: 3,
+                        minBet: notice?.minBet,
+                        maxBet: notice?.maxBet,
+                        errorCode: notice.errorCode,
+                        roundId: notice?.gameRoundId,
+                        betChoice1: notice?.hedgeBetGroup ? this.getChoiceNameOnHedgeBet(notice.hedgeBetGroup[0]) : "",
+                        betChoice2: notice?.hedgeBetGroup ? this.getChoiceNameOnHedgeBet(notice.hedgeBetGroup[1]) : "",
                     },
-                });
+                },
+            });
         }
     };
 
@@ -533,9 +530,8 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         const systemContext = this.props.systemContextModel;
 
         if (gameStateContext.enabledQuickBet) {
-            const { displayPopup } = this.props.gameStateContextModel;
 
-            if (this.isProcessingBet && displayPopup !== PopupType.Rebet) {
+            if (this.isProcessingBet) {
                 this.props.dispatch({
                     type: GameEventActionType.BET_PROCESSING,
                     payload: {},
@@ -748,13 +744,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         clearTimeout(this.disconnectTimeout);
     };
 
-    openPopup(popupType: PopupType) {
-        this.props.dispatch({
-            type: GameEventActionType.OPEN_POPUP,
-            payload: { displayPopup: popupType },
-        });
-    }
-
     setActiveScoreboardTab = (activeScoreboardTab: number) => {
         this.props.dispatch({
             type: GameEventActionType.ACTIVE_SCORE_BOARD,
@@ -897,7 +886,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     renderGame() {
         const gameActionsContext = {
             placeBet: this.placeBet,
-            openPopup: this.openPopup,
             playAcceptedBetAnimation: this.playAcceptedBetAnimation,
             finishProcessingBet: () => {
                 this.isProcessingBet = false;

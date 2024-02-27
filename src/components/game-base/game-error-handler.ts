@@ -1,8 +1,6 @@
-import { GameStateContextModel } from "./../../_shared/react-contexts/game-state-context/game-state-context-model";
 import { GetLocalizedErrorMessage } from "../../_shared/helpers";
 import { GameEventActionType } from "../../_shared/react-contexts/game-state-context/game-event-action";
 import { GameResourceKeys } from "../../_shared/resources";
-import { PopupType } from "./type";
 import { GameMessageHandler, messageEventType } from "./game-message-handler";
 
 export type GameErrorProps = {

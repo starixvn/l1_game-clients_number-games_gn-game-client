@@ -25,11 +25,6 @@ export enum RoundState {
     ConnectFailed,
     SwitchRound,
 }
-export enum PopupType {
-    Rebet,
-    Error,
-    PlaceBet,
-}
 
 export interface GameSettings {
     id: number;

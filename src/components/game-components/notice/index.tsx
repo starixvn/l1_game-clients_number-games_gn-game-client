@@ -33,6 +33,7 @@ export const Notice = () => {
     const { t } = useTranslate(["Common", "SabaNumber"]);
     const gameStateContext = useGameStateContext();
     const dispatch = useGameStatesDispatch();
+
     if (gameStateContext.notice) {
         const { gameName, message, roundId, duration, minBet, maxBet, errorCode, isWarning, betChoice1, betChoice2, onClose } = gameStateContext.notice;
 

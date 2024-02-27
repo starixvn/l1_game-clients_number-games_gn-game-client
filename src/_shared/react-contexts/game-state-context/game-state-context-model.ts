@@ -1,5 +1,5 @@
 import { Resource, Texture } from "pixi.js";
-import { GameConfigs, IBallColor, Notice, PopupType, Round, RoundState } from "../../../components/game-base/type";
+import { GameConfigs, IBallColor, Notice, Round, RoundState } from "../../../components/game-base/type";
 
 export interface GameStateContextModel<Result, SettlementResult> {
     isConnect: boolean;
@@ -15,7 +15,6 @@ export interface GameStateContextModel<Result, SettlementResult> {
     settlementResult?: SettlementResult;
     totalBets: object;
     ownBets: object;
-    displayPopup?: PopupType;
     betPercentage?: object;
     playerBetCount?: object;
     errorMessage?: string | string[];

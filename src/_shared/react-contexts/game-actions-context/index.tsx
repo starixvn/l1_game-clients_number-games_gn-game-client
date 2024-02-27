@@ -1,11 +1,7 @@
 import React, { useContext } from "react";
 
-import { PopupType } from "../../../components/game-base/type";
-
 type GameActionsContextType = {
     placeBet: (betChoice: string, amount: number) => void;
-    openPopup: (type: PopupType) => void;
-    closePopup: () => void;
     finishProcessingBet: Function;
     renderResultCollapse: () => React.ReactElement;
     setActiveScoreboardTab: Function;
