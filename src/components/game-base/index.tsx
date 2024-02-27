@@ -781,37 +781,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     renderNotice() {
-        if (this.props?.gameStateContextModel?.notice == null) {
-            return <></>;
-        }
-
-        const { gameName, message, roundId, duration, minBet, maxBet, errorCode, isWarning, betChoice1, betChoice2, onClose } =
-            this.props.gameStateContextModel.notice;
-        const onCloseNotice = onClose || (() => this.closeNotice());
-        return (
-            <Notice
-                gameName={gameName}
-                roundId={roundId}
-                message={message}
-                duration={duration}
-                minBet={minBet}
-                maxBet={maxBet}
-                errorCode={errorCode}
-                onClose={onCloseNotice}
-                isWarning={isWarning}
-                betChoice1={betChoice1}
-                betChoice2={betChoice2}
-            />
-        );
-    }
-
-    closeNotice() {
-        this.props.dispatch({
-            type: GameEventActionType.DISPLAY_POPUP,
-            payload: {
-                notice: null,
-            },
-        });
+        return <Notice />;
     }
 
     getOddsByChoice(choice: string) {

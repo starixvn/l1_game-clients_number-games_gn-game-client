@@ -5,20 +5,8 @@ import "../../../_shared/helpers/string-helper";
 import BaseDialog from "../base-dialog";
 import { ModalType } from "../base-dialog/type";
 import Styles from "./notice.module.scss";
-
-interface Props {
-    gameName?: string;
-    roundId?: number;
-    message: string;
-    onClose?: () => void;
-    duration: number;
-    minBet?: number;
-    maxBet?: number;
-    errorCode?: string;
-    isWarning?: boolean;
-    betChoice1?: string;
-    betChoice2?: string;
-}
+import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
+import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 
 const BaseNotice: React.FC<{ onClose: () => void; duration: number; isOpen?: boolean; isWarning: boolean; children: React.ReactNode }> = ({
     children,
@@ -41,41 +29,47 @@ const BaseNotice: React.FC<{ onClose: () => void; duration: number; isOpen?: boo
     );
 };
 
-export const Notice: React.FC<Props> = ({
-    message,
-    onClose,
-    duration = 3,
-    minBet = 0,
-    maxBet = 0,
-    gameName,
-    roundId = 0,
-    betChoice1,
-    betChoice2,
-    errorCode,
-    isWarning = true,
-}) => {
+export const Notice = () => {
     const { t } = useTranslate(["Common", "SabaNumber"]);
+    const gameStateContext = useGameStateContext();
+    const dispatch = useGameStatesDispatch();
+    if (gameStateContext.notice) {
+        const { gameName, message, roundId, duration, minBet, maxBet, errorCode, isWarning, betChoice1, betChoice2, onClose } = gameStateContext.notice;
 
-    const opt = {
-        gameName: gameName,
-        roundId: roundId,
-        gameRoundId: roundId,
-        minBet: numberWithCommas(+minBet),
-        maxBet: numberWithCommas(+maxBet),
-        errorCode: errorCode,
-        betChoice1,
-        betChoice2,
-    };
+        const closeNotice = () => {
+            dispatch({
+                type: GameEventActionType.DISPLAY_POPUP,
+                payload: {
+                    notice: null,
+                },
+            });
+        }
 
-    return (
-        <BaseNotice {...{ onClose, duration, isWarning }}>
-            <div className={Styles["notice-content"]}>
-                {t({
-                    key: message,
-                    params: opt,
-                    noWrap: true,
-                }).replaceTolgeeFormat()}
-            </div>
-        </BaseNotice>
-    );
+        const onCloseNotice = onClose || (() => closeNotice());
+
+        const opt = {
+            gameName,
+            roundId,
+            gameRoundId: roundId,
+            minBet: numberWithCommas(+minBet),
+            maxBet: numberWithCommas(+maxBet),
+            errorCode: errorCode,
+            betChoice1,
+            betChoice2,
+        };
+
+        return (
+            <BaseNotice {...{ onClose: onCloseNotice, duration, isWarning }}>
+                <div className={Styles["notice-content"]}>
+                    {t({
+                        key: message,
+                        params: opt,
+                        noWrap: true,
+                    }).replaceTolgeeFormat()}
+                </div>
+            </BaseNotice>
+        );
+    }
+
+    return <></>;
 };
