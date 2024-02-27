@@ -12,9 +12,3 @@ export type BacBallResult = {
 };
 
 export type Odd = {};
-
-export enum BacBallBetOptions {
-    BANKER = "banker",
-    PLAYER = "player",
-    TIE = "tie",
-}

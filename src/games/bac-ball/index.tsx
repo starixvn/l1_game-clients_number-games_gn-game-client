@@ -16,18 +16,17 @@ import { BacBallResultBlock } from "./bac-ball-result-block";
 import { BacBallResult, BacBallSettlementResult } from "./types";
 import { useSystemContext } from "../../_shared/react-contexts";
 import ScoreboardSwipe from "../../components/game-components/scoreboard-swipe";
-
-export const Choices = { player: "player", banker: "banker", tie: "tie" };
+import { BacBallBetOptions } from "./constants";
 
 export const StatisticRuleEntries = Object.entries({
-    [Choices.player]: (countResult: object, total: number) =>
-        countResult[Choices.player] ? Math.round((countResult[Choices.player] * 100) / total) : 0,
-    [Choices.banker]: (countResult: object, total: number) =>
+    [BacBallBetOptions.PLAYER]: (countResult: object, total: number) =>
+        countResult[BacBallBetOptions.PLAYER] ? Math.round((countResult[BacBallBetOptions.PLAYER] * 100) / total) : 0,
+    [BacBallBetOptions.BANKER]: (countResult: object, total: number) =>
         100 -
-        ((countResult[Choices.player] ? Math.round((countResult[Choices.player] * 100) / total) : 0) +
-            (countResult[Choices.tie] ? Math.round((countResult[Choices.tie] * 100) / total) : 0)),
-    [Choices.tie]: (countResult: object, total: number) =>
-        countResult[Choices.tie] ? Math.round((countResult[Choices.tie] * 100) / total) : 0,
+        ((countResult[BacBallBetOptions.PLAYER] ? Math.round((countResult[BacBallBetOptions.PLAYER] * 100) / total) : 0) +
+            (countResult[BacBallBetOptions.TIE] ? Math.round((countResult[BacBallBetOptions.TIE] * 100) / total) : 0)),
+    [BacBallBetOptions.TIE]: (countResult: object, total: number) =>
+        countResult[BacBallBetOptions.TIE] ? Math.round((countResult[BacBallBetOptions.TIE] * 100) / total) : 0,
 });
 
 class BacBall extends GameBase<GameBaseProps> {
@@ -35,7 +34,7 @@ class BacBall extends GameBase<GameBaseProps> {
         const gameMessageHandler = new GameMessageHandler(props.dispatch);
 
         super(props, new TurnStateHandler(), new GameStateHandler(), gameMessageHandler);
-        this.hedgeBetGroup = [Choices.player, Choices.banker];
+        this.hedgeBetGroup = [BacBallBetOptions.PLAYER, BacBallBetOptions.BANKER];
     }
 
     componentDidMount() {

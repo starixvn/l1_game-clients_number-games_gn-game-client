@@ -10,7 +10,7 @@ import { RoundState } from "../../components/game-base/type";
 import PercentageCircle from "../../components/game-components/percentage-circle";
 import { WinningResultEffect } from "../../components/game-components/winning-result-effect";
 import Style from "./bac-ball.module.scss";
-import { BacBallBetOptions } from "./types";
+import { BacBallBetOptions } from "./constants";
 
 export const BacBallBettingBlock: FC = () => {
     const [winningPlayerFrames, setWinningPlayerFrames] = useState<Texture<Resource>[]>([]);
