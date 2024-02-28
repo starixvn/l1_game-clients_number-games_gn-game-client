@@ -1,12 +1,16 @@
 .confirm-bet-container {
-    height: 0rem;
+    position: absolute;
+    height: 4rem;
+    width: 100%;
+    z-index: 2;
 
     .back-ground {
         display: flex;
         justify-content: space-evenly;
+        align-items: center;
         height: 4rem;
         backface-visibility: hidden;
-        background-color: black;
+        background-color: #010206;
         width: 100%;
     }
 
@@ -19,6 +23,7 @@
         line-height: 1.4rem;
         width: 13rem;
         height: 3.4rem;
+        text-transform: capitalize;
         :hover:enabled {
             background: #332229;
         }
@@ -36,6 +41,7 @@
         line-height: 1.4rem;
         width: 13rem;
         height: 3.4rem;
+        text-transform: capitalize;
     }
 
     .btn-confirm:hover:enabled {

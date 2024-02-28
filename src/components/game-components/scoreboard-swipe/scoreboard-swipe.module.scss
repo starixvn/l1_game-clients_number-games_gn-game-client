@@ -1,16 +1,14 @@
-.big-road {
+.big-road-small {
     overflow-x: scroll;
-    scrollbar-width: none;
+    //scrollbar-width: none;
+    //direction: ltr;
+    scroll-snap-align: end;
 }
 
 .scoreboard-full {
     width: 32.8rem;
     position: relative;
 }
-
-// .show {
-//     display: block;
-// }
 
 .hide {
     display: none;
