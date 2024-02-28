@@ -1,7 +1,12 @@
 import { ReactNode } from "react";
 import { Converter } from "sc-scoreboards";
 import { Round } from "../../components/game-base/type";
-import { BeadRoadElement, BigRoadElement, BigRoadRound } from "../../components/game-components/round-history/scoreboard/elements";
+import {
+    BeadRoadElement,
+    BigRoadElement,
+    BigRoadRound,
+    DerivedElement,
+} from "../../components/game-components/round-history/scoreboard/elements";
 import styles from "./scoreboard-elements.module.scss";
 import { BacBallResult, BacBallSettlementResult } from "./types";
 import { BacBallBetOptions } from "./constants";
@@ -57,5 +62,15 @@ export class BacBallBigRoadElement extends BigRoadElement<BacBallSettlementResul
         } else {
             return <span className={`${styles["big-road-tie-first-round"]}`}>{tieValue}</span>;
         }
+    }
+}
+
+export class BacBallDerivedElement extends DerivedElement {
+    renderA(): ReactNode {
+        return <span className={`${styles.banker}`} />;
+    }
+
+    renderB(): ReactNode {
+        return <span className={`${styles.player}`} />;
     }
 }

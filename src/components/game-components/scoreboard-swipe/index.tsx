@@ -6,6 +6,7 @@ import {
     BacBallBeadRoadValueElement,
     BacBallBigRoadConverter,
     BacBallBigRoadElement,
+    BacBallDerivedElement,
 } from "../../../games/bac-ball/scoreboard-elements";
 import { Round } from "../../game-base/type";
 import Scoreboard from "../round-history/scoreboard";
@@ -35,6 +36,33 @@ const ScoreboardSwipe: React.FC<{ roundHistory: Round<any, any>[] }> = ({ roundH
                         rounds={settlements}
                         element={BacBallBigRoadElement}
                         arrange={BacBallBigRoadElement.arrange(BacBallBigRoadConverter.instance)}
+                        row={6}
+                        column={27}
+                        className={Styles["big-road-small"]}
+                    />
+
+                    <Scoreboard
+                        rounds={settlements}
+                        element={BacBallDerivedElement}
+                        arrange={BacBallDerivedElement.arrange(BacBallBigRoadConverter.instance, "bigEyeBoy")}
+                        row={6}
+                        column={27}
+                        className={Styles["big-road-small"]}
+                    />
+
+                    <Scoreboard
+                        rounds={settlements}
+                        element={BacBallDerivedElement}
+                        arrange={BacBallDerivedElement.arrange(BacBallBigRoadConverter.instance, "cockroachPig")}
+                        row={6}
+                        column={27}
+                        className={Styles["big-road-small"]}
+                    />
+
+                    <Scoreboard
+                        rounds={settlements}
+                        element={BacBallDerivedElement}
+                        arrange={BacBallDerivedElement.arrange(BacBallBigRoadConverter.instance, "smallRoad")}
                         row={6}
                         column={27}
                         className={Styles["big-road-small"]}
