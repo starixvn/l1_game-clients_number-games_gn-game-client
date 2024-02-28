@@ -4,6 +4,6 @@ export interface Props {
 }
 
 export const ConnectFailedReasonKey = {
-    lostConnection: "lostGameConnection",
-    restrictPlayPermission: "notPermittedToPlay"
-}
+    lostConnection: "message_lost_game_connection",
+    restrictPlayPermission: "game_excluded",
+};

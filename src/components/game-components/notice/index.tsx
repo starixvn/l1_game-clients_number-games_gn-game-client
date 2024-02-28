@@ -11,7 +11,7 @@ import { GameEventActionType } from "../../../_shared/react-contexts/game-state-
 const BaseNotice: React.FC<{ onClose: () => void; duration: number; isOpen?: boolean; isWarning: boolean; children: React.ReactNode }> = ({
     children,
     onClose,
-    duration,
+    duration = 3,
 }) => {
     useEffect(() => {
         const timer = setTimeout(onClose, duration * 1000);
@@ -35,7 +35,8 @@ export const Notice = () => {
     const dispatch = useGameStatesDispatch();
 
     if (gameStateContext.notice) {
-        const { gameName, message, roundId, duration, minBet, maxBet, errorCode, isWarning, betChoice1, betChoice2, onClose } = gameStateContext.notice;
+        const { gameName, message, roundId, duration, minBet, maxBet, errorCode, isWarning, betChoice1, betChoice2, onClose } =
+            gameStateContext.notice;
 
         const closeNotice = () => {
             dispatch({
@@ -44,7 +45,7 @@ export const Notice = () => {
                     notice: null,
                 },
             });
-        }
+        };
 
         const onCloseNotice = onClose || (() => closeNotice());
 
