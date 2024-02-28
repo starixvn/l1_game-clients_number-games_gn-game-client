@@ -417,6 +417,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 result: finish.result,
                 settlementResult: finish.settlementResult,
                 roundId: finish.roundId,
+                // drawId: finish?.drawId
             },
         });
 
