@@ -1,0 +1,36 @@
+.new-round-transition {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 32.6rem;
+    width: 100%;
+    z-index: 0;
+
+    .bg {
+        background: url(/static/images/smoke-transition.svg) no-repeat center;
+        width: 32.6rem;
+        height: 32.6rem;
+        animation: move-left-to-right 2s ease-out forwards infinite;
+    }
+}
+
+@keyframes move-left-to-right {
+    0% {
+        opacity: 0;
+        transform: translateX(-30rem);
+    }
+
+    5% {
+        opacity: 1;
+        transform: translateX(-30rem);
+    }
+
+    60% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateX(30rem) scale(3);
+    }
+}

@@ -2,14 +2,17 @@ import React from "react";
 import Auth from "sc-user-service-client/dist/auth";
 import { Socket } from "socket.io-client";
 import { v4 as uuidv4 } from "uuid";
+
 import { confirmBet } from "../../_shared/constants";
 import { InitSocketIO } from "../../_shared/helpers";
 import { GetLocalizedErrorMessage } from "../../_shared/helpers/notice-helper";
+import { getValidateMinMaxBetResult, validateHedgeBet } from "../../_shared/helpers/validate-bet-helper";
 import { AuthContext, AuthContextModel, GameActionsContextProvider, GameContextProvider } from "../../_shared/react-contexts";
 import { GameEventActionType } from "../../_shared/react-contexts/game-state-context/game-event-action";
 import { GameResourceKeys } from "../../_shared/resources";
 import { Notice as NoticeData } from "../../components/game-base/type";
 import { getBalance } from "../../services/auth-service";
+import BetConfirmDialog from "../game-components/bet-confirm-dialog";
 import ConfirmBet from "../game-components/confirm-bet";
 import DisabledModal from "../game-components/disabled-modal";
 import { ConnectFailedMessage } from "../game-components/error-message";
@@ -17,15 +20,14 @@ import { ConnectFailedReasonKey } from "../game-components/error-message/type";
 import GameContainer from "../game-components/game-container";
 import { GameHeader } from "../game-components/game-header";
 import GameLoading from "../game-components/game-loading";
+import NewRoundTransition from "../game-components/new-round-transition";
 import { Notice } from "../game-components/notice";
-import { getValidateMinMaxBetResult, validateHedgeBet } from "../../_shared/helpers/validate-bet-helper";
 import { Settings } from "../game-components/settings";
 import BetSettings from "../page-components/bet-settings";
 import { IRoundStateHandler } from "../round-base/round-state-handler";
-import { DummyHandler, GameErrorHandler, GameMessageHandler, PlayerHandler, messageEventType } from "./handlers";
+import { DummyHandler, GameErrorHandler, GameMessageHandler, messageEventType, PlayerHandler } from "./handlers";
 import { IGameStateHandler } from "./handlers/game-state-handler";
 import { GameBaseProps, RoundState } from "./type";
-import BetConfirmDialog from "../game-components/bet-confirm-dialog";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
     protected showResultInfoTimeout: NodeJS.Timeout;
@@ -694,6 +696,10 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         return <></>;
     }
 
+    renderNewRoundTransition() {
+        return <NewRoundTransition />;
+    }
+
     getRenderTemplate() {
         return (
             <>
@@ -701,6 +707,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 {this.renderMenuButtons()}
                 {this.renderBetHistoryModal()}
                 {this.renderResultBlock()}
+                {this.renderNewRoundTransition()}
                 {this.renderNotice()}
                 {this.renderBettingBlock()}
                 {this.renderSlidingChips()}
