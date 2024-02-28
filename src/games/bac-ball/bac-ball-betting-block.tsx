@@ -1,7 +1,8 @@
 import { FC } from "react";
-import { WinningResultEffect } from "../../components/game-components/winning-result-effect";
-import Style from "./bac-ball.module.scss";
+
+import WinningResultEffect from "../../components/game-components/winning-result-effect";
 import { BacBallBetOptionsComponent } from "./bac-ball-options";
+import Style from "./bac-ball.module.scss";
 
 export const BacBallBettingBlock: FC = () => {
     return (

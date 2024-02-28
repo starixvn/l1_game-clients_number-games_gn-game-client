@@ -3,7 +3,7 @@ import { FC } from "react";
 import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import Styles from "./winning-result-effect.module.scss";
 
-export const WinningResultEffect: FC = () => {
+const WinningResultEffect: FC = () => {
     const { betWin, showResultInfo } = useGameStateContext();
 
     if (!betWin || !showResultInfo) {
@@ -16,3 +16,5 @@ export const WinningResultEffect: FC = () => {
         </div>
     );
 };
+
+export default WinningResultEffect;
