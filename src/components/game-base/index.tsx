@@ -20,12 +20,13 @@ import GameLoading from "../game-components/game-loading";
 import { Notice } from "../game-components/notice";
 import { getValidateMinMaxBetResult, validateHedgeBet } from "../../_shared/helpers/validate-bet-helper";
 import { Settings } from "../game-components/settings";
-import ConfirmDialog from "../game-components/submit-dialog";
+import ConfirmDialog from "../game-components/confirm-dialog";
 import BetSettings from "../page-components/bet-settings";
 import { IRoundStateHandler } from "../round-base/round-state-handler";
 import { DummyHandler, GameErrorHandler, GameMessageHandler, PlayerHandler, messageEventType } from "./handlers";
 import { IGameStateHandler } from "./handlers/game-state-handler";
 import { GameBaseProps, RoundState } from "./type";
+import BetConfirmDialog from "../game-components/bet-confirm-dialog";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
     protected showResultInfoTimeout: NodeJS.Timeout;
@@ -191,17 +192,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         return null;
     }
 
-    getNoticeKickedOut = (errorCode: string) => {
-        return {
-            gameName: "gameName",
-            message: GetLocalizedErrorMessage(errorCode),
-            duration: 10,
-            errorCode: errorCode,
-            roundId: 0,
-            onClose: (this.context as AuthContextModel)?.signOut,
-        };
-    };
-
     handleBetFailed = ({ notice, kickedOut }) => {
         const { dispatch, gameName } = this.props;
 
@@ -216,7 +206,14 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             dispatch({
                 type: GameEventActionType.DISPLAY_POPUP,
                 payload: {
-                    notice: this.getNoticeKickedOut(kickedOut.errorCode),
+                    notice: {
+                        gameName: "gameName",
+                        message: GetLocalizedErrorMessage(kickedOut.errorCode),
+                        duration: 10,
+                        errorCode: kickedOut.errorCode,
+                        roundId: 0,
+                        onClose: (this.context as AuthContextModel)?.signOut,
+                    }
                 },
             });
         } else {
@@ -685,37 +682,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     renderConfirmDialog() {
-        if (!this.props.gameStateContextModel.showConfirmDialog) {
-            return null;
-        }
-
-        return (
-            <ConfirmDialog
-                title={<>Insufficient Funds</>}
-                content={<>Outstanding Balance: 500</>}
-                subContent={<>Want to Bet?</>}
-                onCloseModal={() => {
-                    this.props.dispatch({
-                        type: GameEventActionType.SHOW_CONFIRM_DIALOG,
-                        payload: {
-                            showConfirmDialog: false,
-                        },
-                    });
-
-                    console.log("close");
-                }}
-                onSubmit={() => {
-                    this.props.dispatch({
-                        type: GameEventActionType.SHOW_CONFIRM_DIALOG,
-                        payload: {
-                            showConfirmDialog: false,
-                        },
-                    });
-
-                    console.log("yes");
-                }}
-            />
-        );
+        return <BetConfirmDialog />;
     }
 
     renderStatistic() {

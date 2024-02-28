@@ -2,7 +2,7 @@ import { useTranslate } from "@tolgee/react";
 import React from "react";
 import BaseDialog, { Props } from "../base-dialog";
 import { ModalType } from "../base-dialog/type";
-import Styles from "./submit-dialog.module.scss";
+import Styles from "./confirm-dialog.module.scss";
 
 type SubmitDialogProps = { onSubmit?: Function; title; content; subContent };
 
