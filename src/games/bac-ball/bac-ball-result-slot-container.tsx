@@ -59,7 +59,7 @@ export const BacBallResultSlotContainer: React.FC<IResultSlotContainer> = (props
         if (roundState === RoundState.LockingBet || roundState === RoundState.InRound) {
             const clonedData = [...ballsData];
             const currentRound = clonedData.find((ball) => ball.number === 0);
-            currentRound.status = BallStatus.LOADING;
+            currentRound && (currentRound.status = BallStatus.LOADING);
             setBallsData(clonedData);
         }
     }, [roundState]);
