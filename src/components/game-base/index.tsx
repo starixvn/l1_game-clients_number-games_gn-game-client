@@ -20,7 +20,6 @@ import GameLoading from "../game-components/game-loading";
 import { Notice } from "../game-components/notice";
 import { getValidateMinMaxBetResult, validateHedgeBet } from "../../_shared/helpers/validate-bet-helper";
 import { Settings } from "../game-components/settings";
-import ConfirmDialog from "../game-components/confirm-dialog";
 import BetSettings from "../page-components/bet-settings";
 import { IRoundStateHandler } from "../round-base/round-state-handler";
 import { DummyHandler, GameErrorHandler, GameMessageHandler, PlayerHandler, messageEventType } from "./handlers";
@@ -93,9 +92,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     onDestroy() {
         this.props.dispatch({
             type: GameEventActionType.SIGN_OUT,
-            payload: {
-                roundState: RoundState.None,
-            },
+            payload: { roundState: RoundState.None }
         });
 
         clearInterval(this.interval);
@@ -121,49 +118,42 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         const { socketInfo, gameName } = this.props;
 
         const { socket } = InitSocketIO(socketInfo, session, gameName, this.gameMessageHandler);
-
         this.socket = socket;
     }
 
     onVisibilityChange = () => {
-        const visibleState = document.visibilityState;
-        visibleState === "hidden" ? this.onDestroy() : this.onStart();
+        document.visibilityState === "hidden" ? this.onDestroy() : this.onStart();
     };
 
     onConnectFailed() {
         this.onDestroy();
         this.props.dispatch({
             type: GameEventActionType.DISCONNECT_ERROR,
-            payload: {
-                disconnectReason: ConnectFailedReasonKey.lostConnection,
-            },
+            payload: { disconnectReason: ConnectFailedReasonKey.lostConnection }
         });
     }
 
     onSocketDisconnect() {
         this.onDestroy();
-        const time = this.props.gameStateContextModel.signedIn ? 1000 : 5000;
+        const { gameStateContextModel, dispatch } = this.props;
+        const { signedIn } = gameStateContextModel;
 
         this.disconnectTimeout = setTimeout(() => {
-            this.props.dispatch({ type: GameEventActionType.DISCONNECT, payload: {} });
-            if (!this.props.gameStateContextModel.signedIn) {
-                this.props.dispatch({
+            dispatch({ type: GameEventActionType.DISCONNECT, payload: {} });
+            if (!signedIn) {
+                dispatch({
                     type: GameEventActionType.DISCONNECT_ERROR,
-                    payload: {
-                        disconnectReason: ConnectFailedReasonKey.lostConnection,
-                    },
+                    payload: { disconnectReason: ConnectFailedReasonKey.lostConnection, },
                 });
             }
-        }, time);
+        }, signedIn ? 1000 : 5000);
     }
 
     onGameServiceConnected() {
         this.clearDisconnectTimeout();
         this.props.dispatch({
             type: GameEventActionType.CONNECT,
-            payload: {
-                isConnect: true,
-            },
+            payload: { isConnect: true }
         });
     }
 
@@ -673,7 +663,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     renderSlidingChips() {
-        return <BetSettings></BetSettings>;
+        return <BetSettings />;
     }
 
     renderConfirmBet() {

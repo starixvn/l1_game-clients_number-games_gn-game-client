@@ -102,7 +102,6 @@ export interface GameEventPayload {
     turnCounter?: number;
     notConfirmOwnBets?: any;
     umFirstLoading?: boolean;
-    isProcessingBet?: boolean;
 }
 
 export interface GameEventAction {

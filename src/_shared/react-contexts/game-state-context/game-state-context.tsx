@@ -73,8 +73,7 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
         showConfirmDialog,
         turnCounter,
         notConfirmOwnBets,
-        umFirstLoading,
-        isProcessingBet
+        umFirstLoading
     } = payload;
 
     // console.log("payload: ", JSON.stringify(payload));
