@@ -6,7 +6,7 @@ import { Menu } from "./menu";
 
 const ButtonSettingClassName = "setting-button";
 
-export const Settings: React.FC<Props> = ({ onToggleSound, enabledSound, toggleGuideModal }) => {
+export const Settings: React.FC<Props> = ({ onToggleSound, enabledSound, toggleGuideModal, toggleHistoryModal }) => {
     const handleBackToHome = () => {
         console.log("Back to Home");
     };
@@ -23,7 +23,7 @@ export const Settings: React.FC<Props> = ({ onToggleSound, enabledSound, toggleG
                         <span id="icon-home" className="icon-home" />
                     </button>
 
-                    <Menu handleToggleGuideModal={toggleGuideModal} enabledSound={enabledSound} onToggleSound={onToggleSound} />
+                    <Menu handleToggleGuideModal={toggleGuideModal} enabledSound={enabledSound} onToggleSound={onToggleSound} toggleBetHistory={toggleHistoryModal} />
                 </div>
             </div>
         );

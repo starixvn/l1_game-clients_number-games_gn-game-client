@@ -73,7 +73,9 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
         showConfirmDialog,
         turnCounter,
         notConfirmOwnBets,
-        umFirstLoading
+        umFirstLoading,
+        betHistory,
+        isShowBetHistory
     } = payload;
 
     // console.log("payload: ", JSON.stringify(payload));
@@ -386,6 +388,20 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
                 ...state,
                 umFirstLoading,
             };
+        }
+
+        case GameEventActionType.BET_HISTORY: {
+            return {
+                ...state,
+                betHistory
+            }
+        }
+
+        case GameEventActionType.TOGGLE_BET_HISTORY: {
+            return {
+                ...state,
+                isShowBetHistory
+            }
         }
 
         default: {

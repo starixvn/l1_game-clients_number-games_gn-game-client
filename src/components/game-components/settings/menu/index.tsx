@@ -11,13 +11,18 @@ export const Menu: React.FC<{
     handleToggleGuideModal: Function;
     enabledSound: boolean;
     onToggleSound: Function;
-}> = ({ handleToggleGuideModal, enabledSound, onToggleSound }) => {
+    toggleBetHistory: Function;
+}> = ({ handleToggleGuideModal, enabledSound, onToggleSound, toggleBetHistory}) => {
     const { t } = useTranslation([ResourceTypes.COMMON]);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const wrapperRef = useRef<HTMLDivElement>(null);
     const toggleBtnRef = useRef<HTMLDivElement>(null);
     const toggleSoundBtnRef = useRef<HTMLDivElement>(null);
     const specialClassByDevice = !isMobileOnly ? "desktop-style" : "";
+
+    const openBetHistory = () => {
+        toggleBetHistory();
+    }
 
     const openGuide = () => {
         handleToggleGuideModal();
@@ -67,7 +72,7 @@ export const Menu: React.FC<{
                         ></span>
                     </div>
 
-                    <div className={`${dropdownItemClassName} ${Styles[dropdownItemClassName]}`}>
+                    <div className={`${dropdownItemClassName} ${Styles[dropdownItemClassName]}`} onClick={openBetHistory}>
                         <span id="icon-history" className={`icon-history ${Styles["menu-icon"]}`}></span>
                     </div>
                     <div className={`${dropdownItemClassName} ${Styles[dropdownItemClassName]}`} onClick={openGuide}>

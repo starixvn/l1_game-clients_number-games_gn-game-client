@@ -166,8 +166,18 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.gameMessageHandler.register(messageEventType.FINISH, this.handleFinish.bind(this));
         this.gameMessageHandler.register(messageEventType.END_BET, this.handleEndBet.bind(this));
         this.gameMessageHandler.register(messageEventType.GAME_DESTROY, this.onDestroy.bind(this));
+        this.gameMessageHandler.register(messageEventType.BET_HISTORY, this.handleBetHistory.bind(this));       
         this.playerHandler.registerEvents((this.context as AuthContextModel)?.setBalance);
         this.gameErrorHandler.registerEvents((this.context as AuthContextModel)?.signOut);
+    }
+
+    handleBetHistory({history}) {
+        this.props.dispatch({
+            type: GameEventActionType.BET_HISTORY,
+            payload: {
+                betHistory: history
+            }
+        })
     }
 
     get winningAnimationWaitingTimeInSecond() {
@@ -636,7 +646,12 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                         console.log("onToggleSound");
                     }}
                     toggleHistoryModal={() => {
-                        console.log("toggleHistoryModal");
+                        this.props.dispatch({
+                            type: GameEventActionType.TOGGLE_BET_HISTORY,
+                            payload: {
+                                isShowBetHistory: true,
+                            },
+                        })
                     }}
                     toggleGuideModal={() => {
                         console.log("toggleGuideModal");
@@ -644,6 +659,10 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 />
             </>
         );
+    }
+
+    renderBetHistoryModal() {
+        return <></>
     }
 
     renderMenuButtons() {
@@ -684,6 +703,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             <>
                 {this.renderHeaderBlock()}
                 {this.renderMenuButtons()}
+                {this.renderBetHistoryModal()}
                 {this.renderResultBlock()}
                 {this.renderNotice()}
                 {this.renderBettingBlock()}

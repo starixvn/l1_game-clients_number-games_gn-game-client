@@ -27,6 +27,8 @@ export const messageEventType = {
     BET_PERCENTAGE: "betPercentage",
     PLAYER_BET_COUNT: "playerBetCount",
     GAME_DESTROY: "gameDestroy",
+    TOGGLE_BETHISTORY: "toggleBetHistory",
+    BET_HISTORY: "history",
 };
 
 export class GameMessageHandler {

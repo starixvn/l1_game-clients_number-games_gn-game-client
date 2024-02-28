@@ -51,6 +51,14 @@ export interface GameStateContextModel<Result, SettlementResult> {
         minBet: number;
         maxBet: number;
     };
+    betHistory: {
+        betLogs: any[];
+        page: number;
+        pageSize: number;
+        total: number;
+    };
+    isShowBetHistory: boolean;
+
 }
 
 export const initialGameStateContextModel = ({ defaultResult, defaultSettlementResult }) => {
@@ -103,5 +111,7 @@ export const initialGameStateContextModel = ({ defaultResult, defaultSettlementR
             minBet: 1,
             maxBet: 200_000,
         },
+        betHistory: {},
+        isShowBetHistory: false
     };
 };

@@ -347,7 +347,7 @@ class Dashboard extends React.PureComponent<Props, State> {
         const offerGames: number[] = authorizeInfo?.user?.offerGames?.map((game: any) => game?.gameId) ?? [];
         return (
             <AuthContextProvider value={authContextValue}>
-                <div className={`${Styles["dashboard"]}`}>
+                <div className={`${Styles["dashboard"]}`} id={"dashboard"}>
                     <Header
                         user={authorizeInfo.user}
                         enabledNotification={enabledWinningStreakNotification}
