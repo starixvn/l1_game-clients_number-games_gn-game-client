@@ -15,18 +15,7 @@ import { BacBallResultBlock } from "./bac-ball-result-block";
 import { BacBallResult, BacBallSettlementResult } from "./types";
 import { useSystemContext } from "../../_shared/react-contexts";
 import ScoreboardSwipe from "../../components/game-components/scoreboard-swipe";
-import { BacBallBetOptions } from "./constants";
-
-export const StatisticRuleEntries = Object.entries({
-    [BacBallBetOptions.PLAYER]: (countResult: object, total: number) =>
-        countResult[BacBallBetOptions.PLAYER] ? Math.round((countResult[BacBallBetOptions.PLAYER] * 100) / total) : 0,
-    [BacBallBetOptions.BANKER]: (countResult: object, total: number) =>
-        100 -
-        ((countResult[BacBallBetOptions.PLAYER] ? Math.round((countResult[BacBallBetOptions.PLAYER] * 100) / total) : 0) +
-            (countResult[BacBallBetOptions.TIE] ? Math.round((countResult[BacBallBetOptions.TIE] * 100) / total) : 0)),
-    [BacBallBetOptions.TIE]: (countResult: object, total: number) =>
-        countResult[BacBallBetOptions.TIE] ? Math.round((countResult[BacBallBetOptions.TIE] * 100) / total) : 0,
-});
+import { BacBallBetOptions, StatisticRuleEntries } from "./constants";
 
 class BacBall extends GameBase<GameBaseProps> {
     constructor(props: GameBaseProps) {

@@ -55,7 +55,7 @@ export class BacBallBigRoadElement extends BigRoadElement<BacBallSettlementResul
         } else if (player) {
             return <span className={`${styles.player} ${extendClassName}`}>{tieValue}</span>;
         } else {
-            return <span className={`${styles.tie}`}>{tieValue}</span>;
+            return <span className={`${styles["big-road-tie-first-round"]}`}>{tieValue}</span>;
         }
     }
 }

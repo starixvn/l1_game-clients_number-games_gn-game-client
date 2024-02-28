@@ -1,4 +1,5 @@
 %statistic-icon {
+    position: relative;
     width: 1.4rem;
     height: 1.4rem;
     display: flex;
@@ -11,6 +12,24 @@
     background: linear-gradient(var(--colorBackground), var(--colorBackground)) padding-box,
         linear-gradient(to bottom, var(--colorBorderTop), var(--colorBorderBottom)) border-box;
     color: var(--colorText);
+}
+
+%big-road-tie-with-bet-choice {
+    color: #fff;
+    font-size: 0.9rem;
+
+    &::after {
+        content: "";
+        display: block;
+        position: absolute;
+        top: 0.1rem;
+        right: -0.2rem;
+        width: 0.7rem;
+        height: 0.2rem;
+        border-radius: 1rem;
+        background: #3eac3e;
+        transform: rotate(-50deg);
+    }
 }
 
 .statistic-container {
@@ -44,6 +63,10 @@
     --colorBorderTop: #c74046;
     --colorBorderBottom: #7d2d75;
     --colorBackground: #2b1a26;
+
+    &.big-road-tie {
+        @extend %big-road-tie-with-bet-choice;
+    }
 }
 
 .player {
@@ -52,4 +75,8 @@
     --colorBorderTop: #046ccd;
     --colorBorderBottom: #035097;
     --colorBackground: #0c243a;
+
+    &.big-road-tie {
+        @extend %big-road-tie-with-bet-choice;
+    }
 }

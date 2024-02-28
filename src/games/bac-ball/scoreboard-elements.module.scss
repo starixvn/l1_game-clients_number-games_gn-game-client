@@ -4,9 +4,23 @@
     font-size: 0.8rem;
 }
 
-.big-road-tie {
-    --colorText: #3eac3e;
-    --colorBorderTop: #1c7e3a;
-    --colorBorderBottom: #136513;
-    --colorBackground: #092b2d;
+.big-road-tie-first-round {
+    color: #fff;
+    font-size: 0.9rem;
+    position: absolute;
+    z-index: 2;
+
+    &::after {
+        content: "";
+        display: block;
+        position: absolute;
+        top: 0.6rem;
+        right: -0.5rem;
+        width: 1.5rem;
+        height: 0.2rem;
+        border-radius: 1rem;
+        background: #3eac3e;
+        transform: rotate(-50deg);
+        z-index: -1;
+    }
 }

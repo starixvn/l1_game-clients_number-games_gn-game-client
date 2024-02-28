@@ -129,7 +129,7 @@ exports[`BacBallBigRoadElement render when the round result is player with singl
 exports[`BacBallBigRoadElement render when the round result is tie only should match the snapshot 1`] = `
 <div>
   <span
-    class="tie"
+    class="big-road-tie-first-round"
   />
 </div>
 `;

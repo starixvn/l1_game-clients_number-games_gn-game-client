@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { BetChoice, BetPercentage, Odds, OwnBet, PlayerBetCount, TotalBet } from "../../components/game-components/bet-option";
 import Style from "./bac-ball.module.scss";
-import { BacBallBetOptions } from "./constants";
+import { BacBallBetOptions, BacBallBetOptionsPercentageColor } from "./constants";
 import { useGameActionContext, useSystemContext } from "../../_shared/react-contexts";
 import { useShowHighlightPrevResult } from "../../_shared/react-hooks/use-high-light";
 import { BacBallWinningAnimation } from "./bac-ball-winning-animation";
@@ -39,7 +39,14 @@ export const BacBallBetOptionsComponent = () => {
     };
 
     const renderBetPercentage = (choice: string) => {
-        return <BetPercentage choice={choice} className={Style.percent} gameName={gameName} />;
+        return (
+            <BetPercentage
+                choice={choice}
+                className={Style.percent}
+                gameName={gameName}
+                percentageColor={BacBallBetOptionsPercentageColor[choice]}
+            />
+        );
     };
 
     const renderBetChoice = (choice: string) => {

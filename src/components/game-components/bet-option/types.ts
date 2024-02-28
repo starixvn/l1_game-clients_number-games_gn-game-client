@@ -39,4 +39,5 @@ export type BaseProps = {
     choice: string;
     children?: React.ReactNode;
     className?: string;
+    percentageColor?: string;
 };
