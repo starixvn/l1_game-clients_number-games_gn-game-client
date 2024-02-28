@@ -18,7 +18,6 @@ import GameContainer from "../game-components/game-container";
 import { GameHeader } from "../game-components/game-header";
 import GameLoading from "../game-components/game-loading";
 import { Notice } from "../game-components/notice";
-
 import { getValidateMinMaxBetResult, validateHedgeBet } from "../../_shared/helpers/validate-bet-helper";
 import { Settings } from "../game-components/settings";
 import ConfirmDialog from "../game-components/submit-dialog";
@@ -29,10 +28,8 @@ import { IGameStateHandler } from "./handlers/game-state-handler";
 import { GameBaseProps, RoundState } from "./type";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
-    private readonly animationTime = 3000;
     protected showResultInfoTimeout: NodeJS.Timeout;
     protected showWinningAnimationTimeout: NodeJS.Timeout;
-    protected isProcessingBet = false;
     private retryInterval: NodeJS.Timeout;
     protected socket: Socket;
     protected interval: NodeJS.Timeout;
@@ -112,7 +109,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.socket = null;
         this.gameMessageHandler.clearAllHandlers();
         this.props.dispatch({ type: GameEventActionType.DISCONNECT, payload: {} });
-        this.isProcessingBet = false;
+        this.props.dispatch({ type: GameEventActionType.END_BET_PROCESSING, payload: {}, });
         this.clearDisconnectTimeout();
         this.registerHandlers();
         this.connectToGameService();
@@ -244,7 +241,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
     handleEndBet = ({ endBet, ownBets, betChoice, notice, kickedOut, apiError }) => {
         const { playPlaceBetSound } = this.props;
-        this.isProcessingBet = false;
+        this.props.dispatch({ type: GameEventActionType.END_BET_PROCESSING, payload: {}, });
         this.clearRetryInterval();
         this.props.dispatch({
             type: GameEventActionType.DISPLAY_POPUP,
@@ -280,9 +277,11 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             type: GameEventActionType.ACCEPTED_BET_QUEUE,
             payload: { acceptedBetQueue: { ...acceptedBetQueue } },
         });
+
+        const animationTime = 3000;
         setTimeout(() => {
             this.removeAcceptedBetQueue(key);
-        }, this.animationTime);
+        }, animationTime);
     }
 
     removeAcceptedBetQueue(key: number) {
@@ -410,7 +409,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         const { roundHistory } = gameStateContextModel;
         const roundHistoryClone = [...roundHistory];
 
-        this.isProcessingBet = false;
+        this.props.dispatch({ type: GameEventActionType.END_BET_PROCESSING, payload: {}, });
         this.clearRetryInterval();
         //this.storeOwnBet(finish.roundId);
         roundHistoryClone.unshift(finish);
@@ -459,14 +458,17 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         const systemContext = this.props.systemContextModel;
 
         if (gameStateContext.enabledQuickBet) {
-            if (this.isProcessingBet) {
+            if (gameStateContext.isProcessingBet) {
                 this.props.dispatch({
                     type: GameEventActionType.BET_PROCESSING,
-                    payload: {},
+                    payload: { notice: { message: "messages:betProcessing", duration: 2 }, },
                 });
             } else {
                 if (amount > 0) {
-                    this.isProcessingBet = true;
+                    this.props.dispatch({
+                        type: GameEventActionType.BET_PROCESSING,
+                        payload: { notice: null, },
+                    });
                     this.setRetryInterval();
                     this.sendBetMessage(betChoice, amount);
                 }
@@ -743,7 +745,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             placeBet: this.placeBet,
             playAcceptedBetAnimation: this.playAcceptedBetAnimation,
             finishProcessingBet: () => {
-                this.isProcessingBet = false;
+                this.props.dispatch({ type: GameEventActionType.END_BET_PROCESSING, payload: {}, });
                 this.clearRetryInterval();
             },
             setActiveScoreboardTab: this.setActiveScoreboardTab,

@@ -318,11 +318,18 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
         case GameEventActionType.BET_PROCESSING: {
             return {
                 ...state,
-                isProcessingBet,
-                notice: { message: "messages:betProcessing", duration: 2 },
+                isProcessingBet: true,
+                notice
             };
         }
 
+        case GameEventActionType.END_BET_PROCESSING: {
+            return {
+                ...state,
+                isProcessingBet: false,
+                notice: null
+            };
+        }
         case GameEventActionType.ACTIVE_SCORE_BOARD: {
             return {
                 ...state,
