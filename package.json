@@ -55,6 +55,7 @@
         "typescript": "^5.3.3",
         "unique-names-generator": "^4.7.1",
         "use-sound": "^4.0.1",
+        "usehooks-ts": "^2.15.1",
         "uuid": "^9.0.1"
     },
     "devDependencies": {
