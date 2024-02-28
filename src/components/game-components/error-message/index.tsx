@@ -11,14 +11,14 @@ export const ConnectFailedMessage: React.FC<{ gameName: string; onSubmit: () => 
     onSubmit,
     reason,
 }) => {
-    const { t } = useTranslate(["InstantGame", "SabaNumber"]);
+    const { t } = useTranslate("SabaNumber");
     return (
         <BaseDialog type={ModalType.Center} isOpen={true}>
             <div className={`modal-center yellow-color ${Styles["error-message-container"]}`}>
                 <div className={`${Styles["warning-container"]}`}>
                     <div className={`icon-warning ${Styles["icon-warning"]}`}></div>
                 </div>
-                <div className={Styles["title"]}>{gameName}</div>
+                <div className={Styles["title"]}>{t("game_name")}</div>
                 <div className={Styles["content"]}>{t(reason)}</div>
                 <div className={Styles["list-action"]}>
                     <button onClick={() => onSubmit()} className={`btn-red w-100 ${Styles["reconnect"]}`}>

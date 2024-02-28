@@ -92,7 +92,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     onDestroy() {
         this.props.dispatch({
             type: GameEventActionType.SIGN_OUT,
-            payload: { roundState: RoundState.None }
+            payload: { roundState: RoundState.None },
         });
 
         clearInterval(this.interval);
@@ -107,7 +107,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.socket = null;
         this.gameMessageHandler.clearAllHandlers();
         this.props.dispatch({ type: GameEventActionType.DISCONNECT, payload: {} });
-        this.props.dispatch({ type: GameEventActionType.END_BET_PROCESSING, payload: {}, });
+        this.props.dispatch({ type: GameEventActionType.END_BET_PROCESSING, payload: {} });
         this.clearDisconnectTimeout();
         this.registerHandlers();
         this.connectToGameService();
@@ -129,31 +129,32 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.onDestroy();
         this.props.dispatch({
             type: GameEventActionType.DISCONNECT_ERROR,
-            payload: { disconnectReason: ConnectFailedReasonKey.lostConnection }
+            payload: { disconnectReason: ConnectFailedReasonKey.lostConnection },
         });
     }
 
     onSocketDisconnect() {
         this.onDestroy();
-        const { gameStateContextModel, dispatch } = this.props;
-        const { signedIn } = gameStateContextModel;
-
-        this.disconnectTimeout = setTimeout(() => {
-            dispatch({ type: GameEventActionType.DISCONNECT, payload: {} });
-            if (!signedIn) {
-                dispatch({
-                    type: GameEventActionType.DISCONNECT_ERROR,
-                    payload: { disconnectReason: ConnectFailedReasonKey.lostConnection, },
-                });
-            }
-        }, signedIn ? 1000 : 5000);
+        const { dispatch } = this.props;
+        this.disconnectTimeout = setTimeout(
+            () => {
+                dispatch({ type: GameEventActionType.DISCONNECT, payload: {} });
+                if (!this.props.gameStateContextModel.signedIn) {
+                    dispatch({
+                        type: GameEventActionType.DISCONNECT_ERROR,
+                        payload: { disconnectReason: ConnectFailedReasonKey.lostConnection },
+                    });
+                }
+            },
+            this.props.gameStateContextModel.signedIn ? 1000 : 5000
+        );
     }
 
     onGameServiceConnected() {
         this.clearDisconnectTimeout();
         this.props.dispatch({
             type: GameEventActionType.CONNECT,
-            payload: { isConnect: true }
+            payload: { isConnect: true },
         });
     }
 
@@ -203,7 +204,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                         errorCode: kickedOut.errorCode,
                         roundId: 0,
                         onClose: (this.context as AuthContextModel)?.signOut,
-                    }
+                    },
                 },
             });
         } else {
@@ -228,7 +229,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
     handleEndBet = ({ endBet, ownBets, betChoice, notice, kickedOut, apiError }) => {
         const { playPlaceBetSound } = this.props;
-        this.props.dispatch({ type: GameEventActionType.END_BET_PROCESSING, payload: {}, });
+        this.props.dispatch({ type: GameEventActionType.END_BET_PROCESSING, payload: {} });
         this.clearRetryInterval();
         this.props.dispatch({
             type: GameEventActionType.DISPLAY_POPUP,
@@ -396,7 +397,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         const { roundHistory } = gameStateContextModel;
         const roundHistoryClone = [...roundHistory];
 
-        this.props.dispatch({ type: GameEventActionType.END_BET_PROCESSING, payload: {}, });
+        this.props.dispatch({ type: GameEventActionType.END_BET_PROCESSING, payload: {} });
         this.clearRetryInterval();
         //this.storeOwnBet(finish.roundId);
         roundHistoryClone.unshift(finish);
@@ -448,13 +449,13 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             if (gameStateContext.isProcessingBet) {
                 this.props.dispatch({
                     type: GameEventActionType.BET_PROCESSING,
-                    payload: { notice: { message: "messages:betProcessing", duration: 2 }, },
+                    payload: { notice: { message: "messages:betProcessing", duration: 2 } },
                 });
             } else {
                 if (amount > 0) {
                     this.props.dispatch({
                         type: GameEventActionType.BET_PROCESSING,
-                        payload: { notice: null, },
+                        payload: { notice: null },
                     });
                     this.setRetryInterval();
                     this.sendBetMessage(betChoice, amount);
@@ -641,7 +642,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                             payload: {
                                 isShowBetHistory: true,
                             },
-                        })
+                        });
                     }}
                     toggleGuideModal={() => {
                         console.log("toggleGuideModal");
@@ -652,7 +653,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     renderBetHistoryModal() {
-        return <></>
+        return <></>;
     }
 
     renderMenuButtons() {
@@ -712,7 +713,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             placeBet: this.placeBet,
             playAcceptedBetAnimation: this.playAcceptedBetAnimation,
             finishProcessingBet: () => {
-                this.props.dispatch({ type: GameEventActionType.END_BET_PROCESSING, payload: {}, });
+                this.props.dispatch({ type: GameEventActionType.END_BET_PROCESSING, payload: {} });
                 this.clearRetryInterval();
             },
             setActiveScoreboardTab: this.setActiveScoreboardTab,
