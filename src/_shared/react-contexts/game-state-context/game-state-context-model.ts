@@ -1,4 +1,3 @@
-import { Resource, Texture } from "pixi.js";
 import { GameConfigs, IBallColor, Notice, Round, RoundState } from "../../../components/game-base/type";
 
 export interface GameStateContextModel<Result, SettlementResult> {
@@ -34,9 +33,6 @@ export interface GameStateContextModel<Result, SettlementResult> {
     activeScoreboardTab?: number;
     rate?: number;
     disconnectReason?: string;
-    winningPlayerFrames: Texture<Resource>[];
-    winningTieFrames: Texture<Resource>[];
-    cageBallsLoopFrames: Texture<Resource>[];
     cageBallFrames: IBallColor;
     isUMInFirstLoad: boolean;
     betWin: number;
@@ -58,7 +54,6 @@ export interface GameStateContextModel<Result, SettlementResult> {
         total: number;
     };
     isShowBetHistory: boolean;
-
 }
 
 export const initialGameStateContextModel = ({ defaultResult, defaultSettlementResult }) => {
@@ -85,10 +80,6 @@ export const initialGameStateContextModel = ({ defaultResult, defaultSettlementR
         activeScoreboardTab: 0,
         rate: 1,
         disconnectReason: "",
-        winningPlayerFrames: [],
-        winningTieFrames: [],
-        cageBallsLoopFrames: [],
-        cageBallFrames: { blue: [], red: [] },
         gameConfigs: {
             odds: {},
             minBet: 0,
@@ -112,6 +103,6 @@ export const initialGameStateContextModel = ({ defaultResult, defaultSettlementR
             maxBet: 200_000,
         },
         betHistory: {},
-        isShowBetHistory: false
+        isShowBetHistory: false,
     };
 };
