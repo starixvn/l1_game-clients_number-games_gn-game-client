@@ -25,7 +25,7 @@ function Home() {
     const [language, setLanguage] = useState<string>(null);
     const [isDirectMode, setIsDirectMode] = useState<boolean>(null);
 
-    const { token, lang, gameId, ref } = router.query;
+    const { token, lang, gameId } = router.query;
     const { i18n } = useTranslation();
 
     usePWAWoker();
@@ -50,6 +50,7 @@ function Home() {
             if (userSession.isAuthenticated) {
                 setSession(userSession);
                 Sentry.setUser(userSession);
+                const { ref } = router.query;
                 ref && setIsDirectMode(validDirectModeRefs.includes(ref?.toString()));
                 setLoading(false);
 
