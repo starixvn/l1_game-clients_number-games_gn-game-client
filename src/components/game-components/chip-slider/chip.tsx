@@ -27,7 +27,7 @@ export const Chip: React.FC<{ value: number; onClickChip: Function }> = ({ value
     };
 
     return (
-        <div key={value} className={getChipClassName()} onClick={() => onClickChip(value)}>
+        <div id={`chip-${value}`} key={value} className={getChipClassName()} onClick={() => onClickChip(value)}>
             <img
                 src={`/static/images/chips/${systemName}/${ChipMapper[systemName][value] || defaultChip}.svg`}
                 className={`img-fluid ${Styles["chip"]}`}
