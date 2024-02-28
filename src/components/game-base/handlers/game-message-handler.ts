@@ -47,7 +47,6 @@ export class GameMessageHandler {
         this.register(messageEventType.SIGNED_IN, this.handleSignedIn);
         this.register(messageEventType.BET_PERCENTAGE, this.handleBetPercentage);
         this.register(messageEventType.PLAYER_BET_COUNT, this.handlePlayerBetCount);
-        this.register(messageEventType.BET_HISTORY, this.handleBetHistory);
     };
 
     getMessageTransmitter() {
@@ -156,13 +155,6 @@ export class GameMessageHandler {
             payload: { drawId, turnCounter },
         });
     };
-
-    handleBetHistory({ history }) {
-        this.dispatch({
-            type: GameEventActionType.BET_HISTORY,
-            payload: { betHistory: history },
-        });
-    }
 
     clearAllHandlers = () => {
         this.messageTransmitter.clearAllListener();

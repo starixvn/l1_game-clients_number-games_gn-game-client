@@ -74,7 +74,6 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
         turnCounter,
         notConfirmOwnBets,
         umFirstLoading,
-        betHistory,
         isShowBetHistory
     } = payload;
 
@@ -388,13 +387,6 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
                 ...state,
                 umFirstLoading,
             };
-        }
-
-        case GameEventActionType.BET_HISTORY: {
-            return {
-                ...state,
-                betHistory
-            }
         }
 
         case GameEventActionType.TOGGLE_BET_HISTORY: {

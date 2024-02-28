@@ -39,7 +39,6 @@ export enum GameEventActionType {
     SHOW_CONFIRM_DIALOG = "SHOW_CONFIRM_DIALOG",
     NOT_CONFIRM_OWN_BETS = "NOT_CONFIRM_OWN_BETS",
     SET_UM_FIRST_LOADING = "SET_UM_FIRST_LOADING",
-    BET_HISTORY = "BET_HISTORY",
     TOGGLE_BET_HISTORY = "TOGGLE_BET_HISTORY",
 }
 
@@ -104,7 +103,6 @@ export interface GameEventPayload {
     turnCounter?: number;
     notConfirmOwnBets?: any;
     umFirstLoading?: boolean;
-    betHistory?: any;
     isShowBetHistory?: boolean;
 }
 
