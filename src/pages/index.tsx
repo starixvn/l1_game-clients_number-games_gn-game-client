@@ -15,6 +15,7 @@ import UMPage from "../components/page-components/um-page";
 import { sso, verifySession } from "../services/auth-service";
 
 const getUserSession = (token: string) => (token ? sso(token, getAppSettings().appType) : verifySession());
+const validDirectModeRefs = ["m_direct", "d_direct"];
 
 function Home() {
     const router = useRouter();
@@ -22,14 +23,10 @@ function Home() {
     const [loading, setLoading] = useState<boolean>(true);
     const [session, setSession] = useState<SSOResponse>(null);
     const [language, setLanguage] = useState<string>(null);
+    const [isDirectMode, setIsDirectMode] = useState<boolean>(null);
 
     const { token, lang, gameId, ref } = router.query;
     const { i18n } = useTranslation();
-
-    const isDirectMode = () => {
-        const validRefs = ["m_direct", "d_direct"];
-        return validRefs.includes(ref?.toString());
-    };
 
     usePWAWoker();
     useEffect(() => {
@@ -53,6 +50,7 @@ function Home() {
             if (userSession.isAuthenticated) {
                 setSession(userSession);
                 Sentry.setUser(userSession);
+                ref && setIsDirectMode(validDirectModeRefs.includes(ref?.toString()));
                 setLoading(false);
 
                 window.history.pushState(null, "", location.href.split("?")[0]);
@@ -80,7 +78,7 @@ function Home() {
         return <SplashScreen locale={language}></SplashScreen>;
     }
 
-    return <Dashboard session={session} queryGame={+gameId} setIsUm={setIsUm} directMode={isDirectMode()} />;
+    return <Dashboard session={session} queryGame={+gameId} setIsUm={setIsUm} directMode={isDirectMode} />;
 }
 
 export const getStaticProps = async ({ locale }) => {
