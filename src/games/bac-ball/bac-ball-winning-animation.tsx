@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
 import { AnimatedSprite, Container, Stage } from "@pixi/react";
-import { loadPixiAnimations } from "../../_shared/helpers/pixi-resource-loader";
 import { Resource, Texture } from "pixi.js";
+import { useEffect, useState } from "react";
+
+import { loadPixiAnimations } from "../../_shared/helpers/pixi-resource-loader";
 import { useWinningHighLightResult } from "../../_shared/react-hooks/use-high-light";
 
 type Props = {
@@ -20,13 +21,13 @@ export const BacBallWinningAnimation: React.FC<Props> = ({ choice, resourceName,
         if (winningFrames?.length === 0) {
             const handleLoadResource = async () => {
                 await loadPixiAnimations(`/static/images/bac-number/highlight-winning-${resourceName}.json`, (sprite) => {
-                    setWinningFrames((playerFrames) => (playerFrames = sprite.animations[`highlight-winning-${choice}`]));
+                    setWinningFrames((playerFrames) => (playerFrames = sprite.animations[`highlight-winning-${resourceName}`]));
                 });
             };
 
             handleLoadResource();
         }
-    }, []);
+    }, [resourceName]);
 
     return (
         winningHighLightResult({ betChoice: choice }) &&
@@ -39,7 +40,7 @@ export const BacBallWinningAnimation: React.FC<Props> = ({ choice, resourceName,
                         autoUpdate
                         isPlaying={true}
                         initialFrame={0}
-                        animationSpeed={0.2}
+                        animationSpeed={0.3}
                         loop={true}
                     />
                 </Container>
