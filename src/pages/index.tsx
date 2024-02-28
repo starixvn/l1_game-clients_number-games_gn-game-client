@@ -24,12 +24,14 @@ function Home() {
     const [session, setSession] = useState<SSOResponse>(null);
     const [language, setLanguage] = useState<string>(null);
     const [isDirectMode, setIsDirectMode] = useState<boolean>(null);
+    const [gameId, setGameId] = useState(null);
 
-    const { token, lang, gameId } = router.query;
     const { i18n } = useTranslation();
 
     usePWAWoker();
     useEffect(() => {
+        const { token, lang, gameId } = router.query;
+
         const signIn = async () => {
             const userSession = await getUserSession(token as string);
 
@@ -52,6 +54,7 @@ function Home() {
                 Sentry.setUser(userSession);
                 const { ref } = router.query;
                 ref && setIsDirectMode(validDirectModeRefs.includes(ref?.toString()));
+                setGameId(gameId);
                 setLoading(false);
 
                 window.history.pushState(null, "", location.href.split("?")[0]);
@@ -69,7 +72,7 @@ function Home() {
 
             signIn();
         }
-    }, [router]);
+    }, [router.isReady]);
 
     if (isUM) {
         return <UMPage locale={language} />;
