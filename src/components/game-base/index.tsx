@@ -282,7 +282,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     handleUM({ um, um_message, remainingTime }) {
-        const { durations } = this.props;
+        const { durations, gameStateContextModel } = this.props;
         const wholeRound = this.roundStateHandler.getWholeRoundDuration({ durations });
 
         this.props.dispatch({
@@ -290,7 +290,12 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             payload: { umFirstLoading: um && remainingTime && remainingTime + 1 === wholeRound },
         });
 
-        if (um && (this.timeCounter <= durations.placingBets + durations.beforeStartRound + 1 || remainingTime + 1 === wholeRound)) {
+        if (
+            um &&
+            (this.timeCounter <= durations.placingBets + durations.beforeStartRound + 1 ||
+                remainingTime + 1 === wholeRound ||
+                gameStateContextModel.roundState === RoundState.None)
+        ) {
             this.interval && clearInterval(this.interval);
             this.showResultInfoTimeout && clearTimeout(this.showResultInfoTimeout);
             this.showWinningAnimationTimeout && clearTimeout(this.showWinningAnimationTimeout);
