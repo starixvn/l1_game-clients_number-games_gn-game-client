@@ -1,7 +1,7 @@
 $delay-all-anim: 1.2s;
 
-$zoom-in-duration: 0.5s;
-$zoom-in-delay-time: 1s;
+$show-number-duration: 0.5s;
+$show-number-delay-time: 1s;
 
 $loading-duration: 1.6s;
 
@@ -15,7 +15,7 @@ $loading-duration: 1.6s;
 
     &.delay {
         .ball-bg {
-            animation: zoom-in ($zoom-in-duration) ($zoom-in-delay-time + $delay-all-anim) linear forwards;
+            animation: fade-in ($show-number-duration) ($show-number-delay-time + $delay-all-anim) linear forwards;
         }
     }
 
@@ -63,15 +63,15 @@ $loading-duration: 1.6s;
     z-index: 2;
     width: 3.4rem;
     height: 3.4rem;
-    transform: scale(0);
     text-align: center;
     border-radius: 50%;
     transform-origin: center center;
-    animation: zoom-in $zoom-in-duration $zoom-in-delay-time ease-in-out forwards;
+    opacity: 0;
+    animation: fade-in $show-number-duration $show-number-delay-time ease-in-out forwards;
 
     &.display-right-now {
         animation: none;
-        transform: scale(1);
+        opacity: 1;
     }
 
     &::after {
@@ -126,18 +126,18 @@ $loading-duration: 1.6s;
     }
 }
 
-@keyframes zoom-in {
-    from {
-        transform: scale(1.2) translateZ(0) perspective(1px) rotate(0.05deg);
-    }
-
-    to {
-        transform: scale(1) translateZ(0) perspective(1px) rotate(0.05deg);
-    }
-}
-
 @keyframes fade-out {
     to {
         opacity: 0;
+    }
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
     }
 }
