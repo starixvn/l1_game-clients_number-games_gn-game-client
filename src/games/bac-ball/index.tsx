@@ -73,7 +73,7 @@ const BacBallWrapper = (props) => {
 };
 
 const BacBallFC = (props) => {
-    const { t } = useTranslate([`${props.gameName}`, "Common", "SabaNumber"]);
+    const { t } = useTranslate(["Common", "SabaNumber"]);
 
     return (
         <BacBall
