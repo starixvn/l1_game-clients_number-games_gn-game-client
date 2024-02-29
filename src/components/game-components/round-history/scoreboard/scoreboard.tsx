@@ -8,6 +8,7 @@ export type ScoreboardProps<Round> = {
     row: number;
     element: ComponentType<ScoreboardItemProps<Round>>;
     className?: string;
+    elementClassName?: string;
 };
 
 export type ScoreboardItemProps<Round> = {
@@ -16,6 +17,13 @@ export type ScoreboardItemProps<Round> = {
 };
 
 export class Scoreboard<Round> extends Component<ScoreboardProps<Round>> {
+    static defaultProps: Partial<ScoreboardProps<unknown>> = {
+        column: 17,
+        row: 6,
+        className: "",
+        elementClassName: "",
+    };
+
     private renderElement(round: Round, props: Attributes | HTMLAttributes<unknown>): ReactNode {
         const { element } = this.props;
 
@@ -23,7 +31,7 @@ export class Scoreboard<Round> extends Component<ScoreboardProps<Round>> {
     }
 
     render(): ReactNode {
-        const { rounds, className } = this.props;
+        const { rounds, className, elementClassName } = this.props;
         const arranged = this.props.arrange(rounds, this);
 
         return (
@@ -37,7 +45,7 @@ export class Scoreboard<Round> extends Component<ScoreboardProps<Round>> {
                     };
 
                     return this.renderElement(round, {
-                        className: styles["scoreboard-item"],
+                        className: `${styles["scoreboard-item"]} ${elementClassName}`,
                         style,
                         key: index,
                     });
