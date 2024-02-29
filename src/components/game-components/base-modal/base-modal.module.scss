@@ -1,20 +1,55 @@
 .overlay {
     display: flex;
-    justify-content: center;
+    justify-content: start;
     flex-direction: column;
     align-items: center;
     position: absolute;
-    z-index: calc(var(--table-thead-index) + 1);
-    width: 100%; 
-    height: 100%; 
-    overflow: auto;
-    background-color: rgba(235, 231, 231, 0.767); 
+    top: 3.4rem;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    overflow: hidden;
+    background-color: #000;
+
+    &.open {
+        display: flex;
+    }
+
+    &.close {
+        display: none;
+    }
 }
 
-.open {
-    display: flex;
+.modal-body {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 5.4rem 1fr;
+    height: 100%;
+    width: 100%;
+    background-color: #191a1e;
+    border-radius: 1.6rem 1.6rem 0 0;
 }
 
-.close {
-    display: none;
+.title {
+    position: relative;
+    font-size: 1.6rem;
+    font-weight: medium;
+    color: #fff;
+    text-align: center;
+    line-height: 5.4rem;
+}
+
+.icon-close {
+    position: absolute;
+    right: 1rem;
+    top: 1.2rem;
+    font-size: 2.8rem;
+
+    &:hover {
+        cursor: pointer;
+    }
+
+    &::before {
+        color: #6c737b;
+    }
 }
