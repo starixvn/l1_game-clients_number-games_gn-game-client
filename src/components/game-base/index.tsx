@@ -204,28 +204,27 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     registerHandlers() {
+        const signOut = (this.context as AuthContextModel)?.signOut;
+        const setBalance = (this.context as AuthContextModel)?.setBalance;
+
         this.gameMessageHandler.register(messageEventType.SOCKET_CONNECTED, this.onGameServiceConnected.bind(this));
         this.gameMessageHandler.register(messageEventType.SOCKET_CONNECT_ERROR, this.onConnectFailed.bind(this));
         this.gameMessageHandler.register(messageEventType.SOCKET_DISCONNECTED, this.onSocketDisconnect.bind(this));
         this.gameMessageHandler.register(messageEventType.UNDER_MAINTENANCE, this.handleUM.bind(this));
         this.gameMessageHandler.register(messageEventType.REMAINING_TIME, this.handleRemainingTime.bind(this));
         this.gameMessageHandler.register(messageEventType.FINISH, this.handleFinish.bind(this));
-        this.placeBetHandler.registerEvents((this.context as AuthContextModel)?.signOut, this.props.gameStateContextModel);
+        this.placeBetHandler.registerEvents(signOut, this.props.gameStateContextModel);
         this.gameMessageHandler.register(messageEventType.GAME_DESTROY, this.onDestroy.bind(this));
         this.gameMessageHandler.register(messageEventType.CLEAR_GAME_TIMEOUT_AND_INTERVAL, this.clearGameTimoutAndInterval.bind(this));
         this.gameMessageHandler.register(messageEventType.SEND_SOCKET_MESSAGE, this.sendSocketMessage.bind(this));
         this.gameMessageHandler.register(messageEventType.UPDATE_PLAYER_BALANCE, this.updateUserBalance.bind(this));
-        this.playerHandler.registerEvents((this.context as AuthContextModel)?.setBalance);
-        this.gameErrorHandler.registerEvents((this.context as AuthContextModel)?.signOut);
+        this.playerHandler.registerEvents(setBalance);
+        this.gameErrorHandler.registerEvents(signOut);
     }
 
     emitSocketEvent = ({ key, data }) => {
         this.socket?.emit(key, data);
     };
-
-    get winningAnimationWaitingTimeInSecond() {
-        return this.props.durations.showResult * 1000;
-    }
 
     get defaultResult() {
         return null;
@@ -364,13 +363,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         return <Notice />;
     }
 
-    getOddsByChoice(choice: string) {
-        const { gameConfigs } = this.props.gameStateContextModel;
-        const odds = gameConfigs.odds;
-
-        return odds[choice];
-    }
-
     renderResultSection() {
         return null;
     }
@@ -434,7 +426,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     renderConfirmBet() {
-        if (!this.props.gameStateContextModel.showConfirmBet) return null;
         return <ConfirmBet />;
     }
 

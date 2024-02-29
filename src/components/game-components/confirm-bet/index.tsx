@@ -3,18 +3,19 @@ import React, { useEffect } from "react";
 import { confirmBet } from "../../../_shared/constants";
 import { useGameActionContext } from "../../../_shared/react-contexts";
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
-import { useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
+import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import Styles from "./confirm-bet.module.scss";
 
 export type Props = {};
 
-const ConfirmBet: React.FC<Props> = ({ }: Props) => {
+const ConfirmBet: React.FC<Props> = ({}: Props) => {
     const dispatch = useGameStatesDispatch();
     const gameActionContext = useGameActionContext();
+    const gameStateConext = useGameStateContext();
 
     const { t } = useTranslate(["SabaNumber"]);
     useEffect(() => {
-        return () => { };
+        return () => {};
     }, []);
 
     const onCancel = () => {
@@ -40,6 +41,8 @@ const ConfirmBet: React.FC<Props> = ({ }: Props) => {
 
         gameActionContext.placeBet(confirmBet, 0);
     };
+
+    if (!gameStateConext.showConfirmBet) return <></>;
 
     return (
         <div className={Styles["confirm-bet-container"]}>
