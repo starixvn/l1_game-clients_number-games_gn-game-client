@@ -659,7 +659,12 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                         });
                     }}
                     toggleGuideModal={() => {
-                        console.log("toggleGuideModal");
+                        this.props.dispatch({
+                            type: GameEventActionType.TOGGLE_GAME_GUIDE,
+                            payload: {
+                                isShowGameGuide: true,
+                            },
+                        });
                     }}
                 />
             </>
@@ -668,6 +673,10 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
     renderBetHistoryModal() {
         return <></>;
+    }
+
+    renderGameGuideModal() {
+        return <></>
     }
 
     renderMenuButtons() {
@@ -711,6 +720,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         return (
             <>
                 {this.renderHeaderBlock()}
+                {this.renderGameGuideModal()}
                 {this.renderMenuButtons()}
                 {this.renderBetHistoryModal()}
                 {this.renderResultBlock()}

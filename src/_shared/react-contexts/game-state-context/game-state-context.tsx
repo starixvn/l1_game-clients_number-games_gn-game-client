@@ -74,7 +74,8 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
         turnCounter,
         notConfirmOwnBets,
         umFirstLoading,
-        isShowBetHistory
+        isShowBetHistory,
+        isShowGameGuide
     } = payload;
 
     // console.log("payload: ", JSON.stringify(payload));
@@ -394,6 +395,13 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
             return {
                 ...state,
                 isShowBetHistory
+            }
+        }
+
+        case GameEventActionType.TOGGLE_GAME_GUIDE: {
+            return {
+                ...state,
+                isShowGameGuide
             }
         }
 

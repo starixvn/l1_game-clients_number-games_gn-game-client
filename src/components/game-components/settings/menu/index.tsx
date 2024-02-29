@@ -11,8 +11,8 @@ export const Menu: React.FC<{
     handleToggleGuideModal: Function;
     enabledSound: boolean;
     onToggleSound: Function;
-    toggleBetHistory: Function;
-}> = ({ handleToggleGuideModal, enabledSound, onToggleSound, toggleBetHistory}) => {
+    handleToggleBetHistory: Function;
+}> = ({ handleToggleGuideModal, enabledSound, onToggleSound, handleToggleBetHistory}) => {
     const { t } = useTranslation([ResourceTypes.COMMON]);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const wrapperRef = useRef<HTMLDivElement>(null);
@@ -21,7 +21,8 @@ export const Menu: React.FC<{
     const specialClassByDevice = !isMobileOnly ? "desktop-style" : "";
 
     const openBetHistory = () => {
-        toggleBetHistory();
+        handleToggleBetHistory();
+        setDropdownOpen(false);
     }
 
     const openGuide = () => {

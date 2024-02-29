@@ -40,6 +40,7 @@ export enum GameEventActionType {
     NOT_CONFIRM_OWN_BETS = "NOT_CONFIRM_OWN_BETS",
     SET_UM_FIRST_LOADING = "SET_UM_FIRST_LOADING",
     TOGGLE_BET_HISTORY = "TOGGLE_BET_HISTORY",
+    TOGGLE_GAME_GUIDE = "TOGGLE_GAME_GUIDE"
 }
 
 export interface GameEventPayload {
@@ -104,6 +105,7 @@ export interface GameEventPayload {
     notConfirmOwnBets?: any;
     umFirstLoading?: boolean;
     isShowBetHistory?: boolean;
+    isShowGameGuide?: boolean;
 }
 
 export interface GameEventAction {

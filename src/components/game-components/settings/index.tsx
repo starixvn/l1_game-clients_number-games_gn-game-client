@@ -23,7 +23,7 @@ export const Settings: React.FC<Props> = ({ onToggleSound, enabledSound, toggleG
                         <span id="icon-home" className="icon-home" />
                     </button>
 
-                    <Menu handleToggleGuideModal={toggleGuideModal} enabledSound={enabledSound} onToggleSound={onToggleSound} toggleBetHistory={toggleHistoryModal} />
+                    <Menu handleToggleGuideModal={toggleGuideModal} enabledSound={enabledSound} onToggleSound={onToggleSound} handleToggleBetHistory={toggleHistoryModal} />
                 </div>
             </div>
         );
