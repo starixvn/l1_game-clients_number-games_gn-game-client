@@ -1,14 +1,18 @@
-.big-road-small {
-    //scrollbar-width: none;
-    //direction: ltr;
-    scroll-snap-align: end;
-}
-
-.big-eye-small {
-    width: 33.33%;
+.scoreboard-derived-multiple {
+    display: flex;
+    grid-template-columns: 1fr 1fr 1fr;
 }
 
 .big-eye-small-element {
+    width: 0.5rem;
+    height: 0.5rem;
+}
+
+.derived-board-small {
+    width: 33.33%;
+}
+
+.derived-board-small-element {
     width: 0.5rem;
     height: 0.5rem;
 }

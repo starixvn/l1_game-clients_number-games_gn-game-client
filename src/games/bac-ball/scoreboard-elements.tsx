@@ -74,3 +74,23 @@ export class BacBallBigEyeElement extends DerivedElement {
         return <span className={`${styles["big-eye-player"]}`} />;
     }
 }
+
+export class BacBallSmallRoadElement extends DerivedElement {
+    renderA(): ReactNode {
+        return <span className={`${styles["small-road-banker"]}`} />;
+    }
+
+    renderB(): ReactNode {
+        return <span className={`${styles["small-road-player"]}`} />;
+    }
+}
+
+export class BacBallCockroachPigElement extends DerivedElement {
+    renderA(): ReactNode {
+        return <span className={`${styles["cockroach-pig-banker"]}`} />;
+    }
+
+    renderB(): ReactNode {
+        return <span className={`${styles["cockroach-pig-player"]}`} />;
+    }
+}

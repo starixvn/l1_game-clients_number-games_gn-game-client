@@ -7,6 +7,8 @@ import {
     BacBallBigRoadConverter,
     BacBallBigRoadElement,
     BacBallBigEyeElement,
+    BacBallSmallRoadElement,
+    BacBallCockroachPigElement,
 } from "../../../games/bac-ball/scoreboard-elements";
 import { Round } from "../../game-base/type";
 import Scoreboard from "../round-history/scoreboard";
@@ -24,13 +26,6 @@ const ScoreboardSwipe: React.FC<{ roundHistory: Round<any, any>[] }> = ({ roundH
     return (
         <Swiper slidesPerView={"auto"} spaceBetween={10} className="mySwiper">
             <SwiperSlide>
-                {/* <Scoreboard
-                    rounds={settlements}
-                    element={BacBallBigRoadElement}
-                    arrange={BacBallBigRoadElement.arrange(BacBallBigRoadConverter.instance)}
-                    row={6}
-                    className={Styles["big-road"]}
-                /> */}
                 <div className={Styles["scoreboard-multiple"]}>
                     <Scoreboard
                         rounds={settlements}
@@ -38,19 +33,37 @@ const ScoreboardSwipe: React.FC<{ roundHistory: Round<any, any>[] }> = ({ roundH
                         arrange={BacBallBigRoadElement.arrange(BacBallBigRoadConverter.instance)}
                         row={6}
                         column={27}
-                        className={Styles["big-road-small"]}
                         elementClassName={Styles["big-road-small-element"]}
                     />
-
-                    <Scoreboard
-                        rounds={settlements}
-                        element={BacBallBigEyeElement}
-                        arrange={BacBallBigEyeElement.arrange(BacBallBigRoadConverter.instance, "bigEyeBoy")}
-                        row={6}
-                        column={18}
-                        className={Styles["big-eye-small"]}
-                        elementClassName={Styles["big-eye-small-element"]}
-                    />
+                    <div className={Styles["scoreboard-derived-multiple"]}>
+                        <Scoreboard
+                            rounds={settlements}
+                            element={BacBallBigEyeElement}
+                            arrange={BacBallBigEyeElement.arrange(BacBallBigRoadConverter.instance, "bigEyeBoy")}
+                            row={6}
+                            column={18}
+                            className={Styles["derived-board-small"]}
+                            elementClassName={Styles["derived-board-small-element"]}
+                        />
+                        <Scoreboard
+                            rounds={settlements}
+                            element={BacBallSmallRoadElement}
+                            arrange={BacBallSmallRoadElement.arrange(BacBallBigRoadConverter.instance, "smallRoad")}
+                            row={6}
+                            column={18}
+                            className={Styles["derived-board-small"]}
+                            elementClassName={Styles["derived-board-small-element"]}
+                        />
+                        <Scoreboard
+                            rounds={settlements}
+                            element={BacBallCockroachPigElement}
+                            arrange={BacBallCockroachPigElement.arrange(BacBallBigRoadConverter.instance, "cockroachPig")}
+                            row={6}
+                            column={18}
+                            className={Styles["derived-board-small"]}
+                            elementClassName={Styles["derived-board-small-element"]}
+                        />
+                    </div>
                 </div>
             </SwiperSlide>
             <SwiperSlide>
