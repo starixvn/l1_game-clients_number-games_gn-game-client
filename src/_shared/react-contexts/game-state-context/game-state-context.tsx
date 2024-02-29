@@ -163,7 +163,7 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
                 result,
                 settlementResult,
                 roundId,
-                // drawId
+                drawId
             };
         }
 

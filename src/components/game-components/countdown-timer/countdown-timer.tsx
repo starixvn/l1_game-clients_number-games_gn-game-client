@@ -68,7 +68,6 @@ const SimpleTimer = () => {
 
     const seconds = (timeLeft % 60).toString().padStart(2, "0");
 
-    // console.log(`SimpleTimer : ${seconds}`);
     return (
         <div className={styles.timer}>
             <div className={`${styles["countdown-timer"]} ${roundState === RoundState.LockingBet ? styles["lock-bet"] : ""}`}>
@@ -79,11 +78,18 @@ const SimpleTimer = () => {
 };
 
 const GameStatus: React.FC<{ children: React.ReactNode }> = ({ children }: { children: React.ReactNode }) => {
-    const gameStateContextModel = useGameStateContext();
+    const { turnCounter, roundState } = useGameStateContext();
+    const [displayedTurnId, setDisplayedTurnId] = useState(turnCounter);
+
+    useEffect(() => {
+        if (roundState === RoundState.InRound) {
+            setDisplayedTurnId(turnCounter);
+        }
+    }, [roundState, turnCounter]);
 
     return (
         <div className={`${styles["game-status"]}`}>
-            <span>{gameStateContextModel.turnCounter} Draw:</span>
+            <span>{displayedTurnId} Draw:</span>
             {children}
         </div>
     );
