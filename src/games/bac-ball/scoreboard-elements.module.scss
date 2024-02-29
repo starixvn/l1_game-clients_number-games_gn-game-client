@@ -33,8 +33,8 @@
     --colorBorderBottom: #7d2d75;
     --colorBackground: #2b1a26;
     border-width: 0.5px;
-    width: 100%;
-    height: 100%;
+    width: 0.4rem;
+    height: 0.4rem;
 }
 
 .big-eye-player {
@@ -45,8 +45,8 @@
     --colorBorderBottom: #035097;
     --colorBackground: #0c243a;
     border-width: 0.5px;
-    width: 100%;
-    height: 100%;
+    width: 0.4rem;
+    height: 0.4rem;
 }
 
 .small-road-banker {
@@ -54,10 +54,11 @@
     --colorText: #ff5e5e;
     --colorBorderTop: #c74046;
     --colorBorderBottom: #7d2d75;
-    --colorBackground: #c74046;
+    --colorBackground: #c80c3b;
 
-    width: 100%;
-    height: 100%;
+    width: 0.4rem;
+    height: 0.4rem;
+    border: 0;
 }
 
 .small-road-player {
@@ -65,10 +66,11 @@
     --colorText: #1c7bdf;
     --colorBorderTop: #046ccd;
     --colorBorderBottom: #035097;
-    --colorBackground: #046ccd;
+    --colorBackground: #0361b8;
 
-    width: 100%;
-    height: 100%;
+    width: 0.4rem;
+    height: 0.4rem;
+    border: 0;
 }
 
 .cockroach-pig-banker {
@@ -78,11 +80,11 @@
     &::after {
         content: "";
         display: block;
-        position: absolute;
-        width: 0.5rem;
-        height: 0.2rem;
+        //position: absolute;
+        width: 0.45rem;
+        height: 0.1rem;
         border-radius: 1rem;
-        background: #c74046;
+        background: #b0252b;
         transform: rotate(-50deg);
     }
 }
@@ -94,11 +96,11 @@
     &::after {
         content: "";
         display: block;
-        position: absolute;
-        width: 0.5rem;
-        height: 0.2rem;
+        //position: absolute;
+        width: 0.45rem;
+        height: 0.1rem;
         border-radius: 1rem;
-        background: #046ccd;
+        background: #4e6ec3;
         transform: rotate(-50deg);
     }
 }
