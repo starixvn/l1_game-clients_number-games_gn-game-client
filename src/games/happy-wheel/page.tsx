@@ -1,6 +1,5 @@
 "use client";
 
-import RoundResult from "../../components/game-components/round-result";
 import Style from "./happy-wheel.module.scss";
 import { BetOptionData, RoundResultData } from "../../_shared/constants";
 
