@@ -4,9 +4,11 @@ export const validateHedgeBet = (hedgeBetGroup, ownBets, notConfirmOwnBets, betC
     const betTracks = { ...ownBets, ...notConfirmOwnBets };
     betTracks[betChoice] = (betTracks[betChoice] ?? 0) + amount;
 
-    const isInvalid = Object.keys(betTracks).some(
-        (betKey) => betTracks[betKey] && hedgeBetGroup.includes(betKey) && hedgeBetGroup.includes(betChoice) && betKey !== betChoice
-    );
+    const isInvalid =
+        hedgeBetGroup &&
+        Object.keys(betTracks).some(
+            (betKey) => betTracks[betKey] && hedgeBetGroup.includes(betKey) && hedgeBetGroup.includes(betChoice) && betKey !== betChoice
+        );
 
     return isInvalid;
 };

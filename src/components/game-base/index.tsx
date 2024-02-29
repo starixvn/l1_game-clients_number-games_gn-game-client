@@ -20,17 +20,17 @@ import { Settings } from "../game-components/settings";
 import BetSettings from "../page-components/bet-settings";
 import { IRoundStateHandler } from "../round-base/round-state-handler";
 import {
+    GameDisableHandler,
     GameErrorHandler,
-    GameMessageHandler,
-    messageEventType,
-    PlayerHandler,
-    PlaceBetHandler,
     GameFinishHandler,
     GameMessageDummyHandler,
-    GameDisableHandler,
+    GameMessageHandler,
+    PlaceBetHandler,
+    PlayerHandler,
+    messageEventType,
 } from "./handlers";
-import { GameBaseProps, RoundState } from "./type";
 import { IGameStateHandler } from "./handlers/game-state-handler";
+import { GameBaseProps, RoundState } from "./type";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
     protected socket: Socket;
@@ -38,7 +38,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     protected roundTimeCounter: number;
     protected timeCounter: number;
     protected authService: Auth;
-    protected hedgeBetGroup: string[] = [];
     private disconnectTimeout: NodeJS.Timeout;
     private gameMessageHandler: GameMessageHandler;
     private roundStateHandler: IRoundStateHandler;
@@ -88,7 +87,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 gameMessageHandler: this.gameMessageHandler,
                 gameName: this.props.gameName,
                 getPlayerBalance: this.getPlayerBalance,
-                hedgeBetGroup: this.hedgeBetGroup,
+                hedgeBetGroups: this.props.hedgeBetGroups,
                 translate: props.translate,
                 playPlaceBetSound: props.playPlaceBetSound,
             });

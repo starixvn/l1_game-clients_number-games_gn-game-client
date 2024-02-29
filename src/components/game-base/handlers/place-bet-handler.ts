@@ -1,22 +1,22 @@
+import { DefaultParamType, TFnType, TranslationKey } from "@tolgee/react";
+import { v4 as uuidv4 } from "uuid";
+import { confirmBet } from "../../../_shared/constants";
 import { GetLocalizedErrorMessage } from "../../../_shared/helpers";
 import { getValidateMinMaxBetResult, validateHedgeBet } from "../../../_shared/helpers/validate-bet-helper";
-import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
-import { GameResourceKeys } from "../../../_shared/resources";
-import { RoundState } from "../type";
-import { GameMessageHandler, messageEventType } from "./";
-import { v4 as uuidv4 } from "uuid";
-import { Notice as NoticeData } from "../type";
-import { confirmBet } from "../../../_shared/constants";
-import { GameStateContextModel } from "../../../_shared/react-contexts/game-state-context/game-state-context-model";
 import { SystemContextModel } from "../../../_shared/react-contexts";
+import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
+import { GameStateContextModel } from "../../../_shared/react-contexts/game-state-context/game-state-context-model";
+import { GameResourceKeys } from "../../../_shared/resources";
+import { Notice as NoticeData, RoundState } from "../type";
+import { GameMessageHandler, messageEventType } from "./";
 
 export type PlaceBetHandlerProps = {
     gameName: string;
     dispatch: Function;
     gameMessageHandler: GameMessageHandler;
-    translate: Function;
+    translate: TFnType<DefaultParamType, string, TranslationKey>;
     playPlaceBetSound?: Function;
-    hedgeBetGroup: string[];
+    hedgeBetGroups: [string[]];
     getPlayerBalance: Function;
 };
 
@@ -190,6 +190,7 @@ export class PlaceBetHandler {
 
     private validateNotConfirmBet(betChoice: string, amount: number, gameStateContext: GameStateContextModel<any, any>): boolean {
         const notConfirmOwnBets = gameStateContext.notConfirmOwnBets;
+        const hedgeBetGroup = this.props.hedgeBetGroups.find((group) => group.includes(betChoice));
 
         const ownBets = gameStateContext.ownBets;
         const sendNotice = (notice) =>
@@ -206,8 +207,8 @@ export class PlaceBetHandler {
                 message: GetLocalizedErrorMessage(errorCode),
                 duration: 2,
                 errorCode: errorCode,
-                betChoice1: this.props.translate(this.props.hedgeBetGroup[0]),
-                betChoice2: this.props.translate(this.props.hedgeBetGroup[1]),
+                betChoice1: this.props.translate(hedgeBetGroup[0]),
+                betChoice2: this.props.translate(hedgeBetGroup[1]),
                 ...args,
             };
         };
@@ -217,7 +218,7 @@ export class PlaceBetHandler {
             return false;
         }
 
-        if (validateHedgeBet(this.props.hedgeBetGroup, ownBets, notConfirmOwnBets, betChoice, amount)) {
+        if (validateHedgeBet(hedgeBetGroup, ownBets, notConfirmOwnBets, betChoice, amount)) {
             sendNotice(getNotice("SB1939"));
             return false;
         }

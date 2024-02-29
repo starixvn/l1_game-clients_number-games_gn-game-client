@@ -1,5 +1,7 @@
 import { useTranslate } from "@tolgee/react";
 import { withRouter } from "next/router";
+import { JSX } from "react";
+import { useSystemContext } from "../../_shared/react-contexts";
 import {
     GameStateProvider,
     useGameStateContext,
@@ -8,25 +10,22 @@ import {
 import GameBase from "../../components/game-base/";
 import { GameMessageHandler } from "../../components/game-base/handlers";
 import { GameBaseProps } from "../../components/game-base/type";
+import ScoreboardSwipe from "../../components/game-components/scoreboard-swipe";
 import { PercentageStatistic } from "../../components/game-components/statistic";
+import { TurnGameStateHandler } from "../../components/turn-base/turn-game-state-handler";
 import { TurnStateHandler } from "../../components/turn-base/turn-state-handler";
 import { BacBallBettingBlock } from "./bac-ball-betting-block";
 import { BacBallResultBlock } from "./bac-ball-result-block";
-import { BacBallResult, BacBallSettlementResult } from "./types";
-import { useSystemContext } from "../../_shared/react-contexts";
-import ScoreboardSwipe from "../../components/game-components/scoreboard-swipe";
 import { BacBallBetOptions, StatisticRuleEntries } from "./constants";
-import { BacBallBetHistoryModal } from "./history";
-import { TurnGameStateHandler } from "../../components/turn-base/turn-game-state-handler";
-import { JSX } from "react";
 import BacBallGameGuideModal from "./game-guide-modal";
+import { BacBallBetHistoryModal } from "./history";
+import { BacBallResult, BacBallSettlementResult } from "./types";
 
 class BacBall extends GameBase<GameBaseProps> {
     constructor(props: GameBaseProps) {
         const gameMessageHandler = new GameMessageHandler(props.dispatch);
 
         super(props, new TurnStateHandler(), new TurnGameStateHandler(), gameMessageHandler);
-        this.hedgeBetGroup = [BacBallBetOptions.PLAYER, BacBallBetOptions.BANKER];
     }
 
     componentDidMount() {
@@ -90,6 +89,7 @@ const BacBallFC = (props) => {
                 gameStateContextModel: useGameStateContext(),
                 systemContextModel: useSystemContext(),
                 translate: t,
+                hedgeBetGroups: [[BacBallBetOptions.PLAYER, BacBallBetOptions.BANKER]],
             }}
         />
     );
