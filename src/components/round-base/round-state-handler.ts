@@ -34,6 +34,7 @@ export class RoundStateHandler implements IRoundStateHandler {
     getRemainingTime({ remainingTime, durations }): number {
         return remainingTime;
     }
+
     getWholeRoundDuration({ durations }) {
         return durations.wholeRound;
     }

@@ -27,13 +27,14 @@ import {
     PlaceBetHandler,
     GameFinishHandler,
     GameMessageDummyHandler,
+    GameDisableHandler,
 } from "./handlers";
 import { GameBaseProps, RoundState } from "./type";
 import { IGameStateHandler } from "./handlers/game-state-handler";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
     protected socket: Socket;
-    protected interval: NodeJS.Timeout;
+    protected gameCronInterval: NodeJS.Timeout;
     protected roundTimeCounter: number;
     protected timeCounter: number;
     protected authService: Auth;
@@ -46,6 +47,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     private playerHandler: PlayerHandler;
     private placeBetHandler: PlaceBetHandler;
     private gameFishishHandler?: GameFinishHandler;
+    private gameDisabledHandler?: GameDisableHandler;
 
     constructor(
         props: P,
@@ -55,7 +57,8 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         gameErrorHandler?: GameErrorHandler,
         playerHandler?: PlayerHandler,
         placeBetHandler?: PlaceBetHandler,
-        gameFishishHandler?: GameFinishHandler
+        gameFishishHandler?: GameFinishHandler,
+        gameDisabledHandler?: GameDisableHandler
     ) {
         super(props);
 
@@ -98,6 +101,17 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 gameName: this.props.gameName,
             });
 
+        this.gameDisabledHandler =
+            gameDisabledHandler ??
+            new GameDisableHandler({
+                dispatch: props.dispatch,
+                gameMessageHandler: this.gameMessageHandler,
+                gameName: this.props.gameName,
+                durations: this.props.durations,
+                gameStateContextModel: this.props.gameStateContextModel,
+                roundStateHandler: roundStateHandler,
+            });
+
         this.placeBet = this.placeBet.bind(this);
         this.updateUserBalance = this.updateUserBalance.bind(this);
         this.setActiveScoreboardTab = this.setActiveScoreboardTab.bind(this);
@@ -123,11 +137,15 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             payload: { roundState: RoundState.None },
         });
 
-        clearInterval(this.interval);
-        this.gameFishishHandler.clearTimeout();
-        this.placeBetHandler.clearRetryInterval();
+        this.clearGameTimoutAndInterval();
         this.clearDisconnectTimeout();
     }
+
+    clearGameTimoutAndInterval = () => {
+        clearInterval(this.gameCronInterval);
+        this.gameFishishHandler.clearTimeout();
+        this.placeBetHandler.clearRetryInterval();
+    };
 
     onStart() {
         this.socket?.disconnect();
@@ -194,6 +212,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.gameMessageHandler.register(messageEventType.FINISH, this.handleFinish.bind(this));
         this.placeBetHandler.registerEvents((this.context as AuthContextModel)?.signOut, this.props.gameStateContextModel);
         this.gameMessageHandler.register(messageEventType.GAME_DESTROY, this.onDestroy.bind(this));
+        this.gameMessageHandler.register(messageEventType.CLEAR_GAME_TIMEOUT_AND_INTERVAL, this.clearGameTimoutAndInterval.bind(this));
         this.gameMessageHandler.register(messageEventType.SEND_SOCKET_MESSAGE, this.sendSocketMessage.bind(this));
         this.gameMessageHandler.register(messageEventType.UPDATE_PLAYER_BALANCE, this.updateUserBalance.bind(this));
         this.playerHandler.registerEvents((this.context as AuthContextModel)?.setBalance);
@@ -221,30 +240,8 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.socket.emit(event, data);
     };
 
-    handleUM({ um, um_message, remainingTime }) {
-        const { durations, gameStateContextModel } = this.props;
-        const wholeRound = this.roundStateHandler.getWholeRoundDuration({ durations });
-
-        this.props.dispatch({
-            type: GameEventActionType.SET_UM_FIRST_LOADING,
-            payload: { umFirstLoading: um && remainingTime && remainingTime + 1 === wholeRound },
-        });
-
-        if (
-            um &&
-            (this.timeCounter <= durations.placingBets + durations.beforeStartRound + 1 ||
-                remainingTime + 1 === wholeRound ||
-                gameStateContextModel.roundState === RoundState.None)
-        ) {
-            this.interval && clearInterval(this.interval);
-            this.gameFishishHandler.clearTimeout();
-            this.props.dispatch({
-                type: GameEventActionType.UM,
-                payload: {
-                    um_message,
-                },
-            });
-        }
+    handleUM(gameMessage) {
+        this.gameDisabledHandler.handleUM(gameMessage, this.timeCounter);
     }
 
     handleRemainingTime({ remainingTime }) {
@@ -262,8 +259,8 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         const { durations } = this.props;
         const { wholeRound } = durations;
 
-        this.interval && clearInterval(this.interval);
-        this.interval = setInterval(() => {
+        this.gameCronInterval && clearInterval(this.gameCronInterval);
+        this.gameCronInterval = setInterval(() => {
             const newRoundState = this.roundStateHandler.determineRoundBaseState({
                 roundRemainingTime: this.roundTimeCounter,
                 wholeRound: wholeRound,

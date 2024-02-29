@@ -31,6 +31,7 @@ export const messageEventType = {
     TOGGLE_BETHISTORY: "toggleBetHistory",
     BET_HISTORY: "history",
     UPDATE_PLAYER_BALANCE: "updatePlayerBalance",
+    CLEAR_GAME_TIMEOUT_AND_INTERVAL: "clearGameTimeoutAndInterval",
 };
 
 export class GameMessageHandler {
