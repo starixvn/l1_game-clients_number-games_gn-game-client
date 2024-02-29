@@ -169,6 +169,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.gameMessageHandler.register(messageEventType.FINISH, this.handleFinish.bind(this));
         this.gameMessageHandler.register(messageEventType.END_BET, this.handleEndBet.bind(this));
         this.gameMessageHandler.register(messageEventType.GAME_DESTROY, this.onDestroy.bind(this));
+        this.gameMessageHandler.register(messageEventType.SEND_SOCKET_MESSAGE, this.sendSocketMessage.bind(this));
         this.playerHandler.registerEvents((this.context as AuthContextModel)?.setBalance);
         this.gameErrorHandler.registerEvents((this.context as AuthContextModel)?.signOut);
     }
@@ -183,6 +184,11 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
     get defaultSettlementResult() {
         return null;
+    }
+
+    sendSocketMessage = (message) => {
+        const { event, data } = message[messageEventType.SEND_SOCKET_MESSAGE];
+        this.socket.emit(event, data);
     }
 
     handleBetFailed = ({ notice, kickedOut }) => {
