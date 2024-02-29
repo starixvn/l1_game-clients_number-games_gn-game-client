@@ -38,13 +38,7 @@
     width: 17.8rem;
     height: 18.8rem;
     background-size: 17.8rem 18.8rem;
-
-    padding-left: 1.2rem;
-    padding-right: 5.5rem;
-
-    &:focus:not(:active)::after {
-        // animation: ripple 1s ease-out;
-    }
+    border: none;
 }
 
 .player {
@@ -54,6 +48,8 @@
     background: url("/static/images/bac-number/bg-player.svg") no-repeat;
     border-bottom-left-radius: 6.6rem;
     border-top-left-radius: 3.8rem;
+    padding-left: 1.2rem;
+    padding-right: 5.5rem;
 
     .own-bet {
         left: -4rem;
@@ -62,22 +58,45 @@
     .winning-effect {
         left: 0;
     }
-}
 
-// @keyframes ripple {
-//     0% {
-//         transform: scale(0, 0);
-//         opacity: 1;
-//     }
-//     20% {
-//         transform: scale(25, 25);
-//         opacity: 1;
-//     }
-//     100% {
-//         opacity: 0;
-//         transform: scale(40, 40);
-//     }
-// }
+    .btn-ripple {
+        clip-path: polygon(
+            100% 100%,
+            100% 91%,
+            96% 89%,
+            90% 88%,
+            85% 86%,
+            81% 83%,
+            78% 79%,
+            75% 75%,
+            73% 72%,
+            72% 66%,
+            73% 62%,
+            72% 5%,
+            70% 1%,
+            66% 0%,
+            61% 1%,
+            52% 2%,
+            44% 3%,
+            39% 4%,
+            29% 5%,
+            19% 6%,
+            10% 7%,
+            5% 9%,
+            1% 13%,
+            0% 15%,
+            0% 70%,
+            2% 77%,
+            5% 82%,
+            7% 86%,
+            11% 89%,
+            14% 93%,
+            20% 95%,
+            25% 97%,
+            34% 98%
+        );
+    }
+}
 
 .banker {
     --color: #f9bcb9;
@@ -98,39 +117,44 @@
         transform: scaleX(-1);
     }
 
-    // &:after {
-    //     content: "";
-    //     position: absolute;
-    //     top: 0;
-    //     left: 0;
-    //     width: 100%;
-    //     height: 100%;
-    //     background-color: red;
-    //     transform-origin: 50% 50%;
-
-    //     clip-path: polygon(
-    //         28% 0,
-    //         39% 0%,
-    //         60% 2%,
-    //         74% 4%,
-    //         93% 6%,
-    //         100% 13%,
-    //         100% 27%,
-    //         100% 69%,
-    //         96% 86%,
-    //         87% 94%,
-    //         72% 100%,
-    //         46% 100%,
-    //         0 100%,
-    //         0 92%,
-    //         18% 86%,
-    //         26% 72%,
-    //         26% 72%,
-    //         27% 58%,
-    //         28% 38%,
-    //         28% 20%
-    //     );
-    // }
+    .btn-ripple {
+        clip-path: polygon(
+            1% 100%,
+            28% 100%,
+            55% 99%,
+            55% 99%,
+            69% 99%,
+            77% 98%,
+            77% 98%,
+            82% 95%,
+            87% 92%,
+            91% 89%,
+            95% 85%,
+            98% 80%,
+            99% 76%,
+            100% 16%,
+            100% 16%,
+            98% 12%,
+            96% 9%,
+            91% 8%,
+            83% 6%,
+            36% 0%,
+            32% 0%,
+            29% 1%,
+            27% 2%,
+            26% 5%,
+            25% 61%,
+            25% 67%,
+            24% 72%,
+            22% 75%,
+            18% 80%,
+            12% 85%,
+            5% 87%,
+            1% 88%,
+            0% 90%,
+            0% 96%
+        );
+    }
 }
 
 .tie {
@@ -145,8 +169,33 @@
     left: 0;
     right: 0;
     top: -0.5rem;
+    border: none;
     border-bottom-left-radius: 6.6rem;
     border-bottom-right-radius: 6.6rem;
+
+    .btn-ripple {
+        clip-path: polygon(
+            0 4%,
+            40% 1%,
+            50% 0%,
+            54% 0%,
+            100% 4%,
+            100% 84%,
+            91% 91%,
+            84% 95%,
+            78% 96%,
+            69% 98%,
+            61% 100%,
+            52% 100%,
+            43% 100%,
+            34% 99%,
+            26% 97%,
+            18% 95%,
+            11% 91%,
+            4% 88%,
+            0% 85%
+        );
+    }
 }
 
 .stake {
@@ -157,26 +206,6 @@
 
 .own-bet {
     bottom: 1.5rem;
-}
-
-%corner-cover {
-    position: absolute;
-    top: -1.5rem;
-    width: 13rem;
-    height: 2.5rem;
-    z-index: 100;
-}
-
-.left-corner {
-    @extend %corner-cover;
-    left: -1.3rem;
-    transform: rotate(-8deg);
-}
-
-.right-corner {
-    @extend %corner-cover;
-    right: 0;
-    transform: rotate(8deg);
 }
 
 .lottery-player-container {
@@ -213,4 +242,82 @@
     position: absolute;
     left: 0;
     top: 0;
+}
+
+/* Material style */
+.btn-ripple {
+    --ripple-color: #aea8d3;
+    --theme-color-bg: #663399;
+    --theme-color: #663399;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    border: none;
+    cursor: pointer;
+    color: white;
+    padding: 15px 40px;
+    border-radius: 2px;
+    background: none;
+    transition: all 0.1s;
+    outline: none;
+}
+
+/* Ripple style */
+
+.btn-ripple:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background-color: rgba(250, 247, 226, 0.2);
+    opacity: 0;
+    border-radius: 100%;
+    transform: scale(1, 1) translate(-50%);
+    transform-origin: 50% 50%;
+}
+
+@keyframes ripple {
+    0% {
+        transform: scale(0, 0);
+        opacity: 1;
+    }
+    20% {
+        transform: scale(25, 25);
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        transform: scale(60, 70);
+    }
+}
+
+.btn-ripple:focus:not(:active)::after {
+    animation: ripple 1s ease-out;
+}
+.btn-ripple:active {
+    transform: scale(0.9) translate(0px, 5px);
+    box-shadow: none;
+}
+/*for not auto response when screen load*/
+.btn-ripple:after {
+    visibility: hidden;
+}
+
+.btn-ripple:focus:after {
+    visibility: visible;
+}
+/*btn outline */
+.bt-outline {
+    background: none;
+    border: 2px solid var(--theme-color);
+    color: var(--theme-color);
+}
+.bt-outline.btn-ripple:after {
+    background: var(--theme-color-bg);
 }

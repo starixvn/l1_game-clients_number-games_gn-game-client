@@ -1,10 +1,11 @@
 import { useCallback } from "react";
-import { BetChoice, BetPercentage, Odds, OwnBet, PlayerBetCount, TotalBet } from "../../components/game-components/bet-option";
-import Style from "./bac-ball.module.scss";
-import { BacBallBetOptions, BacBallBetOptionsPercentageColor } from "./constants";
+
 import { useGameActionContext, useSystemContext } from "../../_shared/react-contexts";
 import { useShowHighlightPrevResult } from "../../_shared/react-hooks/use-high-light";
+import { BetChoice, BetPercentage, Odds, OwnBet, PlayerBetCount, TotalBet } from "../../components/game-components/bet-option";
 import { BacBallWinningAnimation } from "./bac-ball-winning-animation";
+import Style from "./bac-ball.module.scss";
+import { BacBallBetOptions, BacBallBetOptionsPercentageColor } from "./constants";
 
 export const BacBallBetOptionsComponent = () => {
     const gameActionContext = useGameActionContext();
@@ -96,12 +97,7 @@ export const BacBallBetOptionsComponent = () => {
         const odds = renderOdds(choice);
         const ownBet = renderOwnBet(choice);
         return (
-            <div
-                className={`${Style[choice]} text-white relative`}
-                onClick={() => {
-                    onClickBet(choice);
-                }}
-            >
+            <div className={`${Style[choice]} text-white relative`}>
                 {<div className={Style["winning-effect"]}>{winningResult}</div>}
                 {showHighlightPrevResult({ betChoice: choice }) && winningPrev}
                 <div className={`flex justify-between pt-5`}>
@@ -114,6 +110,12 @@ export const BacBallBetOptionsComponent = () => {
                 {betChoice}
                 {odds}
                 {ownBet}
+                <button
+                    className={Style["btn-ripple"]}
+                    onClick={() => {
+                        onClickBet(choice);
+                    }}
+                ></button>
             </div>
         );
     };
@@ -154,6 +156,12 @@ export const BacBallBetOptionsComponent = () => {
                 {betChoice}
                 {odds}
                 {ownBet}
+                <button
+                    className={Style["btn-ripple"]}
+                    onClick={() => {
+                        onClickBet(BacBallBetOptions.TIE);
+                    }}
+                ></button>
             </div>
         );
     };
