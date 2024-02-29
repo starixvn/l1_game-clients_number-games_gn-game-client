@@ -1,16 +1,10 @@
 import React from "react";
 import Auth from "sc-user-service-client/dist/auth";
 import { Socket } from "socket.io-client";
-import { v4 as uuidv4 } from "uuid";
-
-import { confirmBet } from "../../_shared/constants";
 import { InitSocketIO } from "../../_shared/helpers";
-import { GetLocalizedErrorMessage } from "../../_shared/helpers/notice-helper";
-import { getValidateMinMaxBetResult, validateHedgeBet } from "../../_shared/helpers/validate-bet-helper";
 import { AuthContext, AuthContextModel, GameActionsContextProvider, GameContextProvider } from "../../_shared/react-contexts";
 import { GameEventActionType } from "../../_shared/react-contexts/game-state-context/game-event-action";
 import { GameResourceKeys } from "../../_shared/resources";
-import { Notice as NoticeData } from "../../components/game-base/type";
 import { getBalance } from "../../services/auth-service";
 import BetConfirmDialog from "../game-components/bet-confirm-dialog";
 import ConfirmBet from "../game-components/confirm-bet";
@@ -25,14 +19,19 @@ import { Notice } from "../game-components/notice";
 import { Settings } from "../game-components/settings";
 import BetSettings from "../page-components/bet-settings";
 import { IRoundStateHandler } from "../round-base/round-state-handler";
-import { GameMessageDummyHandler, GameErrorHandler, GameMessageHandler, messageEventType, PlayerHandler } from "./handlers";
+import {
+    GameErrorHandler,
+    GameMessageHandler,
+    messageEventType,
+    PlayerHandler,
+    PlaceBetHandler,
+    GameFinishHandler,
+    GameMessageDummyHandler,
+} from "./handlers";
 import { GameBaseProps, RoundState } from "./type";
 import { IGameStateHandler } from "./handlers/game-state-handler";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
-    protected showResultInfoTimeout: NodeJS.Timeout;
-    protected showWinningAnimationTimeout: NodeJS.Timeout;
-    private retryInterval: NodeJS.Timeout;
     protected socket: Socket;
     protected interval: NodeJS.Timeout;
     protected roundTimeCounter: number;
@@ -45,6 +44,8 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     private gameStateHandler: IGameStateHandler;
     private gameErrorHandler: GameErrorHandler;
     private playerHandler: PlayerHandler;
+    private placeBetHandler: PlaceBetHandler;
+    private gameFishishHandler?: GameFinishHandler;
 
     constructor(
         props: P,
@@ -52,7 +53,9 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         gameStateHandler: IGameStateHandler,
         gameMessageHandler: GameMessageHandler,
         gameErrorHandler?: GameErrorHandler,
-        playerHandler?: PlayerHandler
+        playerHandler?: PlayerHandler,
+        placeBetHandler?: PlaceBetHandler,
+        gameFishishHandler?: GameFinishHandler
     ) {
         super(props);
 
@@ -75,8 +78,27 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 gameName: this.props.gameName,
             });
 
+        this.placeBetHandler =
+            placeBetHandler ??
+            new PlaceBetHandler({
+                dispatch: props.dispatch,
+                gameMessageHandler: this.gameMessageHandler,
+                gameName: this.props.gameName,
+                getPlayerBalance: this.getPlayerBalance,
+                hedgeBetGroup: this.hedgeBetGroup,
+                translate: props.translate,
+                playPlaceBetSound: props.playPlaceBetSound,
+            });
+
+        this.gameFishishHandler =
+            gameFishishHandler ??
+            new GameFinishHandler({
+                dispatch: props.dispatch,
+                gameMessageHandler: this.gameMessageHandler,
+                gameName: this.props.gameName,
+            });
+
         this.placeBet = this.placeBet.bind(this);
-        this.playAcceptedBetAnimation = this.playAcceptedBetAnimation.bind(this);
         this.updateUserBalance = this.updateUserBalance.bind(this);
         this.setActiveScoreboardTab = this.setActiveScoreboardTab.bind(this);
     }
@@ -91,6 +113,10 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         document.removeEventListener("visibilitychange", this.onVisibilityChange);
     }
 
+    getPlayerBalance = () => {
+        return (this.context as AuthContextModel).authorizeInfo.user.red;
+    };
+
     onDestroy() {
         this.props.dispatch({
             type: GameEventActionType.SIGN_OUT,
@@ -98,9 +124,8 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         });
 
         clearInterval(this.interval);
-        clearTimeout(this.showResultInfoTimeout);
-        clearTimeout(this.showWinningAnimationTimeout);
-        this.clearRetryInterval();
+        this.gameFishishHandler.clearTimeout();
+        this.placeBetHandler.clearRetryInterval();
         this.clearDisconnectTimeout();
     }
 
@@ -167,12 +192,17 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.gameMessageHandler.register(messageEventType.UNDER_MAINTENANCE, this.handleUM.bind(this));
         this.gameMessageHandler.register(messageEventType.REMAINING_TIME, this.handleRemainingTime.bind(this));
         this.gameMessageHandler.register(messageEventType.FINISH, this.handleFinish.bind(this));
-        this.gameMessageHandler.register(messageEventType.END_BET, this.handleEndBet.bind(this));
+        this.placeBetHandler.registerEvents((this.context as AuthContextModel)?.signOut, this.props.gameStateContextModel);
         this.gameMessageHandler.register(messageEventType.GAME_DESTROY, this.onDestroy.bind(this));
         this.gameMessageHandler.register(messageEventType.SEND_SOCKET_MESSAGE, this.sendSocketMessage.bind(this));
+        this.gameMessageHandler.register(messageEventType.UPDATE_PLAYER_BALANCE, this.updateUserBalance.bind(this));
         this.playerHandler.registerEvents((this.context as AuthContextModel)?.setBalance);
         this.gameErrorHandler.registerEvents((this.context as AuthContextModel)?.signOut);
     }
+
+    emitSocketEvent = ({ key, data }) => {
+        this.socket?.emit(key, data);
+    };
 
     get winningAnimationWaitingTimeInSecond() {
         return this.props.durations.showResult * 1000;
@@ -189,105 +219,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     sendSocketMessage = (message) => {
         const { event, data } = message[messageEventType.SEND_SOCKET_MESSAGE];
         this.socket.emit(event, data);
-    }
-
-    handleBetFailed = ({ notice, kickedOut }) => {
-        const { dispatch, gameName } = this.props;
-
-        this.props.dispatch({
-            type: GameEventActionType.DISPLAY_POPUP,
-            payload: {
-                notice: null,
-            },
-        });
-
-        if (kickedOut?.isDisabledAccount) {
-            dispatch({
-                type: GameEventActionType.DISPLAY_POPUP,
-                payload: {
-                    notice: {
-                        gameName: "gameName",
-                        message: GetLocalizedErrorMessage(kickedOut.errorCode),
-                        duration: 10,
-                        errorCode: kickedOut.errorCode,
-                        roundId: 0,
-                        onClose: (this.context as AuthContextModel)?.signOut,
-                    },
-                },
-            });
-        } else {
-            dispatch({
-                type: GameEventActionType.DISPLAY_POPUP,
-                payload: {
-                    notice: {
-                        gameName: `${gameName.toLowerCase()}:${GameResourceKeys.GAME_NAME}`,
-                        message: GetLocalizedErrorMessage(notice.errorCode),
-                        duration: 3,
-                        minBet: notice?.minBet,
-                        maxBet: notice?.maxBet,
-                        errorCode: notice.errorCode,
-                        roundId: notice?.gameRoundId,
-                        betChoice1: notice?.hedgeBetGroup ? this.getChoiceNameOnHedgeBet(notice.hedgeBetGroup[0]) : "",
-                        betChoice2: notice?.hedgeBetGroup ? this.getChoiceNameOnHedgeBet(notice.hedgeBetGroup[1]) : "",
-                    },
-                },
-            });
-        }
     };
-
-    handleEndBet = ({ endBet, ownBets, betChoice, notice, kickedOut, apiError }) => {
-        const { playPlaceBetSound } = this.props;
-        this.props.dispatch({ type: GameEventActionType.END_BET_PROCESSING, payload: {} });
-        this.clearRetryInterval();
-        this.props.dispatch({
-            type: GameEventActionType.DISPLAY_POPUP,
-            payload: { notice: null },
-        });
-
-        if (endBet === -1) {
-            !apiError && this.handleBetFailed({ notice, kickedOut });
-        } else {
-            this.playAcceptedBetAnimation(endBet);
-            playPlaceBetSound();
-            this.props.dispatch({
-                type: GameEventActionType.OWN_BETS,
-                payload: { ownBets },
-            });
-            this.updateUserBalance();
-        }
-
-        this.props.dispatch({
-            type: GameEventActionType.NOT_CONFIRM_OWN_BETS,
-            payload: { notConfirmOwnBets: {} },
-        });
-    };
-
-    playAcceptedBetAnimation(amount: number) {
-        const { acceptedBetQueue } = this.props.gameStateContextModel;
-        const key = uuidv4();
-        acceptedBetQueue[key] = {
-            amount,
-        };
-
-        this.props.dispatch({
-            type: GameEventActionType.ACCEPTED_BET_QUEUE,
-            payload: { acceptedBetQueue: { ...acceptedBetQueue } },
-        });
-
-        const animationTime = 3000;
-        setTimeout(() => {
-            this.removeAcceptedBetQueue(key);
-        }, animationTime);
-    }
-
-    removeAcceptedBetQueue(key: number) {
-        const { acceptedBetQueue } = this.props.gameStateContextModel;
-        delete acceptedBetQueue[key];
-        this.props.dispatch({
-            type: GameEventActionType.ACCEPTED_BET_QUEUE,
-            payload: { acceptedBetQueue },
-        });
-    }
 
     handleUM({ um, um_message, remainingTime }) {
         const { durations, gameStateContextModel } = this.props;
@@ -305,8 +237,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 gameStateContextModel.roundState === RoundState.None)
         ) {
             this.interval && clearInterval(this.interval);
-            this.showResultInfoTimeout && clearTimeout(this.showResultInfoTimeout);
-            this.showWinningAnimationTimeout && clearTimeout(this.showWinningAnimationTimeout);
+            this.gameFishishHandler.clearTimeout();
             this.props.dispatch({
                 type: GameEventActionType.UM,
                 payload: {
@@ -346,7 +277,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 this.timeCounter = this.timeCounter - 1;
             }
 
-
             this.handleGamePlay(this.timeCounter);
         }, 1000);
 
@@ -354,10 +284,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     handleGamePlay(remainingTime: number) {
-        // console.log(`---------------`);
-        // console.log(`roundTimeCounter: ${this.roundTimeCounter}`);
-        // console.log(`Turn RemainingTime: ${remainingTime}`);
-
         const { durations, dispatch, gameStateContextModel } = this.props;
 
         dispatch({
@@ -402,200 +328,14 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         }
     }
 
-    getFinishAnimationDuration() {
-        return this.props.durations.resultAnimation * 1000;
-    }
-
-    handleFinish({ finish }) {
-        const { gameStateContextModel, durations, dispatch } = this.props;
-        const { roundHistory } = gameStateContextModel;
-        const roundHistoryClone = [...roundHistory];
-
-        this.props.dispatch({ type: GameEventActionType.END_BET_PROCESSING, payload: {} });
-        this.clearRetryInterval();
-        //this.storeOwnBet(finish.roundId);
-        roundHistoryClone.unshift(finish);
-        roundHistoryClone.length > 100 && roundHistoryClone.pop();
-
-        dispatch({
-            type: GameEventActionType.FINISH,
-            payload: {
-                playResultAnimation: true,
-                result: finish.result,
-                settlementResult: finish.settlementResult,
-                roundId: finish.roundId,
-                drawId: finish?.drawId
-            },
-        });
-
-        const animationDuration = this.getFinishAnimationDuration();
-
-        this.showResultInfoTimeout = setTimeout(() => {
-            dispatch({
-                type: GameEventActionType.SHOW_RESULT_INFO_TIME_OUT,
-                payload: {
-                    showResultInfo: true,
-                    isShowBlink: false,
-                    roundHistory: roundHistoryClone,
-                    playResultAnimation: false,
-                },
-            });
-        }, animationDuration);
-
-        this.showWinningAnimationTimeout = setTimeout(() => {
-            dispatch({
-                type: GameEventActionType.SHOW_WINNING_ANIMATION,
-                payload: {
-                    showWinningAnimation: true,
-                },
-            });
-
-            gameStateContextModel.betWin > 0 && this.updateUserBalance();
-        }, this.winningAnimationWaitingTimeInSecond);
-
-        this.runGame(this.roundStateHandler.getWholeRoundDuration({ durations }));
+    handleFinish(finish) {
+        this.placeBetHandler.clearRetryInterval();
+        this.gameFishishHandler.handleFinish(finish, this.props.gameStateContextModel, this.props.durations);
+        this.runGame(this.roundStateHandler.getWholeRoundDuration({ durations: this.props.durations }));
     }
 
     placeBet(betChoice: string, amount: number) {
-        const gameStateContext = this.props.gameStateContextModel;
-        const systemContext = this.props.systemContextModel;
-
-        if (gameStateContext.enabledQuickBet) {
-            if (gameStateContext.isProcessingBet) {
-                this.props.dispatch({
-                    type: GameEventActionType.BET_PROCESSING,
-                    payload: { notice: { message: "messages:betProcessing", duration: 2 } },
-                });
-            } else {
-                if (amount > 0) {
-                    this.props.dispatch({
-                        type: GameEventActionType.BET_PROCESSING,
-                        payload: { notice: null },
-                    });
-                    this.setRetryInterval();
-                    this.sendBetMessage(betChoice, amount);
-                }
-            }
-            return;
-        }
-        const validate = this.validateNotConfirmBet(betChoice, amount);
-        if (!validate) {
-            console.log("fail");
-            return;
-        }
-
-        if (betChoice == confirmBet) {
-            this.sendConfirmBet();
-            return;
-        }
-
-        !gameStateContext.showConfirmBet &&
-            this.props.dispatch({
-                type: GameEventActionType.SHOW_CONFIRM_BET,
-                payload: {
-                    showConfirmBet: true,
-                },
-            });
-
-        const notConfirmOwnBets = gameStateContext.notConfirmOwnBets;
-
-        notConfirmOwnBets[betChoice] = (notConfirmOwnBets[betChoice] ?? 0) + systemContext.selectedChip;
-
-        this.props.dispatch({
-            type: GameEventActionType.NOT_CONFIRM_OWN_BETS,
-            payload: { notConfirmOwnBets },
-        });
-    }
-
-    private validateNotConfirmBet(betChoice: string, amount: number): boolean {
-        const gameStateContext = this.props.gameStateContextModel;
-        const notConfirmOwnBets = gameStateContext.notConfirmOwnBets;
-
-        const ownBets = gameStateContext.ownBets;
-        const sendNotice = (notice) =>
-            this.props.dispatch({
-                type: GameEventActionType.DISPLAY_POPUP,
-                payload: {
-                    notice,
-                },
-            });
-
-        const getNotice = (errorCode: string, args?): NoticeData => {
-            return {
-                gameName: this.props.gameName,
-                message: GetLocalizedErrorMessage(errorCode),
-                duration: 2,
-                errorCode: errorCode,
-                betChoice1: this.getChoiceNameOnHedgeBet(this.hedgeBetGroup[0]),
-                betChoice2: this.getChoiceNameOnHedgeBet(this.hedgeBetGroup[1]),
-                ...args,
-            };
-        };
-
-        if (gameStateContext.roundState != RoundState.InRound) {
-            sendNotice(getNotice("SB1905"));
-            return false;
-        }
-
-        if (validateHedgeBet(this.hedgeBetGroup, ownBets, notConfirmOwnBets, betChoice, amount)) {
-            sendNotice(getNotice("SB1939"));
-            return false;
-        }
-        const balance = (this.context as AuthContextModel).authorizeInfo.user.red;
-        let totalAmount = 0;
-        totalAmount += Object.values(notConfirmOwnBets).reduce((a, b) => a + b, 0);
-        totalAmount += Object.values(ownBets).reduce((a, b) => a + b, 0);
-
-        if (balance < totalAmount + amount) {
-            this.props.dispatch({
-                type: GameEventActionType.SHOW_CONFIRM_DIALOG,
-                payload: {
-                    showConfirmDialog: true,
-                },
-            });
-
-            return false;
-        }
-
-        const { errorCode, args } = getValidateMinMaxBetResult(
-            gameStateContext.gameConfigs,
-            gameStateContext.userStakeLevel,
-            notConfirmOwnBets,
-            betChoice,
-            amount,
-            totalAmount
-        );
-        if (errorCode == "0") {
-            return true;
-        }
-        sendNotice(getNotice(errorCode, args));
-        return false;
-    }
-
-    private sendConfirmBet() {
-        const notConfirmOwnBets = this.props.gameStateContextModel.notConfirmOwnBets;
-        const betChoices = {};
-        Object.entries(notConfirmOwnBets).forEach(([key, value]) => {
-            betChoices[key] = value;
-        });
-
-        this.socket.emit("bet", { betChoices });
-    }
-
-    protected sendBetMessage(betChoice: string, amount: number) {
-        this.socket.emit("bet", { betChoices: { [betChoice.toLowerCase()]: amount } });
-    }
-
-    setRetryInterval() {
-        this.clearRetryInterval();
-
-        this.retryInterval = setInterval(() => {
-            this.socket.emit("retry");
-        }, 3 * 1000);
-    }
-
-    clearRetryInterval() {
-        clearInterval(this.retryInterval);
+        this.placeBetHandler.placeBet(betChoice, amount, this.props.gameStateContextModel, this.props.systemContextModel);
     }
 
     clearDisconnectTimeout = () => {
@@ -617,10 +357,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             });
         }
     };
-
-    getChoiceNameOnHedgeBet(choiceKey) {
-        return this.getGameTranslate(choiceKey);
-    }
 
     getGameTranslate(key: string) {
         const t = this.props.translate;
@@ -677,7 +413,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     renderGameGuideModal() {
-        return <></>
+        return <></>;
     }
 
     renderMenuButtons() {
@@ -741,10 +477,10 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     renderGame() {
         const gameActionsContext = {
             placeBet: this.placeBet,
-            playAcceptedBetAnimation: this.playAcceptedBetAnimation,
+            playAcceptedBetAnimation: this.placeBetHandler.playAcceptedBetAnimation,
             finishProcessingBet: () => {
                 this.props.dispatch({ type: GameEventActionType.END_BET_PROCESSING, payload: {} });
-                this.clearRetryInterval();
+                this.placeBetHandler.clearRetryInterval();
             },
             setActiveScoreboardTab: this.setActiveScoreboardTab,
             updateStatusShowResult: this.updateStatusShowResult,

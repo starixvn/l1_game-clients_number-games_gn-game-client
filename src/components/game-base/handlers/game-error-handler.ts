@@ -1,6 +1,6 @@
-import { GetLocalizedErrorMessage } from "../../../../_shared/helpers";
-import { GameEventActionType } from "../../../../_shared/react-contexts/game-state-context/game-event-action";
-import { GameResourceKeys } from "../../../../_shared/resources";
+import { GetLocalizedErrorMessage } from "../../../_shared/helpers";
+import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
+import { GameResourceKeys } from "../../../_shared/resources";
 import { GameMessageHandler, messageEventType } from "./game-message-handler";
 
 export type GameErrorHandlerProps = {

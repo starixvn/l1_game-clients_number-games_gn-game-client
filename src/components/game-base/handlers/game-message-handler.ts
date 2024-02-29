@@ -1,6 +1,6 @@
-import MessageTransmitter from "../../../../_shared/helpers/message-transmitter";
-import { MessageTransmitterType } from "../../../../_shared/helpers/message-transmitter/type";
-import { GameEventActionType } from "../../../../_shared/react-contexts/game-state-context/game-event-action";
+import MessageTransmitter from "../../../_shared/helpers/message-transmitter";
+import { MessageTransmitterType } from "../../../_shared/helpers/message-transmitter/type";
+import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 
 export const messageEventType = {
     GAME_CONFIG: "gameConfigs",
@@ -30,6 +30,7 @@ export const messageEventType = {
     SEND_SOCKET_MESSAGE: "sendSocketMessage",
     TOGGLE_BETHISTORY: "toggleBetHistory",
     BET_HISTORY: "history",
+    UPDATE_PLAYER_BALANCE: "updatePlayerBalance",
 };
 
 export class GameMessageHandler {

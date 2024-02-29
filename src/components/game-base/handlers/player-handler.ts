@@ -1,5 +1,5 @@
-import { GameEventActionType } from "../../../../_shared/react-contexts/game-state-context/game-event-action";
-import { ConnectFailedReasonKey } from "../../../game-components/error-message/type";
+import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
+import { ConnectFailedReasonKey } from "../../game-components/error-message/type";
 import { GameMessageHandler, messageEventType } from "./game-message-handler";
 
 export type PlayerHandlerProps = {
@@ -77,8 +77,6 @@ export class PlayerHandler {
     }
 
     handleUserData({ user, gameConfigs }: { user: Player; gameConfigs: any }, setBalance: Function) {
-        //(this.context as AuthContextModel)?.setBalance(user.red);
-
         setBalance(user.red);
 
         this.props.dispatch({

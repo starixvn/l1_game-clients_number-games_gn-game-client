@@ -1,8 +1,8 @@
 import { useEffect } from "react";
-import { GameEventActionType } from "../../../../_shared/react-contexts/game-state-context/game-event-action";
-import { useGameStateContext, useGameStatesDispatch } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
-import { messageEventType } from "..";
-import { RoundState } from "../../type";
+import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
+import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
+import { messageEventType } from ".";
+import { RoundState } from "../type";
 
 export const GameMessageDummyHandler = ({ gameMessageHandler }) => {
     const gameStateContext = useGameStateContext();
