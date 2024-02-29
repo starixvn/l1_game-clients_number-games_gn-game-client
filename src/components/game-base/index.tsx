@@ -344,15 +344,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         });
     };
 
-    updateStatusShowResult = () => {
-        if (this.props.gameStateContextModel.roundState === RoundState.DisplayResult) {
-            this.props.dispatch({
-                type: GameEventActionType.PLAY_RESULT_ANIMATION,
-                payload: { playResultAnimation: false },
-            });
-        }
-    };
-
     getGameTranslate(key: string) {
         const t = this.props.translate;
         return `${t({ key })}`;
@@ -470,7 +461,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 this.placeBetHandler.clearRetryInterval();
             },
             setActiveScoreboardTab: this.setActiveScoreboardTab,
-            updateStatusShowResult: this.updateStatusShowResult,
         };
 
         return (

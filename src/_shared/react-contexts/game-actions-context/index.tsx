@@ -4,7 +4,6 @@ type GameActionsContextType = {
     placeBet: (betChoice: string, amount: number) => void;
     finishProcessingBet: Function;
     setActiveScoreboardTab: Function;
-    updateStatusShowResult: Function;
 };
 const GameActionsContext = React.createContext<Partial<GameActionsContextType>>({});
 GameActionsContext.displayName = "GameActionsContext";
