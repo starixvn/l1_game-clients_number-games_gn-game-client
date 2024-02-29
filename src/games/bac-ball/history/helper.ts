@@ -15,6 +15,6 @@ export function preprocessBetLogTime(elements: any[]) {
     });
     newElements?.sort((a, b) => {
         return b.time - a.time;
-    })
+    });
     return newElements;
-};
+}

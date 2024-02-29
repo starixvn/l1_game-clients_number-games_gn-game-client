@@ -1,17 +1,12 @@
 import { FC } from "react";
-import { Socket } from "socket.io-client";
 import { createPortal } from "react-dom";
 import BetHistoryModal from "../../../components/game-components/bet-history";
-import renderBetHistory from "./bet-log";
-import renderBetDetail from "./bet-log-detail";
+import renderBetLog from "./bet-log";
+import renderBetLogDetail from "./bet-log-detail";
 
-
-export const BacBallBetHistoryBlock: FC<{ socket: Socket }> = ({ socket }) => {
+export const BacBallBetHistoryBlock: FC = () => {
     return createPortal(
-                        <BetHistoryModal
-                        socket={socket}
-                        renderBetHistoryTable={renderBetHistory}
-                        renderBetDetail={renderBetDetail}
-                    />, document.getElementById("dashboard")
-                    )
+        <BetHistoryModal renderBetLog={renderBetLog} renderBetLogDetail={renderBetLogDetail} />,
+        document.getElementById("dashboard")
+    );
 };

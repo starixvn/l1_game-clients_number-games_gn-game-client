@@ -39,7 +39,7 @@ class BacBall extends GameBase<GameBaseProps> {
     }
 
     renderBetHistoryModal() {
-        return <BacBallBetHistoryBlock socket={this.socket} />;
+        return <BacBallBetHistoryBlock />;
     }
 
     renderStatistic() {

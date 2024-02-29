@@ -3,11 +3,11 @@ import { createPortal } from "react-dom";
 import BaseModal from "../../../components/game-components/base-modal";
 import { preprocessBetLogTime, seperateDateTime } from "./helper";
 import TableRow from "./row-table";
-import { BetDetailProps } from "../../../components/game-components/bet-history";
-import Styles from "./common.module.scss"
+import { BetLogDetailProps } from "../../../components/game-components/bet-history";
+import Styles from "./common.module.scss";
 import { randomBytes } from "crypto";
 
-interface BacBallBetDetailProps extends BetDetailProps {
+interface BacBallBetDetailProps extends BetLogDetailProps {
     drawInfo: {
         drawId: number;
         result: {
@@ -27,20 +27,20 @@ interface BacBallBetDetailProps extends BetDetailProps {
     };
 }
 
-const renderBetDetail = ({ betLogDetails, onCloseModal, isShowBetDetail, drawInfo }: BacBallBetDetailProps) => {
+const renderBetLogDetail = ({ betLogDetails, onCloseModal, isShowBetDetail, drawInfo }: BacBallBetDetailProps) => {
     return createPortal(
         <BetDetail betLogDetails={betLogDetails} onCloseModal={onCloseModal} isShowBetDetail={isShowBetDetail} drawInfo={drawInfo} />,
         document.getElementById("dashboard")
     );
 };
 
-const BetDetail: FC<BetDetailProps> = ({ betLogDetails, onCloseModal, isShowBetDetail, drawInfo }) => {
+const BetDetail: FC<BetLogDetailProps> = ({ betLogDetails, onCloseModal, isShowBetDetail, drawInfo }) => {
     const handleCloseModal = () => {
         onCloseModal();
     };
     const handleClickProbalyFair = () => {
         console.log("Click Probaly Fair");
-    }
+    };
     const header = [
         { node: "Time", size: 3.8 },
         { node: "Option", size: 2 },
@@ -52,30 +52,32 @@ const BetDetail: FC<BetDetailProps> = ({ betLogDetails, onCloseModal, isShowBetD
     return (
         isShowBetDetail && (
             <BaseModal isOpen={isShowBetDetail} onCloseModal={handleCloseModal} title="Bet Detail">
-                <div className={Styles["table-fixed-head"]}> 
-                <div className={Styles["draw-info"]}>
-                    <div>
-                        DrawID: {drawInfo?.drawId} Player: {drawInfo?.result?.player} Banker: {drawInfo?.result?.banker}
+                <div className={Styles["table-fixed-head"]}>
+                    <div className={Styles["draw-info"]}>
+                        <div>
+                            DrawID: {drawInfo?.drawId} Player: {drawInfo?.result?.player} Banker: {drawInfo?.result?.banker}
+                        </div>
+                        <button className={`${Styles["btn-clickable"]}`} onClick={handleClickProbalyFair}>
+                            Probaly Fair
+                        </button>
                     </div>
-                    <button className={`${Styles["btn-clickable"]}`} onClick={handleClickProbalyFair}>Probaly Fair</button>
+                    <table>
+                        <thead>
+                            <TableRow isHeader={true}>{header}</TableRow>
+                        </thead>
+                        <tbody>
+                            {preprocessedBetLogDetails?.map((item) => {
+                                return <BetDetailRow betLogDetail={{ ...item, ...drawInfo }} key={randomBytes(10).toString()} />;
+                            })}
+                        </tbody>
+                    </table>
                 </div>
-                <table>
-                    <thead>
-                        <TableRow isHeader={true}>{header}</TableRow>
-                    </thead>
-                    <tbody>
-                        {preprocessedBetLogDetails?.map((item) => {
-                            return <BetRowDetail betLogDetail={{ ...item, ...drawInfo }} key={randomBytes(10).toString()} />;
-                        })}
-                    </tbody>
-                </table>
-                </div>
-        </BaseModal>
+            </BaseModal>
         )
     );
 };
 
-const BetRowDetail: FC<{ betLogDetail: any }> = ({ betLogDetail }) => {
+const BetDetailRow: FC<{ betLogDetail: any }> = ({ betLogDetail }) => {
     const { date, time } = seperateDateTime(betLogDetail.time);
     const content = [
         {
@@ -93,9 +95,7 @@ const BetRowDetail: FC<{ betLogDetail: any }> = ({ betLogDetail }) => {
         { node: betLogDetail.stake[betLogDetail.choice] ?? 0, size: 2 },
         { node: betLogDetail.amount, size: 2 },
     ];
-    return (
-        <TableRow isHeader={false}>{content}</TableRow>
-    );
+    return <TableRow isHeader={false}>{content}</TableRow>;
 };
 
-export default renderBetDetail;
+export default renderBetLogDetail;

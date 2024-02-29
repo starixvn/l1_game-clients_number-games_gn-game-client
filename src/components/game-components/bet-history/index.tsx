@@ -1,21 +1,21 @@
 import { FC, useEffect, useMemo, useState } from "react";
-import { Socket } from "socket.io-client";
 import BaseModal from "../base-modal";
 import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 import { useGameContext } from "../../../_shared/react-contexts";
+import { GameMessageHandler, messageEventType } from "../../game-base/handlers";
 
 const GET_HISTORY = "getHistory";
 const HISTORY_EVENT = "history";
 
-export interface BetHistoryTableProps {
+export interface BetLogProps {
     betLogs: any[];
     handleScroll: (event: any) => void;
-    renderBetDetail: (betDetailProps: BetDetailProps) => JSX.Element;
+    renderBetDetail: (betDetailProps: BetLogDetailProps) => JSX.Element;
     onCloseModal: Function;
 }
 
-export interface BetDetailProps {
+export interface BetLogDetailProps {
     betLogDetails: any[];
     onCloseModal: Function;
     isShowBetDetail: boolean;
@@ -28,12 +28,11 @@ export interface BetDetailProps {
 }
 
 export interface BetHistoryProps {
-    renderBetHistoryTable: (betHistoryTableProps: BetHistoryTableProps) => JSX.Element;
-    renderBetDetail: (betDetailProps: BetDetailProps) => JSX.Element;
-    socket: Socket;
+    renderBetLog: (betLogProps: BetLogProps) => JSX.Element;
+    renderBetLogDetail: (betLogDetailProps: BetLogDetailProps) => JSX.Element;
 }
 
-const BetHistoryModal: FC<BetHistoryProps> = ({ renderBetHistoryTable, renderBetDetail, socket }) => {
+const BetHistoryModal: FC<BetHistoryProps> = ({ renderBetLog: renderBetHistoryTable, renderBetLogDetail: renderBetDetail }) => {
     const [isOpen, setIsOpen] = useState<boolean>(true);
     const [isFetching, setIsFetching] = useState<boolean>(false);
     const { isShowBetHistory } = useGameStateContext();
@@ -52,7 +51,7 @@ const BetHistoryModal: FC<BetHistoryProps> = ({ renderBetHistoryTable, renderBet
     const handleScroll = (nextPage: number) => (event: any) => {
         const bottom = event.target.scrollHeight - event.target.scrollTop === event.target.clientHeight;
         if (bottom && !isFetching) {
-            socket.emit(GET_HISTORY, { page: nextPage, pageSize: 10 });
+            getHistory(gameContext.gameMessageHandler, nextPage);
             setIsFetching(true);
         }
     }
@@ -68,7 +67,8 @@ const BetHistoryModal: FC<BetHistoryProps> = ({ renderBetHistoryTable, renderBet
 
     useEffect(() => {
         if (isShowBetHistory) {
-            socket.emit(GET_HISTORY, { page: 1, pageSize: 10 });
+            console.log("isShowBetHistory");
+            getHistory(gameContext.gameMessageHandler, 1);
             setIsFetching(true);
         }
     }, [isShowBetHistory]);
@@ -79,7 +79,7 @@ const BetHistoryModal: FC<BetHistoryProps> = ({ renderBetHistoryTable, renderBet
         toggleBetHistory();
     };
 
-    const handleClose = () => {
+    const handleCloseInBetDetail = () => {
         setIsOpen(x => !x);
     };
 
@@ -91,10 +91,14 @@ const BetHistoryModal: FC<BetHistoryProps> = ({ renderBetHistoryTable, renderBet
                         if (betLogs?.length <= 0 && page == 0) {
                             return "No data to show";
                         }                
-                        return renderBetHistoryTable({ betLogs, handleScroll: handleScroll(page + 1), onCloseModal: handleClose, renderBetDetail })
+                        return renderBetHistoryTable({ betLogs, handleScroll: handleScroll(page + 1), onCloseModal: handleCloseInBetDetail, renderBetDetail })
                     }, [betLogs])}
         </BaseModal>
     );
+};
+
+const getHistory = (gameMessageHandler: GameMessageHandler, page: number) => {
+    gameMessageHandler.broadcastGameEvent({ [messageEventType.SEND_SOCKET_MESSAGE]: { event: GET_HISTORY, data: { page: page } } });
 };
 
 export default BetHistoryModal;

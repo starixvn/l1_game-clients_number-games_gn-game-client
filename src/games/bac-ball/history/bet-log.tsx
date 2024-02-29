@@ -1,5 +1,5 @@
 import { FC, useState } from "react";
-import { BetHistoryTableProps } from "../../../components/game-components/bet-history";
+import { BetLogProps } from "../../../components/game-components/bet-history";
 import TableRow from "./row-table";
 import Styles from "./common.module.scss";
 import { seperateDateTime, preprocessBetLogTime } from "./helper";
@@ -26,11 +26,11 @@ export interface BetHistory {
     };
 }
 
-const renderBetHistory = ({ betLogs, handleScroll, onCloseModal, renderBetDetail }: BetHistoryTableProps) => {
-    return <BetHistoryTable betLogs={betLogs} handleScroll={handleScroll} onCloseModal={onCloseModal} renderBetDetail={renderBetDetail} />;
+const renderBetLog = ({ betLogs, handleScroll, onCloseModal, renderBetDetail }: BetLogProps) => {
+    return <BetLog betLogs={betLogs} handleScroll={handleScroll} onCloseModal={onCloseModal} renderBetDetail={renderBetDetail} />;
 };
 
-const BetHistoryTable: FC<BetHistoryTableProps> = ({ betLogs, handleScroll, onCloseModal: toggleBetHistory, renderBetDetail }) => {
+const BetLog: FC<BetLogProps> = ({ betLogs, handleScroll, onCloseModal: toggleBetHistory, renderBetDetail }) => {
     const [betLogDetail, setBetLogDetail] = useState<BetHistory>(undefined);
     const handleClickDrawId = (betLogDetail: BetHistory) => {
         toggleBetHistory();
@@ -130,11 +130,7 @@ const BetHistoryRow: FC<{ betHistory: BetHistory; handleClickDrawId: Function }>
         { node: <div className={betHistory.betwin > 0 ? Styles["highlight"] : ""}>{betHistory.betwin}</div>, size: 2 },
     ];
 
-    return (
-        <TableRow isHeader={false}>{content}</TableRow>
-    );
+    return <TableRow isHeader={false}>{content}</TableRow>;
 };
 
-
-
-export default renderBetHistory;
+export default renderBetLog;
