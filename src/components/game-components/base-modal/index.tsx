@@ -10,13 +10,22 @@ export type BaseModalProps = {
 };
 
 const BaseModal: FC<BaseModalProps> = ({ isOpen, children, onCloseModal, title }) => {
+    const handleCloseModal = () => {
+        document.body.classList.remove("no-scroll");
+        onCloseModal?.();
+    };
+
+    if (isOpen) {
+        document.body.classList.add("no-scroll");
+    }
+
     return (
         <div className={`${Styles["overlay"]} ${isOpen ? Styles["open"] : Styles["close"]}`}>
             <div className={Styles["modal-body"]}>
                 <div className={Styles["title"]}>
                     {title}
 
-                    <div className={`icon-close ${Styles["icon-close"]}`} onClick={() => onCloseModal()}></div>
+                    <div className={`icon-close ${Styles["icon-close"]}`} onClick={handleCloseModal}></div>
                 </div>
 
                 <div className="content">{children}</div>
