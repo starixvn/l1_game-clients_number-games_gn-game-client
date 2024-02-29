@@ -1,11 +1,11 @@
 import { FC } from "react";
 import { createPortal } from "react-dom";
-import BaseModal from "../../../components/game-components/base-modal";
 import { preprocessBetLogTime, seperateDateTime } from "./helper";
 import TableRow from "./row-table";
 import { BetLogDetailProps } from "../../../components/game-components/bet-history";
 import Styles from "./common.module.scss";
 import { randomBytes } from "crypto";
+import ModalContainer from "../../../components/game-components/modal-container";
 
 interface BacBallBetDetailProps extends BetLogDetailProps {
     drawInfo: {
@@ -51,7 +51,7 @@ const BetDetail: FC<BetLogDetailProps> = ({ betLogDetails, onCloseModal, isShowB
     const preprocessedBetLogDetails = preprocessBetLogTime(betLogDetails);
     return (
         isShowBetDetail && (
-            <BaseModal isOpen={isShowBetDetail} onCloseModal={handleCloseModal} title="Bet Detail">
+            <ModalContainer isOpen={isShowBetDetail} title="Bet Details" onCloseModal={handleCloseModal} isOverlap={true}>
                 <div className={Styles["table-fixed-head"]}>
                     <div className={Styles["draw-info"]}>
                         <div>
@@ -72,7 +72,7 @@ const BetDetail: FC<BetLogDetailProps> = ({ betLogDetails, onCloseModal, isShowB
                         </tbody>
                     </table>
                 </div>
-            </BaseModal>
+            </ModalContainer>
         )
     );
 };

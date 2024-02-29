@@ -15,6 +15,7 @@ export type Props = {
     enableBackdrop?: boolean;
     toggleBtnRef?: React.MutableRefObject<HTMLElement>;
     isBlockUI?: boolean;
+    isOverlap?: boolean;
 };
 
 const getClassFollowDevice = () => {
@@ -45,6 +46,7 @@ const BaseDialog: React.FC<Props> = ({
     enableBackdrop,
     toggleBtnRef,
     isBlockUI,
+    isOverlap = false
 }: Props) => {
     const wrapperRef = useRef<HTMLDivElement>(null);
     const classModal = `modal-${ModalType[type].toLocaleLowerCase()}`;
@@ -56,7 +58,7 @@ const BaseDialog: React.FC<Props> = ({
         }
 
         return () => {
-            if (enableBackdrop) {
+            if (enableBackdrop && !isOverlap) {
                 document.body.classList.remove("no-scroll");
                 isMobileOnly && document.documentElement.classList.remove("no-scroll-html");
             }

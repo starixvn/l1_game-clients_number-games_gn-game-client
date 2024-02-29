@@ -1,9 +1,10 @@
 import { FC, useEffect, useMemo, useState } from "react";
-import BaseModal from "../base-modal";
 import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 import { useGameContext } from "../../../_shared/react-contexts";
 import { GameMessageHandler, messageEventType } from "../../game-base/handlers";
+import Loader from "../loader";
+import ModalContainer from "../modal-container";
 
 const GET_HISTORY = "getHistory";
 const HISTORY_EVENT = "history";
@@ -32,7 +33,7 @@ export interface BetHistoryProps {
     renderBetLogDetail: (betLogDetailProps: BetLogDetailProps) => JSX.Element;
 }
 
-const BetHistoryModal: FC<BetHistoryProps> = ({ renderBetLog: renderBetHistoryTable, renderBetLogDetail: renderBetDetail }) => {
+const BetHistoryModal: FC<BetHistoryProps> = ({ renderBetLog, renderBetLogDetail }) => {
     const [isOpen, setIsOpen] = useState<boolean>(true);
     const [isFetching, setIsFetching] = useState<boolean>(false);
     const { isShowBetHistory } = useGameStateContext();
@@ -67,7 +68,6 @@ const BetHistoryModal: FC<BetHistoryProps> = ({ renderBetLog: renderBetHistoryTa
 
     useEffect(() => {
         if (isShowBetHistory) {
-            console.log("isShowBetHistory");
             getHistory(gameContext.gameMessageHandler, 1);
             setIsFetching(true);
         }
@@ -84,17 +84,17 @@ const BetHistoryModal: FC<BetHistoryProps> = ({ renderBetLog: renderBetHistoryTa
     };
 
     return (
-        <BaseModal isOpen={isShowBetHistory && isOpen} onCloseModal={handleCloseModal} title={"Bet History"}>
+        <ModalContainer isOpen={isShowBetHistory && isOpen} title="Bet History" onCloseModal={handleCloseModal}>
             {useMemo(
                     () => {
                         setPage(x => x + 1); 
                         if (betLogs?.length <= 0 && page == 0) {
-                            return "No data to show";
+                            return <Loader />;
                         }                
-                        return renderBetHistoryTable({ betLogs, handleScroll: handleScroll(page + 1), onCloseModal: handleCloseInBetDetail, renderBetDetail })
+                        return renderBetLog({ betLogs, handleScroll: handleScroll(page + 1), onCloseModal: handleCloseInBetDetail, renderBetDetail: renderBetLogDetail })
                     }, [betLogs])}
-        </BaseModal>
-    );
+        </ModalContainer>
+    )
 };
 
 const getHistory = (gameMessageHandler: GameMessageHandler, page: number) => {
