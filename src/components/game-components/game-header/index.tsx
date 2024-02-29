@@ -15,17 +15,16 @@ export const GameHeader = () => {
     }, [roundState, roundId]);
 
     return (
-        <>
-            {
-                displayedRoundId > 0 &&
+        <div className="game-header">
+            {displayedRoundId > 0 && (
                 <div id="round-id" className="round-id">
                     #{displayedRoundId}
                 </div>
-            }
+            )}
 
             <div id="countdown-timer" className="countdown-timer">
                 <CountdownTimer />
             </div>
-        </>
+        </div>
     );
 };
