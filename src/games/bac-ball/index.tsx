@@ -16,7 +16,9 @@ import { BacBallResult, BacBallSettlementResult } from "./types";
 import { useSystemContext } from "../../_shared/react-contexts";
 import ScoreboardSwipe from "../../components/game-components/scoreboard-swipe";
 import { BacBallBetOptions, StatisticRuleEntries } from "./constants";
-import { BacBallBetHistoryBlock } from "./history";
+import { BacBallBetHistoryModal } from "./history";
+import { JSX } from "react";
+import BacBallGameGuideModal from "./game-guide-modal";
 
 class BacBall extends GameBase<GameBaseProps> {
     constructor(props: GameBaseProps) {
@@ -39,7 +41,11 @@ class BacBall extends GameBase<GameBaseProps> {
     }
 
     renderBetHistoryModal() {
-        return <BacBallBetHistoryBlock />;
+        return <BacBallBetHistoryModal />;
+    }
+
+    renderGameGuideModal(): JSX.Element {
+        return <BacBallGameGuideModal />;
     }
 
     renderStatistic() {
