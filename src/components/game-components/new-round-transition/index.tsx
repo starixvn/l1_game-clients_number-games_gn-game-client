@@ -4,7 +4,7 @@ import Styles from "./new-round-transition.module.scss";
 
 const NewRoundTransition: React.FC<any> = (props) => {
     const { roundState } = useGameStateContext();
-    console.log("roundState", roundState);
+
     if (roundState !== RoundState.SwitchRound) {
         return <></>;
     }

@@ -16,7 +16,6 @@ const CountdownTimer = () => {
         case RoundState.InRound:
             return (
                 <>
-                    {/* <div className={`loader-show-result`}></div> */}
                     <SimpleTimer />
                     <GameStatus>
                         <div className={styles["start-betting"]}>{t("startBetting")}</div>
@@ -51,6 +50,7 @@ const CountdownTimer = () => {
 const SimpleTimer = () => {
     const { roundState, remainingTime } = useGameStateContext();
     const [timeLeft, setTimeLeft] = useState(remainingTime);
+    const [classNames, setClassNames] = useState('');
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -66,12 +66,14 @@ const SimpleTimer = () => {
     }, [timeLeft]);
 
 
-    const seconds = (timeLeft % 60).toString().padStart(2, "0");
+    useEffect(() => {
+        setClassNames(roundState === RoundState.LockingBet ? styles["lock-bet"] : '');
+    }, [roundState]);
 
     return (
         <div className={styles.timer}>
-            <div className={`${styles["countdown-timer"]} ${roundState === RoundState.LockingBet ? styles["lock-bet"] : ""}`}>
-                <span>{seconds}</span>
+            <div className={`${styles["countdown-timer"]} ${classNames}`}>
+                <span>{(timeLeft % 60).toString().padStart(2, "0")}</span>
             </div>
         </div>
     );

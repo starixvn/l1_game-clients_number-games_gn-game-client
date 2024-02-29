@@ -25,9 +25,9 @@ import { Notice } from "../game-components/notice";
 import { Settings } from "../game-components/settings";
 import BetSettings from "../page-components/bet-settings";
 import { IRoundStateHandler } from "../round-base/round-state-handler";
-import { DummyHandler, GameErrorHandler, GameMessageHandler, messageEventType, PlayerHandler } from "./handlers";
-import { IGameStateHandler } from "./handlers/game-state-handler";
+import { GameMessageDummyHandler, GameErrorHandler, GameMessageHandler, messageEventType, PlayerHandler } from "./handlers";
 import { GameBaseProps, RoundState } from "./type";
+import { IGameStateHandler } from "./handlers/game-state-handler";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
     protected showResultInfoTimeout: NodeJS.Timeout;
@@ -345,6 +345,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             if (this.timeCounter > 0 && newRoundState !== RoundState.SwitchRound) {
                 this.timeCounter = this.timeCounter - 1;
             }
+
 
             this.handleGamePlay(this.timeCounter);
         }, 1000);
@@ -732,7 +733,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 {this.renderConfirmBet()}
                 {this.renderStatistic()}
                 {this.renderScoreboards()}
-                {<DummyHandler gameMessageHandler={this.gameMessageHandler} />}
+                {<GameMessageDummyHandler gameMessageHandler={this.gameMessageHandler} />}
             </>
         );
     }

@@ -2,27 +2,22 @@ import { RoundState } from "../type";
 
 export interface IGameStateHandler {
     getNextRoundState({ gameStateContextModel, nextRoundState, durations, defaultResult, defaultSettlementResult, remainingTime });
+    increaseRoundId({ nextRoundState, durations }): boolean;
 }
 
 export class GameStateHandler implements IGameStateHandler {
-    constructor() {}
+    increaseRoundId({ nextRoundState, durations }): boolean {
+        return false;
+    }
 
     getNextRoundState({ gameStateContextModel, nextRoundState, durations, defaultResult, defaultSettlementResult, remainingTime }) {
         if (gameStateContextModel) {
-            const { displayPopup, notice, result, settlementResult } = gameStateContextModel;
-
-            const timeCounter = this.getTimeCounter({
-                remainingTime,
-                durations: durations,
-                roundState: nextRoundState,
-            });
+            const { notice, result, settlementResult, roundId } = gameStateContextModel;
 
             const newStateDetector = [
                 {
                     condition: nextRoundState === RoundState.InRound,
-                    state: {
-                        betWin: 0,
-                    },
+                    state: { betWin: 0 },
                 },
                 {
                     condition: [RoundState.BeforeStartRound, RoundState.InRound].includes(nextRoundState),
@@ -36,9 +31,8 @@ export class GameStateHandler implements IGameStateHandler {
                     },
                 },
                 {
-                    condition: durations.beforeStartRound
-                        ? nextRoundState === RoundState.BeforeStartRound
-                        : nextRoundState === RoundState.InRound,
+                    condition: this.increaseRoundId({ nextRoundState, durations }),
+                    state: { roundId: roundId + 1 },
                 },
                 {
                     condition: nextRoundState === RoundState.LockingBet,
@@ -58,15 +52,20 @@ export class GameStateHandler implements IGameStateHandler {
                     if (stateDetector.condition) {
                         newState = Object.assign(newState, stateDetector.state);
                     }
-
                     return newState;
                 },
-                { remainingTime: timeCounter }
+                {
+                    remainingTime: this.getTimeCounter({
+                        remainingTime,
+                        durations: durations,
+                        roundState: nextRoundState,
+                    }),
+                }
             );
         }
     }
 
-    private getTimeCounter({ remainingTime, durations, roundState }) {
+    private getTimeCounter({ remainingTime, durations, roundState }): number {
         switch (roundState) {
             case RoundState.InRound:
             case RoundState.LockingBet:

@@ -6,7 +6,7 @@ import {
     useGameStatesDispatch,
 } from "../../_shared/react-contexts/game-state-context/game-state-context";
 import GameBase from "../../components/game-base/";
-import { GameMessageHandler, GameStateHandler } from "../../components/game-base/handlers";
+import { GameMessageHandler } from "../../components/game-base/handlers";
 import { GameBaseProps } from "../../components/game-base/type";
 import { PercentageStatistic } from "../../components/game-components/statistic";
 import { TurnStateHandler } from "../../components/turn-base/turn-state-handler";
@@ -17,6 +17,7 @@ import { useSystemContext } from "../../_shared/react-contexts";
 import ScoreboardSwipe from "../../components/game-components/scoreboard-swipe";
 import { BacBallBetOptions, StatisticRuleEntries } from "./constants";
 import { BacBallBetHistoryModal } from "./history";
+import { TurnGameStateHandler } from "../../components/turn-base/turn-game-state-handler";
 import { JSX } from "react";
 import BacBallGameGuideModal from "./game-guide-modal";
 
@@ -24,7 +25,7 @@ class BacBall extends GameBase<GameBaseProps> {
     constructor(props: GameBaseProps) {
         const gameMessageHandler = new GameMessageHandler(props.dispatch);
 
-        super(props, new TurnStateHandler(), new GameStateHandler(), gameMessageHandler);
+        super(props, new TurnStateHandler(), new TurnGameStateHandler(), gameMessageHandler);
         this.hedgeBetGroup = [BacBallBetOptions.PLAYER, BacBallBetOptions.BANKER];
     }
 
