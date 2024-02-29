@@ -403,12 +403,11 @@ class Dashboard extends React.PureComponent<Props, State> {
                                 onCloseModal={this.closeDialog}
                                 isBlockUI={isBlockUI}
                             >
-                                <div className={`modal-center ${isBlockUI ? Styles["block-ui-message"] : ""}`}>
+                                <div className={`modal-center red-color ${isBlockUI ? Styles["block-ui-message"] : ""}`}>
                                     {!isBlockUI && <div className={`icon-close modal-icon-close`} onClick={this.closeDialog}></div>}
                                     <Trans t={this.props.t}>
                                         {this.props.t(this.state.apiError?.message, { errorCode: this.state.apiError?.errorCode })}
                                     </Trans>
-                                    Không thể cập nhật số tiền trong tài khoản
                                 </div>
                             </BaseDialog>
                         </div>

@@ -35,11 +35,7 @@
         box-shadow: none;
         padding: 0;
         border-radius: 0;
-        position: initial !important;
-
-        @media (min-device-width: 768px) {
-            position: initial;
-        }
+        position: initial;
     }
 
     &.modal-message {
@@ -48,23 +44,5 @@
         left: 5px;
         right: 5px;
         box-shadow: none;
-
-        &.isMobile {
-            bottom: 4.4rem;
-            &.ios-device {
-                @media (min-device-width: 375px) and (min-device-height: 667px) {
-                    bottom: 5.4rem;
-                }
-            }
-        }
-
-        @media (min-width: 1024px) {
-            display: flex;
-            top: 0;
-            bottom: 8rem;
-            background: none;
-            box-shadow: none;
-            border: none;
-        }
     }
 }

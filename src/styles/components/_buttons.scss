@@ -32,16 +32,15 @@
 
 .btn-green {
     @extend %btn;
-    background-color: var(--btn-green-background);
+    background-color: #159639;
     color: var(--btn-green-color);
 
     &:hover:enabled {
-        background: var(--btn-green-background-hover) radial-gradient(circle, transparent 1%, var(--btn-green-background-hover) 1%)
-            center/15000%;
+        background: #12752e radial-gradient(circle, transparent 1%, #12752e 1%) center/15000%;
     }
 
     &:active {
-        background-color: var(--btn-green-background-hover);
+        background-color: #12752e;
     }
 }
 

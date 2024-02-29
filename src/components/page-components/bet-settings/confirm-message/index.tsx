@@ -16,24 +16,18 @@ const ConfirmMessage: React.FC<Props> = ({ closeModal, confirmQuickBet }) => {
     };
 
     return (
-        <div className="game-container">
-            <div className={Styles["error-message-container"]}>
-                <div className={Styles["popup-closed-icon"]} onClick={handleClose}>
-                    <span className={`icon-close ${Styles["icon-close"]}`}></span>
-                </div>
-
-                <div className={Styles["popup-header"]}>
-                    <h1 className={Styles["popup-title"]}>{t("oneClickTitle")}</h1>
-                </div>
-                <div className={Styles.message}>{t("messageConfirmQuickBet")}</div>
-                <div className={Styles["list-button"]}>
-                    <button className={`${Styles["btn-grey"]} ${Styles["btn"]}`} onClick={handleClose} id="btn-cancel-quickbet">
-                        {t("cancel")}
-                    </button>
-                    <button className={`${Styles["btn-red"]} ${Styles["btn"]}`} onClick={handleConfirm} id="btn-on-quickbet">
-                        {t("turnOn")}
-                    </button>
-                </div>
+        <div className={`modal-center yellow-color ${Styles["error-message-container"]}`}>
+            <div className={Styles["popup-header"]}>
+                <h1 className={Styles["popup-title"]}>{t("oneClickTitle")}</h1>
+            </div>
+            <div className={Styles.message}>{t("messageConfirmQuickBet")}</div>
+            <div className={Styles["list-button"]}>
+                <button className={`${Styles["btn-red"]} ${Styles["btn"]}`} onClick={handleClose} id="btn-cancel-quickbet">
+                    {t("cancel")}
+                </button>
+                <button className={`${Styles["btn-green"]} ${Styles["btn"]}`} onClick={handleConfirm} id="btn-on-quickbet">
+                    {t("turnOn")}
+                </button>
             </div>
         </div>
     );

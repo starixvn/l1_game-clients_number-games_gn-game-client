@@ -106,7 +106,7 @@ export const QuickBetBtn = () => {
             {isShowModalConfirm && !!enabledQuickBet === false && (
                 <div className={Styles["modalConfirm"]}>
                     <div className={`${Styles["bg-opacity"]}`}></div>
-                    <BaseDialog type={ModalType.Message} isOpen={isShowModalConfirm} onCloseModal={closeModal}>
+                    <BaseDialog type={ModalType.Center} isOpen={isShowModalConfirm} onCloseModal={closeModal}>
                         <ConfirmMessage closeModal={closeModal} confirmQuickBet={confirmQuickBet} />
                     </BaseDialog>
                 </div>

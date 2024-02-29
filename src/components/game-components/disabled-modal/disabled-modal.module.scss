@@ -5,8 +5,8 @@
     top: 20%;
     z-index: var(--popup-guide-history-index);
     padding: 2rem;
-    
-    .warning-container{
+
+    .warning-container {
         display: inline-block;
     }
 
@@ -20,7 +20,7 @@
         align-items: center;
     }
 
-    .message{
+    .message {
         font-weight: 400;
         line-height: 1.8rem;
     }
@@ -35,5 +35,33 @@
         color: #fff;
         font-size: 1.2rem;
         font-weight: bold;
+    }
+}
+
+.um-setting-icon {
+    position: relative;
+    margin: 0 auto;
+    margin-bottom: 2rem;
+    width: 5rem;
+
+    .um-setting-big {
+        animation: rotation 6s linear infinite;
+    }
+
+    .um-setting-small {
+        position: absolute;
+        top: 2.6rem;
+        right: 0;
+
+        animation: rotation 6s linear reverse infinite;
+    }
+}
+
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
     }
 }

@@ -11,8 +11,9 @@ const DisabledModal: React.FC<{ disableMessage: string; onSubmit: () => void }> 
     return (
         <BaseDialog type={ModalType.Center} isOpen={true}>
             <div className={`modal-center yellow-color ${Styles["disable-message-container"]}`}>
-                <div className={`${Styles["warning-container"]}`}>
-                    <div className={`icon-warning ${Styles["icon-warning"]}`}></div>
+                <div className={`${Styles["um-setting-icon"]}`}>
+                    <img className={`${Styles["um-setting-big"]}`} src="/static/images/um-setting-big.svg" alt="setting-um" />
+                    <img className={`${Styles["um-setting-small"]}`} src="/static/images/um-setting-small.svg" alt="setting-um" />
                 </div>
                 {isDisable ? (
                     <div className={Styles.message}>{disableMessage}</div>
