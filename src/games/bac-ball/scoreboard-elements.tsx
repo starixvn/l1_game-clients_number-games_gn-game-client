@@ -7,9 +7,9 @@ import {
     BigRoadRound,
     DerivedElement,
 } from "../../components/game-components/round-history/scoreboard/elements";
+import { BacBallBetOptions } from "./constants";
 import styles from "./scoreboard-elements.module.scss";
 import { BacBallResult, BacBallSettlementResult } from "./types";
-import { BacBallBetOptions } from "./constants";
 
 export class BacBallBeadRoadCharacterElement extends BeadRoadElement<Round<BacBallResult, BacBallSettlementResult>> {
     renderElement(round: Round<BacBallResult, BacBallSettlementResult>): ReactNode {

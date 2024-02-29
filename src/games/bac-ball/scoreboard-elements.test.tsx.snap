@@ -64,6 +64,22 @@ exports[`BacBallBeadRoadValueElement render when the round result is tie should 
 </div>
 `;
 
+exports[`BacBallBigEyeElement render should match the snapshot 1`] = `
+<div>
+  <span
+    class="big-eye-banker"
+  />
+</div>
+`;
+
+exports[`BacBallBigEyeElement render should match the snapshot 2`] = `
+<div>
+  <span
+    class="big-eye-player"
+  />
+</div>
+`;
+
 exports[`BacBallBigRoadElement render when the round result is banker only should match the snapshot 1`] = `
 <div>
   <span

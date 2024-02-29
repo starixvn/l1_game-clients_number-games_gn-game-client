@@ -2,6 +2,7 @@ import { render } from "@testing-library/react";
 import {
     BacBallBeadRoadCharacterElement,
     BacBallBeadRoadValueElement,
+    BacBallBigEyeElement,
     BacBallBigRoadConverter,
     BacBallBigRoadElement,
 } from "./scoreboard-elements";
@@ -159,6 +160,18 @@ describe(BacBallBigRoadElement.name, () => {
                     expect(container).toMatchSnapshot();
                 });
             });
+        });
+    });
+});
+
+describe(BacBallBigEyeElement.name, () => {
+    describe("render", () => {
+        test.each([[{ status: true }], [{ status: false }]])("should match the snapshot", (round: any) => {
+            // Act
+            const { container } = render(<BacBallBigEyeElement round={round} />);
+
+            // Assert
+            expect(container).toMatchSnapshot();
         });
     });
 });
