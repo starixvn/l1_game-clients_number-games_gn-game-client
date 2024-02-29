@@ -24,7 +24,7 @@ const ScoreboardSwipe: React.FC<{ roundHistory: Round<any, any>[] }> = ({ roundH
     };
 
     return (
-        <Swiper slidesPerView={"auto"} spaceBetween={10} className="mySwiper">
+        <Swiper slidesPerView={"auto"} spaceBetween={8} className="mySwiper">
             <SwiperSlide>
                 <div className={Styles["scoreboard-multiple"]}>
                     <Scoreboard
@@ -33,6 +33,7 @@ const ScoreboardSwipe: React.FC<{ roundHistory: Round<any, any>[] }> = ({ roundH
                         arrange={BacBallBigRoadElement.arrange(BacBallBigRoadConverter.instance)}
                         row={6}
                         column={27}
+                        className={Styles["big-road-small"]}
                         elementClassName={Styles["big-road-small-element"]}
                     />
                     <div className={Styles["scoreboard-derived-multiple"]}>

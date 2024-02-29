@@ -42,7 +42,7 @@ const StatisticItem: React.FC<Props> = (props) => {
 };
 
 export const PercentageStatistic: React.FC<PercentageStatisticProps> = (props) => {
-    const { statisticRuleEntries, roundHistory, activeScoreboardTab } = props;
+    const { statisticRuleEntries, roundHistory } = props;
     const { gameName } = useGameContext();
     const { t } = useTranslation(gameName.toLowerCase());
 
@@ -53,7 +53,7 @@ export const PercentageStatistic: React.FC<PercentageStatisticProps> = (props) =
             <div className={`${Styles["statistic-container"]} flex`} id="bar-statistic">
                 {Object.keys(statisticResult).map((choice) => (
                     <StatisticItem key={choice} value={`${statisticResult[choice]}%`}>
-                        <span className={`${Styles[choice]} ${Styles[gameName]}`}>{t(choice).charAt(0).toUpperCase()}</span>
+                        <span className={`${Styles[choice]} ${Styles["statistic-choice-icon"]}`}>{t(choice).charAt(0).toUpperCase()}</span>
                     </StatisticItem>
                 ))}
             </div>
