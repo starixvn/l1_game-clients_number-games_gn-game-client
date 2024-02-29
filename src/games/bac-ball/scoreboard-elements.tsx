@@ -65,12 +65,12 @@ export class BacBallBigRoadElement extends BigRoadElement<BacBallSettlementResul
     }
 }
 
-export class BacBallDerivedElement extends DerivedElement {
+export class BacBallBigEyeElement extends DerivedElement {
     renderA(): ReactNode {
-        return <span className={`${styles.banker}`} />;
+        return <span className={`${styles["big-eye-banker"]}`} />;
     }
 
     renderB(): ReactNode {
-        return <span className={`${styles.player}`} />;
+        return <span className={`${styles["big-eye-player"]}`} />;
     }
 }

@@ -32,9 +32,10 @@ describe(BigRoadElement.name, () => {
                     { win: false, tie: false },
                     { win: false, tie: true },
                 ];
+                const scoreboard = { props: { row: 6, column: 5 } } as any;
 
                 // Act
-                const actual = BigRoadElement.arrange(new RoundConverter())(rounds, { props: { row: 6 } } as any);
+                const actual = BigRoadElement.arrange(new RoundConverter())(rounds, scoreboard);
 
                 // Assert
                 expect(actual).toMatchSnapshot();

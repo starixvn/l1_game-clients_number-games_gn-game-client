@@ -24,3 +24,19 @@
         z-index: -1;
     }
 }
+
+.big-eye-banker {
+    @extend %statistic-icon;
+    --colorText: #ff5e5e;
+    --colorBorderTop: #c74046;
+    --colorBorderBottom: #7d2d75;
+    --colorBackground: #2b1a26;
+}
+
+.big-eye-player {
+    @extend %statistic-icon;
+    --colorText: #1c7bdf;
+    --colorBorderTop: #046ccd;
+    --colorBorderBottom: #035097;
+    --colorBackground: #0c243a;
+}

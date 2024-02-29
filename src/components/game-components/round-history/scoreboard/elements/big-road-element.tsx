@@ -4,20 +4,22 @@ import type { Scoreboard, ScoreboardItemProps } from "../scoreboard";
 import { Component, ReactNode } from "react";
 import { toFlattenColumns } from "./utilities";
 
-export type BigRoadRound<T> = BigRoadScoreboardPoint<T>;
+export type BigRoadRound<T> = Partial<BigRoadScoreboardPoint<T>>;
 
 export abstract class BigRoadElement<Round> extends Component<ScoreboardItemProps<BigRoadRound<Round>>> {
     static arrange<Round>(converter: Converter<Round>) {
         return function (rounds: Round[], scoreboard: Scoreboard<Round>): BigRoadRound<Round>[] {
-            const height = scoreboard.props.row;
-            const bigRoad = new BigRoadScoreboard({ converter, height });
+            const { row, column } = scoreboard.props;
+            const bigRoad = new BigRoadScoreboard({ converter, height: row });
             const input = [...rounds].reverse();
+            const total = column * row;
 
             bigRoad.initialize(input);
 
             const rows = bigRoad.rows();
+            const columns = toFlattenColumns(rows);
 
-            return toFlattenColumns(rows);
+            return columns.slice(columns.length - total);
         };
     }
 
