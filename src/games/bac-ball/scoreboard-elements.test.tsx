@@ -5,6 +5,8 @@ import {
     BacBallBigEyeElement,
     BacBallBigRoadConverter,
     BacBallBigRoadElement,
+    BacBallCockroachPigElement,
+    BacBallSmallRoadElement,
 } from "./scoreboard-elements";
 
 describe(BacBallBeadRoadCharacterElement.name, () => {
@@ -169,6 +171,30 @@ describe(BacBallBigEyeElement.name, () => {
         test.each([[{ status: true }], [{ status: false }]])("should match the snapshot", (round: any) => {
             // Act
             const { container } = render(<BacBallBigEyeElement round={round} />);
+
+            // Assert
+            expect(container).toMatchSnapshot();
+        });
+    });
+});
+
+describe(BacBallSmallRoadElement.name, () => {
+    describe("render", () => {
+        test.each([[{ status: true }], [{ status: false }]])("should match the snapshot", (round: any) => {
+            // Act
+            const { container } = render(<BacBallSmallRoadElement round={round} />);
+
+            // Assert
+            expect(container).toMatchSnapshot();
+        });
+    });
+});
+
+describe(BacBallCockroachPigElement.name, () => {
+    describe("render", () => {
+        test.each([[{ status: true }], [{ status: false }]])("should match the snapshot", (round: any) => {
+            // Act
+            const { container } = render(<BacBallCockroachPigElement round={round} />);
 
             // Assert
             expect(container).toMatchSnapshot();

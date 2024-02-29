@@ -149,3 +149,35 @@ exports[`BacBallBigRoadElement render when the round result is tie only should m
   />
 </div>
 `;
+
+exports[`BacBallCockroachPigElement render should match the snapshot 1`] = `
+<div>
+  <span
+    class="cockroach-pig-banker"
+  />
+</div>
+`;
+
+exports[`BacBallCockroachPigElement render should match the snapshot 2`] = `
+<div>
+  <span
+    class="cockroach-pig-player"
+  />
+</div>
+`;
+
+exports[`BacBallSmallRoadElement render should match the snapshot 1`] = `
+<div>
+  <span
+    class="small-road-banker"
+  />
+</div>
+`;
+
+exports[`BacBallSmallRoadElement render should match the snapshot 2`] = `
+<div>
+  <span
+    class="small-road-player"
+  />
+</div>
+`;
