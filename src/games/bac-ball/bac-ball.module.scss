@@ -270,9 +270,7 @@
 
 .btn-ripple:after {
     content: "";
-    position: absolute;
-    top: 50%;
-    left: 50%;
+    position: fixed;
     width: 5px;
     height: 5px;
     background-color: rgba(250, 247, 226, 0.2);
@@ -311,13 +309,4 @@
 
 .btn-ripple:focus:after {
     visibility: visible;
-}
-/*btn outline */
-.bt-outline {
-    background: none;
-    border: 2px solid var(--theme-color);
-    color: var(--theme-color);
-}
-.bt-outline.btn-ripple:after {
-    background: var(--theme-color-bg);
 }
