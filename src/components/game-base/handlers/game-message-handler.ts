@@ -32,7 +32,6 @@ export const messageEventType = {
     BET_HISTORY: "history",
     UPDATE_PLAYER_BALANCE: "updatePlayerBalance",
     CLEAR_GAME_TIMEOUT_AND_INTERVAL: "clearGameTimeoutAndInterval",
-    SHOULD_GET_BALANCE_AFTER_WINNING_ANIMATION: "shouldGetBalanceAfterWinningAnimation",
 };
 
 export class GameMessageHandler {
@@ -42,7 +41,6 @@ export class GameMessageHandler {
 
     registerSocketEvents = () => {
         this.register(messageEventType.DRAW_ID, this.handleDrawId);
-        this.register(messageEventType.STATUS, this.handleStatus);
         this.register(messageEventType.GAME_CONFIG, this.handleGameConfigs);
         this.register(messageEventType.TOTAL_BETS, this.handleTotalBet);
         this.register(messageEventType.OWN_BETS, this.handleOwnBets);
@@ -140,13 +138,6 @@ export class GameMessageHandler {
             payload: {
                 playerBetCount,
             },
-        });
-    };
-
-    handleStatus = ({ status }) => {
-        this.dispatch({
-            type: GameEventActionType.STATUS,
-            payload: { status },
         });
     };
 

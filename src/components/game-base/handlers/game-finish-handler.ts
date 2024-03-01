@@ -12,8 +12,22 @@ export type GameFinishHandlerProps = {
 export class GameFinishHandler {
     protected showResultInfoTimeout: NodeJS.Timeout;
     protected showWinningAnimationTimeout: NodeJS.Timeout;
+    private betWin: number = 0;
 
     constructor(private props: GameFinishHandlerProps) {}
+
+    registerEvents = () => {
+        this.props.gameMessageHandler.register(messageEventType.STATUS, this.handleStatus);
+    };
+
+    handleStatus = ({ status }) => {
+        this.props.dispatch({
+            type: GameEventActionType.STATUS,
+            payload: { status },
+        });
+
+        this.betWin = status.bet;
+    };
 
     handleFinish = ({ finish }, gameStateContext: GameStateContextModel<any, any>, durations?: GameDurations) => {
         const { dispatch, gameMessageHandler } = this.props;
@@ -58,7 +72,7 @@ export class GameFinishHandler {
                 },
             });
 
-            gameMessageHandler.broadcastGameEvent({ [messageEventType.SHOULD_GET_BALANCE_AFTER_WINNING_ANIMATION]: {} });
+            this.betWin > 0 && gameMessageHandler.broadcastGameEvent({ [messageEventType.UPDATE_PLAYER_BALANCE]: true });
         }, durations.showResult * 1000);
     };
 

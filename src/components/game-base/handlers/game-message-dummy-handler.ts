@@ -5,15 +5,9 @@ import { messageEventType } from ".";
 import { RoundState } from "../type";
 
 export const GameMessageDummyHandler = ({ gameMessageHandler }) => {
-    const { roundState, isUMInFirstLoad, betWin } = useGameStateContext();
+    const { roundState, isUMInFirstLoad } = useGameStateContext();
     const dispatch = useGameStatesDispatch();
-    const betWinRef = useRef<number>(betWin);
     const roundStateRef = useRef<RoundState>(roundState);
-
-    useEffect(() => {
-        betWinRef.current = betWin;
-    }, [betWin]);
-
     useEffect(() => {
         roundStateRef.current = roundState;
     }, [roundState]);
@@ -34,15 +28,7 @@ export const GameMessageDummyHandler = ({ gameMessageHandler }) => {
             });
         };
 
-        const shouldCallUpdateBalanceAfterWinningAnimation = () => {
-            betWinRef.current > 0 && gameMessageHandler.broadcastGameEvent({ [messageEventType.UPDATE_PLAYER_BALANCE]: {} });
-        };
-
         gameMessageHandler.register(messageEventType.ROUND_HISTORY, handleRoundHistory);
-        gameMessageHandler.register(
-            messageEventType.SHOULD_GET_BALANCE_AFTER_WINNING_ANIMATION,
-            shouldCallUpdateBalanceAfterWinningAnimation
-        );
     }, []);
 
     return null;
