@@ -36,7 +36,7 @@ export interface BetHistoryProps {
 }
 
 const BetHistoryModal: FC<BetHistoryProps> = ({ renderBetLog, renderBetLogDetail }) => {
-    const [isOpen, setIsOpen] = useState<boolean>(true);
+    const [isShowBetDetail, setIsShowBetDetail] = useState<boolean>(false);
     const [isFetching, setIsFetching] = useState<boolean>(false);
     const { isShowBetHistory } = useGameStateContext();
     const dispatch = useGameStatesDispatch();
@@ -82,11 +82,11 @@ const BetHistoryModal: FC<BetHistoryProps> = ({ renderBetLog, renderBetLogDetail
     };
 
     const handleCloseInBetDetail = () => {
-        setIsOpen((x) => !x);
+        setIsShowBetDetail((stateShowBetDetail) => !stateShowBetDetail);
     };
 
     return (
-        <ModalContainer isOpen={isShowBetHistory && isOpen} title="Bet History" onCloseModal={handleCloseModal}>
+        <ModalContainer isOpen={isShowBetHistory && !isShowBetDetail} title="Bet History" onCloseModal={handleCloseModal}>
             {useMemo(() => {
                 setPage((x) => x + 1);
                 if (betLogs?.length <= 0 && page == 0) {

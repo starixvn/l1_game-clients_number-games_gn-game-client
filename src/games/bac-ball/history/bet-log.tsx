@@ -1,5 +1,4 @@
 import { FC, useState } from "react";
-
 import { useBallColor } from "../../../_shared/helpers/ball-color-helper";
 import { BetLogProps } from "../../../components/game-components/bet-history";
 import Styles from "./common.module.scss";
@@ -86,19 +85,11 @@ const BetLog: FC<BetLogProps> = ({ betLogs, handleScroll, onCloseModal: toggleBe
                     drawId: betLogDetail?.drawId,
                     result: betLogDetail?.result,
                     odds: betLogDetail?.odds,
-                    settlementResult: betLogDetail?.settlementResult
+                    settlementResult: betLogDetail?.settlementResult,
                 },
             })}
         </div>
     );
-};
-
-const getStake = (betHistory: BetHistory, settlementResult: any) => {
-    return Object.keys(settlementResult ?? {}).reduce((acc, key) => {
-        if (settlementResult[key]) {
-            return { ...acc, [key]: betHistory[key] ?? 0 };
-        }
-    }, {});
 };
 
 const BetHistoryRow: FC<{ betHistory: BetHistory; handleClickDrawId: Function }> = ({ betHistory, handleClickDrawId }) => {

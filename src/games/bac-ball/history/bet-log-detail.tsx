@@ -1,7 +1,6 @@
 import { randomBytes } from "crypto";
 import { FC } from "react";
 import { createPortal } from "react-dom";
-
 import { useBallColor } from "../../../_shared/helpers/ball-color-helper";
 import { BetLogDetailProps } from "../../../components/game-components/bet-history";
 import ModalContainer from "../../../components/game-components/modal-container";
@@ -10,22 +9,24 @@ import { preprocessBetLogTime, seperateDateTime } from "./helper";
 import TableRow from "./row-table";
 
 interface BacBallBetDetailProps extends BetLogDetailProps {
-    drawInfo: {
-        drawId: number;
-        result: {
-            player: number;
-            banker: number;
-        };
-        odds: {
-            player: number;
-            banker: number;
-            tie: number;
-        };
-        settlementResult: {
-            player: boolean;
-            banker: boolean;
-            tie: boolean;
-        }
+    drawInfo: DrawInfo;
+}
+
+interface DrawInfo {
+    drawId: number;
+    result: {
+        player: number;
+        banker: number;
+    };
+    odds: {
+        player: number;
+        banker: number;
+        tie: number;
+    };
+    settlementResult: {
+        player: boolean;
+        banker: boolean;
+        tie: boolean;
     };
 }
 
@@ -86,7 +87,7 @@ const BetDetail: FC<BetLogDetailProps> = ({ betLogDetails, onCloseModal, isShowB
                         </thead>
                         <tbody>
                             {preprocessedBetLogDetails?.map((item) => {
-                                return <BetDetailRow betLogDetail={{ ...item, ...drawInfo }} key={randomBytes(10).toString()} />;
+                                return <BetDetailRow {...produceDataBetDetailRow(item, drawInfo)} key={randomBytes(10).toString()} />;
                             })}
                         </tbody>
                     </table>
@@ -96,11 +97,26 @@ const BetDetail: FC<BetLogDetailProps> = ({ betLogDetails, onCloseModal, isShowB
     );
 };
 
-const BetDetailRow: FC<{ betLogDetail: any }> = ({ betLogDetail }) => {
-    const { date, time } = seperateDateTime(betLogDetail.time);
-    const { choice, odds, amount, settlementResult } = betLogDetail;
-    const odd = odds[choice];
-    const win = settlementResult?.[choice] ? amount*odd : 0;
+const produceDataBetDetailRow = (item: any, drawInfo: DrawInfo) => {
+    return {
+        rawTime: item.time,
+        amount: item.amount,
+        choice: item.choice,
+        odd: drawInfo.odds[item.choice],
+        win: drawInfo.settlementResult?.[item.choice] ? item.amount * drawInfo.odds[item.choice] : 0,
+    };
+};
+
+interface BacBallBetLogDetailRowProps {
+    rawTime: Date;
+    amount: number;
+    choice: string;
+    odd: number;
+    win: number;
+}
+
+const BetDetailRow: FC<BacBallBetLogDetailRowProps> = ({ rawTime, amount, choice, odd, win }) => {
+    const { date, time } = seperateDateTime(rawTime);
     const content = [
         {
             node: (
@@ -112,10 +128,9 @@ const BetDetailRow: FC<{ betLogDetail: any }> = ({ betLogDetail }) => {
             ),
             size: 3.8,
         },
-        { node: <div className={win > 0 ? "highlight" : ""}>{choice}</div>, size: 2 },
-        { node: <div className={win > 0 ? "highlight" : ""}>{odd}</div>, size: 2 },
-        { node: <div className={win > 0 ? "highlight" : ""}>{amount ?? 0}</div>, size: 2 },
-        { node: <div className={win > 0 ? "highlight" : ""}>{win}</div>, size: 2 },
+        ...[choice, odd, amount ?? 0, win].map((item) => {
+            return { node: <div className={win > 0 ? "highlight" : ""}>{item}</div>, size: 2 };
+        }),
     ];
     return <TableRow isHeader={false}>{content}</TableRow>;
 };
