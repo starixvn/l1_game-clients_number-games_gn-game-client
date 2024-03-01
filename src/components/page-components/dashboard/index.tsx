@@ -1,4 +1,4 @@
-import { Trans, withTranslation } from "next-i18next";
+import { withTranslation } from "next-i18next";
 import Head from "next/head";
 import { withRouter } from "next/router";
 import React from "react";
@@ -25,6 +25,7 @@ import Header from "../header";
 import Styles from "./dashboard.module.scss";
 import { GameGuideModal } from "./game-guide-modal";
 import NameGenerator from "./register/name-generator";
+import { ErrorApiText } from "../../game-components/error-api-text";
 
 class Dashboard extends React.PureComponent<Props, State> {
     private notificationSocket: Socket = null;
@@ -405,9 +406,7 @@ class Dashboard extends React.PureComponent<Props, State> {
                             >
                                 <div className={`modal-center red-color ${isBlockUI ? Styles["block-ui-message"] : ""}`}>
                                     {!isBlockUI && <div className={`icon-close modal-icon-close`} onClick={this.closeDialog}></div>}
-                                    <Trans t={this.props.t}>
-                                        {this.props.t(this.state.apiError?.message, { errorCode: this.state.apiError?.errorCode })}
-                                    </Trans>
+                                    <ErrorApiText errorMessage={this.state.apiError?.message} errorCode={this.state.apiError?.errorCode} />
                                 </div>
                             </BaseDialog>
                         </div>
