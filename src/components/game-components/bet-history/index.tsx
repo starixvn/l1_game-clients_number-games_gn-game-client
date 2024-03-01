@@ -1,10 +1,12 @@
 import { FC, useEffect, useMemo, useState } from "react";
-import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
-import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
+
 import { useGameContext } from "../../../_shared/react-contexts";
+import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
+import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import { GameMessageHandler, messageEventType } from "../../game-base/handlers";
 import Loader from "../loader";
 import ModalContainer from "../modal-container";
+import Styles from "./bet-history.module.scss";
 
 const GET_HISTORY = "getHistory";
 const HISTORY_EVENT = "history";
@@ -22,10 +24,10 @@ export interface BetLogDetailProps {
     isShowBetDetail: boolean;
     drawInfo: {
         drawId: number;
-        result: any,
-        odds: any
+        result: any;
+        odds: any;
         stake: any;
-    }
+    };
 }
 
 export interface BetHistoryProps {
@@ -45,9 +47,9 @@ const BetHistoryModal: FC<BetHistoryProps> = ({ renderBetLog, renderBetLogDetail
     const toggleBetHistory = () => {
         dispatch({
             type: GameEventActionType.TOGGLE_BET_HISTORY,
-            payload: { isShowBetHistory: false }
-        })
-    }
+            payload: { isShowBetHistory: false },
+        });
+    };
 
     const handleScroll = (nextPage: number) => (event: any) => {
         const bottom = event.target.scrollHeight - event.target.scrollTop === event.target.clientHeight;
@@ -55,7 +57,7 @@ const BetHistoryModal: FC<BetHistoryProps> = ({ renderBetLog, renderBetLogDetail
             getHistory(gameContext.gameMessageHandler, nextPage);
             setIsFetching(true);
         }
-    }
+    };
 
     useEffect(() => {
         gameContext.gameMessageHandler.register(HISTORY_EVENT, ({ history }) => {
@@ -63,8 +65,8 @@ const BetHistoryModal: FC<BetHistoryProps> = ({ renderBetLog, renderBetLogDetail
             if (history?.betLogs?.length > 0) {
                 setBetLogs((x) => [...x, ...(history?.betLogs ?? [])]);
             }
-        })
-    }, [])
+        });
+    }, []);
 
     useEffect(() => {
         if (isShowBetHistory) {
@@ -80,21 +82,29 @@ const BetHistoryModal: FC<BetHistoryProps> = ({ renderBetLog, renderBetLogDetail
     };
 
     const handleCloseInBetDetail = () => {
-        setIsOpen(x => !x);
+        setIsOpen((x) => !x);
     };
 
     return (
         <ModalContainer isOpen={isShowBetHistory && isOpen} title="Bet History" onCloseModal={handleCloseModal}>
-            {useMemo(
-                    () => {
-                        setPage(x => x + 1); 
-                        if (betLogs?.length <= 0 && page == 0) {
-                            return <Loader />;
-                        }                
-                        return renderBetLog({ betLogs, handleScroll: handleScroll(page + 1), onCloseModal: handleCloseInBetDetail, renderBetDetail: renderBetLogDetail })
-                    }, [betLogs])}
+            {useMemo(() => {
+                setPage((x) => x + 1);
+                if (betLogs?.length <= 0 && page == 0) {
+                    return (
+                        <div className={Styles["history-loading"]}>
+                            <Loader />
+                        </div>
+                    );
+                }
+                return renderBetLog({
+                    betLogs,
+                    handleScroll: handleScroll(page + 1),
+                    onCloseModal: handleCloseInBetDetail,
+                    renderBetDetail: renderBetLogDetail,
+                });
+            }, [betLogs])}
         </ModalContainer>
-    )
+    );
 };
 
 const getHistory = (gameMessageHandler: GameMessageHandler, page: number) => {
