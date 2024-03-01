@@ -62,8 +62,15 @@ export class Scoreboard<Round> extends Component<ScoreboardProps<Round>> {
         return groups;
     }
 
+    getHTMLAttributes() {
+        const { rounds, className, elementClassName, block, row: originalRow, element, arrange, blockClassName, ...htmlProps } = this.props;
+
+        return htmlProps;
+    }
+
     render(): ReactNode {
-        const { rounds, className, elementClassName, block, row: originalRow, element, arrange, ...htmlProps } = this.props;
+        const { rounds, className, elementClassName, block, row: originalRow, arrange } = this.props;
+        const htmlProps = this.getHTMLAttributes();
         const arranged = arrange(rounds, this);
         const groupItems = this.createGroup(arranged);
 
