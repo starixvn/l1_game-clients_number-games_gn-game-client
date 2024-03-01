@@ -15,58 +15,63 @@ import { SlidableScoreboard, SwitchableScoreboard } from "../round-history/score
 import Styles from "./scoreboard-swipe.module.scss";
 
 const ScoreboardSwipe: React.FC<{ roundHistory: Round<any, any>[] }> = ({ roundHistory }) => {
-    const settlements = roundHistory.map((round) => round.settlementResult);
+    const settlements = [...roundHistory].map((round) => round.settlementResult);
 
     return (
         <SlidableScoreboard
             boards={[
-                <SwitchableScoreboard
-                    className={Styles["scoreboard-multiple"]}
-                    rounds={settlements}
-                    type="scale"
-                    onSwitch={(board) => ({ ...board, className: `${board.className} scaled` })}
-                    scoreboards={[
-                        {
-                            element: BacBallBigRoadElement,
-                            arrange: BacBallBigRoadElement.arrange(BacBallBigRoadConverter.instance),
-                            column: 27,
-                            row: 6,
-                            className: Styles["big-road-small"],
-                            elementClassName: Styles["big-road-small-element"],
-                            blockClassName: Styles["board-small"],
-                        },
-                        {
-                            element: BacBallBigEyeElement,
-                            arrange: BacBallBigEyeElement.arrange(BacBallBigRoadConverter.instance, "bigEyeBoy"),
-                            column: 18,
-                            row: 6,
-                            className: Styles["big-eye-boy"],
-                            elementClassName: Styles["derived-board-small-element"],
-                            block: 2,
-                            blockClassName: Styles["board-small"],
-                        },
-                        {
-                            element: BacBallSmallRoadElement,
-                            arrange: BacBallSmallRoadElement.arrange(BacBallBigRoadConverter.instance, "smallRoad"),
-                            column: 18,
-                            row: 6,
-                            className: Styles["small-road"],
-                            elementClassName: Styles["derived-board-small-element"],
-                            block: 2,
-                            blockClassName: Styles["board-small"],
-                        },
-                        {
-                            element: BacBallCockroachPigElement,
-                            arrange: BacBallCockroachPigElement.arrange(BacBallBigRoadConverter.instance, "cockroachPig"),
-                            column: 18,
-                            row: 6,
-                            className: Styles["cockroach-pig"],
-                            elementClassName: Styles["derived-board-small-element"],
-                            block: 2,
-                            blockClassName: Styles["board-small"],
-                        },
-                    ]}
-                />,
+                useMemo(
+                    () => (
+                        <SwitchableScoreboard
+                            className={Styles["scoreboard-multiple"]}
+                            rounds={settlements}
+                            type="scale"
+                            onSwitch={(board) => ({ ...board, className: `${board.className} scaled` })}
+                            scoreboards={[
+                                {
+                                    element: BacBallBigRoadElement,
+                                    arrange: BacBallBigRoadElement.arrange(BacBallBigRoadConverter.instance),
+                                    column: 27,
+                                    row: 6,
+                                    className: Styles["big-road-small"],
+                                    elementClassName: Styles["big-road-small-element"],
+                                    blockClassName: Styles["board-small"],
+                                },
+                                {
+                                    element: BacBallBigEyeElement,
+                                    arrange: BacBallBigEyeElement.arrange(BacBallBigRoadConverter.instance, "bigEyeBoy"),
+                                    column: 18,
+                                    row: 6,
+                                    className: Styles["big-eye-boy"],
+                                    elementClassName: Styles["derived-board-small-element"],
+                                    block: 2,
+                                    blockClassName: Styles["board-small"],
+                                },
+                                {
+                                    element: BacBallSmallRoadElement,
+                                    arrange: BacBallSmallRoadElement.arrange(BacBallBigRoadConverter.instance, "smallRoad"),
+                                    column: 18,
+                                    row: 6,
+                                    className: Styles["small-road"],
+                                    elementClassName: Styles["derived-board-small-element"],
+                                    block: 2,
+                                    blockClassName: Styles["board-small"],
+                                },
+                                {
+                                    element: BacBallCockroachPigElement,
+                                    arrange: BacBallCockroachPigElement.arrange(BacBallBigRoadConverter.instance, "cockroachPig"),
+                                    column: 18,
+                                    row: 6,
+                                    className: Styles["cockroach-pig"],
+                                    elementClassName: Styles["derived-board-small-element"],
+                                    block: 2,
+                                    blockClassName: Styles["board-small"],
+                                },
+                            ]}
+                        />
+                    ),
+                    [settlements]
+                ),
                 useMemo(
                     () => (
                         <SwitchableScoreboard

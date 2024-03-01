@@ -25,3 +25,13 @@ export function chunk<T>(array: T[], size: number): T[][] {
 
     return result;
 }
+
+export function fitContent<T>(rounds: T[], capacity: number, addition: T) {
+    if (rounds.length > capacity) {
+        return rounds.slice(rounds.length - capacity);
+    }
+
+    const additions = Array.from({ length: capacity - rounds.length }, (_) => addition);
+
+    return [...rounds, ...additions];
+}

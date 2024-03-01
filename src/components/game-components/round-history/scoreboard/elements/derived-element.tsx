@@ -2,7 +2,7 @@ import { BigRoadScoreboard, Converter, DerivedScoreboardPoint, DerivedScoreboard
 import type { Scoreboard, ScoreboardItemProps } from "../scoreboard";
 
 import { Component, ReactNode } from "react";
-import { toFlattenColumns } from "../utilities";
+import { fitContent, toFlattenColumns } from "../utilities";
 
 export abstract class DerivedElement extends Component<ScoreboardItemProps<DerivedScoreboardPoint>> {
     static arrange<Round>(converter: Converter<Round>, key: "bigEyeBoy" | "smallRoad" | "cockroachPig") {
@@ -22,7 +22,7 @@ export abstract class DerivedElement extends Component<ScoreboardItemProps<Deriv
             const derivedRows = derived.getScoreboardData(key);
             const columns = toFlattenColumns(derivedRows);
 
-            return columns.slice(columns.length - total);
+            return fitContent(columns, total, {} as DerivedScoreboardPoint);
         };
     }
 
