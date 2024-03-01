@@ -25,6 +25,7 @@ export const BacBallResultSlotContainer: React.FC<IResultSlotContainer> = (props
 
     useEffect(() => {
         if (!roundData || !roundData[betChoiceBalls] || roundData[betChoiceBalls].length === 0) {
+            setBallsData(defaultData);
             return;
         }
 
