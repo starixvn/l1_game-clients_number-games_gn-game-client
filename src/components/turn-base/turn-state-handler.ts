@@ -33,4 +33,8 @@ export class TurnStateHandler extends RoundStateHandler {
     getWholeRoundDuration({ durations }) {
         return durations.wholeTurn;
     }
+
+    shouldCountDownTimer({ newRoundState }): boolean {
+        return newRoundState !== RoundState.SwitchRound;
+    }
 }
