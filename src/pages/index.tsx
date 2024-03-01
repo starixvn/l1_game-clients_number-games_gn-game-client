@@ -74,9 +74,9 @@ function Home() {
         }
     }, [router.isReady]);
 
-    // if (isUM) {
-    return <UMPage locale={language} />;
-    // }
+    if (isUM) {
+        return <UMPage locale={language} />;
+    }
 
     if (loading) {
         return <SplashScreen locale={language}></SplashScreen>;
