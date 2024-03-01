@@ -2,11 +2,10 @@ import { RoundState } from "../type";
 
 export interface IGameStateHandler {
     getNextRoundState({ gameStateContextModel, nextRoundState, durations, defaultResult, defaultSettlementResult, remainingTime });
-    increaseRoundId({ nextRoundState, durations }): boolean;
 }
 
 export class GameStateHandler implements IGameStateHandler {
-    increaseRoundId({ nextRoundState, durations }): boolean {
+    protected shouldIncreaseRoundId({ nextRoundState, durations }): boolean {
         return false;
     }
 
@@ -31,7 +30,7 @@ export class GameStateHandler implements IGameStateHandler {
                     },
                 },
                 {
-                    condition: this.increaseRoundId({ nextRoundState, durations }),
+                    condition: this.shouldIncreaseRoundId({ nextRoundState, durations }),
                     state: { roundId: roundId + 1 },
                 },
                 {

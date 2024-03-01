@@ -8,7 +8,6 @@ export const GameHeader = () => {
     const [displayedRoundId, setDisplayedRoundId] = useState(roundId);
 
     useEffect(() => {
-        console.log(`\x1B[31m roundId: ${roundId}`);
         if (roundState === RoundState.InRound) {
             setDisplayedRoundId(roundId);
         }

@@ -32,6 +32,7 @@ export const messageEventType = {
     BET_HISTORY: "history",
     UPDATE_PLAYER_BALANCE: "updatePlayerBalance",
     CLEAR_GAME_TIMEOUT_AND_INTERVAL: "clearGameTimeoutAndInterval",
+    SHOULD_GET_BALANCE_AFTER_WINNING_ANIMATION: "shouldGetBalanceAfterWinningAnimation",
 };
 
 export class GameMessageHandler {

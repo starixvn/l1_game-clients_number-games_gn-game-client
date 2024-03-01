@@ -166,14 +166,10 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
         }
 
         case GameEventActionType.STATUS: {
-            if (status.win) {
-                return {
-                    ...state,
-                    betWin: status.bet,
-                };
-            }
+            console.log(`\x1B[31m STATUS betWin: ${JSON.stringify(status.bet)}`);
             return {
                 ...state,
+                betWin: status.bet
             };
         }
 

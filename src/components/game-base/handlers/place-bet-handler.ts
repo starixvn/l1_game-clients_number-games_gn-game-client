@@ -98,7 +98,7 @@ export class PlaceBetHandler {
                 type: GameEventActionType.OWN_BETS,
                 payload: { ownBets },
             });
-            this.props.gameMessageHandler.broadcastGameEvent(messageEventType.UPDATE_PLAYER_BALANCE);
+            this.props.gameMessageHandler.broadcastGameEvent({ [messageEventType.UPDATE_PLAYER_BALANCE]: {} });
         }
 
         this.props.dispatch({

@@ -314,6 +314,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     async updateUserBalance() {
+        console.log(`messageEventType.UPDATE_PLAYER_BALANCE: ${messageEventType.UPDATE_PLAYER_BALANCE}`);
         const authContext = this.context as AuthContextModel;
         const balanceResponse = await getBalance(authContext?.session);
         if (balanceResponse.isSuccessful) {

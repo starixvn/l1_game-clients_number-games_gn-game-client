@@ -16,7 +16,7 @@ export class GameFinishHandler {
     constructor(private props: GameFinishHandlerProps) {}
 
     handleFinish = ({ finish }, gameStateContext: GameStateContextModel<any, any>, durations?: GameDurations) => {
-        const { dispatch } = this.props;
+        const { dispatch, gameMessageHandler } = this.props;
         const { roundHistory } = gameStateContext;
         const roundHistoryClone = [...roundHistory];
 
@@ -58,7 +58,7 @@ export class GameFinishHandler {
                 },
             });
 
-            gameStateContext.betWin > 0 && this.props.gameMessageHandler.broadcastGameEvent(messageEventType.UPDATE_PLAYER_BALANCE);
+            gameMessageHandler.broadcastGameEvent({ [messageEventType.SHOULD_GET_BALANCE_AFTER_WINNING_ANIMATION]: {} });
         }, durations.showResult * 1000);
     };
 
