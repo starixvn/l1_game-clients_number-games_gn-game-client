@@ -3,12 +3,12 @@ import React, { useEffect, useState } from "react";
 import { UMInfo } from "sc-user-service-client/dist/auth";
 import { StorageHelper, localStorageKeys } from "../../../_shared/helpers/storage-helper";
 import { convertToGMT8, formatDate } from "../../../_shared/helpers/time-helper";
-import { useTranslate } from "@tolgee/react";
+import { useTranslator } from "../../../_shared/react-hooks/use-translator";
 import { ResourceTypes } from "../../../_shared/resources";
 
 const UMPage: React.FC<{ locale: string }> = ({ locale }) => {
     const router = useRouter();
-    const { t } = useTranslate([ResourceTypes.COMMON, ResourceTypes.SABANUMBER]);
+    const { t } = useTranslator();
     const [startTime, setStartTime] = useState<string>(null);
     const [endTime, setEndTime] = useState<string>(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -49,12 +49,12 @@ const UMPage: React.FC<{ locale: string }> = ({ locale }) => {
                 <img src="/static/images/error-page/um-spaceman.png" alt="spaceman" />
             </div>
             <p className="um-title">
-                {t("message_sys_maintenance")} <br /> {t("um_title")}
+                {t(`${ResourceTypes.COMMON}.message_sys_maintenance`)} <br /> {t(`${ResourceTypes.SABANUMBER}.um_title`)}
             </p>
-            <p className="highlight">{t("um_content_start")}</p>
-            <p className="highlight txt-bold">{t("um_time", { startTime, endTime }).replaceTolgeeFormat()}</p>
-            <p>{t("under_maintenance_suggest")}</p>
-            <button>{t("back")}</button>
+            <p className="highlight">{t(`${ResourceTypes.SABANUMBER}.um_content_start`)}</p>
+            <p className="highlight txt-bold">{t(`${ResourceTypes.SABANUMBER}.um_time`, { startTime, endTime }).replaceTolgeeFormat()}</p>
+            <p>{t(`${ResourceTypes.COMMON}.under_maintenance_suggest`)}</p>
+            <button>{t(`${ResourceTypes.COMMON}.back`)}</button>
         </div>
     );
 };

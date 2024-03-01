@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { useTranslate } from "@tolgee/react";
-import { ResourceTypes } from "../_shared/resources";
+import { useCommonTranslate } from "../_shared/react-hooks/use-translator";
 
 const TimeOut = () => {
-    const { t } = useTranslate(ResourceTypes.COMMON);
+    const { t } = useCommonTranslate();
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(true);
 

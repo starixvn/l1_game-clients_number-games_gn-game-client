@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
-import { ResourceTypes } from "../_shared/resources";
-import { useTranslate } from "@tolgee/react";
+import { useCommonTranslate } from "../_shared/react-hooks/use-translator";
 
 const Custom404 = () => {
-    const { t } = useTranslate(ResourceTypes.COMMON);
+    const { t } = useCommonTranslate();
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(true);
 
