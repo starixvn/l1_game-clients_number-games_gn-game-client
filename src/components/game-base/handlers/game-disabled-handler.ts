@@ -22,7 +22,7 @@ export class GameDisableHandler {
 
         this.props.dispatch({
             type: GameEventActionType.SET_UM_FIRST_LOADING,
-            payload: { umFirstLoading: um && remainingTime && remainingTime + 1 === wholeRound },
+            payload: { isUMInFirstLoad: um && remainingTime && remainingTime + 1 === wholeRound },
         });
 
         if (

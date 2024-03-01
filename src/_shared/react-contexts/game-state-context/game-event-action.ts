@@ -101,7 +101,7 @@ export interface GameEventPayload {
     showConfirmDialog?: boolean;
     turnCounter?: number;
     notConfirmOwnBets?: any;
-    umFirstLoading?: boolean;
+    isUMInFirstLoad?: boolean;
     isShowBetHistory?: boolean;
     isShowGameGuide?: boolean;
 }

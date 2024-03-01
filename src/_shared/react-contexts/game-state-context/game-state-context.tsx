@@ -70,7 +70,7 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
         showConfirmDialog,
         turnCounter,
         notConfirmOwnBets,
-        umFirstLoading,
+        isUMInFirstLoad,
         isShowBetHistory,
         isShowGameGuide,
     } = payload;
@@ -372,7 +372,7 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
         case GameEventActionType.SET_UM_FIRST_LOADING: {
             return {
                 ...state,
-                umFirstLoading,
+                isUMInFirstLoad,
             };
         }
 
