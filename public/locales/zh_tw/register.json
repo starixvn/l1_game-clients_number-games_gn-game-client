@@ -1,13 +1,1 @@
-{
-    "registerName": "創建您的暱稱",
-    "submit": "提交",
-    "yourNickName": "注意",
-    "rule1": "暱稱的長度必須介於 3 到 14 個字符之間。",
-    "rule2": "不能包含空格、特殊字符和非英文字符。",
-    "rule3": "提交後無法更改暱稱。",
-    "invalidUsername": "輸入的暱稱無效，請重試。",
-    "changeAvatar": "更改頭像",
-    "registerTitle1-gn-apptype1": "歡迎來到 <strong>{{sabaNumberName}}</strong>",
-    "registerTitle2-gn-apptype1": "<strong>{{sabaNumberName}}</strong> 是 <strong>{{sabaClubName}}</strong>, 的附加版本，面向喜歡游戲體驗中的簡單設計和優化的玩家。",
-    "registerTitle3-gn-apptype1": "所有版本的 <strong>{{sabaClubName}}</strong> 都連接在一起，具有相同的遊戲回合和總賭注。"
-}
+{}

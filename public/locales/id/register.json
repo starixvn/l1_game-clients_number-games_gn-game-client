@@ -1,13 +1,1 @@
-{
-    "registerName": "Buat nama panggilan Anda",
-    "submit": "KIRIMKAN",
-    "yourNickName": "Catatan",
-    "rule1": "Panjanga nama panggilan harus antara 3 sampai 14 karakter.",
-    "rule2": "Tidak boleh berisi spasi, karakter khusus, dan karakter non-bahasa Inggris.",
-    "rule3": "Tidak dapat mengubah nama panggilan setelah mengirimkan.",
-    "invalidUsername": "Nama panggilan yang Anda masukan tidak valid, silakan coba lagi.",
-    "changeAvatar": "Mengubah Avatar.",
-    "registerTitle1-gn-apptype1": "Selamat datang di <strong>{{sabaNumberName}}</strong>",
-    "registerTitle2-gn-apptype1": "<strong>{{sabaNumberName}}</strong> adalah versi tambahan dari <strong>{{sabaClubName}}</strong>, yang ditujukan untuk pemain yang menyukai kesederhanaan desain dan pengoptimalan dalam pengalaman bermain.",
-    "registerTitle3-gn-apptype1": "Semua versi <strong>{{sabaClubName}}</strong> terhubung bersama, dengan putaran permainan dan total taruhan yang sama."
-}
+{}

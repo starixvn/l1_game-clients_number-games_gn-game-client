@@ -1,17 +1,1 @@
-{
-    "roundTime": "時間",
-    "round": "圓形的",
-    "result": "結果",
-    "choice": "選擇",
-    "stake": "賭注",
-    "refund": "退款",
-    "onlyRefund": "退款",
-    "win": "贏",
-    "noBetHistory": "無可用數據。",
-    "details": "細節",
-    "totalStake": "總賭注",
-    "betType": "投注類型",
-    "betChoice": "投注選擇",
-    "betDetails": "投注詳情",
-    "apiConnectFailed": "連接不穩定。請稍後再試。"
-}
+{}

@@ -1,13 +1,1 @@
-{
-    "registerName": "Chọn tên nhân vật",
-    "submit": "Vào chơi game",
-    "note": "Lưu ý",
-    "rule1": "Tên nhân vật phải có từ 3 đến 14 ký tự.",
-    "rule2": "Không gõ dấu tiếng Việt, không chứa khoảng trắng và các ký tự đặc biệt.",
-    "rule3": "Không thể đổi tên nhân vật sau khi tạo.",
-    "invalidUsername": "Tên nhân vật không hợp lệ.",
-    "changeAvatar": "Thay đổi hình nhân vật",
-    "registerTitle1-gn-apptype1": "Chào mừng bạn đến với <strong>{{sabaNumberName}}</strong>",
-    "registerTitle2-gn-apptype1": "<strong>{{sabaNumberName}}</strong> là phiên bản bổ sung của <strong>{{sabaClubName}}</strong>, hướng đến người chơi yêu thích sự đơn giản và tối ưu trong trải nghiệm chơi game. ",
-    "registerTitle3-gn-apptype1": "Tất cả phiên bản <strong>{{sabaClubName}}</strong> đều liên thông với nhau về phiên game và số tổng cược."
-}
+{}

@@ -1,17 +1,1 @@
-{
-    "roundTime": "Time",
-    "round": "Round",
-    "result": "Result",
-    "choice": "Choice",
-    "stake": "Stake",
-    "refund": "Refund",
-    "onlyRefund": "Refund",
-    "win": "Win",
-    "noBetHistory": "No data available.",
-    "details": "Details",
-    "totalStake": "Total Stake",
-    "betType": "Bet Type",
-    "betChoice": "Bet Choice",
-    "betDetails": "Bet Details",
-    "apiConnectFailed": "The connection is unstable. Please try later."
-}
+{}

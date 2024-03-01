@@ -1,17 +1,1 @@
-{
-    "roundTime": "Waktu",
-    "round": "Putaran",
-    "result": "Hasil",
-    "choice": "Pilihan",
-    "stake": "Taruhan",
-    "refund": "Pengembalian Dana",
-    "onlyRefund": "Pengembalian Dana",
-    "win": "Menang",
-    "noBetHistory": "Tidak ada data yang tersedia.",
-    "details": "Rincian",
-    "totalStake": "Total Taruhan",
-    "betType": "Jenis Taruhan",
-    "betChoice": "Pilihan Taruhan",
-    "betDetails": "Detail Bet",
-    "apiConnectFailed": "Koneksi tidak stabil. Silakan coba lagi nanti."
-}
+{}

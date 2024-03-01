@@ -1,13 +1,1 @@
-{
-    "registerName": "Create your nickname",
-    "submit": "Submit",
-    "yourNickName": "Note",
-    "rule1": "Must be between 3 and 14 characters long.",
-    "rule2": "Cannot contain spaces, special, and non-English characters.",
-    "rule3": "Cannot change the nickname after submitting.",
-    "invalidUsername": "The entered nickname is invalid, please try again.",
-    "changeAvatar": "Change Avatar",
-    "registerTitle1-gn-apptype1": "Welcome to <strong>{{sabaNumberName}}</strong>",
-    "registerTitle2-gn-apptype1": "<strong>{{sabaNumberName}}</strong> is an additional version of <strong>{{sabaClubName}}</strong>, aimed at players who love the simplicity of design and optimization in the gaming experience.",
-    "registerTitle3-gn-apptype1": "All versions of <strong>{{sabaClubName}}</strong> are connected together, with the same game round and total bets."
-}
+{}
