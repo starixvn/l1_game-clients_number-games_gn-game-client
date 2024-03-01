@@ -58,7 +58,7 @@ export const BacBallResultBlock: FC = () => {
     }
 
     const bankerDelayTime = 1000;
-    console.log("playResultAnimation", playResultAnimation);
+
     return (
         <div className={Style["result-container"]}>
             <div className={Style["player-container"]}>
