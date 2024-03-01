@@ -69,7 +69,7 @@ export class Scoreboard<Round> extends Component<ScoreboardProps<Round>> {
     }
 
     render(): ReactNode {
-        const { rounds, className, elementClassName, block, row: originalRow, arrange } = this.props;
+        const { rounds, className, elementClassName, blockClassName, block, row: originalRow, arrange } = this.props;
         const htmlProps = this.getHTMLAttributes();
         const arranged = arrange(rounds, this);
         const groupItems = this.createGroup(arranged);
@@ -86,7 +86,7 @@ export class Scoreboard<Round> extends Component<ScoreboardProps<Round>> {
                     };
 
                     return (
-                        <div className={styles["scoreboard-block"]} key={index} style={style}>
+                        <div className={`${styles["scoreboard-block"]} ${blockClassName}`} key={index} style={style}>
                             {items.map((round, index) => {
                                 const column = (index / block + 1) >> 0;
                                 const row = (index % block) + 1;

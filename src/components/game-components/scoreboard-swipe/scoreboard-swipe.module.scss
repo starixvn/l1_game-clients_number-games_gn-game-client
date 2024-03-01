@@ -1,40 +1,12 @@
 .scoreboard-multiple {
+    display: flex;
+    flex-wrap: wrap;
+    position: relative;
+    width: 32.9rem;
+    height: 11.3rem;
     border: 0.1rem solid #172d41;
     border-radius: 0.3rem;
     background: #021520;
-}
-
-.scoreboard-derived-multiple {
-    display: flex;
-    grid-template-columns: 1fr 1fr 1fr;
-}
-
-.big-eye-small-element {
-    width: 0.5rem;
-    height: 0.5rem;
-}
-
-.big-road-small {
-    border: 0;
-    border-radius: 0.3rem;
-}
-
-.derived-board-small {
-    width: 10.9rem;
-    border: 0;
-    border-radius: 0;
-}
-
-.derived-board-small-element {
-    width: 0.6rem;
-    height: 0.6rem;
-    padding: initial;
-}
-
-.big-road-small-element {
-    width: 1.2rem;
-    height: 1.2rem;
-    padding: 0.1rem;
 }
 
 .scoreboard-full {
@@ -42,6 +14,64 @@
     position: relative;
 }
 
-.hide {
-    display: none;
+.scoreboard-derived-multiple {
+    display: flex;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.board-small {
+    width: 1.2rem;
+    height: 1.2rem;
+    gap: 0.1rem;
+}
+
+.big-road-small {
+    border: 0;
+    border-radius: 0.3rem;
+    position: absolute;
+    width: auto;
+    z-index: 4;
+}
+
+.big-eye-small-element {
+    width: 0.5rem;
+    height: 0.5rem;
+}
+
+%derived-board-small {
+    width: auto;
+    border: 0;
+
+    position: absolute;
+    padding-top: 0;
+}
+
+.derived-board-small-element {
+    width: 0.4rem;
+    height: 0.4rem;
+    padding: initial;
+}
+
+.big-road-small-element {
+    width: 0.8rem;
+    height: 0.8rem;
+    padding: 0;
+}
+
+.big-eye-boy {
+    @extend %derived-board-small;
+    top: 7.3rem;
+    left: 0;
+}
+
+.small-road {
+    @extend %derived-board-small;
+    top: 7.3rem;
+    left: 10.8rem;
+}
+
+.cockroach-pig {
+    @extend %derived-board-small;
+    top: 7.3rem;
+    right: 0;
 }
