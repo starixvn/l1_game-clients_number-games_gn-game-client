@@ -12,13 +12,13 @@ export class GameRoundHistoryHandler {
 
     handleRoundHistory({ roundHistory, roundId }) {
         const { roundState, isUMInFirstLoad } = this.props.gameStateContextModel;
+
         this.props.dispatch({
             type: GameEventActionType.ROUND_HISTORY,
             payload: {
                 roundHistory: roundHistory,
                 roundId: [RoundState.DisplayResult].includes(roundState) || isUMInFirstLoad ? roundId - 1 : roundId,
                 settlementResult: roundState === RoundState.LockingBet ? {} : roundHistory[0]?.settlementResult,
-                playResultAnimation: [RoundState.DisplayResult].includes(roundState) || isUMInFirstLoad ? false : true,
                 showResultInfo: [RoundState.DisplayResult].includes(roundState) || isUMInFirstLoad ? true : false,
             },
         });

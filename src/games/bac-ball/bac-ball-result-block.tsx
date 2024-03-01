@@ -3,7 +3,7 @@ import { FC, useEffect, useState } from "react";
 
 import { loadPixiAnimations } from "../../_shared/helpers/pixi-resource-loader";
 import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
-import { IBallColor, RoundState } from "../../components/game-base/type";
+import { IBallColor } from "../../components/game-base/type";
 import Cage, { CageColor, CagePosition } from "../../components/game-components/cage";
 import { BacBallResultSlotContainer } from "./bac-ball-result-slot-container";
 import Style from "./bac-ball.module.scss";
@@ -12,7 +12,7 @@ import { BacBallBetOptions } from "./constants";
 export const BacBallResultBlock: FC = () => {
     const [cageBallFrames, setCageBallFrames] = useState<IBallColor>({ blue: [], red: [], blue2: [], red2: [] });
     const [cageBallsLoopFrames, setCageBallsLoopFrames] = useState<Texture<Resource>[]>([]);
-    const { result, roundState } = useGameStateContext();
+    const { result, roundState, playResultAnimation } = useGameStateContext();
 
     useEffect(() => {
         const handleLoadResource = async () => {
@@ -58,7 +58,7 @@ export const BacBallResultBlock: FC = () => {
     }
 
     const bankerDelayTime = 1000;
-
+    console.log("playResultAnimation", playResultAnimation);
     return (
         <div className={Style["result-container"]}>
             <div className={Style["player-container"]}>
@@ -70,7 +70,7 @@ export const BacBallResultBlock: FC = () => {
                         position={CagePosition.LEFT}
                         isSmall={true}
                         result={result?.player}
-                        isShowResult={roundState === RoundState.DisplayResult}
+                        isShowResult={playResultAnimation}
                     />
                 </div>
                 <BacBallResultSlotContainer delayTime={0} betChoice={BacBallBetOptions.PLAYER} />
@@ -85,7 +85,7 @@ export const BacBallResultBlock: FC = () => {
                         position={CagePosition.RIGHT}
                         isSmall={true}
                         result={result?.banker}
-                        isShowResult={roundState === RoundState.DisplayResult}
+                        isShowResult={playResultAnimation}
                         delayShowResultTime={bankerDelayTime}
                     />
                 </div>
