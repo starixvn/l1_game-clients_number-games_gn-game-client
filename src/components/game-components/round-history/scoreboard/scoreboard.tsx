@@ -10,8 +10,9 @@ export type ScoreboardProps<Round> = {
     element: ComponentType<ScoreboardItemProps<Round>>;
     className?: string;
     elementClassName?: string;
+    blockClassName?: string;
     block?: number;
-};
+} & HTMLAttributes<unknown>;
 
 export type ScoreboardItemProps<Round> = {
     round: Round;
@@ -25,6 +26,7 @@ export class Scoreboard<Round> extends Component<ScoreboardProps<Round>> {
         className: "",
         elementClassName: "",
         block: 1,
+        blockClassName: "",
     };
 
     private renderElement(round: Round, props: Attributes | HTMLAttributes<unknown>): ReactNode {
@@ -61,12 +63,12 @@ export class Scoreboard<Round> extends Component<ScoreboardProps<Round>> {
     }
 
     render(): ReactNode {
-        const { rounds, className, elementClassName, block, row: originalRow } = this.props;
-        const arranged = this.props.arrange(rounds, this);
+        const { rounds, className, elementClassName, block, row: originalRow, element, arrange, ...htmlProps } = this.props;
+        const arranged = arrange(rounds, this);
         const groupItems = this.createGroup(arranged);
 
         return (
-            <div className={`${styles.scoreboard} ${className}`} data-testid="scoreboard">
+            <div className={`${styles.scoreboard} ${className}`} {...htmlProps} data-testid="scoreboard">
                 {groupItems.map((items: Round[], index: number) => {
                     const rowByGroup = (originalRow / block) >> 0;
                     const column = (index / rowByGroup + 1) >> 0;
