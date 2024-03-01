@@ -45,7 +45,6 @@ class Dashboard extends React.PureComponent<Props, State> {
             isShowHistory: false,
             isShowGuide: false,
             isShowAnnouncement: false,
-            enabledQuickBet: false,
             isBlockUI: false,
             queryGame: this.props.queryGame,
             isJoinGame: false,
@@ -70,7 +69,6 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.handleShowApiErrorMessage = this.handleShowApiErrorMessage.bind(this);
         this.toggleHistoryModal = this.toggleHistoryModal.bind(this);
         this.toggleGuideModal = this.toggleGuideModal.bind(this);
-        this.setEnabledQuickBet = this.setEnabledQuickBet.bind(this);
         this.handleUpdateUserStakeLevel = this.handleUpdateUserStakeLevel.bind(this);
         this.signOut = this.signOut.bind(this);
         this.toggleAnnouncementModal = this.toggleAnnouncementModal.bind(this);
@@ -88,7 +86,7 @@ class Dashboard extends React.PureComponent<Props, State> {
 
     updateAuthorizeInfo(authorizeInfo: AuthorizeResponse) {
         this.checkOfferedGame(authorizeInfo);
-        this.setState({ authorizeInfo, enabledQuickBet: authorizeInfo?.user?.settings?.quickBet });
+        this.setState({ authorizeInfo });
     }
 
     updateUserBalance(balance: number) {
@@ -271,10 +269,6 @@ class Dashboard extends React.PureComponent<Props, State> {
         StorageHelper.set(localStorageKeys.playSound, !enabledPlaySound);
     }
 
-    setEnabledQuickBet(enabled: boolean) {
-        this.setState({ enabledQuickBet: enabled });
-    }
-
     closeDialog() {
         this.setState({ isShowErrorModal: false });
         this.isKickOut && this.signOut();
@@ -329,7 +323,7 @@ class Dashboard extends React.PureComponent<Props, State> {
             isShowGuide,
             userStakeLevel,
             authorizeInfo,
-            enabledQuickBet,
+
             isBlockUI,
             queryGame,
             isJoinGame,
@@ -359,12 +353,9 @@ class Dashboard extends React.PureComponent<Props, State> {
                         toggleGuideModal={this.toggleGuideModal}
                         toggleAnnouncementModal={this.toggleAnnouncementModal}
                         offerGames={offerGames}
-                        enabledQuickBet={enabledQuickBet}
-                        updateEnabledQuickBet={this.setEnabledQuickBet}
                         isShowToolbarGuide={isShowToolbarGuide}
                     />
                     <Games
-                        enabledQuickBet={enabledQuickBet}
                         enabledWinningStreakNotification={enabledWinningStreakNotification}
                         enabledPlaySound={enabledPlaySound}
                         setApiErrorMessage={this.handleShowApiErrorMessage}

@@ -3,8 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { isIOS, isMobileOnly } from "react-device-detect";
 import { StorageHelper, localStorageKeys } from "../../../../_shared/helpers";
 import { useAuthContext } from "../../../../_shared/react-contexts";
-import { GameEventActionType } from "../../../../_shared/react-contexts/game-state-context/game-event-action";
-import { useGameStateContext, useGameStatesDispatch } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
+import { useGameStateContext } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
 import { updateUserQuickBetSetting } from "../../../../services/user-setting-service";
 import BaseDialog from "../../../game-components/base-dialog";
 import { ModalType } from "../../../game-components/base-dialog/type";
@@ -13,16 +12,10 @@ import Styles from "./quick-bet-btn.module.scss";
 
 export const QuickBetBtn = () => {
     const gameStateContext = useGameStateContext();
-    const dispatch = useGameStatesDispatch();
-    const { enabledQuickBet, showConfirmBet } = gameStateContext;
+    const { showConfirmBet } = gameStateContext;
+    const authContext = useAuthContext();
+    const enabledQuickBet = authContext.authorizeInfo?.user?.settings?.quickBet;
     const isShowToolbarGuide = StorageHelper.get(localStorageKeys.toolbarGuide) ?? true;
-    const updateEnabledQuickBet = (value) =>
-        dispatch({
-            type: GameEventActionType.TOGLE_QUICK_BET,
-            payload: {
-                enabledQuickBet: value,
-            },
-        });
 
     const [isShowModalConfirm, setIsShowModalConfirm] = useState(false);
     const [isShowTooltip, setIsShowTooltip] = useState(true);
@@ -31,14 +24,13 @@ export const QuickBetBtn = () => {
     if (isMobileOnly) {
         deviceClass = isIOS ? Styles["ios-device"] : Styles["android-device"];
     }
-    const authContext = useAuthContext();
     const { t } = useTranslation();
 
     const confirmQuickBet = () => {
         setIsShowTooltip(false);
         closeModal();
-        updateEnabledQuickBet(true);
         updateUserQuickBetSetting(authContext.session, true);
+        authContext.authorizeInfo.user.settings.quickBet = true;
     };
 
     const closeModal = () => {
@@ -65,8 +57,8 @@ export const QuickBetBtn = () => {
         if (!enabledQuickBet) {
             setIsShowModalConfirm(true);
         } else {
-            updateEnabledQuickBet(false);
             updateUserQuickBetSetting(authContext.session, false);
+            authContext.authorizeInfo.user.settings.quickBet = false;
         }
     };
 

@@ -3,10 +3,10 @@ import { isMobileOnly } from "react-device-detect";
 import Slider from "react-slick";
 import useSound from "use-sound";
 import { StorageHelper, localStorageKeys } from "../../../_shared/helpers";
+import { SystemEventActionType, useAuthContext, useSystemContext, useSystemDispatch } from "../../../_shared/react-contexts";
 import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
-import Styles from "./chip-slider.module.scss";
 import { Chip } from "./chip";
-import { SystemEventActionType, useSystemContext, useSystemDispatch } from "../../../_shared/react-contexts";
+import Styles from "./chip-slider.module.scss";
 
 const SlidingTimeInMillisecond = 100;
 const slidesToShow = 5;
@@ -17,7 +17,9 @@ export const ChipSlider: React.FC<{}> = () => {
     const systemContext = useSystemContext();
     const dispatch = useSystemDispatch();
     const enabledSound = StorageHelper.get(localStorageKeys.playSound) ?? false;
-    const { enabledQuickBet, gameConfigs, userStakeLevel } = gameStateContext;
+    const enabledQuickBet = useAuthContext().authorizeInfo?.user?.settings?.quickBet;
+
+    const { gameConfigs, userStakeLevel } = gameStateContext;
     const { selectedChip } = systemContext;
     const [enabledPrevBtn, setEnabledPrevBtn] = useState(false);
     const [enabledNextBtn, setEnabledNextBtn] = useState(true);

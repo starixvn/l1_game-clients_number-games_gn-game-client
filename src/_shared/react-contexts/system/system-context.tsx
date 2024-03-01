@@ -1,7 +1,7 @@
-import React, { createContext, useContext, useReducer } from "react";
+import { createContext, useContext, useReducer } from "react";
 
-import { SystemEventAction, SystemEventActionType } from "./system-event-action";
 import { SystemContextModel, initialSystemContextModel } from "./system-context-model";
+import { SystemEventAction, SystemEventActionType } from "./system-event-action";
 
 export const SystemContext = createContext<Partial<SystemContextModel>>({});
 export const SystemDispatchContext = createContext(null);
@@ -22,19 +22,13 @@ export const useSystemDispatch = () => useContext(SystemDispatchContext);
 
 const systemReducer = (state: any, action: SystemEventAction) => {
     const { type, payload } = action;
-    const { selectedChip, enabledQuickBet, enabledSound } = payload;
+    const { selectedChip, enabledSound } = payload;
 
     switch (type) {
         case SystemEventActionType.SELECT_CHIP: {
             return {
                 ...state,
                 selectedChip,
-            };
-        }
-        case SystemEventActionType.ENABLE_QUICK_BET: {
-            return {
-                ...state,
-                enabledQuickBet,
             };
         }
         case SystemEventActionType.ENABLE_SOUND: {

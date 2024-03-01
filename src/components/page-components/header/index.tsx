@@ -13,8 +13,6 @@ type Props = {
     toggleGuideModal: Function;
     toggleAnnouncementModal: Function;
     offerGames: number[];
-    enabledQuickBet?: boolean;
-    updateEnabledQuickBet?: Function;
     isShowToolbarGuide: boolean;
 };
 

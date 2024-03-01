@@ -38,7 +38,6 @@ export interface GameStateContextModel<Result, SettlementResult> {
     betWin: number;
     kickedOut: any;
     drawId: number;
-    enabledQuickBet: boolean;
     showConfirmBet: boolean;
     showConfirmDialog: boolean;
     turnCounter: number;
@@ -88,7 +87,6 @@ export const initialGameStateContextModel = ({ defaultResult, defaultSettlementR
         drawId: 0,
         result: defaultResult,
         settlementResult: defaultSettlementResult,
-        enabledQuickBet: true,
         showConfirmBet: false,
         showConfirmDialog: false,
         turnCounter: 0,

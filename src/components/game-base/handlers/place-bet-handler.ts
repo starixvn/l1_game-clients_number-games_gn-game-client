@@ -137,6 +137,7 @@ export class PlaceBetHandler {
     placeBet = (
         betChoice: string,
         amount: number,
+        enabledQuickBet: boolean,
         gameStateContext: GameStateContextModel<any, any>,
         systemContext: SystemContextModel
     ) => {
@@ -148,7 +149,7 @@ export class PlaceBetHandler {
             return;
         }
 
-        if (gameStateContext.enabledQuickBet) {
+        if (enabledQuickBet) {
             this.handleQuickBet(amount, betChoice);
 
             return;

@@ -34,13 +34,12 @@ export enum GameEventActionType {
     ACTIVE_SCORE_BOARD = "ACTIVE_SCORE_BOARD",
     PLAY_RESULT_ANIMATION = "PLAY_RESULT_ANIMATION",
     SHOW_RESULT_INFO_TIME_OUT = "SHOW_RESULT_INFO_TIME_OUT",
-    TOGLE_QUICK_BET = "TOGLE_QUICK_BET",
     SHOW_CONFIRM_BET = "SHOW_CONFIRM_BET",
     SHOW_CONFIRM_DIALOG = "SHOW_CONFIRM_DIALOG",
     NOT_CONFIRM_OWN_BETS = "NOT_CONFIRM_OWN_BETS",
     SET_UM_FIRST_LOADING = "SET_UM_FIRST_LOADING",
     TOGGLE_BET_HISTORY = "TOGGLE_BET_HISTORY",
-    TOGGLE_GAME_GUIDE = "TOGGLE_GAME_GUIDE"
+    TOGGLE_GAME_GUIDE = "TOGGLE_GAME_GUIDE",
 }
 
 export interface GameEventPayload {
@@ -100,7 +99,6 @@ export interface GameEventPayload {
     roundRemainingTime?: number;
     showConfirmBet?: boolean;
     showConfirmDialog?: boolean;
-    enabledQuickBet?: boolean;
     turnCounter?: number;
     notConfirmOwnBets?: any;
     umFirstLoading?: boolean;

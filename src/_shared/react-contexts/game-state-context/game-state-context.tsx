@@ -18,9 +18,7 @@ export function GameStateProvider({ children, defaultResult, defaultSettlementRe
     return (
         <GameStateContext.Provider value={gameStateContextModel}>
             <GameStateDispatchContext.Provider value={dispatch}>
-                <GameTranslateContext.Provider value={useTranslate}>
-                    {children}
-                </GameTranslateContext.Provider>
+                <GameTranslateContext.Provider value={useTranslate}>{children}</GameTranslateContext.Provider>
             </GameStateDispatchContext.Provider>
         </GameStateContext.Provider>
     );
@@ -68,14 +66,13 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
         newGameState,
         showResultInfo,
         isShowBlink,
-        enabledQuickBet,
         showConfirmBet,
         showConfirmDialog,
         turnCounter,
         notConfirmOwnBets,
         umFirstLoading,
         isShowBetHistory,
-        isShowGameGuide
+        isShowGameGuide,
     } = payload;
 
     // console.log("payload: ", JSON.stringify(payload));
@@ -164,7 +161,7 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
                 result,
                 settlementResult,
                 roundId,
-                drawId
+                drawId,
             };
         }
 
@@ -321,7 +318,7 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
             return {
                 ...state,
                 isProcessingBet: true,
-                notice
+                notice,
             };
         }
 
@@ -329,7 +326,7 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
             return {
                 ...state,
                 isProcessingBet: false,
-                notice: null
+                notice: null,
             };
         }
         case GameEventActionType.ACTIVE_SCORE_BOARD: {
@@ -353,13 +350,6 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
                 isShowBlink,
                 roundHistory,
                 playResultAnimation,
-            };
-        }
-
-        case GameEventActionType.TOGLE_QUICK_BET: {
-            return {
-                ...state,
-                enabledQuickBet,
             };
         }
 
@@ -394,15 +384,15 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
         case GameEventActionType.TOGGLE_BET_HISTORY: {
             return {
                 ...state,
-                isShowBetHistory
-            }
+                isShowBetHistory,
+            };
         }
 
         case GameEventActionType.TOGGLE_GAME_GUIDE: {
             return {
                 ...state,
-                isShowGameGuide
-            }
+                isShowGameGuide,
+            };
         }
 
         default: {

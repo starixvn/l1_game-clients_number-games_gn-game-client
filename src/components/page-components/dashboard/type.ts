@@ -26,7 +26,6 @@ export type State = {
     isShowHistory: boolean;
     isShowAnnouncement: boolean;
     isShowGuide: boolean;
-    enabledQuickBet: boolean;
     isBlockUI: boolean;
     queryGame: number;
     isJoinGame: boolean;

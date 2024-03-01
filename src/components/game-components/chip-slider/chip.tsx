@@ -1,15 +1,15 @@
 import React from "react";
-import Styles from "./chip-slider.module.scss";
-import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import { ChipLabelMapper, ChipMapper, systemName } from "../../../_shared/constants";
-import { useSystemContext } from "../../../_shared/react-contexts";
+import { useAuthContext, useSystemContext } from "../../../_shared/react-contexts";
+import Styles from "./chip-slider.module.scss";
 
 const defaultChip = "chip-13";
 
 export const Chip: React.FC<{ value: number; onClickChip: Function }> = ({ value, onClickChip }) => {
-    const gameStateContext = useGameStateContext();
     const systemContext = useSystemContext();
-    const { enabledQuickBet } = gameStateContext;
+
+    const enabledQuickBet = useAuthContext().authorizeInfo?.user?.settings?.quickBet;
+
     const { selectedChip } = systemContext;
 
     const getChipClassName = () => {

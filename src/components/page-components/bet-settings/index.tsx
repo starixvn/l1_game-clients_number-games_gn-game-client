@@ -1,14 +1,14 @@
 import { useMemo } from "react";
 import { isIOS, isMobileOnly } from "react-device-detect";
 import { StorageHelper, localStorageKeys } from "../../../_shared/helpers";
-import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
-import Styles from "./bet-setting.module.scss";
+import { useAuthContext } from "../../../_shared/react-contexts";
 import { ChipSlider } from "../../game-components/chip-slider";
+import Styles from "./bet-setting.module.scss";
 import { QuickBetBtn } from "./quick-bet-btn";
 
 const BetSettings = () => {
-    const gameStateContext = useGameStateContext();
-    const { enabledQuickBet } = gameStateContext;
+    const enabledQuickBet = useAuthContext().authorizeInfo?.user?.settings?.quickBet;
+
     const isShowToolbarGuide = StorageHelper.get(localStorageKeys.toolbarGuide) ?? true;
 
     return useMemo(() => {
