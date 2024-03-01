@@ -1,4 +1,4 @@
-import { Trans, useTranslation } from "next-i18next";
+import { useTranslate } from "@tolgee/react";
 import { useEffect, useRef, useState } from "react";
 import { isIOS, isMobileOnly } from "react-device-detect";
 import { StorageHelper, localStorageKeys } from "../../../../_shared/helpers";
@@ -24,7 +24,7 @@ export const QuickBetBtn = () => {
     if (isMobileOnly) {
         deviceClass = isIOS ? Styles["ios-device"] : Styles["android-device"];
     }
-    const { t } = useTranslation();
+    const { t } = useTranslate("SabaNumber");
 
     const confirmQuickBet = () => {
         setIsShowTooltip(false);
@@ -62,25 +62,22 @@ export const QuickBetBtn = () => {
         }
     };
 
-    const handleTurnOn = () => {
-        setIsShowTooltip(false);
-        confirmQuickBet();
-    };
-
-    const closeHintTooltip = () => {
-        setIsShowTooltip(false);
-        updateUserQuickBetSetting(authContext.session, false);
-    };
-
-    const toolTipPositionClass = isMobileOnly ? `bottom ${Styles["isMobile"]}` : "top",
-        toolTipClass = `popover-custom ${toolTipPositionClass} ${Styles["hint-one-click-bet"]} `;
-
+    const quickBetPopup = (
+        <div className={Styles["modalConfirm"]}>
+            <div className={`${Styles["bg-opacity"]}`}></div>
+            <BaseDialog type={ModalType.Center} isOpen={isShowModalConfirm} onCloseModal={closeModal}>
+                <ConfirmMessage closeModal={closeModal} confirmQuickBet={confirmQuickBet} />
+            </BaseDialog>
+        </div>
+    );
     return showConfirmBet ? (
         <></>
     ) : (
         <div className={`${Styles["toggle"]} ${Styles["bet-setting"]} ${deviceClass}`}>
             <div className={Styles["one-click-bet"]} onClick={onClickQuickBet}>
-                {t("common:oneClickTitle")}
+                {t({
+                    key: "quick_bet",
+                })}
             </div>
             <div>
                 <input
@@ -95,29 +92,8 @@ export const QuickBetBtn = () => {
                     <div className={Styles["quick-bet-icon"]}></div>
                 </label>
             </div>
-            {isShowModalConfirm && !!enabledQuickBet === false && (
-                <div className={Styles["modalConfirm"]}>
-                    <div className={`${Styles["bg-opacity"]}`}></div>
-                    <BaseDialog type={ModalType.Center} isOpen={isShowModalConfirm} onCloseModal={closeModal}>
-                        <ConfirmMessage closeModal={closeModal} confirmQuickBet={confirmQuickBet} />
-                    </BaseDialog>
-                </div>
-            )}
-            {enabledQuickBet === undefined && isShowTooltip && (
-                <div ref={tooltipRef} className={toolTipClass}>
-                    <div className={Styles.content}>
-                        <Trans t={t}>{t("common:oneClickHintMsg")}</Trans>
-                    </div>
-                    <div className={Styles.action}>
-                        <button id="btn-cancel-quickbet" className={`btn-grey ${Styles["btn"]}`} onClick={closeHintTooltip}>
-                            {t("common:dismiss")}
-                        </button>
-                        <button id="btn-on-quickbet" className={`btn-red ${Styles["btn"]}`} onClick={handleTurnOn}>
-                            {t("common:turnOn")}
-                        </button>
-                    </div>
-                </div>
-            )}
+            {isShowModalConfirm && !!enabledQuickBet === false && quickBetPopup}
+            {enabledQuickBet === undefined && isShowTooltip && quickBetPopup}
         </div>
     );
 };
