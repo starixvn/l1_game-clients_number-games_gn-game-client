@@ -8,6 +8,7 @@ import { tolgee } from "../_shared/tolgee";
 import "../styles/errors.scss";
 import "../styles/main.scss";
 import Loading from "../components/page-components/loading";
+import "../_shared/helpers/string-helper";
 
 class SabaNumberApp extends App<AppProps> {
     render() {

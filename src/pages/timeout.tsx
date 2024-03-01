@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useTheme } from "next-themes";
 import { useRouter } from "next/router";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { useTranslation } from "next-i18next";
+import { useTranslate } from "@tolgee/react";
+import { ResourceTypes } from "../_shared/resources";
 
 const TimeOut = () => {
-    const { t } = useTranslation("common");
+    const { t } = useTranslate(ResourceTypes.COMMON);
     const router = useRouter();
-    const { theme } = useTheme();
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -36,19 +34,11 @@ const TimeOut = () => {
                 <img src="/static/images/error-page/spaceman-timeout.png" alt="spaceman" />
             </div>
             <p className="errorOccurred-info mt-2">
-                <p>{t("sessionTimeout-1")} </p>
-                <p>{t("sessionTimeout-2")}</p>
+                <p className="break">{t("message_session_timeout_break")} </p>
             </p>
-            <button>Back</button>
+            <button>{t("back")}</button>
         </div>
     );
-};
-export const getStaticProps = async ({ locale }) => {
-    return {
-        props: {
-            ...(await serverSideTranslations(locale, ["common"])),
-        },
-    };
 };
 
 export default TimeOut;

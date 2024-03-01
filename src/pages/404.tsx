@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
-import { useTranslation, Trans } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { useTheme } from "next-themes";
 import { useRouter } from "next/router";
+import { ResourceTypes } from "../_shared/resources";
+import { useTranslate } from "@tolgee/react";
 
 const Custom404 = () => {
-    const { t } = useTranslation("messages");
-    const { theme } = useTheme();
+    const { t } = useTranslate(ResourceTypes.COMMON);
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(true);
 
@@ -32,9 +31,7 @@ const Custom404 = () => {
                 <img className="moving-comet comet-3" src="/static/images/error-page/comet-3.svg" alt="spaceman" />
                 <img className="moving-comet comet-4" src="/static/images/error-page/comet-4.svg" alt="spaceman" />
             </div>
-            <p className="errorOccurred-info">
-                <Trans t={t}>{t("errorOccurred", { errorCode: 404 })}</Trans>
-            </p>
+            <p className="errorOccurred-info">{t("message_error_occurred", { errorCode: 404 }).replaceTolgeeFormat()}</p>
         </div>
     );
 };

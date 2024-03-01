@@ -1,7 +1,6 @@
 import { useTranslate } from "@tolgee/react";
 import React, { useEffect } from "react";
 import { numberWithCommas } from "../../../_shared/helpers/number-helper";
-import "../../../_shared/helpers/string-helper";
 import BaseDialog from "../base-dialog";
 import { ModalType } from "../base-dialog/type";
 import Styles from "./notice.module.scss";

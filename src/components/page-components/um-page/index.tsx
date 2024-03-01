@@ -1,18 +1,16 @@
-import { useTranslation } from "next-i18next";
-import { useTheme } from "next-themes";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { UMInfo } from "sc-user-service-client/dist/auth";
-
 import { StorageHelper, localStorageKeys } from "../../../_shared/helpers/storage-helper";
 import { convertToGMT8, formatDate } from "../../../_shared/helpers/time-helper";
+import { useTranslate } from "@tolgee/react";
+import { ResourceTypes } from "../../../_shared/resources";
 
 const UMPage: React.FC<{ locale: string }> = ({ locale }) => {
     const router = useRouter();
-    const { t } = useTranslation(["um", "messages"]);
+    const { t } = useTranslate([ResourceTypes.COMMON, ResourceTypes.SABANUMBER]);
     const [startTime, setStartTime] = useState<string>(null);
     const [endTime, setEndTime] = useState<string>(null);
-    const { theme } = useTheme();
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -51,12 +49,12 @@ const UMPage: React.FC<{ locale: string }> = ({ locale }) => {
                 <img src="/static/images/error-page/um-spaceman.png" alt="spaceman" />
             </div>
             <p className="um-title">
-                {t("messages:sysMaintenance")} <br /> {t("um:umTitleFirst")}
+                {t("message_sys_maintenance")} <br /> {t("um_title")}
             </p>
-            <p className="highlight">{t("um:umContentStart")}</p>
-            <p className="highlight txt-bold">{t("um:umContent").toString().replace("{0}", startTime).replace("{1}", endTime)}</p>
-            <p>{t("um:umNotice")}</p>
-            <button>Back</button>
+            <p className="highlight">{t("um_content_start")}</p>
+            <p className="highlight txt-bold">{t("um_time", { startTime, endTime }).replaceTolgeeFormat()}</p>
+            <p>{t("under_maintenance_suggest")}</p>
+            <button>{t("back")}</button>
         </div>
     );
 };
