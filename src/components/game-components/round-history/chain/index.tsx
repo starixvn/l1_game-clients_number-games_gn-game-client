@@ -1,4 +1,3 @@
-import { useTranslation } from "next-i18next";
 import React, { useEffect, useMemo, useState } from "react";
 
 import { useGameContext } from "../../../../_shared/react-contexts";
@@ -8,6 +7,7 @@ import { MiniItemNext } from "../dot-next";
 import Styles from "./styles.module.scss";
 import { Props, PropsDot } from "./types";
 import { useGameStateContext } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
+import { useTranslate } from "@tolgee/react";
 
 const RoundDotWrapper = <R, S>({ children, renderRoundDetail, targetName, roundState }: PropsDot<R, S>) => {
     const [isOpenTooltip, setIsOpenTooltip] = useState(false);
@@ -34,7 +34,7 @@ const ChainRoundHistory = <R, S>(props: Props<R, S>) => {
     const { roundState, roundHistory, renderRoundDetail, renderGameDot } = props;
     const { gameName } = useGameContext();
     const { isShowBlink } = useGameStateContext();
-    const { t } = useTranslation(gameName.toLowerCase());
+    const { t } = useTranslate(gameName);
 
     return useMemo(() => {
         const numberOfItems = isShowBlink ? 19 : 20;

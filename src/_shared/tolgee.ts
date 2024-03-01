@@ -4,7 +4,8 @@ import { InContextTools } from "@tolgee/web/tools";
 import { getAppSettings } from "./app-settings";
 
 const languageCodes = ["en", "id", "th", "vi", "zh_cn", "zh_tw"];
-const namespaces = ["SabaNumber", "Common"];
+const gameNames = Object.values(getAppSettings().gameSettings).map((setting) => setting.gameName);
+const namespaces = ["SabaNumber", "Common", ...gameNames];
 export const tolgee = Tolgee().use(FormatIcu()).use(BackendFetch()).init({
     fallbackLanguage: "en",
     defaultLanguage: "en",

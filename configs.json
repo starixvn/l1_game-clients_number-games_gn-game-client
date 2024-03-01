@@ -11,12 +11,11 @@
         "dsn": "",
         "environment": ""
     },
-    "offeredGames": [
-        1001
-    ],
+    "offeredGames": [1001],
     "enableSourceMap": true,
     "subGuideDomain": "gn-guide",
     "enableMsgpackParser": false,
     "system": "GN",
-    "appType": 1
+    "appType": 1,
+    "useTolgeeStatic": false
 }
