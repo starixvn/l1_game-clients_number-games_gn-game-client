@@ -23,8 +23,8 @@ import {
     GameDisableHandler,
     GameErrorHandler,
     GameFinishHandler,
-    GameMessageDummyHandler,
     GameMessageHandler,
+    GameRoundHistoryHandler,
     PlaceBetHandler,
     PlayerHandler,
     messageEventType,
@@ -47,6 +47,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     private placeBetHandler: PlaceBetHandler;
     private gameFishishHandler?: GameFinishHandler;
     private gameDisabledHandler?: GameDisableHandler;
+    private gameRoundHistoryHandler?: GameRoundHistoryHandler;
 
     constructor(
         props: P,
@@ -57,9 +58,12 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         playerHandler?: PlayerHandler,
         placeBetHandler?: PlaceBetHandler,
         gameFishishHandler?: GameFinishHandler,
-        gameDisabledHandler?: GameDisableHandler
+        gameDisabledHandler?: GameDisableHandler,
+        gameRoundHistoryHandler?: GameRoundHistoryHandler
     ) {
         super(props);
+
+        const { dispatch, gameStateContextModel } = this.props;
 
         this.roundStateHandler = roundStateHandler;
         this.gameStateHandler = gameStateHandler;
@@ -67,7 +71,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.gameErrorHandler =
             gameErrorHandler ??
             new GameErrorHandler({
-                dispatch: props.dispatch,
+                dispatch,
                 gameMessageHandler: this.gameMessageHandler,
                 gameName: this.props.gameName,
             });
@@ -75,7 +79,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.playerHandler =
             playerHandler ??
             new PlayerHandler({
-                dispatch: props.dispatch,
+                dispatch,
                 gameMessageHandler: this.gameMessageHandler,
                 gameName: this.props.gameName,
             });
@@ -83,7 +87,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.placeBetHandler =
             placeBetHandler ??
             new PlaceBetHandler({
-                dispatch: props.dispatch,
+                dispatch,
                 gameMessageHandler: this.gameMessageHandler,
                 gameName: this.props.gameName,
                 getPlayerBalance: this.getPlayerBalance,
@@ -95,7 +99,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.gameFishishHandler =
             gameFishishHandler ??
             new GameFinishHandler({
-                dispatch: props.dispatch,
+                dispatch,
                 gameMessageHandler: this.gameMessageHandler,
                 gameName: this.props.gameName,
             });
@@ -103,13 +107,17 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.gameDisabledHandler =
             gameDisabledHandler ??
             new GameDisableHandler({
-                dispatch: props.dispatch,
+                dispatch,
                 gameMessageHandler: this.gameMessageHandler,
                 gameName: this.props.gameName,
                 durations: this.props.durations,
-                gameStateContextModel: this.props.gameStateContextModel,
+                gameStateContextModel,
                 roundStateHandler: roundStateHandler,
             });
+
+        this.gameRoundHistoryHandler =
+            gameRoundHistoryHandler ??
+            new GameRoundHistoryHandler({ dispatch, gameStateContextModel });
 
         this.placeBet = this.placeBet.bind(this);
         this.updateUserBalance = this.updateUserBalance.bind(this);
@@ -220,6 +228,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.playerHandler.registerEvents(setBalance);
         this.gameErrorHandler.registerEvents(signOut);
         this.gameFishishHandler.registerEvents();
+        this.gameMessageHandler.register(messageEventType.ROUND_HISTORY, this.handlRoundHistory.bind(this));
     }
 
     emitSocketEvent = ({ key, data }) => {
@@ -241,6 +250,10 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
     handleUM(gameMessage) {
         this.gameDisabledHandler.handleUM(gameMessage, this.timeCounter);
+    }
+
+    handlRoundHistory(gameMessage) {
+        this.gameRoundHistoryHandler.handleRoundHistory(gameMessage);
     }
 
     handleRemainingTime({ remainingTime }) {
@@ -450,7 +463,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 {this.renderConfirmBet()}
                 {this.renderStatistic()}
                 {this.renderScoreboards()}
-                {<GameMessageDummyHandler gameMessageHandler={this.gameMessageHandler} />}
             </>
         );
     }
