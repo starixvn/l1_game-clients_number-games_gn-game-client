@@ -1,5 +1,6 @@
 import { Attributes, CSSProperties, Component, ComponentType, HTMLAttributes, ReactNode, createElement } from "react";
 import styles from "./scoreboard.module.scss";
+import { chunk } from "./utilities";
 
 export type ScoreboardProps<Round> = {
     arrange: <Output>(data: Round[], scoreboard: Scoreboard<Round>) => Output[] | Round[];
@@ -9,6 +10,7 @@ export type ScoreboardProps<Round> = {
     element: ComponentType<ScoreboardItemProps<Round>>;
     className?: string;
     elementClassName?: string;
+    block?: number;
 };
 
 export type ScoreboardItemProps<Round> = {
@@ -22,6 +24,7 @@ export class Scoreboard<Round> extends Component<ScoreboardProps<Round>> {
         row: 6,
         className: "",
         elementClassName: "",
+        block: 1,
     };
 
     private renderElement(round: Round, props: Attributes | HTMLAttributes<unknown>): ReactNode {
@@ -30,25 +33,67 @@ export class Scoreboard<Round> extends Component<ScoreboardProps<Round>> {
         return <div {...props}>{createElement(element, { round, scoreboard: this })}</div>;
     }
 
+    private createGroup(rounds: Round[] | unknown[]) {
+        const { block, row } = this.props;
+        const rowByGroup = (row / block) >> 0;
+
+        const horizontalGroups = chunk(rounds, block);
+        const columns = chunk(horizontalGroups, rowByGroup);
+        const verticalGroups = chunk(columns, block);
+
+        const groups = verticalGroups.flatMap((vertical) => {
+            const blocks = [];
+
+            for (let row = 0; row < rowByGroup; row++) {
+                const block = [];
+
+                for (let horizontal of vertical) {
+                    block.push(...horizontal[row]);
+                }
+
+                blocks.push(block);
+            }
+
+            return blocks;
+        });
+
+        return groups;
+    }
+
     render(): ReactNode {
-        const { rounds, className, elementClassName } = this.props;
+        const { rounds, className, elementClassName, block, row: originalRow } = this.props;
         const arranged = this.props.arrange(rounds, this);
+        const groupItems = this.createGroup(arranged);
 
         return (
             <div className={`${styles.scoreboard} ${className}`} data-testid="scoreboard">
-                {arranged.map((round: Round, index: number) => {
-                    const column = (index / this.props.row + 1) >> 0;
-                    const row = (index % this.props.row) + 1;
+                {groupItems.map((items: Round[], index: number) => {
+                    const rowByGroup = (originalRow / block) >> 0;
+                    const column = (index / rowByGroup + 1) >> 0;
+                    const row = (index % rowByGroup) + 1;
                     const style: CSSProperties = {
                         gridColumnStart: column,
                         gridRowStart: row,
                     };
 
-                    return this.renderElement(round, {
-                        className: `${styles["scoreboard-item"]} ${elementClassName}`,
-                        style,
-                        key: index,
-                    });
+                    return (
+                        <div className={styles["scoreboard-block"]} key={index} style={style}>
+                            {items.map((round, index) => {
+                                const column = (index / block + 1) >> 0;
+                                const row = (index % block) + 1;
+                                const style: CSSProperties = {
+                                    gridColumnStart: column,
+                                    gridRowStart: row,
+                                };
+
+                                return this.renderElement(round, {
+                                    className: `${styles["scoreboard-item"]} ${elementClassName}`,
+                                    style,
+                                    key: index,
+                                });
+                            })}
+                        </div>
+                    );
                 })}
             </div>
         );

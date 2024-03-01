@@ -45,6 +45,7 @@ const ScoreboardSwipe: React.FC<{ roundHistory: Round<any, any>[] }> = ({ roundH
                             column={18}
                             className={Styles["derived-board-small"]}
                             elementClassName={Styles["derived-board-small-element"]}
+                            block={2}
                         />
                         <Scoreboard
                             rounds={settlements}
@@ -54,6 +55,7 @@ const ScoreboardSwipe: React.FC<{ roundHistory: Round<any, any>[] }> = ({ roundH
                             column={18}
                             className={Styles["derived-board-small"]}
                             elementClassName={Styles["derived-board-small-element"]}
+                            block={2}
                         />
                         <Scoreboard
                             rounds={settlements}
@@ -63,6 +65,7 @@ const ScoreboardSwipe: React.FC<{ roundHistory: Round<any, any>[] }> = ({ roundH
                             column={18}
                             className={Styles["derived-board-small"]}
                             elementClassName={Styles["derived-board-small-element"]}
+                            block={2}
                         />
                     </div>
                 </div>

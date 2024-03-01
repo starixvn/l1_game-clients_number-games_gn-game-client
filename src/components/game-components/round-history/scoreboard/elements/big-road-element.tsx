@@ -2,7 +2,7 @@ import { BigRoadScoreboard, BigRoadScoreboardPoint, Converter } from "sc-scorebo
 import type { Scoreboard, ScoreboardItemProps } from "../scoreboard";
 
 import { Component, ReactNode } from "react";
-import { toFlattenColumns } from "./utilities";
+import { toFlattenColumns } from "../utilities";
 
 export type BigRoadRound<T> = Partial<BigRoadScoreboardPoint<T>>;
 
