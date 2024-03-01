@@ -100,6 +100,12 @@ export class PlaceBetHandler {
             });
             this.props.gameMessageHandler.broadcastGameEvent({ [messageEventType.UPDATE_PLAYER_BALANCE]: {} });
         }
+        this.props.dispatch({
+            type: GameEventActionType.SHOW_CONFIRM_BET,
+            payload: {
+                showConfirmBet: false,
+            },
+        });
 
         this.props.dispatch({
             type: GameEventActionType.NOT_CONFIRM_OWN_BETS,

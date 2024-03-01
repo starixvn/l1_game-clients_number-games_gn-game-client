@@ -32,13 +32,6 @@ const ConfirmBet: React.FC<Props> = ({}: Props) => {
         });
     };
     const onConfirm = () => {
-        dispatch({
-            type: GameEventActionType.SHOW_CONFIRM_BET,
-            payload: {
-                showConfirmBet: false,
-            },
-        });
-
         gameActionContext.placeBet(confirmBet, 0);
     };
 
