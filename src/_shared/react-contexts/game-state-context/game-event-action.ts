@@ -11,7 +11,7 @@ export enum GameEventActionType {
     ROUND_DATA = "ROUND_DATA",
     ROUND_HISTORY = "ROUND_HISTORY",
     FINISH = "FINISH",
-    STATUS = "STATUS",
+    WIN_STATUS = "WIN_STATUS",
     USER = "USER",
     OWN_BETS = "OWN_BETS",
     BET_PERCENTAGE = "BET_PERCENTAGE",

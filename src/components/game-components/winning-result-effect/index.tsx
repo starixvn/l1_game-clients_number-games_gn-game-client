@@ -6,7 +6,7 @@ import Styles from "./winning-result-effect.module.scss";
 const WinningResultEffect: FC = () => {
     const { betWin, showResultInfo } = useGameStateContext();
 
-    if (!betWin || !showResultInfo) {
+    if (betWin <= 0 || !showResultInfo) {
         return <></>;
     }
 

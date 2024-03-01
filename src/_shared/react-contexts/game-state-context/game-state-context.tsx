@@ -1,5 +1,6 @@
 import { useTranslate } from "@tolgee/react";
 import { createContext, useContext, useReducer } from "react";
+
 import { RoundState } from "../../../components/game-base/type";
 import { LanguageLocaleMapper } from "../../constants";
 import { GetLocalizedErrorMessage } from "../../helpers/notice-helper";
@@ -165,10 +166,10 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
             };
         }
 
-        case GameEventActionType.STATUS: {
+        case GameEventActionType.WIN_STATUS: {
             return {
                 ...state,
-                betWin: status.bet
+                betWin: status.bet,
             };
         }
 

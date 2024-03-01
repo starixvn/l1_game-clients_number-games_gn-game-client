@@ -21,12 +21,14 @@ export class GameFinishHandler {
     };
 
     handleStatus = ({ status }) => {
-        this.props.dispatch({
-            type: GameEventActionType.STATUS,
-            payload: { status },
-        });
+        const { win, bet } = status;
+        win &&
+            this.props.dispatch({
+                type: GameEventActionType.WIN_STATUS,
+                payload: { status },
+            });
 
-        this.betWin = status.bet;
+        this.betWin = win ? bet : 0;
     };
 
     handleFinish = ({ finish }, gameStateContext: GameStateContextModel<any, any>, durations?: GameDurations) => {
