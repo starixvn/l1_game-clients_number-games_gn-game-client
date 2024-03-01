@@ -8,11 +8,10 @@ export class TurnStateHandler extends RoundStateHandler {
 
     determineRoundBaseState({ roundRemainingTime, wholeRound, remainingTime, durations }): RoundState {
         const { wholeTurn, showResult, beforeStartRound, switchRoundAnimation } = durations;
+        const startSwitchRoundPointTime = wholeRound - showResult - beforeStartRound;
+        const endSwitchRoundPointTime = startSwitchRoundPointTime - switchRoundAnimation;
 
-        if (
-            roundRemainingTime < wholeRound - showResult - beforeStartRound &&
-            roundRemainingTime >= wholeRound - showResult - beforeStartRound - switchRoundAnimation
-        ) {
+        if (roundRemainingTime < startSwitchRoundPointTime && roundRemainingTime >= endSwitchRoundPointTime) {
             return RoundState.SwitchRound;
         }
 
@@ -21,16 +20,15 @@ export class TurnStateHandler extends RoundStateHandler {
 
     getRemainingTime({ remainingTime, durations }): number {
         const { wholeRound, showResult, beforeStartRound, switchRoundAnimation } = durations;
+        const endSwitchRoundPointTime = wholeRound - showResult - beforeStartRound - switchRoundAnimation;
 
         const turnRemainingTime =
-            remainingTime >= wholeRound - showResult - beforeStartRound - switchRoundAnimation
-                ? (remainingTime % durations.wholeTurn) - durations.switchRoundAnimation
-                : remainingTime % durations.wholeTurn;
+            (remainingTime % durations.wholeTurn) - (remainingTime >= endSwitchRoundPointTime ? switchRoundAnimation : 0);
 
         return turnRemainingTime === 0 ? durations.wholeTurn : turnRemainingTime;
     }
 
-    getWholeRoundDuration({ durations }) {
+    getWholeRoundDuration({ durations }): number {
         return durations.wholeTurn;
     }
 
