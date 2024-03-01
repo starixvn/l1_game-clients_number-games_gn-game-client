@@ -1,8 +1,10 @@
 import { FC, useState } from "react";
+
+import { useBallColor } from "../../../_shared/helpers/ball-color-helper";
 import { BetLogProps } from "../../../components/game-components/bet-history";
-import TableRow from "./row-table";
 import Styles from "./common.module.scss";
-import { seperateDateTime, preprocessBetLogTime } from "./helper";
+import { preprocessBetLogTime, seperateDateTime } from "./helper";
+import TableRow from "./row-table";
 
 export interface BetHistory {
     time: Date;
@@ -67,8 +69,8 @@ const BetLog: FC<BetLogProps> = ({ betLogs, handleScroll, onCloseModal: toggleBe
     ];
 
     return (
-        <div className={Styles["table-fixed-head"]}>
-            <table>
+        <div className="table-container react-infinite-table">
+            <table className="table text-center">
                 <thead>
                     <TableRow isHeader={true}>{header}</TableRow>
                 </thead>
@@ -98,7 +100,11 @@ const getStake = (betHistory: BetHistory, settlementResult: any) => {
 };
 
 const BetHistoryRow: FC<{ betHistory: BetHistory; handleClickDrawId: Function }> = ({ betHistory, handleClickDrawId }) => {
+    const { drawId, result, totalAmount, betwin } = betHistory;
+    const ballColor = useBallColor;
     const { date, time } = seperateDateTime(betHistory.time);
+
+    const { player, banker } = result;
 
     const content = [
         {
@@ -111,8 +117,8 @@ const BetHistoryRow: FC<{ betHistory: BetHistory; handleClickDrawId: Function }>
         },
         {
             node: (
-                <button className={Styles["btn-clickable"]} onClick={() => handleClickDrawId(betHistory)}>
-                    {betHistory.drawId}
+                <button className="clickable" onClick={() => handleClickDrawId(betHistory)}>
+                    {drawId}
                 </button>
             ),
             size: 2,
@@ -120,14 +126,14 @@ const BetHistoryRow: FC<{ betHistory: BetHistory; handleClickDrawId: Function }>
         {
             node: (
                 <div className={Styles["result-container"]}>
-                    <div>{betHistory.result.player}</div>
-                    <div>{betHistory.result.banker}</div>
+                    <div className={`${Styles["ball"]} ${Styles[ballColor({ number: player })]}`}>{player}</div>
+                    <div className={`${Styles["ball"]} ${Styles[ballColor({ number: banker })]}`}>{banker}</div>
                 </div>
             ),
             size: 4,
         },
-        { node: betHistory.totalAmount, size: 2 },
-        { node: <div className={betHistory.betwin > 0 ? Styles["highlight"] : ""}>{betHistory.betwin}</div>, size: 2 },
+        { node: totalAmount, size: 2 },
+        { node: <div className={betwin > 0 ? "highlight" : ""}>{betwin}</div>, size: 2 },
     ];
 
     return <TableRow isHeader={false}>{content}</TableRow>;

@@ -1,12 +1,4 @@
-.popup-container {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    z-index: 1000;
-    background-color: #191A1E;
-}
-
-.modal-body {
+.modal-full {
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 5.4rem 1fr;

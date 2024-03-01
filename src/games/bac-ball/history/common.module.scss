@@ -1,110 +1,47 @@
-.border {
-    border: 1px solid black;
-}
-
-$item-height: 3.7rem;
-$table-background: rgba(255, 253, 250, 0.555);
-
-.draw-info {
-    background-color: $table-background;
-    padding: 4px;
-    border-radius: 5px 5px 0px 0px;
-}
-
-.highlight {
-    color: #cf8e00;
-    font-weight: bolder;
-}
-
-.btn-clickable {
-    color: #0026cf;
-    font-weight: bolder;
-    border: 0;
-    background-color: inherit;
-    cursor: pointer;
-    font-family: inherit;
-}
-
-.result {
-    width: var(--result-column-width) !important;      
-}
-
-.normal-column {
-    width: calc((100% - var(--result-column-width))/ 4) !important;
-}
-
-.table-fixed-head {
-    width: 100%;
-    table-layout: fixed;
-    border-collapse: collapse;
-    @extend .border;
-    border-radius: 5px;
-
-    table {
-        border-collapse: collapse;
-        width: 100%;
-        text-align: center;
-        border-radius: 5px;
-    }
-
-    tbody {
-        display: block;
-        overflow: auto;
-        overflow-y: scroll;
-        max-height: $item-height*7;
-        border-color: #cf8e00;
-        tr {
-            background-color: $table-background;
-            height: $item-height;
-            td {
-                @extend .border;
-                font-size: 1.2rem;
-            }
-            &:first-child {
-                td {
-                    border-top: none;
-                }
-            }
-            &:last-child {
-                td {
-                    border-bottom: none;
-                    &:last-child {
-                        border-radius: 0px 0px 5px 0px;
-                    }
-                    &:first-child {
-                        border-radius: 0px 0px 0px 5px;
-                    }
-                }
-            }
-        }
-        td {
-            &:first-child {
-                border-left: none;
-            }
-            &:last-child {
-                border-right: none;
-            }
-        }
-    }
-
-    thead {
-        border-bottom: 1px solid black;
-        
-        tr {
-            display: block;
-            border-radius: 5px 5px 0px 0px;
-            background-color: rgb(255, 253, 250);
-            th {
-                font-size: 1rem;
-            }
-        }
-        
-    }
-
-}
-
-
 .result-container {
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.ball {
+    width: 2.6rem;
+    height: 2.6rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #2c2f3e;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    background: var(--bg);
+    background-size: 2.6rem 2.6rem;
+}
+
+.red {
+    --bg: url("/static/images/ball/ball-red.png") no-repeat;
+}
+
+.blue {
+    --bg: url("/static/images/ball/ball-blue.png") no-repeat;
+}
+
+/* Bet detail */
+.draw-info {
+    display: flex;
+    justify-content: flex-start;
+    gap: 1.5rem;
+    padding: 0 1rem;
+    color: #d3d9e1;
+
+    .info-item {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+    }
+}
+
+.provably-fair {
+    padding: 1rem;
 }
