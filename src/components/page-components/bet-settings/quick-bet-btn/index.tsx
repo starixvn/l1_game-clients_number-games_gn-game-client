@@ -7,7 +7,7 @@ import { useGameStateContext } from "../../../../_shared/react-contexts/game-sta
 import { updateUserQuickBetSetting } from "../../../../services/user-setting-service";
 import BaseDialog from "../../../game-components/base-dialog";
 import { ModalType } from "../../../game-components/base-dialog/type";
-import ConfirmMessage from "../confirm-message";
+import QuickBetHint from "../quick-bet-hint";
 import Styles from "./quick-bet-btn.module.scss";
 
 export const QuickBetBtn = () => {
@@ -66,7 +66,7 @@ export const QuickBetBtn = () => {
         <div className={Styles["modalConfirm"]}>
             <div className={`${Styles["bg-opacity"]}`}></div>
             <BaseDialog type={ModalType.Center} isOpen={isShowModalConfirm} onCloseModal={closeModal}>
-                <ConfirmMessage closeModal={closeModal} confirmQuickBet={confirmQuickBet} />
+                <QuickBetHint closeModal={closeModal} confirmQuickBet={confirmQuickBet} />
             </BaseDialog>
         </div>
     );
