@@ -39,6 +39,10 @@
     height: 18.8rem;
     background-size: 17.8rem 18.8rem;
     border: none;
+
+    .btn-ripple {
+        z-index: 1;
+    }
 }
 
 .player {
@@ -174,6 +178,7 @@
     border-bottom-right-radius: 6.6rem;
 
     .btn-ripple {
+        z-index: 2;
         clip-path: polygon(
             0 4%,
             40% 1%,
@@ -271,6 +276,8 @@
 .btn-ripple:after {
     content: "";
     position: fixed;
+    top: 50%;
+    left: 50%;
     width: 5px;
     height: 5px;
     background-color: rgba(250, 247, 226, 0.2);
