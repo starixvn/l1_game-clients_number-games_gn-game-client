@@ -144,7 +144,7 @@ export class PlaceBetHandler {
         if (gameStateContext.isProcessingBet) {
             this.props.dispatch({
                 type: GameEventActionType.BET_PROCESSING,
-                payload: { notice: { message: "messages:betProcessing", duration: 2 } },
+                payload: { notice: { message: this.props.translate("message_processing_action"), duration: 2 } },
             });
             return;
         }
