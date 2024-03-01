@@ -11,9 +11,10 @@ type Props = {
     width: number;
     height: number;
     position: [number, number];
+    className?: string;
 };
 
-export const BacBallWinningAnimation: React.FC<Props> = ({ choice, resourceName, width, height, position }) => {
+export const BacBallWinningAnimation: React.FC<Props> = ({ choice, resourceName, width, height, position, className }) => {
     const [winningFrames, setWinningFrames] = useState<Texture<Resource>[]>([]);
     const winningHighLightResult = useWinningHighLightResult;
 
@@ -32,7 +33,7 @@ export const BacBallWinningAnimation: React.FC<Props> = ({ choice, resourceName,
     return (
         winningHighLightResult({ betChoice: choice }) &&
         winningFrames?.length > 0 && (
-            <Stage width={width} height={height} options={{ backgroundAlpha: 0 }}>
+            <Stage width={width} height={height} options={{ backgroundAlpha: 0 }} className={className}>
                 <Container position={position}>
                     <AnimatedSprite
                         anchor={0.5}

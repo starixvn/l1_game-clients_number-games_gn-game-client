@@ -126,6 +126,7 @@ export const BacBallBetOptionsComponent = () => {
                 width={210}
                 height={210}
                 position={[105, 77]}
+                className="absolute"
             />
         );
 
