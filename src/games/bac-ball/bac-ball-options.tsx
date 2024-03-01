@@ -166,12 +166,7 @@ export const BacBallBetOptionsComponent = () => {
         const odds = renderOdds(BacBallBetOptions.TIE);
         const ownBet = renderOwnBet(BacBallBetOptions.TIE);
         return (
-            <div
-                className={`${Style[BacBallBetOptions.TIE]} text-white flex flex-col items-center pt-2 relative`}
-                onClick={() => {
-                    onClickBet(BacBallBetOptions.TIE);
-                }}
-            >
+            <div className={`${Style[BacBallBetOptions.TIE]} text-white flex flex-col items-center pt-2 relative`}>
                 {<div className={Style["winning-effect"]}>{winningResult}</div>}
                 {showHighlightPrevResult({ betChoice: BacBallBetOptions.TIE }) && winningPrev}
                 {betPercentage}
