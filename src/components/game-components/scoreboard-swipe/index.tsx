@@ -26,7 +26,7 @@ const ScoreboardSwipe: React.FC<{ roundHistory: Round<any, any>[] }> = ({ roundH
                             className={Styles["scoreboard-multiple"]}
                             rounds={settlements}
                             type="scale"
-                            onSwitch={(board) => ({ ...board, className: `${board.className} scaled` })}
+                    onSwitch={(board) => ({ ...board, className: `${board.className} ${Styles["scoreboard-expand"]}` })}
                             scoreboards={[
                                 {
                                     element: BacBallBigRoadElement,
@@ -74,24 +74,26 @@ const ScoreboardSwipe: React.FC<{ roundHistory: Round<any, any>[] }> = ({ roundH
                 ),
                 useMemo(
                     () => (
-                        <SwitchableScoreboard
-                            rounds={roundHistory}
-                            type="switch"
-                            scoreboards={[
-                                {
-                                    element: BacBallBeadRoadValueElement,
-                                    arrange: BacBallBeadRoadValueElement.arrange,
-                                    column: 18,
-                                    row: 6,
-                                },
-                                {
-                                    element: BacBallBeadRoadCharacterElement,
-                                    arrange: BacBallBeadRoadCharacterElement.arrange,
-                                    column: 18,
-                                    row: 6,
-                                },
-                            ]}
-                        />
+                        <div className={Styles["scoreboard-full"]}>
+                            <SwitchableScoreboard
+                                rounds={roundHistory}
+                                type="switch"
+                                scoreboards={[
+                                    {
+                                        element: BacBallBeadRoadValueElement,
+                                        arrange: BacBallBeadRoadValueElement.arrange,
+                                        column: 18,
+                                        row: 6,
+                                    },
+                                    {
+                                        element: BacBallBeadRoadCharacterElement,
+                                        arrange: BacBallBeadRoadCharacterElement.arrange,
+                                        column: 18,
+                                        row: 6,
+                                    },
+                                ]}
+                            />
+                        </div>
                     ),
                     [roundHistory]
                 ),
