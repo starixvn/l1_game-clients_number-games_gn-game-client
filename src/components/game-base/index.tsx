@@ -494,27 +494,39 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         return (
             <GameContainer>
                 {signedIn ? this.renderGame() : <GameLoading />}
-                {roundState === RoundState.Disabled && (
-                    <DisabledModal
-                        disableMessage={disabledMessage}
-                        onSubmit={
-                            //TODO: redirect to Saba play lobby
-                            () => window.location.reload()
-                        }
-                    />
-                )}
-                {roundState === RoundState.ConnectFailed && (
-                    <ConnectFailedMessage
-                        gameName={`${this.props.gameName.toLowerCase()}:${GameResourceKeys.GAME_NAME}`}
-                        onSubmit={
-                            ConnectFailedReasonKey.restrictPlayPermission === disconnectReason
-                                ? () => window.location.reload()
-                                : this.retryConnect.bind(this)
-                        }
-                        reason={disconnectReason}
-                    />
-                )}
+                {this.renderDisableGamePopup(roundState, disabledMessage)}
+                {this.renderConnectFailed(roundState, disconnectReason)}
             </GameContainer>
+        );
+    }
+
+    private renderConnectFailed(roundState: RoundState, disconnectReason: string): React.ReactNode {
+        return (
+            roundState === RoundState.ConnectFailed && (
+                <ConnectFailedMessage
+                    gameName={`${this.props.gameName.toLowerCase()}:${GameResourceKeys.GAME_NAME}`}
+                    onSubmit={
+                        ConnectFailedReasonKey.restrictPlayPermission === disconnectReason
+                            ? () => window.location.reload()
+                            : this.retryConnect.bind(this)
+                    }
+                    reason={disconnectReason}
+                />
+            )
+        );
+    }
+
+    private renderDisableGamePopup(roundState: RoundState, disabledMessage: string): React.ReactNode {
+        return (
+            roundState === RoundState.Disabled && (
+                <DisabledModal
+                    disableMessage={disabledMessage}
+                    onSubmit={
+                        //TODO: redirect to Saba play lobby
+                        () => window.location.reload()
+                    }
+                />
+            )
         );
     }
 }
