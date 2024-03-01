@@ -153,7 +153,7 @@ export const BacBallBetOptionsComponent = () => {
                 resourceName={BacBallBetOptions.TIE}
                 width={210}
                 height={210}
-                position={[105, 77]}
+                position={[105, 90]}
                 className="absolute"
             />
         );
@@ -172,7 +172,7 @@ export const BacBallBetOptionsComponent = () => {
                     onClickBet(BacBallBetOptions.TIE);
                 }}
             >
-                {winningResult}
+                {<div className={Style["winning-effect"]}>{winningResult}</div>}
                 {showHighlightPrevResult({ betChoice: BacBallBetOptions.TIE }) && winningPrev}
                 {betPercentage}
                 <div className={Style.stake}>

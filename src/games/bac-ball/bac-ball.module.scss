@@ -177,6 +177,11 @@
     border-bottom-left-radius: 6.6rem;
     border-bottom-right-radius: 6.6rem;
 
+    .winning-effect {
+        left: -5.8rem;
+        top: -0.4rem;
+    }
+
     .btn-ripple {
         z-index: 2;
         clip-path: polygon(
