@@ -26,7 +26,7 @@ export interface BetLogDetailProps {
         drawId: number;
         result: any;
         odds: any;
-        stake: any;
+        settlementResult: any;
     };
 }
 

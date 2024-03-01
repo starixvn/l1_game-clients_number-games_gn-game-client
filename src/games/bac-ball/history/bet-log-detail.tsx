@@ -21,11 +21,11 @@ interface BacBallBetDetailProps extends BetLogDetailProps {
             banker: number;
             tie: number;
         };
-        stake: {
-            player: number;
-            banker: number;
-            tie: number;
-        };
+        settlementResult: {
+            player: boolean;
+            banker: boolean;
+            tie: boolean;
+        }
     };
 }
 
@@ -98,7 +98,9 @@ const BetDetail: FC<BetLogDetailProps> = ({ betLogDetails, onCloseModal, isShowB
 
 const BetDetailRow: FC<{ betLogDetail: any }> = ({ betLogDetail }) => {
     const { date, time } = seperateDateTime(betLogDetail.time);
-    const { choice, odds, stake, amount } = betLogDetail;
+    const { choice, odds, amount, settlementResult } = betLogDetail;
+    const odd = odds[choice];
+    const win = settlementResult?.[choice] ? amount*odd : 0;
     const content = [
         {
             node: (
@@ -110,10 +112,10 @@ const BetDetailRow: FC<{ betLogDetail: any }> = ({ betLogDetail }) => {
             ),
             size: 3.8,
         },
-        { node: <div className={amount > 0 ? "highlight" : ""}>{choice}</div>, size: 2 },
-        { node: <div className={amount > 0 ? "highlight" : ""}>{odds[betLogDetail.choice]}</div>, size: 2 },
-        { node: <div className={amount > 0 ? "highlight" : ""}>{stake[betLogDetail.choice] ?? 0}</div>, size: 2 },
-        { node: <div className={amount > 0 ? "highlight" : ""}>{amount}</div>, size: 2 },
+        { node: <div className={win > 0 ? "highlight" : ""}>{choice}</div>, size: 2 },
+        { node: <div className={win > 0 ? "highlight" : ""}>{odd}</div>, size: 2 },
+        { node: <div className={win > 0 ? "highlight" : ""}>{amount ?? 0}</div>, size: 2 },
+        { node: <div className={win > 0 ? "highlight" : ""}>{win}</div>, size: 2 },
     ];
     return <TableRow isHeader={false}>{content}</TableRow>;
 };

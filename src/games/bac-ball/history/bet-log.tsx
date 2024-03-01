@@ -11,6 +11,9 @@ export interface BetHistory {
     betwin: number;
     totalAmount: number;
     drawId: number;
+    player: number;
+    banker: number;
+    tie: number;
     result: {
         player: number;
         banker: number;
@@ -67,7 +70,6 @@ const BetLog: FC<BetLogProps> = ({ betLogs, handleScroll, onCloseModal: toggleBe
         { node: "Total Stake", size: 2 },
         { node: "Win", size: 2 },
     ];
-
     return (
         <div className="table-container react-infinite-table">
             <table className="table text-center">
@@ -84,7 +86,7 @@ const BetLog: FC<BetLogProps> = ({ betLogs, handleScroll, onCloseModal: toggleBe
                     drawId: betLogDetail?.drawId,
                     result: betLogDetail?.result,
                     odds: betLogDetail?.odds,
-                    stake: getStake(betLogDetail, betLogDetail?.settlementResult),
+                    settlementResult: betLogDetail?.settlementResult
                 },
             })}
         </div>
