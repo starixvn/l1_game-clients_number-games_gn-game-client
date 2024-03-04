@@ -65,7 +65,15 @@ export const BacBallBetOptionsComponent = () => {
     };
 
     const renderOdds = (choice: string) => {
-        return <Odds choice={choice} className="bet-odds text-center" gameName={gameName} />;
+        return (
+            <Odds
+                choice={choice}
+                className="bet-odds text-center"
+                gameName={gameName}
+                animationClass={`${Style["odds-change"]}`}
+                animationDuration={4}
+            />
+        );
     };
 
     const renderOwnBet = (choice: string) => {

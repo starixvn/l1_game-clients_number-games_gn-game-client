@@ -322,3 +322,23 @@
 .btn-ripple:focus:after {
     visibility: visible;
 }
+
+.odds-change {
+    animation-name: odds-change;
+    animation-duration: 4s;
+}
+
+@keyframes odds-change {
+    0% {
+        color: red;
+    }
+    25% {
+        color: yellow;
+    }
+    50% {
+        color: blue;
+    }
+    100% {
+        color: white;
+    }
+}
