@@ -1,8 +1,8 @@
-import { useTranslate } from "@tolgee/react";
 import { BaseProps } from "./types";
+import { useTranslator } from "../../../_shared/react-hooks/use-translator";
 
 export const BetChoice: React.FC<BaseProps> = ({ gameName, choice, className }) => {
-    const { t } = useTranslate(gameName);
+    const { t } = useTranslator([gameName]);
 
     return (
         <div id={`${gameName}-${choice}-bet-name`} className={className}>

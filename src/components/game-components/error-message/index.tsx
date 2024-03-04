@@ -1,17 +1,17 @@
 import React from "react";
-
-import { useTranslate } from "@tolgee/react";
 import BaseDialog from "../base-dialog";
 import { ModalType } from "../base-dialog/type";
 import Styles from "./error-message.module.scss";
 import { ConnectFailedReasonKey } from "./type";
+import { useTranslator } from "../../../_shared/react-hooks/use-translator";
+import { ResourceTypes } from "../../../_shared/resources";
 
 export const ConnectFailedMessage: React.FC<{ gameName: string; onSubmit: () => void; reason: string }> = ({
     gameName,
     onSubmit,
     reason,
 }) => {
-    const { t } = useTranslate("SabaNumber");
+    const { t } = useTranslator([gameName]);
     return (
         <BaseDialog type={ModalType.Center} isOpen={true}>
             <div className={`modal-center yellow-color ${Styles["error-message-container"]}`}>
@@ -22,7 +22,9 @@ export const ConnectFailedMessage: React.FC<{ gameName: string; onSubmit: () => 
                 <div className={Styles["content"]}>{t(reason)}</div>
                 <div className={Styles["list-action"]}>
                     <button onClick={() => onSubmit()} className={`btn-red w-100 ${Styles["reconnect"]}`}>
-                        {reason === ConnectFailedReasonKey.lostConnection ? t({ key: "reconnect" }) : t({ key: "ok" })}
+                        {reason === ConnectFailedReasonKey.lostConnection
+                            ? t(`${ResourceTypes.SABANUMBER}.reconnect`)
+                            : t(`${ResourceTypes.COMMON}.ok`)}
                     </button>
                 </div>
             </div>
