@@ -70,7 +70,6 @@ const SimpleTimer = () => {
         setClassNames(roundState === RoundState.LockingBet ? styles["lock-bet"] : '');
     }, [roundState]);
 
-    console.log(`CountdownTimer: ${(timeLeft % 60).toString().padStart(2, "0")}`);
     return (
         <div className={styles.timer}>
             <div className={`${styles["countdown-timer"]} ${classNames}`}>
