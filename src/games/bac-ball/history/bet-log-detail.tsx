@@ -6,10 +6,9 @@ import { useBallColor } from "../../../_shared/helpers/ball-color-helper";
 import { BetLogDetailProps } from "../../../components/game-components/bet-history";
 import ModalContainer from "../../../components/game-components/modal-container";
 import Styles from "./common.module.scss";
-import { preprocessBetLogTime, seperateDateTime } from "./helper";
 import TableRow from "./row-table";
 import { useCommonTranslate, useSNTranslate, useTranslator } from "../../../_shared/react-hooks/use-translator";
-import { numberWithCommas } from "../../../_shared/helpers";
+import { numberWithCommas, seperateDateTime, sortedCollectionByTime } from "../../../_shared/helpers";
 import { useState } from "react";
 
 interface BacBallBetDetailProps extends BetLogDetailProps {
@@ -72,7 +71,7 @@ const BetDetail: FC<BetLogDetailProps> = ({ betLogDetails, onCloseModal, isShowB
         { node: translateCommon("stake"), size: 2 },
         { node: translateCommon("win"), size: 2 },
     ];
-    const preprocessedBetLogDetails = preprocessBetLogTime(betLogDetails);
+    const preprocessedBetLogDetails = sortedCollectionByTime(betLogDetails);
     return (
         isShowBetDetail && (
             <ModalContainer isOpen={isShowBetDetail} title={translateCommon("bet_detail")} onCloseModal={handleCloseModal} isOverlap={true}>

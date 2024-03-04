@@ -3,10 +3,9 @@ import { FC, useState } from "react";
 import { useBallColor } from "../../../_shared/helpers/ball-color-helper";
 import { BetLogProps } from "../../../components/game-components/bet-history";
 import Styles from "./common.module.scss";
-import { preprocessBetLogTime, seperateDateTime } from "./helper";
 import TableRow from "./row-table";
 import { useCommonTranslate, useSNTranslate, useTranslator } from "../../../_shared/react-hooks/use-translator";
-import { numberWithCommas } from "../../../_shared/helpers";
+import { numberWithCommas, seperateDateTime, sortedCollectionByTime } from "../../../_shared/helpers";
 
 export interface BetHistory {
     time: Date;
@@ -57,7 +56,7 @@ const BetLog: FC<BetLogProps> = ({ betLogs, handleScroll, onCloseModal: toggleBe
     };
 
     const renderbody = () => {
-        const preprocessedBetLogs = preprocessBetLogTime(betLogs);
+        const preprocessedBetLogs = sortedCollectionByTime(betLogs);
         return preprocessedBetLogs?.map((item) => {
             return <BetHistoryRow betHistory={item} key={item.drawId} handleClickDrawId={handleClickDrawId} />;
         });
