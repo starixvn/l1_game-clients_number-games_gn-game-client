@@ -1,7 +1,7 @@
 import { DefaultParamType, TFnType, TranslationKey } from "@tolgee/react";
 import { v4 as uuidv4 } from "uuid";
 import { confirmBet } from "../../../_shared/constants";
-import { GetLocalizedErrorMessage } from "../../../_shared/helpers";
+import { GetLocalizedErrorMessage, StorageHelper, localStorageKeys } from "../../../_shared/helpers";
 import { getValidateMinMaxBetResult, validateHedgeBet } from "../../../_shared/helpers/validate-bet-helper";
 import { SystemContextModel } from "../../../_shared/react-contexts";
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
@@ -9,6 +9,7 @@ import { GameStateContextModel } from "../../../_shared/react-contexts/game-stat
 import { GameResourceKeys } from "../../../_shared/resources";
 import { Notice, RoundState } from "../type";
 import { GameMessageHandler, messageEventType } from "./";
+import { resourceMp3 } from "../../../_shared/react-hooks";
 
 export type PlaceBetHandlerProps = {
     gameName: string;
@@ -82,6 +83,7 @@ export class PlaceBetHandler {
         gameStateContext: GameStateContextModel<any, any>
     ) => {
         const { playPlaceBetSound } = this.props;
+        const enableSound = StorageHelper.get(localStorageKeys.enableSound) ?? false;
         this.props.dispatch({ type: GameEventActionType.END_BET_PROCESSING, payload: {} });
         this.clearRetryInterval();
         this.props.dispatch({
@@ -93,7 +95,7 @@ export class PlaceBetHandler {
             !apiError && this.handleBetFailed({ notice, kickedOut }, signOut);
         } else {
             this.playAcceptedBetAnimation(endBet, gameStateContext);
-            playPlaceBetSound();
+            enableSound && playPlaceBetSound();
             this.props.dispatch({
                 type: GameEventActionType.OWN_BETS,
                 payload: { ownBets },

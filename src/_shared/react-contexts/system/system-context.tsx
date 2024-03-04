@@ -22,19 +22,13 @@ export const useSystemDispatch = () => useContext(SystemDispatchContext);
 
 const systemReducer = (state: any, action: SystemEventAction) => {
     const { type, payload } = action;
-    const { selectedChip, enabledSound } = payload;
+    const { selectedChip } = payload;
 
     switch (type) {
         case SystemEventActionType.SELECT_CHIP: {
             return {
                 ...state,
                 selectedChip,
-            };
-        }
-        case SystemEventActionType.ENABLE_SOUND: {
-            return {
-                ...state,
-                enabledSound,
             };
         }
         default: {

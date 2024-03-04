@@ -2,7 +2,6 @@ import { UserStakeLevel } from "../components/game-base/type";
 
 export type Props = {
     enabledWinningStreakNotification: boolean;
-    enabledPlaySound: boolean;
     setApiErrorMessage: Function;
     userStakeLevel: UserStakeLevel;
     updateUserStakeLevel: Function;

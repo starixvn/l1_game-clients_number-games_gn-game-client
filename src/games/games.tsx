@@ -1,7 +1,6 @@
 import { useTheme } from "next-themes";
 import React, { useEffect, useRef, useState } from "react";
 import { isIOS, isMobileOnly } from "react-device-detect";
-import useSound from "use-sound";
 import { getAppSettings } from "../_shared/app-settings";
 import { SystemContextProvider } from "../_shared/react-contexts";
 import {
@@ -9,7 +8,6 @@ import {
     GameCategoryKeys,
     GameCategoryType,
     GamesInOnePage,
-    favoriteGameIdIgnore,
 } from "../components/page-components/game-category/constants";
 import { WinningStreak } from "../components/page-components/winning-streak";
 import { WinningStreakItem } from "../components/page-components/winning-streak/winning-streak.type";
@@ -23,6 +21,8 @@ import HappyWheel from "./happy-wheel/page";
 import SicBalls from "./sic-balls/page";
 import NextBall from "./next-ball/page";
 import LuckyThree from "./lucky-three/page";
+import { resourceMp3 } from "../_shared/react-hooks";
+import useSound from "use-sound";
 
 let gamesOrder = [];
 const getRenderGames = (selectedCategory: GameCategoryType, selectedPage: number, userOfferGames: number[]) => {
@@ -73,7 +73,6 @@ const getCategoryHashTag = (category: string, pageIndex: number) => {
 
 export const Games: React.FC<Props> = ({
     enabledWinningStreakNotification,
-    enabledPlaySound,
     setApiErrorMessage,
     userStakeLevel,
     updateUserStakeLevel,
@@ -83,7 +82,6 @@ export const Games: React.FC<Props> = ({
     updateQueryGames,
     openGameId,
 }) => {
-    const [playPlaceBetSound] = useSound("./static/sounds/place-bet.mp3");
     const urlHashtag = window.location.hash.replace("#", "").split("_");
     const queryCategory = isJoinGame ? getCategoryByQueryGameId(queryGame) : urlHashtag[0] || getCategoryByGameId(queryGame);
     const [selectedCategory, setSelectedCategory] = useState<GameCategoryType>(GameCategoryType[queryCategory]);
@@ -92,6 +90,7 @@ export const Games: React.FC<Props> = ({
     const { theme } = useTheme();
     location.hash = `#${getCategoryHashTag(queryCategory, selectedPage)}`;
     const [isJoinedGame, setIsJoinedGame] = useState(false);
+    const [playPlaceBetSound] = useSound(resourceMp3.placeBet);
 
     const renderListGames = () => {
         const renderGames = getRenderGames(selectedCategory, selectedPage, userOfferGames);
@@ -106,7 +105,7 @@ export const Games: React.FC<Props> = ({
             ...gameSettings[gameId],
             notifyWinStreak: (winningStreak: WinningStreakItem) =>
                 enabledWinningStreakNotification && winningStreakRef?.current && winningStreakRef.current.addWinningStreak(winningStreak),
-            playPlaceBetSound: () => enabledPlaySound && playPlaceBetSound(),
+            playPlaceBetSound,
             setApiErrorMessage: setApiErrorMessage,
             theme,
             userStakeLevel,

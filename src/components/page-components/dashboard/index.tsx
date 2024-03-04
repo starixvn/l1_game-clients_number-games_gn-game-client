@@ -37,7 +37,6 @@ class Dashboard extends React.PureComponent<Props, State> {
 
         this.state = {
             enabledWinningStreakNotification: StorageHelper.get(localStorageKeys.winningStreakNotification) ?? true,
-            enabledPlaySound: StorageHelper.get(localStorageKeys.playSound) ?? false,
             userStakeLevel: { minBet: 0, maxBet: 0 },
             authorizeInfo: null,
             isShowErrorModal: false,
@@ -59,7 +58,6 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.registerMainSocketEvent = this.registerMainSocketEvent.bind(this);
         this.handleKickedOut = this.handleKickedOut.bind(this);
         this.winningStreakNotificationToggle = this.winningStreakNotificationToggle.bind(this);
-        this.playSoundToggle = this.playSoundToggle.bind(this);
         this.closeDialog = this.closeDialog.bind(this);
         this.toggleHistoryModal = this.toggleHistoryModal.bind(this);
         this.toggleGuideModal = this.toggleGuideModal.bind(this);
@@ -261,12 +259,6 @@ class Dashboard extends React.PureComponent<Props, State> {
         StorageHelper.set(localStorageKeys.winningStreakNotification, !enabledWinningStreakNotification);
     }
 
-    playSoundToggle() {
-        const { enabledPlaySound } = this.state;
-        this.setState({ enabledPlaySound: !enabledPlaySound });
-        StorageHelper.set(localStorageKeys.playSound, !enabledPlaySound);
-    }
-
     closeDialog() {
         this.setState({ isShowErrorModal: false });
         this.isKickOut && this.signOut();
@@ -315,13 +307,11 @@ class Dashboard extends React.PureComponent<Props, State> {
     renderDashBoard() {
         const {
             enabledWinningStreakNotification,
-            enabledPlaySound,
             isShowErrorModal,
             isShowHistory,
             isShowGuide,
             userStakeLevel,
             authorizeInfo,
-
             isBlockUI,
             queryGame,
             isJoinGame,
@@ -344,9 +334,7 @@ class Dashboard extends React.PureComponent<Props, State> {
                     <Header
                         user={authorizeInfo.user}
                         enabledNotification={enabledWinningStreakNotification}
-                        enabledSound={enabledPlaySound}
                         onToggleNotification={this.winningStreakNotificationToggle}
-                        onToggleSound={this.playSoundToggle}
                         toggleHistoryModal={this.toggleHistoryModal}
                         toggleGuideModal={this.toggleGuideModal}
                         toggleAnnouncementModal={this.toggleAnnouncementModal}
@@ -355,7 +343,6 @@ class Dashboard extends React.PureComponent<Props, State> {
                     />
                     <Games
                         enabledWinningStreakNotification={enabledWinningStreakNotification}
-                        enabledPlaySound={enabledPlaySound}
                         setApiErrorMessage={this.handleShowApiErrorMessage}
                         userStakeLevel={userStakeLevel}
                         updateUserStakeLevel={this.handleUpdateUserStakeLevel}

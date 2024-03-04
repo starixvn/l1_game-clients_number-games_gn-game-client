@@ -83,7 +83,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 gameMessageHandler: this.gameMessageHandler,
                 gameName: this.props.gameName,
             });
-
+        console.log(placeBetHandler);
         this.placeBetHandler =
             placeBetHandler ??
             new PlaceBetHandler({
@@ -93,7 +93,9 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 getPlayerBalance: this.getPlayerBalance,
                 hedgeBetGroups: this.props.hedgeBetGroups,
                 translate: props.translate,
-                playPlaceBetSound: props.playPlaceBetSound,
+                playPlaceBetSound: () => {
+                    this.props.playPlaceBetSound();
+                },
             });
 
         this.gameFishishHandler =
@@ -115,9 +117,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 roundStateHandler: roundStateHandler,
             });
 
-        this.gameRoundHistoryHandler =
-            gameRoundHistoryHandler ??
-            new GameRoundHistoryHandler({ dispatch, gameStateContextModel });
+        this.gameRoundHistoryHandler = gameRoundHistoryHandler ?? new GameRoundHistoryHandler({ dispatch, gameStateContextModel });
 
         this.placeBet = this.placeBet.bind(this);
         this.updateUserBalance = this.updateUserBalance.bind(this);
@@ -387,10 +387,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                     </div>
                 </div>
                 <Settings
-                    enabledSound={false}
-                    onToggleSound={() => {
-                        console.log("onToggleSound");
-                    }}
                     toggleHistoryModal={() => {
                         this.props.dispatch({
                             type: GameEventActionType.TOGGLE_BET_HISTORY,

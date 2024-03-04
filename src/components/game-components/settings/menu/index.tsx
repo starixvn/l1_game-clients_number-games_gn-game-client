@@ -1,29 +1,38 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "next-i18next";
-import { CommonResourceKeys, ResourceTypes } from "../../../../_shared/resources";
+import { ResourceTypes } from "../../../../_shared/resources";
 import { Tooltip } from "../../tooltip";
 import { isMobileOnly } from "react-device-detect";
 import Styles from "./menu.module.scss";
+import { StorageHelper, localStorageKeys } from "../../../../_shared/helpers";
 
 const dropdownItemClassName = "dropdown-item";
 
 export const Menu: React.FC<{
     handleToggleGuideModal: Function;
-    enabledSound: boolean;
-    onToggleSound: Function;
     handleToggleBetHistory: Function;
-}> = ({ handleToggleGuideModal, enabledSound, onToggleSound, handleToggleBetHistory}) => {
+}> = ({ handleToggleGuideModal, handleToggleBetHistory }) => {
+    const [enabledSound, setEnabledSound] = useState(StorageHelper.get(localStorageKeys.enableSound) ?? false);
+    const [enabledMusic, setEnabledMusic] = useState(StorageHelper.get(localStorageKeys.enableMusic) ?? false);
     const { t } = useTranslation([ResourceTypes.COMMON]);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const wrapperRef = useRef<HTMLDivElement>(null);
     const toggleBtnRef = useRef<HTMLDivElement>(null);
-    const toggleSoundBtnRef = useRef<HTMLDivElement>(null);
     const specialClassByDevice = !isMobileOnly ? "desktop-style" : "";
+
+    const onToggleSound = () => {
+        StorageHelper.set(localStorageKeys.enableSound, !enabledSound);
+        setEnabledSound(!enabledSound);
+    };
+    const onToggleMusic = () => {
+        StorageHelper.set(localStorageKeys.enableMusic, !enabledMusic);
+        setEnabledMusic(!enabledMusic);
+    };
 
     const openBetHistory = () => {
         handleToggleBetHistory();
         setDropdownOpen(false);
-    }
+    };
 
     const openGuide = () => {
         handleToggleGuideModal();
@@ -58,12 +67,18 @@ export const Menu: React.FC<{
             </div>
             <div className="dropdown">
                 <div className={`dropdown-menu right ${Styles["dropdown-menu"]} ${dropdownOpen ? "show" : ""}`}>
-                    <div className={`${dropdownItemClassName} ${Styles[dropdownItemClassName]}`}>
-                        <span id="icon-music-on" className={`icon-music-on ${Styles["menu-icon"]}`}></span>
+                    <div
+                        className={`${dropdownItemClassName} ${Styles[dropdownItemClassName]}`}
+                        id="music-settings"
+                        onClick={() => onToggleMusic()}
+                    >
+                        <span
+                            id={enabledMusic ? `icon-sound-on` : `icon-music-off`}
+                            className={enabledMusic ? `icon-music-on ${Styles["menu-icon"]}` : `icon-music-off ${Styles["menu-icon"]}`}
+                        ></span>
                     </div>
                     <div
                         className={`${dropdownItemClassName} ${Styles[dropdownItemClassName]}`}
-                        ref={toggleSoundBtnRef}
                         id="sound-settings"
                         onClick={() => onToggleSound()}
                     >

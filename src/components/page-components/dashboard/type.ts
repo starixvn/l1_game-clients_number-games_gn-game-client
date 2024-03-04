@@ -18,7 +18,6 @@ type APIErrorProp = {
 
 export type State = {
     enabledWinningStreakNotification: boolean;
-    enabledPlaySound: boolean;
     userStakeLevel: UserStakeLevel;
     authorizeInfo: AuthorizeResponse;
     isShowErrorModal: boolean;

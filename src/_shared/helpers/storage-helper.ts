@@ -115,7 +115,8 @@ export const localStorageKeys = {
     umInfo: buildLocalStorageKey("um_info"),
     loginStatus: buildLocalStorageKey("login-status"),
     winningStreakNotification: buildLocalStorageKey("winning-streak-notification"),
-    playSound: buildLocalStorageKey("play-sound"),
+    enableSound: buildLocalStorageKey("enable-sound"),
+    enableMusic: buildLocalStorageKey("enable-music"),
     buildVersion: buildLocalStorageKey("build-version"),
     toolbarGuide: buildLocalStorageKey("toolbarGuide"),
 };

@@ -1,12 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { isMobileOnly } from "react-device-detect";
 import Slider from "react-slick";
-import useSound from "use-sound";
-import { StorageHelper, localStorageKeys } from "../../../_shared/helpers";
 import { SystemEventActionType, useAuthContext, useSystemContext, useSystemDispatch } from "../../../_shared/react-contexts";
 import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import { Chip } from "./chip";
 import Styles from "./chip-slider.module.scss";
+import { useChipClickSound } from "../../../_shared/react-hooks";
 
 const SlidingTimeInMillisecond = 100;
 const slidesToShow = 5;
@@ -16,9 +15,7 @@ export const ChipSlider: React.FC<{}> = () => {
     const gameStateContext = useGameStateContext();
     const systemContext = useSystemContext();
     const dispatch = useSystemDispatch();
-    const enabledSound = StorageHelper.get(localStorageKeys.playSound) ?? false;
     const enabledQuickBet = useAuthContext().authorizeInfo?.user?.settings?.quickBet;
-
     const { gameConfigs, userStakeLevel } = gameStateContext;
     const { selectedChip } = systemContext;
     const [enabledPrevBtn, setEnabledPrevBtn] = useState(false);
@@ -26,7 +23,7 @@ export const ChipSlider: React.FC<{}> = () => {
 
     const [isSliding, setIsSliding] = useState(false);
     let sliderRef = null;
-    const [playSound] = useSound("./static/sounds/chip-click.mp3");
+    const playSound = useChipClickSound();
     const chipValues = useMemo(() => {
         const maxBet = Math.min(userStakeLevel.maxBet, gameConfigs.maxBet);
         const minBet = Math.max(userStakeLevel.minBet, gameConfigs.minBet);
@@ -62,7 +59,7 @@ export const ChipSlider: React.FC<{}> = () => {
                     selectedChip: chipValue,
                 },
             });
-            enabledSound && playSound();
+            playSound();
         }
     };
 

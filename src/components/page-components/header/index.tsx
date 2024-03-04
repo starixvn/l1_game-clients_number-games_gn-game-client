@@ -5,9 +5,7 @@ import Styles from "./header.module.scss";
 
 type Props = {
     user: User;
-    enabledSound: boolean;
     enabledNotification: boolean;
-    onToggleSound: Function;
     onToggleNotification: Function;
     toggleHistoryModal: Function;
     toggleGuideModal: Function;
