@@ -24,7 +24,6 @@ export interface BetLogDetailProps {
     betLogDetails: any[];
     onCloseModal: Function;
     isShowBetDetail: boolean;
-    isLoadMore: boolean;
     drawInfo: {
         drawId: number;
         result: any;

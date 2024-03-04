@@ -10,6 +10,7 @@ import { preprocessBetLogTime, seperateDateTime } from "./helper";
 import TableRow from "./row-table";
 import { useCommonTranslate, useSNTranslate, useTranslator } from "../../../_shared/react-hooks/use-translator";
 import { numberWithCommas } from "../../../_shared/helpers";
+import { useState } from "react";
 
 interface BacBallBetDetailProps extends BetLogDetailProps {
     drawInfo: DrawInfo;
@@ -42,6 +43,7 @@ const renderBetLogDetail = ({ betLogDetails, onCloseModal, isShowBetDetail, draw
 
 const BetDetail: FC<BetLogDetailProps> = ({ betLogDetails, onCloseModal, isShowBetDetail, drawInfo }) => {
     const { drawId, result } = drawInfo;
+    const [isHaveMoreData, setIsHaveMoreData] = useState(true);
     const ballColor = useBallColor;
     const { t: translateCommon } = useCommonTranslate();
     const { t: translateSNGames } = useSNTranslate();
@@ -49,10 +51,20 @@ const BetDetail: FC<BetLogDetailProps> = ({ betLogDetails, onCloseModal, isShowB
 
     const handleCloseModal = () => {
         onCloseModal();
+        setIsHaveMoreData(true);
     };
+
     const handleClickProbalyFair = () => {
         console.log("Click Probaly Fair");
     };
+
+    const handleScroll = (event: any) => {
+        const bottom = event.target.scrollHeight - event.target.scrollTop === event.target.clientHeight;
+        if (bottom) {
+            setIsHaveMoreData(false);
+        }
+    };
+
     const header = [
         { node: translateCommon("time"), size: 3.8 },
         { node: translateCommon("bet_choice"), size: 2 },
@@ -86,7 +98,7 @@ const BetDetail: FC<BetLogDetailProps> = ({ betLogDetails, onCloseModal, isShowB
                 <button className={`clickable ${Styles["provably-fair"]}`} onClick={handleClickProbalyFair}>
                     {translateCommon("pf_title_provably_fair")}
                 </button>
-                <div className={`table-container react-infinite-table ${Styles["bet-detail"]}`}>
+                <div className={`table-container react-infinite-table ${Styles["bet-detail"]}`} onScroll={handleScroll}>
                     <table className="table text-center">
                         <thead>
                             <TableRow isHeader={true}>{header}</TableRow>
@@ -97,7 +109,7 @@ const BetDetail: FC<BetLogDetailProps> = ({ betLogDetails, onCloseModal, isShowB
                             })}
                         </tbody>
                     </table>
-                    <div className="text-center">{translateSNGames("table_no_more_data")}</div>
+                    {!isHaveMoreData && <div className="text-center">{translateSNGames("table_no_more_data")}</div>}
                 </div>
             </ModalContainer>
         )
