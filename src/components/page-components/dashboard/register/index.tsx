@@ -6,7 +6,6 @@ import { sabaClubName, sabaNumberName, Themes } from "../../../../_shared/consta
 import { GetLocalizedErrorMessage } from "../../../../_shared/helpers/notice-helper";
 import { randomInteger } from "../../../../_shared/helpers/number-helper";
 import { createNickname } from "../../../../services/auth-service";
-import { updateThemeSetting } from "../../../../services/user-setting-service";
 import ProfilePicture from "../../../page-components/profile-picture";
 import BaseDialog from "../../../game-components/base-dialog";
 import { ModalType } from "../../../game-components/base-dialog/type";
@@ -42,7 +41,6 @@ export default function Register({ session, handleStateLogin }: Props) {
         const response = await createNickname(session, name, selectedAvatarId);
         const authorizeResponse = response as any;
         if (authorizeResponse && authorizeResponse.authorized) {
-            updateThemeSetting(session);
             Object.assign(authorizeResponse.user, { settings: { theme: Themes.light } });
             handleStateLogin(authorizeResponse);
         } else {
@@ -86,26 +84,20 @@ export default function Register({ session, handleStateLogin }: Props) {
             <div className={`${Styles["wrapper-welcome"]} ${highlightSystemClass}`}>
                 <TextBlock>
                     <Trans t={t}>
-                        {t(
-                            `register:registerTitle1-gn-apptype${getAppSettings().appType}`,
-                            { sabaNumberName: sabaNumberName }
-                        )}
+                        {t(`register:registerTitle1-gn-apptype${getAppSettings().appType}`, { sabaNumberName: sabaNumberName })}
                     </Trans>
                 </TextBlock>
                 <TextBlock>
                     <Trans t={t}>
-                        {t(
-                            `register:registerTitle2-gn-apptype${getAppSettings().appType}`,
-                            { sabaNumberName: sabaNumberName, sabaClubName: sabaClubName }
-                        )}
+                        {t(`register:registerTitle2-gn-apptype${getAppSettings().appType}`, {
+                            sabaNumberName: sabaNumberName,
+                            sabaClubName: sabaClubName,
+                        })}
                     </Trans>
                 </TextBlock>
                 <TextBlock>
                     <Trans t={t}>
-                        {t(
-                            `register:registerTitle3-gn-apptype${getAppSettings().appType}`,
-                            { sabaClubName: sabaClubName }
-                        )}
+                        {t(`register:registerTitle3-gn-apptype${getAppSettings().appType}`, { sabaClubName: sabaClubName })}
                     </Trans>
                 </TextBlock>
             </div>

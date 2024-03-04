@@ -11,14 +11,13 @@ import QuickBetHint from "../quick-bet-hint";
 import Styles from "./quick-bet-btn.module.scss";
 
 export const QuickBetBtn = () => {
-    const gameStateContext = useGameStateContext();
-    const { showConfirmBet } = gameStateContext;
+    const { showConfirmBet } = useGameStateContext();
     const authContext = useAuthContext();
     const enabledQuickBet = authContext.authorizeInfo?.user?.settings?.quickBet;
     const isShowToolbarGuide = StorageHelper.get(localStorageKeys.toolbarGuide) ?? true;
 
     const [isShowModalConfirm, setIsShowModalConfirm] = useState(false);
-    const [isShowTooltip, setIsShowTooltip] = useState(true);
+    const [isShowTooltip, setIsShowTooltip] = useState(false);
     const tooltipRef = useRef<HTMLDivElement>(null);
     let deviceClass = "";
     if (isMobileOnly) {
@@ -70,6 +69,7 @@ export const QuickBetBtn = () => {
             </BaseDialog>
         </div>
     );
+
     return showConfirmBet ? (
         <></>
     ) : (

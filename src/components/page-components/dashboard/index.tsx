@@ -7,7 +7,7 @@ import { getAppSettings } from "../../../_shared/app-settings";
 import { buildUrl, GetLocalizedErrorMessage, localStorageKeys, StorageHelper } from "../../../_shared/helpers";
 import { AuthContextProvider } from "../../../_shared/react-contexts";
 import { authorize, createNickname, getSettingGames, reCheckIn } from "../../../services/auth-service";
-import { updateSignInSMStatus, updateThemeSetting } from "../../../services/user-setting-service";
+import { updateSignInSMStatus } from "../../../services/user-setting-service";
 import { Props, State } from "./type";
 
 import { io, Socket } from "socket.io-client";
@@ -234,7 +234,6 @@ class Dashboard extends React.PureComponent<Props, State> {
         const authorizeInfo = { ...this.state.authorizeInfo };
         if (authorizeInfo && authorizeInfo.authorized) {
             updateSignInSMStatus(session);
-            updateThemeSetting(session);
 
             authorizeInfo.user.settings = { theme: Themes.light };
             authorizeInfo.user.isSignedInSM = true;
@@ -252,7 +251,6 @@ class Dashboard extends React.PureComponent<Props, State> {
 
         updateSignInSMStatus(session);
         authorizeInfo.user.isSignedInSM = true;
-        updateThemeSetting(session);
 
         this.updateAuthorizeInfo(authorizeInfo);
     }
@@ -418,7 +416,6 @@ class Dashboard extends React.PureComponent<Props, State> {
         const response = await createNickname(session, nickname, selectedAvatarId);
         const authorizeResponse = response as any;
         if (authorizeResponse && authorizeResponse.authorized) {
-            updateThemeSetting(session);
             Object.assign(authorizeResponse.user, { settings: { theme: Themes.light } });
             this.handleRegister(authorizeResponse);
         } else {

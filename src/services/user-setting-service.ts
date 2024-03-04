@@ -8,10 +8,6 @@ export const updateUserQuickBetSetting = (session: SSOResponse, value: boolean) 
     userSettingsService.updateUserQuickBetSetting(session.ss, session.username, value);
 };
 
-export const updateThemeSetting = async (userSession: SSOResponse, theme = Themes.light) => {
-    return userSettingsService.updateUserThemeSetting(userSession.ss, userSession.username, theme);
-};
-
 export const updateSignInSMStatus = async (userSession: SSOResponse) => {
     return userSettingsService.updateSignInSMStatus(userSession.ss, userSession.username);
 };
