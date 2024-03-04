@@ -3,7 +3,7 @@ import { FC, useEffect, useState } from "react";
 
 import { loadPixiAnimations } from "../../_shared/helpers/pixi-resource-loader";
 import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
-import { IBallColor } from "../../components/game-base/type";
+import { IBallColor, RoundState } from "../../components/game-base/type";
 import Cage, { CageColor, CagePosition } from "../../components/game-components/cage";
 import { BacBallResultSlotContainer } from "./bac-ball-result-slot-container";
 import Style from "./bac-ball.module.scss";
@@ -12,7 +12,15 @@ import { BacBallBetOptions } from "./constants";
 export const BacBallResultBlock: FC = () => {
     const [cageBallFrames, setCageBallFrames] = useState<IBallColor>({ blue: [], red: [], blue2: [], red2: [] });
     const [cageBallsLoopFrames, setCageBallsLoopFrames] = useState<Texture<Resource>[]>([]);
-    const { result, roundState, playResultAnimation } = useGameStateContext();
+    const { result, roundState, roundHistory } = useGameStateContext();
+
+    let currentResult;
+
+    if (result) {
+        currentResult = result;
+    } else if (roundState === RoundState.DisplayResult) {
+        currentResult = roundHistory[0].result;
+    }
 
     useEffect(() => {
         const handleLoadResource = async () => {
@@ -69,8 +77,8 @@ export const BacBallResultBlock: FC = () => {
                         color={CageColor.BLUE}
                         position={CagePosition.LEFT}
                         isSmall={true}
-                        result={result?.player}
-                        isShowResult={playResultAnimation}
+                        result={currentResult?.player}
+                        delayShowResultTime={0}
                     />
                 </div>
                 <BacBallResultSlotContainer delayTime={0} betChoice={BacBallBetOptions.PLAYER} />
@@ -84,8 +92,7 @@ export const BacBallResultBlock: FC = () => {
                         color={CageColor.RED}
                         position={CagePosition.RIGHT}
                         isSmall={true}
-                        result={result?.banker}
-                        isShowResult={playResultAnimation}
+                        result={currentResult?.banker}
                         delayShowResultTime={bankerDelayTime}
                     />
                 </div>

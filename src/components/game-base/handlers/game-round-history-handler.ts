@@ -19,6 +19,7 @@ export class GameRoundHistoryHandler {
                 roundHistory: roundHistory,
                 roundId: [RoundState.DisplayResult].includes(roundState) || isUMInFirstLoad ? roundId - 1 : roundId,
                 settlementResult: roundState === RoundState.LockingBet ? {} : roundHistory[0]?.settlementResult,
+                playResultAnimation: false,
                 showResultInfo: [RoundState.DisplayResult].includes(roundState) || isUMInFirstLoad ? true : false,
             },
         });

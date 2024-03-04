@@ -4,7 +4,8 @@ import React, { useEffect, useMemo, useState } from "react";
 
 import { useBallColor } from "../../../_shared/helpers/ball-color-helper";
 import { loadPixiAnimations } from "../../../_shared/helpers/pixi-resource-loader";
-import { IBallColor } from "../../game-base/type";
+import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
+import { IBallColor, RoundState } from "../../game-base/type";
 import Styles from "./cage.module.scss";
 
 export enum CageColor {
@@ -24,15 +25,18 @@ export type CageProps = {
     cageBallsLoopFrames: Texture<Resource>[];
     cageBallFrames: IBallColor;
     result: number;
-    isShowResult: boolean;
     delayShowResultTime?: number;
     position: string;
 };
 
 const Cage: React.FC<CageProps> = (cageProps) => {
-    const { position, isSmall, cageBallsLoopFrames, cageBallFrames, result, isShowResult, delayShowResultTime, color } = cageProps;
+    const { position, isSmall, cageBallsLoopFrames, cageBallFrames, result, delayShowResultTime, color } = cageProps;
     const animName = result <= 9 ? `number0${result}` : `number${result}`;
     const ballColor = `${useBallColor({ number: result })}${position === CagePosition.LEFT ? "" : "2"}`;
+
+    const { playResultAnimation, roundState } = useGameStateContext();
+
+    const ballSpeed = playResultAnimation ? 0.5 : 1;
     const currentTime = Date.now();
 
     const [isDelayShowResult, setIsDelayShowResult] = useState<boolean>(false);
@@ -54,8 +58,10 @@ const Cage: React.FC<CageProps> = (cageProps) => {
 
     useEffect(() => {
         let timeOut: NodeJS.Timeout;
-        if (isShowResult) {
+        if (playResultAnimation) {
             timeOut = setTimeout(() => setIsDelayShowResult(true), delayShowResultTime);
+        } else if (roundState === RoundState.DisplayResult) {
+            setIsDelayShowResult(true);
         } else {
             setIsDelayShowResult(false);
         }
@@ -63,56 +69,56 @@ const Cage: React.FC<CageProps> = (cageProps) => {
         return () => {
             clearTimeout(timeOut);
         };
-    }, [delayShowResultTime, isShowResult]);
+    }, [delayShowResultTime, playResultAnimation, roundState]);
 
     const showResultBall = () => {
-        if (!isDelayShowResult || !isShowResult) {
+        if (isDelayShowResult && roundState === RoundState.DisplayResult) {
+            return (
+                <div id="show-ball-anim" className={Styles["show-ball-anim"]}>
+                    {cageBallFrames && cageBallFrames[ballColor]?.length > 0 && (
+                        <Stage key={currentTime} width={250} height={250} options={{ backgroundAlpha: 0 }}>
+                            <Container key={currentTime} position={[82, 85]}>
+                                <AnimatedSprite
+                                    anchor={0.5}
+                                    textures={cageBallFrames[ballColor]}
+                                    autoUpdate
+                                    isPlaying={true}
+                                    initialFrame={0}
+                                    animationSpeed={ballSpeed}
+                                    loop={false}
+                                />
+                            </Container>
+                        </Stage>
+                    )}
+                </div>
+            );
+        } else {
             return <></>;
         }
+    };
 
-        return (
-            <div id="show-ball-anim" className={Styles["show-ball-anim"]}>
-                {cageBallFrames && cageBallFrames[ballColor]?.length > 0 && (
-                    <Stage key={currentTime} width={250} height={250} options={{ backgroundAlpha: 0 }}>
+    const showResultNumber = () => {
+        if (isDelayShowResult && roundState === RoundState.DisplayResult && numberBallFrames?.length !== 0) {
+            return (
+                <div key={currentTime} id="result-text" className={Styles["number"]}>
+                    <Stage key={currentTime} width={153} height={153} options={{ backgroundAlpha: 0 }}>
                         <Container key={currentTime} position={[82, 85]}>
                             <AnimatedSprite
                                 anchor={0.5}
-                                textures={cageBallFrames[ballColor]}
+                                textures={numberBallFrames}
                                 autoUpdate
                                 isPlaying={true}
                                 initialFrame={0}
-                                animationSpeed={0.5}
+                                animationSpeed={ballSpeed}
                                 loop={false}
                             />
                         </Container>
                     </Stage>
-                )}
-            </div>
-        );
-    };
-
-    const showResultNumber = () => {
-        if (!isDelayShowResult || !isShowResult || numberBallFrames?.length === 0) {
+                </div>
+            );
+        } else {
             return <></>;
         }
-
-        return (
-            <div key={currentTime} id="result-text" className={Styles["number"]}>
-                <Stage key={currentTime} width={153} height={153} options={{ backgroundAlpha: 0 }}>
-                    <Container key={currentTime} position={[82, 85]}>
-                        <AnimatedSprite
-                            anchor={0.5}
-                            textures={numberBallFrames}
-                            autoUpdate
-                            isPlaying={true}
-                            initialFrame={0}
-                            animationSpeed={0.5}
-                            loop={false}
-                        />
-                    </Container>
-                </Stage>
-            </div>
-        );
     };
 
     return useMemo(() => {
@@ -144,7 +150,7 @@ const Cage: React.FC<CageProps> = (cageProps) => {
                 {showResultNumber()}
             </div>
         );
-    }, [isShowResult, isDelayShowResult, numberBallFrames]);
+    }, [isDelayShowResult, numberBallFrames]);
 };
 
 export default Cage;

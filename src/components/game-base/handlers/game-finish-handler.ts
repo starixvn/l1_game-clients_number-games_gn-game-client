@@ -61,7 +61,6 @@ export class GameFinishHandler {
                     showResultInfo: true,
                     isShowBlink: false,
                     roundHistory: roundHistoryClone,
-                    playResultAnimation: false,
                 },
             });
         }, animationDuration);
