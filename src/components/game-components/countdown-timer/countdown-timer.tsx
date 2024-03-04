@@ -1,13 +1,13 @@
-import { useTranslation } from "next-i18next";
 import { useEffect, useState } from "react";
 import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import { RoundState } from "../../game-base/type";
 import styles from "./countdown-timer.module.scss";
+import { useTranslate } from "@tolgee/react";
 
 export type Rotation = "clockwise" | "counterclockwise";
 const CountdownTimer = () => {
     const { roundState } = useGameStateContext();
-    const { t } = useTranslation("common");
+    const { t } = useTranslate(["Common", "SabaNumber"]);
 
     switch (roundState) {
         case RoundState.BeforeStartRound:
@@ -18,7 +18,7 @@ const CountdownTimer = () => {
                 <>
                     <SimpleTimer />
                     <GameStatus>
-                        <div className={styles["start-betting"]}>{t("startBetting")}</div>
+                        <div className={styles["start-betting"]}>{t("status_start_bet")}</div>
                     </GameStatus>
                 </>
             );
@@ -27,7 +27,7 @@ const CountdownTimer = () => {
                 <>
                     <SimpleTimer />
                     <GameStatus>
-                        <div className={styles["no-more-bets"]}>{t("noMoreBets")}</div>
+                        <div className={styles["no-more-bets"]}>{t("no_more_bet")}</div>
                     </GameStatus>
                 </>
             );
@@ -40,7 +40,7 @@ const CountdownTimer = () => {
                 <>
                     <div className={`loader-show-result`}></div>
                     <GameStatus>
-                        <div className={styles["open-result"]}>{t("openResult")}</div>
+                        <div className={styles["open-result"]}>{t("status_result")}</div>
                     </GameStatus>
                 </>
             );
@@ -70,6 +70,7 @@ const SimpleTimer = () => {
         setClassNames(roundState === RoundState.LockingBet ? styles["lock-bet"] : '');
     }, [roundState]);
 
+    console.log(`CountdownTimer: ${(timeLeft % 60).toString().padStart(2, "0")}`);
     return (
         <div className={styles.timer}>
             <div className={`${styles["countdown-timer"]} ${classNames}`}>

@@ -49,6 +49,9 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     private gameDisabledHandler?: GameDisableHandler;
     private gameRoundHistoryHandler?: GameRoundHistoryHandler;
 
+    protected roundTimeCounterTest: number;
+    protected gameCronIntervalTest: NodeJS.Timeout;
+
     constructor(
         props: P,
         roundStateHandler: IRoundStateHandler,
@@ -260,6 +263,8 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         const { durations, gameStateContextModel } = this.props;
         const { roundState, isUMInFirstLoad } = gameStateContextModel;
 
+        this.roundTimeCounterTest = remainingTime;
+
         if (roundState === RoundState.None || !isUMInFirstLoad) {
             this.roundTimeCounter = remainingTime;
             this.runGame(this.roundStateHandler.getRemainingTime({ remainingTime, durations }));
@@ -270,6 +275,12 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.timeCounter = remainingTime;
         const { durations } = this.props;
         const { wholeRound } = durations;
+
+        this.gameCronIntervalTest && clearInterval(this.gameCronIntervalTest);
+        this.gameCronIntervalTest = setInterval(() => {
+            console.log(`roundTimeCounterTest: \x1B[31m  ${this.roundTimeCounterTest}`);
+            this.roundTimeCounterTest = this.roundTimeCounterTest - 1;
+        }, 1000);
 
         this.gameCronInterval && clearInterval(this.gameCronInterval);
         this.gameCronInterval = setInterval(() => {
@@ -294,6 +305,8 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
     handleGamePlay(remainingTime: number) {
         const { durations, dispatch, gameStateContextModel } = this.props;
+
+        console.log(`REMAINING_TIME: ${remainingTime}`);
 
         dispatch({
             type: GameEventActionType.REMAINING_TIME,
@@ -338,6 +351,8 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     handleFinish(finish) {
+        console.log(`FINISH ----------------------------------------`);
+
         this.placeBetHandler.clearRetryInterval();
         this.gameFishishHandler.handleFinish(finish, this.props.gameStateContextModel, this.props.durations);
         this.runGame(this.roundStateHandler.getWholeRoundDuration({ durations: this.props.durations }));

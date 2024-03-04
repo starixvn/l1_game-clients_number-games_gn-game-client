@@ -32,7 +32,7 @@ export class TurnStateHandler extends RoundStateHandler {
     }
 
     shouldCountDownTimer({ newRoundState }): boolean {
-        // console.log(`\x1B[31m newRoundState ${RoundState[newRoundState]}}`);
+        console.log(`\x1B[31m ${RoundState[newRoundState]}`);
         return newRoundState !== RoundState.SwitchRound;
     }
 }
