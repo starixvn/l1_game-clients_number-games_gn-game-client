@@ -5,6 +5,7 @@ import { BetLogProps } from "../../../components/game-components/bet-history";
 import Styles from "./common.module.scss";
 import { preprocessBetLogTime, seperateDateTime } from "./helper";
 import TableRow from "./row-table";
+import { useCommonTranslate, useSNTranslate, useTranslator } from "../../../_shared/react-hooks/use-translator";
 
 export interface BetHistory {
     time: Date;
@@ -37,6 +38,10 @@ const renderBetLog = ({ betLogs, handleScroll, onCloseModal, renderBetDetail }: 
 
 const BetLog: FC<BetLogProps> = ({ betLogs, handleScroll, onCloseModal: toggleBetHistory, renderBetDetail }) => {
     const [betLogDetail, setBetLogDetail] = useState<BetHistory>(undefined);
+    const { t: tCommand } = useCommonTranslate();
+    const { t: tSNGames } = useSNTranslate();
+    const { t } = useTranslator(["BacBall"]);
+
     const handleClickDrawId = (betLogDetail: BetHistory) => {
         toggleBetHistory();
         setBetLogDetail(betLogDetail);
@@ -55,20 +60,20 @@ const BetLog: FC<BetLogProps> = ({ betLogs, handleScroll, onCloseModal: toggleBe
     };
 
     const header = [
-        { node: "Time", size: 3 },
-        { node: "DrawID", size: 2 },
+        { node: tCommand("time"), size: 3 },
+        { node: tSNGames("draw_id"), size: 2 },
         {
             node: (
                 <>
-                    Result
+                    {tCommand("result")}
                     <br />
-                    Player | Banker
+                    {t("glossary_player")} | {t("glossary_banker")}
                 </>
             ),
             size: 3,
         },
-        { node: "Total Stake", size: 2 },
-        { node: "Win", size: 2 },
+        { node: tCommand("total_stake"), size: 2 },
+        { node: tCommand("win"), size: 2 },
     ];
     return (
         <div className={`table-container react-infinite-table ${Styles["history"]}`}>
