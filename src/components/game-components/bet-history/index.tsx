@@ -44,7 +44,7 @@ const BetHistoryModal: FC<BetHistoryProps> = ({ renderBetLog, renderBetLogDetail
     const [betLogs, setBetLogs] = useState([]);
     const [page, setPage] = useState<number>(0);
     const gameContext = useGameContext();
-    const { t: tCommand } = useCommonTranslate();
+    const { t: translateCommon } = useCommonTranslate();
 
     const toggleBetHistory = () => {
         dispatch({
@@ -88,7 +88,11 @@ const BetHistoryModal: FC<BetHistoryProps> = ({ renderBetLog, renderBetLogDetail
     };
 
     return (
-        <ModalContainer isOpen={isShowBetHistory && !isShowBetDetail} title={tCommand("bet_history")} onCloseModal={handleCloseModal}>
+        <ModalContainer
+            isOpen={isShowBetHistory && !isShowBetDetail}
+            title={translateCommon("bet_history")}
+            onCloseModal={handleCloseModal}
+        >
             {useMemo(() => {
                 setPage((x) => x + 1);
                 if (betLogs?.length <= 0 && page == 0) {

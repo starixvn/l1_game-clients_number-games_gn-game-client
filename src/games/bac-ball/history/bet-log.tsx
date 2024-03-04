@@ -38,9 +38,9 @@ const renderBetLog = ({ betLogs, handleScroll, onCloseModal, renderBetDetail }: 
 
 const BetLog: FC<BetLogProps> = ({ betLogs, handleScroll, onCloseModal: toggleBetHistory, renderBetDetail }) => {
     const [betLogDetail, setBetLogDetail] = useState<BetHistory>(undefined);
-    const { t: tCommand } = useCommonTranslate();
-    const { t: tSNGames } = useSNTranslate();
-    const { t } = useTranslator(["BacBall"]);
+    const { t: translateCommon } = useCommonTranslate();
+    const { t: translateSNGames } = useSNTranslate();
+    const { t: translateBacBall } = useTranslator(["BacBall"]);
 
     const handleClickDrawId = (betLogDetail: BetHistory) => {
         toggleBetHistory();
@@ -60,20 +60,20 @@ const BetLog: FC<BetLogProps> = ({ betLogs, handleScroll, onCloseModal: toggleBe
     };
 
     const header = [
-        { node: tCommand("time"), size: 3 },
-        { node: tSNGames("draw_id"), size: 2 },
+        { node: translateCommon("time"), size: 3 },
+        { node: translateSNGames("draw_id"), size: 2 },
         {
             node: (
                 <>
-                    {tCommand("result")}
+                    {translateCommon("result")}
                     <br />
-                    {t("glossary_player")} | {t("glossary_banker")}
+                    {translateBacBall("glossary_player")} | {translateBacBall("glossary_banker")}
                 </>
             ),
             size: 3,
         },
-        { node: tCommand("total_stake"), size: 2 },
-        { node: tCommand("win"), size: 2 },
+        { node: translateCommon("total_stake"), size: 2 },
+        { node: translateCommon("win"), size: 2 },
     ];
     return (
         <div className={`table-container react-infinite-table ${Styles["history"]}`}>

@@ -42,9 +42,9 @@ const renderBetLogDetail = ({ betLogDetails, onCloseModal, isShowBetDetail, draw
 const BetDetail: FC<BetLogDetailProps> = ({ betLogDetails, onCloseModal, isShowBetDetail, drawInfo }) => {
     const { drawId, result } = drawInfo;
     const ballColor = useBallColor;
-    const { t: tCommand } = useCommonTranslate();
-    const { t: tSNGames } = useSNTranslate();
-    const { t } = useTranslator(["BacBall"]);
+    const { t: translateCommon } = useCommonTranslate();
+    const { t: translateSNGames } = useSNTranslate();
+    const { t: translateBacBall } = useTranslator(["BacBall"]);
 
     const handleCloseModal = () => {
         onCloseModal();
@@ -53,37 +53,37 @@ const BetDetail: FC<BetLogDetailProps> = ({ betLogDetails, onCloseModal, isShowB
         console.log("Click Probaly Fair");
     };
     const header = [
-        { node: tCommand("time"), size: 3.8 },
-        { node: tCommand("bet_choice"), size: 2 },
-        { node: tCommand("odds"), size: 2 },
-        { node: tCommand("stake"), size: 2 },
-        { node: tCommand("win"), size: 2 },
+        { node: translateCommon("time"), size: 3.8 },
+        { node: translateCommon("bet_choice"), size: 2 },
+        { node: translateCommon("odds"), size: 2 },
+        { node: translateCommon("stake"), size: 2 },
+        { node: translateCommon("win"), size: 2 },
     ];
     const preprocessedBetLogDetails = preprocessBetLogTime(betLogDetails);
     return (
         isShowBetDetail && (
-            <ModalContainer isOpen={isShowBetDetail} title={tCommand("bet_detail")} onCloseModal={handleCloseModal} isOverlap={true}>
+            <ModalContainer isOpen={isShowBetDetail} title={translateCommon("bet_detail")} onCloseModal={handleCloseModal} isOverlap={true}>
                 {result && (
                     <div className={Styles["draw-info"]}>
                         <div className={Styles["info-item"]}>
-                            {tSNGames("draw_id")}:{" "}
+                            {translateSNGames("draw_id")}:{" "}
                             <span>
                                 <b>{drawId}</b>
                             </span>
                         </div>
                         <div className={Styles["info-item"]}>
-                            {t("glossary_player")}:{" "}
+                            {translateBacBall("glossary_player")}:{" "}
                             <span className={`${Styles["ball"]} ${Styles[ballColor({ number: result.player })]}`}>{result.player}</span>
                         </div>
                         <div className={Styles["info-item"]}>
-                            {t("glossary_banker")}:{" "}
+                            {translateBacBall("glossary_banker")}:{" "}
                             <span className={`${Styles["ball"]} ${Styles[ballColor({ number: result.banker })]}`}>{result.banker}</span>
                         </div>
                     </div>
                 )}
 
                 <button className={`clickable ${Styles["provably-fair"]}`} onClick={handleClickProbalyFair}>
-                    {tCommand("pf_title_provably_fair")}
+                    {translateCommon("pf_title_provably_fair")}
                 </button>
                 <div className={`table-container react-infinite-table ${Styles["bet-detail"]}`}>
                     <table className="table text-center">
@@ -122,7 +122,7 @@ interface BacBallBetLogDetailRowProps {
 
 const BetDetailRow: FC<BacBallBetLogDetailRowProps> = ({ rawTime, amount, choice, odds, win }) => {
     const { date, time } = seperateDateTime(rawTime);
-    const { t } = useTranslator(["BacBall"]);
+    const { t: translateBacBall } = useTranslator(["BacBall"]);
     const content = [
         {
             node: (
@@ -134,7 +134,7 @@ const BetDetailRow: FC<BacBallBetLogDetailRowProps> = ({ rawTime, amount, choice
             ),
             size: 3.8,
         },
-        ...[t(`glossary_${choice}`), odds, amount ?? 0, win].map((item) => {
+        ...[translateBacBall(`glossary_${choice}`), odds, amount ?? 0, win].map((item) => {
             return { node: <div className={win > 0 ? "highlight" : ""}>{item}</div>, size: 2 };
         }),
     ];
