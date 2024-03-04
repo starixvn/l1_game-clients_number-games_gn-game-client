@@ -27,7 +27,7 @@ const CountdownTimer = () => {
                 <>
                     <SimpleTimer />
                     <GameStatus>
-                        <div className={styles["no-more-bets"]}>{t("no_more_bet")}</div>
+                        <div className={styles["no-more-bets"]}>{t("status_stop_bet")}</div>
                     </GameStatus>
                 </>
             );
