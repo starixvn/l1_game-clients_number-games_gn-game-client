@@ -1,6 +1,4 @@
-import { useTranslation } from "next-i18next";
 import React, { useMemo } from "react";
-
 import { useGameContext } from "../../../_shared/react-contexts";
 import { Round } from "../../game-base/type";
 import Styles from "./statistic.module.scss";
