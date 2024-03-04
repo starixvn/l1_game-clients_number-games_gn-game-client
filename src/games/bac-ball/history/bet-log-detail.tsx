@@ -1,6 +1,7 @@
 import { randomBytes } from "crypto";
 import { FC } from "react";
 import { createPortal } from "react-dom";
+
 import { useBallColor } from "../../../_shared/helpers/ball-color-helper";
 import { BetLogDetailProps } from "../../../components/game-components/bet-history";
 import ModalContainer from "../../../components/game-components/modal-container";
@@ -58,29 +59,29 @@ const BetDetail: FC<BetLogDetailProps> = ({ betLogDetails, onCloseModal, isShowB
     return (
         isShowBetDetail && (
             <ModalContainer isOpen={isShowBetDetail} title="Bet Details" onCloseModal={handleCloseModal} isOverlap={true}>
-                <div className="table-container react-infinite-table">
-                    {result && (
-                        <div className={Styles["draw-info"]}>
-                            <div className={Styles["info-item"]}>
-                                DrawID:{" "}
-                                <span>
-                                    <b>{drawId}</b>
-                                </span>
-                            </div>
-                            <div className={Styles["info-item"]}>
-                                Player:{" "}
-                                <span className={`${Styles["ball"]} ${Styles[ballColor({ number: result.player })]}`}>{result.player}</span>
-                            </div>
-                            <div className={Styles["info-item"]}>
-                                Banker:{" "}
-                                <span className={`${Styles["ball"]} ${Styles[ballColor({ number: result.banker })]}`}>{result.banker}</span>
-                            </div>
+                {result && (
+                    <div className={Styles["draw-info"]}>
+                        <div className={Styles["info-item"]}>
+                            DrawID:{" "}
+                            <span>
+                                <b>{drawId}</b>
+                            </span>
                         </div>
-                    )}
+                        <div className={Styles["info-item"]}>
+                            Player:{" "}
+                            <span className={`${Styles["ball"]} ${Styles[ballColor({ number: result.player })]}`}>{result.player}</span>
+                        </div>
+                        <div className={Styles["info-item"]}>
+                            Banker:{" "}
+                            <span className={`${Styles["ball"]} ${Styles[ballColor({ number: result.banker })]}`}>{result.banker}</span>
+                        </div>
+                    </div>
+                )}
 
-                    <button className={`clickable ${Styles["provably-fair"]}`} onClick={handleClickProbalyFair}>
-                        Provably Fair
-                    </button>
+                <button className={`clickable ${Styles["provably-fair"]}`} onClick={handleClickProbalyFair}>
+                    Provably Fair
+                </button>
+                <div className={`table-container react-infinite-table ${Styles["bet-detail"]}`}>
                     <table className="table text-center">
                         <thead>
                             <TableRow isHeader={true}>{header}</TableRow>

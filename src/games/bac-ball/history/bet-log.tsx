@@ -1,4 +1,5 @@
 import { FC, useState } from "react";
+
 import { useBallColor } from "../../../_shared/helpers/ball-color-helper";
 import { BetLogProps } from "../../../components/game-components/bet-history";
 import Styles from "./common.module.scss";
@@ -70,7 +71,7 @@ const BetLog: FC<BetLogProps> = ({ betLogs, handleScroll, onCloseModal: toggleBe
         { node: "Win", size: 2 },
     ];
     return (
-        <div className="table-container react-infinite-table">
+        <div className={`table-container react-infinite-table ${Styles["history"]}`}>
             <table className="table text-center">
                 <thead>
                     <TableRow isHeader={true}>{header}</TableRow>

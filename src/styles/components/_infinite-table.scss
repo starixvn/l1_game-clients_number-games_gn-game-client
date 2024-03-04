@@ -10,7 +10,7 @@
 }
 
 .table-container {
-    height: 100%;
+    height: calc(100% - var(---more-info-height));
     padding: 0;
 }
 

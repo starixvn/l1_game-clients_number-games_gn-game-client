@@ -1,3 +1,7 @@
+.history {
+    ---more-info-height: 0;
+}
+
 .result-container {
     display: flex;
     justify-content: center;
@@ -44,4 +48,8 @@
 
 .provably-fair {
     padding: 1rem;
+}
+
+.bet-detail {
+    ---more-info-height: 6.8rem;
 }

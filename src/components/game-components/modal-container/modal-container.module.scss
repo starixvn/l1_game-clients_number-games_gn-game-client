@@ -1,7 +1,7 @@
 .modal-full {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 5.4rem 1fr;
+    grid-template-rows: 5.4rem calc(100% - 5.4rem);
     height: 100%;
     width: 100%;
     background-color: #191a1e;
@@ -23,6 +23,10 @@
     color: #fff;
     text-align: center;
     line-height: 5.4rem;
+}
+
+.content {
+    height: 100%;
 }
 
 .icon-close {

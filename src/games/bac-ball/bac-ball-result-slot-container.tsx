@@ -23,6 +23,7 @@ export const BacBallResultSlotContainer: React.FC<IResultSlotContainer> = (props
     const gameStateContext = useGameStateContext();
     const { result, roundState, roundData, turnCounter, drawId } = gameStateContext;
 
+    console.log("ballsData", ballsData);
     useEffect(() => {
         if (!roundData || !roundData[betChoiceBalls] || roundData[betChoiceBalls].length === 0) {
             setBallsData(defaultData);
