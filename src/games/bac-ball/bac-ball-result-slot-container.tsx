@@ -10,16 +10,15 @@ export interface IResultSlotContainer {
     betChoice: string;
 }
 
-const defaultRoundData = [
-    { number: 0, status: BallStatus.NONE, delayTime: 0 },
-    { number: 0, status: BallStatus.NONE, delayTime: 0 },
-    { number: 0, status: BallStatus.NONE, delayTime: 0 },
-    { number: 0, status: BallStatus.NONE, delayTime: 0 },
-];
-
 export const BacBallResultSlotContainer: React.FC<IResultSlotContainer> = (props) => {
     const { delayTime, betChoice } = props;
     const betChoiceBalls = `${betChoice}Balls`;
+    const defaultRoundData = [
+        { number: 0, status: BallStatus.NONE, delayTime: 0 },
+        { number: 0, status: BallStatus.NONE, delayTime: 0 },
+        { number: 0, status: BallStatus.NONE, delayTime: 0 },
+        { number: 0, status: BallStatus.NONE, delayTime: 0 },
+    ];
     const [ballsData, setBallsData] = useState<IBall[]>(defaultRoundData);
     const gameStateContext = useGameStateContext();
     const { result, roundState, roundData, turnCounter, drawId } = gameStateContext;
