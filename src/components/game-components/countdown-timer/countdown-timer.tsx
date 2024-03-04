@@ -1,13 +1,13 @@
-import { useTranslation } from "next-i18next";
 import { useEffect, useState } from "react";
 import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import { RoundState } from "../../game-base/type";
 import styles from "./countdown-timer.module.scss";
+import { useSNTranslate } from "../../../_shared/react-hooks/use-translator";
 
 export type Rotation = "clockwise" | "counterclockwise";
 const CountdownTimer = () => {
     const { roundState } = useGameStateContext();
-    const { t } = useTranslation("common");
+    const { t } = useSNTranslate();
 
     switch (roundState) {
         case RoundState.BeforeStartRound:
@@ -18,7 +18,7 @@ const CountdownTimer = () => {
                 <>
                     <SimpleTimer />
                     <GameStatus>
-                        <div className={styles["start-betting"]}>{t("startBetting")}</div>
+                        <div className={styles["start-betting"]}>{t("status_start_bet")}</div>
                     </GameStatus>
                 </>
             );
@@ -27,7 +27,7 @@ const CountdownTimer = () => {
                 <>
                     <SimpleTimer />
                     <GameStatus>
-                        <div className={styles["no-more-bets"]}>{t("noMoreBets")}</div>
+                        <div className={styles["no-more-bets"]}>{t("status_stop_bet")}</div>
                     </GameStatus>
                 </>
             );
@@ -40,7 +40,7 @@ const CountdownTimer = () => {
                 <>
                     <div className={`loader-show-result`}></div>
                     <GameStatus>
-                        <div className={styles["open-result"]}>{t("openResult")}</div>
+                        <div className={styles["open-result"]}>{t("status_result")}</div>
                     </GameStatus>
                 </>
             );

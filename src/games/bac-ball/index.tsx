@@ -20,6 +20,7 @@ import { BacBallBetOptions, StatisticRuleEntries } from "./constants";
 import BacBallGameGuideModal from "./game-guide-modal";
 import { BacBallBetHistoryModal } from "./history";
 import { BacBallResult, BacBallSettlementResult } from "./types";
+import { DrawIdBlock } from "./draw-id-block";
 
 class BacBall extends GameBase<GameBaseProps> {
     constructor(props: GameBaseProps) {
@@ -58,6 +59,10 @@ class BacBall extends GameBase<GameBaseProps> {
         const { roundHistory } = this.props.gameStateContextModel;
 
         return <ScoreboardSwipe roundHistory={roundHistory} />;
+    }
+
+    renderRoundIdSection(): JSX.Element {
+        return <DrawIdBlock />
     }
 }
 

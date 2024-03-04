@@ -12,7 +12,6 @@ import DisabledModal from "../game-components/disabled-modal";
 import { ConnectFailedMessage } from "../game-components/error-message";
 import { ConnectFailedReasonKey } from "../game-components/error-message/type";
 import GameContainer from "../game-components/game-container";
-import { GameHeader } from "../game-components/game-header";
 import GameLoading from "../game-components/game-loading";
 import NewRoundTransition from "../game-components/new-round-transition";
 import { Notice } from "../game-components/notice";
@@ -31,6 +30,7 @@ import {
 } from "./handlers";
 import { IGameStateHandler } from "./handlers/game-state-handler";
 import { GameBaseProps, RoundState } from "./type";
+import CountdownTimer from "../game-components/countdown-timer/countdown-timer";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
     protected socket: Socket;
@@ -373,10 +373,19 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         return null;
     }
 
+    renderRoundIdSection() {
+        return <></>;
+
+    }
     renderHeaderBlock() {
         return (
             <>
-                <GameHeader />
+                <div className="game-header">
+                    {this.renderRoundIdSection()}
+                    <div id="countdown-timer" className="countdown-timer">
+                        <CountdownTimer />
+                    </div>
+                </div>
                 <Settings
                     enabledSound={false}
                     onToggleSound={() => {
