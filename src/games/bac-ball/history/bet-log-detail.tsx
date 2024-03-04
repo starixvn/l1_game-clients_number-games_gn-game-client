@@ -9,6 +9,7 @@ import Styles from "./common.module.scss";
 import { preprocessBetLogTime, seperateDateTime } from "./helper";
 import TableRow from "./row-table";
 import { useCommonTranslate, useSNTranslate, useTranslator } from "../../../_shared/react-hooks/use-translator";
+import { numberWithCommas } from "../../../_shared/helpers";
 
 interface BacBallBetDetailProps extends BetLogDetailProps {
     drawInfo: DrawInfo;
@@ -96,6 +97,7 @@ const BetDetail: FC<BetLogDetailProps> = ({ betLogDetails, onCloseModal, isShowB
                             })}
                         </tbody>
                     </table>
+                    <div className="text-center">{translateSNGames("table_no_more_data")}</div>
                 </div>
             </ModalContainer>
         )
@@ -134,9 +136,11 @@ const BetDetailRow: FC<BacBallBetLogDetailRowProps> = ({ rawTime, amount, choice
             ),
             size: 3.8,
         },
-        ...[translateBacBall(`glossary_${choice}`), odds, amount ?? 0, win].map((item) => {
-            return { node: <div className={win > 0 ? "highlight" : ""}>{item}</div>, size: 2 };
-        }),
+        ...[translateBacBall(`glossary_${choice}`), numberWithCommas(odds), numberWithCommas(amount) ?? 0, numberWithCommas(win)].map(
+            (item) => {
+                return { node: <div className={win > 0 ? "highlight" : ""}>{item}</div>, size: 2 };
+            }
+        ),
     ];
     return <TableRow isHeader={false}>{content}</TableRow>;
 };

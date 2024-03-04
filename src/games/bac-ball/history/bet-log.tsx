@@ -6,6 +6,7 @@ import Styles from "./common.module.scss";
 import { preprocessBetLogTime, seperateDateTime } from "./helper";
 import TableRow from "./row-table";
 import { useCommonTranslate, useSNTranslate, useTranslator } from "../../../_shared/react-hooks/use-translator";
+import { numberWithCommas } from "../../../_shared/helpers";
 
 export interface BetHistory {
     time: Date;
@@ -32,11 +33,19 @@ export interface BetHistory {
     };
 }
 
-const renderBetLog = ({ betLogs, handleScroll, onCloseModal, renderBetDetail }: BetLogProps) => {
-    return <BetLog betLogs={betLogs} handleScroll={handleScroll} onCloseModal={onCloseModal} renderBetDetail={renderBetDetail} />;
+const renderBetLog = ({ betLogs, handleScroll, onCloseModal, renderBetDetail, isLoadMore }: BetLogProps) => {
+    return (
+        <BetLog
+            betLogs={betLogs}
+            handleScroll={handleScroll}
+            onCloseModal={onCloseModal}
+            renderBetDetail={renderBetDetail}
+            isLoadMore={isLoadMore}
+        />
+    );
 };
 
-const BetLog: FC<BetLogProps> = ({ betLogs, handleScroll, onCloseModal: toggleBetHistory, renderBetDetail }) => {
+const BetLog: FC<BetLogProps> = ({ betLogs, handleScroll, onCloseModal: toggleBetHistory, renderBetDetail, isLoadMore }) => {
     const [betLogDetail, setBetLogDetail] = useState<BetHistory>(undefined);
     const { t: translateCommon } = useCommonTranslate();
     const { t: translateSNGames } = useSNTranslate();
@@ -76,12 +85,12 @@ const BetLog: FC<BetLogProps> = ({ betLogs, handleScroll, onCloseModal: toggleBe
         { node: translateCommon("win"), size: 2 },
     ];
     return (
-        <div className={`table-container react-infinite-table ${Styles["history"]}`}>
+        <div className={`table-container react-infinite-table ${Styles["history"]}`} onScroll={handleScroll}>
             <table className="table text-center">
                 <thead>
                     <TableRow isHeader={true}>{header}</TableRow>
                 </thead>
-                <tbody onScroll={handleScroll}>{renderbody()}</tbody>
+                <tbody>{renderbody()}</tbody>
             </table>
             {renderBetDetail({
                 betLogDetails: betLogDetail?.betLogDetails,
@@ -94,6 +103,7 @@ const BetLog: FC<BetLogProps> = ({ betLogs, handleScroll, onCloseModal: toggleBe
                     settlementResult: betLogDetail?.settlementResult,
                 },
             })}
+            {!isLoadMore && <div className="text-center">{translateSNGames("table_no_more_data")}</div>}
         </div>
     );
 };
@@ -131,8 +141,8 @@ const BetHistoryRow: FC<{ betHistory: BetHistory; handleClickDrawId: Function }>
             ),
             size: 4,
         },
-        { node: totalAmount, size: 2 },
-        { node: <div className={betwin > 0 ? "highlight" : ""}>{betwin}</div>, size: 2 },
+        { node: numberWithCommas(totalAmount), size: 2 },
+        { node: <div className={betwin > 0 ? "highlight" : ""}>{numberWithCommas(betwin)}</div>, size: 2 },
     ];
 
     return <TableRow isHeader={false}>{content}</TableRow>;
