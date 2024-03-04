@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import { RoundState } from "../../game-base/type";
 import styles from "./countdown-timer.module.scss";
-import { useTranslate } from "@tolgee/react";
+import { useSNTranslate } from "../../../_shared/react-hooks/use-translator";
 
 export type Rotation = "clockwise" | "counterclockwise";
 const CountdownTimer = () => {
     const { roundState } = useGameStateContext();
-    const { t } = useTranslate(["Common", "SabaNumber"]);
+    const { t } = useSNTranslate();
 
     switch (roundState) {
         case RoundState.BeforeStartRound:
