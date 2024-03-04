@@ -387,9 +387,6 @@ class Dashboard extends React.PureComponent<Props, State> {
                             </BaseDialog>
                         </div>
                     )}
-                    {/* {isMobileOnly && isSafari && (
-                        <ToolbarGuide isShowToolbarGuide={isShowToolbarGuide} onCloseGuide={this.closeToolbarGuide}></ToolbarGuide>
-                    )} */}
                 </div>
             </AuthContextProvider>
         );

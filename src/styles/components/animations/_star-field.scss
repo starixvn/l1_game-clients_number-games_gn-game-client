@@ -1,12 +1,26 @@
+.background-galaxy {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    img {
+        width: 100%;
+    }
+}
+
 .star-field {
     --starLayerDuration: 15s;
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 53rem;
     perspective: 600px;
     -webkit-perspective: 600px;
+    overflow: hidden;
+    transform: rotate(90deg);
 }
 
 .star-field .layer {
@@ -31,9 +45,9 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    height: 4px;
-    width: 4px;
-    border-radius: 2px;
+    height: 5px;
+    width: 5px;
+    border-radius: 5px;
 }
 .star-field .layer:nth-child(1) {
     animation: sf-fly-by-1 var(--starLayerDuration) linear infinite;
