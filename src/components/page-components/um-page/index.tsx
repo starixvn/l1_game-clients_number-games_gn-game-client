@@ -5,6 +5,7 @@ import { StorageHelper, localStorageKeys } from "../../../_shared/helpers/storag
 import { convertToGMT8, formatDate } from "../../../_shared/helpers/time-helper";
 import { useTranslator } from "../../../_shared/react-hooks/use-translator";
 import { ResourceTypes } from "../../../_shared/resources";
+import { Markup } from "interweave";
 
 const UMPage: React.FC<{ locale: string }> = ({ locale }) => {
     const router = useRouter();
@@ -51,8 +52,9 @@ const UMPage: React.FC<{ locale: string }> = ({ locale }) => {
             <p className="um-title">
                 {t(`${ResourceTypes.COMMON}.message_sys_maintenance`)} <br /> {t(`${ResourceTypes.SABANUMBER}.um_title`)}
             </p>
-            <p className="highlight">{t(`${ResourceTypes.SABANUMBER}.um_content_start`)}</p>
-            <p className="highlight txt-bold">{t(`${ResourceTypes.SABANUMBER}.um_time`, { startTime, endTime }).replaceTolgeeFormat()}</p>
+            <p className="highlight break">
+                <Markup content={t(`${ResourceTypes.SABANUMBER}.um_content`, { startTime, endTime }).replaceTolgeeFormat()}></Markup>
+            </p>
             <p>{t(`${ResourceTypes.COMMON}.under_maintenance_suggest`)}</p>
             <button>{t(`${ResourceTypes.COMMON}.back`)}</button>
         </div>

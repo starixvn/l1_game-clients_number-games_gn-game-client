@@ -4,8 +4,12 @@ const numberRoundDownWithCommas = (number: number, toFixed = 2) => {
     return numberWithCommas(result, toFixed);
 };
 
-const numberWithCommas = (number: number, toFixed = 2) => {
-    return number.toLocaleString("en-US", { maximumFractionDigits: toFixed });
+const numberWithCommas = (number: number, toFixed = 2, minimumFractionDigits = 0) => {
+    const options = { maximumFractionDigits: toFixed } as any;
+    if (number % parseInt(number.toString()) !== 0) {
+        options.minimumFractionDigits = minimumFractionDigits;
+    }
+    return number.toLocaleString("en-US", options);
 };
 
 const randomInteger = (min: number, max: number) => {
@@ -15,7 +19,7 @@ const randomInteger = (min: number, max: number) => {
 const sumArray = (numbers: number[]) => numbers.reduce((number, sum) => number + sum, 0);
 
 const formatOdds = (value: number | string | undefined, isFractionalFormat = false) => {
-    return isFractionalFormat ? `${numberWithCommas(+value - 1, 2)}:1` : `1:${value}`;
+    return isFractionalFormat ? `${numberWithCommas(+value - 1, 2, 2)}:1` : `1:${numberWithCommas(+value, 2, 2)}`;
 };
 
 export { numberRoundDownWithCommas, numberWithCommas, randomInteger, sumArray, formatOdds };
