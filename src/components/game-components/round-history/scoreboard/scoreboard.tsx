@@ -3,11 +3,11 @@ import styles from "./scoreboard.module.scss";
 import { chunk } from "./utilities";
 
 export type ScoreboardProps<Round> = {
-    arrange: <Output>(data: Round[], scoreboard: Scoreboard<Round>) => Output[] | Round[];
+    arrange: (data: unknown[], scoreboard: unknown) => unknown[];
     rounds: Round[];
     column?: number;
     row: number;
-    element: ComponentType<ScoreboardItemProps<Round>>;
+    element: ComponentType<any>;
     className?: string;
     elementClassName?: string;
     blockClassName?: string;

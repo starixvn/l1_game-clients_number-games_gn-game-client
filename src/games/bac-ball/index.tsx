@@ -9,8 +9,8 @@ import {
 } from "../../_shared/react-contexts/game-state-context/game-state-context";
 import GameBase from "../../components/game-base/";
 import { GameMessageHandler } from "../../components/game-base/handlers";
-import { GameBaseProps } from "../../components/game-base/type";
-import ScoreboardSwipe from "../../components/game-components/scoreboard-swipe";
+import { GameBaseProps, Round } from "../../components/game-base/type";
+import { Scoreboard } from "./scoreboard";
 import { PercentageStatistic } from "../../components/game-components/statistic";
 import { TurnGameStateHandler } from "../../components/turn-base/turn-game-state-handler";
 import { TurnStateHandler } from "../../components/turn-base/turn-state-handler";
@@ -58,11 +58,11 @@ class BacBall extends GameBase<GameBaseProps> {
     renderScoreboards() {
         const { roundHistory } = this.props.gameStateContextModel;
 
-        return <ScoreboardSwipe roundHistory={roundHistory} />;
+        return <Scoreboard roundHistory={roundHistory as Round<BacBallResult, BacBallSettlementResult>[]} />;
     }
 
     renderRoundIdSection(): JSX.Element {
-        return <DrawIdBlock />
+        return <DrawIdBlock />;
     }
 }
 

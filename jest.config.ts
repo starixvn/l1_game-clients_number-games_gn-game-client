@@ -2,6 +2,9 @@ const configs = {
     collectCoverageFrom: ["**/*.{js,jsx,ts,tsx}", "!**/*.d.ts", "!**/node_modules/**"],
     moduleNameMapper: {
         "^.+\\.(css|sass|scss)$": "identity-obj-proxy",
+        "swiper/css": "identity-obj-proxy",
+        "swiper/css/pagination": "identity-obj-proxy",
+        "swiper/react": "<rootDir>/node_modules/swiper/swiper.js",
     },
     testPathIgnorePatterns: ["<rootDir>/node_modules/", "<rootDir>/.next/"],
     moduleFileExtensions: ["ts", "tsx", "js"],
