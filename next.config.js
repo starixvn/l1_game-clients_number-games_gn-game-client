@@ -1,6 +1,5 @@
 const gameSettings = require("./game-settings.json");
 const configs = require("./configs.json");
-const { i18n } = require("./next-i18next.config");
 const { v4: uuidv4 } = require("uuid");
 const { withSentryConfig } = require("@sentry/nextjs");
 
@@ -11,7 +10,6 @@ const appSettings = {
 };
 
 module.exports = withSentryConfig({
-    i18n,
     publicRuntimeConfig: appSettings,
     productionBrowserSourceMaps: configs.enableSourceMap,
     sentry: {

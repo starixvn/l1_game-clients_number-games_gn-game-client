@@ -1,4 +1,4 @@
-import { WithTranslation } from "next-i18next";
+import { TolgeeInstance } from "@tolgee/react";
 import { WithRouterProps } from "next/dist/client/with-router";
 import { AuthorizeResponse, SSOResponse } from "sc-user-service-client/dist/auth";
 import { UserStakeLevel } from "../../game-base/type";
@@ -8,8 +8,8 @@ export type Props = {
     queryGame: number;
     setIsUm: Function;
     directMode: boolean;
-} & WithRouterProps &
-    WithTranslation;
+    tolgee: TolgeeInstance;
+} & WithRouterProps;
 
 type APIErrorProp = {
     message: string;

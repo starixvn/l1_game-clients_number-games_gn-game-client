@@ -1,4 +1,3 @@
-import { withTranslation } from "next-i18next";
 import Head from "next/head";
 import { withRouter } from "next/router";
 import React from "react";
@@ -104,7 +103,7 @@ class Dashboard extends React.PureComponent<Props, State> {
     }
 
     signOut() {
-        this.props.router.push("/timeout", "/timeout", { locale: this.props.i18n.language });
+        this.props.router.push("/timeout", "/timeout", { locale: this.props.tolgee.getLanguage() });
     }
 
     checkOfferedGame(authorizeInfo) {
@@ -134,13 +133,13 @@ class Dashboard extends React.PureComponent<Props, State> {
 
     async componentDidMount() {
         // console.log("componentDidMount");
-        const { session, i18n, directMode } = this.props;
+        const { session, directMode } = this.props;
         const authorizeResponse = await authorize(session);
 
         const errorResponse = authorizeResponse as any;
 
         if (errorResponse && errorResponse.errorCode === "SB0002") {
-            this.props.router.push("/timeout", "/timeout", { locale: i18n.language });
+            this.signOut();
             return;
         }
 
@@ -220,7 +219,7 @@ class Dashboard extends React.PureComponent<Props, State> {
                 setIsUm(true);
             }, 500);
         } else {
-            router.push("/timeout", "/timeout", { locale: this.props.i18n.language });
+            this.signOut();
         }
     }
 
@@ -383,7 +382,7 @@ class Dashboard extends React.PureComponent<Props, State> {
             Object.assign(authorizeResponse.user, { settings: { theme: Themes.light } });
             this.handleRegister(authorizeResponse);
         } else {
-            this.props.router.push("/timeout", "/timeout", { locale: this.props.i18n.language });
+            this.signOut();
         }
     };
 
@@ -434,4 +433,4 @@ class Dashboard extends React.PureComponent<Props, State> {
     }
 }
 
-export default withRouter(withTranslation()(Dashboard));
+export default withRouter(Dashboard);

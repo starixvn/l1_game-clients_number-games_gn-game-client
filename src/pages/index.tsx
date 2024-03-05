@@ -1,5 +1,3 @@
-import { useTranslation } from "next-i18next";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { SSOResponse } from "sc-user-service-client/dist/auth";
@@ -25,8 +23,6 @@ function Home() {
     const [language, setLanguage] = useState<string>(null);
     const [isDirectMode, setIsDirectMode] = useState<boolean>(null);
     const [gameId, setGameId] = useState(null);
-
-    const { i18n } = useTranslation();
 
     usePWAWoker();
     useEffect(() => {
@@ -67,9 +63,7 @@ function Home() {
             const userSession = StorageHelper.get<SSOResponse>(localStorageKeys.session);
             const locale = languageMapper[(lang as string) ?? userSession?.language] ?? router.locale;
             setLanguage(locale);
-            i18n.changeLanguage(locale);
             tolgee.changeLanguage(locale);
-
             signIn();
         }
     }, [router.isReady]);
@@ -82,15 +76,7 @@ function Home() {
         return <SplashScreen locale={language}></SplashScreen>;
     }
 
-    return <Dashboard session={session} queryGame={+gameId} setIsUm={setIsUm} directMode={isDirectMode} />;
+    return <Dashboard session={session} queryGame={+gameId} setIsUm={setIsUm} directMode={isDirectMode} tolgee={tolgee} />;
 }
-
-export const getStaticProps = async ({ locale }) => {
-    return {
-        props: {
-            ...(await serverSideTranslations(locale, ["common", "register", "bethistory", "messages", "um"])),
-        },
-    };
-};
 
 export default Home;

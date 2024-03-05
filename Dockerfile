@@ -10,7 +10,7 @@ COPY package.json yarn.lock ./
 RUN --mount=type=cache,target=$YARN_CACHE_FOLDER \
      yarn install --frozen-lockfile --verbose
 
-COPY sentry.client.config.js sentry.server.config.js tsconfig.json configs.json game-settings.json next-i18next.config.js next.config.js ./
+COPY sentry.client.config.js sentry.server.config.js tsconfig.json configs.json game-settings.json next.config.js ./
 COPY configs ./configs
 COPY public ./public
 COPY configs/missing-configuration.js ./public/c.js

@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { useCommonTranslate } from "../_shared/react-hooks/use-translator";
 
 const Custom404 = () => {
@@ -34,11 +33,5 @@ const Custom404 = () => {
         </div>
     );
 };
-
-export const getStaticProps = async ({ locale }) => ({
-    props: {
-        ...(await serverSideTranslations(locale, ["messages"])),
-    },
-});
 
 export default Custom404;

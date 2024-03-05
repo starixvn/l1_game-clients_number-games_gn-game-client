@@ -1,14 +1,13 @@
 import { TolgeeProvider } from "@tolgee/react";
-import { appWithTranslation } from "next-i18next";
 import { ThemeProvider } from "next-themes";
 import App, { AppProps } from "next/app";
 import Head from "next/head";
 import { buildVersion, systemName, Themes } from "../_shared/constants";
+import "../_shared/helpers/string-helper";
 import { tolgee } from "../_shared/tolgee";
+import Loading from "../components/page-components/loading";
 import "../styles/errors.scss";
 import "../styles/main.scss";
-import Loading from "../components/page-components/loading";
-import "../_shared/helpers/string-helper";
 
 class SabaNumberApp extends App<AppProps> {
     render() {
@@ -34,4 +33,4 @@ export const AppTilte = () => {
     );
 };
 
-export default appWithTranslation(SabaNumberApp);
+export default SabaNumberApp;
