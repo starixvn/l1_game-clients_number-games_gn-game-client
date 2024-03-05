@@ -152,7 +152,8 @@ export const Games: React.FC<Props> = ({
                 <GameCategory selectedPage={selectedPage} selectCategoryPage={selectCategoryPage} selectedCategory={selectedCategory} />
                 <div className={`${styles["game-list"]} ${isMobileOnly ? styles[isIOS ? "ios-device" : "android-device"] : ""}`}>
                     <div className="background-galaxy">
-                        <img src="/static/images/bg-galaxy.jpg" alt="galaxy" />
+                        <img className="galaxy-1" src="/static/images/bg-galaxy.jpg" alt="galaxy" />
+                        <img className="galaxy-2" src="/static/images/bg-galaxy.jpg" alt="galaxy" />
                     </div>
                     <div className="star-field">
                         <div className="layer"></div>

@@ -60,8 +60,8 @@
 .banker {
     @extend %statistic-icon;
     --colorText: #ff5e5e;
-    --colorBorderTop: #c74046;
-    --colorBorderBottom: #7d2d75;
+    --colorBorderTop: #fd1e55;
+    --colorBorderBottom: #fd1e55;
     --colorBackground: #2b1a26;
 
     &.big-road-tie {
@@ -72,8 +72,8 @@
 .player {
     @extend %statistic-icon;
     --colorText: #1c7bdf;
-    --colorBorderTop: #046ccd;
-    --colorBorderBottom: #035097;
+    --colorBorderTop: #1b91ff;
+    --colorBorderBottom: #1b91ff;
     --colorBackground: #0c243a;
 
     &.big-road-tie {

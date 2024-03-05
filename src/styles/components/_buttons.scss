@@ -32,51 +32,35 @@
 
 .btn-green {
     @extend %btn;
-    background-color: #159639;
-    color: var(--btn-green-color);
+    background-color: var(--btn-green-background);
 
     &:hover:enabled {
-        background: #12752e radial-gradient(circle, transparent 1%, #12752e 1%) center/15000%;
-    }
-
-    &:active {
-        background-color: #12752e;
-    }
-}
-
-.btn-orange {
-    @extend %btn;
-    background-color: var(--btn-orange-background);
-    color: var(--btn-orange-color);
-
-    &:hover:enabled {
-        background: var(--btn-orange-background-hover) radial-gradient(circle, transparent 1%, var(--btn-orange-background-hover) 1%)
+        background: var(--btn-green-background-hover) radial-gradient(circle, transparent 1%, var(--btn-green-background-hover) 1%)
             center/15000%;
     }
 
     &:active {
-        background-color: var(--btn-orange-background-hover);
+        background-color: var(--btn-green-background-hover);
     }
 }
 
-.btn-blue {
+.btn-yellow {
     @extend %btn;
-    background: var(--btn-blue-background);
-    color: var(--btn-orange-color);
+    background-color: var(--btn-yellow-background);
 
     &:hover:enabled {
-        background: var(--btn-blue-background-hover);
+        background: var(--btn-yellow-background-hover) radial-gradient(circle, transparent 1%, var(--btn-yellow-background-hover) 1%)
+            center/15000%;
     }
 
     &:active {
-        background-color: var(--btn-blue-background-hover);
+        background-color: var(--btn-yellow-background-hover);
     }
 }
 
 .btn-red {
     @extend %btn;
     background: var(--btn-red-background);
-    color: var(--btn-orange-color);
 
     &:hover:enabled {
         background: var(--btn-red-background-hover);
@@ -84,100 +68,5 @@
 
     &:active {
         background-color: var(--btn-red-background-hover);
-    }
-}
-
-.btn-grey {
-    @extend %btn;
-    background: var(--btn-grey-background);
-    color: var(--btn-grey-color);
-
-    &:hover:enabled {
-        background: var(--btn-grey-background-hover);
-    }
-
-    &:active {
-        background-color: var(--btn-grey-background-hover);
-    }
-}
-
-%button-custom-3d {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: none;
-    outline: none;
-    border-radius: 1rem;
-    z-index: 1;
-    -webkit-tap-highlight-color: transparent;
-
-    &:before {
-        position: absolute;
-        left: 0.1rem;
-        right: 0.1rem;
-        top: 0.1rem;
-        bottom: 0.1rem;
-        border-radius: 1rem;
-        content: "";
-        z-index: -1;
-    }
-}
-
-[data-theme="light"] .header-button {
-    --header-button-background: linear-gradient(180deg, #ffd586 0%, #ffaa20 100%);
-    --header-button-border1: #a0a0a0;
-    --header-button-border2: #ffc459;
-    --header-button-shadow-inner: inset 0 0.2rem 0.3rem #ffffff;
-    --header-button-background-hover: linear-gradient(180deg, #db8700 0%, #ffbd41 100%);
-
-    @media (min-width: 768px) {
-        --header-button-border1: #e8e8e8;
-    }
-}
-
-.header-button {
-    @extend %button-custom-3d;
-    height: 3.4rem;
-    background-color: var(--header-button-border1);
-
-    &:before {
-        background: var(--header-button-background);
-        border: 0.1rem solid var(--header-button-border2);
-        box-shadow: var(--header-button-shadow-inner);
-    }
-
-    @media (hover: hover) {
-        &:hover:before {
-            cursor: pointer;
-            box-shadow: none;
-            background: var(--header-button-background-hover);
-        }
-    }
-}
-
-[data-theme="light"] .game-header-button {
-    --game-header-button-background: linear-gradient(180deg, #ffc65c 0%, #ffae2b 100%);
-    --game-header-button-border: linear-gradient(180deg, #faa60c 0%, #a96800 100%);
-    --game-header-button-shadow-inner: inset 0 0.2rem 0.3rem #fff;
-    --game-header-button-background-hover: linear-gradient(180deg, #d78600 0%, #fbae21 100%);
-}
-
-.game-header-button {
-    @extend %button-custom-3d;
-    height: 3.6rem;
-    background: var(--game-header-button-border);
-
-    &:before {
-        background: var(--game-header-button-background);
-        box-shadow: var(--game-header-button-shadow-inner);
-    }
-
-    @media (hover: hover) {
-        &:hover:before {
-            cursor: pointer;
-            box-shadow: none;
-            background: var(--game-header-button-background-hover);
-        }
     }
 }

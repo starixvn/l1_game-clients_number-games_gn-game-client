@@ -23,33 +23,26 @@ html {
 
     --font-family: "Montserrat", arial, sans-serif;
     --font-money: "BebasNeue", Arial, sans-serif;
-    --font-number: "SanFranciscoDisplay", Arial, sans-serif;
-    --primary-color: #ff8b20;
+    --font-number: "Montserrat", Arial, sans-serif;
 
     // buttons
     --btn-red-background: #ea1d40;
-    --btn-red-background-hover: #f84362;
+    --btn-red-background-hover: #a90f29;
+
+    --btn-green-background: #159639;
+    --btn-green-background-hover: #0c6f28;
+
+    --btn-yellow-background: #c3a125;
+    --btn-yellow-background-hover: #a4830e;
 
     // z-index
     --bet-setting-index: 300;
-    --chip-index: 10;
     --header-index: 1071;
     --table-thead-index: 999;
-    --footer-index: 300;
-    --popup-result-index: 302;
     --popup-index: 301;
-    --popup-index-phone: 9999;
-    --notice-index: 200;
     --popup-guide-history-index: 300;
-    --amount-index: 91;
     --result-animation-index: 90;
-    --balance-betting-pool-index: 80;
-    --waiting-time-index: 80;
-    --overlay-index: 70;
     --modal-index: 300;
-    --loader-layer-index: 250;
-    --setting-index: 302;
-    --tooltip-buttons-index: 100;
     --global-api-error-index: 2000;
 
     // spacing size
@@ -78,15 +71,8 @@ html {
 
     // popup
     --popup-background: #fff;
-    --popup-border: #cbcbcb;
     --popup-color: #2c2f3e;
-    --popup-title-color: #2c2f3e;
-    --popup-sub-title-color: #787878;
-    --popup-game-name-color: #ff9a00;
-    --popup-icon-close-background: #eaebf0;
-    --popup-icon-close-color: #4f4f54;
     --popup-bet-form-shadow: 0 0 2rem rgba(0, 0, 0, 0.3);
-
     --container-color-bg: #fff;
     --container-border-color: #cbcbcb;
     --icon-favorite-game-guide: #2c2f3e;
@@ -111,6 +97,7 @@ body {
     color: var(--text-color);
     overscroll-behavior: contain;
     background-size: cover;
+    overflow: hidden;
 }
 
 .no-scroll-html {

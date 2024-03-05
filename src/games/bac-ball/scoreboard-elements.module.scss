@@ -29,10 +29,10 @@
     @extend %statistic-icon;
 
     --colorText: #ff5e5e;
-    --colorBorderTop: #c74046;
-    --colorBorderBottom: #7d2d75;
+    --colorBorderTop: #fd1e55;
+    --colorBorderBottom: #fd1e55;
     --colorBackground: #2b1a26;
-    border-width: 0.5px;
+
     width: 0.4rem;
     height: 0.4rem;
 }
@@ -41,10 +41,10 @@
     @extend %statistic-icon;
 
     --colorText: #1c7bdf;
-    --colorBorderTop: #046ccd;
-    --colorBorderBottom: #035097;
+    --colorBorderTop: #1b91ff;
+    --colorBorderBottom: #1b91ff;
     --colorBackground: #0c243a;
-    border-width: 0.5px;
+
     width: 0.4rem;
     height: 0.4rem;
 }
