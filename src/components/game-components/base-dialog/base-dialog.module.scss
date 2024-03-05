@@ -47,14 +47,14 @@
     }
 
     @media screen and (min-width: 1600px) {
-        height: 80vh;
+        height: calc((1 / var(--zoom-game)) * 100vh);
     }
 
     @media (min-aspect-ratio: 3/4) {
-        height: 80vh;
+        height: calc((1 / var(--zoom-game)) * 100vh);
     }
 
     @media screen and (min-width: 500px) and (orientation: portrait) {
-        height: 80vh;
+        height: calc((1 / var(--zoom-game)) * 100vh);
     }
 }
