@@ -25,8 +25,9 @@ export const BacBallResultSlotContainer: React.FC<IResultSlotContainer> = (props
 
     useEffect(() => {
         if (roundData?.[betChoiceBalls]?.length > 0) {
-            const clonedData = [...defaultRoundData];
-            for (let i = 0; i < ballsData.length; i++) {
+            const clonedData = [].concat(defaultRoundData);
+
+            for (let i = 0; i < clonedData.length; i++) {
                 const value = roundData[betChoiceBalls][i];
                 if (value) {
                     clonedData[i].number = value;
@@ -41,6 +42,7 @@ export const BacBallResultSlotContainer: React.FC<IResultSlotContainer> = (props
     useEffect(() => {
         if (result && drawId === result.drawId) {
             let clonedData = [...ballsData];
+            clonedData[turnCounter - 1].status = BallStatus.LOADING;
             clonedData[turnCounter - 1].number = result[betChoice];
             clonedData[turnCounter - 1].delayTime = delayTime;
             setBallsData(clonedData);
