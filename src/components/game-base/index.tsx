@@ -26,6 +26,7 @@ import {
     GameRoundHistoryHandler,
     PlaceBetHandler,
     PlayerHandler,
+    TurnIdHandler,
     messageEventType,
 } from "./handlers";
 import { IGameStateHandler } from "./handlers/game-state-handler";
@@ -258,6 +259,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     handleRemainingTime({ remainingTime }) {
+        // console.log({ name: "recieve-remaining-time", remainingTime });
         const { durations, gameStateContextModel } = this.props;
         const { roundState, isUMInFirstLoad } = gameStateContextModel;
 
@@ -296,6 +298,13 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     handleGamePlay(remainingTime: number) {
         const { durations, dispatch, gameStateContextModel } = this.props;
 
+        // console.log({
+        //     remainingTime,
+        //     roundState: RoundState[gameStateContextModel.roundState],
+        //     roundTimeCounter: this.roundTimeCounter,
+        //     turnCounter: gameStateContextModel.turnCounter,
+        // });
+
         dispatch({
             type: GameEventActionType.REMAINING_TIME,
             payload: { remainingTime },
@@ -307,6 +316,8 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             remainingTime,
             durations,
         });
+
+        this.gameMessageHandler.broadcastGameEvent({ [messageEventType.ROUND_STATE]: newRoundState });
 
         if (gameStateContextModel.roundState !== newRoundState && gameStateContextModel.isConnect) {
             const newGameState = {

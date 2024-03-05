@@ -24,7 +24,7 @@ export class TurnStateHandler extends RoundStateHandler {
                 ? (remainingTime % durations.wholeTurn) - durations.switchRoundAnimation
                 : remainingTime % durations.wholeTurn;
 
-        return turnRemainingTime === 0 ? durations.wholeTurn : turnRemainingTime;
+        return turnRemainingTime <= 0 ? durations.wholeTurn : turnRemainingTime;
     }
 
     getWholeRoundDuration({ durations }) {

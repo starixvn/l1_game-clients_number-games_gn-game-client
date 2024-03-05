@@ -18,6 +18,7 @@ export const messageEventType = {
     ODDS: "odds",
     UNDER_MAINTENANCE: "um",
     DRAW_ID: "drawId",
+    ROUND_STATE: "roundState",
     SOCKET_CONNECT_ERROR: "connect_error",
     SOCKET_CONNECTED: "connect",
     SOCKET_DISCONNECTED: "disconnect",
@@ -40,7 +41,6 @@ export class GameMessageHandler {
     }
 
     registerSocketEvents = () => {
-        this.register(messageEventType.DRAW_ID, this.handleDrawId);
         this.register(messageEventType.GAME_CONFIG, this.handleGameConfigs);
         this.register(messageEventType.TOTAL_BETS, this.handleTotalBet);
         this.register(messageEventType.OWN_BETS, this.handleOwnBets);
@@ -138,16 +138,6 @@ export class GameMessageHandler {
             payload: {
                 playerBetCount,
             },
-        });
-    };
-
-    handleDrawId = ({ drawId }) => {
-        const numberOfTurnsPerRound = 3;
-        const turnCounter = drawId % numberOfTurnsPerRound === 0 ? numberOfTurnsPerRound : drawId % numberOfTurnsPerRound;
-
-        this.dispatch({
-            type: GameEventActionType.DRAW_ID,
-            payload: { drawId, turnCounter },
         });
     };
 

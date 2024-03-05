@@ -271,6 +271,12 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
             return {
                 ...state,
                 drawId,
+            };
+        }
+
+        case GameEventActionType.TURN_COUNTER: {
+            return {
+                ...state,
                 turnCounter,
             };
         }

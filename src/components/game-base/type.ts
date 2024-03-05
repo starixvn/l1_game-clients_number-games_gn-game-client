@@ -32,6 +32,7 @@ export interface GameSettings {
     gameName: string;
     socketInfo: SocketInfo;
     durations: GameDurations;
+    totalTurns: number;
 }
 
 export type GamePropsContext = {
@@ -39,6 +40,7 @@ export type GamePropsContext = {
     gameName?: string;
     socketInfo?: SocketInfo;
     durations?: GameDurations;
+    totalTurns?: number;
     notifyWinStreak?: Function;
     playPlaceBetSound?: Function;
     setApiErrorMessage?: Function;

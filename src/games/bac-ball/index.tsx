@@ -8,7 +8,7 @@ import {
     useGameStatesDispatch,
 } from "../../_shared/react-contexts/game-state-context/game-state-context";
 import GameBase from "../../components/game-base/";
-import { GameMessageHandler } from "../../components/game-base/handlers";
+import { GameMessageHandler, TurnIdHandler } from "../../components/game-base/handlers";
 import { GameBaseProps, Round } from "../../components/game-base/type";
 import { Scoreboard } from "./scoreboard";
 import { PercentageStatistic } from "../../components/game-components/statistic";
@@ -22,10 +22,26 @@ import { BacBallResult, BacBallSettlementResult } from "./types";
 import { DrawIdBlock } from "./draw-id-block";
 
 class BacBall extends GameBase<GameBaseProps> {
+    private turnIdHandler?: TurnIdHandler;
+
     constructor(props: GameBaseProps) {
         const gameMessageHandler = new GameMessageHandler(props.dispatch);
-
         super(props, new TurnStateHandler(), new TurnGameStateHandler(), gameMessageHandler);
+
+        this.turnIdHandler = new TurnIdHandler({
+            dispatch: props.dispatch,
+            gameStateContextModel: () => {
+                return this.props.gameStateContextModel;
+            },
+            gameMessageHandler,
+            totalTurns: props.totalTurns,
+        });
+    }
+
+    override registerHandlers(): void {
+        super.registerHandlers();
+
+        this.turnIdHandler?.registerEvents();
     }
 
     componentDidMount() {
