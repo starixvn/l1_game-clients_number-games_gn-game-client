@@ -93,12 +93,6 @@ export class Scoreboard extends Component<ScoreboardComponentProps> {
                     type="switch"
                     scoreboards={[
                         {
-                            element: BacBallBeadRoadValueElement,
-                            arrange: BacBallBeadRoadValueElement.arrange,
-                            column: 18,
-                            row: 6,
-                        },
-                        {
                             element: BacBallBeadRoadCharacterElement,
                             arrange: BacBallBeadRoadCharacterElement.arrange,
                             column: 18,
