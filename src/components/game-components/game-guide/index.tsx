@@ -7,10 +7,12 @@ import Loader from "../loader";
 import { buildGameGuideUrl } from "../../../_shared/helpers";
 import { tolgee } from "../../../_shared/tolgee";
 import { useTheme } from "next-themes";
+import { useCommonTranslate } from "../../../_shared/react-hooks";
 
 const GameGuideModal: FC = () => {
     const { isShowGameGuide } = useGameStateContext();
     const dispatch = useGameStatesDispatch();
+    const { t: translate } = useCommonTranslate();
 
     const handleCloseModal = () => {
         dispatch({ type: "TOGGLE_GAME_GUIDE", payload: { isShowGameGuide: false } });
@@ -18,7 +20,7 @@ const GameGuideModal: FC = () => {
 
     return (
         isShowGameGuide && (
-            <ModalContainer isOpen={true} onCloseModal={handleCloseModal} title={"Game Guide"}>
+            <ModalContainer isOpen={true} onCloseModal={handleCloseModal} title={translate("game_guide")}>
                 <WrapperGameGuide />
             </ModalContainer>
         )
