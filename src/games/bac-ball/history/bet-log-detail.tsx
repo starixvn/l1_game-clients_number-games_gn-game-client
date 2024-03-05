@@ -1,15 +1,15 @@
 import { randomBytes } from "crypto";
 import { FC } from "react";
+import { useState } from "react";
 import { createPortal } from "react-dom";
 
+import { numberWithCommas, seperateDateTime, sortedCollectionByTime } from "../../../_shared/helpers";
 import { useBallColor } from "../../../_shared/helpers/ball-color-helper";
+import { useCommonTranslate, useSNTranslate, useTranslator } from "../../../_shared/react-hooks/use-translator";
 import { BetLogDetailProps } from "../../../components/game-components/bet-history";
 import ModalContainer from "../../../components/game-components/modal-container";
 import Styles from "./common.module.scss";
 import TableRow from "./row-table";
-import { useCommonTranslate, useSNTranslate, useTranslator } from "../../../_shared/react-hooks/use-translator";
-import { numberWithCommas, seperateDateTime, sortedCollectionByTime } from "../../../_shared/helpers";
-import { useState } from "react";
 
 interface BacBallBetDetailProps extends BetLogDetailProps {
     drawInfo: DrawInfo;
@@ -84,11 +84,11 @@ const BetDetail: FC<BetLogDetailProps> = ({ betLogDetails, onCloseModal, isShowB
                             </span>
                         </div>
                         <div className={Styles["info-item"]}>
-                            {translateBacBall("glossary_player")}:{" "}
+                            {translateBacBall("glossary_player")}
                             <span className={`${Styles["ball"]} ${Styles[ballColor({ number: result.player })]}`}>{result.player}</span>
                         </div>
                         <div className={Styles["info-item"]}>
-                            {translateBacBall("glossary_banker")}:{" "}
+                            {translateBacBall("glossary_banker")}
                             <span className={`${Styles["ball"]} ${Styles[ballColor({ number: result.banker })]}`}>{result.banker}</span>
                         </div>
                     </div>
