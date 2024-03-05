@@ -1,10 +1,10 @@
 import React from "react";
+import { useTranslator } from "../../../_shared/react-hooks/use-translator";
+import { ResourceTypes } from "../../../_shared/resources";
 import BaseDialog from "../base-dialog";
 import { ModalType } from "../base-dialog/type";
 import Styles from "./error-message.module.scss";
 import { ConnectFailedReasonKey } from "./type";
-import { useTranslator } from "../../../_shared/react-hooks/use-translator";
-import { ResourceTypes } from "../../../_shared/resources";
 
 export const ConnectFailedMessage: React.FC<{ gameName: string; onSubmit: () => void; reason: string }> = ({
     gameName,
@@ -18,7 +18,7 @@ export const ConnectFailedMessage: React.FC<{ gameName: string; onSubmit: () => 
                 <div className={`${Styles["warning-container"]}`}>
                     <div className={`icon-warning ${Styles["icon-warning"]}`}></div>
                 </div>
-                <div className={Styles["title"]}>{t("game_name")}</div>
+                <div className={Styles["title"]}>{gameName}</div>
                 <div className={Styles["content"]}>{t(reason)}</div>
                 <div className={Styles["list-action"]}>
                     <button onClick={() => onSubmit()} className={`btn-red w-100 ${Styles["reconnect"]}`}>

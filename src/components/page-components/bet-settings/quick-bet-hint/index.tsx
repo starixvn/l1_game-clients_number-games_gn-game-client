@@ -26,7 +26,9 @@ const QuickBetHint: React.FC<Props> = ({ closeModal, confirmQuickBet }) => {
             <div className={Styles["popup-header"]}>
                 <h1 className={Styles["popup-title"]}>{translate("quick_bet")}</h1>
             </div>
-            <div className={Styles.message}>{translate("enable_quick_bet_hint")}</div>
+            <div className={Styles.message}>
+                <div dangerouslySetInnerHTML={{ __html: translate("enable_quick_bet_hint") }} />
+            </div>
             <div className={Styles["list-button"]}>
                 <button className={`${Styles["btn-red"]} ${Styles["btn"]}`} onClick={handleClose} id="btn-cancel-quickbet">
                     {translate("button_cancel")}

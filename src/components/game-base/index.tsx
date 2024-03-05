@@ -4,10 +4,10 @@ import { Socket } from "socket.io-client";
 import { InitSocketIO } from "../../_shared/helpers";
 import { AuthContext, AuthContextModel, GameActionsContextProvider, GameContextProvider } from "../../_shared/react-contexts";
 import { GameEventActionType } from "../../_shared/react-contexts/game-state-context/game-event-action";
-import { GameResourceKeys } from "../../_shared/resources";
 import { getBalance } from "../../services/auth-service";
 import BetConfirmDialog from "../game-components/bet-confirm-dialog";
 import ConfirmBet from "../game-components/confirm-bet";
+import CountdownTimer from "../game-components/countdown-timer/countdown-timer";
 import DisabledModal from "../game-components/disabled-modal";
 import { ConnectFailedMessage } from "../game-components/error-message";
 import { ConnectFailedReasonKey } from "../game-components/error-message/type";
@@ -30,7 +30,6 @@ import {
 } from "./handlers";
 import { IGameStateHandler } from "./handlers/game-state-handler";
 import { GameBaseProps, RoundState } from "./type";
-import CountdownTimer from "../game-components/countdown-timer/countdown-timer";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
     protected socket: Socket;
@@ -375,7 +374,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
     renderRoundIdSection() {
         return <></>;
-
     }
     renderHeaderBlock() {
         return (
@@ -509,7 +507,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         return (
             roundState === RoundState.ConnectFailed && (
                 <ConnectFailedMessage
-                    gameName={`${this.props.gameName.toLowerCase()}:${GameResourceKeys.GAME_NAME}`}
+                    gameName={this.props.gameName}
                     onSubmit={
                         ConnectFailedReasonKey.restrictPlayPermission === disconnectReason
                             ? () => window.location.reload()
