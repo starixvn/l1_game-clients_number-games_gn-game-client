@@ -45,4 +45,16 @@
         right: 5px;
         box-shadow: none;
     }
+
+    @media screen and (min-width: 1600px) {
+        height: 80vh;
+    }
+
+    @media (min-aspect-ratio: 3/4) {
+        height: 80vh;
+    }
+
+    @media screen and (min-width: 500px) and (orientation: portrait) {
+        height: 80vh;
+    }
 }
