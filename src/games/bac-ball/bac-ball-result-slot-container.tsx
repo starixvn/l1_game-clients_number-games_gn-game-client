@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
 import { RoundState } from "../../components/game-base/type";
@@ -19,13 +19,16 @@ export const BacBallResultSlotContainer: React.FC<IResultSlotContainer> = (props
         { number: 0, status: BallStatus.NONE, delayTime: 0 },
         { number: 0, status: BallStatus.NONE, delayTime: 0 },
     ];
-    const [ballsData, setBallsData] = useState<IBall[]>(defaultRoundData);
+
+    const [ballsData, setBallsData] = useState<IBall[]>([]);
     const gameStateContext = useGameStateContext();
     const { result, roundState, roundData, turnCounter, drawId } = gameStateContext;
 
     useEffect(() => {
         if (roundData?.[betChoiceBalls]?.length > 0) {
-            const clonedData = [].concat(defaultRoundData);
+            let clonedData = defaultRoundData.map((data) => {
+                return { ...data };
+            });
 
             for (let i = 0; i < clonedData.length; i++) {
                 const value = roundData[betChoiceBalls][i];
@@ -40,12 +43,14 @@ export const BacBallResultSlotContainer: React.FC<IResultSlotContainer> = (props
     }, [roundData]);
 
     useEffect(() => {
-        if (result && drawId === result.drawId) {
+        if (result && drawId === result.drawId && ballsData.length > 0) {
             let clonedData = [...ballsData];
-            clonedData[turnCounter - 1].status = BallStatus.LOADING;
-            clonedData[turnCounter - 1].number = result[betChoice];
-            clonedData[turnCounter - 1].delayTime = delayTime;
-            setBallsData(clonedData);
+            if (clonedData[turnCounter - 1]) {
+                clonedData[turnCounter - 1].status = BallStatus.LOADING;
+                clonedData[turnCounter - 1].number = result[betChoice];
+                clonedData[turnCounter - 1].delayTime = delayTime;
+                setBallsData(clonedData);
+            }
         }
     }, [result]);
 
@@ -59,25 +64,20 @@ export const BacBallResultSlotContainer: React.FC<IResultSlotContainer> = (props
         if (roundState === RoundState.LockingBet || roundState === RoundState.InRound) {
             const clonedData = [...ballsData];
             const currentRound = clonedData.find((ball) => ball.number === 0);
-            currentRound && (currentRound.status = BallStatus.LOADING);
-            setBallsData(clonedData);
+            if (currentRound) {
+                currentRound.status = BallStatus.LOADING;
+                setBallsData(clonedData);
+            }
         }
-    }, [roundState]);
+    }, [roundState, ballsData]);
 
-    return (
-        <div className={Style["ball-container"]}>
-            {ballsData.map((result, index) => {
-                const props: any = {};
-                props.number = result.number;
-                props.delayTime = result.delayTime;
-                if (result.number > 0 || result.status === BallStatus.LOADING) {
-                    props.status = result.status;
-                } else {
-                    props.status = BallStatus.NONE;
-                }
-
-                return <Ball key={index} {...props} />;
-            })}
-        </div>
-    );
+    return useMemo(() => {
+        return (
+            <div className={Style["ball-container"]}>
+                {ballsData.map((result, index) => {
+                    return <Ball key={index} {...result} />;
+                })}
+            </div>
+        );
+    }, [ballsData]);
 };
