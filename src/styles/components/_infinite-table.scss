@@ -10,7 +10,7 @@
 }
 
 .table-container {
-    height: calc(calc(100% - var(--more-info-height)) - calc(calc(100% - var(--more-info-height)) * (var(--zoom-game) - 1)));
+    height: calc(100% - var(--more-info-height));
     padding: 0;
 }
 
@@ -65,6 +65,7 @@
             }
 
             .highlight {
+                font-weight: bold;
                 color: #ffbc11;
             }
         }
