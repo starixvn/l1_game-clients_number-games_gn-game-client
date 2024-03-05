@@ -361,11 +361,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         });
     };
 
-    getGameTranslate(key: string) {
-        const t = this.props.translate;
-        return `${t({ key })}`;
-    }
-
     renderNotice() {
         return <Notice />;
     }

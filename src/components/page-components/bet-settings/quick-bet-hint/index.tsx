@@ -1,11 +1,12 @@
 import React from "react";
 
-import { useTranslate } from "@tolgee/react";
+import { Markup } from "interweave";
+import { useSNTranslate } from "../../../../_shared/react-hooks";
 import Styles from "./quick-bet-hint.module.scss";
 import { Props } from "./type";
 
 const QuickBetHint: React.FC<Props> = ({ closeModal, confirmQuickBet }) => {
-    const { t } = useTranslate("SabaNumber");
+    const { t } = useSNTranslate();
 
     const handleClose = () => {
         closeModal();
@@ -15,26 +16,20 @@ const QuickBetHint: React.FC<Props> = ({ closeModal, confirmQuickBet }) => {
         confirmQuickBet();
     };
 
-    const translate = (key) => {
-        return t({
-            key,
-        });
-    };
-
     return (
         <div className={`modal-center yellow-color ${Styles["error-message-container"]}`}>
             <div className={Styles["popup-header"]}>
-                <h1 className={Styles["popup-title"]}>{translate("quick_bet")}</h1>
+                <h1 className={Styles["popup-title"]}>{t("quick_bet")}</h1>
             </div>
             <div className={Styles.message}>
-                <div dangerouslySetInnerHTML={{ __html: translate("enable_quick_bet_hint") }} />
+                <Markup content={t(`enable_quick_bet_hint`).replaceTolgeeFormat()}></Markup>
             </div>
             <div className={Styles["list-button"]}>
                 <button className={`${Styles["btn-red"]} ${Styles["btn"]}`} onClick={handleClose} id="btn-cancel-quickbet">
-                    {translate("button_cancel")}
+                    {t("button_cancel")}
                 </button>
                 <button className={`${Styles["btn-green"]} ${Styles["btn"]}`} onClick={handleConfirm} id="btn-on-quickbet">
-                    {translate("button_enable_quickbet")}
+                    {t("button_enable_quickbet")}
                 </button>
             </div>
         </div>

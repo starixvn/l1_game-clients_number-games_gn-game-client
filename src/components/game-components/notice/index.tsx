@@ -1,11 +1,11 @@
-import { useTranslate } from "@tolgee/react";
 import React, { useEffect } from "react";
 import { numberWithCommas } from "../../../_shared/helpers/number-helper";
+import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
+import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
+import { useCommonTranslate } from "../../../_shared/react-hooks";
 import BaseDialog from "../base-dialog";
 import { ModalType } from "../base-dialog/type";
 import Styles from "./notice.module.scss";
-import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
-import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 
 const BaseNotice: React.FC<{ onClose: () => void; duration: number; isOpen?: boolean; isWarning: boolean; children: React.ReactNode }> = ({
     children,
@@ -29,7 +29,7 @@ const BaseNotice: React.FC<{ onClose: () => void; duration: number; isOpen?: boo
 };
 
 export const Notice = () => {
-    const { t } = useTranslate(["Common", "SabaNumber"]);
+    const { t } = useCommonTranslate();
     const gameStateContext = useGameStateContext();
     const dispatch = useGameStatesDispatch();
 

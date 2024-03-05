@@ -1,12 +1,12 @@
 import React from "react";
 
-import { useTranslate } from "@tolgee/react";
+import { useCommonTranslate } from "../../../_shared/react-hooks";
 import BaseDialog from "../base-dialog";
 import { ModalType } from "../base-dialog/type";
 import Styles from "./disabled-modal.module.scss";
 
 const DisabledModal: React.FC<{ disableMessage: string; onSubmit: () => void }> = ({ disableMessage, onSubmit }) => {
-    const { t } = useTranslate(["Common", "SabaNumber"]);
+    const { t } = useCommonTranslate();
     const isDisable = disableMessage === "";
     return (
         <BaseDialog type={ModalType.Center} isOpen={true}>

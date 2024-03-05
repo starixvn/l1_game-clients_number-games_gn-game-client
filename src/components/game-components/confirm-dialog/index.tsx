@@ -1,5 +1,5 @@
-import { useTranslate } from "@tolgee/react";
 import React from "react";
+import { useSNTranslate } from "../../../_shared/react-hooks";
 import BaseDialog, { Props } from "../base-dialog";
 import { ModalType } from "../base-dialog/type";
 import Styles from "./confirm-dialog.module.scss";
@@ -19,7 +19,7 @@ export const ConfirmDialog: React.FC<Props & SubmitDialogProps> = ({
     content,
     subContent,
 }: Props & SubmitDialogProps) => {
-    const { t } = useTranslate(["SabaNumber"]);
+    const { t } = useSNTranslate();
 
     return (
         <BaseDialog
@@ -48,7 +48,7 @@ export const ConfirmDialog: React.FC<Props & SubmitDialogProps> = ({
                         type="button"
                         data-testid="btn-no-summit-dialog"
                     >
-                        {t({ key: "no" })}
+                        {t("button_no")}
                     </button>
                     <button
                         className={`btn-red ${Styles["btn-no"]}`}
@@ -56,7 +56,7 @@ export const ConfirmDialog: React.FC<Props & SubmitDialogProps> = ({
                         type="button"
                         data-testid="btn-yes-summit-dialog"
                     >
-                        {t({ key: "yes" })}
+                        {t("button_yes")}
                     </button>
                 </div>
             </div>

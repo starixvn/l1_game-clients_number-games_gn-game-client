@@ -1,9 +1,9 @@
-import { useTranslate } from "@tolgee/react";
 import { useEffect, useRef, useState } from "react";
 import { isIOS, isMobileOnly } from "react-device-detect";
 import { StorageHelper, localStorageKeys } from "../../../../_shared/helpers";
 import { useAuthContext } from "../../../../_shared/react-contexts";
 import { useGameStateContext } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
+import { useSNTranslate } from "../../../../_shared/react-hooks";
 import { updateUserQuickBetSetting } from "../../../../services/user-setting-service";
 import BaseDialog from "../../../game-components/base-dialog";
 import { ModalType } from "../../../game-components/base-dialog/type";
@@ -23,7 +23,7 @@ export const QuickBetBtn = () => {
     if (isMobileOnly) {
         deviceClass = isIOS ? Styles["ios-device"] : Styles["android-device"];
     }
-    const { t } = useTranslate("SabaNumber");
+    const { t } = useSNTranslate();
 
     const confirmQuickBet = () => {
         setIsShowTooltip(false);
@@ -75,9 +75,7 @@ export const QuickBetBtn = () => {
     ) : (
         <div className={`${Styles["toggle"]} ${Styles["bet-setting"]} ${deviceClass}`}>
             <div className={Styles["one-click-bet"]} onClick={onClickQuickBet}>
-                {t({
-                    key: "quick_bet",
-                })}
+                {t("quick_bet")}
             </div>
             <div>
                 <input

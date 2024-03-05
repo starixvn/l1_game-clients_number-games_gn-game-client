@@ -1,9 +1,9 @@
-import { useTranslate } from "@tolgee/react";
 import React, { useEffect } from "react";
 import { confirmBet } from "../../../_shared/constants";
 import { useGameActionContext } from "../../../_shared/react-contexts";
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
+import { useSNTranslate } from "../../../_shared/react-hooks";
 import Styles from "./confirm-bet.module.scss";
 
 export type Props = {};
@@ -13,7 +13,7 @@ const ConfirmBet: React.FC<Props> = ({}: Props) => {
     const gameActionContext = useGameActionContext();
     const gameStateConext = useGameStateContext();
 
-    const { t } = useTranslate(["SabaNumber"]);
+    const { t } = useSNTranslate();
     useEffect(() => {
         return () => {};
     }, []);
@@ -41,7 +41,7 @@ const ConfirmBet: React.FC<Props> = ({}: Props) => {
         <div className={Styles["confirm-bet-container"]}>
             <div className={Styles["back-ground"]}>
                 <button className={`btn-red ${Styles["btn-cancel"]}`} onClick={() => onCancel()} type="button" data-testid="btn-cancel-bet">
-                    {t({ key: "cancel" })}
+                    {t({ key: "button_cancel" })}
                 </button>
                 <button
                     className={`btn-red ${Styles["btn-confirm"]}`}
@@ -49,7 +49,7 @@ const ConfirmBet: React.FC<Props> = ({}: Props) => {
                     type="button"
                     data-testid="btn-confirm-bet"
                 >
-                    {t({ key: "confirm" })}
+                    {t({ key: "button_confirm" })}
                 </button>
             </div>
         </div>
