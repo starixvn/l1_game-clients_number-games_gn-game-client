@@ -20,7 +20,6 @@ import BaseDialog from "../../game-components/base-dialog";
 import { ModalType } from "../../game-components/base-dialog/type";
 import { ErrorApiText } from "../../game-components/error-api-text";
 import Footer from "../../game-components/footer";
-import { HistoryModal } from "../../page-components/dashboard/history";
 import Register from "../../page-components/dashboard/register";
 import Header from "../header";
 import Styles from "./dashboard.module.scss";
@@ -344,13 +343,6 @@ class Dashboard extends React.PureComponent<Props, State> {
 
                     <Footer />
 
-                    {isShowHistory && (
-                        <HistoryModal
-                            onCloseModal={this.toggleHistoryModal}
-                            offerGames={offerGames}
-                            fractionalOddsFormat={authorizeInfo.user?.fractionalOddsFormat}
-                        />
-                    )}
                     {isShowGuide && (
                         <GameGuideModal
                             userStakeLevel={userStakeLevel}
