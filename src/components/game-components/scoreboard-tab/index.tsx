@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef, createRef } from "react";
+import React, { createRef, useMemo, useRef, useState } from "react";
 
 import { useGameActionContext } from "../../../_shared/react-contexts";
 import { Tooltip } from "../tooltip";
@@ -38,11 +38,6 @@ const ScoreboardTab: React.FunctionComponent<Props> = (props) => {
                             data-testid="tab-child"
                             ref={toggleTabs.current[index]}
                         >
-                            {tabsValue[tab].tabWinningStreak > 3 && (
-                                <span className={Styles["winning-streak"]} data-testid="winning-streak">
-                                    {tabsValue[tab].tabWinningStreak}
-                                </span>
-                            )}
                             <span className={`${Styles.type} ${tabActive === index ? Styles["tabs-active"] : ""}`}>
                                 {tabsValue[tab].tabName}
                             </span>

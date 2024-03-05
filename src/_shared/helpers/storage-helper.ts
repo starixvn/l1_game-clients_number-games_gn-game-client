@@ -114,7 +114,6 @@ export const localStorageKeys = {
     rebet: buildLocalStorageKey("rebet"),
     umInfo: buildLocalStorageKey("um_info"),
     loginStatus: buildLocalStorageKey("login-status"),
-    winningStreakNotification: buildLocalStorageKey("winning-streak-notification"),
     enableSound: buildLocalStorageKey("enable-sound"),
     enableMusic: buildLocalStorageKey("enable-music"),
     buildVersion: buildLocalStorageKey("build-version"),

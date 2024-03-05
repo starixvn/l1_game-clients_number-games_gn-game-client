@@ -1,28 +1,26 @@
 import { useTheme } from "next-themes";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { isIOS, isMobileOnly } from "react-device-detect";
+import useSound from "use-sound";
 import { getAppSettings } from "../_shared/app-settings";
+import { AppTypes, GameIds } from "../_shared/constants";
 import { SystemContextProvider } from "../_shared/react-contexts";
+import { resourceMp3 } from "../_shared/react-hooks";
+import { GameCategory } from "../components/page-components/game-category";
 import {
     GameCategoryConfig,
     GameCategoryKeys,
     GameCategoryType,
     GamesInOnePage,
 } from "../components/page-components/game-category/constants";
-import { WinningStreak } from "../components/page-components/winning-streak";
-import { WinningStreakItem } from "../components/page-components/winning-streak/winning-streak.type";
-import styles from "./games.module.scss";
-import { Props } from "./type";
-import { AppTypes, GameIds } from "../_shared/constants";
 import BacBall from "./bac-ball";
-import { GameCategory } from "../components/page-components/game-category";
+import styles from "./games.module.scss";
 import HappyFour from "./happy-four/page";
 import HappyWheel from "./happy-wheel/page";
-import SicBalls from "./sic-balls/page";
-import NextBall from "./next-ball/page";
 import LuckyThree from "./lucky-three/page";
-import { resourceMp3 } from "../_shared/react-hooks";
-import useSound from "use-sound";
+import NextBall from "./next-ball/page";
+import SicBalls from "./sic-balls/page";
+import { Props } from "./type";
 
 let gamesOrder = [];
 const getRenderGames = (selectedCategory: GameCategoryType, selectedPage: number, userOfferGames: number[]) => {
@@ -72,7 +70,6 @@ const getCategoryHashTag = (category: string, pageIndex: number) => {
 };
 
 export const Games: React.FC<Props> = ({
-    enabledWinningStreakNotification,
     setApiErrorMessage,
     userStakeLevel,
     updateUserStakeLevel,
@@ -86,7 +83,6 @@ export const Games: React.FC<Props> = ({
     const queryCategory = isJoinGame ? getCategoryByQueryGameId(queryGame) : urlHashtag[0] || getCategoryByGameId(queryGame);
     const [selectedCategory, setSelectedCategory] = useState<GameCategoryType>(GameCategoryType[queryCategory]);
     const [selectedPage, setSelectedPage] = useState(+urlHashtag[1] + 1 || 1);
-    const winningStreakRef = useRef(null);
     const { theme } = useTheme();
     location.hash = `#${getCategoryHashTag(queryCategory, selectedPage)}`;
     const [isJoinedGame, setIsJoinedGame] = useState(false);
@@ -103,8 +99,6 @@ export const Games: React.FC<Props> = ({
 
         const gameProps = {
             ...gameSettings[gameId],
-            notifyWinStreak: (winningStreak: WinningStreakItem) =>
-                enabledWinningStreakNotification && winningStreakRef?.current && winningStreakRef.current.addWinningStreak(winningStreak),
             playPlaceBetSound,
             setApiErrorMessage: setApiErrorMessage,
             theme,
@@ -155,7 +149,6 @@ export const Games: React.FC<Props> = ({
     return (
         <div className={`game-container game-wrapper ${styles["open-chips"]}`}>
             <SystemContextProvider>
-                {enabledWinningStreakNotification && <WinningStreak ref={winningStreakRef}></WinningStreak>}
                 <GameCategory selectedPage={selectedPage} selectCategoryPage={selectCategoryPage} selectedCategory={selectedCategory} />
                 <div className={`${styles["game-list"]} ${isMobileOnly ? styles[isIOS ? "ios-device" : "android-device"] : ""}`}>
                     <div className="background-galaxy">

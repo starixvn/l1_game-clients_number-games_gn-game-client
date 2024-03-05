@@ -18,6 +18,7 @@ import Games from "../../../games/games";
 import { UserStakeLevel } from "../../game-base/type";
 import BaseDialog from "../../game-components/base-dialog";
 import { ModalType } from "../../game-components/base-dialog/type";
+import { ErrorApiText } from "../../game-components/error-api-text";
 import Footer from "../../game-components/footer";
 import { HistoryModal } from "../../page-components/dashboard/history";
 import Register from "../../page-components/dashboard/register";
@@ -25,7 +26,6 @@ import Header from "../header";
 import Styles from "./dashboard.module.scss";
 import { GameGuideModal } from "./game-guide-modal";
 import NameGenerator from "./register/name-generator";
-import { ErrorApiText } from "../../game-components/error-api-text";
 
 class Dashboard extends React.PureComponent<Props, State> {
     private notificationSocket: Socket = null;
@@ -36,7 +36,6 @@ class Dashboard extends React.PureComponent<Props, State> {
         super(props);
 
         this.state = {
-            enabledWinningStreakNotification: StorageHelper.get(localStorageKeys.winningStreakNotification) ?? true,
             userStakeLevel: { minBet: 0, maxBet: 0 },
             authorizeInfo: null,
             isShowErrorModal: false,
@@ -57,7 +56,6 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.handleRegister = this.handleRegister.bind(this);
         this.registerMainSocketEvent = this.registerMainSocketEvent.bind(this);
         this.handleKickedOut = this.handleKickedOut.bind(this);
-        this.winningStreakNotificationToggle = this.winningStreakNotificationToggle.bind(this);
         this.closeDialog = this.closeDialog.bind(this);
         this.toggleHistoryModal = this.toggleHistoryModal.bind(this);
         this.toggleGuideModal = this.toggleGuideModal.bind(this);
@@ -253,12 +251,6 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.updateAuthorizeInfo(authorizeInfo);
     }
 
-    winningStreakNotificationToggle() {
-        const { enabledWinningStreakNotification } = this.state;
-        this.setState({ enabledWinningStreakNotification: !enabledWinningStreakNotification });
-        StorageHelper.set(localStorageKeys.winningStreakNotification, !enabledWinningStreakNotification);
-    }
-
     closeDialog() {
         this.setState({ isShowErrorModal: false });
         this.isKickOut && this.signOut();
@@ -306,7 +298,6 @@ class Dashboard extends React.PureComponent<Props, State> {
 
     renderDashBoard() {
         const {
-            enabledWinningStreakNotification,
             isShowErrorModal,
             isShowHistory,
             isShowGuide,
@@ -333,8 +324,6 @@ class Dashboard extends React.PureComponent<Props, State> {
                 <div className={`${Styles["dashboard"]}`} id={"dashboard"}>
                     <Header
                         user={authorizeInfo.user}
-                        enabledNotification={enabledWinningStreakNotification}
-                        onToggleNotification={this.winningStreakNotificationToggle}
                         toggleHistoryModal={this.toggleHistoryModal}
                         toggleGuideModal={this.toggleGuideModal}
                         toggleAnnouncementModal={this.toggleAnnouncementModal}
@@ -342,7 +331,6 @@ class Dashboard extends React.PureComponent<Props, State> {
                         isShowToolbarGuide={isShowToolbarGuide}
                     />
                     <Games
-                        enabledWinningStreakNotification={enabledWinningStreakNotification}
                         setApiErrorMessage={this.handleShowApiErrorMessage}
                         userStakeLevel={userStakeLevel}
                         updateUserStakeLevel={this.handleUpdateUserStakeLevel}
