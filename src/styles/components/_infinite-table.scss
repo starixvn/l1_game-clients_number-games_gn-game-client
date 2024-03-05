@@ -10,7 +10,7 @@
 }
 
 .table-container {
-    height: calc(100% - var(---more-info-height));
+    height: calc(calc(100% - var(--more-info-height)) - calc(calc(100% - var(--more-info-height)) * (var(--zoom-game) - 1)));
     padding: 0;
 }
 
