@@ -25,7 +25,7 @@ export const BacBallResultSlotContainer: React.FC<IResultSlotContainer> = (props
 
     useEffect(() => {
         if (roundData?.[betChoiceBalls]?.length > 0) {
-            const clonedData = [...ballsData];
+            const clonedData = [...defaultRoundData];
             for (let i = 0; i < ballsData.length; i++) {
                 const value = roundData[betChoiceBalls][i];
                 if (value) {
