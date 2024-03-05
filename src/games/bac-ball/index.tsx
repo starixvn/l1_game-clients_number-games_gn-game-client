@@ -17,7 +17,6 @@ import { TurnStateHandler } from "../../components/turn-base/turn-state-handler"
 import { BacBallBettingBlock } from "./bac-ball-betting-block";
 import { BacBallResultBlock } from "./bac-ball-result-block";
 import { BacBallBetOptions, StatisticRuleEntries } from "./constants";
-import BacBallGameGuideModal from "./game-guide-modal";
 import { BacBallBetHistoryModal } from "./history";
 import { BacBallResult, BacBallSettlementResult } from "./types";
 import { DrawIdBlock } from "./draw-id-block";
@@ -43,10 +42,6 @@ class BacBall extends GameBase<GameBaseProps> {
 
     renderBetHistoryModal() {
         return <BacBallBetHistoryModal />;
-    }
-
-    renderGameGuideModal(): JSX.Element {
-        return <BacBallGameGuideModal />;
     }
 
     renderStatistic() {

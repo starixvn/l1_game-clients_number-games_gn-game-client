@@ -6,6 +6,7 @@ import Styles from "./game-guide.module.scss";
 import Loader from "../loader";
 import { buildGameGuideUrl } from "../../../_shared/helpers";
 import { tolgee } from "../../../_shared/tolgee";
+import { useTheme } from "next-themes";
 
 const GameGuideModal: FC = () => {
     const { isShowGameGuide } = useGameStateContext();
@@ -26,7 +27,7 @@ const GameGuideModal: FC = () => {
 
 const GameGuide: FC = () => {
     const { userStakeLevel, gameConfigs } = useGameStateContext();
-    const theme = "dark";
+    const theme = useTheme().theme ?? "dark";
     const language = tolgee.getLanguage() ?? "en";
     const wrapperRef = useRef<HTMLIFrameElement>();
     const wrapperIframeRef = useRef<HTMLIFrameElement>();

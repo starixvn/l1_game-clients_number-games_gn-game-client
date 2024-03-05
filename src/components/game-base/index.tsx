@@ -30,6 +30,8 @@ import {
 } from "./handlers";
 import { IGameStateHandler } from "./handlers/game-state-handler";
 import { GameBaseProps, RoundState } from "./type";
+import GameGuideModal from "../game-components/game-guide";
+import { createPortal } from "react-dom";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
     protected socket: Socket;
@@ -411,7 +413,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     renderGameGuideModal() {
-        return <></>;
+        return createPortal(<GameGuideModal />, document.getElementById("dashboard"));
     }
 
     renderMenuButtons() {
