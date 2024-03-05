@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
 import { RoundState } from "../../components/game-base/type";
@@ -24,12 +24,19 @@ export const BacBallResultSlotContainer: React.FC<IResultSlotContainer> = (props
     const gameStateContext = useGameStateContext();
     const { result, roundState, roundData, turnCounter, drawId } = gameStateContext;
 
+    const updateLoadingIcon = (data) => {
+        const currentRound = data?.find((ball) => ball.number === 0);
+        if (currentRound) {
+            currentRound.status = BallStatus.LOADING;
+            setBallsData(data);
+        }
+    };
+
     useEffect(() => {
         if (roundData?.[betChoiceBalls]?.length > 0) {
             let clonedData = defaultRoundData.map((data) => {
                 return { ...data };
             });
-
             for (let i = 0; i < clonedData.length; i++) {
                 const value = roundData[betChoiceBalls][i];
                 if (value) {
@@ -62,22 +69,15 @@ export const BacBallResultSlotContainer: React.FC<IResultSlotContainer> = (props
 
     useEffect(() => {
         if (roundState === RoundState.LockingBet || roundState === RoundState.InRound) {
-            const clonedData = [...ballsData];
-            const currentRound = clonedData.find((ball) => ball.number === 0);
-            if (currentRound) {
-                currentRound.status = BallStatus.LOADING;
-                setBallsData(clonedData);
-            }
+            updateLoadingIcon([...ballsData]);
         }
-    }, [roundState, ballsData]);
+    }, [roundState]);
 
-    return useMemo(() => {
-        return (
-            <div className={Style["ball-container"]}>
-                {ballsData.map((result, index) => {
-                    return <Ball key={index} {...result} />;
-                })}
-            </div>
-        );
-    }, [ballsData]);
+    return (
+        <div className={Style["ball-container"]}>
+            {ballsData.map((result, index) => {
+                return <Ball key={index} {...result} />;
+            })}
+        </div>
+    );
 };
