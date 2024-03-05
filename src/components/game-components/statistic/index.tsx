@@ -1,9 +1,9 @@
 import React, { useMemo } from "react";
+
 import { useGameContext } from "../../../_shared/react-contexts";
 import { Round } from "../../game-base/type";
 import Styles from "./statistic.module.scss";
-import { Props, PercentageStatisticProps } from "./types";
-import { useTranslate } from "@tolgee/react";
+import { PercentageStatisticProps, Props } from "./types";
 
 export const countSettlementResult = (roundHistory: Round<any, any>[]) => {
     return roundHistory.reduce((result, { settlementResult }) => {
@@ -43,7 +43,6 @@ const StatisticItem: React.FC<Props> = (props) => {
 export const PercentageStatistic: React.FC<PercentageStatisticProps> = (props) => {
     const { statisticRuleEntries, roundHistory } = props;
     const { gameName } = useGameContext();
-    const { t } = useTranslate(gameName);
 
     return useMemo(() => {
         const statisticResult = calculatePercent(statisticRuleEntries, countSettlementResult(roundHistory), roundHistory.length);
@@ -52,12 +51,12 @@ export const PercentageStatistic: React.FC<PercentageStatisticProps> = (props) =
             <div className={`${Styles["statistic-container"]} flex`} id="bar-statistic">
                 {Object.keys(statisticResult).map((choice) => (
                     <StatisticItem key={choice} value={`${statisticResult[choice]}%`}>
-                        <span className={`${Styles[choice]} ${Styles["statistic-choice-icon"]}`}>{t(choice).charAt(0).toUpperCase()}</span>
+                        <span className={`${Styles[choice]} ${Styles["statistic-choice-icon"]}`}>{choice.charAt(0).toUpperCase()}</span>
                     </StatisticItem>
                 ))}
             </div>
         );
-    }, [roundHistory, statisticRuleEntries, gameName, t]);
+    }, [roundHistory, statisticRuleEntries, gameName]);
 };
 
 export default StatisticItem;

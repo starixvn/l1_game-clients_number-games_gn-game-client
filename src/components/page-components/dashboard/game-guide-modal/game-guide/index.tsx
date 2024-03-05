@@ -1,13 +1,13 @@
-import React, { useEffect, useRef, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
-import Loader from "../../../../game-components/loader";
-import { UserStakeLevel } from "../../../../game-base/type";
+import { useTolgee } from "@tolgee/react";
 import { useTheme } from "next-themes";
-import { useTranslation } from "next-i18next";
-import { isMobileOnly, isIOS, browserVersion } from "react-device-detect";
-import Styles from "./game-guide.module.scss";
+import React, { useEffect, useRef, useState } from "react";
+import { browserVersion, isIOS, isMobileOnly } from "react-device-detect";
+import { v4 as uuidv4 } from "uuid";
 import { buildGameGuideUrl } from "../../../../../_shared/helpers/url-helper";
 import { useAuthContext } from "../../../../../_shared/react-contexts";
+import { UserStakeLevel } from "../../../../game-base/type";
+import Loader from "../../../../game-components/loader";
+import Styles from "./game-guide.module.scss";
 
 type Props = {
     gameId: number;
@@ -16,7 +16,7 @@ type Props = {
 };
 const GameGuides: React.FC<Props> = (props) => {
     const { gameId, userStakeLevel, gameConfigs } = props;
-    const { i18n } = useTranslation();
+    const tolgee = useTolgee();
     const { theme } = useTheme();
     const wrapperRef = useRef<HTMLIFrameElement>();
     const wrapperIframeRef = useRef<HTMLIFrameElement>();
@@ -27,7 +27,7 @@ const GameGuides: React.FC<Props> = (props) => {
     const { fractionalOddsFormat } = useAuthContext();
     const oddsFormatParams = `&fof=${fractionalOddsFormat ?? false}`;
     const guideUrl = buildGameGuideUrl();
-    const srcPath = `${guideUrl}/${i18n.language}/?gId=${gameId}&t=${theme}${minMaxBetParams}&dy=0&v=${Date.now()}${oddsFormatParams}`;
+    const srcPath = `${guideUrl}/${tolgee.getLanguage()}/?gId=${gameId}&t=${theme}${minMaxBetParams}&dy=0&v=${Date.now()}${oddsFormatParams}`;
     const handleResize = () => {
         if (wrapperRef?.current) {
             setHeightGuide(wrapperRef.current.clientHeight);

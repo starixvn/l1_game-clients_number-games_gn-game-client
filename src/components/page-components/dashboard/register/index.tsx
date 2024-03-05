@@ -1,18 +1,18 @@
-import { Trans, useTranslation } from "next-i18next";
 import React, { useState } from "react";
-import { AuthorizeResponse, Response, SSOResponse } from "sc-user-service-client/dist/auth";
+import { AuthorizeResponse, SSOResponse } from "sc-user-service-client/dist/auth";
 
+import { getAppSettings } from "../../../../_shared/app-settings";
 import { sabaClubName, sabaNumberName, Themes } from "../../../../_shared/constants";
 import { GetLocalizedErrorMessage } from "../../../../_shared/helpers/notice-helper";
 import { randomInteger } from "../../../../_shared/helpers/number-helper";
+import { useTranslator } from "../../../../_shared/react-hooks";
 import { createNickname } from "../../../../services/auth-service";
-import ProfilePicture from "../../../page-components/profile-picture";
 import BaseDialog from "../../../game-components/base-dialog";
 import { ModalType } from "../../../game-components/base-dialog/type";
 import FirstLoginContainer from "../../../page-components/dashboard/container";
 import TextBlock from "../../../page-components/dashboard/text-block";
+import ProfilePicture from "../../../page-components/profile-picture";
 import NameGenerator from "./name-generator";
-import { getAppSettings } from "../../../../_shared/app-settings";
 import Styles from "./register.module.scss";
 
 type Props = {
@@ -22,7 +22,7 @@ type Props = {
 
 const maxAvatarId = 88;
 export default function Register({ session, handleStateLogin }: Props) {
-    const { t } = useTranslation(["register", "common", "messages"]);
+    const { t } = useTranslator();
 
     const nameAuto = NameGenerator.generateName;
     const [name, updateNameState] = useState<string>(nameAuto);
@@ -35,7 +35,7 @@ export default function Register({ session, handleStateLogin }: Props) {
         event.preventDefault();
         if (validateUsername(name)) {
             setIsValidUserName(false);
-            setNameInValid(t("register:invalidUsername"));
+            setNameInValid(t("invalidUsername"));
             return;
         }
         const response = await createNickname(session, name, selectedAvatarId);
@@ -83,23 +83,15 @@ export default function Register({ session, handleStateLogin }: Props) {
         <FirstLoginContainer>
             <div className={`${Styles["wrapper-welcome"]} ${highlightSystemClass}`}>
                 <TextBlock>
-                    <Trans t={t}>
-                        {t(`register:registerTitle1-gn-apptype${getAppSettings().appType}`, { sabaNumberName: sabaNumberName })}
-                    </Trans>
+                    {t(`register:registerTitle1-gn-apptype${getAppSettings().appType}`, { sabaNumberName: sabaNumberName })}
                 </TextBlock>
                 <TextBlock>
-                    <Trans t={t}>
-                        {t(`register:registerTitle2-gn-apptype${getAppSettings().appType}`, {
-                            sabaNumberName: sabaNumberName,
-                            sabaClubName: sabaClubName,
-                        })}
-                    </Trans>
+                    {t(`register:registerTitle2-gn-apptype${getAppSettings().appType}`, {
+                        sabaNumberName: sabaNumberName,
+                        sabaClubName: sabaClubName,
+                    })}
                 </TextBlock>
-                <TextBlock>
-                    <Trans t={t}>
-                        {t(`register:registerTitle3-gn-apptype${getAppSettings().appType}`, { sabaClubName: sabaClubName })}
-                    </Trans>
-                </TextBlock>
+                <TextBlock>{t(`register:registerTitle3-gn-apptype${getAppSettings().appType}`, { sabaClubName: sabaClubName })}</TextBlock>
             </div>
             <ProfilePicture avatarId={selectedAvatarId} isEditable={true} onClick={openAvatarGallery} data-testid="open-avatar-gallery" />
 
@@ -172,7 +164,7 @@ const AvatarGallery: React.FC<{ selectedAvatarId: number; onSelectAvatar: (imgId
     onSelectAvatar,
     onClose,
 }) => {
-    const { t } = useTranslation(["register", "common"]);
+    const { t } = useTranslator();
     const [selectedId, setSelectedId] = useState<number>(selectedAvatarId);
 
     const loadAvatars = () => {
@@ -191,15 +183,15 @@ const AvatarGallery: React.FC<{ selectedAvatarId: number; onSelectAvatar: (imgId
     return (
         <div className={Styles["gallery-wrapper"]}>
             <BaseDialog type={ModalType.Center} isOpen={true} onCloseModal={onClose}>
-                <h3 className={Styles["gallery-title"]}>{t("register:changeAvatar")}</h3>
+                <h3 className={Styles["gallery-title"]}>{t("changeAvatar")}</h3>
                 <div className={`icon-close ${Styles["icon-close"]}`} onClick={onClose} data-testid="btn-close-gallery"></div>
                 <div className={Styles["container-avatars"]}>{loadAvatars()}</div>
                 <div className={Styles["list-actions"]}>
                     <button className="btn-grey" onClick={onClose} type="button">
-                        {t("common:cancel")}
+                        {t("button_cancel")}
                     </button>
                     <button className="btn-red" onClick={submit} type="button" data-testid="btn-submit-gallery">
-                        {t("common:ok")}
+                        {t("ok")}
                     </button>
                 </div>
             </BaseDialog>

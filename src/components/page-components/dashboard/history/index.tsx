@@ -1,6 +1,6 @@
-import { useTranslation } from "next-i18next";
 import React, { useState } from "react";
 import { getAppSettings } from "../../../../_shared/app-settings";
+import { useSNTranslate } from "../../../../_shared/react-hooks/use-translator";
 import BaseDialog from "../../../game-components/base-dialog";
 import GameSelector from "../../../game-components/game-selector";
 import Styles from "./history.module.scss";
@@ -10,7 +10,7 @@ export const HistoryModal: React.FC<{ onCloseModal: Function; offerGames: number
     offerGames,
     fractionalOddsFormat,
 }) => {
-    const { t } = useTranslation();
+    const { t } = useSNTranslate();
     const [selectedGameId, setSelectedGameId] = useState<number>(
         getAppSettings().offeredGames.filter((game) => offerGames.includes(game))[0]
     );
@@ -31,7 +31,7 @@ export const HistoryModal: React.FC<{ onCloseModal: Function; offerGames: number
                 <div className={Styles["title"]}>{t("popupTitleHistory")}</div>
                 <span className={`icon-close ${Styles["icon-close"]}`} onClick={closeModal} data-testid="icon-close"></span>
                 <div className={Styles["form"]}>
-                    <span className={Styles["form-label"]}>{t("common:game")}</span>
+                    <span className={Styles["form-label"]}>{t("game")}</span>
                     <GameSelector onChangeGame={setSelectedGameId} selectedGame={selectedGameId} offerGames={offerGames} />
                 </div>
                 <div className={`w-100 ${Styles["history-content"]}`}>{renderHistory()}</div>

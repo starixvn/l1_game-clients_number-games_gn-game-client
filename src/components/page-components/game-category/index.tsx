@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from "react";
-import { useTranslation } from "next-i18next";
-import { isMobileOnly } from "react-device-detect";
 import { getAppSettings } from "../../../_shared/app-settings";
+import { useSNTranslate } from "../../../_shared/react-hooks/use-translator";
 import { GameCategoryConfig, GameCategoryKeys, GameCategoryType, GamesInOnePage } from "./constants";
 import styles from "./game-category.module.scss";
 
@@ -36,7 +35,7 @@ export const GameCategory: React.FC<{
     selectedPage: number;
     selectCategoryPage: Function;
 }> = ({ selectedCategory, selectCategoryPage, selectedPage }) => {
-    const { t } = useTranslation();
+    const { t } = useSNTranslate();
     const wrapperRef = useRef<HTMLDivElement>(null);
 
     const categoryPage = GameCategoryKeys.reduce((result, category) => {

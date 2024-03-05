@@ -1,6 +1,5 @@
 import { GetLocalizedErrorMessage } from "../../../_shared/helpers";
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
-import { GameResourceKeys } from "../../../_shared/resources";
 import { GameMessageHandler, messageEventType } from "./game-message-handler";
 
 export type GameErrorHandlerProps = {
@@ -35,7 +34,7 @@ export class GameErrorHandler {
         const onClose = isKickOutError ? signOut : null;
 
         const message = GetLocalizedErrorMessage(errorCode, isPlaceBet);
-        const gameName = `${this.props.gameName.toLowerCase()}:${GameResourceKeys.GAME_NAME}`;
+        const gameName = `${this.props.gameName}`;
 
         this.props.dispatch({
             type: GameEventActionType.DISPLAY_POPUP,

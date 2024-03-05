@@ -1,7 +1,7 @@
-import { useTranslation } from "next-i18next";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import { getAppSettings } from "../../../../_shared/app-settings";
+import { useSNTranslate } from "../../../../_shared/react-hooks/use-translator";
 import BaseDialog from "../../../game-components/base-dialog";
 import { GameSelector } from "../../../game-components/game-selector";
 import GameGuides from "./game-guide";
@@ -23,7 +23,7 @@ export const GameGuideModal: React.FC<{
         getAppSettings().offeredGames.filter((game) => offerGames.includes(game))[0]
     );
     const [gameConfigs, setGameConfigs] = useState<GameConfigs>();
-    const { t } = useTranslation();
+    const { t } = useSNTranslate();
     const closeModal = () => {
         onCloseModal();
     };
@@ -45,7 +45,7 @@ export const GameGuideModal: React.FC<{
                 <div className={Styles["title"]}>{t("popupTitleGuide")}</div>
                 <span className={`icon-close ${Styles["icon-close"]}`} onClick={closeModal} data-testid="icon-close"></span>
                 <div className={Styles["form"]}>
-                    <span className={Styles["form-label"]}>{t("common:game")}</span>
+                    <span className={Styles["form-label"]}>{t("game")}</span>
                     <GameSelector onChangeGame={setSelectedGameId} selectedGame={selectedGameId} offerGames={offerGames} />
                 </div>
                 <div className={Styles["guide-content"]}>

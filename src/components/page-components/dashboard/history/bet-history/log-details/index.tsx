@@ -1,7 +1,7 @@
 import React from "react";
 
-import { Props } from "./bet-history-detail";
 import BaseDialog from "../../../../../game-components/base-dialog";
+import { Props } from "./bet-history-detail";
 import Styles from "./bet-history-details.module.scss";
 
 const BetHistoryDetailsContainer: React.FC<Props> = ({

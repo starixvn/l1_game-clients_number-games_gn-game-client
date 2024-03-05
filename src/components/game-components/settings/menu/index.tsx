@@ -1,10 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useTranslation } from "next-i18next";
-import { ResourceTypes } from "../../../../_shared/resources";
-import { Tooltip } from "../../tooltip";
 import { isMobileOnly } from "react-device-detect";
-import Styles from "./menu.module.scss";
 import { StorageHelper, localStorageKeys } from "../../../../_shared/helpers";
+import { useSNTranslate } from "../../../../_shared/react-hooks/use-translator";
+import { Tooltip } from "../../tooltip";
+import Styles from "./menu.module.scss";
 
 const dropdownItemClassName = "dropdown-item";
 
@@ -14,7 +13,8 @@ export const Menu: React.FC<{
 }> = ({ handleToggleGuideModal, handleToggleBetHistory }) => {
     const [enabledSound, setEnabledSound] = useState(StorageHelper.get(localStorageKeys.enableSound) ?? false);
     const [enabledMusic, setEnabledMusic] = useState(StorageHelper.get(localStorageKeys.enableMusic) ?? false);
-    const { t } = useTranslation([ResourceTypes.COMMON]);
+
+    const { t } = useSNTranslate();
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const wrapperRef = useRef<HTMLDivElement>(null);
     const toggleBtnRef = useRef<HTMLDivElement>(null);
