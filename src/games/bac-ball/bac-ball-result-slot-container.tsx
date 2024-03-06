@@ -28,7 +28,6 @@ export const BacBallResultSlotContainer: React.FC<IResultSlotContainer> = (props
         const currentRound = data?.find((ball) => ball.number === 0);
         if (currentRound) {
             currentRound.status = BallStatus.LOADING;
-            setBallsData(data);
         }
     };
 
@@ -42,14 +41,15 @@ export const BacBallResultSlotContainer: React.FC<IResultSlotContainer> = (props
         let clonedData = cloneDefaultData();
         if (roundData?.[betChoiceBalls]?.length > 0) {
             for (let i = 0; i < clonedData.length; i++) {
-                const value = roundData[betChoiceBalls][i];
-                if (value) {
-                    clonedData[i].number = value;
+                const result = roundData[betChoiceBalls][i];
+                if (result) {
+                    clonedData[i].number = result;
                     clonedData[i].status = BallStatus.SHOW;
                     clonedData[i].delayTime = 0;
                 }
             }
         }
+        updateLoadingIcon(clonedData);
         setBallsData(clonedData);
     }, [roundData]);
 
@@ -68,9 +68,12 @@ export const BacBallResultSlotContainer: React.FC<IResultSlotContainer> = (props
     useEffect(() => {
         if (roundState === RoundState.LockingBet || roundState === RoundState.InRound) {
             if (turnCounter === 1) {
-                setBallsData(cloneDefaultData());
+                const defaultData = cloneDefaultData();
+                updateLoadingIcon(defaultData);
+                setBallsData(defaultData);
+            } else {
+                updateLoadingIcon([...ballsData]);
             }
-            updateLoadingIcon([...ballsData]);
         }
     }, [roundState, turnCounter]);
 
