@@ -9,7 +9,7 @@ export type GameDisabledHandlerProps = {
     dispatch: Function;
     gameMessageHandler: GameMessageHandler;
     roundStateHandler: IRoundStateHandler;
-    gameStateContextModel: GameStateContextModel<any, any>;
+    gameStateContextModel(): GameStateContextModel<any, any>;
     durations: GameDurations;
 };
 
@@ -29,7 +29,7 @@ export class GameDisableHandler {
             um &&
             (timeCounter <= durations.placingBets + durations.beforeStartRound + 1 ||
                 remainingTime + 1 === wholeRound ||
-                gameStateContextModel.roundState === RoundState.None)
+                gameStateContextModel().roundState === RoundState.None)
         ) {
             this.props.gameMessageHandler.broadcastGameEvent({
                 [messageEventType.CLEAR_GAME_TIMEOUT_AND_INTERVAL]: true,

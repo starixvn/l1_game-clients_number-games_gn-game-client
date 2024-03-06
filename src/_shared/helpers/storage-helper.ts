@@ -118,6 +118,7 @@ export const localStorageKeys = {
     enableMusic: buildLocalStorageKey("enable-music"),
     buildVersion: buildLocalStorageKey("build-version"),
     toolbarGuide: buildLocalStorageKey("toolbarGuide"),
+    debug: buildLocalStorageKey("debug"),
 };
 
 export function buildLocalStorageKey(key: string) {

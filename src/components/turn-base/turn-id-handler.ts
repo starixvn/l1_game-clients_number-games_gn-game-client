@@ -1,13 +1,15 @@
 import { GameEventActionType } from "../../_shared/react-contexts/game-state-context/game-event-action";
 import { GameStateContextModel } from "../../_shared/react-contexts/game-state-context/game-state-context-model";
-import { RoundState } from "../game-base/type";
+import { GameDurations, RoundState } from "../game-base/type";
 import { GameMessageHandler, messageEventType } from "../game-base/handlers/game-message-handler";
+import { writeDebugLog } from "../../_shared/helpers";
 
 export type TurnIdHandlerProps = {
     dispatch: Function;
     gameStateContextModel(): GameStateContextModel<any, any>;
     gameMessageHandler: GameMessageHandler;
     totalTurns?: number;
+    durations: GameDurations;
 };
 
 export class TurnIdHandler {
@@ -31,8 +33,17 @@ export class TurnIdHandler {
 
         this.turnCounter = drawId % numberOfTurnsPerRound === 0 ? numberOfTurnsPerRound : drawId % numberOfTurnsPerRound;
 
-        const roundState = this.props.gameStateContextModel().roundState;
-        if (roundState !== RoundState.DisplayResult) {
+        const { roundState, remainingTime } = this.props.gameStateContextModel();
+        const { showResult, wholeTurn } = this.props.durations;
+
+        if (roundState === RoundState.None && remainingTime >= wholeTurn - showResult) {
+            if (this.turnCounter === 1) {
+                this.turnCounter = numberOfTurnsPerRound;
+            } else {
+                this.turnCounter -= 1;
+            }
+            this.dispatchTurnCounter(true);
+        } else if (roundState !== RoundState.DisplayResult) {
             this.dispatchTurnCounter(true);
             this.roundState = roundState;
         }
@@ -51,5 +62,7 @@ export class TurnIdHandler {
             type: GameEventActionType.TURN_COUNTER,
             payload: { turnCounter: this.turnCounter },
         });
+
+        writeDebugLog({ name: "dispatch turnCounter", turnCounter: this.turnCounter, fromDrawId, roundState: RoundState[this.roundState] });
     };
 }

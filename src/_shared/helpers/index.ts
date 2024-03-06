@@ -6,3 +6,4 @@ export * from "./storage-helper";
 export * from "./message-transmitter/index";
 export * from "./socket-connection";
 export * from "./ball-color-helper";
+export * from "./debug-helper";

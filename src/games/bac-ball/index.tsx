@@ -30,11 +30,10 @@ class BacBall extends GameBase<GameBaseProps> {
 
         this.turnIdHandler = new TurnIdHandler({
             dispatch: props.dispatch,
-            gameStateContextModel: () => {
-                return this.props.gameStateContextModel;
-            },
+            gameStateContextModel: this.getGameStateContext.bind(this),
             gameMessageHandler,
             totalTurns: props.totalTurns,
+            durations: props.durations,
         });
     }
 

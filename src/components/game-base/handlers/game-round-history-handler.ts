@@ -4,14 +4,14 @@ import { RoundState } from "../type";
 
 export type GameRoundHistorydHandlerProps = {
     dispatch: Function;
-    gameStateContextModel: GameStateContextModel<any, any>;
+    gameStateContextModel(): GameStateContextModel<any, any>;
 };
 
 export class GameRoundHistoryHandler {
     constructor(private props: GameRoundHistorydHandlerProps) {}
 
     handleRoundHistory({ roundHistory, roundId }) {
-        const { roundState, isUMInFirstLoad } = this.props.gameStateContextModel;
+        const { roundState, isUMInFirstLoad } = this.props.gameStateContextModel();
 
         this.props.dispatch({
             type: GameEventActionType.ROUND_HISTORY,

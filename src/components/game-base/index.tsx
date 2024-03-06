@@ -1,7 +1,7 @@
 import React from "react";
 import Auth from "sc-user-service-client/dist/auth";
 import { Socket } from "socket.io-client";
-import { InitSocketIO } from "../../_shared/helpers";
+import { InitSocketIO, writeDebugLog } from "../../_shared/helpers";
 import { AuthContext, AuthContextModel, GameActionsContextProvider, GameContextProvider } from "../../_shared/react-contexts";
 import { GameEventActionType } from "../../_shared/react-contexts/game-state-context/game-event-action";
 import { getBalance } from "../../services/auth-service";
@@ -26,7 +26,6 @@ import {
     GameRoundHistoryHandler,
     PlaceBetHandler,
     PlayerHandler,
-    TurnIdHandler,
     messageEventType,
 } from "./handlers";
 import { IGameStateHandler } from "./handlers/game-state-handler";
@@ -115,16 +114,22 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 gameMessageHandler: this.gameMessageHandler,
                 gameName: this.props.gameName,
                 durations: this.props.durations,
-                gameStateContextModel,
+                gameStateContextModel: this.getGameStateContext.bind(this),
                 roundStateHandler: roundStateHandler,
             });
 
-        this.gameRoundHistoryHandler = gameRoundHistoryHandler ?? new GameRoundHistoryHandler({ dispatch, gameStateContextModel });
+        this.gameRoundHistoryHandler =
+            gameRoundHistoryHandler ??
+            new GameRoundHistoryHandler({ dispatch, gameStateContextModel: this.getGameStateContext.bind(this) });
 
         this.placeBet = this.placeBet.bind(this);
         this.updateUserBalance = this.updateUserBalance.bind(this);
         this.setActiveScoreboardTab = this.setActiveScoreboardTab.bind(this);
     }
+
+    getGameStateContext = () => {
+        return this.props.gameStateContextModel;
+    };
 
     componentDidMount() {
         document.addEventListener("visibilitychange", this.onVisibilityChange);
@@ -259,13 +264,14 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     handleRemainingTime({ remainingTime }) {
-        // console.log({ name: "recieve-remaining-time", remainingTime });
+        writeDebugLog({ name: "recieve-remaining-time", remainingTime });
         const { durations, gameStateContextModel } = this.props;
         const { roundState, isUMInFirstLoad } = gameStateContextModel;
 
         if (roundState === RoundState.None || !isUMInFirstLoad) {
             this.roundTimeCounter = remainingTime;
-            this.runGame(this.roundStateHandler.getRemainingTime({ remainingTime, durations }));
+            this.props.gameStateContextModel.remainingTime = this.roundStateHandler.getRemainingTime({ remainingTime, durations });
+            this.runGame(this.props.gameStateContextModel.remainingTime);
         }
     }
 
@@ -298,12 +304,12 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     handleGamePlay(remainingTime: number) {
         const { durations, dispatch, gameStateContextModel } = this.props;
 
-        // console.log({
-        //     remainingTime,
-        //     roundState: RoundState[gameStateContextModel.roundState],
-        //     roundTimeCounter: this.roundTimeCounter,
-        //     turnCounter: gameStateContextModel.turnCounter,
-        // });
+        writeDebugLog({
+            remainingTime,
+            roundState: RoundState[gameStateContextModel.roundState],
+            roundTimeCounter: this.roundTimeCounter,
+            turnCounter: gameStateContextModel.turnCounter,
+        });
 
         dispatch({
             type: GameEventActionType.REMAINING_TIME,
