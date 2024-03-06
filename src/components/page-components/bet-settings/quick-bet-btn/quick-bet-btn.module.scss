@@ -1,5 +1,5 @@
 [data-theme="light"] .toggle {
-    --one-click-bet-text-color: #2c2f3e;
+    --one-click-bet-text-color: #00ff00;
 }
 
 .toggle {
@@ -39,6 +39,10 @@
 
     .toggle-checkbox:checked {
         & + .toggle-btn {
+            background: #033c03;
+            border-color: #09de09;
+            box-shadow: inset 0 0 4px #1b7e1b;
+
             > .quick-bet-icon {
                 background: url("/static/images/quickbet-on.svg") no-repeat center;
             }
@@ -69,6 +73,10 @@
             font-size: 1rem;
             color: #fff;
             margin-right: 1rem;
+
+            &.active {
+                color: var(--one-click-bet-text-color);
+            }
         }
     }
 }

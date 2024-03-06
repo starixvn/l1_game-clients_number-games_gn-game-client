@@ -34,8 +34,8 @@ export const calculatePercent = (
 const StatisticItem: React.FC<Props> = (props) => {
     return (
         <div className={Styles["statistic-group"]}>
-            <span className={Styles["number"]}>{props.value}</span>
             {props.children}
+            <span className={Styles["number"]}>{props.value}</span>
         </div>
     );
 };

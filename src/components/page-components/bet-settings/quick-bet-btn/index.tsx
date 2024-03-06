@@ -74,7 +74,7 @@ export const QuickBetBtn = () => {
         <></>
     ) : (
         <div className={`${Styles["toggle"]} ${Styles["bet-setting"]} ${deviceClass}`}>
-            <div className={Styles["one-click-bet"]} onClick={onClickQuickBet}>
+            <div className={`${Styles["one-click-bet"]} ${enabledQuickBet ? Styles["active"] : ""}`} onClick={onClickQuickBet}>
                 {t("quick_bet")}
             </div>
             <div>

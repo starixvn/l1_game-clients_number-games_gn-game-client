@@ -1,4 +1,6 @@
 .confirm-bet-container {
+    --glow-color: #05ff00;
+
     position: absolute;
     height: 4rem;
     width: 100%;
@@ -14,37 +16,27 @@
         width: 100%;
     }
 
-    .btn-cancel {
-        background: #332229;
-        border-radius: 2.3rem;
-        color: #ff5449;
-        font-size: 1.2rem;
-        font-weight: 700;
-        line-height: 1.4rem;
+    .btn-cancel-bet,
+    .btn-confirm-bet {
         width: 13rem;
-        height: 3.4rem;
-        text-transform: capitalize;
-        :hover:enabled {
-            background: #332229;
-        }
-    }
-    .btn-cancel:hover:enabled {
-        background: #332229;
     }
 
-    .btn-confirm {
-        background: #1f2f2f;
-        border-radius: 2.3rem;
-        color: #0caf60;
-        font-size: 1.2rem;
-        font-weight: 700;
-        line-height: 1.4rem;
-        width: 13rem;
-        height: 3.4rem;
-        text-transform: capitalize;
+    .btn-confirm-bet {
+        animation: pulse 2s infinite;
     }
+}
 
-    .btn-confirm:hover:enabled {
-        background: #1f2f2f;
+@keyframes pulse {
+    from {
+        background-color: var(--btn-green-background-hover);
+        box-shadow: 0 0 9px #333;
+    }
+    50% {
+        background-color: var(--btn-green-background);
+        box-shadow: 0 0 18px var(--glow-color);
+    }
+    to {
+        background-color: (var(--btn-green-background-hover));
+        box-shadow: 0 0 9px #333;
     }
 }

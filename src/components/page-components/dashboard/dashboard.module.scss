@@ -18,20 +18,20 @@
         background-size: 37.5rem;
     }
 
-    @media screen and (min-width: 1600px) {
-        transform: scale(var(--zoom-game));
-        transform-origin: top;
-    }
+    // @media screen and (min-width: 1600px) {
+    //     transform: scale(var(--zoom-game));
+    //     transform-origin: top;
+    // }
 
-    @media (min-aspect-ratio: 3/4) {
-        transform: scale(var(--zoom-game));
-        transform-origin: top;
-    }
+    // @media (min-aspect-ratio: 3/4) {
+    //     transform: scale(var(--zoom-game));
+    //     transform-origin: top;
+    // }
 
-    @media screen and (min-width: 500px) and (orientation: portrait) {
-        transform: scale(var(--zoom-game));
-        transform-origin: top;
-    }
+    // @media screen and (min-width: 500px) and (orientation: portrait) {
+    //     transform: scale(var(--zoom-game));
+    //     transform-origin: top;
+    // }
 }
 
 .container-modal {

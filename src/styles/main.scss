@@ -30,7 +30,7 @@ html {
     --btn-red-background-hover: #a90f29;
 
     --btn-green-background: #159639;
-    --btn-green-background-hover: #0c6f28;
+    --btn-green-background-hover: #0e7029;
 
     --btn-yellow-background: #c3a125;
     --btn-yellow-background-hover: #a4830e;
@@ -54,6 +54,9 @@ html {
     --spacing-size-6: 2.4rem;
 
     --zoom-game: 1.25;
+
+    // footer
+    --color-copyright: rgba(161, 161, 161, 0.6);
 }
 
 [data-theme="light"] {
@@ -158,14 +161,15 @@ body {
 
 .bet-name,
 .bet-odds {
-    font-size: 14px;
+    font-size: 1.4rem;
     font-weight: 500;
     color: white;
     text-transform: uppercase;
 }
 
 .bet-odds {
-    line-height: 1;
+    line-height: 1.5;
+    font-size: 1.8rem;
 }
 
 .player-value,
@@ -175,9 +179,9 @@ body {
 }
 
 .copyright {
-    font-size: 1rem;
-    font-weight: 600;
-    color: #a1a1a199;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--color-copyright);
 }
 
 .own-bet {
