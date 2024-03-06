@@ -15,11 +15,11 @@ module.exports = withSentryConfig({
     sentry: {
         disableServerWebpackPlugin: true,
         disableClientWebpackPlugin: true,
+        hideSourceMaps: true,
     },
     generateBuildId: async () => {
         return uuidv4();
     },
-    excludeFile: (str) => /\*.{spec,test}.js/.test(str),
     webpack: (config, options) => {
         config.module.rules.push({
             test: /\.(png|jpg|gif|svg|eot|ttf|woff|woff2|mp3)$/,

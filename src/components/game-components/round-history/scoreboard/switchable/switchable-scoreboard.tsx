@@ -61,7 +61,7 @@ export class SwitchableScoreboard<Round> extends Component<SwitchableScoreboardP
                     };
                     const props = onSwitch && index + 1 === selected ? onSwitch(defaultProps) : defaultProps;
 
-                    return <Scoreboard {...props} />;
+                    return <Scoreboard key={index} {...props} />;
                 })}
             </div>
         );

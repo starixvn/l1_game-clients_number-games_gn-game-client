@@ -9,7 +9,8 @@
     },
     "sentry": {
         "dsn": "",
-        "environment": ""
+        "environment": "",
+        "tracesSampleRate": 1
     },
     "offeredGames": [1001],
     "enableSourceMap": true,
