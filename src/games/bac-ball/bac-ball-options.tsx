@@ -82,7 +82,6 @@ export const BacBallBetOptionsComponent = () => {
     };
 
     useEffect(() => {
-        // Everything around if statement
         return setRipplePosition(setRipplePosX, setRipplePosY, rippleButtons);
     }, [rippleButtons]);
 
@@ -132,7 +131,6 @@ export const BacBallBetOptionsComponent = () => {
                     ref={(el) => (rippleButtons.current[choice === "player" ? 0 : 1] = el)}
                     className={`btn-ripple ${Style["btn-ripple"]}`}
                     onClick={() => {
-                        console.log("-bet", choice);
                         onClickBet(choice);
                     }}
                 ></button>

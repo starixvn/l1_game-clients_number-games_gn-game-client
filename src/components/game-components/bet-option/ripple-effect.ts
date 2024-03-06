@@ -1,4 +1,4 @@
-export const setRipplePosition = (setRipplePosX: (x: number) => {}, setRipplePosY: (y: number) => {}, rippleElement) => {
+export const setRipplePosition = (setRipplePosX, setRipplePosY, rippleElement) => {
     const setPosition = (e, item) => {
         const pos = item.getBoundingClientRect();
         const x = e.pageX - pos.left;
