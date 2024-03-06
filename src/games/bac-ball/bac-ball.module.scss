@@ -305,10 +305,7 @@
 .btn-ripple:focus:not(:active)::after {
     animation: ripple 1s ease-out;
 }
-.btn-ripple:active {
-    transform: scale(0.9) translate(0px, 5px);
-    box-shadow: none;
-}
+
 /*for not auto response when screen load*/
 .btn-ripple:after {
     visibility: hidden;
