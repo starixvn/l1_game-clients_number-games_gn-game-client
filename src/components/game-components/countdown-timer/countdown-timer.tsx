@@ -50,7 +50,7 @@ const CountdownTimer = () => {
 const SimpleTimer = () => {
     const { roundState, remainingTime } = useGameStateContext();
     const [timeLeft, setTimeLeft] = useState(remainingTime);
-    const [classNames, setClassNames] = useState('');
+    const [classNames, setClassNames] = useState("");
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -65,9 +65,8 @@ const SimpleTimer = () => {
         };
     }, [timeLeft]);
 
-
     useEffect(() => {
-        setClassNames(roundState === RoundState.LockingBet ? styles["lock-bet"] : '');
+        setClassNames(roundState === RoundState.LockingBet ? styles["lock-bet"] : "");
     }, [roundState]);
 
     return (
@@ -82,6 +81,7 @@ const SimpleTimer = () => {
 const GameStatus: React.FC<{ children: React.ReactNode }> = ({ children }: { children: React.ReactNode }) => {
     const { turnCounter, roundState } = useGameStateContext();
     const [displayedTurnId, setDisplayedTurnId] = useState(turnCounter);
+    const { t } = useSNTranslate();
 
     useEffect(() => {
         if (roundState === RoundState.InRound) {
@@ -91,7 +91,7 @@ const GameStatus: React.FC<{ children: React.ReactNode }> = ({ children }: { chi
 
     return (
         <div className={`${styles["game-status"]}`}>
-            <span>{displayedTurnId} Draw:</span>
+            <span>{t(`draw_${displayedTurnId}`)}</span>
             {children}
         </div>
     );
