@@ -6,15 +6,18 @@ import { Menu } from "./menu";
 
 const ButtonSettingClassName = "setting-button";
 
-export const Settings: React.FC<Props> = ({ toggleGuideModal, toggleHistoryModal }) => {
+export const Settings: React.FC<Props> = ({ toggleGuideModal, toggleHistoryModal, togglePFSettingModal }) => {
     const handleBackToHome = () => {
         console.log("Back to Home");
+    };
+    const handleClickPFSetting = () => {
+        togglePFSettingModal();
     };
 
     return (
         <div className={styles["settings-container"]}>
             <div className={`${styles["setting-right"]} ${styles[getLogoName()]}`}>
-                <button className={styles[ButtonSettingClassName]}>
+                <button className={styles[ButtonSettingClassName]} onClick={handleClickPFSetting}>
                     <span id="icon-pf" className="icon-pf" />
                 </button>
 

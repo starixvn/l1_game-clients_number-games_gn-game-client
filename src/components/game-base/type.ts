@@ -6,7 +6,6 @@ import { SystemContextModel } from "../../_shared/react-contexts";
 import { GameEventAction } from "../../_shared/react-contexts/game-state-context/game-event-action";
 import { GameStateContextModel } from "../../_shared/react-contexts/game-state-context/game-state-context-model";
 import { GameMessageHandler } from "./handlers/game-message-handler";
-import { ReCheckInResponse } from "sc-user-service-client/dist/auth";
 
 export interface GameConfigs {
     odds: { [key: string]: number };

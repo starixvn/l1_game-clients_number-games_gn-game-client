@@ -32,6 +32,7 @@ import { IGameStateHandler } from "./handlers/game-state-handler";
 import { GameBaseProps, RoundState } from "./type";
 import GameGuideModal from "../game-components/game-guide";
 import { createPortal } from "react-dom";
+import PFSettingModal from "../game-components/pf-setting";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
     protected socket: Socket;
@@ -415,9 +416,21 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                             },
                         });
                     }}
+                    togglePFSettingModal={() => {
+                        this.props.dispatch({
+                            type: GameEventActionType.TOGGLE_PF_SETTING,
+                            payload: {
+                                isShowPFSetting: true,
+                            },
+                        });
+                    }}
                 />
             </>
         );
+    }
+
+    renderPFSettingModal() {
+        return createPortal(<PFSettingModal />, document.getElementById("dashboard"));
     }
 
     renderBetHistoryModal() {
@@ -470,6 +483,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 {this.renderHeaderBlock()}
                 {this.renderGameGuideModal()}
                 {this.renderMenuButtons()}
+                {this.renderPFSettingModal()}
                 {this.renderBetHistoryModal()}
                 {this.renderResultBlock()}
                 {this.renderNewRoundTransition()}

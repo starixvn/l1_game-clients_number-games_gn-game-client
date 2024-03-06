@@ -74,6 +74,7 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
         isUMInFirstLoad,
         isShowBetHistory,
         isShowGameGuide,
+        isShowPFSetting,
     } = payload;
 
     // console.log("payload: ", JSON.stringify(payload));
@@ -394,6 +395,13 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
             return {
                 ...state,
                 isShowGameGuide,
+            };
+        }
+
+        case GameEventActionType.TOGGLE_PF_SETTING: {
+            return {
+                ...state,
+                isShowPFSetting,
             };
         }
 

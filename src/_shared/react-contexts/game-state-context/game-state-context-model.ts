@@ -48,6 +48,7 @@ export interface GameStateContextModel<Result, SettlementResult> {
     };
     isShowBetHistory: boolean;
     isShowGameGuide: boolean;
+    isShowPFSetting: boolean;
 }
 
 export const initialGameStateContextModel = ({ defaultResult, defaultSettlementResult }) => {

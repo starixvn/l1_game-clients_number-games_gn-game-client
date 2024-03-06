@@ -41,6 +41,7 @@ export enum GameEventActionType {
     SET_UM_FIRST_LOADING = "SET_UM_FIRST_LOADING",
     TOGGLE_BET_HISTORY = "TOGGLE_BET_HISTORY",
     TOGGLE_GAME_GUIDE = "TOGGLE_GAME_GUIDE",
+    TOGGLE_PF_SETTING = "TOGGLE_PF_SETTING",
 }
 
 export interface GameEventPayload {
@@ -105,6 +106,7 @@ export interface GameEventPayload {
     isUMInFirstLoad?: boolean;
     isShowBetHistory?: boolean;
     isShowGameGuide?: boolean;
+    isShowPFSetting?: boolean;
 }
 
 export interface GameEventAction {
