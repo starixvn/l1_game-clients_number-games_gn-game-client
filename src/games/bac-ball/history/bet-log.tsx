@@ -1,11 +1,11 @@
 import { FC, useState } from "react";
 
+import { numberWithCommas, seperateDateTime, sortedCollectionByTime } from "../../../_shared/helpers";
 import { useBallColor } from "../../../_shared/helpers/ball-color-helper";
+import { useCommonTranslate, useSNTranslate, useTranslator } from "../../../_shared/react-hooks/use-translator";
 import { BetLogProps } from "../../../components/game-components/bet-history";
 import Styles from "./common.module.scss";
 import TableRow from "./row-table";
-import { useCommonTranslate, useSNTranslate, useTranslator } from "../../../_shared/react-hooks/use-translator";
-import { numberWithCommas, seperateDateTime, sortedCollectionByTime } from "../../../_shared/helpers";
 
 export interface BetHistory {
     time: Date;
@@ -118,7 +118,8 @@ const BetHistoryRow: FC<{ betHistory: BetHistory; handleClickDrawId: Function }>
         {
             node: (
                 <>
-                    <b>{time}</b> <br /> <div>{date}</div>
+                    {time} <br />
+                    {date}
                 </>
             ),
             size: 3,
