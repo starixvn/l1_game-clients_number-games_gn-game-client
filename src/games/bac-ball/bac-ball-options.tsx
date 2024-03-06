@@ -3,12 +3,13 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useGameActionContext, useSystemContext } from "../../_shared/react-contexts";
 import { useShowHighlightPrevResult } from "../../_shared/react-hooks/use-high-light";
 import { BetChoice, BetPercentage, Odds, OwnBet, PlayerBetCount, TotalBet } from "../../components/game-components/bet-option";
+import { setRipplePosition } from "../../components/game-components/bet-option/ripple-effect";
 import { BacBallWinningAnimation } from "./bac-ball-winning-animation";
 import Style from "./bac-ball.module.scss";
 import { BacBallBetOptions, BacBallBetOptionsPercentageColor } from "./constants";
 
 export const BacBallBetOptionsComponent = () => {
-    const rippleElement = useRef([]);
+    const rippleButtons = useRef([]);
     const [ripplePosX, setRipplePosX] = useState(0);
     const [ripplePosY, setRipplePosY] = useState(0);
 
@@ -82,27 +83,8 @@ export const BacBallBetOptionsComponent = () => {
 
     useEffect(() => {
         // Everything around if statement
-        const ripple = (e, item) => {
-            const pos = item.getBoundingClientRect();
-            const x = e.pageX - pos.left;
-            const y = e.pageY - pos.top;
-            setRipplePosX(x);
-            setRipplePosY(y);
-        };
-
-        if (rippleElement) {
-            rippleElement.current.forEach((item) => {
-                item?.addEventListener("mousedown", (e) => {
-                    ripple(e, item);
-                });
-            });
-        }
-        return () => {
-            rippleElement?.current?.forEach((item) => {
-                item?.removeEventListener("mousedown", ripple);
-            });
-        };
-    }, [rippleElement]);
+        return setRipplePosition(setRipplePosX, setRipplePosY, rippleButtons);
+    }, [rippleButtons]);
 
     const renderHighlightWinningPrevResult = (choice: string) => {
         let className = "";
@@ -147,8 +129,8 @@ export const BacBallBetOptionsComponent = () => {
                 {odds}
                 {ownBet}
                 <button
-                    ref={(el) => (rippleElement.current[choice === "player" ? 0 : 1] = el)}
-                    className={`ripple ${Style["btn-ripple"]}`}
+                    ref={(el) => (rippleButtons.current[choice === "player" ? 0 : 1] = el)}
+                    className={`btn-ripple ${Style["btn-ripple"]}`}
                     onClick={() => {
                         console.log("-bet", choice);
                         onClickBet(choice);
@@ -190,8 +172,8 @@ export const BacBallBetOptionsComponent = () => {
                 {odds}
                 {ownBet}
                 <button
-                    ref={(el) => (rippleElement.current[2] = el)}
-                    className={`ripple ${Style["btn-ripple"]}`}
+                    ref={(el) => (rippleButtons.current[2] = el)}
+                    className={`btn-ripple ${Style["btn-ripple"]}`}
                     onClick={() => {
                         onClickBet(BacBallBetOptions.TIE);
                     }}

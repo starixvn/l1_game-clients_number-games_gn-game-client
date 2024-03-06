@@ -253,68 +253,6 @@
     top: 0;
 }
 
-/* Material style */
-.btn-ripple {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    box-sizing: border-box;
-    border: none;
-    cursor: pointer;
-    color: white;
-    padding: 15px 40px;
-    border-radius: 2px;
-    background: none;
-    transition: all 0.1s;
-    outline: none;
-}
-
-/* Ripple style */
-
-.btn-ripple:after {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 5px;
-    height: 5px;
-    background-color: rgba(250, 247, 226, 0.2);
-    opacity: 0;
-    border-radius: 100%;
-    transform: scale(1, 1) translate(-50%);
-    transform-origin: 50% 50%;
-}
-
-@keyframes ripple {
-    0% {
-        transform: scale(0, 0);
-        opacity: 1;
-    }
-    20% {
-        transform: scale(25, 25);
-        opacity: 1;
-    }
-    100% {
-        opacity: 0;
-        transform: scale(60, 70);
-    }
-}
-
-.btn-ripple:focus:not(:active)::after {
-    animation: ripple 1s ease-out;
-}
-
-/*for not auto response when screen load*/
-.btn-ripple:after {
-    visibility: hidden;
-}
-
-.btn-ripple:focus:after {
-    visibility: visible;
-}
-
 .odds-change {
     animation-name: odds-change;
     animation-duration: 4s;
