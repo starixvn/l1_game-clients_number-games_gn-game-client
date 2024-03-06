@@ -21,6 +21,18 @@
         padding-right: 0;
         box-shadow: var(--popup-bet-form-shadow);
         z-index: var(--popup-guide-history-index);
+
+        @media screen and (min-width: 1600px) {
+            height: calc((1 / var(--zoom-game)) * 100vh);
+        }
+
+        @media (min-aspect-ratio: 3/4) {
+            height: calc((1 / var(--zoom-game)) * 100vh);
+        }
+
+        @media screen and (min-width: 500px) and (orientation: portrait) {
+            height: calc((1 / var(--zoom-game)) * 100vh);
+        }
     }
 
     &.modal-rebet {
@@ -44,17 +56,5 @@
         left: 5px;
         right: 5px;
         box-shadow: none;
-    }
-
-    @media screen and (min-width: 1600px) {
-        height: calc((1 / var(--zoom-game)) * 100vh);
-    }
-
-    @media (min-aspect-ratio: 3/4) {
-        height: calc((1 / var(--zoom-game)) * 100vh);
-    }
-
-    @media screen and (min-width: 500px) and (orientation: portrait) {
-        height: calc((1 / var(--zoom-game)) * 100vh);
     }
 }
