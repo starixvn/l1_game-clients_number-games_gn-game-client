@@ -142,7 +142,7 @@ export class GameMessageHandler {
     };
 
     handleDrawId = ({ drawId }) => {
-        const numberOfTurnsPerRound = 4;
+        const numberOfTurnsPerRound = 3;
         const turnCounter = drawId % numberOfTurnsPerRound === 0 ? numberOfTurnsPerRound : drawId % numberOfTurnsPerRound;
 
         this.dispatch({
