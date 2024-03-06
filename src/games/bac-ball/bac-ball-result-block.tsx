@@ -69,33 +69,29 @@ export const BacBallResultBlock: FC = () => {
 
     return (
         <div className={Style["result-container"]}>
-            <div className={Style["player-container"]}>
-                <div className={Style["lottery-player-container"]}>
-                    <Cage
-                        cageBallsLoopFrames={cageBallsLoopFrames}
-                        cageBallFrames={cageBallFrames}
-                        color={CageColor.BLUE}
-                        position={CagePosition.LEFT}
-                        isSmall={true}
-                        result={currentResult?.player}
-                        delayShowResultTime={0}
-                    />
-                </div>
+            <div className={Style["result"]}>
+                <Cage
+                    cageBallsLoopFrames={cageBallsLoopFrames}
+                    cageBallFrames={cageBallFrames}
+                    color={CageColor.BLUE}
+                    position={CagePosition.LEFT}
+                    isSmall={true}
+                    result={currentResult?.player}
+                    delayShowResultTime={0}
+                />
                 <BacBallResultSlotContainer delayTime={0} betChoice={BacBallBetOptions.PLAYER} />
             </div>
-            <div className={Style["player-container"]}>
+            <div className="result">
+                <Cage
+                    cageBallsLoopFrames={cageBallsLoopFrames}
+                    cageBallFrames={cageBallFrames}
+                    color={CageColor.RED}
+                    position={CagePosition.RIGHT}
+                    isSmall={true}
+                    result={currentResult?.banker}
+                    delayShowResultTime={bankerDelayTime}
+                />
                 <BacBallResultSlotContainer delayTime={bankerDelayTime} betChoice={BacBallBetOptions.BANKER} />
-                <div className="lottery">
-                    <Cage
-                        cageBallsLoopFrames={cageBallsLoopFrames}
-                        cageBallFrames={cageBallFrames}
-                        color={CageColor.RED}
-                        position={CagePosition.RIGHT}
-                        isSmall={true}
-                        result={currentResult?.banker}
-                        delayShowResultTime={bankerDelayTime}
-                    />
-                </div>
             </div>
         </div>
     );

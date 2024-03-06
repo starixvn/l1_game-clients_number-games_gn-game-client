@@ -150,6 +150,7 @@ export const BacBallBetOptionsComponent = () => {
                     ref={(el) => (rippleElement.current[choice === "player" ? 0 : 1] = el)}
                     className={`ripple ${Style["btn-ripple"]}`}
                     onClick={() => {
+                        console.log("-bet", choice);
                         onClickBet(choice);
                     }}
                 ></button>
