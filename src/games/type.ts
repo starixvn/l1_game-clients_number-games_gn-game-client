@@ -1,3 +1,4 @@
+import { ReCheckInResponse } from "sc-user-service-client/dist/auth";
 import { UserStakeLevel } from "../components/game-base/type";
 
 export type Props = {
@@ -10,4 +11,5 @@ export type Props = {
     isJoinGame: boolean;
     openGameId: number;
     openGameName: string;
+    handleRecheckInResponse: (response: ReCheckInResponse) => void;
 };

@@ -68,6 +68,7 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.updateQueryGame = this.updateQueryGame.bind(this);
         this.openGame = this.openGame.bind(this);
         this.closeToolbarGuide = this.closeToolbarGuide.bind(this);
+        this.handleRecheckInResponse = this.handleRecheckInResponse.bind(this);
 
         const buildId = process.env.buildVersion;
         const buildVersion = StorageHelper.get(localStorageKeys.buildVersion) ?? 0;
@@ -337,6 +338,7 @@ class Dashboard extends React.PureComponent<Props, State> {
                         isJoinGame={isJoinGame}
                         openGameId={openGameId}
                         openGameName={openGameName}
+                        handleRecheckInResponse={this.handleRecheckInResponse}
                     />
 
                     <Footer />
