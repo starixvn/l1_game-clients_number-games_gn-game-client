@@ -58,7 +58,7 @@ export const BacBallBetOptionsComponent = () => {
         return (
             <Odds
                 choice={choice}
-                className="bet-odds text-center"
+                className={`bet-odds text-center`}
                 gameName={gameName}
                 animationClass={`${Style["odds-change"]}`}
                 animationDuration={4}

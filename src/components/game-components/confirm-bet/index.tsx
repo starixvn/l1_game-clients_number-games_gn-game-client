@@ -41,7 +41,7 @@ const ConfirmBet: React.FC<Props> = ({}: Props) => {
         <div className={Styles["confirm-bet-container"]}>
             <div className={Styles["back-ground"]}>
                 <button
-                    className={`btn-red ${Styles["btn-cancel-bet"]}`}
+                    className={`btn-grey ${Styles["btn-cancel-bet"]}`}
                     onClick={() => onCancel()}
                     type="button"
                     data-testid="btn-cancel-bet"

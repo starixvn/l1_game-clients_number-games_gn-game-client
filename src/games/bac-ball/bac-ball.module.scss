@@ -254,21 +254,43 @@
 }
 
 .odds-change {
-    animation-name: odds-change;
-    animation-duration: 4s;
+    --odds-change-duration: 0.8s;
+    --odds-change-count: 3;
+    --animate-duration: 1s;
+
+    --animate-repeat: 2;
+
+    position: relative;
+    animation-fill-mode: both;
+    animation-duration: calc(var(--animate-duration) * 1);
+    animation-name: heartBeat;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: var(--animate-repeat);
 }
 
-@keyframes odds-change {
+@keyframes heartBeat {
     0% {
-        color: red;
+        -webkit-transform: scale(1);
+        transform: scale(1);
     }
-    25% {
-        color: yellow;
+
+    14% {
+        -webkit-transform: scale(1.3);
+        transform: scale(1.3);
     }
-    50% {
-        color: blue;
+
+    28% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
     }
-    100% {
-        color: white;
+
+    42% {
+        -webkit-transform: scale(1.3);
+        transform: scale(1.3);
+    }
+
+    70% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
     }
 }

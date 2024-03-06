@@ -71,6 +71,19 @@
     }
 }
 
+.btn-grey {
+    @extend %btn;
+    background: var(--btn-grey-background);
+
+    &:hover:enabled {
+        background: var(--btn-grey-background-hover);
+    }
+
+    &:active {
+        background-color: var(--btn-grey-background-hover);
+    }
+}
+
 /* Button with ripple effect */
 .btn-ripple {
     position: absolute;
