@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import { useGameActionContext, useSystemContext } from "../../_shared/react-contexts";
 import { useShowHighlightPrevResult } from "../../_shared/react-hooks/use-high-light";
-import { BetChoice, BetPercentage, Odds, OwnBet, PlayerBetCount, TotalBet } from "../../components/game-components/bet-option";
+import { BetChoice, BetPercentage, Odds, OwnBet, TotalBet } from "../../components/game-components/bet-option";
 import { setRipplePosition } from "../../components/game-components/bet-option/ripple-effect";
 import { BacBallWinningAnimation } from "./bac-ball-winning-animation";
 import Style from "./bac-ball.module.scss";
@@ -28,17 +28,6 @@ export const BacBallBetOptionsComponent = () => {
             <TotalBet
                 choice={choice}
                 className={`flex items-center ${Style["total-stakes"]} gap-1 ${choice === BacBallBetOptions.TIE ? tieClassName : ""}`}
-                gameName={gameName}
-            />
-        );
-    };
-
-    const renderPlayerBetCount = (choice: string) => {
-        const tieClassName = "justify-center";
-        return (
-            <PlayerBetCount
-                choice={choice}
-                className={`flex items-center players gap-1 ${choice === BacBallBetOptions.TIE ? tieClassName : ""}`}
                 gameName={gameName}
             />
         );
@@ -108,7 +97,6 @@ export const BacBallBetOptionsComponent = () => {
         );
         const winningPrev = renderHighlightWinningPrevResult(choice);
         const totalBetComponent = renderTotalBet(choice);
-        const playerBetCount = renderPlayerBetCount(choice);
         const betPercentage = renderBetPercentage(choice);
         const betChoice = renderBetChoice(choice);
         const odds = renderOdds(choice);
@@ -118,10 +106,7 @@ export const BacBallBetOptionsComponent = () => {
                 {<div className={Style["winning-effect"]}>{winningResult}</div>}
                 {showHighlightPrevResult({ betChoice: choice }) && winningPrev}
                 <div className={`flex justify-between pt-5`}>
-                    <div className={Style.stake}>
-                        {totalBetComponent}
-                        {playerBetCount}
-                    </div>
+                    <div className={Style.stake}>{totalBetComponent}</div>
                     {betPercentage}
                 </div>
                 {betChoice}
@@ -152,7 +137,6 @@ export const BacBallBetOptionsComponent = () => {
 
         const winningPrev = renderHighlightWinningPrevResult(BacBallBetOptions.TIE);
         const totalBetComponent = renderTotalBet(BacBallBetOptions.TIE);
-        const playerBetCount = renderPlayerBetCount(BacBallBetOptions.TIE);
         const betPercentage = renderBetPercentage(BacBallBetOptions.TIE);
         const betChoice = renderBetChoice(BacBallBetOptions.TIE);
         const odds = renderOdds(BacBallBetOptions.TIE);
@@ -162,10 +146,7 @@ export const BacBallBetOptionsComponent = () => {
                 {<div className={Style["winning-effect"]}>{winningResult}</div>}
                 {showHighlightPrevResult({ betChoice: BacBallBetOptions.TIE }) && winningPrev}
                 {betPercentage}
-                <div className={Style.stake}>
-                    {totalBetComponent}
-                    {playerBetCount}
-                </div>
+                <div className={Style.stake}>{totalBetComponent}</div>
                 {betChoice}
                 {odds}
                 {ownBet}
