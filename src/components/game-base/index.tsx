@@ -4,7 +4,7 @@ import { Socket } from "socket.io-client";
 import { InitSocketIO, writeDebugLog } from "../../_shared/helpers";
 import { AuthContext, AuthContextModel, GameActionsContextProvider, GameContextProvider } from "../../_shared/react-contexts";
 import { GameEventActionType } from "../../_shared/react-contexts/game-state-context/game-event-action";
-import { getBalance, reCheckIn } from "../../services/auth-service";
+import { getBalance } from "../../services/auth-service";
 import BetConfirmDialog from "../game-components/bet-confirm-dialog";
 import ConfirmBet from "../game-components/confirm-bet";
 import CountdownTimer from "../game-components/countdown-timer/countdown-timer";
@@ -174,11 +174,9 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
     protected async connectToGameService() {
         const { session } = this.context as AuthContextModel;
-        const reCheckInResponse = await reCheckIn(session);
-        this.props.handleRecheckInResponse(reCheckInResponse);
         const { socketInfo, gameName } = this.props;
-
         const { socket } = InitSocketIO(socketInfo, session, gameName, this.gameMessageHandler);
+
         this.socket = socket;
     }
 

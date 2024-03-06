@@ -78,7 +78,6 @@ export const Games: React.FC<Props> = ({
     isJoinGame,
     updateQueryGames,
     openGameId,
-    handleRecheckInResponse,
 }) => {
     const urlHashtag = window.location.hash.replace("#", "").split("_");
     const queryCategory = isJoinGame ? getCategoryByQueryGameId(queryGame) : urlHashtag[0] || getCategoryByGameId(queryGame);
@@ -107,7 +106,6 @@ export const Games: React.FC<Props> = ({
             updateUserStakeLevel,
             finishJoinGame: () => setIsJoinedGame(true),
             isJoinedGame: isJoinedGame,
-            handleRecheckInResponse,
         };
 
         switch (gameId) {

@@ -69,6 +69,7 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.openGame = this.openGame.bind(this);
         this.closeToolbarGuide = this.closeToolbarGuide.bind(this);
         this.handleRecheckInResponse = this.handleRecheckInResponse.bind(this);
+        this.onVisibilityChange = this.onVisibilityChange.bind(this);
 
         const buildId = process.env.buildVersion;
         const buildVersion = StorageHelper.get(localStorageKeys.buildVersion) ?? 0;
@@ -131,8 +132,16 @@ class Dashboard extends React.PureComponent<Props, State> {
         }
     }
 
+    async onVisibilityChange() {
+        if (!document["hidden"]) {
+            const reCheckInResponse = await reCheckIn(this.props.session);
+            this.handleRecheckInResponse(reCheckInResponse);
+        }
+    }
+
     async componentDidMount() {
         // console.log("componentDidMount");
+        document.addEventListener("visibilitychange", this.onVisibilityChange);
         const { session, directMode } = this.props;
         const authorizeResponse = await authorize(session);
 
@@ -164,6 +173,7 @@ class Dashboard extends React.PureComponent<Props, State> {
     }
 
     componentWillUnmount() {
+        document.removeEventListener("visibilitychange", this.onVisibilityChange);
         this.notificationSocket?.close();
         clearInterval(this.reCheckInInterval);
     }
@@ -338,7 +348,6 @@ class Dashboard extends React.PureComponent<Props, State> {
                         isJoinGame={isJoinGame}
                         openGameId={openGameId}
                         openGameName={openGameName}
-                        handleRecheckInResponse={this.handleRecheckInResponse}
                     />
 
                     <Footer />
