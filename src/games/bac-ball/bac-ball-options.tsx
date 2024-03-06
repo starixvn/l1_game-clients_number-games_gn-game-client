@@ -82,15 +82,18 @@ export const BacBallBetOptionsComponent = () => {
 
     useEffect(() => {
         // Everything around if statement
-        const ripple = (e) => {
-            setRipplePosX(e.pageX);
-            setRipplePosY(e.pageY);
+        const ripple = (e, item) => {
+            const pos = item.getBoundingClientRect();
+            const x = e.pageX - pos.left;
+            const y = e.pageY - pos.top;
+            setRipplePosX(x);
+            setRipplePosY(y);
         };
 
         if (rippleElement) {
             rippleElement.current.forEach((item) => {
                 item?.addEventListener("mousedown", (e) => {
-                    ripple(e);
+                    ripple(e, item);
                 });
             });
         }
@@ -200,7 +203,14 @@ export const BacBallBetOptionsComponent = () => {
             {renderMainOption(BacBallBetOptions.PLAYER)}
             {renderMainOption(BacBallBetOptions.BANKER)}
             {renderBetOptionTie()}
-            <style>{`.${Style["btn-ripple"]}:after { top: ${ripplePosY}px; left: ${ripplePosX}px}`}</style>
+            <style>
+                {`
+                 .${Style["btn-ripple"]}:after {
+                    top: calc(1 / var(--zoom-game) * ${ripplePosY}px);
+                    left: calc(1 / var(--zoom-game) * ${ripplePosX}px);
+                   }
+                 `}
+            </style>
         </>
     );
 };

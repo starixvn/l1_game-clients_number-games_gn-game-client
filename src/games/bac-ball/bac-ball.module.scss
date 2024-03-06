@@ -256,10 +256,6 @@
 
 /* Material style */
 .btn-ripple {
-    --ripple-color: #aea8d3;
-    --theme-color-bg: #663399;
-    --theme-color: #663399;
-
     position: absolute;
     top: 0;
     left: 0;
@@ -280,7 +276,7 @@
 
 .btn-ripple:after {
     content: "";
-    position: fixed;
+    position: absolute;
     top: 50%;
     left: 50%;
     width: 5px;
