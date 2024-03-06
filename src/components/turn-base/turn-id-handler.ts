@@ -31,10 +31,20 @@ export class TurnIdHandler {
             payload: { drawId },
         });
 
-        this.turnCounter = drawId % numberOfTurnsPerRound === 0 ? numberOfTurnsPerRound : drawId % numberOfTurnsPerRound;
+        const turnIndex = drawId % numberOfTurnsPerRound;
+        this.turnCounter = turnIndex === 0 ? numberOfTurnsPerRound : turnIndex;
 
         const { roundState, remainingTime } = this.props.gameStateContextModel();
         const { showResult, wholeTurn } = this.props.durations;
+
+        writeDebugLog({
+            name: "handleDrawId - turncounter",
+            roundState: RoundState[this.roundState],
+            showResult,
+            wholeTurn,
+            remainingTime,
+            drawId,
+        });
 
         if (roundState === RoundState.None && remainingTime >= wholeTurn - showResult) {
             if (this.turnCounter === 1) {
