@@ -66,16 +66,13 @@ export const BacBallResultSlotContainer: React.FC<IResultSlotContainer> = (props
     }, [result]);
 
     useEffect(() => {
-        if (turnCounter === 1) {
-            setBallsData(cloneDefaultData());
-        }
-    }, [turnCounter]);
-
-    useEffect(() => {
         if (roundState === RoundState.LockingBet || roundState === RoundState.InRound) {
+            if (turnCounter === 1) {
+                setBallsData(cloneDefaultData());
+            }
             updateLoadingIcon([...ballsData]);
         }
-    }, [roundState]);
+    }, [roundState, turnCounter]);
 
     return (
         <div className={Style["ball-container"]}>
