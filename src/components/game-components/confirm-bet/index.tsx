@@ -11,7 +11,7 @@ export type Props = {};
 const ConfirmBet: React.FC<Props> = ({}: Props) => {
     const dispatch = useGameStatesDispatch();
     const gameActionContext = useGameActionContext();
-    const gameStateConext = useGameStateContext();
+    const gameStateContext = useGameStateContext();
 
     const { t } = useSNTranslate();
     useEffect(() => {
@@ -30,12 +30,34 @@ const ConfirmBet: React.FC<Props> = ({}: Props) => {
             type: GameEventActionType.NOT_CONFIRM_OWN_BETS,
             payload: { notConfirmOwnBets: {} },
         });
+
+        removeSuggestBet();
     };
+
+    const removeSuggestBet = () => {
+        dispatch({
+            type: GameEventActionType.SUGGEST_BET,
+            payload: {
+                suggestBet: {
+                    currentBetChoice: "",
+                    sendOutstandingBet: null,
+                },
+            },
+        });
+    };
+
     const onConfirm = () => {
+        if (gameStateContext.suggestBet.currentBetChoice) {
+            gameStateContext.suggestBet.sendOutstandingBet();
+
+            removeSuggestBet();
+
+            return;
+        }
         gameActionContext.placeBet(confirmBet, 0);
     };
 
-    if (!gameStateConext.showConfirmBet) return <></>;
+    if (!gameStateContext.showConfirmBet) return <></>;
 
     return (
         <div className={Styles["confirm-bet-container"]}>

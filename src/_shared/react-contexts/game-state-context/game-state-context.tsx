@@ -76,6 +76,7 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
         isShowGameGuide,
         isShowPFSetting,
         provablyFairData,
+        suggestBet,
     } = payload;
 
     // console.log("payload: ", JSON.stringify(payload));
@@ -410,6 +411,12 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
             return {
                 ...state,
                 provablyFairData,
+            };
+        }
+        case GameEventActionType.SUGGEST_BET: {
+            return {
+                ...state,
+                suggestBet,
             };
         }
 

@@ -161,3 +161,9 @@ export enum BallColor {
     BLUE = "blue",
     RED = "red",
 }
+
+export type SuggestBet = {
+    currentBetChoice?: string;
+    suggestBetAmount?: number;
+    sendOutstandingBet?: Function;
+};

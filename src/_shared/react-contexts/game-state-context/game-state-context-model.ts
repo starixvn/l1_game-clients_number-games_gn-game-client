@@ -1,4 +1,4 @@
-import { GameConfigs, IBallColor, Notice, Round, RoundState } from "../../../components/game-base/type";
+import { GameConfigs, IBallColor, Notice, Round, RoundState, SuggestBet } from "../../../components/game-base/type";
 
 export interface GameStateContextModel<Result, SettlementResult> {
     isConnect: boolean;
@@ -54,6 +54,7 @@ export interface GameStateContextModel<Result, SettlementResult> {
         roundId: number;
         serverSeedHash: string;
     };
+    suggestBet: SuggestBet;
 }
 
 export const initialGameStateContextModel = ({ defaultResult, defaultSettlementResult }) => {
@@ -103,5 +104,10 @@ export const initialGameStateContextModel = ({ defaultResult, defaultSettlementR
         },
         isShowBetHistory: false,
         isShowGameGuide: false,
+        suggestBet: {
+            currentBetChoice: "",
+            sendOutstandingBet: null,
+            suggestBetAmount: 0,
+        },
     };
 };

@@ -1,4 +1,4 @@
-import { GameConfigs, GameDurations, Notice, RoundState } from "../../../components/game-base/type";
+import { GameConfigs, GameDurations, Notice, RoundState, SuggestBet } from "../../../components/game-base/type";
 
 export enum GameEventActionType {
     CONNECT = "CONNECT",
@@ -43,6 +43,7 @@ export enum GameEventActionType {
     TOGGLE_GAME_GUIDE = "TOGGLE_GAME_GUIDE",
     TOGGLE_PF_SETTING = "TOGGLE_PF_SETTING",
     PROVABLY_FAIR = "pf",
+    SUGGEST_BET = "SUGGEST_BET",
 }
 
 export interface GameEventPayload {
@@ -113,6 +114,7 @@ export interface GameEventPayload {
         roundId: number;
         serverSeedHash: string;
     };
+    suggestBet?: SuggestBet;
 }
 
 export interface GameEventAction {

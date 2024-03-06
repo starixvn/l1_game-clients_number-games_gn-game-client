@@ -2,14 +2,23 @@ import { DefaultParamType, TFnType, TranslationKey } from "@tolgee/react";
 import { v4 as uuidv4 } from "uuid";
 import { confirmBet } from "../../../_shared/constants";
 import { GetLocalizedErrorMessage, StorageHelper, localStorageKeys } from "../../../_shared/helpers";
-import { getValidateMinMaxBetResult, validateHedgeBet } from "../../../_shared/helpers/validate-bet-helper";
+import {
+    getSuggestBetAmount,
+    getTotalBetAmount,
+    getValidateMinMaxBetResult,
+    validateHedgeBet,
+} from "../../../_shared/helpers/validate-bet-helper";
 import { SystemContextModel } from "../../../_shared/react-contexts";
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 import { GameStateContextModel } from "../../../_shared/react-contexts/game-state-context/game-state-context-model";
 import { GameResourceKeys } from "../../../_shared/resources";
-import { Notice, RoundState } from "../type";
+import { Notice, RoundState, SuggestBet } from "../type";
 import { GameMessageHandler, messageEventType } from "./";
-import { resourceMp3 } from "../../../_shared/react-hooks";
+
+type ValidateResult = {
+    isValid: boolean;
+    notice: Notice;
+};
 
 export type PlaceBetHandlerProps = {
     gameName: string;
@@ -157,12 +166,107 @@ export class PlaceBetHandler {
             return;
         }
 
-        if (enabledQuickBet) {
-            this.handleQuickBet(amount, betChoice);
+        //validate bet
+
+        if (gameStateContext.roundState != RoundState.InRound) {
+            this.sendNotice(this.getNotice("SB1905"));
+            return;
+        }
+
+        const notConfirmOwnBets = gameStateContext.notConfirmOwnBets;
+        const hedgeBetGroup = this.props.hedgeBetGroups.find((group) => group.includes(betChoice));
+
+        const ownBets = gameStateContext.ownBets;
+
+        if (validateHedgeBet(hedgeBetGroup, ownBets, notConfirmOwnBets, betChoice, amount)) {
+            this.sendNotice(this.getNotice("SB1939", betChoice));
+            return;
+        }
+
+        let totalAmount = getTotalBetAmount(gameStateContext);
+        const balance = this.props.getPlayerBalance();
+        const availableBalance = Math.trunc(balance) - totalAmount;
+
+        if (balance == 0 || availableBalance == 0) {
+            this.sendNotice(this.getNotice("3002"));
+            return;
+        }
+
+        if (balance > totalAmount + amount) {
+            let totalAmount = getTotalBetAmount(gameStateContext);
+
+            const { errorCode, args, suggestBetAmount } = getValidateMinMaxBetResult(gameStateContext, betChoice, amount, totalAmount);
+
+            if (errorCode == "0") {
+                if (enabledQuickBet) {
+                    this.handleQuickBetValidateSuccess(amount, betChoice);
+                } else {
+                    this.handleUpdateNotConfirmBet(gameStateContext, betChoice, systemContext);
+                }
+                return;
+            }
+
+            if (suggestBetAmount) {
+                this.props.dispatch({
+                    type: GameEventActionType.SHOW_CONFIRM_DIALOG,
+                    payload: {
+                        showConfirmDialog: true,
+                    },
+                });
+
+                const suggestBet: SuggestBet = {
+                    currentBetChoice: betChoice,
+                    suggestBetAmount,
+                };
+
+                this.props.dispatch({
+                    type: GameEventActionType.SUGGEST_BET,
+                    payload: {
+                        suggestBet,
+                    },
+                });
+            } else {
+                this.sendNotice(this.getNotice(errorCode, betChoice, args));
+            }
 
             return;
         }
-        this.handleQuickBetOff(amount, betChoice, gameStateContext, systemContext);
+
+        const suggestBetAmount = getSuggestBetAmount(availableBalance, gameStateContext, betChoice);
+
+        if (suggestBetAmount == 0) {
+            this.sendNotice(this.getNotice("3002"));
+
+            return;
+        }
+
+        this.props.dispatch({
+            type: GameEventActionType.SHOW_CONFIRM_DIALOG,
+            payload: {
+                showConfirmDialog: true,
+            },
+        });
+
+        const sendOutstandingBet = () => this.sendBetMessage(betChoice, suggestBetAmount);
+
+        const suggestBet: SuggestBet = {
+            currentBetChoice: betChoice,
+            suggestBetAmount,
+            sendOutstandingBet,
+        };
+
+        this.props.dispatch({
+            type: GameEventActionType.SUGGEST_BET,
+            payload: {
+                suggestBet,
+            },
+        });
+        // if (enabledQuickBet) {
+        //     this.handleQuickBet(amount, betChoice);
+
+        //     return;
+        // }
+        // this.handleQuickBetOff(amount, betChoice, gameStateContext, systemContext);
     };
 
     private handleQuickBetOff(
@@ -171,7 +275,8 @@ export class PlaceBetHandler {
         gameStateContext: GameStateContextModel<any, any>,
         systemContext: SystemContextModel
     ) {
-        const validate = this.validateNotConfirmBet(betChoice, amount, gameStateContext);
+        const validate = this.validateBet(betChoice, amount, gameStateContext);
+
         if (!validate) {
             console.log("fail");
             return;
@@ -217,7 +322,7 @@ export class PlaceBetHandler {
         this.sendConfirmBet(gameStateContext);
     }
 
-    private handleQuickBet(amount: number, betChoice: string) {
+    private handleQuickBetValidateSuccess(amount: number, betChoice: string) {
         if (amount > 0) {
             this.props.dispatch({
                 type: GameEventActionType.BET_PROCESSING,
@@ -256,7 +361,7 @@ export class PlaceBetHandler {
         };
     };
 
-    private validateNotConfirmBet(betChoice: string, amount: number, gameStateContext: GameStateContextModel<any, any>): boolean {
+    private validateBet(betChoice: string, amount: number, gameStateContext: GameStateContextModel<any, any>): boolean {
         const notConfirmOwnBets = gameStateContext.notConfirmOwnBets;
         const hedgeBetGroup = this.props.hedgeBetGroups.find((group) => group.includes(betChoice));
 
@@ -272,9 +377,26 @@ export class PlaceBetHandler {
             return false;
         }
 
-        let totalAmount = this.getTotalBetAmount(gameStateContext);
+        let totalAmount = getTotalBetAmount(gameStateContext);
         const balance = this.props.getPlayerBalance();
+        const availableBalance = Math.trunc(balance) - totalAmount;
+        const suggestBetAmount = getSuggestBetAmount(availableBalance, gameStateContext, betChoice);
+
+        if (balance == 0) {
+            this.sendNotice(this.getNotice("3002"));
+
+            return false;
+        }
+
         if (balance < totalAmount + amount) {
+            const isValidMinMaxBet = this.validateMinMaxBet(betChoice, amount, gameStateContext);
+
+            if (suggestBetAmount == 0 && !isValidMinMaxBet) {
+                this.sendNotice(this.getNotice("3002"));
+
+                return false;
+            }
+
             this.props.dispatch({
                 type: GameEventActionType.SHOW_CONFIRM_DIALOG,
                 payload: {
@@ -282,43 +404,62 @@ export class PlaceBetHandler {
                 },
             });
 
+            const sendOutstandingBet = () => this.sendBetMessage(betChoice, suggestBetAmount);
+            const suggestBet: SuggestBet = {
+                currentBetChoice: betChoice,
+                suggestBetAmount,
+                sendOutstandingBet,
+            };
+
+            this.props.dispatch({
+                type: GameEventActionType.SUGGEST_BET,
+                payload: {
+                    suggestBet,
+                },
+            });
             return false;
         }
-
         return this.validateMinMaxBet(betChoice, amount, gameStateContext);
-    }
-
-    private getTotalBetAmount(gameStateContext: GameStateContextModel<any, any>) {
-        const notConfirmOwnBets = gameStateContext.notConfirmOwnBets;
-        const ownBets = gameStateContext.ownBets;
-        let totalAmount = 0;
-        totalAmount += Object.values(notConfirmOwnBets).reduce((a, b) => a + b, 0);
-        totalAmount += Object.values(ownBets).reduce((a, b) => a + b, 0);
-
-        return totalAmount;
     }
 
     private validateMinMaxBet(betChoice: string, amount: number, gameStateContext: GameStateContextModel<any, any>) {
         const notConfirmOwnBets = gameStateContext.notConfirmOwnBets;
         const gameConfigs = gameStateContext.gameConfigs;
         const userStakeLevel = gameStateContext.userStakeLevel;
+        const balance = Math.trunc(this.props.getPlayerBalance());
 
-        let totalAmount = this.getTotalBetAmount(gameStateContext);
+        let totalAmount = getTotalBetAmount(gameStateContext);
 
-        const { errorCode, args } = getValidateMinMaxBetResult(
-            gameConfigs,
-            userStakeLevel,
-            notConfirmOwnBets,
-            betChoice,
-            amount,
-            totalAmount
-        );
+        const { errorCode, args, suggestBetAmount } = getValidateMinMaxBetResult(gameStateContext, betChoice, amount, totalAmount);
 
         if (errorCode == "0") {
             return true;
         }
 
-        this.sendNotice(this.getNotice(errorCode, betChoice, args));
+        if (balance - totalAmount > 0 && suggestBetAmount) {
+            this.props.dispatch({
+                type: GameEventActionType.SHOW_CONFIRM_DIALOG,
+                payload: {
+                    showConfirmDialog: true,
+                },
+            });
+
+            const sendOutstandingBet = () => this.sendBetMessage(betChoice, suggestBetAmount);
+            const suggestBet: SuggestBet = {
+                currentBetChoice: betChoice,
+                suggestBetAmount,
+                sendOutstandingBet,
+            };
+
+            this.props.dispatch({
+                type: GameEventActionType.SUGGEST_BET,
+                payload: {
+                    suggestBet,
+                },
+            });
+        } else {
+            this.sendNotice(this.getNotice(errorCode, betChoice, args));
+        }
         return false;
     }
 
