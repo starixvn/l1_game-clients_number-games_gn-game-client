@@ -22,7 +22,6 @@ import Footer from "../../game-components/footer";
 import Register from "../../page-components/dashboard/register";
 import Header from "../header";
 import Styles from "./dashboard.module.scss";
-import { GameGuideModal } from "./game-guide-modal";
 import NameGenerator from "./register/name-generator";
 
 class Dashboard extends React.PureComponent<Props, State> {
@@ -342,14 +341,6 @@ class Dashboard extends React.PureComponent<Props, State> {
 
                     <Footer />
 
-                    {isShowGuide && (
-                        <GameGuideModal
-                            userStakeLevel={userStakeLevel}
-                            onCloseModal={this.toggleGuideModal}
-                            offerGames={offerGames}
-                            settingGames={settingGames}
-                        />
-                    )}
                     {isShowErrorModal && (
                         <div className={Styles["container-modal"]}>
                             <div className={`${Styles["bg-opacity"]} ${isBlockUI ? Styles["block-ui-backdrop"] : ""}`}></div>
