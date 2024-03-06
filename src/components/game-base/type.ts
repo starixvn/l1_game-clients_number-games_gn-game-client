@@ -55,7 +55,7 @@ export type GamePropsContext = {
     translate?: TFnType<DefaultParamType, string, TranslationKey>;
     hedgeBetGroups?: [string[]];
     gameMessageHandler?: GameMessageHandler;
-    handleRecheckInResponse: (response: ReCheckInResponse) => void;
+    handleRecheckInResponse?: (response: ReCheckInResponse) => void;
 };
 
 export type GameBaseProps = GamePropsContext & WithRouterProps;
