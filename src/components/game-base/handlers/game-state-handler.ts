@@ -42,6 +42,7 @@ export class GameStateHandler implements IGameStateHandler {
                         settlementResult: defaultSettlementResult ?? settlementResult,
                         notConfirmOwnBets: {},
                         showConfirmBet: false,
+                        showConfirmDialog: false,
                     },
                 },
             ];

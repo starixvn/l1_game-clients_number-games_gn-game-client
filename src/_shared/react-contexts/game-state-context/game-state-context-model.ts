@@ -108,6 +108,7 @@ export const initialGameStateContextModel = ({ defaultResult, defaultSettlementR
             currentBetChoice: "",
             sendOutstandingBet: null,
             suggestBetAmount: 0,
+            isInsufficientFunds: null,
         },
     };
 };

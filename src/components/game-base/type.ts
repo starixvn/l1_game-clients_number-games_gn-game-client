@@ -166,4 +166,5 @@ export type SuggestBet = {
     currentBetChoice?: string;
     suggestBetAmount?: number;
     sendOutstandingBet?: Function;
+    isInsufficientFunds?: boolean;
 };

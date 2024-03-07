@@ -9,9 +9,11 @@ const BetConfirmDialog = () => {
     const gameStateContext = useGameStateContext();
     const enabledQuickBet = useAuthContext().authorizeInfo?.user?.settings?.quickBet;
 
-    const currentBetChoice = gameStateContext.suggestBet.currentBetChoice;
+    const suggestBet = gameStateContext.suggestBet;
+    const currentBetChoice = suggestBet.currentBetChoice;
+    const outstandingBalance = suggestBet.suggestBetAmount;
+    const isInsufficientFunds = suggestBet.isInsufficientFunds;
 
-    const outstandingBalance = gameStateContext.suggestBet.suggestBetAmount;
     const { t } = useTranslator();
 
     if (!gameStateContext.showConfirmDialog) {
@@ -23,7 +25,9 @@ const BetConfirmDialog = () => {
             payload: {
                 suggestBet: {
                     currentBetChoice: "",
+                    suggestBetAmount: null,
                     sendOutstandingBet: null,
+                    isInsufficientFunds: null,
                 },
             },
         });
@@ -31,8 +35,14 @@ const BetConfirmDialog = () => {
 
     return (
         <ConfirmDialog
-            title={<>{t("message_insufficient_fund")}</>}
-            content={<>{t("message_balance", { outstandingBalance })}</>}
+            title={<>{isInsufficientFunds ? t("message_insufficient_fund") : t("message_reach_maxbet")}</>}
+            content={
+                <>
+                    {isInsufficientFunds
+                        ? t("message_balance", { outstandingBalance })
+                        : t("message_bet_available", { maxbet: outstandingBalance })}
+                </>
+            }
             subContent={<>{t("message_confirm_bet")}?</>}
             onCloseModal={() => {
                 console.log("close");

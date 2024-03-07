@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { confirmBet } from "../../../_shared/constants";
-import { useGameActionContext } from "../../../_shared/react-contexts";
+import { useAuthContext, useGameActionContext } from "../../../_shared/react-contexts";
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import { useSNTranslate } from "../../../_shared/react-hooks";
@@ -12,6 +12,7 @@ const ConfirmBet: React.FC<Props> = ({}: Props) => {
     const dispatch = useGameStatesDispatch();
     const gameActionContext = useGameActionContext();
     const gameStateContext = useGameStateContext();
+    const enabledQuickBet = useAuthContext().authorizeInfo.user.settings.quickBet;
 
     const { t } = useSNTranslate();
     useEffect(() => {
@@ -47,7 +48,7 @@ const ConfirmBet: React.FC<Props> = ({}: Props) => {
     };
 
     const onConfirm = () => {
-        if (gameStateContext.suggestBet.currentBetChoice) {
+        if (enabledQuickBet) {
             gameStateContext.suggestBet.sendOutstandingBet();
 
             removeSuggestBet();
