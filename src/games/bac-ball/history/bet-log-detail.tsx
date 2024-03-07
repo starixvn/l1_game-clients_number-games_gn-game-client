@@ -78,7 +78,7 @@ const BetDetail: FC<BetLogDetailProps> = ({ betLogDetails, onCloseModal, isShowB
                 {result && (
                     <div className={Styles["draw-info"]}>
                         <div className={Styles["info-item"]}>
-                            {translateSNGames("draw_id")}:{" "}
+                            {translateSNGames("glossary_draw_id")}:{" "}
                             <span>
                                 <b>{drawId}</b>
                             </span>
@@ -95,7 +95,7 @@ const BetDetail: FC<BetLogDetailProps> = ({ betLogDetails, onCloseModal, isShowB
                 )}
 
                 <button className={`clickable ${Styles["provably-fair"]}`} onClick={handleClickProbalyFair}>
-                    {translateCommon("pf_title_provably_fair")}
+                    <span className={`icon-pf ${Styles["icon-pf"]}`}></span> {translateCommon("pf_title_provably_fair")}
                 </button>
                 <div className={`table-container react-infinite-table ${Styles["bet-detail"]}`} onScroll={handleScroll}>
                     <table className="table text-center">
@@ -140,16 +140,16 @@ const BetDetailRow: FC<BacBallBetLogDetailRowProps> = ({ rawTime, amount, choice
         {
             node: (
                 <>
-                    <b>{time}</b>
+                    {time}
                     <br />
                     {date}
                 </>
             ),
-            size: 3.8,
+            size: 2,
         },
         ...[translateBacBall(`glossary_${choice}`), numberWithCommas(odds), numberWithCommas(amount) ?? 0, numberWithCommas(win)].map(
             (item) => {
-                return { node: <div className={win > 0 ? "highlight" : ""}>{item}</div>, size: 2 };
+                return { node: <div className={win > 0 ? "highlight" : ""}>{item}</div>, size: 2.5 };
             }
         ),
     ];

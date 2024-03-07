@@ -69,15 +69,9 @@ const BetLog: FC<BetLogProps> = ({ betLogs, handleScroll, onCloseModal: toggleBe
 
     const header = [
         { node: translateCommon("time"), size: 3 },
-        { node: translateSNGames("draw_id"), size: 2 },
+        { node: translateSNGames("glossary_draw_id"), size: 2 },
         {
-            node: (
-                <>
-                    {translateCommon("result")}
-                    <br />
-                    {translateBacBall("glossary_player")} | {translateBacBall("glossary_banker")}
-                </>
-            ),
+            node: <>{translateCommon("result")}</>,
             size: 3,
         },
         { node: translateCommon("total_stake"), size: 2 },
