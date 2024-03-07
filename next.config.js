@@ -7,6 +7,7 @@ const basePath = "";
 const appSettings = {
     ...configs,
     gameSettings,
+    versionParam: `version=${uuidv4()}`,
 };
 
 module.exports = withSentryConfig({
