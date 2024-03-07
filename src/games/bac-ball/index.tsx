@@ -20,6 +20,7 @@ import { BacBallBetOptions, StatisticRuleEntries } from "./constants";
 import { BacBallBetHistoryModal } from "./history";
 import { BacBallResult, BacBallSettlementResult } from "./types";
 import { DrawIdBlock } from "./draw-id-block";
+import { loadPixiAnimations } from "../../_shared/helpers/pixi-resource-loader";
 
 class BacBall extends GameBase<GameBaseProps> {
     private turnIdHandler?: TurnIdHandler;
@@ -45,6 +46,11 @@ class BacBall extends GameBase<GameBaseProps> {
 
     componentDidMount() {
         super.componentDidMount();
+
+        // Load all animations in background
+        Array.from({ length: 75 }, (_, i) => i + 1).forEach((result) =>
+            loadPixiAnimations(`/static/images/cage/number/${result}.json`, () => ({}))
+        );
     }
 
     renderResultBlock() {
