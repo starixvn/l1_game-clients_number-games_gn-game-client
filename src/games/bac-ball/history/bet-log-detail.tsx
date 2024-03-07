@@ -73,10 +73,6 @@ const BetDetail: FC<BetLogDetailProps> = ({ betLogDetails, onCloseModal, isShowB
     ];
     const preprocessedBetLogDetails = sortedCollectionByTime(betLogDetails);
 
-    const capitalizeFirstLetter = (string) => {
-        return string[0].toUpperCase() + string.slice(1);
-    };
-
     return (
         isShowBetDetail && (
             <ModalContainer isOpen={isShowBetDetail} title={translateCommon("bet_detail")} onCloseModal={handleCloseModal} isOverlap={true}>
@@ -101,7 +97,7 @@ const BetDetail: FC<BetLogDetailProps> = ({ betLogDetails, onCloseModal, isShowB
 
                 <button className={`clickable ${Styles["provably-fair"]}`} onClick={handleClickProbalyFair}>
                     <span className={`icon-pf ${Styles["icon-pf"]}`}></span>
-                    {capitalizeFirstLetter(translateCommon("pf_title_provably_fair"))}
+                    {translateCommon("pf_title_provably_fair").capitalizeFirstLetter()}
                 </button>
                 <div className={`table-container react-infinite-table ${Styles["bet-detail"]}`} onScroll={handleScroll}>
                     <table className="table text-center">
