@@ -54,14 +54,16 @@ const SimpleTimer = () => {
     const [classNames, setClassNames] = useState("");
 
     useEffect(() => {
-        if (remainingTime > 0 && remainingTime !== timeLeft) {
+        if (remainingTime !== timeLeft) {
             writeDebugLog({ timeLeft, remainingTime, roundState: RoundState[roundState] });
             setTimeLeft(remainingTime);
             setClassNames(roundState === RoundState.LockingBet ? styles["lock-bet"] : "");
         }
     }, [timeLeft, remainingTime, roundState]);
 
-    return (
+    return remainingTime <= 0 ? (
+        <></>
+    ) : (
         <div className={styles.timer}>
             <div className={`${styles["countdown-timer"]} ${classNames}`}>
                 <span>{(timeLeft % 60).toString().padStart(2, "0")}</span>
