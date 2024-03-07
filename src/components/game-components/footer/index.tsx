@@ -5,7 +5,7 @@ const Footer = () => {
 
     return (
         <h3 className="text-center copyright">
-            {t(`${ResourceTypes.SABANUMBER}.copyright`, { year: new Date().getFullYear() }).replaceTolgeeFormat()}
+            {t(`${ResourceTypes.SABA_NUMBER}.copyright`, { year: new Date().getFullYear() }).replaceTolgeeFormat()}
         </h3>
     );
 };

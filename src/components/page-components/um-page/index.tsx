@@ -1,3 +1,4 @@
+import { Markup } from "interweave";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { UMInfo } from "sc-user-service-client/dist/auth";
@@ -5,7 +6,6 @@ import { StorageHelper, localStorageKeys } from "../../../_shared/helpers/storag
 import { convertToGMT8, formatDate } from "../../../_shared/helpers/time-helper";
 import { useTranslator } from "../../../_shared/react-hooks/use-translator";
 import { ResourceTypes } from "../../../_shared/resources";
-import { Markup } from "interweave";
 
 const UMPage: React.FC<{ locale: string }> = ({ locale }) => {
     const router = useRouter();
@@ -50,10 +50,10 @@ const UMPage: React.FC<{ locale: string }> = ({ locale }) => {
                 <img src="/static/images/error-page/um-spaceman.png" alt="spaceman" />
             </div>
             <p className="um-title">
-                {t(`${ResourceTypes.COMMON}.message_sys_maintenance`)} <br /> {t(`${ResourceTypes.SABANUMBER}.um_title`)}
+                {t(`${ResourceTypes.COMMON}.message_sys_maintenance`)} <br /> {t(`${ResourceTypes.SABA_NUMBER}.um_title`)}
             </p>
             <p className="highlight break">
-                <Markup content={t(`${ResourceTypes.SABANUMBER}.um_content`, { startTime, endTime }).replaceTolgeeFormat()}></Markup>
+                <Markup content={t(`${ResourceTypes.SABA_NUMBER}.um_content`, { startTime, endTime }).replaceTolgeeFormat()}></Markup>
             </p>
             <p>{t(`${ResourceTypes.COMMON}.under_maintenance_suggest`)}</p>
             <button>{t(`${ResourceTypes.COMMON}.back`)}</button>

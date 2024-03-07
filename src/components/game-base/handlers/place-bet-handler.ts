@@ -187,12 +187,11 @@ export class PlaceBetHandler {
 
         if (availableUseToBetBalance == 0) {
             this.sendNotice(this.getNotice("3002"));
+
             return;
         }
-        const availableSuggestBetAmount = getAvailableSuggestBetAmount(availableUseToBetBalance, gameStateContext, betChoice);
 
         const { errorCode, args } = getValidateMinMaxBetResult(gameStateContext, betChoice, amount, totalAmount);
-
         if (errorCode == "0") {
             if (enabledQuickBet) {
                 this.handleQuickBetValidateSuccess(amount, betChoice);
@@ -206,31 +205,31 @@ export class PlaceBetHandler {
             return;
         }
 
+        const availableSuggestBetAmount = getAvailableSuggestBetAmount(availableUseToBetBalance, gameStateContext, betChoice);
         if (availableSuggestBetAmount) {
-            this.props.dispatch({
-                type: GameEventActionType.SHOW_CONFIRM_DIALOG,
-                payload: {
-                    showConfirmDialog: true,
-                },
-            });
-            const sendOutstandingBet = () => this.sendBetMessage(betChoice, availableSuggestBetAmount);
-
-            const suggestBet: SuggestBet = {
-                currentBetChoice: betChoice,
-                suggestBetAmount: availableSuggestBetAmount,
-                sendOutstandingBet,
-                isInsufficientFunds: false,
-            };
-
-            this.props.dispatch({
-                type: GameEventActionType.SUGGEST_BET,
-                payload: {
-                    suggestBet,
-                },
-            });
-        } else {
-            this.sendNotice(this.getNotice(errorCode, betChoice, args));
+            this.suggestBetAmount(betChoice, availableSuggestBetAmount);
+            return;
         }
+
+        this.sendNotice(this.getNotice(errorCode, betChoice, args));
+    };
+
+    suggestBetAmount = (betChoice: string, availableSuggestBetAmount: number) => {
+        this.props.dispatch({
+            type: GameEventActionType.SHOW_CONFIRM_DIALOG,
+            payload: {
+                showConfirmDialog: true,
+            },
+        });
+        const sendOutstandingBet = () => this.sendBetMessage(betChoice, availableSuggestBetAmount);
+        const suggestBet: SuggestBet = {
+            currentBetChoice: betChoice,
+            suggestBetAmount: availableSuggestBetAmount,
+            sendOutstandingBet,
+            isInsufficientFunds: false,
+        };
+
+        this.props.dispatch({ type: GameEventActionType.SUGGEST_BET, payload: { suggestBet } });
     };
 
     private handleUpdateNotConfirmBet(

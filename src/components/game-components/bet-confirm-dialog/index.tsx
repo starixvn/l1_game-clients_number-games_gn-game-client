@@ -19,6 +19,7 @@ const BetConfirmDialog = () => {
     if (!gameStateContext.showConfirmDialog) {
         return null;
     }
+
     const removeSuggestBet = () => {
         dispatch({
             type: GameEventActionType.SUGGEST_BET,
@@ -33,64 +34,72 @@ const BetConfirmDialog = () => {
         });
     };
 
+    const handleCloseModal = () => {
+        dispatch({
+            type: GameEventActionType.SHOW_CONFIRM_DIALOG,
+            payload: {
+                showConfirmDialog: false,
+            },
+        });
+
+        enabledQuickBet && removeSuggestBet();
+    };
+
+    const handleSubmitBet = () => {
+        dispatch({
+            type: GameEventActionType.SHOW_CONFIRM_DIALOG,
+            payload: {
+                showConfirmDialog: false,
+            },
+        });
+
+        if (enabledQuickBet) {
+            gameStateContext.suggestBet.sendOutstandingBet();
+            removeSuggestBet();
+
+            return;
+        }
+
+        dispatch({
+            type: GameEventActionType.SHOW_CONFIRM_BET,
+            payload: {
+                showConfirmBet: true,
+            },
+        });
+
+        const notConfirmOwnBets = gameStateContext.notConfirmOwnBets;
+        notConfirmOwnBets[currentBetChoice] = (notConfirmOwnBets[currentBetChoice] ?? 0) + outstandingBalance;
+
+        dispatch({
+            type: GameEventActionType.NOT_CONFIRM_OWN_BETS,
+            payload: {
+                notConfirmOwnBets,
+            },
+        });
+    };
+
+    const getContent = () => {
+        const formatValue = () => {
+            return `<strong color="red">${outstandingBalance}</strong>`;
+        };
+        const content = isInsufficientFunds
+            ? t("message_balance", { outstandingBalance: formatValue() })
+            : t("message_bet_available", { maxbet: formatValue() });
+
+        return content;
+    };
+
+    const getTitle = () => {
+        return isInsufficientFunds ? t("message_insufficient_fund") : t("message_reach_maxbet");
+    };
+
     return (
         <ConfirmDialog
-            title={<>{isInsufficientFunds ? t("message_insufficient_fund") : t("message_reach_maxbet")}</>}
-            content={
-                <>
-                    {isInsufficientFunds
-                        ? t("message_balance", { outstandingBalance })
-                        : t("message_bet_available", { maxbet: outstandingBalance })}
-                </>
-            }
-            subContent={<>{t("message_confirm_bet")}?</>}
-            onCloseModal={() => {
-                console.log("close");
-                dispatch({
-                    type: GameEventActionType.SHOW_CONFIRM_DIALOG,
-                    payload: {
-                        showConfirmDialog: false,
-                    },
-                });
-
-                if (enabledQuickBet) {
-                    removeSuggestBet();
-                    return;
-                }
-            }}
-            onSubmit={() => {
-                console.log("yes");
-
-                dispatch({
-                    type: GameEventActionType.SHOW_CONFIRM_DIALOG,
-                    payload: {
-                        showConfirmDialog: false,
-                    },
-                });
-
-                if (enabledQuickBet) {
-                    gameStateContext.suggestBet.sendOutstandingBet();
-                    removeSuggestBet();
-                    return;
-                }
-
-                dispatch({
-                    type: GameEventActionType.SHOW_CONFIRM_BET,
-                    payload: {
-                        showConfirmBet: true,
-                    },
-                });
-
-                const notConfirmOwnBets = gameStateContext.notConfirmOwnBets;
-                notConfirmOwnBets[currentBetChoice] = (notConfirmOwnBets[currentBetChoice] ?? 0) + outstandingBalance;
-
-                dispatch({
-                    type: GameEventActionType.NOT_CONFIRM_OWN_BETS,
-                    payload: {
-                        notConfirmOwnBets,
-                    },
-                });
-            }}
+            title={getTitle()}
+            content={getContent()}
+            subContent={`${t("message_confirm_bet")}?`}
+            onCloseModal={handleCloseModal}
+            onSubmit={handleSubmitBet}
         />
     );
 };

@@ -2,7 +2,7 @@ import { useTranslate } from "@tolgee/react";
 import { ResourceTypes } from "../resources";
 
 export const useTranslator = (gameNamespaces?: string[]) => {
-    const defaultNamespaces = [ResourceTypes.SABANUMBER, ResourceTypes.COMMON];
+    const defaultNamespaces = [ResourceTypes.SABA_NUMBER, ResourceTypes.COMMON];
     const ns = gameNamespaces ? gameNamespaces.concat(defaultNamespaces) : defaultNamespaces;
     const translator = useTranslate(ns);
     const t = (key: string, params?: any) => {
@@ -22,5 +22,5 @@ export const useCommonTranslate = () => {
 };
 
 export const useSNTranslate = () => {
-    return useTranslate(ResourceTypes.SABANUMBER);
+    return useTranslate(ResourceTypes.SABA_NUMBER);
 };
