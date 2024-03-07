@@ -65,13 +65,18 @@ const BetDetail: FC<BetLogDetailProps> = ({ betLogDetails, onCloseModal, isShowB
     };
 
     const header = [
-        { node: translateCommon("time"), size: 3.8 },
-        { node: translateCommon("bet_choice"), size: 2 },
-        { node: translateCommon("odds"), size: 2 },
-        { node: translateCommon("stake"), size: 2 },
-        { node: translateCommon("win"), size: 2 },
+        { node: translateCommon("time"), size: 2 },
+        { node: translateCommon("bet_choice"), size: 2.5 },
+        { node: translateCommon("odds"), size: 2.5 },
+        { node: translateCommon("stake"), size: 2.5 },
+        { node: translateCommon("win"), size: 2.5 },
     ];
     const preprocessedBetLogDetails = sortedCollectionByTime(betLogDetails);
+
+    const capitalizeFirstLetter = (string) => {
+        return string[0].toUpperCase() + string.slice(1);
+    };
+
     return (
         isShowBetDetail && (
             <ModalContainer isOpen={isShowBetDetail} title={translateCommon("bet_detail")} onCloseModal={handleCloseModal} isOverlap={true}>
@@ -95,7 +100,8 @@ const BetDetail: FC<BetLogDetailProps> = ({ betLogDetails, onCloseModal, isShowB
                 )}
 
                 <button className={`clickable ${Styles["provably-fair"]}`} onClick={handleClickProbalyFair}>
-                    <span className={`icon-pf ${Styles["icon-pf"]}`}></span> {translateCommon("pf_title_provably_fair")}
+                    <span className={`icon-pf ${Styles["icon-pf"]}`}></span>
+                    {capitalizeFirstLetter(translateCommon("pf_title_provably_fair"))}
                 </button>
                 <div className={`table-container react-infinite-table ${Styles["bet-detail"]}`} onScroll={handleScroll}>
                     <table className="table text-center">
