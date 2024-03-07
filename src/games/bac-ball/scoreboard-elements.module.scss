@@ -105,3 +105,19 @@
         transform: rotate(-50deg);
     }
 }
+
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}
+
+.blink {
+    @extend %statistic-icon;
+    --colorText: #828282;
+    --colorBorderTop: #8282826e;
+    --colorBorderBottom: #8282826e;
+    --colorBackground: #828282;
+
+    animation: blink 0.5s step-start 0s infinite;
+}

@@ -33,6 +33,16 @@ describe(BacBallBeadRoadCharacterElement.name, () => {
                 });
             });
         });
+
+        describe(`when the round result is blink node`, () => {
+            it("should match the snapshot", () => {
+                // Act
+                const { container } = render(<BacBallBeadRoadCharacterElement round={{} as any} />);
+
+                // Assert
+                expect(container).toMatchSnapshot();
+            });
+        });
     });
 });
 
@@ -65,6 +75,16 @@ describe(BacBallBeadRoadValueElement.name, () => {
                 });
             });
         });
+
+        describe(`when the round result is blink node`, () => {
+            it("should match the snapshot", () => {
+                // Act
+                const { container } = render(<BacBallBeadRoadCharacterElement round={{} as any} />);
+
+                // Assert
+                expect(container).toMatchSnapshot();
+            });
+        });
     });
 });
 
@@ -86,6 +106,22 @@ describe(BacBallBigRoadConverter.name, () => {
 
             // Assert
             expect(actual).toBe("tie");
+        });
+    });
+
+    describe("static addBlinkNode", () => {
+        it("should add new node to the array", () => {
+            // Arrange
+            const rounds = [{ banker: true, player: false, tie: false, drawId: 1 }];
+
+            // Act
+            BacBallBigRoadConverter.addBlinkNode(rounds);
+
+            // Assert
+            expect(rounds).toStrictEqual([
+                { banker: false, player: undefined, tie: undefined, drawId: 0 },
+                { banker: true, player: false, tie: false, drawId: 1 },
+            ]);
         });
     });
 });
@@ -150,6 +186,12 @@ describe(BacBallBigRoadElement.name, () => {
                         { banker: false, player: false, tie: true, drawId: 1 },
                         { banker: false, player: false, tie: true, drawId: 2 },
                     ],
+                },
+            },
+            {
+                name: "blink node",
+                round: {
+                    data: [{ banker: false, player: undefined, tie: undefined, drawId: 0 }],
                 },
             },
         ].forEach(({ name, round }) => {

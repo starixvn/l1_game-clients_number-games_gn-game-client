@@ -4,20 +4,13 @@ import "swiper/css/pagination";
 import { Component, ReactNode } from "react";
 import { Round } from "../../components/game-base/type";
 import { ScoreboardProps, SlidableScoreboard, SwitchableScoreboard } from "../../components/game-components/round-history/scoreboard";
-import {
-    BacBallBeadRoadCharacterElement,
-    BacBallBeadRoadValueElement,
-    BacBallBigEyeElement,
-    BacBallBigRoadConverter,
-    BacBallBigRoadElement,
-    BacBallCockroachPigElement,
-    BacBallSmallRoadElement,
-} from "./scoreboard-elements";
+import { BacBallBeadRoadCharacterElement, BacBallBigRoadConverter, BacBallBigRoadElement } from "./scoreboard-elements";
 import Styles from "./scoreboard.module.scss";
 import { BacBallResult, BacBallSettlementResult } from "./types";
 
 export type ScoreboardComponentProps = {
     roundHistory: Round<BacBallResult, BacBallSettlementResult>[];
+    isShowBlink: boolean;
 };
 
 export class Scoreboard extends Component<ScoreboardComponentProps> {
@@ -29,8 +22,10 @@ export class Scoreboard extends Component<ScoreboardComponentProps> {
     }
 
     renderBigRoad(): ReactNode {
-        const { roundHistory } = this.props;
+        const { roundHistory, isShowBlink } = this.props;
         const settlements = [...roundHistory].map((round) => round.settlementResult);
+
+        isShowBlink && BacBallBigRoadConverter.addBlinkNode(settlements);
 
         return (
             <div className={Styles["scoreboard-full"]}>
@@ -51,12 +46,13 @@ export class Scoreboard extends Component<ScoreboardComponentProps> {
     }
 
     renderBeadRoad(): ReactNode {
-        const { roundHistory } = this.props;
+        const { roundHistory, isShowBlink } = this.props;
+        const rounds = isShowBlink ? [{}, ...roundHistory] : roundHistory;
 
         return (
             <div className={Styles["scoreboard-full"]}>
                 <SwitchableScoreboard
-                    rounds={roundHistory}
+                    rounds={rounds}
                     type="switch"
                     scoreboards={[
                         {

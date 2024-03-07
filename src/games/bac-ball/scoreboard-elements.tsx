@@ -13,7 +13,9 @@ import { BacBallResult, BacBallSettlementResult } from "./types";
 
 export class BacBallBeadRoadCharacterElement extends BeadRoadElement<Round<BacBallResult, BacBallSettlementResult>> {
     renderElement(round: Round<BacBallResult, BacBallSettlementResult>): ReactNode {
-        if (round.settlementResult.tie) {
+        if (!round.settlementResult) {
+            return <span className={`${styles.blink}`}></span>;
+        } else if (round.settlementResult.tie) {
             return <span className={`${styles.tie}`}>T</span>;
         } else if (round.settlementResult.banker) {
             return <span className={`${styles.banker}`}>B</span>;
@@ -25,7 +27,9 @@ export class BacBallBeadRoadCharacterElement extends BeadRoadElement<Round<BacBa
 
 export class BacBallBeadRoadValueElement extends BeadRoadElement<Round<BacBallResult, BacBallSettlementResult>> {
     renderElement(round: Round<BacBallResult, BacBallSettlementResult>): ReactNode {
-        if (round.settlementResult.tie) {
+        if (!round.settlementResult) {
+            return <span className={`${styles.blink}`}></span>;
+        } else if (round.settlementResult.tie) {
             return <span className={`${styles.tie} ${styles.value}`}>{round.result.banker}</span>;
         } else if (round.settlementResult.banker) {
             return <span className={`${styles.banker} ${styles.value}`}>{round.result.banker}</span>;
@@ -36,6 +40,13 @@ export class BacBallBeadRoadValueElement extends BeadRoadElement<Round<BacBallRe
 }
 
 export class BacBallBigRoadConverter extends Converter<BacBallSettlementResult> {
+    static addBlinkNode(rounds: BacBallSettlementResult[]) {
+        const lastRound = rounds.find((round) => round.player || round.banker);
+        const blinkRound = { banker: !lastRound?.banker, player: undefined, tie: undefined, drawId: 0 };
+
+        rounds.unshift(blinkRound);
+    }
+
     static instance = new BacBallBigRoadConverter();
 
     protected positiveKey(): string {
@@ -54,8 +65,11 @@ export class BacBallBigRoadElement extends BigRoadElement<BacBallSettlementResul
         const tie = round.data.filter((result) => result.tie);
         const extendClassName = tie.length !== 0 ? styles["big-road-tie"] : "";
         const tieValue = tie.length > 1 ? tie.length : "";
+        const isBlinkNode = round.data.some((result) => result.player === undefined || result.banker === undefined);
 
-        if (banker) {
+        if (isBlinkNode) {
+            return <span className={`${styles.blink} ${extendClassName}`}></span>;
+        } else if (banker) {
             return <span className={`${styles.banker} ${extendClassName}`}>{tieValue}</span>;
         } else if (player) {
             return <span className={`${styles.player} ${extendClassName}`}>{tieValue}</span>;

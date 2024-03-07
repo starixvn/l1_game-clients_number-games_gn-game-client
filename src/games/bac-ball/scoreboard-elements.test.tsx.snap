@@ -10,6 +10,14 @@ exports[`BacBallBeadRoadCharacterElement render when the round result is banker 
 </div>
 `;
 
+exports[`BacBallBeadRoadCharacterElement render when the round result is blink node should match the snapshot 1`] = `
+<div>
+  <span
+    class="blink"
+  />
+</div>
+`;
+
 exports[`BacBallBeadRoadCharacterElement render when the round result is null should match the snapshot 1`] = `<div />`;
 
 exports[`BacBallBeadRoadCharacterElement render when the round result is player should match the snapshot 1`] = `
@@ -39,6 +47,14 @@ exports[`BacBallBeadRoadValueElement render when the round result is banker shou
   >
     2
   </span>
+</div>
+`;
+
+exports[`BacBallBeadRoadValueElement render when the round result is blink node should match the snapshot 1`] = `
+<div>
+  <span
+    class="blink"
+  />
 </div>
 `;
 
@@ -102,6 +118,14 @@ exports[`BacBallBigRoadElement render when the round result is banker with singl
 <div>
   <span
     class="banker big-road-tie"
+  />
+</div>
+`;
+
+exports[`BacBallBigRoadElement render when the round result is blink node should match the snapshot 1`] = `
+<div>
+  <span
+    class="blink "
   />
 </div>
 `;

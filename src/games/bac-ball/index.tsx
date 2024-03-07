@@ -66,9 +66,9 @@ class BacBall extends GameBase<GameBaseProps> {
     }
 
     renderScoreboards() {
-        const { roundHistory } = this.props.gameStateContextModel;
+        const { roundHistory, isShowBlink } = this.props.gameStateContextModel;
 
-        return <Scoreboard roundHistory={roundHistory as Round<BacBallResult, BacBallSettlementResult>[]} />;
+        return <Scoreboard isShowBlink={isShowBlink} roundHistory={roundHistory as Round<BacBallResult, BacBallSettlementResult>[]} />;
     }
 
     renderRoundIdSection(): JSX.Element {
