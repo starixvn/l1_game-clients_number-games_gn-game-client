@@ -35,13 +35,15 @@ export const BacBallResultBlock: FC = () => {
                     const redFrames = sprite.animations["red"];
                     const blue2Frames = sprite.animations["blue2"];
                     const red2Frames = sprite.animations["red2"];
-                    setCageBallFrames({ blue: blueFrames, red: redFrames, blue2: blue2Frames, red2: red2Frames });
+                    setCageBallFrames(
+                        (cageBallFrames) => (cageBallFrames = { blue: blueFrames, red: redFrames, blue2: blue2Frames, red2: red2Frames })
+                    );
                 });
             }
 
             if (cageBallsLoopFrames.length === 0) {
                 await loadPixiAnimations("/static/images/cage/cage-balls.json", (sprite) => {
-                    setCageBallsLoopFrames(sprite.animations["loop"]);
+                    setCageBallsLoopFrames((cageBallsLoopFrames) => (cageBallsLoopFrames = sprite.animations["loop"]));
                 });
             }
         };
