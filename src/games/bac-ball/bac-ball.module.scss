@@ -254,11 +254,8 @@
 }
 
 .odds-change {
-    --odds-change-duration: 0.8s;
-    --odds-change-count: 3;
-    --animate-duration: 1s;
-
-    --animate-repeat: 2;
+    --animate-duration: 0.8s;
+    --animate-repeat: 3;
 
     position: relative;
     animation-fill-mode: both;
