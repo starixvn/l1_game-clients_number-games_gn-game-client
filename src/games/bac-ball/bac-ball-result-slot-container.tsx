@@ -50,7 +50,7 @@ export const BacBallResultSlotContainer: React.FC<IResultSlotContainer> = (props
             }
         }
         updateLoadingIcon(clonedData);
-        setBallsData((ballsData) => (ballsData = clonedData));
+        setBallsData(clonedData);
     }, [roundData]);
 
     useEffect(() => {
@@ -60,7 +60,7 @@ export const BacBallResultSlotContainer: React.FC<IResultSlotContainer> = (props
                 clonedData[turnCounter - 1].status = BallStatus.LOADING;
                 clonedData[turnCounter - 1].number = result[betChoice];
                 clonedData[turnCounter - 1].delayTime = delayTime;
-                setBallsData((ballsData) => (ballsData = clonedData));
+                setBallsData(clonedData);
             }
         }
     }, [result]);
@@ -70,7 +70,7 @@ export const BacBallResultSlotContainer: React.FC<IResultSlotContainer> = (props
             if (turnCounter === 1) {
                 const defaultData = cloneDefaultData();
                 updateLoadingIcon(defaultData);
-                setBallsData((ballsData) => (ballsData = defaultData));
+                setBallsData(defaultData);
             } else {
                 updateLoadingIcon([...ballsData]);
             }
