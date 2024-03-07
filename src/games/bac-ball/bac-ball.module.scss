@@ -36,7 +36,6 @@
 }
 
 %main-option {
-    position: relative;
     overflow: hidden;
     width: 17.8rem;
     height: 18.8rem;
@@ -45,6 +44,16 @@
 
     .btn-ripple {
         z-index: 1;
+    }
+
+    .disable-layer {
+        position: absolute;
+        left: -0.2rem;
+        top: 0;
+        background: url("/static/images/bac-number/player-disabled-layer.png") no-repeat;
+        width: 18.2rem;
+        height: 19rem;
+        opacity: 0.5;
     }
 }
 
@@ -56,7 +65,7 @@
     border-bottom-left-radius: 6.6rem;
     border-top-left-radius: 3.8rem;
     padding-left: 1.2rem;
-    padding-right: 5.5rem;
+    padding-right: 5.6rem;
 
     .own-bet {
         left: -4rem;
@@ -113,7 +122,7 @@
     border-bottom-right-radius: 6.6rem;
     border-top-right-radius: 3.8rem;
     padding-right: 1.2rem;
-    padding-left: 5.5rem;
+    padding-left: 5.6rem;
 
     .own-bet {
         left: 4rem;
@@ -162,6 +171,10 @@
             0% 96%
         );
     }
+
+    .disable-layer {
+        transform: scaleX(-1);
+    }
 }
 
 .tie {
@@ -209,6 +222,17 @@
             0% 85%
         );
     }
+
+    .disable-layer {
+        position: absolute;
+        left: -0.1rem;
+        top: -1px;
+        width: 9.6rem;
+        height: 17.6rem;
+        background: url("/static/images/bac-number/tie-disabled-layer.png") no-repeat;
+        background-size: 9.6rem 17.6rem;
+        opacity: 0.5;
+    }
 }
 
 .stake {
@@ -221,14 +245,23 @@
     bottom: 1.5rem;
 }
 
+.total-stakes {
+    height: 1.8rem;
+}
+
 .ball-svg {
     position: absolute;
     top: 0;
     transform: scale(0.65);
 }
 
-.bet-name {
+.bet-name-banker,
+.bet-name-player {
     margin-top: 3.2rem;
+}
+
+.bet-name-tie {
+    margin-top: 1.9rem;
 }
 
 .highlight-prev-result-player {
@@ -289,5 +322,18 @@
     70% {
         -webkit-transform: scale(1);
         transform: scale(1);
+    }
+}
+
+/* bet area */
+
+.choice-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1.6rem;
+
+    &.choice-banker {
+        flex-flow: row-reverse;
     }
 }

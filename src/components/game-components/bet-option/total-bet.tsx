@@ -6,12 +6,17 @@ const convertStakeToString = (amount: number, rate: number) => (amount ? numberW
 
 export const TotalBet: React.FC<BaseProps> = ({ gameName, choice, className }) => {
     const { totalBets, rate } = useGameStateContext();
+    const totalBet = totalBets?.[choice] ?? 0;
+
+    if (totalBet <= 0) {
+        return <div className={className}></div>;
+    }
 
     return (
         <div className={className}>
             <span className="icon-coin"></span>
             <span id={`${gameName}-${choice}-total-stakes`} className="stakes-value">
-                {convertStakeToString(totalBets?.[choice] ?? 0, rate)}
+                {convertStakeToString(totalBet, rate)}
             </span>
         </div>
     );

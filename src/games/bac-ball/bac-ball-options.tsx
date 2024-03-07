@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { useGameActionContext, useSystemContext } from "../../_shared/react-contexts";
+import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
 import { useShowHighlightPrevResult } from "../../_shared/react-hooks/use-high-light";
+import { RoundState } from "../../components/game-base/type";
 import { BetChoice, BetPercentage, Odds, OwnBet, TotalBet } from "../../components/game-components/bet-option";
 import { setRipplePosition } from "../../components/game-components/bet-option/ripple-effect";
 import { BacBallWinningAnimation } from "./bac-ball-winning-animation";
@@ -21,6 +23,9 @@ export const BacBallBetOptionsComponent = () => {
     );
     const gameName = "BacBall";
     const showHighlightPrevResult = useShowHighlightPrevResult;
+    const { roundState } = useGameStateContext();
+    const isShowDisabledLayer =
+        roundState === RoundState.DisplayResult || roundState === RoundState.SwitchRound || roundState === RoundState.BeforeStartRound;
 
     const renderTotalBet = (choice: string) => {
         const tieClassName = "justify-center mt-1";
@@ -45,13 +50,7 @@ export const BacBallBetOptionsComponent = () => {
     };
 
     const renderBetChoice = (choice: string) => {
-        return (
-            <BetChoice
-                choice={choice}
-                className={`bet-name text-center ${choice === BacBallBetOptions.TIE ? "mt-3" : Style["bet-name"]}`}
-                gameName={gameName}
-            />
-        );
+        return <BetChoice choice={choice} className={`bet-name text-center ${Style[`bet-name-${choice}`]}`} gameName={gameName} />;
     };
 
     const renderOdds = (choice: string) => {
@@ -103,9 +102,7 @@ export const BacBallBetOptionsComponent = () => {
         const ownBet = renderOwnBet(choice);
         return (
             <div className={`${Style[choice]} text-white relative`}>
-                {<div className={Style["winning-effect"]}>{winningResult}</div>}
-                {showHighlightPrevResult({ betChoice: choice }) && winningPrev}
-                <div className={`flex justify-between pt-5`}>
+                <div className={`${Style["choice-info"]} ${Style[`choice-${choice}`]}`}>
                     <div className={Style.stake}>{totalBetComponent}</div>
                     {betPercentage}
                 </div>
@@ -114,11 +111,14 @@ export const BacBallBetOptionsComponent = () => {
                 {ownBet}
                 <button
                     ref={(el) => (rippleButtons.current[choice === "player" ? 0 : 1] = el)}
-                    className={`btn-ripple ${Style["btn-ripple"]}`}
+                    className={`btn-ripple ${Style["btn-ripple"]} ${isShowDisabledLayer}`}
                     onClick={() => {
                         onClickBet(choice);
                     }}
                 ></button>
+                {isShowDisabledLayer && <div className={Style["disable-layer"]}></div>}
+                {<div className={Style["winning-effect"]}>{winningResult}</div>}
+                {showHighlightPrevResult({ betChoice: choice }) && winningPrev}
             </div>
         );
     };
@@ -142,9 +142,7 @@ export const BacBallBetOptionsComponent = () => {
         const odds = renderOdds(BacBallBetOptions.TIE);
         const ownBet = renderOwnBet(BacBallBetOptions.TIE);
         return (
-            <div className={`${Style[BacBallBetOptions.TIE]} text-white flex flex-col items-center pt-2 relative`}>
-                {<div className={Style["winning-effect"]}>{winningResult}</div>}
-                {showHighlightPrevResult({ betChoice: BacBallBetOptions.TIE }) && winningPrev}
+            <div className={`${Style[BacBallBetOptions.TIE]} text-white flex flex-col items-center pt-2`}>
                 {betPercentage}
                 <div className={Style.stake}>{totalBetComponent}</div>
                 {betChoice}
@@ -152,11 +150,14 @@ export const BacBallBetOptionsComponent = () => {
                 {ownBet}
                 <button
                     ref={(el) => (rippleButtons.current[2] = el)}
-                    className={`btn-ripple ${Style["btn-ripple"]}`}
+                    className={`btn-ripple ${Style["btn-ripple"]} ${isShowDisabledLayer}`}
                     onClick={() => {
                         onClickBet(BacBallBetOptions.TIE);
                     }}
                 ></button>
+                {isShowDisabledLayer && <div className={Style["disable-layer"]}></div>}
+                {<div className={Style["winning-effect"]}>{winningResult}</div>}
+                {showHighlightPrevResult({ betChoice: BacBallBetOptions.TIE }) && winningPrev}
             </div>
         );
     };

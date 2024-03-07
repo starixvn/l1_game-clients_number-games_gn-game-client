@@ -161,8 +161,7 @@ body {
     fill: var(--color);
 }
 
-.icon-coin,
-.icon-user {
+.icon-coin {
     color: var(--color);
 }
 
@@ -179,10 +178,9 @@ body {
     font-size: 1.8rem;
 }
 
-.player-value,
 .stakes-value {
     height: 1.8rem;
-    line-height: 1.7;
+    line-height: 1.5;
 }
 
 .copyright {

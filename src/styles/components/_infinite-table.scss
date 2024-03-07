@@ -7,6 +7,9 @@
 
     --table-row-odd-color: #1a1b20;
     --table-row-even-color: #2c2f36;
+
+    --table-text-highlight: #ffbc11;
+    --table-text-clickable: #3a95ff;
 }
 
 .table-container {
@@ -66,14 +69,14 @@
 
             .highlight {
                 font-weight: bold;
-                color: #ffbc11;
+                color: var(--table-text-highlight);
             }
         }
     }
 }
 
 .clickable {
-    color: #3a95ff;
+    color: var(--table-text-clickable);
     cursor: pointer;
     font-family: inherit;
     border: none;
