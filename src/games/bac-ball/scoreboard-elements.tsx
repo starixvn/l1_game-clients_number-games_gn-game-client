@@ -42,7 +42,7 @@ export class BacBallBeadRoadValueElement extends BeadRoadElement<Round<BacBallRe
 export class BacBallBigRoadConverter extends Converter<BacBallSettlementResult> {
     static addBlinkNode(rounds: BacBallSettlementResult[]) {
         const lastRound = rounds.find((round) => round.player || round.banker);
-        const blinkRound = { banker: !lastRound?.banker, player: undefined, tie: undefined, drawId: 0 };
+        const blinkRound = { banker: lastRound?.banker, player: undefined, tie: undefined, drawId: 0 };
 
         rounds.unshift(blinkRound);
     }

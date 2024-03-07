@@ -119,7 +119,7 @@ describe(BacBallBigRoadConverter.name, () => {
 
             // Assert
             expect(rounds).toStrictEqual([
-                { banker: false, player: undefined, tie: undefined, drawId: 0 },
+                { banker: true, player: undefined, tie: undefined, drawId: 0 },
                 { banker: true, player: false, tie: false, drawId: 1 },
             ]);
         });
