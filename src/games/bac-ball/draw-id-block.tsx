@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+
 import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
 import { RoundState } from "../../components/game-base/type";
 
@@ -15,7 +16,7 @@ export const DrawIdBlock = () => {
     return (
         <div>
             {displayedRawId > 0 && (
-                <div id="round-id" className="round-id">
+                <div key={displayedRawId} id="round-id" className="round-id">
                     #{displayedRawId}
                 </div>
             )}

@@ -151,6 +151,10 @@ body {
     line-height: 3.2rem;
     font-size: 1.2rem;
     color: white;
+    width: auto;
+    overflow: hidden;
+    white-space: nowrap;
+    animation: round-animation 1.3s ease-in;
 }
 
 .text-percentage {
@@ -223,4 +227,18 @@ body {
 
 .break {
     white-space: pre-wrap;
+}
+
+@keyframes round-animation {
+    0% {
+        max-width: 0;
+    }
+
+    20% {
+        max-width: 0;
+    }
+
+    100% {
+        max-width: 100%;
+    }
 }
