@@ -22,7 +22,7 @@ const DisabledModal: React.FC<{ disableMessage: string; onSubmit: () => void }> 
                 )}
 
                 <div className={Styles["list-action"]}>
-                    <button onClick={() => onSubmit()} className={`btn-red w-100 ${Styles["ok"]}`}>
+                    <button onClick={() => onSubmit()} className={`btn-yellow ${Styles["ok"]}`}>
                         {t({ key: "ok" })}
                     </button>
                 </div>

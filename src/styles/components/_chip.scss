@@ -1,8 +1,8 @@
 .chip-container {
     --ratio: 1;
-    --chip-width: calc(4rem * var(--ratio));
-    --chip-height: calc(4.174rem * var(--ratio));
-    --chip-value-font-size: calc(2rem * var(--ratio));
+    --chip-width: calc(4.4rem * var(--ratio));
+    --chip-height: calc(4.4rem * var(--ratio));
+    --chip-value-font-size: calc(1.4rem * var(--ratio));
 
     position: relative;
     display: grid !important;
@@ -28,22 +28,7 @@
         text-align: center;
         font-family: var(--font-money);
         font-size: var(--chip-value-font-size);
-        color: #2c2f3e;
+        color: #fff;
         z-index: 1;
-    }
-    &.chip-9 {
-        &.gn {
-            .value {
-                color: #fff;
-            }
-        }
-    }
-    &.chip-10,
-    &.chip-11,
-    &.chip-12,
-    &.chip-13 {
-        .value {
-            color: #fff;
-        }
     }
 }
