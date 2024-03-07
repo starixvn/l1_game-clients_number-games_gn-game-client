@@ -33,6 +33,7 @@ export const messageEventType = {
     BET_HISTORY: "history",
     UPDATE_PLAYER_BALANCE: "updatePlayerBalance",
     CLEAR_GAME_TIMEOUT_AND_INTERVAL: "clearGameTimeoutAndInterval",
+    PROVABLY_FAIR: "pf",
 };
 
 export class GameMessageHandler {
@@ -49,6 +50,7 @@ export class GameMessageHandler {
         this.register(messageEventType.SIGNED_IN, this.handleSignedIn);
         this.register(messageEventType.BET_PERCENTAGE, this.handleBetPercentage);
         this.register(messageEventType.PLAYER_BET_COUNT, this.handlePlayerBetCount);
+        this.register(messageEventType.PROVABLY_FAIR, this.handleProvablyFair);
     };
 
     getMessageTransmitter() {
@@ -137,6 +139,15 @@ export class GameMessageHandler {
             type: GameEventActionType.PLAYER_BET_COUNT,
             payload: {
                 playerBetCount,
+            },
+        });
+    };
+
+    handleProvablyFair = ({ pf }) => {
+        this.dispatch({
+            type: GameEventActionType.PROVABLY_FAIR,
+            payload: {
+                provablyFairData: pf,
             },
         });
     };

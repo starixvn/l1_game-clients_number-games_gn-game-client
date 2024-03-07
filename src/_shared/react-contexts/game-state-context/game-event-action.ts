@@ -42,6 +42,7 @@ export enum GameEventActionType {
     TOGGLE_BET_HISTORY = "TOGGLE_BET_HISTORY",
     TOGGLE_GAME_GUIDE = "TOGGLE_GAME_GUIDE",
     TOGGLE_PF_SETTING = "TOGGLE_PF_SETTING",
+    PROVABLY_FAIR = "pf",
 }
 
 export interface GameEventPayload {
@@ -107,6 +108,11 @@ export interface GameEventPayload {
     isShowBetHistory?: boolean;
     isShowGameGuide?: boolean;
     isShowPFSetting?: boolean;
+    provablyFairData?: {
+        drawId: number;
+        roundId: number;
+        serverSeedHash: string;
+    };
 }
 
 export interface GameEventAction {

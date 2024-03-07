@@ -75,6 +75,7 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
         isShowBetHistory,
         isShowGameGuide,
         isShowPFSetting,
+        provablyFairData,
     } = payload;
 
     // console.log("payload: ", JSON.stringify(payload));
@@ -402,6 +403,13 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
             return {
                 ...state,
                 isShowPFSetting,
+            };
+        }
+
+        case GameEventActionType.PROVABLY_FAIR: {
+            return {
+                ...state,
+                provablyFairData,
             };
         }
 
