@@ -3,6 +3,7 @@ import { useGameStateContext } from "../../../_shared/react-contexts/game-state-
 import { RoundState } from "../../game-base/type";
 import styles from "./countdown-timer.module.scss";
 import { useSNTranslate } from "../../../_shared/react-hooks/use-translator";
+import { writeDebugLog } from "../../../_shared/helpers";
 
 export type Rotation = "clockwise" | "counterclockwise";
 const CountdownTimer = () => {
@@ -53,21 +54,12 @@ const SimpleTimer = () => {
     const [classNames, setClassNames] = useState("");
 
     useEffect(() => {
-        const timer = setInterval(() => {
-            setTimeLeft((prevTime) => prevTime - 1);
-            if (timeLeft === 0) {
-                clearInterval(timer);
-            }
-        }, 1000);
-
-        return () => {
-            clearInterval(timer);
-        };
-    }, [timeLeft]);
-
-    useEffect(() => {
-        setClassNames(roundState === RoundState.LockingBet ? styles["lock-bet"] : "");
-    }, [roundState]);
+        if (remainingTime > 0 && remainingTime !== timeLeft) {
+            writeDebugLog({ timeLeft, remainingTime, roundState: RoundState[roundState] });
+            setTimeLeft(remainingTime);
+            setClassNames(roundState === RoundState.LockingBet ? styles["lock-bet"] : "");
+        }
+    }, [timeLeft, remainingTime, roundState]);
 
     return (
         <div className={styles.timer}>
