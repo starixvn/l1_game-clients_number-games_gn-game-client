@@ -30,7 +30,11 @@ const PFSetting: FC = () => {
     const { provablyFairData } = useGameStateContext();
     const [randomSeed, setRandomSeed] = useState<number>(null);
     const { t: translateCommon } = useCommonTranslate();
-    const { gameMessageHandler } = useGameContext();
+
+    const handleCopyServerSeedHash = () => {
+        let serverSeed = document.getElementById("server-seed-hash") as HTMLInputElement;
+        navigator.clipboard.writeText(serverSeed.value);
+    };
 
     useEffect(() => {
         setRandomSeed(Math.floor(Math.random() * 75) + 1);
@@ -57,7 +61,7 @@ const PFSetting: FC = () => {
                     <div className={Styles["client-seed-option"]}>
                         <div style={{ width: "30%" }}>
                             <input type="radio" id="manual-seed" name="client-seed" />
-                            <label htmlFor="manual-seed">{translateCommon("pf_client_seed_para_3")}</label>
+                            <label htmlFor="manual-seed">{`${translateCommon("pf_client_seed_para_3")}`}</label>
                         </div>
                         <input type="text" />
                     </div>
@@ -65,7 +69,10 @@ const PFSetting: FC = () => {
             </div>
             <div className="pf-setting-seed">
                 <h3>{translateCommon("pf_header_server_seed")}</h3>
-                <div style={{ margin: "1rem 1.6rem", width: "35rem", wordWrap: "break-word" }}>{provablyFairData?.serverSeedHash}</div>
+                <div className={Styles["server-seed-field"]}>
+                    <input id="server-seed-hash" className={Styles["server-seed-hash"]} value={provablyFairData?.serverSeedHash} readOnly />
+                    <button onClick={handleCopyServerSeedHash}>Copy</button>
+                </div>
             </div>
         </div>
     );
