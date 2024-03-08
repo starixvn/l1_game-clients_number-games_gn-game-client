@@ -1,13 +1,11 @@
 import { Assets, Spritesheet } from "pixi.js";
-import getConfig from "next/config";
+import { buildVersion } from "../constants";
 
 const cachedAnimations = [];
 
 export const loadPixiAnimations = async (spriteUrl: string, onLoaded: (sprite: Spritesheet) => void) => {
-    const { publicRuntimeConfig } = getConfig();
-
     if (cachedAnimations[spriteUrl] == null) {
-        const sprite = await Assets.load<Spritesheet>(spriteUrl + `?${publicRuntimeConfig.versionParam}`);
+        const sprite = await Assets.load<Spritesheet>(`${spriteUrl}?${buildVersion}`);
 
         cachedAnimations[spriteUrl] = sprite;
     }

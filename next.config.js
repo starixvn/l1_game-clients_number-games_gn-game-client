@@ -7,7 +7,6 @@ const basePath = "";
 const appSettings = {
     ...configs,
     gameSettings,
-    versionParam: `version=${uuidv4()}`,
 };
 
 module.exports = withSentryConfig({
@@ -18,9 +17,7 @@ module.exports = withSentryConfig({
         disableClientWebpackPlugin: true,
         hideSourceMaps: true,
     },
-    generateBuildId: async () => {
-        return uuidv4();
-    },
+    generateBuildId: async () => uuidv4(),
     webpack: (config, options) => {
         config.module.rules.push({
             test: /\.(png|jpg|gif|svg|eot|ttf|woff|woff2|mp3)$/,
@@ -45,6 +42,20 @@ module.exports = withSentryConfig({
             {
                 source: "/health",
                 destination: "/api/health",
+            },
+        ];
+    },
+    async headers() {
+        return [
+            {
+                source: "/:all*(js|png|json)",
+                locale: false,
+                headers: [
+                    {
+                        key: "Cache-Control",
+                        value: "public, max-age=31536000, must-revalidate",
+                    },
+                ],
             },
         ];
     },
