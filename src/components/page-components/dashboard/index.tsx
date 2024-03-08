@@ -8,7 +8,6 @@ import { AuthContextProvider } from "../../../_shared/react-contexts";
 import { authorize, createNickname, getSettingGames, reCheckIn } from "../../../services/auth-service";
 import { updateSignInSMStatus } from "../../../services/user-setting-service";
 import { Props, State } from "./type";
-
 import { io, Socket } from "socket.io-client";
 import MsgpackParser from "socket.io-msgpack-parser";
 import { Themes } from "../../../_shared/constants";
@@ -37,8 +36,6 @@ class Dashboard extends React.PureComponent<Props, State> {
             authorizeInfo: null,
             isShowErrorModal: false,
             apiError: null,
-            isShowHistory: false,
-            isShowGuide: false,
             isShowAnnouncement: false,
             isBlockUI: false,
             queryGame: this.props.queryGame,
@@ -54,14 +51,10 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.registerMainSocketEvent = this.registerMainSocketEvent.bind(this);
         this.handleKickedOut = this.handleKickedOut.bind(this);
         this.closeDialog = this.closeDialog.bind(this);
-        this.toggleHistoryModal = this.toggleHistoryModal.bind(this);
-        this.toggleGuideModal = this.toggleGuideModal.bind(this);
         this.handleReload = this.handleReload.bind(this);
         this.updateAuthorizeInfo = this.updateAuthorizeInfo.bind(this);
         this.updateUserBalance = this.updateUserBalance.bind(this);
         this.handleShowApiErrorMessage = this.handleShowApiErrorMessage.bind(this);
-        this.toggleHistoryModal = this.toggleHistoryModal.bind(this);
-        this.toggleGuideModal = this.toggleGuideModal.bind(this);
         this.handleUpdateUserStakeLevel = this.handleUpdateUserStakeLevel.bind(this);
         this.signOut = this.signOut.bind(this);
         this.toggleAnnouncementModal = this.toggleAnnouncementModal.bind(this);
@@ -264,21 +257,6 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.isKickOut && this.signOut();
     }
 
-    toggleHistoryModal() {
-        this.setState({ isShowHistory: !this.state.isShowHistory });
-    }
-
-    async toggleGuideModal() {
-        const { isShowGuide } = this.state;
-        if (!isShowGuide) {
-            await this.updateBetSettingGames();
-        }
-
-        setTimeout(() => {
-            this.setState({ isShowGuide: !this.state.isShowGuide });
-        }, 100);
-    }
-
     async updateBetSettingGames() {
         const { session } = this.props;
         const betSettings = await getSettingGames(session);
@@ -307,8 +285,6 @@ class Dashboard extends React.PureComponent<Props, State> {
     renderDashBoard() {
         const {
             isShowErrorModal,
-            isShowHistory,
-            isShowGuide,
             userStakeLevel,
             authorizeInfo,
             isBlockUI,
@@ -332,8 +308,6 @@ class Dashboard extends React.PureComponent<Props, State> {
                 <div className={`${Styles["dashboard"]}`} id={"dashboard"}>
                     <Header
                         user={authorizeInfo.user}
-                        toggleHistoryModal={this.toggleHistoryModal}
-                        toggleGuideModal={this.toggleGuideModal}
                         toggleAnnouncementModal={this.toggleAnnouncementModal}
                         offerGames={offerGames}
                         isShowToolbarGuide={isShowToolbarGuide}

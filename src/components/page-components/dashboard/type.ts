@@ -21,9 +21,7 @@ export type State = {
     authorizeInfo: AuthorizeResponse;
     isShowErrorModal: boolean;
     apiError: APIErrorProp;
-    isShowHistory: boolean;
     isShowAnnouncement: boolean;
-    isShowGuide: boolean;
     isBlockUI: boolean;
     queryGame: number;
     isJoinGame: boolean;

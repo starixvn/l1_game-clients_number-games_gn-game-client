@@ -5,8 +5,6 @@ import Styles from "./header.module.scss";
 
 type Props = {
     user: User;
-    toggleHistoryModal: Function;
-    toggleGuideModal: Function;
     toggleAnnouncementModal: Function;
     offerGames: number[];
     isShowToolbarGuide: boolean;
