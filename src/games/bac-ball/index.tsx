@@ -21,6 +21,7 @@ import { BacBallBetHistoryModal } from "./history";
 import { BacBallResult, BacBallSettlementResult } from "./types";
 import { DrawIdBlock } from "./draw-id-block";
 import { loadPixiAnimations } from "../../_shared/helpers/pixi-resource-loader";
+import { useTranslator } from "../../_shared/react-hooks";
 
 class BacBall extends GameBase<GameBaseProps> {
     private turnIdHandler?: TurnIdHandler;
@@ -100,7 +101,7 @@ const BacBallWrapper = (props) => {
 };
 
 const BacBallFC = (props) => {
-    const { t } = useTranslate(["Common", "SabaNumber"]);
+    const { t } = useTranslator();
 
     return (
         <BacBall

@@ -1,8 +1,7 @@
 import React from "react";
-
-import { useTranslate } from "@tolgee/react";
+import { useTranslator } from "../../../_shared/react-hooks";
 
 export const ErrorApiText: React.FC<{ errorMessage: string; errorCode: string }> = ({ errorMessage, errorCode }) => {
-    const { t } = useTranslate(["Common", "SabaNumber"]);
+    const { t } = useTranslator();
     return <>{t(errorMessage, { errorCode }).replaceTolgeeFormat()}</>;
 };
