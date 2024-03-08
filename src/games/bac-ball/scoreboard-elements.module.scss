@@ -106,16 +106,18 @@
     }
 }
 
-@keyframes blink-animation-dark-theme {
-    0%,
-    50% {
-        background-color: #507396;
+@keyframes pulsate-bck {
+    0% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
     }
-
-    25%,
-    75%,
+    50% {
+        -webkit-transform: scale(0.9);
+        transform: scale(0.9);
+    }
     100% {
-        background: #395877;
+        -webkit-transform: scale(1);
+        transform: scale(1);
     }
 }
 
@@ -124,5 +126,5 @@
     height: 1.4rem;
     border-radius: 50%;
     background-color: #507396;
-    animation: blink-animation-dark-theme 0.5s step-start 0s infinite;
+    animation: 0.5s ease-in-out 0s infinite normal both running pulsate-bck;
 }

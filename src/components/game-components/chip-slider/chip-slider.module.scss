@@ -42,96 +42,17 @@
 }
 
 .chip-container {
-    --chip-highlight-width: calc(4rem * var(--ratio) + 1.4rem);
-    --chip-highlight-height: calc(4.174rem * var(--ratio) + 1.4rem);
-    --ratio: 1.1;
-
     transition: all -0.1s ease-in;
 
     &.selected {
-        --ratio: 1.4;
+        --ratio: 1.2;
         transition: all -0.1s ease-out;
-
-        // &:before {
-        //     content: "";
-        //     position: absolute;
-        //     left: calc(-0.6rem * var(--ratio));
-        //     right: calc(-0.6rem * var(--ratio));
-        //     bottom: calc(-0.6rem * var(--ratio));
-        //     top: calc(-0.6rem * var(--ratio));
-        //     background-repeat: no-repeat;
-        //     background-image: url("/static/images/chips/active/chip-active.png");
-        //     background-image: -webkit-image-set(
-        //         url("/static/images/chips/active/chip-active.png") 1x,
-        //         url("/static/images/chips/active/chip-active@2x.png") 2x,
-        //         url("/static/images/chips/active/chip-active@3x.png") 3x
-        //     );
-        //     background-image: image-set(
-        //         url("/static/images/chips/active/chip-active.png") 1x,
-        //         url("/static/images/chips/active/chip-active@2x.png") 2x,
-        //         url("/static/images/chips/active/chip-active@3x.png") 3x
-        //     );
-        //     background-size: 100%;
-        // }
-
-        // &.enabled-quick-bet:before {
-        //     background-image: url("/static/images/chips/active/chip-active-quick-bet.png");
-        //     background-image: -webkit-image-set(
-        //         url("/static/images/chips/active/chip-active-quick-bet.png") 1x,
-        //         url("/static/images/chips/active/chip-active-quick-bet@2x.png") 2x,
-        //         url("/static/images/chips/active/chip-active-quick-bet@3x.png") 3x
-        //     );
-        //     background-image: image-set(
-        //         url("/static/images/chips/active/chip-active-quick-bet.png") 1x,
-        //         url("/static/images/chips/active/chip-active-quick-bet@2x.png") 2x,
-        //         url("/static/images/chips/active/chip-active-quick-bet@3x.png") 3x
-        //     );
-        // }
     }
 
     &:active,
     &:focus,
     &:focus-visible {
         outline: none;
-    }
-
-    @media (hover: hover) and (pointer: fine) {
-        &:hover {
-            cursor: pointer;
-            &:before {
-                content: "";
-                position: absolute;
-                left: calc(-0.6rem * var(--ratio));
-                right: calc(-0.6rem * var(--ratio));
-                bottom: calc(-0.6rem * var(--ratio));
-                top: calc(-0.6rem * var(--ratio));
-                // background-image: url("/static/images/chips/active/chip-active.png");
-                // background-image: -webkit-image-set(
-                //     url("/static/images/chips/active/chip-active.png") 1x,
-                //     url("/static/images/chips/active/chip-active@2x.png") 2x,
-                //     url("/static/images/chips/active/chip-active@3x.png") 3x
-                // );
-                // background-image: image-set(
-                //     url("/static/images/chips/active/chip-active.png") 1x,
-                //     url("/static/images/chips/active/chip-active@2x.png") 2x,
-                //     url("/static/images/chips/active/chip-active@3x.png") 3x
-                // );
-                // background-size: 100%;
-            }
-        }
-        // &.enabled-quick-bet:hover:before {
-        //     background-image: url("/static/images/chips/active/chip-active-quick-bet.png");
-        //     background-image: -webkit-image-set(
-        //         url("/static/images/chips/active/chip-active-quick-bet.png") 1x,
-        //         url("/static/images/chips/active/chip-active-quick-bet@2x.png") 2x,
-        //         url("/static/images/chips/active/chip-active-quick-bet@3x.png") 3x
-        //     );
-        //     background-image: image-set(
-        //         url("/static/images/chips/active/chip-active-quick-bet.png") 1x,
-        //         url("/static/images/chips/active/chip-active-quick-bet@2x.png") 2x,
-        //         url("/static/images/chips/active/chip-active-quick-bet@3x.png") 3x
-        //     );
-        // }
     }
 
     @keyframes show-highlight-circle {

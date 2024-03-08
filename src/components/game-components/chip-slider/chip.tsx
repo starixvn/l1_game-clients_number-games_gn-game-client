@@ -3,7 +3,7 @@ import { ChipLabelMapper, ChipMapper, systemName } from "../../../_shared/consta
 import { useAuthContext, useSystemContext } from "../../../_shared/react-contexts";
 import Styles from "./chip-slider.module.scss";
 
-const defaultChip = "chip-13";
+const defaultChip = "chip";
 
 export const Chip: React.FC<{ value: number; onClickChip: Function }> = ({ value, onClickChip }) => {
     const systemContext = useSystemContext();
