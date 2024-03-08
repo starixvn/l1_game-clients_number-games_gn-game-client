@@ -24,8 +24,7 @@ export const BacBallBetOptionsComponent = () => {
     const gameName = "BacBall";
     const showHighlightPrevResult = useShowHighlightPrevResult;
     const { roundState } = useGameStateContext();
-    const isShowDisabledLayer =
-        roundState === RoundState.DisplayResult || roundState === RoundState.SwitchRound || roundState === RoundState.BeforeStartRound;
+    const isShowDisabledLayer = roundState === RoundState.LockingBet;
 
     const renderTotalBet = (choice: string) => {
         const tieClassName = "justify-center mt-1";
