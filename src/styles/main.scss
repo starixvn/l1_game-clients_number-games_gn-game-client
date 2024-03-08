@@ -149,70 +149,14 @@ body {
     animation: round-animation 1.3s ease-in;
 }
 
-.text-percentage {
-    fill: var(--color);
-}
-
-.icon-coin {
-    color: var(--color);
-}
-
-.bet-name,
-.bet-odds {
-    font-size: 1.4rem;
-    font-weight: 500;
-    color: white;
-    text-transform: uppercase;
-}
-
-.bet-odds {
-    line-height: 1.5;
-    font-size: 1.8rem;
-}
-
-.stakes-value {
-    height: 1.8rem;
-    line-height: 1.5;
-}
-
 .copyright {
     font-size: 0.9rem;
     font-weight: 500;
     color: var(--color-copyright);
 }
 
-.own-bet {
-    position: absolute;
-    bottom: 5px;
-    left: 0;
-    right: 0;
-    height: 16px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    .bet-value {
-        display: flex;
-        align-items: center;
-        font-size: 11px;
-        font-weight: 600;
-        color: white;
-        padding: 0 4px;
-        border-radius: 10px;
-        background: linear-gradient(133deg, rgba(53, 206, 97, 1) 0%, rgba(11, 178, 66, 1) 100%);
-
-        &::before {
-            content: "";
-            position: relative;
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            margin-right: 2px;
-            background: url(/static/images/coin-outline.svg) no-repeat 50%;
-            background-size: contain;
-            vertical-align: middle;
-        }
-    }
+.text-percentage {
+    fill: var(--color);
 }
 
 .break {

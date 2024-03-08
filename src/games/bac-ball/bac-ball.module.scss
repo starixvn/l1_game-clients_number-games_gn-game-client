@@ -234,20 +234,6 @@
     }
 }
 
-.stake {
-    color: var(--color);
-    font-size: 1.2rem;
-    font-weight: 500;
-}
-
-.own-bet {
-    bottom: 1.5rem;
-}
-
-.total-stakes {
-    height: 1.8rem;
-}
-
 .ball-svg {
     position: absolute;
     top: 0;
@@ -264,7 +250,7 @@
 }
 
 .highlight-prev-result-player {
-    background: url(/static//images/bac-number/winning-previous-player.svg) no-repeat center center;
+    background: url("/static/images/bac-number/winning-previous-player.svg") no-repeat center center;
     height: 18.6rem;
     width: 17.8rem;
     position: absolute;
@@ -277,51 +263,12 @@
 }
 
 .highlight-prev-result-tie {
-    background: url(/static//images/bac-number/winning-previous-tie.svg) no-repeat center center;
+    background: url("/static/images/bac-number/winning-previous-tie.svg") no-repeat center center;
     width: 9.5rem;
     height: 17.2rem;
     position: absolute;
     left: 0;
     top: 0;
-}
-
-.odds-change {
-    --animate-duration: 0.8s;
-    --animate-repeat: 3;
-
-    position: relative;
-    animation-fill-mode: both;
-    animation-duration: calc(var(--animate-duration) * 1);
-    animation-name: heartBeat;
-    animation-timing-function: ease-in-out;
-    animation-iteration-count: var(--animate-repeat);
-}
-
-@keyframes heartBeat {
-    0% {
-        -webkit-transform: scale(1);
-        transform: scale(1);
-    }
-
-    14% {
-        -webkit-transform: scale(1.3);
-        transform: scale(1.3);
-    }
-
-    28% {
-        -webkit-transform: scale(1);
-        transform: scale(1);
-    }
-
-    42% {
-        -webkit-transform: scale(1.3);
-        transform: scale(1.3);
-    }
-
-    70% {
-        -webkit-transform: scale(1);
-        transform: scale(1);
-    }
 }
 
 /* bet area */

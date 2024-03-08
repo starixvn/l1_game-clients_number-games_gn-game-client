@@ -28,14 +28,8 @@ export const BacBallBetOptionsComponent = () => {
     const isShowDisabledLayer = roundState === RoundState.LockingBet;
 
     const renderTotalBet = (choice: string) => {
-        const tieClassName = "justify-center mt-1";
-        return (
-            <TotalBet
-                choice={choice}
-                className={`flex items-center ${Style["total-stakes"]} gap-1 ${choice === BacBallBetOptions.TIE ? tieClassName : ""}`}
-                gameName={gameName}
-            />
-        );
+        const tieClassName = `justify-center mt-1`;
+        return <TotalBet choice={choice} className={`${choice === BacBallBetOptions.TIE ? tieClassName : ""}`} gameName={gameName} />;
     };
 
     const renderBetPercentage = (choice: string) => {
@@ -50,23 +44,15 @@ export const BacBallBetOptionsComponent = () => {
     };
 
     const renderBetChoice = (choice: string) => {
-        return <BetChoice choice={choice} className={`bet-name text-center ${Style[`bet-name-${choice}`]}`} gameName={gameName} />;
+        return <BetChoice choice={choice} className={`${Style[`bet-name-${choice}`]}`} gameName={gameName} />;
     };
 
     const renderOdds = (choice: string) => {
-        return (
-            <Odds
-                choice={choice}
-                className={`bet-odds text-center`}
-                gameName={gameName}
-                animationClass={`${Style["odds-change"]}`}
-                animationDuration={4}
-            />
-        );
+        return <Odds choice={choice} gameName={gameName} animationDuration={5} />;
     };
 
     const renderOwnBet = (choice: string) => {
-        return <OwnBet choice={choice} className={`own-bet ${Style["own-bet"]}`} gameName={gameName} />;
+        return <OwnBet choice={choice} gameName={gameName} />;
     };
 
     useEffect(() => {
