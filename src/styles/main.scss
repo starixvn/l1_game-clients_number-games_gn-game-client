@@ -114,14 +114,6 @@ body {
 
 .no-scroll {
     overflow: hidden !important;
-
-    @media (min-device-width: 1024px) {
-        padding-right: 0.5rem;
-
-        header {
-            padding-right: 0.5rem;
-        }
-    }
 }
 
 .game-header {

@@ -1,7 +1,7 @@
 .chip-container {
     --ratio: 1;
     --chip-width: calc(5rem * var(--ratio));
-    --chip-height: calc(5rem * var(--ratio));
+    --chip-height: calc(5.1rem * var(--ratio));
     --chip-value-font-size: calc(1.4rem * var(--ratio));
 
     position: relative;

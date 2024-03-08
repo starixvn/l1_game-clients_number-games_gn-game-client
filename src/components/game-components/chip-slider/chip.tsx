@@ -32,8 +32,6 @@ export const Chip: React.FC<{ value: number; onClickChip: Function }> = ({ value
             <img
                 src={`/static/images/chips/${systemName}/${ChipMapper[systemName][value] || defaultChip}.svg`}
                 className={`img-fluid ${Styles["chip"]}`}
-                width="60"
-                height="62"
                 alt="Chip"
             />
             <span className={Styles["value"]}>{getChipValueString()}</span>
