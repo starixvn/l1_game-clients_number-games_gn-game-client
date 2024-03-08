@@ -3,13 +3,14 @@ import { FC } from "react";
 import { useState } from "react";
 import { createPortal } from "react-dom";
 
-import { numberWithCommas, seperateDateTime, sortedCollectionByTime } from "../../../_shared/helpers";
+import { formatOdds, numberWithCommas, seperateDateTime, sortedCollectionByTime } from "../../../_shared/helpers";
 import { useBallColor } from "../../../_shared/helpers/ball-color-helper";
 import { useCommonTranslate, useSNTranslate, useTranslator } from "../../../_shared/react-hooks/use-translator";
 import { BetLogDetailProps } from "../../../components/game-components/bet-history";
 import ModalContainer from "../../../components/game-components/modal-container";
 import Styles from "./common.module.scss";
 import TableRow from "./row-table";
+import { useAuthContext } from "../../../_shared/react-contexts";
 
 interface BacBallBetDetailProps extends BetLogDetailProps {
     drawInfo: DrawInfo;
@@ -138,6 +139,7 @@ interface BacBallBetLogDetailRowProps {
 const BetDetailRow: FC<BacBallBetLogDetailRowProps> = ({ rawTime, amount, choice, odds, win }) => {
     const { date, time } = seperateDateTime(rawTime);
     const { t: translateBacBall } = useTranslator(["BacBall"]);
+    const { fractionalOddsFormat } = useAuthContext();
     const content = [
         {
             node: (
@@ -149,11 +151,14 @@ const BetDetailRow: FC<BacBallBetLogDetailRowProps> = ({ rawTime, amount, choice
             ),
             size: 2,
         },
-        ...[translateBacBall(`glossary_${choice}`), numberWithCommas(odds), numberWithCommas(amount) ?? 0, numberWithCommas(win)].map(
-            (item) => {
-                return { node: <div className={win > 0 ? "highlight" : ""}>{item}</div>, size: 2.5 };
-            }
-        ),
+        ...[
+            translateBacBall(`glossary_${choice}`),
+            formatOdds(odds, fractionalOddsFormat),
+            numberWithCommas(amount) ?? 0,
+            numberWithCommas(win),
+        ].map((item) => {
+            return { node: <div className={win > 0 ? "highlight" : ""}>{item}</div>, size: 2.5 };
+        }),
     ];
     return <TableRow isHeader={false}>{content}</TableRow>;
 };
