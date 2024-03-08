@@ -111,7 +111,7 @@ const BetDetail: FC<BetLogDetailProps> = ({ betLogDetails, onCloseModal, isShowB
                             })}
                         </tbody>
                     </table>
-                    {!isHaveMoreData && <div className="text-center">{translateSNGames("table_no_more_data")}</div>}
+                    {!isHaveMoreData && <hr className={Styles["no-more-data"]} data-content={translateSNGames("table_no_more_data")} />}
                 </div>
             </ModalContainer>
         )
@@ -153,7 +153,7 @@ const BetDetailRow: FC<BacBallBetLogDetailRowProps> = ({ rawTime, amount, choice
         },
         ...[
             translateBacBall(`glossary_${choice}`),
-            formatOdds(odds, fractionalOddsFormat),
+            numberWithCommas(fractionalOddsFormat ? odds - 1 : odds),
             numberWithCommas(amount) ?? 0,
             numberWithCommas(win),
         ].map((item) => {

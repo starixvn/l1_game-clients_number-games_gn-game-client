@@ -2,7 +2,7 @@ import { FC, useState } from "react";
 
 import { numberWithCommas, seperateDateTime, sortedCollectionByTime } from "../../../_shared/helpers";
 import { useBallColor } from "../../../_shared/helpers/ball-color-helper";
-import { useCommonTranslate, useSNTranslate, useTranslator } from "../../../_shared/react-hooks/use-translator";
+import { useCommonTranslate, useSNTranslate } from "../../../_shared/react-hooks/use-translator";
 import { BetLogProps } from "../../../components/game-components/bet-history";
 import Styles from "./common.module.scss";
 import TableRow from "./row-table";
@@ -48,7 +48,6 @@ const BetLog: FC<BetLogProps> = ({ betLogs, handleScroll, onCloseModal: toggleBe
     const [betLogDetail, setBetLogDetail] = useState<BetHistory>(undefined);
     const { t: translateCommon } = useCommonTranslate();
     const { t: translateSNGames } = useSNTranslate();
-    const { t: translateBacBall } = useTranslator(["BacBall"]);
 
     const handleClickDrawId = (betLogDetail: BetHistory) => {
         toggleBetHistory();
@@ -96,7 +95,7 @@ const BetLog: FC<BetLogProps> = ({ betLogs, handleScroll, onCloseModal: toggleBe
                     settlementResult: betLogDetail?.settlementResult,
                 },
             })}
-            {!isLoadMore && <div className="text-center">{translateSNGames("table_no_more_data")}</div>}
+            {!isLoadMore && <hr className={Styles["no-more-data"]} data-content={translateSNGames("table_no_more_data")} />}
         </div>
     );
 };

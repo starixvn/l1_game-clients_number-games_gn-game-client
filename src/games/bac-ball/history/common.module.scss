@@ -71,7 +71,29 @@
     --more-info-height: 6.8rem;
 }
 
-.no-more-info {
+.no-more-data {
+    line-height: 1em;
+    position: relative;
+    outline: 0;
+    border: 0;
+    font-size: 1.2rem;
+    color: black;
     text-align: center;
-    color: #d3d9e1;
+    &:before {
+        content: "";
+        background: linear-gradient(to right, transparent, #ffffff, transparent);
+        position: absolute;
+        left: 0;
+        top: 50%;
+        width: 100%;
+        height: 0.1rem;
+    }
+    &:after {
+        content: attr(data-content);
+        position: relative;
+        display: inline-block;
+        padding: 0 0.5rem;
+        color: #9ca3ae;
+        background-color: #191a1e;
+    }
 }
