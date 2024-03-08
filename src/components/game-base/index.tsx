@@ -477,10 +477,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         const gameActionsContext = {
             placeBet: this.placeBet,
             playAcceptedBetAnimation: this.placeBetHandler.playAcceptedBetAnimation,
-            finishProcessingBet: () => {
-                this.props.dispatch({ type: GameEventActionType.END_BET_PROCESSING, payload: {} });
-                this.placeBetHandler.clearRetryInterval();
-            },
             setActiveScoreboardTab: this.setActiveScoreboardTab,
         };
 

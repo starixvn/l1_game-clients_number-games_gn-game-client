@@ -80,7 +80,7 @@ const BetConfirmDialog = () => {
 
     const getContent = () => {
         const formatValue = () => {
-            return `<div style={{color:"red!important"}}><strong color="red!important">${outstandingBalance}</strong></div>`;
+            return `<strong class="amount-color">${outstandingBalance}</strong>`;
         };
 
         const content = isInsufficientFunds

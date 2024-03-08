@@ -23,7 +23,6 @@ export const Chip: React.FC<{ value: number; onClickChip: Function }> = ({ value
         if (ChipLabelMapper[systemName][value]) {
             return ChipLabelMapper[systemName][value];
         }
-        console.log("chip value", value);
         return value < 1000 ? value.toString() : `${value / 1000}K`;
     };
 

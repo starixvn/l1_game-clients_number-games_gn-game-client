@@ -6,15 +6,13 @@ import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/rea
 import { useSNTranslate } from "../../../_shared/react-hooks";
 import Styles from "./confirm-bet.module.scss";
 
-export type Props = {};
-
-const ConfirmBet: React.FC<Props> = ({}: Props) => {
+const ConfirmBet: React.FC = () => {
     const dispatch = useGameStatesDispatch();
     const gameActionContext = useGameActionContext();
     const gameStateContext = useGameStateContext();
     const enabledQuickBet = useAuthContext().authorizeInfo.user.settings.quickBet;
-
     const { t } = useSNTranslate();
+
     useEffect(() => {
         return () => {};
     }, []);
@@ -50,7 +48,6 @@ const ConfirmBet: React.FC<Props> = ({}: Props) => {
     const onConfirm = () => {
         if (enabledQuickBet) {
             gameStateContext.suggestBet.sendOutstandingBet();
-
             removeSuggestBet();
 
             return;
@@ -58,7 +55,9 @@ const ConfirmBet: React.FC<Props> = ({}: Props) => {
         gameActionContext.placeBet(confirmBet, 0);
     };
 
-    if (!gameStateContext.showConfirmBet) return <></>;
+    if (!gameStateContext.showConfirmBet) {
+        return <></>;
+    }
 
     return (
         <div className={Styles["confirm-bet-container"]}>

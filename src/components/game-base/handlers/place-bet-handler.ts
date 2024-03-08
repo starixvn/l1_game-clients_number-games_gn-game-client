@@ -1,11 +1,12 @@
 import { DefaultParamType, TFnType, TranslationKey } from "@tolgee/react";
 import { v4 as uuidv4 } from "uuid";
 import { confirmBet } from "../../../_shared/constants";
+import { MessageErrorCode } from "../../../_shared/constants/error-code-dictionary";
 import { GetLocalizedErrorMessage, StorageHelper, localStorageKeys } from "../../../_shared/helpers";
 import {
-    getAvailableSuggestBetAmount,
+    IAvailableSuggestBetAmount,
     getTotalBetAmount,
-    getValidateMinMaxBetResult,
+    getValidateMinMaxBetResult as getValidateBet,
     validateHedgeBet,
 } from "../../../_shared/helpers/validate-bet-helper";
 import { SystemContextModel } from "../../../_shared/react-contexts";
@@ -158,13 +159,12 @@ export class PlaceBetHandler {
         gameStateContext: GameStateContextModel<unknown, unknown>,
         systemContext: SystemContextModel
     ) => {
-        if (gameStateContext.isProcessingBet) {
-            this.handleProcessingBet();
+        if (this.isInPhasePreventBet(gameStateContext)) {
             return;
         }
 
-        if (this.isRoundNotInProgress(gameStateContext)) {
-            this.sendNotice(this.getNotice("SB1905"));
+        if (gameStateContext.isProcessingBet) {
+            this.handleProcessingBet();
             return;
         }
 
@@ -176,14 +176,7 @@ export class PlaceBetHandler {
             return;
         }
 
-        const totalAmount = getTotalBetAmount(gameStateContext);
-        const { errorCode, args } = getValidateMinMaxBetResult(gameStateContext, betChoice, amount, totalAmount);
-        if (errorCode === "0") {
-            this.handleValidBetChoice(enabledQuickBet, amount, betChoice, gameStateContext, systemContext);
-            return;
-        }
-
-        this.handleInvalidBet(gameStateContext, errorCode, betChoice, args);
+        this.handleBetAction(gameStateContext, betChoice, amount, enabledQuickBet, systemContext);
     };
 
     protected handleProcessingBet = () => {
@@ -193,8 +186,19 @@ export class PlaceBetHandler {
         });
     };
 
-    protected isRoundNotInProgress = (gameStateContext: GameStateContextModel<unknown, unknown>) => {
-        return gameStateContext.roundState !== RoundState.InRound;
+    protected isInPhasePreventBet = (gameStateContext: GameStateContextModel<unknown, unknown>) => {
+        const isPreventBet = gameStateContext.roundState !== RoundState.InRound;
+
+        if (isPreventBet) {
+            const isStartingRound = gameStateContext.roundState === RoundState.BeforeStartRound;
+            const notice = isStartingRound
+                ? this.getNotice(MessageErrorCode.cannotBet)
+                : this.getNotice(MessageErrorCode.placeBetNextRound);
+
+            this.sendNotice(notice);
+        }
+
+        return isPreventBet;
     };
 
     protected handleHedgeBet = (
@@ -207,7 +211,7 @@ export class PlaceBetHandler {
         const hedgeBetGroup = hedgeBetGroups.find((group) => group.includes(betChoice));
         const ownBets = gameStateContext.ownBets;
         if (validateHedgeBet(hedgeBetGroup, ownBets, notConfirmOwnBets, betChoice, amount)) {
-            this.sendNotice(this.getNotice("SB1939", betChoice));
+            this.sendNotice(this.getNotice(MessageErrorCode.hedgeBet, betChoice));
 
             return true;
         }
@@ -219,12 +223,35 @@ export class PlaceBetHandler {
         const balance = this.props.getPlayerBalance();
         const availableUseToBetBalance = Math.trunc(balance);
         if (availableUseToBetBalance === 0) {
-            this.sendNotice(this.getNotice("3002"));
+            this.sendNotice(this.getNotice(MessageErrorCode.insufficientFund));
 
             return true;
         }
 
         return false;
+    };
+
+    protected handleBetAction = (
+        gameStateContext: GameStateContextModel<any, any>,
+        betChoice: string,
+        amount: number,
+        enabledQuickBet: boolean,
+        systemContext: SystemContextModel
+    ) => {
+        const totalBetAmount = getTotalBetAmount(gameStateContext);
+        const { errorCode, args } = getValidateBet(gameStateContext, betChoice, amount, totalBetAmount, this.getAvailableUseToBetBalance());
+
+        if (errorCode === MessageErrorCode.validBet) {
+            this.handleValidBetChoice(enabledQuickBet, amount, betChoice, gameStateContext, systemContext);
+            return;
+        }
+
+        if (errorCode === MessageErrorCode.suggestBet) {
+            this.suggestBetAmount(betChoice, args);
+            return;
+        }
+
+        this.sendNotice(this.getNotice(errorCode, betChoice, args));
     };
 
     protected handleValidBetChoice = (
@@ -246,38 +273,24 @@ export class PlaceBetHandler {
         }
     };
 
-    protected handleInvalidBet = (
-        gameStateContext: GameStateContextModel<unknown, unknown>,
-        errorCode: string,
-        betChoice: string,
-        args: any
-    ) => {
-        const availableSuggestBetAmount = getAvailableSuggestBetAmount(this.getAvailableUseToBetBalance(), gameStateContext, betChoice);
-        if (availableSuggestBetAmount) {
-            this.suggestBetAmount(betChoice, availableSuggestBetAmount);
-            return;
-        }
-        this.sendNotice(this.getNotice(errorCode, betChoice, args));
-    };
-
     protected getAvailableUseToBetBalance = () => {
         const balance = this.props.getPlayerBalance();
         return Math.trunc(balance);
     };
 
-    protected suggestBetAmount = (betChoice: string, availableSuggestBetAmount: number) => {
+    protected suggestBetAmount = (betChoice: string, availableSuggestBet: IAvailableSuggestBetAmount) => {
         this.props.dispatch({
             type: GameEventActionType.SHOW_CONFIRM_DIALOG,
             payload: {
                 showConfirmDialog: true,
             },
         });
-        const sendOutstandingBet = () => this.sendBetMessage(betChoice, availableSuggestBetAmount);
+        const sendOutstandingBet = () => this.sendBetMessage(betChoice, availableSuggestBet?.amount);
         const suggestBet: SuggestBet = {
             currentBetChoice: betChoice,
-            suggestBetAmount: availableSuggestBetAmount,
+            suggestBetAmount: availableSuggestBet?.amount,
             sendOutstandingBet,
-            isInsufficientFunds: false,
+            isInsufficientFunds: availableSuggestBet?.isInsufficientFunds,
         };
 
         this.props.dispatch({ type: GameEventActionType.SUGGEST_BET, payload: { suggestBet } });
