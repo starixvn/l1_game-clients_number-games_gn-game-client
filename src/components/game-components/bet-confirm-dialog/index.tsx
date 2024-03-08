@@ -28,7 +28,7 @@ const BetConfirmDialog = () => {
                     currentBetChoice: "",
                     suggestBetAmount: null,
                     sendOutstandingBet: null,
-                    isInsufficientFunds: null,
+                    isInsufficientFunds: false,
                 },
             },
         });
@@ -80,8 +80,9 @@ const BetConfirmDialog = () => {
 
     const getContent = () => {
         const formatValue = () => {
-            return `<strong color="red">${outstandingBalance}</strong>`;
+            return `<div style={{color:"red!important"}}><strong color="red!important">${outstandingBalance}</strong></div>`;
         };
+
         const content = isInsufficientFunds
             ? t("message_balance", { outstandingBalance: formatValue() })
             : t("message_bet_available", { maxbet: formatValue() });

@@ -17,8 +17,9 @@ export const BacBallBetOptionsComponent = () => {
 
     const gameActionContext = useGameActionContext();
     const systemContext = useSystemContext();
+    
     const onClickBet = useCallback(
-        (choice) => gameActionContext.placeBet(choice, systemContext.selectedChip),
+        (choice: string) => gameActionContext.placeBet(choice, systemContext.selectedChip),
         [gameActionContext, systemContext.selectedChip]
     );
     const gameName = "BacBall";

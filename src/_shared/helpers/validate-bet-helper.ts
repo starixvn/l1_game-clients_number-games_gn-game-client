@@ -48,12 +48,12 @@ export const getValidateMinMaxBetResult = (
 };
 
 export const getAvailableSuggestBetAmount = (
-    availableUseToBetBalance: number,
+    accountBalance: number,
     { gameConfigs, userStakeLevel, notConfirmOwnBets, ownBets }: GameStateContextModel<unknown, unknown>,
     betChoice: string
 ): number => {
-    const { maxBet, minBet, maxBetPerChoices } = gameConfigs;
-    const { maxBet: userMaxBet, minBet: userMinBet } = userStakeLevel;
+    const { minBet, maxBet, maxBetPerChoices } = gameConfigs;
+    const { minBet: userMinBet, maxBet: userMaxBet } = userStakeLevel;
 
     const roundMaxBet = Math.min(userMaxBet, maxBet);
     const roundMinBet = Math.max(userMinBet, minBet);
@@ -62,7 +62,7 @@ export const getAvailableSuggestBetAmount = (
     const currentAmountOfChoice = (ownBets[betChoice] || 0) + (notConfirmOwnBets[betChoice] || 0);
     const maxAvailableAmountOfChoice = maxBetPerChoice - currentAmountOfChoice;
 
-    let suggestAmount = Math.min(availableUseToBetBalance, maxAvailableAmountOfChoice);
+    let suggestAmount = Math.min(accountBalance, maxAvailableAmountOfChoice);
 
     if (suggestAmount + currentAmountOfChoice < roundMinBet || suggestAmount + currentAmountOfChoice > roundMaxBet) {
         return 0;
