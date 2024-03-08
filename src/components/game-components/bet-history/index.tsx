@@ -109,9 +109,6 @@ const BetHistoryModal: FC<BetHistoryProps> = ({ renderBetLog, renderBetLogDetail
                         </div>
                     );
                 }
-                if (betLogs?.length <= 0) {
-                    return <div className="text-center">{translateSNGames("table_no_data")}</div>;
-                }
                 return renderBetLog({
                     betLogs,
                     handleScroll: handleScroll(page + 1),

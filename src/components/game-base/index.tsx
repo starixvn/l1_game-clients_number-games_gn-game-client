@@ -399,32 +399,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                         <CountdownTimer />
                     </div>
                 </div>
-                <Settings
-                    toggleHistoryModal={() => {
-                        this.props.dispatch({
-                            type: GameEventActionType.TOGGLE_BET_HISTORY,
-                            payload: {
-                                isShowBetHistory: true,
-                            },
-                        });
-                    }}
-                    toggleGuideModal={() => {
-                        this.props.dispatch({
-                            type: GameEventActionType.TOGGLE_GAME_GUIDE,
-                            payload: {
-                                isShowGameGuide: true,
-                            },
-                        });
-                    }}
-                    togglePFSettingModal={() => {
-                        this.props.dispatch({
-                            type: GameEventActionType.TOGGLE_PF_SETTING,
-                            payload: {
-                                isShowPFSetting: true,
-                            },
-                        });
-                    }}
-                />
+                <Settings />
             </>
         );
     }

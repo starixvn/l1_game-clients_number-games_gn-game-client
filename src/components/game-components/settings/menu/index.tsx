@@ -4,13 +4,12 @@ import { StorageHelper, localStorageKeys } from "../../../../_shared/helpers";
 import { useSNTranslate } from "../../../../_shared/react-hooks/use-translator";
 import { Tooltip } from "../../tooltip";
 import Styles from "./menu.module.scss";
+import { useGameStatesDispatch } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
+import { GameEventActionType } from "../../../../_shared/react-contexts/game-state-context/game-event-action";
 
 const dropdownItemClassName = "dropdown-item";
 
-export const Menu: React.FC<{
-    handleToggleGuideModal: Function;
-    handleToggleBetHistory: Function;
-}> = ({ handleToggleGuideModal, handleToggleBetHistory }) => {
+export const Menu: React.FC = () => {
     const [enabledSound, setEnabledSound] = useState(StorageHelper.get(localStorageKeys.enableSound) ?? false);
     const [enabledMusic, setEnabledMusic] = useState(StorageHelper.get(localStorageKeys.enableMusic) ?? false);
 
@@ -19,6 +18,7 @@ export const Menu: React.FC<{
     const wrapperRef = useRef<HTMLDivElement>(null);
     const toggleBtnRef = useRef<HTMLDivElement>(null);
     const specialClassByDevice = !isMobileOnly ? "desktop-style" : "";
+    const dispatch = useGameStatesDispatch();
 
     const onToggleSound = () => {
         StorageHelper.set(localStorageKeys.enableSound, !enabledSound);
@@ -30,12 +30,22 @@ export const Menu: React.FC<{
     };
 
     const openBetHistory = () => {
-        handleToggleBetHistory();
+        dispatch({
+            type: GameEventActionType.TOGGLE_BET_HISTORY,
+            payload: {
+                isShowBetHistory: true,
+            },
+        });
         setDropdownOpen(false);
     };
 
     const openGuide = () => {
-        handleToggleGuideModal();
+        dispatch({
+            type: GameEventActionType.TOGGLE_GAME_GUIDE,
+            payload: {
+                isShowGameGuide: true,
+            },
+        });
         setDropdownOpen(false);
     };
 

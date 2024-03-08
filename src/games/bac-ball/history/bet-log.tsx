@@ -95,7 +95,8 @@ const BetLog: FC<BetLogProps> = ({ betLogs, handleScroll, onCloseModal: toggleBe
                     settlementResult: betLogDetail?.settlementResult,
                 },
             })}
-            {!isLoadMore && <hr className={Styles["no-more-data"]} data-content={translateSNGames("table_no_more_data")} />}
+            {betLogs.length === 0 && <div className={Styles["no-more-data"]}>{translateSNGames("table_no_data")}</div>}
+            {!isLoadMore && betLogs.length > 0 && <div className={Styles["no-more-data"]}>{translateSNGames("table_no_more_data")}</div>}
         </div>
     );
 };

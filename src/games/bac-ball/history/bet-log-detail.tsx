@@ -111,7 +111,7 @@ const BetDetail: FC<BetLogDetailProps> = ({ betLogDetails, onCloseModal, isShowB
                             })}
                         </tbody>
                     </table>
-                    {!isHaveMoreData && <hr className={Styles["no-more-data"]} data-content={translateSNGames("table_no_more_data")} />}
+                    {!isHaveMoreData && <div className={Styles["no-more-data"]}>{translateSNGames("table_no_more_data")}</div>}
                 </div>
             </ModalContainer>
         )

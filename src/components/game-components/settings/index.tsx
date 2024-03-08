@@ -1,17 +1,25 @@
 import React from "react";
 import { getLogoName } from "../../page-components/header";
 import styles from "./settings.module.scss";
-import { Props } from "./types";
 import { Menu } from "./menu";
+import { useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
+import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 
 const ButtonSettingClassName = "setting-button";
 
-export const Settings: React.FC<Props> = ({ toggleGuideModal, toggleHistoryModal, togglePFSettingModal }) => {
+export const Settings: React.FC = () => {
+    const dispatch = useGameStatesDispatch();
+
     const handleBackToHome = () => {
         console.log("Back to Home");
     };
     const handleClickPFSetting = () => {
-        togglePFSettingModal();
+        dispatch({
+            type: GameEventActionType.TOGGLE_PF_SETTING,
+            payload: {
+                isShowPFSetting: true,
+            },
+        });
     };
 
     return (
@@ -25,7 +33,7 @@ export const Settings: React.FC<Props> = ({ toggleGuideModal, toggleHistoryModal
                     <span id="icon-home" className="icon-home" />
                 </button>
 
-                <Menu handleToggleGuideModal={toggleGuideModal} handleToggleBetHistory={toggleHistoryModal} />
+                <Menu />
             </div>
         </div>
     );
