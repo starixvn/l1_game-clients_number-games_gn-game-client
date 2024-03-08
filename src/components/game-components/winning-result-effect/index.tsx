@@ -1,10 +1,11 @@
 import { FC } from "react";
 
+import { numberWithCommas } from "../../../_shared/helpers";
 import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import Styles from "./winning-result-effect.module.scss";
 
 const WinningResultEffect: FC = () => {
-    const { betWin, showResultInfo } = useGameStateContext();
+    const { betWin, showResultInfo, rate } = useGameStateContext();
 
     if (betWin <= 0 || !showResultInfo) {
         return <></>;
@@ -12,7 +13,7 @@ const WinningResultEffect: FC = () => {
 
     return (
         <div className={Styles["winning-result-container"]}>
-            <div className={Styles["winning-result"]}>{`+${betWin}`}</div>
+            <div className={Styles["winning-result"]}>{`+${numberWithCommas(betWin, 1)}`}</div>
         </div>
     );
 };
