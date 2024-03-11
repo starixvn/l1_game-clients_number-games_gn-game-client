@@ -1,8 +1,30 @@
-import { confirmBet } from "../constants";
 import { MessageErrorCode } from "../constants/error-code-dictionary";
 import { GameStateContextModel } from "../react-contexts/game-state-context/game-state-context-model";
 
-export const validateHedgeBet = (hedgeBetGroup, ownBets, notConfirmOwnBets, betChoice, amount): boolean => {
+export interface IAvailableSuggestBetAmount {
+    amount?: number;
+    isInsufficientFunds?: boolean;
+    isAvailable?: boolean;
+    errorCode?: string;
+    args?: unknown;
+    maxBetPerChoice?: number;
+    mode: 1 | 2 | 3 | 4;
+}
+
+export enum SuggestBetMode {
+    ReachMaxBet = 1,
+    SuggestBet = 2,
+    MinBet = 3,
+    MaxBetRound = 4,
+}
+
+export const validateHedgeBet = (
+    hedgeBetGroup: Record<any, any>,
+    ownBets: Record<any, any>,
+    notConfirmOwnBets: Record<any, any>,
+    betChoice: string,
+    amount: number
+): boolean => {
     const betTracks = { ...ownBets, ...notConfirmOwnBets };
     betTracks[betChoice] = (betTracks[betChoice] ?? 0) + amount;
 
@@ -15,93 +37,199 @@ export const validateHedgeBet = (hedgeBetGroup, ownBets, notConfirmOwnBets, betC
     return isInvalid;
 };
 
-export const getValidateMinMaxBetResult = (
+export const getRoundMinBet = (gameConfigs: GameStateContextModel<any, any>["gameConfigs"], userMinBet: number): number => {
+    return Math.max(userMinBet, gameConfigs.minBet);
+};
+
+export const getRoundMaxBet = (gameConfigs: GameStateContextModel<any, any>["gameConfigs"], userMaxBet: number): number => {
+    return Math.min(userMaxBet, gameConfigs.maxBet);
+};
+
+export const getMaxBetPerChoice = (gameConfigs: GameStateContextModel<any, any>["gameConfigs"], betChoice: string): number => {
+    return gameConfigs.maxBetPerChoices[betChoice] || Infinity;
+};
+
+export const getCurrentAmountOfChoice = (ownBets: unknown, notConfirmOwnBets: unknown, betChoice: string): number => {
+    return (ownBets[betChoice] || 0) + (notConfirmOwnBets[betChoice] || 0);
+};
+
+export const isInsufficientFunds = (amount: number, accountBalance: number): boolean => {
+    return amount > accountBalance;
+};
+
+export const isOptionReachMaxBet = (currentTotalAmount: number, maxBetPerChoice: number): boolean => {
+    return currentTotalAmount > maxBetPerChoice;
+};
+
+export const isMinBet = (amount: number, roundMinBet: number): boolean => {
+    return amount > 0 && amount < roundMinBet;
+};
+
+export const isMaxBetRound = (currentTotalAmount: number, roundMaxBet: number, totalBetAmount: number): boolean => {
+    return currentTotalAmount > roundMaxBet || totalBetAmount > roundMaxBet;
+};
+
+export const getMaxAvailableAmountOfChoice = (
+    amount: number,
+    maxBetPerChoice: number,
+    currentAmountOfChoice: number,
+    roundMaxBet: number,
+    totalBetAmount: number
+): number => {
+    if (totalBetAmount === roundMaxBet) {
+        return 0;
+    }
+    let remainAmount = maxBetPerChoice - currentAmountOfChoice;
+    if (remainAmount + currentAmountOfChoice + totalBetAmount >= roundMaxBet) {
+        remainAmount = roundMaxBet - totalBetAmount;
+    }
+
+    return remainAmount > 0 ? remainAmount : 0;
+};
+
+export const getValidateBet = (
     gameStateContext: GameStateContextModel<any, any>,
     betChoice: string,
     amount: number,
-    totalBetAmount: number,
-    accountBalance: number
+    accountBalance: number,
+    handleSuggestBet?: (betChoice: string, availableSuggestBet: IAvailableSuggestBetAmount) => void
 ): { errorCode: string; args?: any } => {
-    const { gameConfigs, userStakeLevel, notConfirmOwnBets, ownBets } = gameStateContext;
-    const maxBet = Math.min(userStakeLevel.maxBet, gameConfigs.maxBet);
-    const minBet = Math.max(userStakeLevel.minBet, gameConfigs.minBet);
-    const maxBetPerChoice = Math.min(userStakeLevel.maxBet, gameConfigs.maxBetPerChoices[betChoice]);
-
-    let isReachMinBet = amount < minBet;
-    if (betChoice === confirmBet) {
-        isReachMinBet = totalBetAmount < minBet;
+    const totalBetAmount = getTotalBetAmount(gameStateContext);
+    const availableSuggestBet = validationCriteriaBet(amount, accountBalance, gameStateContext, betChoice, totalBetAmount);
+    if (availableSuggestBet.amount > 0 && availableSuggestBet.isAvailable) {
+        handleSuggestBet?.(betChoice, availableSuggestBet);
+        return;
     }
 
-    if (isReachMinBet) {
-        return { errorCode: MessageErrorCode.minBetNotice, args: { minBet } };
+    if (availableSuggestBet?.errorCode) {
+        return { errorCode: availableSuggestBet?.errorCode, args: availableSuggestBet?.args };
     }
-    const currentAmountOfChoice = (ownBets[betChoice] ?? 0) + (notConfirmOwnBets[betChoice] ?? 0);
-
-    // if (amount > maxBetPerChoice || currentAmountOfChoice + amount > maxBetPerChoice) {
-    //     return { errorCode: MessageErrorCode.maxBet, args: { maxBet: maxBetPerChoice } };
-    // }
-
-    if (
-        amount > maxBetPerChoice ||
-        currentAmountOfChoice + amount > maxBetPerChoice ||
-        amount > maxBet ||
-        totalBetAmount + amount > maxBet ||
-        accountBalance < amount
-    ) {
-        const availableSuggestBet = getAvailableSuggestBetAmount(amount, accountBalance, gameStateContext, betChoice);
-        if (availableSuggestBet?.isAvailable) {
-            return { errorCode: MessageErrorCode.suggestBet, args: availableSuggestBet };
-        }
-    }
-
-    // if (amount > maxBet || totalBetAmount + amount > maxBet) {
-    //     return { errorCode: MessageErrorCode.roundMaxBet, args: { maxBet } };
-    // }
 
     return { errorCode: MessageErrorCode.validBet };
 };
 
-export interface IAvailableSuggestBetAmount {
-    amount: number;
-    isInsufficientFunds: boolean;
-    isAvailable: boolean;
-}
-
-const getAvailableSuggestBetAmount = (
+const validationCriteriaBet = (
     amount: number,
     accountBalance: number,
-    { gameConfigs, userStakeLevel, notConfirmOwnBets, ownBets }: GameStateContextModel<unknown, unknown>,
-    betChoice: string
+    context: GameStateContextModel<any, any>,
+    betChoice: string,
+    totalBetAmount: number
 ): IAvailableSuggestBetAmount => {
-    let isInsufficientFunds = false;
-
-    const { minBet, maxBet, maxBetPerChoices } = gameConfigs;
+    const { gameConfigs, userStakeLevel, notConfirmOwnBets, ownBets } = context;
     const { minBet: userMinBet, maxBet: userMaxBet } = userStakeLevel;
 
-    const roundMaxBet = Math.min(userMaxBet, maxBet);
-    const roundMinBet = Math.max(userMinBet, minBet);
-    const maxBetPerChoice = Math.min(userMaxBet, maxBetPerChoices[betChoice] || Infinity);
-    const currentAmountOfChoice = (ownBets[betChoice] || 0) + (notConfirmOwnBets[betChoice] || 0);
-    const maxAvailableAmountOfChoice = maxBetPerChoice - currentAmountOfChoice;
+    const roundMinBet = getRoundMinBet(gameConfigs, userMinBet);
+    const roundMaxBet = getRoundMaxBet(gameConfigs, userMaxBet);
+    const maxBetPerChoice = getMaxBetPerChoice(gameConfigs, betChoice);
+    const currentAmountOfChoice = getCurrentAmountOfChoice(ownBets, notConfirmOwnBets, betChoice);
+    const currentTotalAmount = totalBetAmount + amount;
+    const maxAvailableAmountOfChoice = getMaxAvailableAmountOfChoice(
+        amount,
+        maxBetPerChoice,
+        currentAmountOfChoice,
+        roundMaxBet,
+        totalBetAmount
+    );
+    const suggestAmount = Math.min(accountBalance, maxAvailableAmountOfChoice);
+    const isInsufficientFundsResult = isInsufficientFunds(amount, accountBalance);
+    const isOptionReachMaxBetResult = isOptionReachMaxBet(currentTotalAmount, maxBetPerChoice);
+    const isMinBetResult = isMinBet(amount, roundMinBet);
+    const isMaxBetRoundResult = isMaxBetRound(currentTotalAmount, roundMaxBet, totalBetAmount);
 
-    let suggestAmount = Math.min(accountBalance, maxAvailableAmountOfChoice);
-    if (accountBalance < amount) {
-        isInsufficientFunds = true;
+    return suggestBetMode(
+        suggestAmount,
+        isInsufficientFundsResult,
+        isOptionReachMaxBetResult,
+        isMinBetResult,
+        isMaxBetRoundResult,
+        maxBetPerChoice,
+        roundMaxBet,
+        roundMinBet,
+        currentAmountOfChoice
+    );
+};
+
+const suggestBetMode = (
+    suggestAmount: number,
+    isInsufficientFunds: boolean,
+    isOptionReachMaxBet: boolean,
+    isMinBet: boolean,
+    isMaxBetRound: boolean,
+    maxBetPerChoice: number,
+    roundMaxBet: number,
+    roundMinBet: number,
+    currentAmountOfChoice: number
+): IAvailableSuggestBetAmount => {
+    if (suggestAmount === 0) {
+        if (isMaxBetRound) {
+            return getMaxBetRoundMode(roundMaxBet, maxBetPerChoice);
+        }
+        if (isOptionReachMaxBet) {
+            return getReachMaxBetMode(maxBetPerChoice);
+        }
+
+        if (isMinBet) {
+            return getMinBetMode(roundMinBet, maxBetPerChoice);
+        }
     }
 
-    if (suggestAmount + currentAmountOfChoice < roundMinBet || (suggestAmount + currentAmountOfChoice > roundMaxBet && suggestAmount > 0)) {
-        return {
-            amount: 0,
-            isInsufficientFunds,
-            isAvailable: false,
-        };
-    }
+    const condition = isSuggestBetAvailable(
+        suggestAmount,
+        currentAmountOfChoice,
+        roundMinBet,
+        roundMaxBet,
+        isInsufficientFunds,
+        isOptionReachMaxBet,
+        isMaxBetRound
+    );
 
     return {
-        amount: suggestAmount || 0,
+        amount: suggestAmount,
         isInsufficientFunds,
-        isAvailable: suggestAmount > 0,
+        isAvailable: condition,
+        mode: SuggestBetMode.SuggestBet,
     };
+};
+
+const getReachMaxBetMode = (maxBetPerChoice: number): IAvailableSuggestBetAmount => {
+    return {
+        mode: SuggestBetMode.ReachMaxBet,
+        errorCode: MessageErrorCode.optionMaxBet,
+        args: { maxBet: maxBetPerChoice },
+    };
+};
+
+const getMinBetMode = (roundMinBet: number, maxBetPerChoice: number): IAvailableSuggestBetAmount => {
+    return {
+        mode: SuggestBetMode.MinBet,
+        maxBetPerChoice,
+        errorCode: MessageErrorCode.minBet,
+        args: { minBet: roundMinBet },
+    };
+};
+
+const getMaxBetRoundMode = (roundMaxBet: number, maxBetPerChoice: number): IAvailableSuggestBetAmount => {
+    return {
+        mode: SuggestBetMode.MaxBetRound,
+        maxBetPerChoice,
+        errorCode: MessageErrorCode.roundMaxBet,
+        args: { maxBet: roundMaxBet },
+    };
+};
+
+const isSuggestBetAvailable = (
+    suggestAmount: number,
+    currentAmountOfChoice: number,
+    roundMinBet: number,
+    roundMaxBet: number,
+    isInsufficientFunds: boolean,
+    isOptionReachMaxBet: boolean,
+    isMaxBetRoundResult: boolean
+): boolean => {
+    return (
+        (suggestAmount + currentAmountOfChoice >= roundMinBet || suggestAmount + currentAmountOfChoice <= roundMaxBet) &&
+        (isInsufficientFunds || isOptionReachMaxBet || isMaxBetRoundResult)
+    );
 };
 
 export const getTotalBetAmount = (gameStateContext: GameStateContextModel<any, any>) => {

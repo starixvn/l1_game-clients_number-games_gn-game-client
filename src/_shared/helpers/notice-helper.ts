@@ -1,5 +1,14 @@
 import ErrorCodeDictionary, { CommonErrorCodeList } from "../constants/error-code-dictionary";
 
+export interface INotice {
+    errorCode: string;
+    hedgeBetGroup?: string[];
+    minBet?: number;
+    maxBet?: number;
+    gameRoundId?: number;
+    gameTypeId?: number;
+    isPlaceBetFailed?: boolean;
+}
 export const GetLocalizedErrorMessage = (errorCode: string, isPlaceBet = false) => {
     if (!ErrorCodeDictionary[errorCode]) {
         return "message_error_occurred";
@@ -12,4 +21,12 @@ export const GetLocalizedErrorMessage = (errorCode: string, isPlaceBet = false) 
     }
 
     return key;
+};
+
+export const createOptionForHedgeBetGroup = (hedgeBetGroup: string[]) => {
+    const option = {};
+    hedgeBetGroup?.forEach((choice, index) => {
+        option[`betChoice${index + 1}`] = `glossary_${choice}`;
+    });
+    return option;
 };

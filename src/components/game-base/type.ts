@@ -71,6 +71,7 @@ export interface Notice {
     betChoice1?: string;
     betChoice2?: string;
     onClose?: () => void;
+    hedgeBetGroup?: string[];
 }
 
 export interface APIError extends Notice {

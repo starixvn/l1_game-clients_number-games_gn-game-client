@@ -105,12 +105,15 @@ export const MessageErrorCode = {
     insufficientFund: "3002",
     hedgeBet: "SB1939",
     placeBetNextRound: "SB1905",
-    minBetNotice: "SB1909",
-    maxBet: "SB1910",
+    minBet: "SB1909",
+    optionMaxBet: "SB1910",
     roundMaxBet: "SB1911",
     validBet: "validBet",
     cannotBet: "SB1906",
     suggestBet: "Suggest",
+    cannotSuggestBet: "cannotSuggestBet",
+    notEnoughMoney: "SB1907",
+    reachMaxBet: "SB1924",
 };
 
 export default ErrorCodeDictionary;

@@ -3,12 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import { confirmBet } from "../../../_shared/constants";
 import { MessageErrorCode } from "../../../_shared/constants/error-code-dictionary";
 import { GetLocalizedErrorMessage, StorageHelper, localStorageKeys } from "../../../_shared/helpers";
-import {
-    IAvailableSuggestBetAmount,
-    getTotalBetAmount,
-    getValidateMinMaxBetResult as getValidateBet,
-    validateHedgeBet,
-} from "../../../_shared/helpers/validate-bet-helper";
+import { IAvailableSuggestBetAmount, getValidateBet, validateHedgeBet } from "../../../_shared/helpers/validate-bet-helper";
 import { SystemContextModel } from "../../../_shared/react-contexts";
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 import { GameStateContextModel } from "../../../_shared/react-contexts/game-state-context/game-state-context-model";
@@ -168,11 +163,15 @@ export class PlaceBetHandler {
             return;
         }
 
-        if (this.handleHedgeBet(this.props?.hedgeBetGroups, gameStateContext, betChoice, amount)) {
+        const availableBalance = this.props.getPlayerBalance();
+        if (availableBalance === 0) {
+            this.showNoticePlaceBetFailure();
             return;
         }
 
-        if (this.handleInsufficientBalance()) {
+        const hedgeBetGroup = this.props.hedgeBetGroups.find((group) => group.includes(betChoice));
+        if (validateHedgeBet(hedgeBetGroup, gameStateContext.ownBets, gameStateContext?.notConfirmOwnBets, betChoice, amount)) {
+            this.sendNotice(this.getNotice(MessageErrorCode.hedgeBet, betChoice));
             return;
         }
 
@@ -185,6 +184,12 @@ export class PlaceBetHandler {
             payload: { notice: { message: this.props.translate("message_processing_action"), duration: 2 } },
         });
     };
+
+    showNoticePlaceBetFailure() {
+        const notice = this.getNotice(MessageErrorCode.notEnoughMoney);
+
+        this.sendNotice(notice);
+    }
 
     protected isInPhasePreventBet = (gameStateContext: GameStateContextModel<unknown, unknown>) => {
         const isPreventBet = gameStateContext.roundState !== RoundState.InRound;
@@ -238,20 +243,13 @@ export class PlaceBetHandler {
         enabledQuickBet: boolean,
         systemContext: SystemContextModel
     ) => {
-        const totalBetAmount = getTotalBetAmount(gameStateContext);
-        const { errorCode, args } = getValidateBet(gameStateContext, betChoice, amount, totalBetAmount, this.getAvailableUseToBetBalance());
-
-        if (errorCode === MessageErrorCode.validBet) {
+        const validateBet = getValidateBet(gameStateContext, betChoice, amount, this.getAvailableUseToBetBalance(), this.suggestBetAmount);
+        if (validateBet?.errorCode === MessageErrorCode.validBet) {
             this.handleValidBetChoice(enabledQuickBet, amount, betChoice, gameStateContext, systemContext);
             return;
         }
 
-        if (errorCode === MessageErrorCode.suggestBet) {
-            this.suggestBetAmount(betChoice, args);
-            return;
-        }
-
-        this.sendNotice(this.getNotice(errorCode, betChoice, args));
+        this.sendNotice(this.getNotice(validateBet?.errorCode, betChoice, validateBet?.args));
     };
 
     protected handleValidBetChoice = (

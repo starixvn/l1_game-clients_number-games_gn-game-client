@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { createOptionForHedgeBetGroup } from "../../../_shared/helpers";
 import { numberWithCommas } from "../../../_shared/helpers/number-helper";
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
@@ -34,8 +35,20 @@ export const Notice = () => {
     const dispatch = useGameStatesDispatch();
 
     if (gameStateContext.notice) {
-        const { gameName, message, roundId, duration, minBet, maxBet, errorCode, isWarning, betChoice1, betChoice2, onClose } =
-            gameStateContext.notice;
+        const {
+            gameName,
+            message,
+            roundId,
+            duration,
+            minBet,
+            maxBet,
+            errorCode,
+            isWarning,
+            betChoice1,
+            betChoice2,
+            onClose,
+            hedgeBetGroup,
+        } = gameStateContext.notice;
 
         const closeNotice = () => {
             dispatch({
@@ -47,6 +60,10 @@ export const Notice = () => {
         };
 
         const onCloseNotice = onClose || (() => closeNotice());
+        let hedgeBet = {};
+        if (hedgeBetGroup) {
+            hedgeBet = createOptionForHedgeBetGroup(hedgeBetGroup);
+        }
 
         const opt = {
             gameName,
@@ -57,6 +74,7 @@ export const Notice = () => {
             errorCode: errorCode,
             betChoice1,
             betChoice2,
+            ...hedgeBet,
         };
 
         return (
