@@ -7,6 +7,12 @@
     margin-right: auto;
     margin-top: 1rem;
     z-index: 2;
+
+    //For iPhone X, iPhone Xs, iPhone 11 Pro, iPhone 12 Mini, and iPhone 13 Mini:
+    @media only screen and (width: 375px) and (height: 812px) and (-webkit-device-pixel-ratio: 3) {
+        transform: scale(0.9);
+        transform-origin: top;
+    }
 }
 
 .result-container {
@@ -14,6 +20,12 @@
     justify-content: center;
     gap: 4rem;
     height: 18.5rem;
+
+    //For iPhone X, iPhone Xs, iPhone 11 Pro, iPhone 12 Mini, and iPhone 13 Mini:
+    @media only screen and (width: 375px) and (height: 812px) and (-webkit-device-pixel-ratio: 3) {
+        transform: scale(0.9);
+        transform-origin: top;
+    }
 }
 
 .ball-container {
