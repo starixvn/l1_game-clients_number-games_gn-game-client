@@ -7,7 +7,7 @@ describe("RoundStateHandler", () => {
 
     beforeEach(() => {
         roundStateHandler = new RoundStateHandler();
-        durations = { showResult: 9, beforeStartRound: 1, placingBets: 25, lockingBet: 3, wholeRound: 35, resultAnimation: 5 };
+        durations = { showResult: 9, beforePlaceBet: 1, placingBets: 25, lockingBet: 3, wholeRound: 35, resultAnimation: 5 };
     });
 
     describe("determineRoundBaseState", () => {
@@ -21,15 +21,15 @@ describe("RoundStateHandler", () => {
             expect(state).toBe(RoundState.DisplayResult);
         });
 
-        // test("returns BeforeStartRound when remainingTime is greater than placingBets and beforeStartRound greater than 0", () => {
-        //     const state = roundStateHandler.determineRoundBaseState({
-        //         wholeRound: 35,
-        //         remainingTime: 26,
-        //         durations,
-        //         roundRemainingTime: 26,
-        //     });
-        //     expect(state).toBe(RoundState.BeforeStartRound);
-        // });
+        test("returns BeforePlaceBet when remainingTime is greater than placingBets and beforePlaceBet greater than 0", () => {
+            const state = roundStateHandler.determineRoundBaseState({
+                wholeRound: 35,
+                remainingTime: 26,
+                durations,
+                roundRemainingTime: 26,
+            });
+            expect(state).toBe(RoundState.BeforePlaceBet);
+        });
 
         test("returns InRound when remainingTime is between placingBets and lockingBet", () => {
             const state = roundStateHandler.determineRoundBaseState({
@@ -77,8 +77,8 @@ describe("RoundStateHandler", () => {
     });
 
     describe("shouldCountDownTimer", () => {
-        test("returns false when newRoundState is BeforeStartRound", () => {
-            const shouldCount = roundStateHandler.shouldCountDownTimer({ newRoundState: RoundState.BeforeStartRound });
+        test("returns false when newRoundState is BeforePlaceBet", () => {
+            const shouldCount = roundStateHandler.shouldCountDownTimer({ newRoundState: RoundState.BeforePlaceBet });
             expect(shouldCount).toBe(false);
         });
 

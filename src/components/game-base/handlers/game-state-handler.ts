@@ -19,7 +19,7 @@ export class GameStateHandler implements IGameStateHandler {
                     state: { betWin: 0 },
                 },
                 {
-                    condition: [RoundState.BeforeStartRound, RoundState.InRound].includes(nextRoundState),
+                    condition: [RoundState.BeforePlaceBet, RoundState.InRound].includes(nextRoundState),
                     state: {
                         ownBets: {},
                         totalBets: {},
@@ -70,8 +70,8 @@ export class GameStateHandler implements IGameStateHandler {
             case RoundState.InRound:
             case RoundState.LockingBet:
                 return remainingTime;
-            case RoundState.BeforeStartRound:
-                return durations.beforeStartRound;
+            case RoundState.BeforePlaceBet:
+                return durations.beforePlaceBet;
             default:
                 return 0;
         }

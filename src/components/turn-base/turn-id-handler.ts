@@ -53,14 +53,17 @@ export class TurnIdHandler {
                 this.turnCounter -= 1;
             }
             this.dispatchTurnCounter(true);
-        } else if (roundState !== RoundState.DisplayResult) {
+        } else if (roundState !== RoundState.DisplayResult && this.roundState !== RoundState.BeforePlaceBet) {
             this.dispatchTurnCounter(true);
             this.roundState = roundState;
         }
     };
 
     handleRoundState = ({ roundState }) => {
-        if (roundState == RoundState.InRound && this.roundState === RoundState.DisplayResult) {
+        if (
+            roundState == RoundState.InRound &&
+            (this.roundState === RoundState.DisplayResult || this.roundState === RoundState.BeforePlaceBet)
+        ) {
             this.dispatchTurnCounter(false);
         }
 

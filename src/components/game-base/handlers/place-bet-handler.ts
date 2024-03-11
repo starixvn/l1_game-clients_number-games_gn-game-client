@@ -190,7 +190,7 @@ export class PlaceBetHandler {
         const isPreventBet = gameStateContext.roundState !== RoundState.InRound;
 
         if (isPreventBet) {
-            const isStartingRound = gameStateContext.roundState === RoundState.BeforeStartRound;
+            const isStartingRound = gameStateContext.roundState === RoundState.BeforePlaceBet;
             const notice = isStartingRound
                 ? this.getNotice(MessageErrorCode.cannotBet)
                 : this.getNotice(MessageErrorCode.placeBetNextRound);

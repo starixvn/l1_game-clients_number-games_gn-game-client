@@ -291,7 +291,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             });
 
             this.roundTimeCounter = this.roundTimeCounter - 1;
-
             if (this.timeCounter > 0 && this.roundStateHandler.shouldCountDownTimer({ newRoundState })) {
                 this.timeCounter = this.timeCounter - 1;
             }
@@ -304,7 +303,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
     handleGamePlay(remainingTime: number) {
         const { durations, dispatch, gameStateContextModel } = this.props;
-
         writeDebugLog({
             remainingTime,
             roundState: RoundState[gameStateContextModel.roundState],

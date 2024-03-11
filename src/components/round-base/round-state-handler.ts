@@ -10,14 +10,14 @@ export interface IRoundStateHandler {
 export class RoundStateHandler implements IRoundStateHandler {
     constructor() {}
     determineRoundBaseState({ roundRemainingTime, wholeRound, remainingTime, durations }): RoundState {
-        const { showResult, beforeStartRound, placingBets, lockingBet } = durations;
+        const { showResult, beforePlaceBet, placingBets, lockingBet } = durations;
 
-        if (remainingTime >= wholeRound - showResult) {
+        if (remainingTime > wholeRound - showResult) {
             return RoundState.DisplayResult;
         }
 
-        if (beforeStartRound && remainingTime > placingBets) {
-            return RoundState.BeforeStartRound;
+        if (beforePlaceBet > 0 && remainingTime > placingBets) {
+            return RoundState.BeforePlaceBet;
         }
 
         if (remainingTime <= placingBets && remainingTime > lockingBet) {
@@ -40,6 +40,6 @@ export class RoundStateHandler implements IRoundStateHandler {
     }
 
     shouldCountDownTimer({ newRoundState }): boolean {
-        return newRoundState !== RoundState.BeforeStartRound;
+        return newRoundState !== RoundState.BeforePlaceBet;
     }
 }

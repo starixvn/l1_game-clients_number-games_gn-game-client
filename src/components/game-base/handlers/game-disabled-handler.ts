@@ -27,7 +27,7 @@ export class GameDisableHandler {
 
         if (
             um &&
-            (timeCounter <= durations.placingBets + durations.beforeStartRound + 1 ||
+            (timeCounter <= durations.placingBets + durations.beforePlaceBet + 1 ||
                 remainingTime + 1 === wholeRound ||
                 gameStateContextModel().roundState === RoundState.None)
         ) {

@@ -11,7 +11,7 @@ const CountdownTimer = () => {
     const { t } = useSNTranslate();
 
     switch (roundState) {
-        case RoundState.BeforeStartRound:
+        case RoundState.BeforePlaceBet:
         case RoundState.SwitchRound:
             return <></>;
         case RoundState.InRound:
@@ -59,6 +59,7 @@ const SimpleTimer = () => {
             setTimeLeft(remainingTime);
             setClassNames(roundState === RoundState.LockingBet ? styles["lock-bet"] : "");
         }
+
     }, [timeLeft, remainingTime, roundState]);
 
     return remainingTime <= 0 ? (
@@ -78,9 +79,7 @@ const GameStatus: React.FC<{ children: React.ReactNode }> = ({ children }: { chi
     const { t } = useSNTranslate();
 
     useEffect(() => {
-        if (roundState === RoundState.InRound) {
-            setDisplayedTurnId(turnCounter);
-        }
+        setDisplayedTurnId(turnCounter);
     }, [roundState, turnCounter]);
 
     return (

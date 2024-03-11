@@ -9,7 +9,7 @@ describe("TurnStateHandler", () => {
         handler = new TurnStateHandler();
         durations = {
             showResult: 9,
-            beforeStartRound: 1,
+            beforePlaceBet: 1,
             placingBets: 25,
             lockingBet: 3,
             wholeTurn: 35,
@@ -74,7 +74,7 @@ describe("TurnStateHandler", () => {
     });
 
     describe("shouldCountDownTimer", () => {
-        it.each([RoundState.InRound, RoundState.LockingBet, RoundState.BeforeStartRound, RoundState.DisplayResult])(
+        it.each([RoundState.InRound, RoundState.LockingBet, RoundState.BeforePlaceBet, RoundState.DisplayResult])(
             "should return true if newRoundState is not SwitchRound",
             (newRoundState) => {
                 const shouldCount = handler.shouldCountDownTimer({ newRoundState });

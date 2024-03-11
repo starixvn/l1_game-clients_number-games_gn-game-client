@@ -13,7 +13,7 @@
             "lockingBet": 3,
             "showResult": 9,
             "resultAnimation": 3,
-            "beforeStartRound": 1,
+            "beforePlaceBet": 1,
             "switchRoundAnimation": 2
         },
         "totalTurns": 4

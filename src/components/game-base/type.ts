@@ -22,7 +22,7 @@ export enum RoundState {
     InRound,
     LockingBet,
     DisplayResult,
-    BeforeStartRound,
+    BeforePlaceBet,
     ConnectFailed,
     SwitchRound,
 }
@@ -90,7 +90,7 @@ export interface GameDurations {
     lockingBet: number;
     showResult: number;
     resultAnimation: number;
-    beforeStartRound: number;
+    beforePlaceBet: number;
     switchRoundAnimation?: number;
 }
 

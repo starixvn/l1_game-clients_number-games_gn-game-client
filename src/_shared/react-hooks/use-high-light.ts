@@ -14,7 +14,7 @@ export function useShowHighlightPrevResult({ betChoice }) {
 
     if (roundHistory[0]) {
         return (
-            [RoundState.SwitchRound, RoundState.BeforeStartRound, RoundState.InRound].includes(roundState) &&
+            [RoundState.SwitchRound, RoundState.BeforePlaceBet, RoundState.InRound].includes(roundState) &&
             roundHistory[0].settlementResult[betChoice]
         );
     }
