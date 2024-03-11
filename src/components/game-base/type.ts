@@ -134,16 +134,6 @@ export interface WinStreakCollectorModel {
     };
 }
 
-export interface Position {
-    x: number;
-    y: number;
-}
-
-export interface Boundary {
-    left: number;
-    right: number;
-}
-
 export interface Round<R, S> {
     roundId: number;
     result: R;
