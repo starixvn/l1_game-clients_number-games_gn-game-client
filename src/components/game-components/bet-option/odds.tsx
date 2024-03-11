@@ -38,7 +38,7 @@ export const Odds: React.FC<Props> = ({ gameName, choice, className, animationDu
         <div
             id={`${gameName}-${choice}-odds`}
             className={`text-center ${Styles["bet-odds"]} ${className} ${isOddUp ? Styles["up"] : Styles["down"]} ${
-                !showOddsIcon ? Styles["hide-odds-icon"] : Styles["show-odds-icon"]
+                showOddsIcon ? Styles["show-odds-icon"] : ""
             }`}
         >
             {formatOdds(oddsValue, fractionalOddsFormat)}
