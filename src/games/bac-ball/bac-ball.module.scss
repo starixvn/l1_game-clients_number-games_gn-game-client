@@ -64,7 +64,8 @@
         background: url("/static/images/bac-number/player-disabled-layer.png") no-repeat;
         width: 18.2rem;
         height: 19rem;
-        opacity: 0.5;
+        opacity: 0;
+        animation: show-disabled-layer 0.3s ease-in forwards;
     }
 }
 
@@ -242,7 +243,8 @@
         height: 17.6rem;
         background: url("/static/images/bac-number/tie-disabled-layer.png") no-repeat;
         background-size: 9.6rem 17.6rem;
-        opacity: 0.5;
+        opacity: 0;
+        animation: show-disabled-layer 0.3s ease-in forwards;
     }
 }
 
@@ -302,5 +304,15 @@
         top: 8rem;
         left: 5rem;
         right: 0;
+    }
+}
+
+@keyframes show-disabled-layer {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 0.5;
     }
 }

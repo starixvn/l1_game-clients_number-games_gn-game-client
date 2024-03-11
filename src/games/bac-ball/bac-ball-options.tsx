@@ -63,13 +63,13 @@ export const BacBallBetOptionsComponent = () => {
         let className = "";
         switch (choice) {
             case BacBallBetOptions.PLAYER:
-                className = Style["highlight-prev-result-player"];
+                className = `${Style["highlight-prev-result-player"]} fade-in`;
                 break;
             case BacBallBetOptions.BANKER:
-                className = `${Style["highlight-prev-result-player"]} ${Style["reverse"]}`;
+                className = `${Style["highlight-prev-result-player"]} ${Style["reverse"]} fade-in`;
                 break;
             case BacBallBetOptions.TIE:
-                className = Style["highlight-prev-result-tie"];
+                className = `${Style["highlight-prev-result-tie"]} fade-in`;
                 break;
             default:
         }
