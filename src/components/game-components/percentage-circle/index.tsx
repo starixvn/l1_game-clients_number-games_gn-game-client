@@ -1,5 +1,7 @@
 import React from "react";
 
+import Styles from "./percentage-circle.module.scss";
+
 const cleanPercentage = (percentage: number) => {
     const tooLow = !Number.isFinite(+percentage) || percentage < 0;
     const tooHigh = percentage > 100;
@@ -13,6 +15,7 @@ const Circle: React.FC<{ pct: number; color: string }> = ({ pct, color }) => {
     const strokePct = ((100 - pct) * circ) / 100;
     return (
         <circle
+            className={Styles["circle"]}
             r={r}
             cx={16}
             cy={16}
