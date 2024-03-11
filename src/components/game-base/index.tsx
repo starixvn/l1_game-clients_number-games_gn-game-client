@@ -1,8 +1,15 @@
 import React from "react";
+import { createPortal } from "react-dom";
 import Auth from "sc-user-service-client/dist/auth";
 import { Socket } from "socket.io-client";
 import { InitSocketIO, writeDebugLog } from "../../_shared/helpers";
-import { AuthContext, AuthContextModel, GameActionsContextProvider, GameContextProvider } from "../../_shared/react-contexts";
+import {
+    AuthContext,
+    AuthContextModel,
+    GameActionsContextProvider,
+    GameContextProvider,
+    SystemEventActionType,
+} from "../../_shared/react-contexts";
 import { GameEventActionType } from "../../_shared/react-contexts/game-state-context/game-event-action";
 import { getBalance } from "../../services/auth-service";
 import BetConfirmDialog from "../game-components/bet-confirm-dialog";
@@ -12,9 +19,11 @@ import DisabledModal from "../game-components/disabled-modal";
 import { ConnectFailedMessage } from "../game-components/error-message";
 import { ConnectFailedReasonKey } from "../game-components/error-message/type";
 import GameContainer from "../game-components/game-container";
+import GameGuideModal from "../game-components/game-guide";
 import GameLoading from "../game-components/game-loading";
 import NewRoundTransition from "../game-components/new-round-transition";
 import { Notice } from "../game-components/notice";
+import PFSettingModal from "../game-components/pf-setting";
 import { Settings } from "../game-components/settings";
 import BetSettings from "../page-components/bet-settings";
 import { IRoundStateHandler } from "../round-base/round-state-handler";
@@ -30,9 +39,6 @@ import {
 } from "./handlers";
 import { IGameStateHandler } from "./handlers/game-state-handler";
 import { GameBaseProps, RoundState } from "./type";
-import GameGuideModal from "../game-components/game-guide";
-import { createPortal } from "react-dom";
-import PFSettingModal from "../game-components/pf-setting";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
     protected socket: Socket;
@@ -171,6 +177,13 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.clearDisconnectTimeout();
         this.registerHandlers();
         this.connectToGameService();
+        !this.props.systemContextModel.isUserGesture &&
+            this.props.systemDispatch({
+                type: SystemEventActionType.SET_USER_GESTURE,
+                payload: {
+                    isUserGesture: true,
+                },
+            });
     }
 
     protected async connectToGameService() {

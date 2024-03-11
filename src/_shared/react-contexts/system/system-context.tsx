@@ -22,7 +22,7 @@ export const useSystemDispatch = () => useContext(SystemDispatchContext);
 
 const systemReducer = (state: any, action: SystemEventAction) => {
     const { type, payload } = action;
-    const { selectedChip } = payload;
+    const { selectedChip, isUserGesture } = payload;
 
     switch (type) {
         case SystemEventActionType.SELECT_CHIP: {
@@ -31,6 +31,14 @@ const systemReducer = (state: any, action: SystemEventAction) => {
                 selectedChip,
             };
         }
+
+        case SystemEventActionType.SET_USER_GESTURE: {
+            return {
+                ...state,
+                isUserGesture,
+            };
+        }
+
         default: {
             throw Error("Unknown action: " + action.type);
         }

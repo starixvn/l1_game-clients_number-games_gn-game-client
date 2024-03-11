@@ -3,9 +3,9 @@ import { isMobileOnly } from "react-device-detect";
 import Slider from "react-slick";
 import { SystemEventActionType, useAuthContext, useSystemContext, useSystemDispatch } from "../../../_shared/react-contexts";
 import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
+import { useClickSound } from "../../../_shared/react-hooks";
 import { Chip } from "./chip";
 import Styles from "./chip-slider.module.scss";
-import { useChipClickSound } from "../../../_shared/react-hooks";
 
 const SlidingTimeInMillisecond = 100;
 const slidesToShow = 5;
@@ -23,7 +23,7 @@ export const ChipSlider: React.FC<{}> = () => {
 
     const [isSliding, setIsSliding] = useState(false);
     let sliderRef = null;
-    const playSound = useChipClickSound();
+    const playClick = useClickSound();
     const chipValues = useMemo(() => {
         const maxBet = Math.min(userStakeLevel.maxBet, gameConfigs.maxBet);
         const minBet = Math.max(userStakeLevel.minBet, gameConfigs.minBet);
@@ -59,7 +59,7 @@ export const ChipSlider: React.FC<{}> = () => {
                     selectedChip: chipValue,
                 },
             });
-            playSound();
+            playClick();
         }
     };
 
@@ -136,7 +136,7 @@ export const ChipSlider: React.FC<{}> = () => {
         },
     };
     return (
-        <React.Fragment>
+        <>
             <span
                 id="icon-chip-slider-pre"
                 className={`${Styles["icon-prev"]} ${!enabledPrevBtn && Styles["disabled"]} ${enabledQuickBet ? Styles["quick-bet"] : ""}`}
@@ -159,6 +159,6 @@ export const ChipSlider: React.FC<{}> = () => {
                 className={`${Styles["icon-next"]} ${!enabledNextBtn && Styles["disabled"]} ${enabledQuickBet ? Styles["quick-bet"] : ""}`}
                 onClick={onClickNext}
             ></span>
-        </React.Fragment>
+        </>
     );
 };

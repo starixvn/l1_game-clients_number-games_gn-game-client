@@ -1,6 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { isMobileOnly } from "react-device-detect";
+import useSound from "use-sound";
 import { StorageHelper, localStorageKeys } from "../../../../_shared/helpers";
+import { useSystemContext } from "../../../../_shared/react-contexts";
+import { getRandomSong } from "../../../../_shared/react-hooks";
 import { useSNTranslate } from "../../../../_shared/react-hooks/use-translator";
 import { Tooltip } from "../../tooltip";
 import Styles from "./menu.module.scss";
@@ -12,6 +15,35 @@ const dropdownItemClassName = "dropdown-item";
 export const Menu: React.FC = () => {
     const [enabledSound, setEnabledSound] = useState(StorageHelper.get(localStorageKeys.enableSound) ?? false);
     const [enabledMusic, setEnabledMusic] = useState(StorageHelper.get(localStorageKeys.enableMusic) ?? false);
+    const systemContext = useSystemContext();
+    const [song, setSong] = useState(getRandomSong(""));
+    const [play, { stop }] = useSound(song, {
+        onend: () => {
+            setSong(getRandomSong(song));
+        },
+    });
+
+    const toggle = () => {
+        setEnabledMusic(!enabledMusic);
+    };
+
+    useEffect(() => {
+        if (systemContext.isUserGesture) {
+            enabledMusic && play();
+        }
+        return () => {
+            stop();
+        };
+    }, [play]);
+
+    useEffect(() => {
+        if (enabledMusic) {
+            play();
+        } else {
+            stop();
+            setSong(getRandomSong(song));
+        }
+    }, [enabledMusic]);
 
     const { t } = useSNTranslate();
     const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -27,6 +59,7 @@ export const Menu: React.FC = () => {
     const onToggleMusic = () => {
         StorageHelper.set(localStorageKeys.enableMusic, !enabledMusic);
         setEnabledMusic(!enabledMusic);
+        toggle();
     };
 
     const openBetHistory = () => {

@@ -2,7 +2,7 @@ import { WithRouterProps } from "next/dist/client/with-router";
 import { Resource, Texture } from "pixi.js";
 
 import { DefaultParamType, TFnType, TranslationKey } from "@tolgee/react";
-import { SystemContextModel } from "../../_shared/react-contexts";
+import { SystemContextModel, SystemEventAction } from "../../_shared/react-contexts";
 import { GameEventAction } from "../../_shared/react-contexts/game-state-context/game-event-action";
 import { GameStateContextModel } from "../../_shared/react-contexts/game-state-context/game-state-context-model";
 import { GameMessageHandler } from "./handlers/game-message-handler";
@@ -51,6 +51,7 @@ export type GamePropsContext = {
     dispatch?: (action: GameEventAction) => {};
     gameStateContextModel?: GameStateContextModel<{}, {}>;
     systemContextModel?: SystemContextModel;
+    systemDispatch?: (action: SystemEventAction) => {};
     translate?: TFnType<DefaultParamType, string, TranslationKey>;
     hedgeBetGroups?: [string[]];
     gameMessageHandler?: GameMessageHandler;

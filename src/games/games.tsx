@@ -1,11 +1,10 @@
 import { useTheme } from "next-themes";
 import React, { useEffect, useState } from "react";
 import { isIOS, isMobileOnly } from "react-device-detect";
-import useSound from "use-sound";
 import { getAppSettings } from "../_shared/app-settings";
 import { AppTypes, GameIds } from "../_shared/constants";
 import { SystemContextProvider } from "../_shared/react-contexts";
-import { resourceMp3 } from "../_shared/react-hooks";
+import { usePlaceBetSound } from "../_shared/react-hooks";
 import { GameCategory } from "../components/page-components/game-category";
 import {
     GameCategoryConfig,
@@ -86,7 +85,7 @@ export const Games: React.FC<Props> = ({
     const { theme } = useTheme();
     location.hash = `#${getCategoryHashTag(queryCategory, selectedPage)}`;
     const [isJoinedGame, setIsJoinedGame] = useState(false);
-    const [playPlaceBetSound] = useSound(resourceMp3.placeBet);
+    const playPlaceBetSound = usePlaceBetSound();
 
     const renderListGames = () => {
         const renderGames = getRenderGames(selectedCategory, selectedPage, userOfferGames);
