@@ -123,12 +123,13 @@ img {
 }
 
 ::-webkit-scrollbar {
-    width: 0.5rem;
+    width: 0.6rem;
     height: 0.6rem;
     background-color: var(--scrollbar-background);
 }
 
 ::-webkit-scrollbar-thumb {
+    border-radius: 1.6rem;
     background-color: var(--scrollbar-thumb-background);
 }
 
