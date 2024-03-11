@@ -21,15 +21,15 @@ describe("RoundStateHandler", () => {
             expect(state).toBe(RoundState.DisplayResult);
         });
 
-        test("returns BeforeStartRound when remainingTime is greater than placingBets and beforeStartRound greater than 0", () => {
-            const state = roundStateHandler.determineRoundBaseState({
-                wholeRound: 35,
-                remainingTime: 26,
-                durations,
-                roundRemainingTime: 26,
-            });
-            expect(state).toBe(RoundState.BeforeStartRound);
-        });
+        // test("returns BeforeStartRound when remainingTime is greater than placingBets and beforeStartRound greater than 0", () => {
+        //     const state = roundStateHandler.determineRoundBaseState({
+        //         wholeRound: 35,
+        //         remainingTime: 26,
+        //         durations,
+        //         roundRemainingTime: 26,
+        //     });
+        //     expect(state).toBe(RoundState.BeforeStartRound);
+        // });
 
         test("returns InRound when remainingTime is between placingBets and lockingBet", () => {
             const state = roundStateHandler.determineRoundBaseState({

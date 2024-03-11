@@ -12,7 +12,7 @@ export class RoundStateHandler implements IRoundStateHandler {
     determineRoundBaseState({ roundRemainingTime, wholeRound, remainingTime, durations }): RoundState {
         const { showResult, beforeStartRound, placingBets, lockingBet } = durations;
 
-        if (remainingTime > wholeRound - showResult) {
+        if (remainingTime >= wholeRound - showResult) {
             return RoundState.DisplayResult;
         }
 
