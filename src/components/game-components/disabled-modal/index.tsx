@@ -7,7 +7,6 @@ import Styles from "./disabled-modal.module.scss";
 
 const DisabledModal: React.FC<{ disableMessage: string; onSubmit: () => void }> = ({ disableMessage, onSubmit }) => {
     const { t } = useCommonTranslate();
-    const isDisable = disableMessage === "";
     return (
         <BaseDialog type={ModalType.Center} isOpen={true}>
             <div className={`modal-center yellow-color ${Styles["disable-message-container"]}`}>
@@ -15,12 +14,7 @@ const DisabledModal: React.FC<{ disableMessage: string; onSubmit: () => void }> 
                     <img className={`${Styles["um-setting-big"]}`} src="/static/images/um-setting-big.svg" alt="setting-um" />
                     <img className={`${Styles["um-setting-small"]}`} src="/static/images/um-setting-small.svg" alt="setting-um" />
                 </div>
-                {isDisable ? (
-                    <div className={Styles.message}>{disableMessage}</div>
-                ) : (
-                    <div className={Styles.message}>{t({ key: "message_disabled_game" })}</div>
-                )}
-
+                <div className={Styles.message}>{disableMessage || t({ key: "message_disabled_game" })}</div>
                 <div className={Styles["list-action"]}>
                     <button onClick={() => onSubmit()} className={`btn-yellow ${Styles["ok"]}`}>
                         {t({ key: "ok" })}

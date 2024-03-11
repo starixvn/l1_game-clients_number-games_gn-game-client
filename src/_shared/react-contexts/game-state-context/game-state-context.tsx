@@ -6,6 +6,7 @@ import { LanguageLocaleMapper } from "../../constants";
 import { GetLocalizedErrorMessage } from "../../helpers/notice-helper";
 import { GameEventAction, GameEventActionType } from "./game-event-action";
 import { GameStateContextModel, initialGameStateContextModel } from "./game-state-context-model";
+import { tolgee } from "../../tolgee";
 
 const GameStateContext = createContext({ rate: 1 } as GameStateContextModel<any, any>);
 const GameStateDispatchContext = createContext(null);
@@ -118,7 +119,7 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
             return {
                 ...state,
                 roundState: RoundState.Disabled,
-                disabledMessage: um_message[LanguageLocaleMapper["en"]], // TO DO: remove hard code
+                disabledMessage: um_message[LanguageLocaleMapper[tolgee.getLanguage() || "en"]], // TO DO: remove hard code
                 showResultInfo: false,
             };
         }
