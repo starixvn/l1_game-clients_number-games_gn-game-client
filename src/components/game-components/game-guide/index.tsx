@@ -8,7 +8,7 @@ import { buildGameGuideUrl } from "../../../_shared/helpers";
 import { tolgee } from "../../../_shared/tolgee";
 import { useTheme } from "next-themes";
 import { useCommonTranslate } from "../../../_shared/react-hooks";
-import { buildVersion } from "../../../_shared/constants";
+import { Themes, buildVersion } from "../../../_shared/constants";
 
 const GameGuideModal: FC = () => {
     const { isShowGameGuide } = useGameStateContext();
@@ -30,7 +30,7 @@ const GameGuideModal: FC = () => {
 
 const GameGuide: FC = () => {
     const { userStakeLevel, gameConfigs } = useGameStateContext();
-    const theme = useTheme().theme ?? "dark";
+    const theme = Themes.numberGame ?? "dark";
     const language = tolgee.getLanguage() ?? "en";
     const wrapperRef = useRef<HTMLIFrameElement>();
     const wrapperIframeRef = useRef<HTMLIFrameElement>();

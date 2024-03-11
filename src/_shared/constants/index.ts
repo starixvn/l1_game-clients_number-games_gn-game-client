@@ -97,6 +97,7 @@ export const languageNameMapper = { en: "English", vi: "Tiếng Việt" };
 
 export const Themes = {
     light: "light",
+    numberGame: "number-game",
 };
 
 export const sabaNumberName = "Saba.numbers";
