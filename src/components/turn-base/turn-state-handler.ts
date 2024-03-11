@@ -7,11 +7,11 @@ export class TurnStateHandler extends RoundStateHandler {
     }
 
     determineRoundBaseState({ roundRemainingTime, wholeRound, remainingTime, durations }): RoundState {
-        const { wholeTurn, showResult, beforeStartRound, switchRoundAnimation } = durations;
+        const { wholeTurn, showResult, switchRoundAnimation } = durations;
         const startSwitchRoundPoinTtime = wholeRound - showResult;
-        const endSwitchRoundPontTime = startSwitchRoundPoinTtime - switchRoundAnimation;
+        const endSwitchRoundPointTime = startSwitchRoundPoinTtime - switchRoundAnimation;
 
-        if (roundRemainingTime < startSwitchRoundPoinTtime && roundRemainingTime >= endSwitchRoundPontTime) {
+        if (roundRemainingTime < startSwitchRoundPoinTtime && roundRemainingTime >= endSwitchRoundPointTime) {
             return RoundState.SwitchRound;
         }
 
@@ -19,14 +19,14 @@ export class TurnStateHandler extends RoundStateHandler {
     }
 
     getRemainingTime({ remainingTime, durations }): number {
-        const { wholeRound, showResult, beforeStartRound, switchRoundAnimation } = durations;
+        const { wholeRound, showResult, switchRoundAnimation, wholeTurn } = durations;
+        const endSwitchRoundPointTime = wholeRound - showResult - switchRoundAnimation;
+        const turnRemainingTimeTmp = remainingTime % wholeTurn;
 
         const turnRemainingTime =
-            remainingTime >= wholeRound - showResult - switchRoundAnimation
-                ? (remainingTime % durations.wholeTurn) - durations.switchRoundAnimation
-                : remainingTime % durations.wholeTurn;
+            remainingTime >= endSwitchRoundPointTime ? turnRemainingTimeTmp - switchRoundAnimation : turnRemainingTimeTmp;
 
-        return turnRemainingTime <= 0 ? durations.wholeTurn : turnRemainingTime;
+        return turnRemainingTime <= 0 ? wholeTurn : turnRemainingTime;
     }
 
     getWholeRoundDuration({ durations }) {
@@ -34,7 +34,6 @@ export class TurnStateHandler extends RoundStateHandler {
     }
 
     shouldCountDownTimer({ newRoundState }): boolean {
-        // console.log(`\x1B[31m newRoundState ${RoundState[newRoundState]}}`);
         return newRoundState !== RoundState.SwitchRound;
     }
 }
