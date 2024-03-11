@@ -17,7 +17,7 @@ export const BacBallBetOptionsComponent = () => {
 
     const gameActionContext = useGameActionContext();
     const systemContext = useSystemContext();
-    
+
     const onClickBet = useCallback(
         (choice: string) => gameActionContext.placeBet(choice, systemContext.selectedChip),
         [gameActionContext, systemContext.selectedChip]
@@ -92,8 +92,11 @@ export const BacBallBetOptionsComponent = () => {
                     <div className={Style.stake}>{totalBetComponent}</div>
                     {betPercentage}
                 </div>
-                {betChoice}
-                {odds}
+                <div className={`${Style["choice-odds-area"]} ${Style[`${choice}-choice`]}`}>
+                    {betChoice}
+                    {odds}
+                </div>
+
                 {ownBet}
                 <button
                     ref={(el) => (rippleButtons.current[choice === "player" ? 0 : 1] = el)}
@@ -131,8 +134,10 @@ export const BacBallBetOptionsComponent = () => {
             <div className={`${Style[BacBallBetOptions.TIE]} text-white flex flex-col items-center pt-2`}>
                 {betPercentage}
                 <div className={Style.stake}>{totalBetComponent}</div>
-                {betChoice}
-                {odds}
+                <div className={`${Style["choice-odds-area"]} ${Style[`${BacBallBetOptions.TIE}-choice`]}`}>
+                    {betChoice}
+                    {odds}
+                </div>
                 {ownBet}
                 <button
                     ref={(el) => (rippleButtons.current[2] = el)}

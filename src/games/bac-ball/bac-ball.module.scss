@@ -240,15 +240,6 @@
     transform: scale(0.65);
 }
 
-.bet-name-banker,
-.bet-name-player {
-    margin-top: 3.2rem;
-}
-
-.bet-name-tie {
-    margin-top: 2.3rem;
-}
-
 .highlight-prev-result-player {
     background: url("/static/images/bac-number/winning-previous-player.svg") no-repeat center center;
     height: 18.6rem;
@@ -271,8 +262,6 @@
     top: 0;
 }
 
-/* bet area */
-
 .choice-info {
     display: flex;
     justify-content: space-between;
@@ -281,5 +270,25 @@
 
     &.choice-banker {
         flex-flow: row-reverse;
+    }
+}
+
+.choice-odds-area {
+    position: absolute;
+
+    &.tie-choice {
+        top: 8.5rem;
+    }
+
+    &.player-choice {
+        top: 8rem;
+        right: 5rem;
+        left: 0;
+    }
+
+    &.banker-choice {
+        top: 8rem;
+        left: 5rem;
+        right: 0;
     }
 }
