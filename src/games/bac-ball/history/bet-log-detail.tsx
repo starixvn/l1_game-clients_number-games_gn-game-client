@@ -1,9 +1,8 @@
 import { randomBytes } from "crypto";
-import { FC } from "react";
-import { useState } from "react";
+import { FC, useState } from "react";
 import { createPortal } from "react-dom";
 
-import { formatOdds, numberWithCommas, seperateDateTime, sortedCollectionByTime } from "../../../_shared/helpers";
+import { numberWithCommas, seperateDateTime, sortedCollectionByTime } from "../../../_shared/helpers";
 import { useBallColor } from "../../../_shared/helpers/ball-color-helper";
 import { useCommonTranslate, useSNTranslate, useTranslator } from "../../../_shared/react-hooks/use-translator";
 import { BetLogDetailProps } from "../../../components/game-components/bet-history";
@@ -11,6 +10,7 @@ import ModalContainer from "../../../components/game-components/modal-container"
 import Styles from "./common.module.scss";
 import TableRow from "./row-table";
 import { useAuthContext } from "../../../_shared/react-contexts";
+import { BacBallBetOptions } from "../constants";
 
 interface BacBallBetDetailProps extends BetLogDetailProps {
     drawInfo: DrawInfo;
@@ -119,12 +119,27 @@ const BetDetail: FC<BetLogDetailProps> = ({ betLogDetails, onCloseModal, isShowB
 };
 
 const produceDataBetDetailRow = (item: any, drawInfo: DrawInfo) => {
+    const calculateWin = (isTie: boolean, isWin: true, amount: number, odds: number) => {
+        if (isTie) {
+            return isWin ? amount * odds : amount;
+        }
+
+        return isWin ? amount * odds : 0;
+    };
+    const win = calculateWin(
+        drawInfo.settlementResult?.[BacBallBetOptions.TIE],
+        drawInfo.settlementResult?.[item.choice],
+        item.amount,
+        drawInfo.odds[item.choice]
+    );
+
     return {
         rawTime: item.time,
         amount: item.amount,
         choice: item.choice,
         odds: drawInfo.odds[item.choice],
-        win: drawInfo.settlementResult?.[item.choice] ? item.amount * drawInfo.odds[item.choice] : 0,
+        win: win,
+        hightlight: drawInfo.settlementResult?.[item.choice],
     };
 };
 
@@ -134,9 +149,10 @@ interface BacBallBetLogDetailRowProps {
     choice: string;
     odds: number;
     win: number;
+    hightlight: boolean;
 }
 
-const BetDetailRow: FC<BacBallBetLogDetailRowProps> = ({ rawTime, amount, choice, odds, win }) => {
+const BetDetailRow: FC<BacBallBetLogDetailRowProps> = ({ rawTime, amount, choice, odds, win, hightlight }) => {
     const { date, time } = seperateDateTime(rawTime);
     const { t: translateBacBall } = useTranslator(["BacBall"]);
     const { fractionalOddsFormat } = useAuthContext();
@@ -155,10 +171,13 @@ const BetDetailRow: FC<BacBallBetLogDetailRowProps> = ({ rawTime, amount, choice
             translateBacBall(`glossary_${choice}`),
             numberWithCommas(fractionalOddsFormat ? odds - 1 : odds),
             numberWithCommas(amount) ?? 0,
-            numberWithCommas(win),
         ].map((item) => {
-            return { node: <div className={win > 0 ? "highlight" : ""}>{item}</div>, size: 2.5 };
+            return { node: <div className={hightlight ? "highlight" : ""}>{item}</div>, size: 2.5 };
         }),
+        {
+            node: <div className={win > 0 ? "highlight" : ""}>{numberWithCommas(win)}</div>,
+            size: 2.5,
+        },
     ];
     return <TableRow isHeader={false}>{content}</TableRow>;
 };
