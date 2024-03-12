@@ -102,7 +102,7 @@ export const CommonErrorCodeList = [
     "Common.message_network_error",
 ];
 
-export const MessageErrorCode = {
+export const NoticeErrorCode = {
     insufficientFund: "3002",
     hedgeBet: "SB1939",
     placeBetNextRound: "SB1905",
