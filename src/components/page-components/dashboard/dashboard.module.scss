@@ -59,3 +59,28 @@
         z-index: calc(var(--global-api-error-index) + 1);
     }
 }
+
+.lobby-container {
+    padding: 0 0.8rem;
+}
+
+.icon-game {
+    position: relative;
+    width: 13rem;
+    cursor: pointer;
+
+    img {
+        width: 13rem;
+    }
+
+    .game-name {
+        position: absolute;
+        bottom: 1rem;
+        width: 100%;
+        left: 0;
+        color: #fff;
+        text-align: center;
+        font-size: 2rem;
+        font-weight: 700;
+    }
+}

@@ -7,7 +7,7 @@ export class SlidableScoreboard extends Component<SlidableScoreboardProps> {
     render(): ReactNode {
         const { boards } = this.props;
         return (
-            <Swiper slidesPerView={"auto"} spaceBetween={8}>
+            <Swiper slidesPerView={"auto"} spaceBetween={8} className="swiper-scoreboard">
                 {boards.map((board, key) => (
                     <SwiperSlide key={key}>{board}</SwiperSlide>
                 ))}

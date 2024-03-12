@@ -22,6 +22,8 @@ import Register from "../../page-components/dashboard/register";
 import Header from "../header";
 import Styles from "./dashboard.module.scss";
 import NameGenerator from "./register/name-generator";
+import { Banner } from "../banner";
+import { GameBoardDetail } from "../game-board-detail";
 
 class Dashboard extends React.PureComponent<Props, State> {
     private notificationSocket: Socket = null;
@@ -301,7 +303,19 @@ class Dashboard extends React.PureComponent<Props, State> {
     }
 
     renderLobby() {
-        return <button onClick={() => this.setState({ openGameId: 1001 })}>BacBall</button>;
+        return (
+            <>
+                <Banner />
+                <div className={Styles["lobby-container"]}>
+                    <div className={`${Styles["icon-game"]}`} id="ico-bacball" onClick={() => this.setState({ openGameId: 1001 })}>
+                        <img src="/static/images/game-board-detail/icon-game-1.png" alt="icon-game-1" />
+                        <span className={`${Styles["game-name"]}`}>Bac Ball</span>
+                    </div>
+
+                    <GameBoardDetail />
+                </div>
+            </>
+        );
     }
 
     renderDashBoard() {

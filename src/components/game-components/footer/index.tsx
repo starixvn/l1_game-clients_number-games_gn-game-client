@@ -1,5 +1,6 @@
 import { useTranslator } from "../../../_shared/react-hooks/use-translator";
 import { ResourceTypes } from "../../../_shared/resources";
+
 const Footer = () => {
     const { t } = useTranslator();
 
