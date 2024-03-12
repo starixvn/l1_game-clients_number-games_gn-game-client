@@ -1,4 +1,4 @@
-import { GameConfigs, IBallColor, Notice, Round, RoundState, SuggestBet } from "../../../components/game-base/type";
+import { GameConfigs, IBallColor, Notice, PFSettingData, Round, RoundState, SuggestBet } from "../../../components/game-base/type";
 
 export interface GameStateContextModel<Result, SettlementResult> {
     isConnect: boolean;
@@ -49,14 +49,6 @@ export interface GameStateContextModel<Result, SettlementResult> {
     isShowBetHistory: boolean;
     isShowGameGuide: boolean;
     isShowPFSetting: boolean;
-    provablyFairData?: {
-        drawId: number;
-        roundId: number;
-        serverSeedHash: string;
-        randomClientSeed: string;
-        manualClientSeed: string;
-        useManualClientSeed: boolean;
-    };
     suggestBet: SuggestBet;
 }
 
@@ -107,9 +99,6 @@ export const initialGameStateContextModel = ({ defaultResult, defaultSettlementR
         },
         isShowBetHistory: false,
         isShowGameGuide: false,
-        provablyFairData: {
-            useManualClientSeed: false,
-        },
         suggestBet: {
             currentBetChoice: "",
             sendOutstandingBet: null,

@@ -38,7 +38,7 @@ import {
     messageEventType,
 } from "./handlers";
 import { IGameStateHandler } from "./handlers/game-state-handler";
-import { GameBaseProps, RoundState } from "./type";
+import { GameBaseProps, PFSettingData, RoundState } from "./type";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
     protected socket: Socket;
@@ -247,6 +247,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.gameMessageHandler.register(messageEventType.CLEAR_GAME_TIMEOUT_AND_INTERVAL, this.clearGameTimoutAndInterval.bind(this));
         this.gameMessageHandler.register(messageEventType.SEND_SOCKET_MESSAGE, this.sendSocketMessage.bind(this));
         this.gameMessageHandler.register(messageEventType.UPDATE_PLAYER_BALANCE, this.updateUserBalance.bind(this));
+        this.gameMessageHandler.register(messageEventType.UPDATE_PF_SETTING, this.updatePFSetting.bind(this));
         this.playerHandler.registerEvents(setBalance);
         this.gameErrorHandler.registerEvents(signOut);
         this.gameFinishHandler.registerEvents();
@@ -269,6 +270,19 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         const { event, data } = message[messageEventType.SEND_SOCKET_MESSAGE];
         this.socket.emit(event, data);
     };
+
+    updatePFSetting(message) {
+        const { checkDrawId, data } = message[messageEventType.UPDATE_PF_SETTING];
+        const uid = (this.context as AuthContextModel).authorizeInfo?.user?.UID;
+        const oldPFSetting = StorageHelper.get<PFSettingData>(`${localStorageKeys.pfSetting}-${uid}`);
+        if (!checkDrawId || oldPFSetting?.drawId != data?.drawId) {
+            const newPFSetting = {
+                ...oldPFSetting,
+                ...data,
+            };
+            StorageHelper.set(`${localStorageKeys.pfSetting}-${uid}`, newPFSetting);
+        }
+    }
 
     handleUM(gameMessage) {
         this.gameDisabledHandler.handleUM(gameMessage, this.timeCounter);

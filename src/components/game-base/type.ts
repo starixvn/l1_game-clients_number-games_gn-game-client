@@ -168,3 +168,12 @@ export type SuggestBet = {
     sendOutstandingBet?: Function;
     isInsufficientFunds?: boolean;
 };
+
+export interface PFSettingData {
+    drawId: number;
+    roundId: number;
+    serverSeedHash: string;
+    randomClientSeed: string;
+    manualClientSeed: string;
+    useManualClientSeed: boolean;
+}

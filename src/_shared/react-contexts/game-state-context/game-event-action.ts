@@ -1,4 +1,4 @@
-import { GameConfigs, GameDurations, Notice, RoundState, SuggestBet } from "../../../components/game-base/type";
+import { GameConfigs, GameDurations, Notice, PFSettingData, RoundState, SuggestBet } from "../../../components/game-base/type";
 
 export enum GameEventActionType {
     CONNECT = "CONNECT",
@@ -109,14 +109,6 @@ export interface GameEventPayload {
     isShowBetHistory?: boolean;
     isShowGameGuide?: boolean;
     isShowPFSetting?: boolean;
-    provablyFairData?: {
-        drawId: number;
-        roundId: number;
-        serverSeedHash: string;
-        randomClientSeed: string;
-        manualClientSeed: string;
-        useManualClientSeed: boolean;
-    };
     suggestBet?: SuggestBet;
 }
 

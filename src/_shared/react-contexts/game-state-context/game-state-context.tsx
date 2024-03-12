@@ -76,7 +76,6 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
         isShowBetHistory,
         isShowGameGuide,
         isShowPFSetting,
-        provablyFairData,
         suggestBet,
     } = payload;
 
@@ -408,15 +407,6 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
             };
         }
 
-        case GameEventActionType.PROVABLY_FAIR: {
-            return {
-                ...state,
-                provablyFairData: {
-                    ...state.provablyFairData,
-                    ...provablyFairData,
-                },
-            };
-        }
         case GameEventActionType.SUGGEST_BET: {
             return {
                 ...state,

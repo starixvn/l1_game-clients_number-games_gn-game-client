@@ -1,8 +1,8 @@
 import { GameEventActionType } from "../../_shared/react-contexts/game-state-context/game-event-action";
 import { GameStateContextModel } from "../../_shared/react-contexts/game-state-context/game-state-context-model";
-import { GameDurations, RoundState } from "../game-base/type";
+import { GameDurations, PFSettingData, RoundState } from "../game-base/type";
 import { GameMessageHandler, messageEventType } from "../game-base/handlers/game-message-handler";
-import { randomNumberSeries, writeDebugLog } from "../../_shared/helpers";
+import { StorageHelper, localStorageKeys, randomNumberSeries, writeDebugLog } from "../../_shared/helpers";
 
 export type TurnIdHandlerProps = {
     dispatch: Function;
@@ -31,20 +31,21 @@ export class TurnIdHandler {
             payload: { drawId },
         });
 
-        this.props.dispatch({
-            type: GameEventActionType.PROVABLY_FAIR,
-            payload: {
-                provablyFairData: {
-                    randomClientSeed: randomNumberSeries(4),
-                },
-            },
-        });
-
         const turnIndex = drawId % numberOfTurnsPerRound;
         this.turnCounter = turnIndex === 0 ? numberOfTurnsPerRound : turnIndex;
 
         const { roundState, remainingTime } = this.props.gameStateContextModel();
         const { showResult, wholeTurn } = this.props.durations;
+
+        this.props.gameMessageHandler.broadcastGameEvent({
+            [messageEventType.UPDATE_PF_SETTING]: {
+                checkDrawId: true,
+                data: {
+                    drawId,
+                    randomClientSeed: randomNumberSeries(4),
+                },
+            },
+        });
 
         writeDebugLog({
             name: "handleDrawId - turncounter",

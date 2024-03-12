@@ -34,6 +34,8 @@ export const messageEventType = {
     UPDATE_PLAYER_BALANCE: "updatePlayerBalance",
     CLEAR_GAME_TIMEOUT_AND_INTERVAL: "clearGameTimeoutAndInterval",
     PROVABLY_FAIR: "pf",
+    UPDATE_PF_SETTING: "updatePfSetting",
+    IN_GAME_SERVER_SEED: "serverSeedHash",
 };
 
 export class GameMessageHandler {
@@ -51,6 +53,7 @@ export class GameMessageHandler {
         this.register(messageEventType.BET_PERCENTAGE, this.handleBetPercentage);
         this.register(messageEventType.PLAYER_BET_COUNT, this.handlePlayerBetCount);
         this.register(messageEventType.PROVABLY_FAIR, this.handleProvablyFair);
+        this.register(messageEventType.IN_GAME_SERVER_SEED, this.handleInGameServerSeedHash);
     };
 
     getMessageTransmitter() {
@@ -144,10 +147,21 @@ export class GameMessageHandler {
     };
 
     handleProvablyFair = ({ pf }) => {
-        this.dispatch({
-            type: GameEventActionType.PROVABLY_FAIR,
-            payload: {
-                provablyFairData: pf,
+        this.broadcastGameEvent({
+            [messageEventType.UPDATE_PF_SETTING]: {
+                data: {
+                    ...pf,
+                },
+            },
+        });
+    };
+
+    handleInGameServerSeedHash = ({ serverSeedHash }) => {
+        this.broadcastGameEvent({
+            [messageEventType.UPDATE_PF_SETTING]: {
+                data: {
+                    serverSeedHash,
+                },
             },
         });
     };
