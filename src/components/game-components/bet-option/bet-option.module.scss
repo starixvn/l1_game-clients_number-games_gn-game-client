@@ -38,7 +38,7 @@
     }
 
     &.show-odds-icon {
-        animation: move-up 0.6s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+        animation: odd-move-up 0.6s cubic-bezier(0.39, 0.575, 0.565, 1) both;
 
         &:after {
             animation: fade-in 0.3s ease-in forwards;
@@ -53,6 +53,8 @@
 }
 
 .own-bet {
+    --moveFrom: 2rem;
+    --moveTo: 0;
     position: absolute;
     bottom: 5px;
     left: 0;
@@ -85,6 +87,13 @@
             vertical-align: middle;
         }
     }
+
+    &.own-bet-anim {
+        --moveFrom: 0;
+        --moveTo: -2rem;
+        opacity: 0;
+        animation: own-bet-move-up 0.6s cubic-bezier(0.39, 0.575, 0.565, 1);
+    }
 }
 
 .stakes-value {
@@ -92,16 +101,30 @@
     line-height: 1.5;
 }
 
-@keyframes move-up {
+@keyframes odd-move-up {
     0% {
-        -webkit-transform: translateY(3rem);
-        transform: translateY(3rem);
+        transform: translateY(2rem);
         opacity: 0;
     }
     100% {
-        -webkit-transform: translateY(0);
         transform: translateY(0);
         opacity: 1;
+    }
+}
+
+@keyframes own-bet-move-up {
+    0% {
+        transform: translateY(0);
+        opacity: 0.8;
+    }
+
+    60% {
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: translateY(-3rem);
+        opacity: 0;
     }
 }
 

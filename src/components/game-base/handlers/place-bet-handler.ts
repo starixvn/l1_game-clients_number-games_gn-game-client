@@ -1,13 +1,14 @@
 import { DefaultParamType, TFnType, TranslationKey } from "@tolgee/react";
 import { v4 as uuidv4 } from "uuid";
+
 import { confirmBet } from "../../../_shared/constants";
 import { NoticeErrorCode } from "../../../_shared/constants/error-code-dictionary";
-import { GetLocalizedErrorMessage, StorageHelper, localStorageKeys } from "../../../_shared/helpers";
+import { GetLocalizedErrorMessage, localStorageKeys, StorageHelper } from "../../../_shared/helpers";
 import {
-    IAvailableSuggestBetAmount,
     findHedgeBetGroup,
     getAccountBalance,
     getCriteriaValidateBet,
+    IAvailableSuggestBetAmount,
     isBalanceUnavailable,
     isHedgeBet,
     isInPhasePreventBet,
@@ -221,6 +222,7 @@ export class PlaceBetHandler {
         systemContext: SystemContextModel
     ) => {
         if (enabledQuickBet) {
+            this.updateNotConfirmedBetState(gameStateContext, betChoice, systemContext);
             this.handleEnabledQuickBet(amount, betChoice);
         } else {
             if (betChoice === confirmBet) {
@@ -231,6 +233,8 @@ export class PlaceBetHandler {
 
             const enableSound = StorageHelper.get(localStorageKeys.enableSound) ?? false;
             enableSound && this.props.playPlaceBetSound();
+
+            this.showConfirmBet(gameStateContext);
             this.updateNotConfirmedBetState(gameStateContext, betChoice, systemContext);
         }
     };
@@ -253,11 +257,7 @@ export class PlaceBetHandler {
         this.props.dispatch({ type: GameEventActionType.SUGGEST_BET, payload: { suggestBet } });
     };
 
-    protected updateNotConfirmedBetState(
-        gameStateContext: GameStateContextModel<unknown, unknown>,
-        betChoice: string,
-        systemContext: SystemContextModel
-    ) {
+    private showConfirmBet(gameStateContext: GameStateContextModel<unknown, unknown>) {
         !gameStateContext.showConfirmBet &&
             this.props.dispatch({
                 type: GameEventActionType.SHOW_CONFIRM_BET,
@@ -265,7 +265,13 @@ export class PlaceBetHandler {
                     showConfirmBet: true,
                 },
             });
+    }
 
+    protected updateNotConfirmedBetState(
+        gameStateContext: GameStateContextModel<unknown, unknown>,
+        betChoice: string,
+        systemContext: SystemContextModel
+    ) {
         const notConfirmOwnBets = gameStateContext.notConfirmOwnBets;
         notConfirmOwnBets[betChoice] = (notConfirmOwnBets[betChoice] ?? 0) + systemContext.selectedChip;
         this.props.dispatch({
