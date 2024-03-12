@@ -281,19 +281,31 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.setState({ isShowToolbarGuide: false });
     }
 
+    renderGames() {
+        const { userStakeLevel, authorizeInfo, queryGame, isJoinGame, openGameId, openGameName } = this.state;
+        const offerGames: number[] = authorizeInfo?.user?.offerGames?.map((game: any) => game?.gameId) ?? [];
+
+        return (
+            <Games
+                setApiErrorMessage={this.handleShowApiErrorMessage}
+                userStakeLevel={userStakeLevel}
+                updateUserStakeLevel={this.handleUpdateUserStakeLevel}
+                userOfferGames={offerGames}
+                queryGame={queryGame}
+                updateQueryGames={this.updateQueryGame}
+                isJoinGame={isJoinGame}
+                openGameId={openGameId}
+                openGameName={openGameName}
+            />
+        );
+    }
+
+    renderLobby() {
+        return <button onClick={() => this.setState({ openGameId: 1001 })}>BacBall</button>;
+    }
+
     renderDashBoard() {
-        const {
-            isShowErrorModal,
-            userStakeLevel,
-            authorizeInfo,
-            isBlockUI,
-            queryGame,
-            isJoinGame,
-            settingGames,
-            openGameId,
-            openGameName,
-            isShowToolbarGuide,
-        } = this.state;
+        const { isShowErrorModal, authorizeInfo, isBlockUI, isShowToolbarGuide, openGameId } = this.state;
         const authContextValue = {
             authorizeInfo: authorizeInfo,
             session: this.props.session,
@@ -302,6 +314,7 @@ class Dashboard extends React.PureComponent<Props, State> {
             fractionalOddsFormat: authorizeInfo.user?.fractionalOddsFormat ?? false,
         };
         const offerGames: number[] = authorizeInfo?.user?.offerGames?.map((game: any) => game?.gameId) ?? [];
+
         return (
             <AuthContextProvider value={authContextValue}>
                 <div className={`${Styles["dashboard"]}`} id={"dashboard"}>
@@ -311,17 +324,8 @@ class Dashboard extends React.PureComponent<Props, State> {
                         offerGames={offerGames}
                         isShowToolbarGuide={isShowToolbarGuide}
                     />
-                    <Games
-                        setApiErrorMessage={this.handleShowApiErrorMessage}
-                        userStakeLevel={userStakeLevel}
-                        updateUserStakeLevel={this.handleUpdateUserStakeLevel}
-                        userOfferGames={offerGames}
-                        queryGame={queryGame}
-                        updateQueryGames={this.updateQueryGame}
-                        isJoinGame={isJoinGame}
-                        openGameId={openGameId}
-                        openGameName={openGameName}
-                    />
+
+                    {openGameId ? this.renderGames() : this.renderLobby()}
 
                     <Footer />
 
