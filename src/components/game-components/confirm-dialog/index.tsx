@@ -43,7 +43,7 @@ export const ConfirmDialog: React.FC<Props & SubmitDialogProps> = ({
                 </div>
                 <div className={Styles["list-action"]}>
                     <button
-                        className={`btn-red ${Styles["btn-yes"]}`}
+                        className={`btn-grey`}
                         onClick={() => {
                             clickSound();
                             onCloseModal();
@@ -54,7 +54,7 @@ export const ConfirmDialog: React.FC<Props & SubmitDialogProps> = ({
                         {t("button_no")}
                     </button>
                     <button
-                        className={`btn-red ${Styles["btn-no"]}`}
+                        className={`btn-green`}
                         onClick={() => {
                             clickSound();
                             onSubmit();
