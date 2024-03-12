@@ -3,7 +3,7 @@ import { createOptionForHedgeBetGroup } from "../../../_shared/helpers";
 import { numberWithCommas } from "../../../_shared/helpers/number-helper";
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
-import { useCommonTranslate } from "../../../_shared/react-hooks";
+import { useTranslator } from "../../../_shared/react-hooks";
 import BaseDialog from "../base-dialog";
 import { ModalType } from "../base-dialog/type";
 import Styles from "./notice.module.scss";
@@ -30,7 +30,7 @@ const BaseNotice: React.FC<{ onClose: () => void; duration: number; isOpen?: boo
 };
 
 export const Notice = () => {
-    const { t } = useCommonTranslate();
+    const { t } = useTranslator();
     const gameStateContext = useGameStateContext();
     const dispatch = useGameStatesDispatch();
 
@@ -80,9 +80,7 @@ export const Notice = () => {
         return (
             <BaseNotice {...{ onClose: onCloseNotice, duration, isWarning }}>
                 <div className={Styles["notice-content"]}>
-                    {t({
-                        key: message,
-                        params: opt,
+                    {t(message, opt, {
                         noWrap: true,
                     }).replaceTolgeeFormat()}
                 </div>
