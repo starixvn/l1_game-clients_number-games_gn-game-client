@@ -1,3 +1,4 @@
+import { numberRoundDownWithCommas } from "../../../_shared/helpers";
 import { useAuthContext } from "../../../_shared/react-contexts";
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
@@ -80,7 +81,7 @@ const BetConfirmDialog = () => {
 
     const getContent = () => {
         const formatValue = () => {
-            return `<strong class="amount-color">${outstandingBalance}</strong>`;
+            return `<strong class="amount-color">${numberRoundDownWithCommas(outstandingBalance)}</strong>`;
         };
 
         const content = isInsufficientFunds
@@ -98,7 +99,7 @@ const BetConfirmDialog = () => {
         <ConfirmDialog
             title={getTitle()}
             content={getContent()}
-            subContent={`${t("message_confirm_bet")}?`}
+            subContent={t("message_confirm_bet")}
             onCloseModal={handleCloseModal}
             onSubmit={handleSubmitBet}
         />

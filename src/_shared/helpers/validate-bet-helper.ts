@@ -144,7 +144,11 @@ export const getCriteriaValidateBet = (
         return;
     }
 
-    return { errorCode: criteria?.errorCode, args: criteria?.args };
+    if (criteria?.errorCode) {
+        return { errorCode: criteria?.errorCode, args: criteria?.args };
+    }
+
+    return { errorCode: NoticeErrorCode.validBet };
 };
 
 const composeValidationCriteria = (
