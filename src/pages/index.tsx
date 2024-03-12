@@ -26,8 +26,11 @@ function Home() {
 
     usePWAWoker();
     useEffect(() => {
-        const { token, lang, gameId } = router.query;
-        console.log(router.query);
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get("token");
+        const lang = urlParams.get("lang");
+        const game = urlParams.get("gameId");
+
         const signIn = async () => {
             const userSession = await getUserSession(token as string);
 
@@ -51,7 +54,7 @@ function Home() {
                 const { ref } = router.query;
                 console.log({ ref });
                 ref && setIsDirectMode(validDirectModeRefs.includes(ref?.toString()));
-                setGameId(gameId);
+                setGameId(game);
                 setLoading(false);
 
                 window.history.pushState(null, "", location.href.split("?")[0]);
@@ -60,14 +63,12 @@ function Home() {
             }
         };
 
-        if (router.isReady) {
-            const userSession = StorageHelper.get<SSOResponse>(localStorageKeys.session);
-            const locale = languageMapper[(lang as string) ?? userSession?.language] ?? router.locale;
-            setLanguage(locale);
-            tolgee.changeLanguage(locale);
-            signIn();
-        }
-    }, [router.isReady]);
+        const userSession = StorageHelper.get<SSOResponse>(localStorageKeys.session);
+        const locale = languageMapper[(lang as string) ?? userSession?.language] ?? router.locale;
+        setLanguage(locale);
+        tolgee.changeLanguage(locale);
+        signIn();
+    }, []);
 
     if (isUM) {
         return <UMPage locale={language} />;
