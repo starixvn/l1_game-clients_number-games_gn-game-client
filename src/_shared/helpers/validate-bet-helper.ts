@@ -65,12 +65,21 @@ export const getCurrentAmountOfChoice = (ownBets: object, notConfirmOwnBets: obj
     return (ownBets[betChoice] || 0) + (notConfirmOwnBets[betChoice] || 0);
 };
 
-export const isInsufficientFunds = (amount: number, accountBalance: number, suggestAmount: number): boolean => {
-    return amount > accountBalance && suggestAmount === accountBalance;
+export const isInsufficientFunds = (
+    amount: number,
+    accountBalance: number,
+    suggestAmount: number,
+    isOptionReachMaxBetResult: boolean
+): boolean => {
+    if (suggestAmount > 0 && isOptionReachMaxBetResult) {
+        return false;
+    }
+
+    return amount > accountBalance;
 };
 
-export const isOptionReachMaxBet = (currentTotalAmount: number, maxBetPerChoice: number): boolean => {
-    return currentTotalAmount > maxBetPerChoice;
+export const isOptionReachMaxBet = (currentTotalAmountOfChoice: number, maxBetPerChoice: number): boolean => {
+    return currentTotalAmountOfChoice > maxBetPerChoice;
 };
 
 export const isMinBet = (amount: number, roundMinBet: number): boolean => {
@@ -168,8 +177,9 @@ const composeValidationCriteria = (
     const currentTotalAmount = totalBetAmount + amount;
     const maxAvailableAmountOfChoice = getMaxAvailableAmountOfChoice(maxBetPerChoice, currentAmountOfChoice, roundMaxBet, totalBetAmount);
     const suggestAmount = Math.min(accountBalance, maxAvailableAmountOfChoice);
-    const isInsufficientFundsResult = isInsufficientFunds(amount, accountBalance, suggestAmount);
-    const isOptionReachMaxBetResult = isOptionReachMaxBet(currentTotalAmount, maxBetPerChoice);
+    const isOptionReachMaxBetResult = isOptionReachMaxBet(currentAmountOfChoice + amount, maxBetPerChoice);
+    const isInsufficientFundsResult = isInsufficientFunds(amount, accountBalance, suggestAmount, isOptionReachMaxBetResult);
+
     const isMinBetResult = isMinBet(amount, roundMinBet);
     const isMaxBetRoundResult = isMaxBetRound(currentTotalAmount, roundMaxBet, totalBetAmount);
 
