@@ -411,7 +411,10 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
         case GameEventActionType.PROVABLY_FAIR: {
             return {
                 ...state,
-                provablyFairData,
+                provablyFairData: {
+                    ...state.provablyFairData,
+                    ...provablyFairData,
+                },
             };
         }
         case GameEventActionType.SUGGEST_BET: {

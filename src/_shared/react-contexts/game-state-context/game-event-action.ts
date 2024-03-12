@@ -42,7 +42,7 @@ export enum GameEventActionType {
     TOGGLE_BET_HISTORY = "TOGGLE_BET_HISTORY",
     TOGGLE_GAME_GUIDE = "TOGGLE_GAME_GUIDE",
     TOGGLE_PF_SETTING = "TOGGLE_PF_SETTING",
-    PROVABLY_FAIR = "pf",
+    PROVABLY_FAIR = "PF",
     SUGGEST_BET = "SUGGEST_BET",
 }
 
@@ -113,6 +113,9 @@ export interface GameEventPayload {
         drawId: number;
         roundId: number;
         serverSeedHash: string;
+        randomClientSeed: string;
+        manualClientSeed: string;
+        useManualClientSeed: boolean;
     };
     suggestBet?: SuggestBet;
 }

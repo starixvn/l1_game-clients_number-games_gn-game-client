@@ -53,6 +53,9 @@ export interface GameStateContextModel<Result, SettlementResult> {
         drawId: number;
         roundId: number;
         serverSeedHash: string;
+        randomClientSeed: string;
+        manualClientSeed: string;
+        useManualClientSeed: boolean;
     };
     suggestBet: SuggestBet;
 }
@@ -104,6 +107,9 @@ export const initialGameStateContextModel = ({ defaultResult, defaultSettlementR
         },
         isShowBetHistory: false,
         isShowGameGuide: false,
+        provablyFairData: {
+            useManualClientSeed: false,
+        },
         suggestBet: {
             currentBetChoice: "",
             sendOutstandingBet: null,

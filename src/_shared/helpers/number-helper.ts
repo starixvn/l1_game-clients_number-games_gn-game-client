@@ -16,10 +16,14 @@ const randomInteger = (min: number, max: number) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
+const randomNumberSeries = (length: number) => {
+    return Array.from({ length }, () => randomInteger(0, 9)).join("");
+};
+
 const sumArray = (numbers: number[]) => numbers.reduce((number, sum) => number + sum, 0);
 
 const formatOdds = (value: number | string | undefined, isFractionalFormat = false) => {
     return isFractionalFormat ? `${numberWithCommas(+value - 1, 2, 2)}:1` : `1:${numberWithCommas(+value, 2, 2)}`;
 };
 
-export { numberRoundDownWithCommas, numberWithCommas, randomInteger, sumArray, formatOdds };
+export { numberRoundDownWithCommas, numberWithCommas, randomInteger, sumArray, formatOdds, randomNumberSeries };

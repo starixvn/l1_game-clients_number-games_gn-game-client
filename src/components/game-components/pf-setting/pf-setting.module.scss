@@ -16,13 +16,35 @@
 .client-seed-form {
     border: 1px solid #9ca3ae;
     border-radius: 5px;
+    width: calc(100% - 3.2rem);
+    height: 15rem;
     margin: 1rem 1.6rem;
-    padding: 1rem;
 }
+.child-of-form {
+    width: calc(100% - 3.4rem);
+    height: 14.8rem;
+    position: absolute;
+    border-radius: 5px;
+}
+
+.form-overlay {
+    @extend .child-of-form;
+    background-color: rgba(0, 0, 0, 0.226);
+}
+
+.client-seed-options {
+    @extend .child-of-form;
+    padding: 0rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.3rem;
+    justify-content: center;
+}
+
 .client-seed-option {
     display: flex;
-    margin: 2rem 0;
 }
+
 .server-seed-hash {
     margin: 0rem 0.6rem;
     border: none;
@@ -47,4 +69,9 @@
     button {
         margin: 0rem 0.4rem;
     }
+}
+
+.manual-seed-input {
+    display: flex;
+    flex-direction: column;
 }
