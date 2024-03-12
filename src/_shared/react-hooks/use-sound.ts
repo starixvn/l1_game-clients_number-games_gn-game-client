@@ -1,20 +1,15 @@
 import useSound from "use-sound";
-import { StorageHelper, localStorageKeys } from "../helpers";
-const path = "./static/sounds/";
-const bgMusicPath = `${path}bg-music/`;
+import { StorageHelper, localStorageKeys, objectMap } from "../helpers";
+export const path = "./static/sounds/";
 
-export const songList = [1, 2, 3, 4, 5, 6, 7].map((x) => `${bgMusicPath}song${x}.mp3`);
-
-export const getRandomSong = (currentSong: string) => {
-    const newSongList = songList.filter((s) => s != currentSong);
-    const randomSongIndex = Math.floor(Math.random() * newSongList.length);
-    return newSongList[randomSongIndex];
+const mp3File = {
+    placeBet: `place-bet`,
+    click: `click`,
+    startingRound: `starting-round`,
+    receiveFinish: `receive-finish`,
 };
 
-export const resourceMp3 = {
-    placeBet: `${path}place-bet.mp3`,
-    click: `${path}click.mp3`,
-};
+const resourceMp3 = objectMap(mp3File, (v) => `${path}${v}.mp3`);
 
 export const usePlaySound = (resource: string) => {
     const enable = StorageHelper.get(localStorageKeys.enableSound) ?? false;
@@ -28,4 +23,12 @@ export const useClickSound = () => {
 
 export const usePlaceBetSound = () => {
     return usePlaySound(resourceMp3.placeBet);
+};
+
+export const useStartRoundSound = () => {
+    return usePlaySound(resourceMp3.startingRound);
+};
+
+export const useReceiveFinishSound = () => {
+    return usePlaySound(resourceMp3.receiveFinish);
 };

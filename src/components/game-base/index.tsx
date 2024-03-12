@@ -2,7 +2,7 @@ import React from "react";
 import { createPortal } from "react-dom";
 import Auth from "sc-user-service-client/dist/auth";
 import { Socket } from "socket.io-client";
-import { InitSocketIO, writeDebugLog } from "../../_shared/helpers";
+import { InitSocketIO, StorageHelper, localStorageKeys, writeDebugLog } from "../../_shared/helpers";
 import {
     AuthContext,
     AuthContextModel,
@@ -53,7 +53,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     private gameErrorHandler: GameErrorHandler;
     private playerHandler: PlayerHandler;
     private placeBetHandler: PlaceBetHandler;
-    private gameFishishHandler?: GameFinishHandler;
+    private gameFinishHandler?: GameFinishHandler;
     private gameDisabledHandler?: GameDisableHandler;
     private gameRoundHistoryHandler?: GameRoundHistoryHandler;
 
@@ -65,7 +65,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         gameErrorHandler?: GameErrorHandler,
         playerHandler?: PlayerHandler,
         placeBetHandler?: PlaceBetHandler,
-        gameFishishHandler?: GameFinishHandler,
+        gameFinishHandler?: GameFinishHandler,
         gameDisabledHandler?: GameDisableHandler,
         gameRoundHistoryHandler?: GameRoundHistoryHandler
     ) {
@@ -102,12 +102,12 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 hedgeBetGroups: this.props.hedgeBetGroups,
                 translate: props.translate,
                 playPlaceBetSound: () => {
-                    this.props.playPlaceBetSound();
+                    this.props.gameSound.playPlaceBetSound();
                 },
             });
 
-        this.gameFishishHandler =
-            gameFishishHandler ??
+        this.gameFinishHandler =
+            gameFinishHandler ??
             new GameFinishHandler({
                 dispatch,
                 gameMessageHandler: this.gameMessageHandler,
@@ -164,7 +164,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
     clearGameTimoutAndInterval = () => {
         clearInterval(this.gameCronInterval);
-        this.gameFishishHandler.clearTimeout();
+        this.gameFinishHandler.clearTimeout();
         this.placeBetHandler.clearRetryInterval();
     };
 
@@ -248,8 +248,8 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.gameMessageHandler.register(messageEventType.UPDATE_PLAYER_BALANCE, this.updateUserBalance.bind(this));
         this.playerHandler.registerEvents(setBalance);
         this.gameErrorHandler.registerEvents(signOut);
-        this.gameFishishHandler.registerEvents();
-        this.gameMessageHandler.register(messageEventType.ROUND_HISTORY, this.handlRoundHistory.bind(this));
+        this.gameFinishHandler.registerEvents();
+        this.gameMessageHandler.register(messageEventType.ROUND_HISTORY, this.handleRoundHistory.bind(this));
     }
 
     emitSocketEvent = ({ key, data }) => {
@@ -273,7 +273,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.gameDisabledHandler.handleUM(gameMessage, this.timeCounter);
     }
 
-    handlRoundHistory(gameMessage) {
+    handleRoundHistory(gameMessage) {
         this.gameRoundHistoryHandler.handleRoundHistory(gameMessage);
     }
 
@@ -354,6 +354,26 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 type: GameEventActionType.SET_NEW_GAME_STATE,
                 payload: { newGameState },
             });
+            const enableSound = StorageHelper.get(localStorageKeys.enableSound) ?? false;
+            enableSound && this.playSound(gameStateContextModel.roundState);
+        }
+    }
+
+    private playSound(roundState: RoundState) {
+        const { stopBettingSound, receiveFinishSound, startRoundSound, startBettingSound } = this.props.gameSound;
+        switch (roundState) {
+            case RoundState.InRound:
+                stopBettingSound();
+                break;
+
+            case RoundState.LockingBet:
+                receiveFinishSound();
+                break;
+
+            case RoundState.DisplayResult:
+                startRoundSound();
+                startBettingSound();
+                break;
         }
     }
 
@@ -369,7 +389,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
     handleFinish(finish) {
         this.placeBetHandler.clearRetryInterval();
-        this.gameFishishHandler.handleFinish(finish, this.props.gameStateContextModel, this.props.durations);
+        this.gameFinishHandler.handleFinish(finish, this.props.gameStateContextModel, this.props.durations);
         this.runGame(this.roundStateHandler.getWholeRoundDuration({ durations: this.props.durations }));
     }
 

@@ -4,7 +4,14 @@ import { isIOS, isMobileOnly } from "react-device-detect";
 import { getAppSettings } from "../_shared/app-settings";
 import { AppTypes, GameIds } from "../_shared/constants";
 import { SystemContextProvider } from "../_shared/react-contexts";
-import { usePlaceBetSound } from "../_shared/react-hooks";
+import {
+    usePlaceBetSound,
+    useReceiveFinishSound,
+    useStartBettingSound,
+    useStartRoundSound,
+    useStopBettingSound,
+} from "../_shared/react-hooks";
+import { tolgee } from "../_shared/tolgee";
 import { GameCategory } from "../components/page-components/game-category";
 import {
     GameCategoryConfig,
@@ -85,7 +92,16 @@ export const Games: React.FC<Props> = ({
     const { theme } = useTheme();
     location.hash = `#${getCategoryHashTag(queryCategory, selectedPage)}`;
     const [isJoinedGame, setIsJoinedGame] = useState(false);
-    const playPlaceBetSound = usePlaceBetSound();
+
+    const locale = tolgee.getLanguage();
+
+    const gameSound = {
+        playPlaceBetSound: usePlaceBetSound(),
+        startRoundSound: useStartRoundSound(),
+        receiveFinishSound: useReceiveFinishSound(),
+        startBettingSound: useStartBettingSound(locale),
+        stopBettingSound: useStopBettingSound(locale),
+    };
 
     const renderListGames = () => {
         const renderGames = getRenderGames(selectedCategory, selectedPage, userOfferGames);
@@ -98,7 +114,7 @@ export const Games: React.FC<Props> = ({
 
         const gameProps = {
             ...gameSettings[gameId],
-            playPlaceBetSound,
+            gameSound,
             setApiErrorMessage: setApiErrorMessage,
             theme,
             userStakeLevel,

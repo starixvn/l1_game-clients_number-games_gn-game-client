@@ -42,7 +42,6 @@ export type GamePropsContext = {
     durations?: GameDurations;
     totalTurns?: number;
     notifyWinStreak?: Function;
-    playPlaceBetSound?: Function;
     setApiErrorMessage?: Function;
     userStakeLevel?: UserStakeLevel;
     updateUserStakeLevel?: Function;
@@ -55,6 +54,15 @@ export type GamePropsContext = {
     translate?: TFnType<DefaultParamType, string, TranslationKey>;
     hedgeBetGroups?: [string[]];
     gameMessageHandler?: GameMessageHandler;
+    gameSound?: GameSound;
+};
+
+export type GameSound = {
+    playPlaceBetSound: Function;
+    startRoundSound: Function;
+    receiveFinishSound: Function;
+    startBettingSound: Function;
+    stopBettingSound: Function;
 };
 
 export type GameBaseProps = GamePropsContext & WithRouterProps;
