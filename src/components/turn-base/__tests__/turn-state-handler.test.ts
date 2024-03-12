@@ -76,7 +76,7 @@ describe("TurnStateHandler", () => {
             [110, 110],
             [109, 109],
             [108, 108],
-        ])("returns expected round remaining when remainingTime isis greater than beforePlaceBet", (roundRemainingTime, expectedResult) => {
+        ])("returns expected round remaining when remainingTime is greater than beforePlaceBet", (roundRemainingTime, expectedResult) => {
             const result = handler.getRoundRemainingTimeToCalculateTurnRemainingtime({ remainingTime: roundRemainingTime, durations });
             expect(result).toBe(expectedResult);
         });
