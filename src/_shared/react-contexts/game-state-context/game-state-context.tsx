@@ -257,7 +257,7 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
         case GameEventActionType.NOTICE_USER_STAKE_LEVEL: {
             return {
                 ...state,
-                notice: { message: "message_bet_limit_change" },
+                notice: { message: "Common.message_bet_limit_change" },
             };
         }
 
