@@ -34,59 +34,51 @@ export class PlaceBetHandler {
 
     constructor(private props: PlaceBetHandlerProps) {}
 
-    registerEvents = (signOut: Function, gameStateContext: GameStateContextModel<unknown, unknown>) => {
+    registerEvents = (signOut: () => void, gameStateContext: GameStateContextModel<unknown, unknown>) => {
         this.props.gameMessageHandler.register(messageEventType.END_BET, (gameMessage) => {
             this.handleEndBet(gameMessage, signOut, gameStateContext);
         });
     };
 
-    handleBetFailed = ({ notice, kickedOut }, signOut: Function) => {
+    handleBetFailed = ({ notice, kickedOut }, signOut: () => void) => {
         const { dispatch, gameName } = this.props;
-
-        this.props.dispatch({
+        const isDisabledAccount = kickedOut?.isDisabledAccount;
+        dispatch({
             type: GameEventActionType.DISPLAY_POPUP,
             payload: {
                 notice: null,
             },
         });
 
-        if (kickedOut?.isDisabledAccount) {
-            dispatch({
-                type: GameEventActionType.DISPLAY_POPUP,
-                payload: {
-                    notice: {
-                        gameName: this.props.gameName,
-                        message: GetLocalizedErrorMessage(kickedOut.errorCode),
-                        duration: 10,
-                        errorCode: kickedOut.errorCode,
-                        roundId: 0,
-                        onClose: signOut,
-                    },
-                },
-            });
+        const noticePayload = this.getNoticePayloadBetFailed(notice, kickedOut);
+        if (isDisabledAccount) {
+            noticePayload.onClose = signOut;
+            noticePayload.duration = 10;
+            noticePayload.roundId = 0;
+            noticePayload.gameName = gameName;
         } else {
-            dispatch({
-                type: GameEventActionType.DISPLAY_POPUP,
-                payload: {
-                    notice: {
-                        gameName: `${gameName.toLowerCase()}:${GameResourceKeys.GAME_NAME}`,
-                        message: GetLocalizedErrorMessage(notice.errorCode),
-                        duration: 3,
-                        minBet: notice?.minBet,
-                        maxBet: notice?.maxBet,
-                        errorCode: notice.errorCode,
-                        roundId: notice?.gameRoundId,
-                        betChoice1: notice?.hedgeBetGroup ? this.props.translate(notice.hedgeBetGroup[0]) : "",
-                        betChoice2: notice?.hedgeBetGroup ? this.props.translate(notice.hedgeBetGroup[1]) : "",
-                    },
-                },
-            });
+            noticePayload.duration = 3;
+            noticePayload.minBet = notice?.minBet;
+            noticePayload.maxBet = notice?.maxBet;
+            noticePayload.roundId = notice?.gameRoundId;
+            noticePayload.gameName = `${gameName.toLowerCase()}:${GameResourceKeys.GAME_NAME}`;
         }
+
+        dispatch({ type: GameEventActionType.DISPLAY_POPUP, payload: noticePayload });
+    };
+
+    getNoticePayloadBetFailed = (notice: Notice, kickedOut: any) => {
+        const errorCode = kickedOut?.isDisabledAccount ? kickedOut.errorCode : notice.errorCode;
+
+        const hedgeBetGroup = notice?.hedgeBetGroup;
+        const betChoice = hedgeBetGroup ? hedgeBetGroup[0] : undefined;
+
+        return this.getNotice(errorCode, betChoice, notice);
     };
 
     handleEndBet = (
         { endBet, ownBets, notice, kickedOut, apiError },
-        signOut: Function,
+        signOut: () => void,
         gameStateContext: GameStateContextModel<unknown, unknown>
     ) => {
         const { playPlaceBetSound, dispatch, gameMessageHandler } = this.props;
@@ -212,13 +204,13 @@ export class PlaceBetHandler {
             this.suggestBetAmount
         );
 
-        if (criteriaValidateBet?.errorCode === NoticeErrorCode.validBet) {
-            this.handleValidBetChoice(enabledQuickBet, amount, betChoice, gameStateContext, systemContext);
+        if (criteriaValidateBet?.errorCode) {
+            this.sendNotice(this.getNotice(criteriaValidateBet?.errorCode, betChoice, criteriaValidateBet?.args));
 
             return;
         }
 
-        this.sendNotice(this.getNotice(criteriaValidateBet?.errorCode, betChoice, criteriaValidateBet?.args));
+        this.handleValidBetChoice(enabledQuickBet, amount, betChoice, gameStateContext, systemContext);
     };
 
     protected handleValidBetChoice = (
