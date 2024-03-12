@@ -70,6 +70,7 @@ export const BacBallResultBlock: FC = () => {
     return (
         <div className={Style["result-container"]}>
             <div className={Style["result"]}>
+                <BacBallResultSlotContainer delayTime={0} betChoice={BacBallBetOptions.PLAYER} className="player-balls" />
                 <Cage
                     cageBallsLoopFrames={cageBallsLoopFrames}
                     cageBallFrames={cageBallFrames}
@@ -79,9 +80,9 @@ export const BacBallResultBlock: FC = () => {
                     result={currentResult?.player}
                     delayShowResultTime={0}
                 />
-                <BacBallResultSlotContainer delayTime={0} betChoice={BacBallBetOptions.PLAYER} className="player-balls" />
             </div>
             <div className={Style["result"]}>
+                <BacBallResultSlotContainer delayTime={bankerDelayTime} betChoice={BacBallBetOptions.BANKER} className="banker-balls" />
                 <Cage
                     cageBallsLoopFrames={cageBallsLoopFrames}
                     cageBallFrames={cageBallFrames}
@@ -91,7 +92,6 @@ export const BacBallResultBlock: FC = () => {
                     result={currentResult?.banker}
                     delayShowResultTime={bankerDelayTime}
                 />
-                <BacBallResultSlotContainer delayTime={bankerDelayTime} betChoice={BacBallBetOptions.BANKER} className="banker-balls" />
             </div>
         </div>
     );
