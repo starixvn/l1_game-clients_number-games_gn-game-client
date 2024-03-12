@@ -8,63 +8,79 @@ describe("TurnStateHandler", () => {
     beforeEach(() => {
         handler = new TurnStateHandler();
         durations = {
-            showResult: 9,
-            beforePlaceBet: 1,
-            placingBets: 25,
+            wholeRound: 122,
+            wholeTurn: 30,
+            placingBets: 20,
             lockingBet: 3,
-            wholeTurn: 35,
-            wholeRound: 142,
-            switchRoundAnimation: 2,
+            showResult: 9,
             resultAnimation: 3,
+            beforePlaceBet: 1,
+            switchRoundAnimation: 2,
         };
     });
 
     describe("determineRoundBaseState", () => {
-        it.each([131, 132])(
+        it.each([112, 113])(
             "should return SwitchRound if roundRemainingTime is within the switch round animation period",
             (roundRemainingTime) => {
-                const roundState = handler.determineRoundBaseState({ wholeRound: 142, remainingTime: 34, durations, roundRemainingTime });
+                const roundState = handler.determineRoundBaseState({ wholeRound: 122, remainingTime: 34, durations, roundRemainingTime });
                 expect(roundState).toBe(RoundState.SwitchRound);
             }
         );
     });
 
-    // describe("getRemainingTime", () => {
-    //     it("returns correct remaining time when remainingTime is greater than endSwitchRoundPointTime", () => {
-    //         const remainingTime = 140;
-    //         const expected = 5;
-    //         const result = handler.getRemainingTime({ remainingTime, durations });
-    //         expect(result).toBe(expected);
-    //     });
+    describe("getRemainingTime", () => {
+        it.each([[0], [-1]])("should return the whole turn duration when turnRemainingTime is less than or equal to 0", (remainingTime) => {
+            const result = handler.getRemainingTime({ remainingTime, durations });
+            expect(result).toBe(durations.wholeTurn);
+        });
 
-    //     // it("returns correct remaining time when remainingTime is less than endSwitchRoundPointTime", () => {
-    //     //     const remainingTime = 50;
-    //     //     const expected = 40; // 50 % 60
-    //     //     const result = handler.getRemainingTime({ remainingTime, durations });
-    //     //     expect(result).toBe(expected);
-    //     // });
+        it("should return the turnRemainingTime when it is greater than 0", () => {
+            const result = handler.getRemainingTime({ remainingTime: 5, durations });
+            expect(result).toBe(5);
+        });
+    });
 
-    //     // it("adjusts remaining time correctly when remainingTime is on the edge of endSwitchRoundPointTime", () => {
-    //     //     const remainingTime = 70; // endSwitchRoundPointTime is 70 (100 - 20 - 10)
-    //     //     const expected = 60; // Since it's exactly at the endSwitchRoundPointTime, it should subtract switchRoundAnimation and wrap around
-    //     //     const result = handler.getRemainingTime({ remainingTime, durations });
-    //     //     expect(result).toBe(expected);
-    //     // });
+    describe("getRoundRemainingTimeToCalculateTurnRemainingtime", () => {
+        it.each([
+            [122, 120],
+            [121, 119],
+            [120, 118],
+            [119, 117],
+            [118, 116],
+            [117, 115],
+            [116, 114],
+            [115, 113],
+            [114, 112],
+        ])(
+            "returns correct expected round remaining time when remainingTime is greater than endSwitchRoundPointTime",
+            (roundRemainingTime, expectedResult) => {
+                const result = handler.getRoundRemainingTimeToCalculateTurnRemainingtime({ remainingTime: roundRemainingTime, durations });
+                expect(result).toBe(expectedResult);
+            }
+        );
 
-    //     // it("returns wholeTurn when the calculated remaining time is less than or equal to 0", () => {
-    //     //     const remainingTime = 20; // This would result in a negative or 0 remaining time
-    //     //     const expected = 60; // wholeTurn
-    //     //     const result = handler.getRemainingTime({ remainingTime, durations });
-    //     //     expect(result).toBe(expected);
-    //     // });
+        it.each([
+            [113, 110],
+            [112, 110],
+            [111, 110],
+        ])(
+            "returns expected round remaining when remainingTime is on range of startSwitchRoundPointTime to beforePlaceBet",
+            (roundRemainingTime, expectedResult) => {
+                const result = handler.getRoundRemainingTimeToCalculateTurnRemainingtime({ remainingTime: roundRemainingTime, durations });
+                expect(result).toBe(expectedResult);
+            }
+        );
 
-    //     // it("handles remainingTime exactly equal to wholeTurn correctly", () => {
-    //     //     const remainingTime = 60; // Exactly wholeTurn
-    //     //     const expected = 50; // Should subtract switchRoundAnimation because it's greater than endSwitchRoundPointTime
-    //     //     const result = handler.getRemainingTime({ remainingTime, durations });
-    //     //     expect(result).toBe(expected);
-    //     // });
-    // });
+        it.each([
+            [110, 110],
+            [109, 109],
+            [108, 108],
+        ])("returns expected round remaining when remainingTime isis greater than beforePlaceBet", (roundRemainingTime, expectedResult) => {
+            const result = handler.getRoundRemainingTimeToCalculateTurnRemainingtime({ remainingTime: roundRemainingTime, durations });
+            expect(result).toBe(expectedResult);
+        });
+    });
 
     describe("getWholeRoundDuration", () => {
         it("should return the wholeTurn duration from durations", () => {

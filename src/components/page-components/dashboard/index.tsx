@@ -133,7 +133,6 @@ class Dashboard extends React.PureComponent<Props, State> {
     }
 
     async componentDidMount() {
-        // console.log("componentDidMount");
         document.addEventListener("visibilitychange", this.onVisibilityChange);
         const { session, directMode } = this.props;
         const authorizeResponse = await authorize(session);

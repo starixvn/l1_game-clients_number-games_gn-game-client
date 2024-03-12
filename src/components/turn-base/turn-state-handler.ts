@@ -8,10 +8,10 @@ export class TurnStateHandler extends RoundStateHandler {
 
     determineRoundBaseState({ roundRemainingTime, wholeRound, remainingTime, durations }): RoundState {
         const { wholeTurn, showResult, switchRoundAnimation } = durations;
-        const startSwitchRoundPoinTtime = wholeRound - showResult;
-        const endSwitchRoundPointTime = startSwitchRoundPoinTtime - switchRoundAnimation;
+        const startSwitchRoundPointTime = wholeRound - showResult;
+        const endSwitchRoundPointTime = startSwitchRoundPointTime - switchRoundAnimation;
 
-        if (roundRemainingTime < startSwitchRoundPoinTtime && roundRemainingTime >= endSwitchRoundPointTime) {
+        if (startSwitchRoundPointTime >= roundRemainingTime && roundRemainingTime > endSwitchRoundPointTime) {
             return RoundState.SwitchRound;
         }
 
@@ -19,14 +19,30 @@ export class TurnStateHandler extends RoundStateHandler {
     }
 
     getRemainingTime({ remainingTime, durations }): number {
-        const { wholeRound, showResult, switchRoundAnimation, wholeTurn } = durations;
-        const endSwitchRoundPointTime = wholeRound - showResult - switchRoundAnimation;
-        const turnRemainingTimeTmp = remainingTime % wholeTurn;
-
         const turnRemainingTime =
-            remainingTime >= endSwitchRoundPointTime ? turnRemainingTimeTmp - switchRoundAnimation : turnRemainingTimeTmp;
+            this.getRoundRemainingTimeToCalculateTurnRemainingtime({ remainingTime, durations }) % durations.wholeTurn;
 
-        return turnRemainingTime <= 0 ? wholeTurn : turnRemainingTime;
+        if (turnRemainingTime <= 0) {
+            return durations.wholeTurn;
+        }
+
+        return turnRemainingTime;
+    }
+
+    getRoundRemainingTimeToCalculateTurnRemainingtime({ remainingTime, durations }): number {
+        const { wholeRound, showResult, switchRoundAnimation, beforePlaceBet } = durations;
+        const startSwitchRoundPointTime = wholeRound - showResult;
+        const endSwitchRoundPointTime = startSwitchRoundPointTime - switchRoundAnimation;
+
+        if (remainingTime > startSwitchRoundPointTime) {
+            return remainingTime - switchRoundAnimation;
+        }
+
+        if (startSwitchRoundPointTime >= remainingTime && remainingTime > endSwitchRoundPointTime - beforePlaceBet) {
+            return endSwitchRoundPointTime - beforePlaceBet;
+        }
+
+        return remainingTime;
     }
 
     getWholeRoundDuration({ durations }) {
