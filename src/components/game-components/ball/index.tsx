@@ -12,10 +12,11 @@ export interface IBall {
     number: number;
     status?: BallStatus;
     delayTime?: number;
+    index?: number;
 }
 
 const Ball: FC<IBall> = (props) => {
-    const { number, delayTime, status } = props;
+    const { number, delayTime, status, index } = props;
 
     const color = useBallColor({ number });
     const ballStyleName = `${Styles["ball-bg"]} ${Styles[color]} ${status === BallStatus.SHOW ? Styles["display-right-now"] : ""}`;
@@ -39,13 +40,7 @@ const Ball: FC<IBall> = (props) => {
     return (
         <div className={`${Styles.ball} ${blurStyle} ${delayStyle}`}>
             {isDelayShowResult && number > 0 && (
-                <div className={ballStyleName}>
-                    {
-                        <span id="ball-number" className={Styles["ball-number"]}>
-                            {number}
-                        </span>
-                    }
-                </div>
+                <div className={ballStyleName}>{<span className={`${Styles["ball-number"]} ball-index-${index + 1}`}>{number}</span>}</div>
             )}
 
             <div className={`${Styles.loading} ${isDelayShowResult && number > 0 ? Styles["hide"] : ""}`}>

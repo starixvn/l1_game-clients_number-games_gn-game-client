@@ -27,7 +27,7 @@ function Home() {
     usePWAWoker();
     useEffect(() => {
         const { token, lang, gameId } = router.query;
-
+        console.log(router.query);
         const signIn = async () => {
             const userSession = await getUserSession(token as string);
 
@@ -49,6 +49,7 @@ function Home() {
                 setSession(userSession);
                 Sentry.setUser(userSession);
                 const { ref } = router.query;
+                console.log({ ref });
                 ref && setIsDirectMode(validDirectModeRefs.includes(ref?.toString()));
                 setGameId(gameId);
                 setLoading(false);
@@ -76,6 +77,7 @@ function Home() {
         return <SplashScreen locale={language}></SplashScreen>;
     }
 
+    console.log({ isDirectMode });
     return <Dashboard session={session} queryGame={+gameId} setIsUm={setIsUm} directMode={isDirectMode} tolgee={tolgee} />;
 }
 

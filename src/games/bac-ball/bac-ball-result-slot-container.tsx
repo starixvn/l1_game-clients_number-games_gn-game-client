@@ -8,10 +8,11 @@ import Style from "./bac-ball.module.scss";
 export interface IResultSlotContainer {
     delayTime: number;
     betChoice: string;
+    className?: string;
 }
 
 export const BacBallResultSlotContainer: React.FC<IResultSlotContainer> = (props) => {
-    const { delayTime, betChoice } = props;
+    const { delayTime, betChoice, className } = props;
     const betChoiceBalls = `${betChoice}Balls`;
     const defaultRoundData = [
         { number: 0, status: BallStatus.NONE, delayTime: 0 },
@@ -78,9 +79,9 @@ export const BacBallResultSlotContainer: React.FC<IResultSlotContainer> = (props
     }, [roundState, turnCounter]);
 
     return (
-        <div className={Style["ball-container"]}>
+        <div className={`${Style["ball-container"]} ${className}`}>
             {ballsData.map((result, index) => {
-                return <Ball key={index} {...result} />;
+                return <Ball key={index} index={index} {...result} />;
             })}
         </div>
     );

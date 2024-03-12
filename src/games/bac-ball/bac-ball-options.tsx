@@ -101,6 +101,7 @@ export const BacBallBetOptionsComponent = () => {
                 <button
                     ref={(el) => (rippleButtons.current[choice === "player" ? 0 : 1] = el)}
                     className={`btn-ripple ${Style["btn-ripple"]} ${isShowDisabledLayer}`}
+                    id={`${gameName}-choice-${choice}`}
                     onClick={() => {
                         onClickBet(choice);
                     }}
@@ -142,6 +143,7 @@ export const BacBallBetOptionsComponent = () => {
                 <button
                     ref={(el) => (rippleButtons.current[2] = el)}
                     className={`btn-ripple ${Style["btn-ripple"]} ${isShowDisabledLayer}`}
+                    id={`${gameName}-choice-tie`}
                     onClick={() => {
                         onClickBet(BacBallBetOptions.TIE);
                     }}

@@ -87,6 +87,7 @@ const ErrorCodeDictionary = {
     SB1934: "not_enough_spin",
     SB1935: "invalid_bet",
     SB1939: "message_hedge_bet",
+    SB1940: "message_exceeded_max_payout",
 };
 
 export const CommonErrorCodeList = [
