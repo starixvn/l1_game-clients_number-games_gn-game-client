@@ -88,11 +88,11 @@ export class PlaceBetHandler {
         signOut: Function,
         gameStateContext: GameStateContextModel<unknown, unknown>
     ) => {
-        const { playPlaceBetSound } = this.props;
+        const { playPlaceBetSound, dispatch, gameMessageHandler } = this.props;
         const enableSound = StorageHelper.get(localStorageKeys.enableSound) ?? false;
-        this.props.dispatch({ type: GameEventActionType.END_BET_PROCESSING, payload: {} });
+        dispatch({ type: GameEventActionType.END_BET_PROCESSING, payload: {} });
         this.clearRetryInterval();
-        this.props.dispatch({
+        dispatch({
             type: GameEventActionType.DISPLAY_POPUP,
             payload: { notice: null },
         });
@@ -102,20 +102,20 @@ export class PlaceBetHandler {
         } else {
             this.playAcceptedBetAnimation(endBet, gameStateContext);
             enableSound && playPlaceBetSound();
-            this.props.dispatch({
+            dispatch({
                 type: GameEventActionType.OWN_BETS,
                 payload: { ownBets },
             });
-            this.props.gameMessageHandler.broadcastGameEvent({ [messageEventType.UPDATE_PLAYER_BALANCE]: {} });
+            gameMessageHandler.broadcastGameEvent({ [messageEventType.UPDATE_PLAYER_BALANCE]: {} });
         }
-        this.props.dispatch({
+        dispatch({
             type: GameEventActionType.SHOW_CONFIRM_BET,
             payload: {
                 showConfirmBet: false,
             },
         });
 
-        this.props.dispatch({
+        dispatch({
             type: GameEventActionType.NOT_CONFIRM_OWN_BETS,
             payload: { notConfirmOwnBets: {} },
         });
@@ -236,6 +236,8 @@ export class PlaceBetHandler {
                 return;
             }
 
+            const enableSound = StorageHelper.get(localStorageKeys.enableSound) ?? false;
+            enableSound && this.props.playPlaceBetSound();
             this.updateNotConfirmedBetState(gameStateContext, betChoice, systemContext);
         }
     };
@@ -332,12 +334,13 @@ export class PlaceBetHandler {
     }
 
     protected sendBetMessage(betChoice: string, amount: number) {
-        this.props.dispatch({
+        const { dispatch, gameMessageHandler } = this.props;
+        dispatch({
             type: GameEventActionType.BET_PROCESSING,
             payload: { notice: null },
         });
 
-        this.props.gameMessageHandler.broadcastGameEvent({
+        gameMessageHandler.broadcastGameEvent({
             [messageEventType.SEND_SOCKET_MESSAGE]: { event: "bet", data: { betChoices: { [betChoice.toLowerCase()]: amount } } },
         });
     }

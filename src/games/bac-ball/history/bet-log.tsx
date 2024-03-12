@@ -2,6 +2,7 @@ import { FC, useState } from "react";
 
 import { numberWithCommas, seperateDateTime, sortedCollectionByTime } from "../../../_shared/helpers";
 import { useBallColor } from "../../../_shared/helpers/ball-color-helper";
+import { useClickSound } from "../../../_shared/react-hooks";
 import { useCommonTranslate, useSNTranslate } from "../../../_shared/react-hooks/use-translator";
 import { BetLogProps } from "../../../components/game-components/bet-history";
 import Styles from "./common.module.scss";
@@ -49,7 +50,10 @@ const BetLog: FC<BetLogProps> = ({ betLogs, handleScroll, onCloseModal: toggleBe
     const { t: translateCommon } = useCommonTranslate();
     const { t: translateSNGames } = useSNTranslate();
 
+    const clickSound = useClickSound();
+
     const handleClickDrawId = (betLogDetail: BetHistory) => {
+        clickSound();
         toggleBetHistory();
         setBetLogDetail(betLogDetail);
     };

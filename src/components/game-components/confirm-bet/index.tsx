@@ -3,7 +3,7 @@ import { confirmBet } from "../../../_shared/constants";
 import { useAuthContext, useGameActionContext } from "../../../_shared/react-contexts";
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
-import { useSNTranslate } from "../../../_shared/react-hooks";
+import { useClickSound, useSNTranslate } from "../../../_shared/react-hooks";
 import Styles from "./confirm-bet.module.scss";
 
 const ConfirmBet: React.FC = () => {
@@ -11,6 +11,7 @@ const ConfirmBet: React.FC = () => {
     const gameActionContext = useGameActionContext();
     const gameStateContext = useGameStateContext();
     const enabledQuickBet = useAuthContext().authorizeInfo.user.settings.quickBet;
+    const clickSound = useClickSound();
     const { t } = useSNTranslate();
 
     useEffect(() => {
@@ -18,6 +19,7 @@ const ConfirmBet: React.FC = () => {
     }, []);
 
     const onCancel = () => {
+        clickSound();
         dispatch({
             type: GameEventActionType.SHOW_CONFIRM_BET,
             payload: {

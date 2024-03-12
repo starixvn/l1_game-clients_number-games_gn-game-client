@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { isIOS, isMobileOnly } from "react-device-detect";
 
+import { useClickSound } from "../../../_shared/react-hooks";
 import Styles from "./base-dialog.module.scss";
 import { ModalType } from "./type";
 
@@ -46,10 +47,11 @@ const BaseDialog: React.FC<Props> = ({
     enableBackdrop,
     toggleBtnRef,
     isBlockUI,
-    isOverlap = false
+    isOverlap = false,
 }: Props) => {
     const wrapperRef = useRef<HTMLDivElement>(null);
     const classModal = `modal-${ModalType[type].toLocaleLowerCase()}`;
+    const clickSound = useClickSound();
 
     useEffect(() => {
         if (enableBackdrop) {
@@ -68,6 +70,8 @@ const BaseDialog: React.FC<Props> = ({
     useEffect(() => {
         const handleClickOutside = (event: any) => {
             if (isOpen && !wrapperRef?.current?.contains(event.target) && !toggleBtnRef?.current?.contains(event.target)) {
+                clickSound();
+
                 onCloseModal && onCloseModal();
             }
         };

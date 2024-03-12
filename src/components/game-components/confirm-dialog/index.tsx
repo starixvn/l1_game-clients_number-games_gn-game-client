@@ -1,6 +1,6 @@
 import { Markup } from "interweave";
 import React from "react";
-import { useSNTranslate } from "../../../_shared/react-hooks";
+import { useClickSound, useSNTranslate } from "../../../_shared/react-hooks";
 import BaseDialog, { Props } from "../base-dialog";
 import { ModalType } from "../base-dialog/type";
 import Styles from "./confirm-dialog.module.scss";
@@ -21,6 +21,7 @@ export const ConfirmDialog: React.FC<Props & SubmitDialogProps> = ({
     subContent,
 }: Props & SubmitDialogProps) => {
     const { t } = useSNTranslate();
+    const clickSound = useClickSound();
 
     return (
         <BaseDialog
@@ -43,7 +44,10 @@ export const ConfirmDialog: React.FC<Props & SubmitDialogProps> = ({
                 <div className={Styles["list-action"]}>
                     <button
                         className={`btn-red ${Styles["btn-yes"]}`}
-                        onClick={() => onCloseModal()}
+                        onClick={() => {
+                            clickSound();
+                            onCloseModal();
+                        }}
                         type="button"
                         data-testid="btn-no-summit-dialog"
                     >
@@ -51,7 +55,10 @@ export const ConfirmDialog: React.FC<Props & SubmitDialogProps> = ({
                     </button>
                     <button
                         className={`btn-red ${Styles["btn-no"]}`}
-                        onClick={() => onSubmit()}
+                        onClick={() => {
+                            clickSound();
+                            onSubmit();
+                        }}
                         type="button"
                         data-testid="btn-yes-summit-dialog"
                     >

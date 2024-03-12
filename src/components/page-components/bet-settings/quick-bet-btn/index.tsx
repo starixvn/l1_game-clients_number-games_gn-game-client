@@ -3,7 +3,7 @@ import { isIOS, isMobileOnly } from "react-device-detect";
 import { StorageHelper, localStorageKeys } from "../../../../_shared/helpers";
 import { useAuthContext } from "../../../../_shared/react-contexts";
 import { useGameStateContext } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
-import { useSNTranslate } from "../../../../_shared/react-hooks";
+import { useClickSound, useSNTranslate } from "../../../../_shared/react-hooks";
 import { updateUserQuickBetSetting } from "../../../../services/user-setting-service";
 import BaseDialog from "../../../game-components/base-dialog";
 import { ModalType } from "../../../game-components/base-dialog/type";
@@ -24,8 +24,10 @@ export const QuickBetBtn = () => {
         deviceClass = isIOS ? Styles["ios-device"] : Styles["android-device"];
     }
     const { t } = useSNTranslate();
+    const clickSound = useClickSound();
 
     const confirmQuickBet = () => {
+        clickSound();
         setIsShowTooltip(false);
         closeModal();
         updateUserQuickBetSetting(authContext.session, true);
@@ -33,6 +35,7 @@ export const QuickBetBtn = () => {
     };
 
     const closeModal = () => {
+        clickSound();
         setIsShowModalConfirm(false);
     };
 
@@ -53,6 +56,7 @@ export const QuickBetBtn = () => {
     }, [tooltipRef, isShowToolbarGuide]);
 
     const onClickQuickBet = () => {
+        clickSound();
         if (!enabledQuickBet) {
             setIsShowModalConfirm(true);
         } else {

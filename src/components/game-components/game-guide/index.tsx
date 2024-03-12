@@ -1,14 +1,13 @@
 import { FC, memo, useMemo, useRef, useState } from "react";
-import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
-import ModalContainer from "../modal-container";
 import { v4 as uuidv4 } from "uuid";
-import Styles from "./game-guide.module.scss";
-import Loader from "../loader";
-import { buildGameGuideUrl } from "../../../_shared/helpers";
-import { tolgee } from "../../../_shared/tolgee";
-import { useTheme } from "next-themes";
-import { useCommonTranslate } from "../../../_shared/react-hooks";
 import { Themes, buildVersion } from "../../../_shared/constants";
+import { buildGameGuideUrl } from "../../../_shared/helpers";
+import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
+import { useCommonTranslate } from "../../../_shared/react-hooks";
+import { tolgee } from "../../../_shared/tolgee";
+import Loader from "../loader";
+import ModalContainer from "../modal-container";
+import Styles from "./game-guide.module.scss";
 
 const GameGuideModal: FC = () => {
     const { isShowGameGuide } = useGameStateContext();
