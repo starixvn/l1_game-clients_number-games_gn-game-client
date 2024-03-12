@@ -81,7 +81,7 @@ export const BacBallResultBlock: FC = () => {
                 />
                 <BacBallResultSlotContainer delayTime={0} betChoice={BacBallBetOptions.PLAYER} className="player-balls" />
             </div>
-            <div className="result">
+            <div className={Style["result"]}>
                 <Cage
                     cageBallsLoopFrames={cageBallsLoopFrames}
                     cageBallFrames={cageBallFrames}

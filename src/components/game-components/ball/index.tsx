@@ -42,10 +42,6 @@ const Ball: FC<IBall> = (props) => {
             {isDelayShowResult && number > 0 && (
                 <div className={ballStyleName}>{<span className={`${Styles["ball-number"]} ball-index-${index + 1}`}>{number}</span>}</div>
             )}
-
-            <div className={`${Styles.loading} ${isDelayShowResult && number > 0 ? Styles["hide"] : ""}`}>
-                {status === BallStatus.LOADING && <div className={Styles["loading-icon"]}></div>}
-            </div>
         </div>
     );
 };

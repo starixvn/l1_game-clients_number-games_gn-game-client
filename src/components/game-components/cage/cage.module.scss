@@ -1,4 +1,7 @@
 .cage-area {
+    --cage-width: 13rem;
+    --cage-height: 13rem;
+
     position: relative;
     display: grid;
     grid: 1fr/1fr;
