@@ -11,7 +11,7 @@ export interface INotice {
 }
 export const GetLocalizedErrorMessage = (errorCode: string, isPlaceBet = false) => {
     if (!ErrorCodeDictionary[errorCode]) {
-        return "message_error_occurred";
+        return "Common.message_error_occurred";
     }
 
     let key = ErrorCodeDictionary[errorCode];
