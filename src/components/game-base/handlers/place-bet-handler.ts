@@ -204,13 +204,13 @@ export class PlaceBetHandler {
             this.suggestBetAmount
         );
 
-        if (criteriaValidateBet?.errorCode) {
-            this.sendNotice(this.getNotice(criteriaValidateBet?.errorCode, betChoice, criteriaValidateBet?.args));
+        if (criteriaValidateBet?.errorCode === NoticeErrorCode.validBet) {
+            this.handleValidBetChoice(enabledQuickBet, amount, betChoice, gameStateContext, systemContext);
 
             return;
         }
 
-        this.handleValidBetChoice(enabledQuickBet, amount, betChoice, gameStateContext, systemContext);
+        this.sendNotice(this.getNotice(criteriaValidateBet?.errorCode, betChoice, criteriaValidateBet?.args));
     };
 
     protected handleValidBetChoice = (
