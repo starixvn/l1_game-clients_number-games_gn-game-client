@@ -18,6 +18,18 @@ export enum SuggestBetMode {
     MaxBetRound = 4,
 }
 
+interface SuggestBetOptions {
+    suggestAmount: number;
+    isInsufficientFunds: boolean;
+    isOptionReachMaxBet: boolean;
+    isMinBet: boolean;
+    isMaxBetRound: boolean;
+    maxBetPerChoice: number;
+    roundMaxBet: number;
+    roundMinBet: number;
+    currentAmountOfChoice: number;
+}
+
 export const validateHedgeBet = (
     hedgeBetGroup: Record<any, any>,
     ownBets: Record<any, any>,
@@ -37,15 +49,15 @@ export const validateHedgeBet = (
     return isInvalid;
 };
 
-export const getRoundMinBet = (gameConfigs: GameStateContextModel<any, any>["gameConfigs"], userMinBet: number): number => {
+export const getRoundMinBet = (gameConfigs: GameStateContextModel<unknown, unknown>["gameConfigs"], userMinBet: number): number => {
     return Math.max(userMinBet, gameConfigs.minBet);
 };
 
-export const getRoundMaxBet = (gameConfigs: GameStateContextModel<any, any>["gameConfigs"], userMaxBet: number): number => {
+export const getRoundMaxBet = (gameConfigs: GameStateContextModel<unknown, unknown>["gameConfigs"], userMaxBet: number): number => {
     return Math.min(userMaxBet, gameConfigs.maxBet);
 };
 
-export const getMaxBetPerChoice = (gameConfigs: GameStateContextModel<any, any>["gameConfigs"], betChoice: string): number => {
+export const getMaxBetPerChoice = (gameConfigs: GameStateContextModel<unknown, unknown>["gameConfigs"], betChoice: string): number => {
     return gameConfigs.maxBetPerChoices[betChoice] || Infinity;
 };
 
@@ -87,31 +99,32 @@ export const getMaxAvailableAmountOfChoice = (
     return remainAmount > 0 ? remainAmount : 0;
 };
 
-export const getValidateBet = (
-    gameStateContext: GameStateContextModel<any, any>,
+export const getCriteriaValidateBet = (
+    gameStateContext: GameStateContextModel<unknown, unknown>,
     betChoice: string,
     amount: number,
     accountBalance: number,
     handleSuggestBet?: (betChoice: string, availableSuggestBet: IAvailableSuggestBetAmount) => void
-): { errorCode: string; args?: any } => {
-    const totalBetAmount = getTotalBetAmount(gameStateContext);
-    const availableSuggestBet = validationCriteriaBet(amount, accountBalance, gameStateContext, betChoice, totalBetAmount);
-    if (availableSuggestBet.amount > 0 && availableSuggestBet.isAvailable) {
-        handleSuggestBet?.(betChoice, availableSuggestBet);
+): { errorCode: string; args?: unknown } => {
+    const criteria = composeValidationCriteria(amount, accountBalance, gameStateContext, betChoice, getTotalBetAmount(gameStateContext));
+
+    if (criteria.amount > 0 && criteria.isAvailable) {
+        handleSuggestBet?.(betChoice, criteria);
+
         return;
     }
 
-    if (availableSuggestBet?.errorCode) {
-        return { errorCode: availableSuggestBet?.errorCode, args: availableSuggestBet?.args };
+    if (criteria?.errorCode) {
+        return { errorCode: criteria?.errorCode, args: criteria?.args };
     }
 
     return { errorCode: MessageErrorCode.validBet };
 };
 
-const validationCriteriaBet = (
+const composeValidationCriteria = (
     amount: number,
     accountBalance: number,
-    context: GameStateContextModel<any, any>,
+    context: GameStateContextModel<unknown, unknown>,
     betChoice: string,
     totalBetAmount: number
 ): IAvailableSuggestBetAmount => {
@@ -136,30 +149,30 @@ const validationCriteriaBet = (
     const isMinBetResult = isMinBet(amount, roundMinBet);
     const isMaxBetRoundResult = isMaxBetRound(currentTotalAmount, roundMaxBet, totalBetAmount);
 
-    return suggestBetMode(
+    return suggestBetMode({
         suggestAmount,
-        isInsufficientFundsResult,
-        isOptionReachMaxBetResult,
-        isMinBetResult,
-        isMaxBetRoundResult,
+        isInsufficientFunds: isInsufficientFundsResult,
+        isOptionReachMaxBet: isOptionReachMaxBetResult,
+        isMinBet: isMinBetResult,
+        isMaxBetRound: isMaxBetRoundResult,
         maxBetPerChoice,
         roundMaxBet,
         roundMinBet,
-        currentAmountOfChoice
-    );
+        currentAmountOfChoice,
+    });
 };
 
-const suggestBetMode = (
-    suggestAmount: number,
-    isInsufficientFunds: boolean,
-    isOptionReachMaxBet: boolean,
-    isMinBet: boolean,
-    isMaxBetRound: boolean,
-    maxBetPerChoice: number,
-    roundMaxBet: number,
-    roundMinBet: number,
-    currentAmountOfChoice: number
-): IAvailableSuggestBetAmount => {
+const suggestBetMode = ({
+    suggestAmount,
+    isInsufficientFunds,
+    isOptionReachMaxBet,
+    isMinBet,
+    isMaxBetRound,
+    maxBetPerChoice,
+    roundMaxBet,
+    roundMinBet,
+    currentAmountOfChoice,
+}: SuggestBetOptions): IAvailableSuggestBetAmount => {
     if (suggestAmount === 0) {
         if (isMaxBetRound) {
             return getMaxBetRoundMode(roundMaxBet, maxBetPerChoice);
@@ -232,7 +245,7 @@ const isSuggestBetAvailable = (
     );
 };
 
-export const getTotalBetAmount = (gameStateContext: GameStateContextModel<any, any>) => {
+export const getTotalBetAmount = (gameStateContext: GameStateContextModel<unknown, unknown>) => {
     const notConfirmOwnBets = gameStateContext.notConfirmOwnBets;
     const ownBets = gameStateContext.ownBets;
     let totalAmount = 0;
