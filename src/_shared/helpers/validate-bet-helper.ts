@@ -108,6 +108,10 @@ export const findHedgeBetGroup = (hedgeBetGroups: string[][], betChoice: string)
     return hedgeBetGroups?.find((group) => group.includes(betChoice)) ?? [];
 };
 
+export const getAccountBalance = (balance: number): number => {
+    return Math.trunc(balance || 0);
+};
+
 export const getMaxAvailableAmountOfChoice = (
     maxBetPerChoice: number,
     currentAmountOfChoice: number,
