@@ -157,6 +157,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             type: GameEventActionType.SIGN_OUT,
             payload: { roundState: RoundState.None },
         });
+        this.socket?.disconnect();
 
         this.clearGameTimoutAndInterval();
         this.clearDisconnectTimeout();
