@@ -70,9 +70,9 @@ function Home() {
         signIn();
     }, []);
 
-    // if (isUM) {
-    return <UMPage locale={language} />;
-    // }
+    if (isUM) {
+        return <UMPage locale={language} />;
+    }
 
     if (loading) {
         return <SplashScreen locale={language}></SplashScreen>;
