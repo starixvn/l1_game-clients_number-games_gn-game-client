@@ -28,7 +28,7 @@ export class Scoreboard extends Component<ScoreboardComponentProps> {
         isShowBlink && BacBallBigRoadConverter.addBlinkNode(settlements);
 
         return (
-            <div className={Styles["scoreboard-full"]}>
+            <div className={Styles["scoreboard-full"]} id="big-road">
                 <SwitchableScoreboard
                     rounds={settlements}
                     type="switch"
@@ -50,7 +50,7 @@ export class Scoreboard extends Component<ScoreboardComponentProps> {
         const rounds = isShowBlink ? [{}, ...roundHistory] : roundHistory;
 
         return (
-            <div className={Styles["scoreboard-full"]}>
+            <div className={Styles["scoreboard-full"]} id="bead-road">
                 <SwitchableScoreboard
                     rounds={rounds}
                     type="switch"
