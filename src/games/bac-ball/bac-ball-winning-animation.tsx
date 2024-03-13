@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 import { loadPixiAnimations } from "../../_shared/helpers/pixi-resource-loader";
 import { useWinningHighLightResult } from "../../_shared/react-hooks/use-high-light";
+import Styles from "./bac-ball.module.scss";
 
 type Props = {
     choice: string;
@@ -33,19 +34,22 @@ export const BacBallWinningAnimation: React.FC<Props> = ({ choice, resourceName,
     return (
         winningHighLightResult({ betChoice: choice }) &&
         winningFrames?.length > 0 && (
-            <Stage width={width} height={height} options={{ backgroundAlpha: 0 }} className={className}>
-                <Container position={position}>
-                    <AnimatedSprite
-                        anchor={0.5}
-                        textures={winningFrames}
-                        autoUpdate
-                        isPlaying={true}
-                        initialFrame={0}
-                        animationSpeed={0.3}
-                        loop={true}
-                    />
-                </Container>
-            </Stage>
+            <div>
+                <div className={Styles[`winning-${choice}`]}></div>
+                <Stage width={width} height={height} options={{ backgroundAlpha: 0 }} className={className}>
+                    <Container position={position}>
+                        <AnimatedSprite
+                            anchor={0.5}
+                            textures={winningFrames}
+                            autoUpdate
+                            isPlaying={true}
+                            initialFrame={0}
+                            animationSpeed={0.3}
+                            loop={true}
+                        />
+                    </Container>
+                </Stage>
+            </div>
         )
     );
 };
