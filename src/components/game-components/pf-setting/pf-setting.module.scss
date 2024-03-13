@@ -29,7 +29,9 @@
 
 .form-overlay {
     @extend .child-of-form;
+    display: block;
     background-color: rgba(0, 0, 0, 0.226);
+    z-index: 2;
 }
 
 .client-seed-options {
@@ -39,6 +41,7 @@
     flex-direction: column;
     gap: 1.3rem;
     justify-content: center;
+    z-index: 1;
 }
 
 .client-seed-option {
