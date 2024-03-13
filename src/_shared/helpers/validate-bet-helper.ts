@@ -65,17 +65,12 @@ export const getCurrentAmountOfChoice = (ownBets: object, notConfirmOwnBets: obj
     return (ownBets[betChoice] || 0) + (notConfirmOwnBets[betChoice] || 0);
 };
 
-export const isInsufficientFunds = (
-    amount: number,
-    accountBalance: number,
-    suggestAmount: number,
-    isOptionReachMaxBetResult: boolean
-): boolean => {
-    if (suggestAmount > 0 && isOptionReachMaxBetResult) {
-        return false;
+export const isInsufficientFunds = (amount: number, accountBalance: number, totalBetAmount: number, enabledQuickBet: boolean): boolean => {
+    if (enabledQuickBet) {
+        return amount > accountBalance;
     }
 
-    return amount > accountBalance;
+    return totalBetAmount + amount > accountBalance;
 };
 
 export const isOptionReachMaxBet = (currentTotalAmountOfChoice: number, maxBetPerChoice: number): boolean => {
@@ -97,11 +92,14 @@ export const isInPhasePreventBet = (gameStateContext: GameStateContextModel<unkn
 export const isBalanceUnavailable = (
     availableBalance: number,
     amount: number,
-    gameStateContext: GameStateContextModel<unknown, unknown>
+    gameStateContext: GameStateContextModel<unknown, unknown>,
+    enabledQuickBet: boolean
 ): boolean => {
+    if (enabledQuickBet) {
+        return availableBalance === 0;
+    }
     const totalBetAmount = getTotalBetAmount(gameStateContext);
-
-    return availableBalance === 0 || (amount > 0 && availableBalance - totalBetAmount === 0);
+    return amount > 0 && availableBalance - totalBetAmount === 0;
 };
 
 export const isHedgeBet = (
@@ -143,9 +141,17 @@ export const getCriteriaValidateBet = (
     betChoice: string,
     amount: number,
     accountBalance: number,
+    enabledQuickBet: boolean,
     handleSuggestBet?: (betChoice: string, availableSuggestBet: IAvailableSuggestBetAmount) => void
 ): { errorCode: string; args?: object } => {
-    const criteria = composeValidationCriteria(amount, accountBalance, gameStateContext, betChoice, getTotalBetAmount(gameStateContext));
+    const criteria = composeValidationCriteria(
+        amount,
+        accountBalance,
+        gameStateContext,
+        betChoice,
+        getTotalBetAmount(gameStateContext),
+        enabledQuickBet
+    );
 
     if (criteria.suggestAmount > 0 && criteria.isSuggestBet) {
         handleSuggestBet?.(betChoice, criteria);
@@ -165,7 +171,8 @@ const composeValidationCriteria = (
     accountBalance: number,
     context: GameStateContextModel<unknown, unknown>,
     betChoice: string,
-    totalBetAmount: number
+    totalBetAmount: number,
+    enabledQuickBet: boolean
 ): IAvailableSuggestBetAmount => {
     const { gameConfigs, userStakeLevel, notConfirmOwnBets, ownBets } = context;
     const { minBet: userMinBet, maxBet: userMaxBet } = userStakeLevel;
@@ -174,14 +181,13 @@ const composeValidationCriteria = (
     const roundMaxBet = getRoundMaxBet(gameConfigs, userMaxBet);
     const maxBetPerChoice = getMaxBetPerChoice(gameConfigs, betChoice);
     const currentAmountOfChoice = getCurrentAmountOfChoice(ownBets, notConfirmOwnBets, betChoice);
-    const currentTotalAmount = totalBetAmount + amount;
     const maxAvailableAmountOfChoice = getMaxAvailableAmountOfChoice(maxBetPerChoice, currentAmountOfChoice, roundMaxBet, totalBetAmount);
     const suggestAmount = Math.min(accountBalance, maxAvailableAmountOfChoice);
     const isOptionReachMaxBetResult = isOptionReachMaxBet(currentAmountOfChoice + amount, maxBetPerChoice);
-    const isInsufficientFundsResult = isInsufficientFunds(amount, accountBalance, suggestAmount, isOptionReachMaxBetResult);
+    const isInsufficientFundsResult = isInsufficientFunds(amount, accountBalance, totalBetAmount, enabledQuickBet);
 
     const isMinBetResult = isMinBet(amount, roundMinBet);
-    const isMaxBetRoundResult = isMaxBetRound(currentTotalAmount, roundMaxBet, totalBetAmount);
+    const isMaxBetRoundResult = isMaxBetRound(totalBetAmount + amount, roundMaxBet, totalBetAmount);
 
     return determineBetMode({
         suggestAmount,

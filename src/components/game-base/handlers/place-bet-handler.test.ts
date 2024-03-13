@@ -18,7 +18,7 @@ describe("placeBet", () => {
 
         systemContextModel = stub<SystemContextModel>();
         gameMessageHandler = stub<GameMessageHandler>();
-
+        gameConfigs = stub<GameConfigs>();
         placeBetHandlerProps = {
             gameName: "test",
             dispatch: jest.fn(),
@@ -76,7 +76,8 @@ describe("placeBet", () => {
 
         it("does not call handleProcessingBet when isProcessingBet is false", () => {
             // Arrange
-            const gameStateContext = { isProcessingBet: false, roundState: RoundState.InRound };
+
+            const gameStateContext = { isProcessingBet: false, roundState: RoundState.InRound, gameConfigs };
             gameStateContextModel = stub<GameStateContextModel<any, any>>(gameStateContext);
             const handleProcessingBetSpy = jest.spyOn(placeBetHandler, "handleProcessingBet");
 
@@ -93,8 +94,13 @@ describe("placeBet", () => {
             // Arrange
             placeBetHandlerProps.getPlayerBalance = jest.fn().mockReturnValue(0);
             placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
-
-            const gameStateContext = { isProcessingBet: false, roundState: RoundState.InRound };
+            const gameStateContext = {
+                isProcessingBet: false,
+                roundState: RoundState.InRound,
+                gameConfigs,
+                notConfirmOwnBets: {},
+                ownBets: {},
+            };
             gameStateContextModel = stub<GameStateContextModel<any, any>>(gameStateContext);
             const sendNoticeSpy = jest.spyOn(placeBetHandler, "sendNotice");
             const notice = {
@@ -150,7 +156,6 @@ describe("placeBet", () => {
             // Arrange
             const availableBalance = 100;
             const amount = 50;
-            gameConfigs = stub<GameConfigs>();
             placeBetHandlerProps.getPlayerBalance = jest.fn().mockReturnValue(availableBalance);
             placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
             const gameStateContext = {
@@ -216,7 +221,6 @@ describe("placeBet", () => {
                 isInPhasePreventBet: jest.fn(() => false),
                 isBalanceUnavailable: jest.fn(() => false),
             }));
-            gameConfigs = stub<GameConfigs>();
 
             placeBetHandlerProps.hedgeBetGroups = [["choice1", "choice2"]];
             placeBetHandlerProps.getPlayerBalance = jest.fn().mockReturnValue(200);

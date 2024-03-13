@@ -161,7 +161,7 @@ export class PlaceBetHandler {
             return;
         }
 
-        if (isBalanceUnavailable(getAccountBalance(this.props.getPlayerBalance()), amount, gameStateContext)) {
+        if (isBalanceUnavailable(getAccountBalance(this.props.getPlayerBalance()), amount, gameStateContext, enabledQuickBet)) {
             this.sendNotice(this.getNotice(NoticeErrorCode.notEnoughMoney));
 
             return;
@@ -202,6 +202,7 @@ export class PlaceBetHandler {
             betChoice,
             amount,
             getAccountBalance(this.props.getPlayerBalance()),
+            enabledQuickBet,
             this.suggestBetAmount
         );
 
