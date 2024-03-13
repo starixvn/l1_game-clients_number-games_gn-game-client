@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { formatOdds } from "../../../_shared/helpers";
 import { useAuthContext } from "../../../_shared/react-contexts";
@@ -33,15 +33,19 @@ export const Odds: React.FC<Props> = ({ gameName, choice, className, animationDu
                 setShowOddsIcon(false);
             }, animationDuration * 1000);
     }, [showOddsIcon, animationDuration]);
-
-    return (
-        <div
-            id={`${gameName}-${choice}-odds`}
-            className={`text-center ${Styles["bet-odds"]} ${className} ${isOddUp ? Styles["up"] : Styles["down"]} ${
-                showOddsIcon ? Styles["show-odds-icon"] : ""
-            }`}
-        >
-            {formatOdds(oddsValue, fractionalOddsFormat)}
-        </div>
-    );
+    const odds = formatOdds(oddsValue, fractionalOddsFormat);
+    return useMemo(() => {
+        return oddsValue != 0 ? (
+            <div
+                id={`${gameName}-${choice}-odds`}
+                className={`text-center ${Styles["bet-odds"]} ${className} ${isOddUp ? Styles["up"] : Styles["down"]} ${
+                    showOddsIcon ? Styles["show-odds-icon"] : ""
+                }`}
+            >
+                {odds}
+            </div>
+        ) : (
+            <></>
+        );
+    }, [odds]);
 };
