@@ -34,18 +34,20 @@ export class TurnIdHandler {
         const turnIndex = drawId % numberOfTurnsPerRound;
         this.turnCounter = turnIndex === 0 ? numberOfTurnsPerRound : turnIndex;
 
-        const { roundState, remainingTime } = this.props.gameStateContextModel();
+        const { roundState, remainingTime, pfSetting } = this.props.gameStateContextModel();
         const { showResult, wholeTurn } = this.props.durations;
 
-        this.props.gameMessageHandler.broadcastGameEvent({
-            [messageEventType.UPDATE_PF_SETTING]: {
-                checkDrawId: true,
-                data: {
-                    drawId,
-                    randomClientSeed: randomNumberSeries(4),
+        if (pfSetting.drawId != drawId) {
+            this.props.dispatch({
+                type: GameEventActionType.UPDATE_PF_SETTING,
+                payload: {
+                    pfSetting: {
+                        drawId,
+                        randomClientSeed: randomNumberSeries(4),
+                    },
                 },
-            },
-        });
+            });
+        }
 
         writeDebugLog({
             name: "handleDrawId - turncounter",

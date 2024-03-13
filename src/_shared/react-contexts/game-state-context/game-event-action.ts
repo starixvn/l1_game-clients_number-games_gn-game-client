@@ -42,7 +42,7 @@ export enum GameEventActionType {
     TOGGLE_BET_HISTORY = "TOGGLE_BET_HISTORY",
     TOGGLE_GAME_GUIDE = "TOGGLE_GAME_GUIDE",
     TOGGLE_PF_SETTING = "TOGGLE_PF_SETTING",
-    PROVABLY_FAIR = "PF",
+    UPDATE_PF_SETTING = "UPDATE_PF_SETTING",
     SUGGEST_BET = "SUGGEST_BET",
 }
 
@@ -110,6 +110,7 @@ export interface GameEventPayload {
     isShowGameGuide?: boolean;
     isShowPFSetting?: boolean;
     suggestBet?: SuggestBet;
+    pfSetting?: PFSettingData;
 }
 
 export interface GameEventAction {

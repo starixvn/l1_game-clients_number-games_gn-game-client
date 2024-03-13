@@ -34,8 +34,8 @@ export const messageEventType = {
     UPDATE_PLAYER_BALANCE: "updatePlayerBalance",
     CLEAR_GAME_TIMEOUT_AND_INTERVAL: "clearGameTimeoutAndInterval",
     PROVABLY_FAIR: "pf",
-    UPDATE_PF_SETTING: "updatePfSetting",
     IN_GAME_SERVER_SEED: "serverSeedHash",
+    SEND_SOCKET_MESSAGE_WITH_CLIENT_SEED: "sendSocketMessageWithClientSeed",
 };
 
 export class GameMessageHandler {
@@ -147,9 +147,10 @@ export class GameMessageHandler {
     };
 
     handleProvablyFair = ({ pf }) => {
-        this.broadcastGameEvent({
-            [messageEventType.UPDATE_PF_SETTING]: {
-                data: {
+        this.dispatch({
+            type: GameEventActionType.UPDATE_PF_SETTING,
+            payload: {
+                pfSetting: {
                     ...pf,
                 },
             },
@@ -157,9 +158,10 @@ export class GameMessageHandler {
     };
 
     handleInGameServerSeedHash = ({ serverSeedHash }) => {
-        this.broadcastGameEvent({
-            [messageEventType.UPDATE_PF_SETTING]: {
-                data: {
+        this.dispatch({
+            type: GameEventActionType.UPDATE_PF_SETTING,
+            payload: {
+                pfSetting: {
                     serverSeedHash,
                 },
             },

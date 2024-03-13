@@ -7,6 +7,7 @@ import { GetLocalizedErrorMessage } from "../../helpers/notice-helper";
 import { GameEventAction, GameEventActionType } from "./game-event-action";
 import { GameStateContextModel, initialGameStateContextModel } from "./game-state-context-model";
 import { tolgee } from "../../tolgee";
+import { randomNumberSeries } from "../../helpers";
 
 const GameStateContext = createContext({ rate: 1 } as GameStateContextModel<any, any>);
 const GameStateDispatchContext = createContext(null);
@@ -77,6 +78,7 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
         isShowGameGuide,
         isShowPFSetting,
         suggestBet,
+        pfSetting,
     } = payload;
 
     // console.log("payload: ", JSON.stringify(payload));
@@ -140,6 +142,18 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
         }
 
         case GameEventActionType.ROUND_DATA: {
+            if (roundData.drawId != state.pfSetting.drawId) {
+                return {
+                    ...state,
+                    roundData,
+                    pfSetting: {
+                        ...state.pfSetting,
+                        drawId: roundData.drawId,
+                        randomClientSeed: randomNumberSeries(4),
+                    },
+                };
+            }
+
             return {
                 ...state,
                 roundData,
@@ -411,6 +425,16 @@ function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEven
             return {
                 ...state,
                 suggestBet,
+            };
+        }
+
+        case GameEventActionType.UPDATE_PF_SETTING: {
+            return {
+                ...state,
+                pfSetting: {
+                    ...state.pfSetting,
+                    ...pfSetting,
+                },
             };
         }
 

@@ -324,7 +324,7 @@ export class PlaceBetHandler {
         });
 
         this.props.gameMessageHandler.broadcastGameEvent({
-            [messageEventType.SEND_SOCKET_MESSAGE]: { event: "bet", data: { betChoices } },
+            [messageEventType.SEND_SOCKET_MESSAGE_WITH_CLIENT_SEED]: { event: "bet", data: { betChoices } },
         });
     }
 
@@ -336,7 +336,10 @@ export class PlaceBetHandler {
         });
 
         gameMessageHandler.broadcastGameEvent({
-            [messageEventType.SEND_SOCKET_MESSAGE]: { event: "bet", data: { betChoices: { [betChoice.toLowerCase()]: amount } } },
+            [messageEventType.SEND_SOCKET_MESSAGE_WITH_CLIENT_SEED]: {
+                event: "bet",
+                data: { betChoices: { [betChoice.toLowerCase()]: amount } },
+            },
         });
     }
 

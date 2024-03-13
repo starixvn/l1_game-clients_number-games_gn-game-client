@@ -4,10 +4,6 @@ import ModalContainer from "../modal-container";
 import { useCommonTranslate } from "../../../_shared/react-hooks";
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 import Styles from "./pf-setting.module.scss";
-import { StorageHelper, localStorageKeys } from "../../../_shared/helpers";
-import { PFSettingData } from "../../game-base/type";
-import { useAuthContext, useGameContext } from "../../../_shared/react-contexts";
-import { messageEventType } from "../../game-base/handlers";
 
 const NUMBER_VALUES = "0123456789";
 
@@ -34,14 +30,11 @@ const PFSetting: FC = () => {
     const randomSeed = useRef<HTMLInputElement>();
     const manualRadio = useRef<HTMLInputElement>();
     const manualSeed = useRef<HTMLInputElement>();
-    const { authorizeInfo } = useAuthContext();
-    const uid = authorizeInfo.user.UID;
+    const { pfSetting, ownBets } = useGameStateContext();
     const [isFirstLoad, setIsFirstLoad] = useState<boolean>(true);
-    const provablyFairData = StorageHelper.get<PFSettingData>(`${localStorageKeys.pfSetting}-${uid}`);
-    const [isManualMode, setIsManualMode] = useState<boolean>(provablyFairData?.useManualClientSeed || false);
-    const { ownBets } = useGameStateContext();
+    const [isManualMode, setIsManualMode] = useState<boolean>(pfSetting?.useManualClientSeed || false);
     const { t: translateCommon } = useCommonTranslate();
-    const { gameMessageHandler } = useGameContext();
+    const dispatch = useGameStatesDispatch();
     const handleOnKeyPress = (event: any) => {
         const chr = String.fromCharCode(event.which);
         if ((NUMBER_VALUES.indexOf(chr) < 0 && event.which !== 8) || (event.target.value.length >= 4 && event.which !== 8)) {
@@ -55,9 +48,10 @@ const PFSetting: FC = () => {
                 event.target.value = randomSeed.current.value;
             }
 
-            gameMessageHandler.broadcastGameEvent({
-                [messageEventType.UPDATE_PF_SETTING]: {
-                    data: {
+            dispatch({
+                type: GameEventActionType.UPDATE_PF_SETTING,
+                payload: {
+                    pfSetting: {
                         manualClientSeed: event.target.value,
                     },
                 },
@@ -66,7 +60,6 @@ const PFSetting: FC = () => {
     }, []);
 
     useEffect(() => {
-        console.log("Change mode", manualRadio.current.checked);
         if (isManualMode) {
             if (!isFirstLoad) {
                 manualSeed.current.focus();
@@ -87,17 +80,19 @@ const PFSetting: FC = () => {
         setIsFirstLoad(false);
         if (manualRadio.current.checked) {
             manualSeed.current.value = randomSeed.current.value;
-            gameMessageHandler.broadcastGameEvent({
-                [messageEventType.UPDATE_PF_SETTING]: {
-                    data: {
+            dispatch({
+                type: GameEventActionType.UPDATE_PF_SETTING,
+                payload: {
+                    pfSetting: {
                         useManualClientSeed: true,
                     },
                 },
             });
         } else {
-            gameMessageHandler.broadcastGameEvent({
-                [messageEventType.UPDATE_PF_SETTING]: {
-                    data: {
+            dispatch({
+                type: GameEventActionType.UPDATE_PF_SETTING,
+                payload: {
+                    pfSetting: {
                         useManualClientSeed: false,
                         manualClientSeed: undefined,
                     },
@@ -126,7 +121,7 @@ const PFSetting: FC = () => {
                                 id="random-seed"
                                 name="client-seed"
                                 checked={!isManualMode}
-                                value={provablyFairData.randomClientSeed}
+                                value={pfSetting.randomClientSeed}
                                 onChange={handleCheckRadio}
                             />
                             <label htmlFor="random-seed">{translateCommon("pf_client_seed_para_4")}</label>
@@ -136,7 +131,7 @@ const PFSetting: FC = () => {
                                 ref={randomSeed}
                                 type="text"
                                 id="random-client-seed"
-                                value={provablyFairData.randomClientSeed}
+                                value={pfSetting.randomClientSeed}
                                 readOnly={true}
                                 disabled={isManualMode}
                             />
@@ -162,7 +157,7 @@ const PFSetting: FC = () => {
                                 inputMode="numeric"
                                 onKeyDown={handleOnKeyPress}
                                 disabled={!isManualMode}
-                                defaultValue={provablyFairData?.manualClientSeed ?? ""}
+                                defaultValue={pfSetting?.manualClientSeed ?? ""}
                             />
                         </div>
                     </div>
@@ -171,7 +166,7 @@ const PFSetting: FC = () => {
             <div className="pf-setting-seed">
                 <h3>{translateCommon("pf_header_server_seed")}</h3>
                 <div className={Styles["server-seed-field"]}>
-                    <input id="server-seed-hash" className={Styles["server-seed-hash"]} value={provablyFairData?.serverSeedHash} readOnly />
+                    <input id="server-seed-hash" className={Styles["server-seed-hash"]} value={pfSetting?.serverSeedHash} readOnly />
                     <button onClick={handleCopyServerSeedHash}>Copy</button>
                 </div>
                 {Object.keys(ownBets).length > 0 && (

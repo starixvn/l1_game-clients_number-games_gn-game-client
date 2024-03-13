@@ -158,6 +158,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             payload: { roundState: RoundState.None },
         });
         this.socket?.disconnect();
+        this.savePFSetting();
 
         this.clearGameTimoutAndInterval();
         this.clearDisconnectTimeout();
@@ -177,6 +178,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.props.dispatch({ type: GameEventActionType.END_BET_PROCESSING, payload: {} });
         this.clearDisconnectTimeout();
         this.registerHandlers();
+        this.loadPFSetting();
         this.connectToGameService();
         !this.props.systemContextModel.isUserGesture &&
             this.props.systemDispatch({
@@ -247,7 +249,10 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.gameMessageHandler.register(messageEventType.CLEAR_GAME_TIMEOUT_AND_INTERVAL, this.clearGameTimoutAndInterval.bind(this));
         this.gameMessageHandler.register(messageEventType.SEND_SOCKET_MESSAGE, this.sendSocketMessage.bind(this));
         this.gameMessageHandler.register(messageEventType.UPDATE_PLAYER_BALANCE, this.updateUserBalance.bind(this));
-        this.gameMessageHandler.register(messageEventType.UPDATE_PF_SETTING, this.updatePFSetting.bind(this));
+        this.gameMessageHandler.register(
+            messageEventType.SEND_SOCKET_MESSAGE_WITH_CLIENT_SEED,
+            this.sendSocketMessageWithClientSeed.bind(this)
+        );
         this.playerHandler.registerEvents(setBalance);
         this.gameErrorHandler.registerEvents(signOut);
         this.gameFinishHandler.registerEvents();
@@ -271,17 +276,29 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.socket.emit(event, data);
     };
 
-    updatePFSetting(message) {
-        const { checkDrawId, data } = message[messageEventType.UPDATE_PF_SETTING];
+    sendSocketMessageWithClientSeed = (message) => {
+        const { event, data } = message[messageEventType.SEND_SOCKET_MESSAGE_WITH_CLIENT_SEED];
+        const { pfSetting } = this.props.gameStateContextModel;
+        const clientSeed = pfSetting?.useManualClientSeed ? pfSetting?.manualClientSeed : pfSetting?.randomClientSeed;
+
+        this.socket.emit(event, { ...data, clientSeed });
+    };
+
+    loadPFSetting() {
         const uid = (this.context as AuthContextModel).authorizeInfo?.user?.UID;
-        const oldPFSetting = StorageHelper.get<PFSettingData>(`${localStorageKeys.pfSetting}-${uid}`);
-        if (!checkDrawId || oldPFSetting?.drawId != data?.drawId) {
-            const newPFSetting = {
-                ...oldPFSetting,
-                ...data,
-            };
-            StorageHelper.set(`${localStorageKeys.pfSetting}-${uid}`, newPFSetting);
-        }
+        const pfSetting = StorageHelper.get<PFSettingData>(`${localStorageKeys.pfSetting}-${uid}`);
+        this.props.dispatch({
+            type: GameEventActionType.UPDATE_PF_SETTING,
+            payload: {
+                pfSetting: pfSetting,
+            },
+        });
+    }
+
+    savePFSetting() {
+        const uid = (this.context as AuthContextModel).authorizeInfo?.user?.UID;
+        const { pfSetting } = this.props.gameStateContextModel;
+        StorageHelper.set(`${localStorageKeys.pfSetting}-${uid}`, pfSetting);
     }
 
     handleUM(gameMessage) {

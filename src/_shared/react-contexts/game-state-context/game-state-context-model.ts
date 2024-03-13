@@ -50,6 +50,7 @@ export interface GameStateContextModel<Result, SettlementResult> {
     isShowGameGuide: boolean;
     isShowPFSetting: boolean;
     suggestBet: SuggestBet;
+    pfSetting?: PFSettingData;
 }
 
 export const initialGameStateContextModel = ({ defaultResult, defaultSettlementResult }) => {
