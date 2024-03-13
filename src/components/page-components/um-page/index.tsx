@@ -50,10 +50,12 @@ const UMPage: React.FC<{ locale: string }> = ({ locale }) => {
                 <img src="/static/images/error-page/um-spaceman.png" alt="spaceman" />
             </div>
             <p className="um-title">
-                {t(`${ResourceTypes.COMMON}.message_sys_maintenance`)} <br /> {t(`${ResourceTypes.SABA_NUMBER}.um_title`)}
+                {t(`${ResourceTypes.COMMON}.message_sys_maintenance`)} <br /> {t(`${ResourceTypes.SABA_NUMBER}.message_um_title`)}
             </p>
             <p className="highlight break">
-                <Markup content={t(`${ResourceTypes.SABA_NUMBER}.um_content`, { startTime, endTime }).replaceTolgeeFormat()}></Markup>
+                <Markup
+                    content={t(`${ResourceTypes.SABA_NUMBER}.message_um_content`, { startTime, endTime }).replaceTolgeeFormat()}
+                ></Markup>
             </p>
             <p>{t(`${ResourceTypes.COMMON}.under_maintenance_suggest`)}</p>
             <button>{t(`${ResourceTypes.COMMON}.back`)}</button>
