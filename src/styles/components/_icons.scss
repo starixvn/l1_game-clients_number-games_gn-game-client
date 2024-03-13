@@ -14,6 +14,20 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-copy:before {
+    content: "\e911";
+    color: #fff;
+}
+
+.icon-info:before {
+    content: "\e912";
+    color: #fff;
+}
+
+.icon-clock:before {
+    content: "\e910";
+}
+
 .icon-music-off:before {
     content: "\e90d";
     color: #fff;

@@ -60,13 +60,14 @@
     padding-left: var(--spacing-size-2);
     padding-right: var(--spacing-size-2);
     padding-bottom: 2rem;
+    padding-top: 0.4rem;
 
     .swiper-slide .banner-img {
         width: 34.8rem;
     }
 
     .swiper-pagination-bullet {
-        transition: width cubic-bezier(0.33, 0, 0.67, 1) 0.4s, background-color linear 0.25s;
+        transition: width cubic-bezier(0.33, 0, 0.67, 1) 0.25s, background-color linear 0.25s;
     }
 
     .swiper-pagination-bullet-active {

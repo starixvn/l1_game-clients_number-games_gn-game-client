@@ -305,11 +305,33 @@ class Dashboard extends React.PureComponent<Props, State> {
     renderLobby() {
         return (
             <>
+                <div className="background-galaxy">
+                    <img className="galaxy-2" src="/static/images/bg-galaxy.jpg" alt="galaxy" />
+                    <img className="galaxy-1" src="/static/images/bg-galaxy.jpg" alt="galaxy" />
+                </div>
+                <div className="star-field">
+                    <div className="layer"></div>
+                    <div className="layer"></div>
+                    <div className="layer"></div>
+                </div>
                 <Banner />
                 <div className={Styles["lobby-container"]}>
-                    <div className={`${Styles["icon-game"]}`} id="ico-bacball" onClick={() => this.setState({ openGameId: 1001 })}>
-                        <img src="/static/images/game-board-detail/icon-game-1.png" alt="icon-game-1" />
-                        <span className={`${Styles["game-name"]}`}>Bac Ball</span>
+                    <div className={Styles["game-board-detail"]} id="ico-bacball" onClick={() => this.setState({ openGameId: 1001 })}>
+                        <div className={`${Styles["icon-game"]}`}>
+                            <img src="/static/images/game-board-detail/icon-game-1.png" alt="icon-game-1" />
+                            <span className={`${Styles["game-name"]}`}>Bac Ball</span>
+                            <div className={Styles["user-playing"]}>
+                                <span className={Styles["user-playing-icon"]}></span>
+                                <span className={Styles["user-playing-value"]}>555</span> playing
+                            </div>
+                        </div>
+                        <div className={Styles["detail"]}>
+                            <div className={Styles["detail-top"]}>
+                                <span className="icon-clock"></span>
+                                Starting bet
+                            </div>
+                            <img src="/static/images/game-board-detail/scoreboard.svg" alt="scoreboard" />
+                        </div>
                     </div>
 
                     <GameBoardDetail />
