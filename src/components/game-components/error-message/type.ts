@@ -7,5 +7,5 @@ export interface Props {
 
 export const ConnectFailedReasonKey = {
     lostConnection: `${ResourceTypes.COMMON}.splash_connection_lost`,
-    restrictPlayPermission: `${ResourceTypes.SABA_NUMBER}.game_excluded`,
+    restrictPlayPermission: `${ResourceTypes.COMMON}.game_excluded`,
 };
