@@ -76,7 +76,12 @@ const Cage: React.FC<CageProps> = (cageProps) => {
             return (
                 <div id="show-ball-anim" className={Styles["show-ball-anim"]}>
                     {cageBallFrames && cageBallFrames[ballColor]?.length > 0 && (
-                        <Stage key={currentTime} width={250} height={250} options={{ backgroundAlpha: 0 }}>
+                        <Stage
+                            key={currentTime}
+                            width={250}
+                            height={250}
+                            options={{ backgroundAlpha: 0, antialias: false, powerPreference: "low-power" }}
+                        >
                             <Container key={currentTime} position={[82, 85]}>
                                 <AnimatedSprite
                                     anchor={0.5}
@@ -101,7 +106,12 @@ const Cage: React.FC<CageProps> = (cageProps) => {
         if (isDelayShowResult && roundState === RoundState.DisplayResult && numberBallFrames?.length !== 0) {
             return (
                 <div key={currentTime} id="result-text" className={Styles["number"]}>
-                    <Stage key={currentTime} width={153} height={153} options={{ backgroundAlpha: 0 }}>
+                    <Stage
+                        key={currentTime}
+                        width={153}
+                        height={153}
+                        options={{ backgroundAlpha: 0, antialias: false, powerPreference: "low-power" }}
+                    >
                         <Container key={currentTime} position={[82, 85]}>
                             <AnimatedSprite
                                 anchor={0.5}
@@ -127,7 +137,7 @@ const Cage: React.FC<CageProps> = (cageProps) => {
                 <div id="cage-bg" className={Styles["cage-bg"]}></div>
                 <div id="cage-balls" className={Styles["cage-balls"]}>
                     {cageBallsLoopFrames?.length > 0 && (
-                        <Stage width={130} height={130} options={{ backgroundAlpha: 0 }}>
+                        <Stage width={130} height={130} options={{ backgroundAlpha: 0, antialias: false, powerPreference: "low-power" }}>
                             <Container position={[65, 65]}>
                                 <AnimatedSprite
                                     anchor={0.5}

@@ -36,7 +36,12 @@ export const BacBallWinningAnimation: React.FC<Props> = ({ choice, resourceName,
         winningFrames?.length > 0 && (
             <div>
                 <div className={Styles[`winning-${choice}`]}></div>
-                <Stage width={width} height={height} options={{ backgroundAlpha: 0 }} className={className}>
+            <Stage
+                width={width}
+                height={height}
+                options={{ backgroundAlpha: 0, antialias: false, powerPreference: "low-power" }}
+                className={className}
+            >
                     <Container position={position}>
                         <AnimatedSprite
                             anchor={0.5}
