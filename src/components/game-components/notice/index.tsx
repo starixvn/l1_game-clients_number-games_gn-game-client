@@ -3,7 +3,7 @@ import { createOptionForHedgeBetGroup } from "../../../_shared/helpers";
 import { numberWithCommas } from "../../../_shared/helpers/number-helper";
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
-import { useTranslator } from "../../../_shared/react-hooks";
+import { useClickSound, useTranslator } from "../../../_shared/react-hooks";
 import BaseDialog from "../base-dialog";
 import { ModalType } from "../base-dialog/type";
 import Styles from "./notice.module.scss";
@@ -18,11 +18,19 @@ const BaseNotice: React.FC<{ onClose: () => void; duration: number; isOpen?: boo
 
         return () => clearTimeout(timer);
     }, []);
+    const clickSound = useClickSound();
 
     return (
         <BaseDialog type={ModalType.Center} isOpen={true} onCloseModal={onClose}>
             <div className={`modal-center red-color`}>
-                <span className={`icon-close ${Styles["icon-close"]}`} onClick={onClose} data-testid="close-btn"></span>
+                <span
+                    className={`icon-close ${Styles["icon-close"]}`}
+                    onClick={() => {
+                        clickSound();
+                        onClose();
+                    }}
+                    data-testid="close-btn"
+                ></span>
                 {children}
             </div>
         </BaseDialog>
