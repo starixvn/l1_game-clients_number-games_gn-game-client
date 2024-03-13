@@ -179,7 +179,7 @@ export class PlaceBetHandler {
     protected handleProcessingBet = () => {
         this.props.dispatch({
             type: GameEventActionType.BET_PROCESSING,
-            payload: { notice: { message: this.props.translate("message_processing_action"), duration: 2 } },
+            payload: { notice: { message: this.props.translate("Common.message_processing_action"), duration: 2 } },
         });
     };
 
