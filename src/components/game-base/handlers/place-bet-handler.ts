@@ -26,7 +26,7 @@ export type PlaceBetHandlerProps = {
     gameMessageHandler: GameMessageHandler;
     translate: TFnType<DefaultParamType, string, TranslationKey>;
     playPlaceBetSound?: Function;
-    hedgeBetGroups: [string[]];
+    hedgeBetGroups: string[][];
     getPlayerBalance: Function;
 };
 
@@ -176,14 +176,14 @@ export class PlaceBetHandler {
         this.handleBetValidation(gameStateContext, betChoice, amount, enabledQuickBet, systemContext);
     };
 
-    protected handleProcessingBet = () => {
+    handleProcessingBet = () => {
         this.props.dispatch({
             type: GameEventActionType.BET_PROCESSING,
             payload: { notice: { message: this.props.translate("Common.message_processing_action"), duration: 2 } },
         });
     };
 
-    protected handlePreventBet = (gameStateContext: GameStateContextModel<unknown, unknown>) => {
+    handlePreventBet = (gameStateContext: GameStateContextModel<unknown, unknown>) => {
         const isStartingRound = gameStateContext.roundState === RoundState.BeforePlaceBet;
         const notice = isStartingRound ? this.getNotice(NoticeErrorCode.cannotBet) : this.getNotice(NoticeErrorCode.placeBetNextRound);
 
@@ -287,7 +287,7 @@ export class PlaceBetHandler {
         }
     }
 
-    protected sendNotice = (notice: Notice) =>
+    sendNotice = (notice: Notice) =>
         this.props.dispatch({
             type: GameEventActionType.DISPLAY_POPUP,
             payload: {

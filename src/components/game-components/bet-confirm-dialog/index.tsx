@@ -84,9 +84,7 @@ const BetConfirmDialog = () => {
             return `<strong class="amount-color">${numberRoundDownWithCommas(outstandingBalance)}</strong>`;
         };
 
-        const content = isInsufficientFunds
-            ? t("message_balance", { outstandingBalance: formatValue() })
-            : t("message_bet_available", { maxbet: formatValue() });
+        const content = t("message_bet_available", { amount: formatValue() });
 
         return content;
     };
