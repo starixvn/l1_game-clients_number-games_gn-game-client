@@ -9,7 +9,7 @@ import { BetLogDetailProps } from "../../../components/game-components/bet-histo
 import ModalContainer from "../../../components/game-components/modal-container";
 import Styles from "./common.module.scss";
 import TableRow from "./row-table";
-import { useAuthContext } from "../../../_shared/react-contexts";
+import { usePlayerContext } from "../../../_shared/react-contexts";
 import { BacBallBetOptions } from "../constants";
 
 interface BacBallBetDetailProps extends BetLogDetailProps {
@@ -155,7 +155,7 @@ interface BacBallBetLogDetailRowProps {
 const BetDetailRow: FC<BacBallBetLogDetailRowProps> = ({ rawTime, amount, choice, odds, win, hightlight }) => {
     const { date, time } = seperateDateTime(rawTime);
     const { t: translateBacBall } = useTranslator(["BacBall"]);
-    const { fractionalOddsFormat } = useAuthContext();
+    const { fractionalOddsFormat } = usePlayerContext();
     const content = [
         {
             node: (

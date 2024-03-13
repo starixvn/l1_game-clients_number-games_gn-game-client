@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { confirmBet } from "../../../_shared/constants";
-import { useAuthContext, useGameActionContext } from "../../../_shared/react-contexts";
+import { usePlayerContext, useGameActionContext } from "../../../_shared/react-contexts";
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import { useClickSound, useSNTranslate } from "../../../_shared/react-hooks";
@@ -10,7 +10,7 @@ const ConfirmBet: React.FC = () => {
     const dispatch = useGameStatesDispatch();
     const gameActionContext = useGameActionContext();
     const gameStateContext = useGameStateContext();
-    const enabledQuickBet = useAuthContext().authorizeInfo.user.settings.quickBet;
+    const enabledQuickBet = usePlayerContext().authorizeInfo.user.settings.quickBet;
     const clickSound = useClickSound();
     const { t } = useSNTranslate();
 

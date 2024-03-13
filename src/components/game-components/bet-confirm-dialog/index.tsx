@@ -1,5 +1,5 @@
 import { numberRoundDownWithCommas } from "../../../_shared/helpers";
-import { useAuthContext } from "../../../_shared/react-contexts";
+import { usePlayerContext } from "../../../_shared/react-contexts";
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import { useTranslator } from "../../../_shared/react-hooks";
@@ -8,7 +8,7 @@ import ConfirmDialog from "../confirm-dialog";
 const BetConfirmDialog = () => {
     const dispatch = useGameStatesDispatch();
     const gameStateContext = useGameStateContext();
-    const enabledQuickBet = useAuthContext().authorizeInfo?.user?.settings?.quickBet;
+    const enabledQuickBet = usePlayerContext().authorizeInfo?.user?.settings?.quickBet;
 
     const suggestBet = gameStateContext.suggestBet;
     const currentBetChoice = suggestBet.currentBetChoice;

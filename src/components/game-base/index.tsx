@@ -4,8 +4,8 @@ import Auth from "sc-user-service-client/dist/auth";
 import { Socket } from "socket.io-client";
 import { InitSocketIO, StorageHelper, localStorageKeys, writeDebugLog } from "../../_shared/helpers";
 import {
-    AuthContext,
-    AuthContextModel,
+    PlayerContext,
+    PlayerContextModel,
     GameActionsContextProvider,
     GameContextProvider,
     SystemEventActionType,
@@ -149,7 +149,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     getPlayerBalance = () => {
-        return (this.context as AuthContextModel).authorizeInfo.user.red;
+        return (this.context as PlayerContextModel).authorizeInfo.user.red;
     };
 
     onDestroy() {
@@ -190,7 +190,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     protected async connectToGameService() {
-        const { session } = this.context as AuthContextModel;
+        const { session } = this.context as PlayerContextModel;
         const { socketInfo, gameName } = this.props;
         const { socket } = InitSocketIO(socketInfo, session, gameName, this.gameMessageHandler);
 
@@ -235,8 +235,8 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     registerHandlers() {
-        const signOut = (this.context as AuthContextModel)?.signOut;
-        const setBalance = (this.context as AuthContextModel)?.setBalance;
+        const signOut = (this.context as PlayerContextModel)?.signOut;
+        const setBalance = (this.context as PlayerContextModel)?.setBalance;
 
         this.gameMessageHandler.register(messageEventType.SOCKET_CONNECTED, this.onGameServiceConnected.bind(this));
         this.gameMessageHandler.register(messageEventType.SOCKET_CONNECT_ERROR, this.onConnectFailed.bind(this));
@@ -285,7 +285,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     };
 
     loadPFSetting() {
-        const uid = (this.context as AuthContextModel).authorizeInfo?.user?.UID;
+        const uid = (this.context as PlayerContextModel).authorizeInfo?.user?.UID;
         const pfSetting = StorageHelper.get<PFSettingData>(`${localStorageKeys.pfSetting}-${uid}`);
         this.props.dispatch({
             type: GameEventActionType.UPDATE_PF_SETTING,
@@ -296,7 +296,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     savePFSetting() {
-        const uid = (this.context as AuthContextModel).authorizeInfo?.user?.UID;
+        const uid = (this.context as PlayerContextModel).authorizeInfo?.user?.UID;
         const { pfSetting } = this.props.gameStateContextModel;
         StorageHelper.set(`${localStorageKeys.pfSetting}-${uid}`, pfSetting);
     }
@@ -410,7 +410,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     async updateUserBalance() {
-        const authContext = this.context as AuthContextModel;
+        const authContext = this.context as PlayerContextModel;
         const balanceResponse = await getBalance(authContext?.session);
         if (balanceResponse.isSuccessful) {
             authContext?.setBalance(balanceResponse.balance);
@@ -426,7 +426,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     placeBet(betChoice: string, amount: number) {
-        const enabledQuickBet = (this.context as AuthContextModel).authorizeInfo?.user?.settings?.quickBet;
+        const enabledQuickBet = (this.context as PlayerContextModel).authorizeInfo?.user?.settings?.quickBet;
 
         this.placeBetHandler.placeBet(betChoice, amount, enabledQuickBet, this.props.gameStateContextModel, this.props.systemContextModel);
     }
@@ -600,6 +600,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 }
 
-GameBase.contextType = AuthContext;
+GameBase.contextType = PlayerContext;
 
 export default GameBase;

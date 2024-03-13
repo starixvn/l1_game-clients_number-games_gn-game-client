@@ -8,7 +8,7 @@ interface IActionStorage {
 }
 
 declare global {
-    interface Window {
+    interface globalThis {
         localMemory: object;
     }
 }
@@ -51,8 +51,8 @@ export class LocalStorage implements IActionStorage {
 export class Memory implements IActionStorage {
     localMemory: any;
     constructor() {
-        window.localMemory = {};
-        this.localMemory = window.localMemory;
+        globalThis.localMemory = {};
+        this.localMemory = globalThis.localMemory;
     }
 
     remove(name: string) {
@@ -120,11 +120,12 @@ export const localStorageKeys = {
     toolbarGuide: buildLocalStorageKey("toolbarGuide"),
     pfSetting: buildLocalStorageKey("pf-setting"),
     debug: buildLocalStorageKey("debug"),
+    url: buildLocalStorageKey("url"),
 };
 
 export function buildLocalStorageKey(key: string) {
-    if (typeof window !== "undefined" && window.location && window.location.hostname) {
-        return `${window.location.hostname}.${key}.${getAppSettings().appType}`;
+    if (typeof globalThis !== "undefined" && globalThis.location && globalThis.location.hostname) {
+        return `${globalThis.location.hostname}.${key}.${getAppSettings().appType}`;
     }
 
     return key;

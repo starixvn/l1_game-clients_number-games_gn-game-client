@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 
 import { formatOdds } from "../../../_shared/helpers";
-import { useAuthContext } from "../../../_shared/react-contexts";
+import { usePlayerContext } from "../../../_shared/react-contexts";
 import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import Styles from "./bet-option.module.scss";
 import { BaseProps } from "./types";
@@ -16,7 +16,7 @@ export const Odds: React.FC<Props> = ({ gameName, choice, className, animationDu
     const [isOddUp, setIsOddUp] = useState(false);
     const [oddsValue, setOddsValue] = useState(0);
     const { gameConfigs } = useGameStateContext();
-    const { fractionalOddsFormat } = useAuthContext();
+    const { fractionalOddsFormat } = usePlayerContext();
 
     useEffect(() => {
         const odds = gameConfigs?.odds?.[choice] ?? 0;

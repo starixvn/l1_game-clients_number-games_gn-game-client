@@ -1,17 +1,19 @@
 import React from "react";
 import { AuthorizeResponse, SSOResponse } from "sc-user-service-client/dist/auth";
+import { locales } from "../../constants";
 
-export type AuthContextModel = {
-    authorizeInfo: AuthorizeResponse;
-    session: SSOResponse;
-    setBalance: (balance: number) => void;
-    signOut: () => void;
-    fractionalOddsFormat: boolean;
+export type PlayerContextModel = {
+    authorizeInfo?: AuthorizeResponse;
+    session?: SSOResponse;
+    locale: string;
+    setBalance?: (balance: number) => void;
+    signOut?: () => void;
+    fractionalOddsFormat?: boolean;
 };
 
-export const AuthContext = React.createContext<AuthContextModel>(null);
-AuthContext.displayName = "AuthContext";
+export const PlayerContext = React.createContext<PlayerContextModel>({ locale: locales.vi });
+PlayerContext.displayName = "AuthContext";
 
-export const AuthContextProvider = AuthContext.Provider;
-export const AuthContextConsumer = AuthContext.Consumer;
-export const useAuthContext = () => React.useContext(AuthContext);
+export const PlayerContextProvider = PlayerContext.Provider;
+export const PlayerContextConsumer = PlayerContext.Consumer;
+export const usePlayerContext = () => React.useContext(PlayerContext);

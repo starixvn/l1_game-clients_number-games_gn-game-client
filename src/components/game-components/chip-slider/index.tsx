@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { isMobileOnly } from "react-device-detect";
 import Slider from "react-slick";
-import { SystemEventActionType, useAuthContext, useSystemContext, useSystemDispatch } from "../../../_shared/react-contexts";
+import { SystemEventActionType, usePlayerContext, useSystemContext, useSystemDispatch } from "../../../_shared/react-contexts";
 import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import { useClickSound } from "../../../_shared/react-hooks";
 import { Chip } from "./chip";
@@ -15,7 +15,7 @@ export const ChipSlider: React.FC<{}> = () => {
     const gameStateContext = useGameStateContext();
     const systemContext = useSystemContext();
     const dispatch = useSystemDispatch();
-    const enabledQuickBet = useAuthContext().authorizeInfo?.user?.settings?.quickBet;
+    const enabledQuickBet = usePlayerContext().authorizeInfo?.user?.settings?.quickBet;
     const { gameConfigs, userStakeLevel } = gameStateContext;
     const { selectedChip } = systemContext;
     const [enabledPrevBtn, setEnabledPrevBtn] = useState(false);

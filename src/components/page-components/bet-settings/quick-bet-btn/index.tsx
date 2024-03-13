@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { isIOS, isMobileOnly } from "react-device-detect";
 import { StorageHelper, localStorageKeys } from "../../../../_shared/helpers";
-import { useAuthContext } from "../../../../_shared/react-contexts";
+import { usePlayerContext } from "../../../../_shared/react-contexts";
 import { useGameStateContext } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
 import { useClickSound, useSNTranslate } from "../../../../_shared/react-hooks";
 import { updateUserQuickBetSetting } from "../../../../services/user-setting-service";
@@ -12,7 +12,7 @@ import Styles from "./quick-bet-btn.module.scss";
 
 export const QuickBetBtn = () => {
     const { showConfirmBet } = useGameStateContext();
-    const authContext = useAuthContext();
+    const authContext = usePlayerContext();
     const enabledQuickBet = authContext.authorizeInfo?.user?.settings?.quickBet;
     const isShowToolbarGuide = StorageHelper.get(localStorageKeys.toolbarGuide) ?? true;
 

@@ -29,23 +29,22 @@ export function parseContextFromURL(): URLContextModel | undefined {
 
 export function loadURLContext(): URLContextModel {
     const contextFromURL = parseContextFromURL();
-    const contextFromLocalStorage = StorageHelper.get("localStorageKeys.url") || null;
+    const contextFromLocalStorage = StorageHelper.get(localStorageKeys.url) || null;
 
     if (!!contextFromURL) {
         const contextString = { ...contextFromURL, token: undefined };
 
         globalThis.history.pushState(null, "", globalThis.location?.href.split("?")[0]);
-        // StorageHelper.set(localStorageKeys.url, contextString);
+        StorageHelper.set(localStorageKeys.url, contextString);
     }
 
     return contextFromURL || contextFromLocalStorage;
 }
 
 export const initialURLContextData = {
-    isDirectMode: false,
-    redirectUrl: "",
+    ...loadURLContext(),
     backToLobby: () => {
-        window.location.reload();
+        globalThis.location.reload();
     },
 };
 
