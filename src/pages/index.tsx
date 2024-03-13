@@ -11,6 +11,7 @@ import Dashboard from "../components/page-components/dashboard";
 import SplashScreen from "../components/page-components/splash-screen";
 import UMPage from "../components/page-components/um-page";
 import { sso, verifySession } from "../services/auth-service";
+import { URLContext, URLContextProvider, initialURLContextData } from "../_shared/react-contexts/url-context";
 
 const getUserSession = (token: string) => (token ? sso(token, getAppSettings().appType) : verifySession());
 const validDirectModeRefs = ["m_direct", "d_direct"];
@@ -79,7 +80,9 @@ function Home() {
     }
 
     console.log({ isDirectMode });
-    return <Dashboard session={session} queryGame={+gameId} setIsUm={setIsUm} directMode={isDirectMode} tolgee={tolgee} />;
+    return <URLContext.Provider value={initialURLContextData}>
+        <Dashboard session={session} queryGame={+gameId} setIsUm={setIsUm} directMode={true} tolgee={tolgee} />
+    </URLContext.Provider  >;
 }
 
 export default Home;

@@ -1,21 +1,19 @@
-import React from "react";
+import React, { useContext } from "react";
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 import { useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import { useClickSound } from "../../../_shared/react-hooks";
 import { getLogoName } from "../../page-components/header";
 import { Menu } from "./menu";
 import styles from "./settings.module.scss";
+import { URLContext } from "../../../_shared/react-contexts/url-context";
 
 const ButtonSettingClassName = "setting-button";
 
-export const Settings: React.FC = () => {
+export function Settings() {
     const dispatch = useGameStatesDispatch();
     const clickSound = useClickSound();
+    const { backToLobby, isDirectMode } = useContext(URLContext);
 
-    const handleBackToHome = () => {
-        clickSound();
-        console.log("Back to Home");
-    };
     const handleClickPFSetting = () => {
         clickSound();
         dispatch({
@@ -33,9 +31,9 @@ export const Settings: React.FC = () => {
                     <span id="icon-pf" className="icon-pf" />
                 </button>
 
-                <button className={styles[ButtonSettingClassName]} onClick={handleBackToHome}>
+                {!isDirectMode && <button className={styles[ButtonSettingClassName]} onClick={() => backToLobby()}>
                     <span id="icon-home" className="icon-home" />
-                </button>
+                </button>}
 
                 <Menu />
             </div>
