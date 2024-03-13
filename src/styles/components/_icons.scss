@@ -14,9 +14,14 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-setting:before {
+    content: "\e913";
+    color: #fff;
+}
+
 .icon-copy:before {
     content: "\e911";
-    color: #fff;
+    color: #9ca3ae;
 }
 
 .icon-info:before {

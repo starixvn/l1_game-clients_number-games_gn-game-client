@@ -15,7 +15,7 @@
     justify-content: flex-start;
     background-color: transparent;
     align-content: flex-start;
-    padding-top: 1.3rem;
+    padding-top: 4rem;
 }
 
 .container {
@@ -29,13 +29,4 @@
     background: var(--game-category-background);
     overflow-x: auto;
     z-index: calc(var(--header-index) - 1);
-
-    // @media (min-width: 768px) {
-    //     overflow-x: initial;
-    //     position: fixed;
-    //     left: 0;
-    //     width: 100%;
-    //     justify-content: center;
-    //     margin-bottom: 1rem;
-    // }
 }

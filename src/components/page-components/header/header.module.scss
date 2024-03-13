@@ -12,6 +12,10 @@
 }
 
 .header {
+    position: fixed;
+    left: 0;
+    right: 0;
+    padding-left: 0.8rem;
     display: flex;
     align-items: center;
     height: 3.2rem;
@@ -19,6 +23,12 @@
     top: 0;
     width: 100%;
     z-index: var(--header-index);
+    margin: 0 auto;
+
+    @media screen and (min-width: 500px) {
+        max-width: 37.5rem;
+        background-size: 37.5rem;
+    }
 
     .header-right {
         display: flex;
@@ -94,5 +104,17 @@
             transform: scale(1);
             opacity: 1;
         }
+    }
+}
+
+.button-setting {
+    background: none;
+    border: none;
+    padding-right: 0;
+    padding-left: 1.6rem;
+    cursor: pointer;
+
+    .icon-setting {
+        font-size: 1.6rem;
     }
 }

@@ -23,7 +23,7 @@ import Header from "../header";
 import Styles from "./dashboard.module.scss";
 import NameGenerator from "./register/name-generator";
 import { Banner } from "../banner";
-import { GameBoardDetail } from "../game-board-detail";
+import { GameIcon } from "./game-icon";
 
 class Dashboard extends React.PureComponent<Props, State> {
     private notificationSocket: Socket = null;
@@ -304,7 +304,7 @@ class Dashboard extends React.PureComponent<Props, State> {
 
     renderLobby() {
         return (
-            <>
+            <div className={Styles["lobby-container"]}>
                 <div className="background-galaxy">
                     <img className="galaxy-2" src="/static/images/bg-galaxy.jpg" alt="galaxy" />
                     <img className="galaxy-1" src="/static/images/bg-galaxy.jpg" alt="galaxy" />
@@ -315,28 +315,17 @@ class Dashboard extends React.PureComponent<Props, State> {
                     <div className="layer"></div>
                 </div>
                 <Banner />
-                <div className={Styles["lobby-container"]}>
-                    <div className={Styles["game-board-detail"]} id="ico-bacball" onClick={() => this.setState({ openGameId: 1001 })}>
-                        <div className={`${Styles["icon-game"]}`}>
-                            <img src="/static/images/game-board-detail/icon-game-1.png" alt="icon-game-1" />
-                            <span className={`${Styles["game-name"]}`}>Bac Ball</span>
-                            <div className={Styles["user-playing"]}>
-                                <span className={Styles["user-playing-icon"]}></span>
-                                <span className={Styles["user-playing-value"]}>555</span> playing
-                            </div>
+                <div className={Styles["game-board-detail"]} id="ico-bacball" onClick={() => this.setState({ openGameId: 1001 })}>
+                    <GameIcon gameName="Bac Ball" onlineUsers={15} />
+                    <div className={Styles["detail"]}>
+                        <div className={Styles["detail-top"]}>
+                            <span className="icon-clock" />
+                            Starting bet
                         </div>
-                        <div className={Styles["detail"]}>
-                            <div className={Styles["detail-top"]}>
-                                <span className="icon-clock"></span>
-                                Starting bet
-                            </div>
-                            <img src="/static/images/game-board-detail/scoreboard.svg" alt="scoreboard" />
-                        </div>
+                        <img src="/static/images/game-board-detail/scoreboard.svg" alt="scoreboard" />
                     </div>
-
-                    <GameBoardDetail />
                 </div>
-            </>
+            </div>
         );
     }
 

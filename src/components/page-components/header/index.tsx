@@ -29,6 +29,9 @@ const Header: React.FC<Props> = (props) => {
                     </div>
                     <div className={Styles["header-right"]}>
                         <UserInfo user={props.user} />
+                        <button className={Styles["button-setting"]}>
+                            <span className={`icon-setting ${Styles["icon-setting"]}`} />
+                        </button>
                     </div>
                 </div>
             </div>
