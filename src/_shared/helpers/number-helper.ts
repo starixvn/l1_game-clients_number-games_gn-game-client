@@ -26,4 +26,9 @@ const formatOdds = (value: number | string | undefined, isFractionalFormat = fal
     return isFractionalFormat ? `${numberWithCommas(+value - 1, 2, 2)}:1` : `1:${numberWithCommas(+value, 2, 2)}`;
 };
 
-export { numberRoundDownWithCommas, numberWithCommas, randomInteger, sumArray, formatOdds, randomNumberSeries };
+const probabilityToBetOdds = (prob: number, margin = 0) => {
+    const odds = (1 - margin) / prob;
+    return odds > 20 ? Math.floor(odds) : Number((Math.floor(odds * 100) / 100).toFixed(2));
+};
+
+export { numberRoundDownWithCommas, numberWithCommas, randomInteger, sumArray, formatOdds, randomNumberSeries, probabilityToBetOdds };

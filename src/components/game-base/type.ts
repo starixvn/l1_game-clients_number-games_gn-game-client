@@ -13,6 +13,7 @@ export interface GameConfigs {
     maxBet: number;
     maxBetPerChoices: any;
     enableFreeBet: boolean;
+    margin: any;
     chips: string[];
 }
 

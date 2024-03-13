@@ -22,3 +22,15 @@ export const StatisticRuleEntries = Object.entries({
     [BacBallBetOptions.TIE]: (countResult: object, total: number) =>
         countResult[BacBallBetOptions.TIE] ? Math.round((countResult[BacBallBetOptions.TIE] * 100) / total) : 0,
 });
+
+export const MinProbability = {
+    player: 2346 / (72 * 72),
+    banker: 2346 / (72 * 72),
+    tie: 69 / (72 * 72),
+};
+
+export const MaxProbability = {
+    player: 2769 / (72 * 72),
+    banker: 2769 / (72 * 72),
+    tie: 1 / 72,
+};
