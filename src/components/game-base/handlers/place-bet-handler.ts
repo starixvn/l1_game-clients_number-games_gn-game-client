@@ -65,7 +65,7 @@ export class PlaceBetHandler {
             noticePayload.gameName = `${gameName.toLowerCase()}:${GameResourceKeys.GAME_NAME}`;
         }
 
-        dispatch({ type: GameEventActionType.DISPLAY_POPUP, payload: noticePayload });
+        dispatch({ type: GameEventActionType.DISPLAY_POPUP, payload: { notice: noticePayload } });
     };
 
     getNoticePayloadBetFailed = (notice: Notice, kickedOut: any) => {
