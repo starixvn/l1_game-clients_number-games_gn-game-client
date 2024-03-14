@@ -18,7 +18,7 @@ export const ConnectFailedMessage: React.FC<{ gameName: string; onSubmit: () => 
                 <div className={`${Styles["warning-container"]}`}>
                     <div className={`icon-warning ${Styles["icon-warning"]}`}></div>
                 </div>
-                <div className={Styles["title"]}>{gameName.insertSpaceCapitalLetters()}</div>
+                <div className={Styles["title"]}>{t(`${gameName}.game_name`)}</div>
                 <div className={Styles["content"]}>{t(reason, { gameName }).replaceTolgeeFormat().replace(gameName, "")}</div>
                 <div className={Styles["list-action"]}>
                     <button onClick={() => onSubmit()} className={`btn-green w-100 ${Styles["reconnect"]}`}>
