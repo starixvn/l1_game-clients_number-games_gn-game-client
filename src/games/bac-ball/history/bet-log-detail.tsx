@@ -11,6 +11,7 @@ import Styles from "./common.module.scss";
 import TableRow from "./row-table";
 import { usePlayerContext } from "../../../_shared/react-contexts";
 import { BacBallBetOptions } from "../constants";
+import PFVerifyModal from "../../../components/game-components/pf-verify";
 
 interface BacBallBetDetailProps extends BetLogDetailProps {
     drawInfo: DrawInfo;
@@ -44,6 +45,7 @@ const renderBetLogDetail = ({ betLogDetails, onCloseModal, isShowBetDetail, draw
 const BetDetail: FC<BetLogDetailProps> = ({ betLogDetails, onCloseModal, isShowBetDetail, drawInfo }) => {
     const { drawId, result } = drawInfo;
     const [isHaveMoreData, setIsHaveMoreData] = useState(true);
+    const [isShowPFVerify, setIsShowPFVerify] = useState(false);
     const ballColor = useBallColor;
     const { t: translateCommon } = useCommonTranslate();
     const { t: translateSNGames } = useSNTranslate();
@@ -54,8 +56,13 @@ const BetDetail: FC<BetLogDetailProps> = ({ betLogDetails, onCloseModal, isShowB
         setIsHaveMoreData(true);
     };
 
+    const handleClosePFVerifyModal = () => {
+        setIsShowPFVerify(false);
+    };
+
     const handleClickProbalyFair = () => {
         console.log("Click Probaly Fair");
+        setIsShowPFVerify(true);
     };
 
     const handleScroll = (event: any) => {
@@ -76,7 +83,12 @@ const BetDetail: FC<BetLogDetailProps> = ({ betLogDetails, onCloseModal, isShowB
 
     return (
         isShowBetDetail && (
-            <ModalContainer isOpen={isShowBetDetail} title={translateCommon("bet_detail")} onCloseModal={handleCloseModal} isOverlap={true}>
+            <ModalContainer
+                isOpen={isShowBetDetail && !isShowPFVerify}
+                title={translateCommon("bet_detail")}
+                onCloseModal={handleCloseModal}
+                isOverlap={true}
+            >
                 {result && (
                     <div className={Styles["draw-info"]}>
                         <div className={Styles["info-item"]}>
@@ -110,6 +122,7 @@ const BetDetail: FC<BetLogDetailProps> = ({ betLogDetails, onCloseModal, isShowB
                     </table>
                     {!isHaveMoreData && <div className={Styles["no-more-data"]}>{translateSNGames("table_no_more_data")}</div>}
                 </div>
+                <PFVerifyModal handleCloseModal={handleClosePFVerifyModal} isShowPFVerify={isShowPFVerify} drawId={drawId}></PFVerifyModal>
             </ModalContainer>
         )
     );
