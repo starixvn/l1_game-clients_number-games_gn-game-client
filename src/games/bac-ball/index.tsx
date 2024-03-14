@@ -47,7 +47,7 @@ class BacBall extends GameBase<GameBaseProps> {
     componentDidMount() {
         super.componentDidMount();
 
-        // Load all animations in background
+        // Load all animation resources in background
         Array.from({ length: 75 }, (_, i) => i + 1).forEach((result) =>
             loadPixiAnimations(`/static/images/cage/number/${result}.json`, () => ({}))
         );

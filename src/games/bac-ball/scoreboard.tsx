@@ -67,6 +67,13 @@ export class Scoreboard extends Component<ScoreboardComponentProps> {
         );
     }
 
+    shouldComponentUpdate(nextProps: Readonly<ScoreboardComponentProps>): boolean {
+        const current = this.props.roundHistory.map((x) => x.roundId).join();
+        const next = nextProps.roundHistory.map((x) => x.roundId).join();
+
+        return current !== next || this.props.isShowBlink !== nextProps.isShowBlink;
+    }
+
     render(): ReactNode {
         return <SlidableScoreboard boards={[this.renderBigRoad(), this.renderBeadRoad()]} />;
     }
