@@ -51,7 +51,7 @@ export const OwnBet: React.FC<BaseProps> = ({ gameName, choice, className }) => 
     return (
         <>
             {ownBetValue > 0 && ownBetUI(numberWithCommas(ownBetValue, 1))}
-            {isShowBetAnim && ownBetUI(numberWithCommas(latestNotConfirmBet, 1), Styles["own-bet-anim"])}
+            {isShowBetAnim && latestNotConfirmBet > 0 && ownBetUI(numberWithCommas(latestNotConfirmBet, 1), Styles["own-bet-anim"])}
         </>
     );
 };

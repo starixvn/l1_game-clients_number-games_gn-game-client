@@ -62,7 +62,7 @@ export const BacBallResultBlock: FC = () => {
         cageBallFrames?.blue2?.length === 0 ||
         cageBallFrames?.red2?.length === 0
     ) {
-        return <></>;
+        return <div className={Style["result-container"]}></div>;
     }
 
     const bankerDelayTime = 1000;
