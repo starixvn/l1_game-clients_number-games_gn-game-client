@@ -65,7 +65,18 @@ export const BacBallResultBlock: FC<BacBallResultBlockProps> = (props: BacBallRe
         cageBallFrames?.blue2?.length === 0 ||
         cageBallFrames?.red2?.length === 0
     ) {
-        return <div className={Style["result-container"]}></div>;
+        return (
+            <div className={Style["result-container"]}>
+                <div className={Style["result"]}>
+                    <div className="cage-blur blue"></div>
+                    <BacBallResultSlotContainer delayTime={0} betChoice={null} className="player-balls" />
+                </div>
+                <div className={Style["result"]}>
+                    <div className="cage-blur red"></div>
+                    <BacBallResultSlotContainer delayTime={0} betChoice={null} className="banker-balls" />
+                </div>
+            </div>
+        );
     }
 
     const bankerDelayTime = 1000;

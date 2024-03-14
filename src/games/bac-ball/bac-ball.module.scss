@@ -8,9 +8,10 @@
 }
 
 .result-container {
-    display: flex;
+    display: grid;
     justify-content: center;
-    gap: 4rem;
+    grid-template-columns: repeat(2, 15.3rem);
+    grid-gap: 4rem;
     height: 18.5rem;
 }
 
@@ -22,8 +23,8 @@
 
 .result {
     position: relative;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-rows: 15.3rem 1fr;
 }
 
 .winning-effect {

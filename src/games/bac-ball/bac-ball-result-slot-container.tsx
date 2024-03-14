@@ -77,6 +77,16 @@ export const BacBallResultSlotContainer: React.FC<IResultSlotContainer> = (props
         }
     }, [roundState, turnCounter]);
 
+    if (betChoice === null) {
+        return (
+            <div className={`${Style["ball-container"]} ${className}`}>
+                {defaultRoundData.map((result, index) => {
+                    return <Ball key={index} index={index} {...result} />;
+                })}
+            </div>
+        );
+    }
+
     return (
         <div className={`${Style["ball-container"]} ${className}`}>
             {ballsData.map((result, index) => {

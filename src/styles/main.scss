@@ -179,3 +179,22 @@ body {
 .amount-color {
     color: #ffd21e !important;
 }
+
+/* Cage */
+
+.cage-blur {
+    width: 15.3rem;
+    height: 15.3rem;
+    background-size: 14rem 14rem;
+    transform: scale(0.92);
+    background-repeat: no-repeat;
+    background-position: center;
+
+    &.blue {
+        background-image: url("/static/images/cage/cage-blue-blur.png");
+    }
+
+    &.red {
+        background-image: url("/static/images/cage/cage-red-blur.png");
+    }
+}
