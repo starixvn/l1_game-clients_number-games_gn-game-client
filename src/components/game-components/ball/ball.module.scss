@@ -45,11 +45,11 @@ $loading-duration: 2s;
 }
 
 .red {
-    --bg: url("/static/images/ball/ball-red.png") no-repeat;
+    --bg: url("/static/images/ball/ball-red.png?v=2") no-repeat;
 }
 
 .blue {
-    --bg: url("/static/images/ball/ball-blue.png") no-repeat;
+    --bg: url("/static/images/ball/ball-blue.png?v=2") no-repeat;
 }
 
 .ball-bg {
@@ -63,6 +63,7 @@ $loading-duration: 2s;
     width: 3rem;
     height: 3rem;
     border-radius: 50%;
+    background-size: 3rem 3rem;
     transform-origin: center center;
     opacity: 0;
     animation: fade-in $show-number-duration $show-number-delay-time ease-in-out forwards;
