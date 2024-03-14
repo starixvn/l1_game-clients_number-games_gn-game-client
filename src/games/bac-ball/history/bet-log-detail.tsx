@@ -80,10 +80,7 @@ const BetDetail: FC<BetLogDetailProps> = ({ betLogDetails, onCloseModal, isShowB
                 {result && (
                     <div className={Styles["draw-info"]}>
                         <div className={Styles["info-item"]}>
-                            {translateSNGames("glossary_draw_id")}:{" "}
-                            <span>
-                                <b>{drawId}</b>
-                            </span>
+                            {translateSNGames("glossary_draw_id")}: <span className="font-weight-medium">{drawId}</span>
                         </div>
                         <div className={Styles["info-item"]}>
                             {translateBacBall("glossary_player")}

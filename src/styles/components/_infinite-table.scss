@@ -45,7 +45,7 @@
                 background: var(--table-header-background);
                 color: var(--table-header-color);
                 border-bottom: none;
-                font-weight: bold;
+                font-weight: 600;
                 white-space: nowrap;
             }
         }
@@ -68,7 +68,7 @@
             }
 
             .highlight {
-                font-weight: bold;
+                font-weight: 600;
                 color: var(--table-text-highlight);
             }
         }
