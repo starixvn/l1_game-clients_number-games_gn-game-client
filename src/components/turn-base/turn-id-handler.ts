@@ -51,7 +51,8 @@ export class TurnIdHandler {
 
         writeDebugLog({
             name: "handleDrawId - turncounter",
-            roundState: RoundState[this.roundState],
+            innerRoundState: RoundState[this.roundState],
+            globalRoundState: RoundState[roundState],
             showResult,
             wholeTurn,
             remainingTime,
