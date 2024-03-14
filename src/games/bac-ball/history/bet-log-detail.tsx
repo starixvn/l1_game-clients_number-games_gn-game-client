@@ -83,11 +83,11 @@ const BetDetail: FC<BetLogDetailProps> = ({ betLogDetails, onCloseModal, isShowB
                             {translateSNGames("glossary_draw_id")}: <span className="font-weight-medium">{drawId}</span>
                         </div>
                         <div className={Styles["info-item"]}>
-                            {translateBacBall("glossary_player")}
+                            <span className="font-weight-medium">{translateBacBall("glossary_player").toUpperCase()}</span>
                             <span className={`${Styles["ball"]} ${Styles[ballColor({ number: result.player })]}`}>{result.player}</span>
                         </div>
                         <div className={Styles["info-item"]}>
-                            {translateBacBall("glossary_banker")}
+                            <span className="font-weight-medium">{translateBacBall("glossary_banker").toUpperCase()}</span>
                             <span className={`${Styles["ball"]} ${Styles[ballColor({ number: result.banker })]}`}>{result.banker}</span>
                         </div>
                     </div>

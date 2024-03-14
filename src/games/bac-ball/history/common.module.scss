@@ -44,6 +44,9 @@
         display: flex;
         align-items: center;
         gap: 0.6rem;
+        &:not(:first) {
+            font-weight: bold;
+        }
     }
 }
 
