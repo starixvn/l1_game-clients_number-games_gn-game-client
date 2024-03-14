@@ -27,6 +27,7 @@ import LuckyThree from "./lucky-three/page";
 import NextBall from "./next-ball/page";
 import SicBalls from "./sic-balls/page";
 import { Props } from "./type";
+import { BackgroundGalaxy } from "../components/page-components/background";
 
 let gamesOrder = [];
 const getRenderGames = (selectedCategory: GameCategoryType, selectedPage: number, userOfferGames: number[]) => {
@@ -166,15 +167,7 @@ export const Games: React.FC<Props> = ({
             <SystemContextProvider>
                 <GameCategory selectedPage={selectedPage} selectCategoryPage={selectCategoryPage} selectedCategory={selectedCategory} />
                 <div className={`${styles["game-list"]} ${isMobileOnly ? styles[isIOS ? "ios-device" : "android-device"] : ""}`}>
-                    <div className="background-galaxy">
-                        <img className="galaxy-2" src="/static/images/bg-galaxy.jpg" alt="galaxy" />
-                        <img className="galaxy-1" src="/static/images/bg-galaxy.jpg" alt="galaxy" />
-                    </div>
-                    <div className="star-field">
-                        <div className="layer"></div>
-                        <div className="layer"></div>
-                        <div className="layer"></div>
-                    </div>
+                    <BackgroundGalaxy />
                     {renderListGames()}
                 </div>
             </SystemContextProvider>

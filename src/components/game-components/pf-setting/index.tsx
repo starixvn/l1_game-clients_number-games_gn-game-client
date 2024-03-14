@@ -109,13 +109,14 @@ const PFSetting: FC = () => {
                     <li>{translateCommon("pf_settings_para_2")}</li>
                 </ul>
             </div>
-            <h3>{translateCommon("pf_header_client_seed")}</h3>
+            <h3 className={Styles["section-title"]}>{translateCommon("pf_header_client_seed")}</h3>
             <div className={Styles["client-seed-form"]}>
                 {Object.keys(ownBets).length > 0 && <div className={Styles["form-overlay"]}></div>}
                 <div className={Styles["client-seed-options"]}>
                     <div className={Styles["client-seed-option"]}>
-                        <div style={{ width: "30%" }}>
+                        <div>
                             <input
+                                className={Styles["radio-input"]}
                                 ref={randomRadio}
                                 type="radio"
                                 id="random-seed"
@@ -124,10 +125,13 @@ const PFSetting: FC = () => {
                                 value={pfSetting.randomClientSeed}
                                 onChange={handleCheckRadio}
                             />
-                            <label htmlFor="random-seed">{translateCommon("pf_client_seed_para_4")}</label>
+                            <label className={Styles["radio-label"]} htmlFor="random-seed">
+                                {translateCommon("pf_client_seed_para_4")}
+                            </label>
                         </div>
                         <div>
                             <input
+                                className={Styles["client-seed-input"]}
                                 ref={randomSeed}
                                 type="text"
                                 id="random-client-seed"
@@ -138,7 +142,7 @@ const PFSetting: FC = () => {
                         </div>
                     </div>
                     <div className={Styles["client-seed-option"]}>
-                        <div style={{ width: "30%" }}>
+                        <div>
                             <input
                                 ref={manualRadio}
                                 type="radio"
@@ -146,11 +150,15 @@ const PFSetting: FC = () => {
                                 name="client-seed"
                                 checked={isManualMode}
                                 onChange={handleCheckRadio}
+                                className={Styles["radio-input"]}
                             />
-                            <label htmlFor="manual-seed">{`${translateCommon("pf_client_seed_para_3")}`}</label>
+                            <label className={Styles["radio-label"]} htmlFor="manual-seed">{`${translateCommon(
+                                "pf_client_seed_para_3"
+                            )}`}</label>
                         </div>
                         <div className={Styles["manual-seed-input"]}>
                             <input
+                                className={Styles["client-seed-input"]}
                                 id="manual-client-seed"
                                 ref={manualSeed}
                                 type="text"
@@ -163,17 +171,16 @@ const PFSetting: FC = () => {
                     </div>
                 </div>
             </div>
-            <div className="pf-setting-seed">
-                <h3>{translateCommon("pf_header_server_seed")}</h3>
+
+            <h3 className={Styles["section-title"]}>{translateCommon("pf_header_server_seed")}</h3>
+            <div className={Styles["client-seed-form"]}>
                 <div className={Styles["server-seed-field"]}>
                     <input id="server-seed-hash" className={Styles["server-seed-hash"]} value={pfSetting?.serverSeedHash} readOnly />
-                    <button onClick={handleCopyServerSeedHash}>Copy</button>
+                    <button className={Styles["copy-btn"]} onClick={handleCopyServerSeedHash}>
+                        <span className="icon-copy" />
+                    </button>
                 </div>
-                {Object.keys(ownBets).length > 0 && (
-                    <div style={{ padding: "0rem 2rem", textAlign: "center", color: "yellow" }}>
-                        {translateCommon("pf_client_seed_para_1")}
-                    </div>
-                )}
+                {Object.keys(ownBets).length > 0 && <div className={Styles["pf-note"]}>{translateCommon("pf_client_seed_para_1")}</div>}
             </div>
         </div>
     );
