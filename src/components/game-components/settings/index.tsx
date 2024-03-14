@@ -24,7 +24,6 @@ export function Settings() {
         });
     };
 
-    console.log(`redirectUrl: ${redirectUrl}`);
     return (
         <div className={styles["settings-container"]}>
             <div className={`${styles["setting-right"]} ${styles[getLogoName()]}`}>

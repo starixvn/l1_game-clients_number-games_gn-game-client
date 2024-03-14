@@ -48,7 +48,6 @@ export const initialURLContextData = {
     ...loadURLContext(),
     backToRedirectUrl: (redirectUrl: string) => {
         if (redirectUrl !== "") {
-            console.log(`redirectUrl: ${redirectUrl}`);
             globalThis.location.href = GameUtils.base64Decode(redirectUrl);
         }
 
