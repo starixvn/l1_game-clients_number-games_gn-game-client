@@ -11,7 +11,7 @@ import { useTranslator } from "../../_shared/react-hooks";
 import GameBase from "../../components/game-base/";
 import { GameMessageHandler, TurnIdHandler } from "../../components/game-base/handlers";
 import { GameBaseProps, Round } from "../../components/game-base/type";
-import { PercentageStatistic } from "../../components/game-components/statistic";
+import PercentageStatistic from "../../components/game-components/statistic";
 import { TurnGameStateHandler } from "../../components/turn-base/turn-game-state-handler";
 import { TurnStateHandler } from "../../components/turn-base/turn-state-handler";
 import { BacBallBettingBlock } from "./bac-ball-betting-block";
@@ -68,7 +68,7 @@ class BacBall extends GameBase<GameBaseProps> {
     renderStatistic() {
         const { roundHistory } = this.props.gameStateContextModel;
 
-        return <PercentageStatistic roundHistory={roundHistory} statisticRuleEntries={StatisticRuleEntries}></PercentageStatistic>;
+        return <PercentageStatistic roundHistory={roundHistory} statisticRuleEntries={StatisticRuleEntries} />;
     }
 
     renderScoreboards() {
