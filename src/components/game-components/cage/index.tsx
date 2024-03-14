@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useState } from "react";
 
 import { useBallColor } from "../../../_shared/helpers/ball-color-helper";
 import { loadPixiAnimations } from "../../../_shared/helpers/pixi-resource-loader";
-import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
+import { GameStateContextModel } from "../../../_shared/react-contexts/game-state-context/game-state-context-model";
 import { IBallColor, RoundState } from "../../game-base/type";
 import Styles from "./cage.module.scss";
 
@@ -27,15 +27,13 @@ export type CageProps = {
     result: number;
     delayShowResultTime?: number;
     position: string;
-};
+} & Partial<GameStateContextModel<unknown, unknown>>;
 
 const Cage: React.FC<CageProps> = (cageProps) => {
-    const { position, isSmall, cageBallsLoopFrames, cageBallFrames, result, delayShowResultTime, color } = cageProps;
+    const { position, isSmall, cageBallsLoopFrames, cageBallFrames, result, delayShowResultTime, color, playResultAnimation, roundState } =
+        cageProps;
     const animName = result <= 9 ? `number0${result}` : `number${result}`;
     const ballColor = `${useBallColor({ number: result })}${position === CagePosition.LEFT ? "" : "2"}`;
-
-    const { playResultAnimation, roundState } = useGameStateContext();
-
     const ballSpeed = playResultAnimation ? 0.5 : 1;
     const currentTime = Date.now();
 

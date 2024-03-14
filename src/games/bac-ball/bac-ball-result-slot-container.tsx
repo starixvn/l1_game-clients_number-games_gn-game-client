@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
 
-import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
+import { GameStateContextModel } from "../../_shared/react-contexts/game-state-context/game-state-context-model";
 import { RoundState } from "../../components/game-base/type";
 import Ball, { BallStatus, IBall } from "../../components/game-components/ball";
 import Style from "./bac-ball.module.scss";
+import { BacBallResult, BacBallSettlementResult } from "./types";
 
-export interface IResultSlotContainer {
+export type IResultSlotContainer = {
     delayTime: number;
     betChoice: string;
     className?: string;
-}
+} & Partial<GameStateContextModel<BacBallResult, BacBallSettlementResult>>;
 
 export const BacBallResultSlotContainer: React.FC<IResultSlotContainer> = (props) => {
-    const { delayTime, betChoice, className } = props;
+    const { delayTime, betChoice, className, result, roundState, roundData, turnCounter, drawId } = props;
     const betChoiceBalls = `${betChoice}Balls`;
     const defaultRoundData = [
         { number: 0, status: BallStatus.NONE, delayTime: 0 },
@@ -22,8 +23,6 @@ export const BacBallResultSlotContainer: React.FC<IResultSlotContainer> = (props
     ];
 
     const [ballsData, setBallsData] = useState<IBall[]>([]);
-    const gameStateContext = useGameStateContext();
-    const { result, roundState, roundData, turnCounter, drawId } = gameStateContext;
 
     const updateLoadingIcon = (data) => {
         const currentRound = data?.find((ball) => ball.number === 0);

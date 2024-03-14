@@ -1,18 +1,21 @@
 import { Resource, Texture } from "pixi.js";
-import { FC, useEffect, useState } from "react";
+import { FC, memo, useEffect, useState } from "react";
 
 import { loadPixiAnimations } from "../../_shared/helpers/pixi-resource-loader";
-import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
+import { GameStateContextModel } from "../../_shared/react-contexts/game-state-context/game-state-context-model";
 import { IBallColor, RoundState } from "../../components/game-base/type";
 import Cage, { CageColor, CagePosition } from "../../components/game-components/cage";
 import { BacBallResultSlotContainer } from "./bac-ball-result-slot-container";
 import Style from "./bac-ball.module.scss";
 import { BacBallBetOptions } from "./constants";
+import { BacBallResult, BacBallSettlementResult } from "./types";
 
-export const BacBallResultBlock: FC = () => {
+export type BacBallResultBlockProps = Partial<GameStateContextModel<BacBallResult, BacBallSettlementResult>>;
+
+export const BacBallResultBlock: FC<BacBallResultBlockProps> = (props: BacBallResultBlockProps) => {
     const [cageBallFrames, setCageBallFrames] = useState<IBallColor>({ blue: [], red: [], blue2: [], red2: [] });
     const [cageBallsLoopFrames, setCageBallsLoopFrames] = useState<Texture<Resource>[]>([]);
-    const { result, roundState, roundHistory } = useGameStateContext();
+    const { result, roundState, roundHistory, playResultAnimation } = props;
 
     let currentResult;
 
@@ -78,8 +81,10 @@ export const BacBallResultBlock: FC = () => {
                     isSmall={true}
                     result={currentResult?.player}
                     delayShowResultTime={0}
+                    playResultAnimation={playResultAnimation}
+                    roundState={roundState}
                 />
-                <BacBallResultSlotContainer delayTime={0} betChoice={BacBallBetOptions.PLAYER} className="player-balls" />
+                <BacBallResultSlotContainer delayTime={0} betChoice={BacBallBetOptions.PLAYER} className="player-balls" {...props} />
             </div>
             <div className={Style["result"]}>
                 <Cage
@@ -90,9 +95,18 @@ export const BacBallResultBlock: FC = () => {
                     isSmall={true}
                     result={currentResult?.banker}
                     delayShowResultTime={bankerDelayTime}
+                    playResultAnimation={playResultAnimation}
+                    roundState={roundState}
                 />
-                <BacBallResultSlotContainer delayTime={bankerDelayTime} betChoice={BacBallBetOptions.BANKER} className="banker-balls" />
+                <BacBallResultSlotContainer
+                    delayTime={bankerDelayTime}
+                    betChoice={BacBallBetOptions.BANKER}
+                    className="banker-balls"
+                    {...props}
+                />
             </div>
         </div>
     );
 };
+
+export default memo(BacBallResultBlock);

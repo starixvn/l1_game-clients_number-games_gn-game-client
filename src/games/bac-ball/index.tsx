@@ -15,8 +15,8 @@ import PercentageStatistic from "../../components/game-components/statistic";
 import { TurnGameStateHandler } from "../../components/turn-base/turn-game-state-handler";
 import { TurnStateHandler } from "../../components/turn-base/turn-state-handler";
 import { BacBallBettingBlock } from "./bac-ball-betting-block";
-import { BacBallResultBlock } from "./bac-ball-result-block";
-import { BacBallBetOptions, MaxProbability, MinProbability, StatisticRuleEntries } from "./constants";
+import BacBallResultBlock from "./bac-ball-result-block";
+import { BacBallBetOptions, StatisticRuleEntries } from "./constants";
 import { DrawIdBlock } from "./draw-id-block";
 import { BacBallBetHistoryModal } from "./history";
 import Scoreboard from "./scoreboard";
@@ -54,7 +54,19 @@ class BacBall extends GameBase<GameBaseProps> {
     }
 
     renderResultBlock() {
-        return <BacBallResultBlock />;
+        const { roundHistory, result, roundState, roundData, turnCounter, drawId, playResultAnimation } = this.props.gameStateContextModel;
+
+        return (
+            <BacBallResultBlock
+                roundHistory={roundHistory as Round<BacBallResult, BacBallSettlementResult>[]}
+                result={result}
+                roundState={roundState}
+                roundData={roundData}
+                turnCounter={turnCounter}
+                drawId={drawId}
+                playResultAnimation={playResultAnimation}
+            />
+        );
     }
 
     renderBettingBlock() {
