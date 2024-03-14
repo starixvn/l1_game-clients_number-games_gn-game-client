@@ -23,7 +23,7 @@ export const ConnectFailedMessage: React.FC<{ gameName: string; onSubmit: () => 
                 <div className={Styles["list-action"]}>
                     <button onClick={() => onSubmit()} className={`btn-green w-100 ${Styles["reconnect"]}`}>
                         {reason === ConnectFailedReasonKey.lostConnection
-                            ? t(`${ResourceTypes.SABA_NUMBER}.reconnect`)
+                            ? t(`${ResourceTypes.SABA_NUMBER}.button_reconnect`)
                             : t(`${ResourceTypes.COMMON}.ok`)}
                     </button>
                 </div>
