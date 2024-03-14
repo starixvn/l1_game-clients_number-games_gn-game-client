@@ -21,7 +21,7 @@ export function parseContextFromURL(): URLContextModel | undefined {
     const token = params.get("token");
     const language = params.get("lang");
     const gameId = Number(params.get("gameId") || 0);
-    const isDirectMode = params.has("ref");
+    const isDirectMode = !!params.get("ref");
     const redirectUrl = isDirectMode ? params.get("rurl") : "";
 
     return { token, language, gameId, isDirectMode, redirectUrl };
