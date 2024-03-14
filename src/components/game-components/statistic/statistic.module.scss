@@ -6,11 +6,8 @@
     font-size: 1rem;
     align-items: center;
     justify-content: center;
-    border: 0.1rem solid transparent;
     border-radius: 5rem;
     font-weight: 500;
-    background: linear-gradient(var(--colorBackground), var(--colorBackground)) padding-box,
-        linear-gradient(to bottom, var(--colorBorderTop), var(--colorBorderBottom)) border-box;
     color: var(--colorText);
 }
 
@@ -52,17 +49,15 @@
 .tie {
     @extend %statistic-icon;
     --colorText: #3eac3e;
-    --colorBorderTop: #1c7e3a;
-    --colorBorderBottom: #136513;
-    --colorBackground: #092b2d;
+    background: url("/static/images/dot/dot-green.svg") no-repeat;
+    background-size: contain;
 }
 
 .banker {
     @extend %statistic-icon;
     --colorText: #ff5e5e;
-    --colorBorderTop: #fd1e55;
-    --colorBorderBottom: #fd1e55;
-    --colorBackground: #2b1a26;
+    background: url("/static/images/dot/dot-red.svg") no-repeat;
+    background-size: contain;
 
     &.big-road-tie {
         @extend %big-road-tie-with-bet-choice;
@@ -72,9 +67,8 @@
 .player {
     @extend %statistic-icon;
     --colorText: #1c7bdf;
-    --colorBorderTop: #1b91ff;
-    --colorBorderBottom: #1b91ff;
-    --colorBackground: #0c243a;
+    background: url("/static/images/dot/dot-blue.svg") no-repeat;
+    background-size: contain;
 
     &.big-road-tie {
         @extend %big-road-tie-with-bet-choice;
@@ -84,4 +78,5 @@
 .statistic-choice-icon {
     width: 1.6rem;
     height: 1.6rem;
+    line-height: 1.6rem;
 }
