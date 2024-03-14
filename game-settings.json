@@ -4,7 +4,8 @@
         "gameName": "BacBall",
         "socketInfo": {
             "namespace": "bacball",
-            "path": "bacball"
+            "path": "bacball",
+            "serviceName": "baccarat-ball"
         },
         "durations": {
             "wholeRound": 122,

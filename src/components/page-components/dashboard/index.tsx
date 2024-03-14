@@ -24,6 +24,7 @@ import Styles from "./dashboard.module.scss";
 import NameGenerator from "./register/name-generator";
 import { Banner } from "../banner";
 import { GameIcon } from "./game-icon";
+import { Lobby } from "../lobby/lobby";
 
 class Dashboard extends React.PureComponent<Props, State> {
     private notificationSocket: Socket = null;
@@ -307,30 +308,8 @@ class Dashboard extends React.PureComponent<Props, State> {
     }
 
     renderLobby() {
-        return (
-            <div className={Styles["lobby-container"]}>
-                <div className="background-galaxy">
-                    <img className="galaxy-2" src="/static/images/bg-galaxy.jpg" alt="galaxy" />
-                    <img className="galaxy-1" src="/static/images/bg-galaxy.jpg" alt="galaxy" />
-                </div>
-                <div className="star-field">
-                    <div className="layer"></div>
-                    <div className="layer"></div>
-                    <div className="layer"></div>
-                </div>
-                <Banner />
-                <div className={Styles["game-board-detail"]} id="ico-bacball" onClick={() => this.openGame(1001)}>
-                    <GameIcon gameName="Bac Ball" onlineUsers={15} />
-                    <div className={Styles["detail"]}>
-                        <div className={Styles["detail-top"]}>
-                            <span className="icon-clock" />
-                            Starting bet
-                        </div>
-                        <img src="/static/images/game-board-detail/scoreboard.svg" alt="scoreboard" />
-                    </div>
-                </div>
-            </div>
-        );
+        const openGame = () => this.setState({ openGameId: 1001 });
+        return <Lobby openGame={openGame} />;
     }
 
     renderDashBoard() {
