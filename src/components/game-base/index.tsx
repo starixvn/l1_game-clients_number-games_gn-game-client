@@ -503,7 +503,8 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     renderSlidingChips() {
-        return <BetSettings />;
+        const { gameConfigs, userStakeLevel } = this.props.gameStateContextModel;
+        return <BetSettings gameConfigs={gameConfigs} userStakeLevel={userStakeLevel} />;
     }
 
     renderConfirmBet() {

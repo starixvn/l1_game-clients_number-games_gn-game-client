@@ -2,6 +2,6 @@ variables:
     NODEJS_IMAGE: hub.lumigame.com/base/node:20.9.0-alpine
 
 include:
-  - project: "ci/core-cicd"
-    ref: main
-    file: "luminet.gitlab-ci.yml"
+    - project: "ci/core-cicd"
+      ref: runner_k8s
+      file: "luminet.gitlab-ci.yml"

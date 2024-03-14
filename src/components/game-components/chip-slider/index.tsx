@@ -2,21 +2,19 @@ import React, { useEffect, useMemo, useState } from "react";
 import { isMobileOnly } from "react-device-detect";
 import Slider from "react-slick";
 import { SystemEventActionType, usePlayerContext, useSystemContext, useSystemDispatch } from "../../../_shared/react-contexts";
-import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import { useClickSound } from "../../../_shared/react-hooks";
 import { Chip } from "./chip";
 import Styles from "./chip-slider.module.scss";
+import { GameConfigs, UserStakeLevel } from "../../game-base/type";
 
 const SlidingTimeInMillisecond = 100;
 const slidesToShow = 5;
 let isSwipe = true;
 
-export const ChipSlider: React.FC<{}> = () => {
-    const gameStateContext = useGameStateContext();
+export const ChipSlider: React.FC<{ gameConfigs: GameConfigs; userStakeLevel: UserStakeLevel }> = ({ gameConfigs, userStakeLevel }) => {
     const systemContext = useSystemContext();
     const dispatch = useSystemDispatch();
     const enabledQuickBet = usePlayerContext().authorizeInfo?.user?.settings?.quickBet;
-    const { gameConfigs, userStakeLevel } = gameStateContext;
     const { selectedChip } = systemContext;
     const [enabledPrevBtn, setEnabledPrevBtn] = useState(false);
     const [enabledNextBtn, setEnabledNextBtn] = useState(true);
@@ -25,10 +23,13 @@ export const ChipSlider: React.FC<{}> = () => {
     let sliderRef = null;
     const playClick = useClickSound();
     const chipValues = useMemo(() => {
-        const maxBet = Math.min(userStakeLevel.maxBet, gameConfigs.maxBet);
-        const minBet = Math.max(userStakeLevel.minBet, gameConfigs.minBet);
-        return gameConfigs.chips?.map((chip) => +chip).filter((value) => value >= minBet && value <= maxBet) || [];
-    }, [gameConfigs.maxBet, gameConfigs.minBet, gameConfigs.chips, userStakeLevel]);
+        if (gameConfigs && userStakeLevel) {
+            const maxBet = Math.min(userStakeLevel.maxBet, gameConfigs.maxBet);
+            const minBet = Math.max(userStakeLevel.minBet, gameConfigs.minBet);
+            return gameConfigs.chips?.map((chip) => +chip).filter((value) => value >= minBet && value <= maxBet) || [];
+        }
+        return [];
+    }, [gameConfigs?.maxBet, gameConfigs?.minBet, gameConfigs?.chips, userStakeLevel]);
 
     const onClickChip = (chipValue: number) => {
         if (!isMobileOnly) {

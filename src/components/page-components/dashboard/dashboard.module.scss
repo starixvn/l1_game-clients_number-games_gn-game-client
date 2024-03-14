@@ -58,31 +58,3 @@
         z-index: calc(var(--global-api-error-index) + 1);
     }
 }
-
-.lobby-container {
-    padding-top: 4rem;
-}
-
-.game-board-detail {
-    background: url("/static/images/game-board-detail/bg-game-board.svg") no-repeat top center;
-    background-size: 100% 100%;
-    padding: 0 0.8rem;
-    position: relative;
-    display: flex;
-    gap: 1rem;
-    cursor: pointer;
-}
-
-.detail {
-    padding-top: 1.2rem;
-}
-
-.detail-top {
-    font-size: 1.2rem;
-    color: #00ff47;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    justify-content: end;
-    margin-bottom: 0.5rem;
-}
