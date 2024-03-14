@@ -17,19 +17,14 @@ export const getLogoName = () => {
 };
 
 const Header: React.FC<Props> = (props) => {
+    const imageUrl = `/static/images/${props.isRenderGames ? "bac-number/game-name" : "logo-site"}.svg`
+
     return (
         <header className={`${Styles.header}`} data-testid="header">
             <div className="game-container d-flex">
                 <div className={Styles["header-container"]}>
                     <div className={Styles["header-left"]}>
-                        {
-                            props.isRenderGames && <img id="img-game-name" src="/static/images/bac-number/game-name.svg" alt="game name" />
-                        }
-                        {
-                            !props.isRenderGames && <a onClick={() => window.location.reload()} className={Styles["site-name"]}>
-                                <img id="img-game-name" src="/static/images/logo-site.svg" alt="game name" />
-                            </a>
-                        }
+                        <img id="img-game-name" src={imageUrl} alt="game name" />
                     </div>
                     <div className={Styles["header-right"]}>
                         <UserInfo user={props.user} />
