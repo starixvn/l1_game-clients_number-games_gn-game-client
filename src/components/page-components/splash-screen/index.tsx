@@ -19,7 +19,7 @@ export type SplashScreenState = {
     underMaintenance: boolean;
 };
 
-export async function startup(): Promise<void> {
+export async function useCustomStartup(): Promise<void> {
     const { token, language } = useContext(URLContext);
     const router = useRouter();
     const player = usePlayerContext();
@@ -49,7 +49,7 @@ export async function startup(): Promise<void> {
     router.push("");
 }
 
-export function onStartupError(error: Error): void {
+export function useStartupErrorCatcher(error: Error): void {
     Sentry.captureException(error);
 
     const router = useRouter();
@@ -58,7 +58,7 @@ export function onStartupError(error: Error): void {
 }
 
 export function SplashScreen(): ReactNode {
-    startup().catch(onStartupError);
+    useCustomStartup().catch(useStartupErrorCatcher);
 
     const { session, locale } = usePlayerContext();
 

@@ -5,7 +5,7 @@ import { locales } from "../../constants";
 export type PlayerContextModel = {
     authorizeInfo?: AuthorizeResponse;
     session?: SSOResponse;
-    locale: string;
+    locale?: string;
     setBalance?: (balance: number) => void;
     signOut?: () => void;
     fractionalOddsFormat?: boolean;
