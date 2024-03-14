@@ -442,10 +442,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         });
     };
 
-    calculateOddsRange = (margin: any) => {
-        return {};
-    };
-
     renderNotice() {
         return <Notice />;
     }
@@ -480,7 +476,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     renderGameGuideModal() {
-        return createPortal(<GameGuideModal calculateOddsRange={this.calculateOddsRange} />, document.getElementById("dashboard"));
+        return createPortal(<GameGuideModal />, document.getElementById("dashboard"));
     }
 
     renderMenuButtons() {

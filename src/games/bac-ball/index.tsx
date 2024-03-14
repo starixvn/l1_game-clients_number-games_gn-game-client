@@ -21,7 +21,6 @@ import { DrawIdBlock } from "./draw-id-block";
 import { BacBallBetHistoryModal } from "./history";
 import { Scoreboard } from "./scoreboard";
 import { BacBallResult, BacBallSettlementResult } from "./types";
-import { probabilityToBetOdds } from "../../_shared/helpers";
 
 class BacBall extends GameBase<GameBaseProps> {
     private turnIdHandler?: TurnIdHandler;
@@ -37,7 +36,6 @@ class BacBall extends GameBase<GameBaseProps> {
             totalTurns: props.totalTurns,
             durations: props.durations,
         });
-        this.calculateOddsRange.bind(this);
     }
 
     override registerHandlers(): void {
@@ -54,24 +52,6 @@ class BacBall extends GameBase<GameBaseProps> {
             loadPixiAnimations(`/static/images/cage/number/${result}.json`, () => ({}))
         );
     }
-
-    calculateOddsRange = (margin: any) => {
-        return {
-            min: this.getBetOdds(MaxProbability, margin),
-            max: this.getBetOdds(MinProbability, margin),
-        };
-    };
-
-    getBetOdds = (probabilities: Record<string, number>, margins: Record<string, number>[] = []): Record<string, number> => {
-        const sortedMargins = margins.toSorted((margin) => margin.max);
-        return Object.keys(probabilities).reduce((result, choice) => {
-            const prob = probabilities[choice];
-            const originalOdds = probabilityToBetOdds(prob);
-            const margin = sortedMargins.find((m) => originalOdds <= m.max)?.[choice];
-            result[choice] = probabilityToBetOdds(prob, margin);
-            return result;
-        }, {} as any);
-    };
 
     renderResultBlock() {
         return <BacBallResultBlock />;

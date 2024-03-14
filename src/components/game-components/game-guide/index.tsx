@@ -9,7 +9,7 @@ import Loader from "../loader";
 import ModalContainer from "../modal-container";
 import Styles from "./game-guide.module.scss";
 
-const GameGuideModal: FC<{ calculateOddsRange: Function }> = ({ calculateOddsRange }) => {
+const GameGuideModal: FC = () => {
     const { isShowGameGuide } = useGameStateContext();
     const dispatch = useGameStatesDispatch();
     const { t: translate } = useCommonTranslate();
@@ -21,18 +21,14 @@ const GameGuideModal: FC<{ calculateOddsRange: Function }> = ({ calculateOddsRan
     return (
         isShowGameGuide && (
             <ModalContainer isOpen={true} onCloseModal={handleCloseModal} title={translate("game_guide")}>
-                <WrapperGameGuide calculateOddsRange={calculateOddsRange} />
+                <WrapperGameGuide />
             </ModalContainer>
         )
     );
 };
 
-const GameGuide: FC<{ calculateOddsRange: Function }> = ({ calculateOddsRange }) => {
+const GameGuide: FC = () => {
     const { userStakeLevel, gameConfigs } = useGameStateContext();
-    const odds = useMemo(() => {
-        return calculateOddsRange(gameConfigs.margin);
-    }, [gameConfigs.margin]);
-    Object.assign(gameConfigs, { oddsRange: odds });
     const theme = Themes.numberGame ?? "dark";
     const language = tolgee.getLanguage() ?? "en";
     const wrapperRef = useRef<HTMLIFrameElement>();
