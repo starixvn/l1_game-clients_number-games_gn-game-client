@@ -15,80 +15,110 @@ export type TurnIdHandlerProps = {
 export class TurnIdHandler {
     private turnCounter = 0;
     private roundState: RoundState = RoundState.None;
+    private reloadHandler = false;
+    private roundRemainingTime = 0;
+    private drawId = 0;
 
     constructor(private props: TurnIdHandlerProps) {}
 
     registerEvents = () => {
+        console.log("TurnIdHandler re-init");
+        this.reloadHandler = true;
+        this.roundRemainingTime = 0;
+        this.props.gameMessageHandler.register(messageEventType.REMAINING_TIME, this.handleRemainingTime.bind(this));
         this.props.gameMessageHandler.register(messageEventType.DRAW_ID, this.handleDrawId.bind(this));
         this.props.gameMessageHandler.register(messageEventType.ROUND_STATE, this.handleRoundState.bind(this));
     };
 
-    handleDrawId = ({ drawId }) => {
-        const numberOfTurnsPerRound = this.props.totalTurns;
-
-        this.props.dispatch({
-            type: GameEventActionType.DRAW_ID,
-            payload: { drawId },
-        });
-
-        const turnIndex = drawId % numberOfTurnsPerRound;
-        this.turnCounter = turnIndex === 0 ? numberOfTurnsPerRound : turnIndex;
-
-        const { roundState, remainingTime, pfSetting } = this.props.gameStateContextModel();
-        const { showResult, wholeTurn, beforePlaceBet } = this.props.durations;
-
-        if (pfSetting.drawId != drawId) {
-            this.props.dispatch({
-                type: GameEventActionType.UPDATE_PF_SETTING,
-                payload: {
-                    pfSetting: {
-                        drawId,
-                        randomClientSeed: randomNumberSeries(4),
-                    },
-                },
+    handleRemainingTime = ({ remainingTime }) => {
+        if (this.reloadHandler) {
+            this.roundRemainingTime = remainingTime;
+            writeDebugLog({
+                name: "TurnIdHandler - handleRemainingTime",
+                remainingTime,
             });
         }
+    };
+
+    handleDrawId = ({ drawId }) => {
+        this.drawId = drawId;
+        const numberOfTurnsPerRound = this.props.totalTurns;
+        const turnIndex = drawId % numberOfTurnsPerRound;
+        this.turnCounter = turnIndex === 0 ? numberOfTurnsPerRound : turnIndex;
+        // const { pfSetting } = this.props.gameStateContextModel();
+        const { showResult, wholeTurn, beforePlaceBet, switchRoundAnimation } = this.props.durations;
+        const isInDisplayResultState = this.roundRemainingTime % wholeTurn > wholeTurn - (showResult + beforePlaceBet);
 
         writeDebugLog({
-            name: "handleDrawId - turncounter",
+            name: "TurnIdHandler - handleDrawId",
             innerRoundState: RoundState[this.roundState],
-            globalRoundState: RoundState[roundState],
             showResult,
             wholeTurn,
-            remainingTime,
+            remainingTime: this.roundRemainingTime,
             drawId,
+            isInDisplayResultState,
         });
 
-        if (this.roundState === RoundState.None && remainingTime >= wholeTurn - (showResult + beforePlaceBet)) {
-            if (this.turnCounter === 1) {
-                this.turnCounter = numberOfTurnsPerRound;
-            } else {
-                this.turnCounter -= 1;
-            }
-            this.roundState = RoundState.DisplayResult;
-            this.dispatchTurnCounter(true);
-        } else if (this.roundState !== RoundState.DisplayResult && this.roundState !== RoundState.BeforePlaceBet) {
-            this.dispatchTurnCounter(true);
+        const isInSwitchRoundState = this.roundRemainingTime <= switchRoundAnimation;
+
+        if (this.reloadHandler && isInDisplayResultState) {
+            let publishTurnCounter = this.turnCounter === 1 ? numberOfTurnsPerRound : this.turnCounter - 1;
+            this.reloadHandler = false;
+            this.dispatchTurnCounter(true, publishTurnCounter);
+            this.dispatchDrawId(drawId - 1);
+        } else if (!this.isInDisplayResultState() || isInSwitchRoundState) {
+            this.dispatchTurnCounter(true, this.turnCounter);
+            this.dispatchDrawId(drawId);
         }
     };
 
     handleRoundState = ({ roundState }) => {
-        if (
-            roundState == RoundState.InRound &&
-            (this.roundState === RoundState.DisplayResult || this.roundState === RoundState.BeforePlaceBet)
-        ) {
-            this.dispatchTurnCounter(false);
+        if (roundState == RoundState.InRound && this.isInDisplayResultState()) {
+            this.dispatchTurnCounter(false, this.turnCounter);
+            this.dispatchDrawId(this.drawId);
         }
 
         this.roundState = roundState;
     };
 
-    dispatchTurnCounter = (fromDrawId) => {
+    dispatchTurnCounter = (fromDrawId, turnCounter) => {
         this.props.dispatch({
             type: GameEventActionType.TURN_COUNTER,
-            payload: { turnCounter: this.turnCounter },
+            payload: { turnCounter },
         });
 
-        writeDebugLog({ name: "dispatch turnCounter", turnCounter: this.turnCounter, fromDrawId, roundState: RoundState[this.roundState] });
+        writeDebugLog({
+            name: "TurnIdHandler dispatch turnCounter",
+            turnCounter,
+            fromDrawId,
+            roundState: RoundState[this.roundState],
+        });
     };
+
+    dispatchDrawId = (drawId) => {
+        this.props.dispatch({
+            type: GameEventActionType.DRAW_ID,
+            payload: { drawId },
+        });
+
+        this.props.dispatch({
+            type: GameEventActionType.UPDATE_PF_SETTING,
+            payload: {
+                pfSetting: {
+                    drawId,
+                    randomClientSeed: randomNumberSeries(4),
+                },
+            },
+        });
+
+        writeDebugLog({
+            name: "TurnIdHandler dispatch drawId",
+            drawId,
+            roundState: RoundState[this.roundState],
+        });
+    };
+
+    private isInDisplayResultState() {
+        return this.roundState === RoundState.DisplayResult || this.roundState === RoundState.BeforePlaceBet;
+    }
 }
