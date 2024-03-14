@@ -14,4 +14,5 @@ window.envConfig = {
     enableMsgpackParser: false,
     system: "GN",
     appType: 1,
+    enableDebugLogs: true,
 };

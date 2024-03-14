@@ -369,7 +369,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
         this.gameMessageHandler.broadcastGameEvent({ [messageEventType.ROUND_STATE]: newRoundState });
 
-        if (gameStateContextModel.roundState !== newRoundState && gameStateContextModel.isConnect) {
+        if (gameStateContextModel.roundState !== newRoundState) {
             const newGameState = {
                 roundState: newRoundState,
                 ...this.gameStateHandler.getNextRoundState({
@@ -381,6 +381,13 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                     remainingTime,
                 }),
             };
+
+            writeDebugLog({
+                name: "change-round-state",
+                currentRoundState: RoundState[gameStateContextModel.roundState],
+                newRoundState: RoundState[newRoundState],
+                ...newGameState,
+            });
 
             dispatch({
                 type: GameEventActionType.SET_NEW_GAME_STATE,

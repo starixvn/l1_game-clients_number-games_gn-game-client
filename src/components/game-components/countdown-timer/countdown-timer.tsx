@@ -59,7 +59,6 @@ const SimpleTimer = () => {
             setTimeLeft(remainingTime);
             setClassNames(roundState === RoundState.LockingBet ? styles["lock-bet"] : "");
         }
-
     }, [timeLeft, remainingTime, roundState]);
 
     return remainingTime <= 0 ? (
@@ -82,9 +81,11 @@ const GameStatus: React.FC<{ children: React.ReactNode }> = ({ children }: { chi
         setDisplayedTurnId(turnCounter);
     }, [roundState, turnCounter]);
 
+    const turnCounterText = displayedTurnId > 0 ? t(`draw_${displayedTurnId}`) : "";
+
     return (
         <div className={`${styles["game-status"]}`}>
-            <span>{t(`draw_${displayedTurnId}`)}</span>
+            <span>{turnCounterText}</span>
             {children}
         </div>
     );
