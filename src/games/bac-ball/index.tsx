@@ -19,7 +19,7 @@ import { BacBallResultBlock } from "./bac-ball-result-block";
 import { BacBallBetOptions, MaxProbability, MinProbability, StatisticRuleEntries } from "./constants";
 import { DrawIdBlock } from "./draw-id-block";
 import { BacBallBetHistoryModal } from "./history";
-import { Scoreboard } from "./scoreboard";
+import Scoreboard from "./scoreboard";
 import { BacBallResult, BacBallSettlementResult } from "./types";
 
 class BacBall extends GameBase<GameBaseProps> {

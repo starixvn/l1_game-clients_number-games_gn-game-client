@@ -1,7 +1,7 @@
 import "swiper/css";
 import "swiper/css/pagination";
 
-import { Component, ReactNode } from "react";
+import { Component, ReactNode, memo } from "react";
 import { Round } from "../../components/game-base/type";
 import { ScoreboardProps, SlidableScoreboard, SwitchableScoreboard } from "../../components/game-components/round-history/scoreboard";
 import { BacBallBeadRoadCharacterElement, BacBallBigRoadConverter, BacBallBigRoadElement } from "./scoreboard-elements";
@@ -67,14 +67,9 @@ export class Scoreboard extends Component<ScoreboardComponentProps> {
         );
     }
 
-    shouldComponentUpdate(nextProps: Readonly<ScoreboardComponentProps>): boolean {
-        const current = this.props.roundHistory.map((x) => x.roundId).join();
-        const next = nextProps.roundHistory.map((x) => x.roundId).join();
-
-        return current !== next || this.props.isShowBlink !== nextProps.isShowBlink;
-    }
-
     render(): ReactNode {
         return <SlidableScoreboard boards={[this.renderBigRoad(), this.renderBeadRoad()]} />;
     }
 }
+
+export default memo(Scoreboard);

@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { memo, useMemo } from "react";
 import { isIOS, isMobileOnly } from "react-device-detect";
 import { StorageHelper, localStorageKeys } from "../../../_shared/helpers";
 import { usePlayerContext } from "../../../_shared/react-contexts";
@@ -33,4 +33,4 @@ const BetSettings = () => {
     }, [isShowToolbarGuide, enabledQuickBet]);
 };
 
-export default BetSettings;
+export default memo(BetSettings);
