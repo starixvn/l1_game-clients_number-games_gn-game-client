@@ -19,8 +19,8 @@ export class TurnIdHandler {
     constructor(private props: TurnIdHandlerProps) {}
 
     registerEvents = () => {
-        this.props.gameMessageHandler.register(messageEventType.DRAW_ID, this.handleDrawId);
-        this.props.gameMessageHandler.register(messageEventType.ROUND_STATE, this.handleRoundState);
+        this.props.gameMessageHandler.register(messageEventType.DRAW_ID, this.handleDrawId.bind(this));
+        this.props.gameMessageHandler.register(messageEventType.ROUND_STATE, this.handleRoundState.bind(this));
     };
 
     handleDrawId = ({ drawId }) => {
@@ -35,7 +35,7 @@ export class TurnIdHandler {
         this.turnCounter = turnIndex === 0 ? numberOfTurnsPerRound : turnIndex;
 
         const { roundState, remainingTime, pfSetting } = this.props.gameStateContextModel();
-        const { showResult, wholeTurn } = this.props.durations;
+        const { showResult, wholeTurn, beforePlaceBet } = this.props.durations;
 
         if (pfSetting.drawId != drawId) {
             this.props.dispatch({
@@ -59,16 +59,16 @@ export class TurnIdHandler {
             drawId,
         });
 
-        if (roundState === RoundState.None && remainingTime >= wholeTurn - showResult) {
+        if (this.roundState === RoundState.None && remainingTime >= wholeTurn - (showResult + beforePlaceBet)) {
             if (this.turnCounter === 1) {
                 this.turnCounter = numberOfTurnsPerRound;
             } else {
                 this.turnCounter -= 1;
             }
+            this.roundState = RoundState.DisplayResult;
             this.dispatchTurnCounter(true);
-        } else if (roundState !== RoundState.DisplayResult && this.roundState !== RoundState.BeforePlaceBet) {
+        } else if (this.roundState !== RoundState.DisplayResult && this.roundState !== RoundState.BeforePlaceBet) {
             this.dispatchTurnCounter(true);
-            this.roundState = roundState;
         }
     };
 
