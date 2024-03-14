@@ -26,7 +26,6 @@ export function parseContextFromURL(): URLContextModel | undefined {
     const gameId = Number(params.get("gameId") || 0);
     const isDirectMode = !!params.get("ref");
     const redirectUrl = isDirectMode ? params.get("rurl") : "";
-
     return { token, language, gameId, isDirectMode, redirectUrl };
 }
 
@@ -49,10 +48,10 @@ export const initialURLContextData = {
     backToRedirectUrl: (redirectUrl: string) => {
         if (redirectUrl !== "") {
             globalThis.location.href = GameUtils.base64Decode(redirectUrl);
+        } else {
+            StorageHelper.set(localStorageKeys.backToLobby, true);
+            Router.push({ pathname: "/" });
         }
-
-        StorageHelper.set(localStorageKeys.backToLobby, true);
-        Router.push({ pathname: "/" });
     },
 };
 

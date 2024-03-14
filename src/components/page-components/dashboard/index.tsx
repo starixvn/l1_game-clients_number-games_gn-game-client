@@ -4,7 +4,7 @@ import React from "react";
 import { AuthorizeResponse, ReCheckInResponse } from "sc-user-service-client/dist/auth";
 import { getAppSettings } from "../../../_shared/app-settings";
 import { buildUrl, GetLocalizedErrorMessage, localStorageKeys, StorageHelper } from "../../../_shared/helpers";
-import { PlayerContextProvider, updateURLContext } from "../../../_shared/react-contexts";
+import { PlayerContextProvider, URLContextModel, updateURLContext } from "../../../_shared/react-contexts";
 import { authorize, createNickname, getSettingGames, reCheckIn } from "../../../services/auth-service";
 import { updateSignInSMStatus } from "../../../services/user-setting-service";
 import { Props, State } from "./type";
@@ -309,11 +309,12 @@ class Dashboard extends React.PureComponent<Props, State> {
 
     openGameFromLobby() {
         StorageHelper.set(localStorageKeys.backToLobby, false);
+        updateURLContext({ gameId: 1001 });
         this.setState({ openGameId: 1001 })
     }
 
     renderLobby() {
-        this.setState({ openGameId: null })
+        this.setState({ openGameId: null });
         StorageHelper.set(localStorageKeys.backToLobby, true);
         return <Lobby openGame={() => this.openGameFromLobby()} />;
     }
@@ -329,8 +330,9 @@ class Dashboard extends React.PureComponent<Props, State> {
         };
         const offerGames: number[] = authorizeInfo?.user?.offerGames?.map((game: any) => game?.gameId) ?? [];
         const backToLobby = Boolean(StorageHelper.get(localStorageKeys.backToLobby));
-        const isRenderGames = offerGames.includes(openGameId) && !backToLobby;
 
+        const ssoRedirectGameId = (StorageHelper.get(localStorageKeys.url) as URLContextModel).gameId;
+        const isRenderGames = (offerGames.includes(openGameId) && !backToLobby) || ssoRedirectGameId > 0;
         return (
             <PlayerContextProvider value={authContextValue}>
                 <div className={`${Styles["dashboard"]}`} id={"dashboard"}>
