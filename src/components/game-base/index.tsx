@@ -37,6 +37,7 @@ import {
     PlayerHandler,
     messageEventType,
 } from "./handlers";
+import { GameSoundHandler } from "./handlers/game-sound-handler";
 import { IGameStateHandler } from "./handlers/game-state-handler";
 import { GameBaseProps, PFSettingData, RoundState } from "./type";
 
@@ -56,6 +57,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     private gameFinishHandler?: GameFinishHandler;
     private gameDisabledHandler?: GameDisableHandler;
     private gameRoundHistoryHandler?: GameRoundHistoryHandler;
+    private gameSoundHandler?: GameSoundHandler;
 
     constructor(
         props: P,
@@ -67,7 +69,8 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         placeBetHandler?: PlaceBetHandler,
         gameFinishHandler?: GameFinishHandler,
         gameDisabledHandler?: GameDisableHandler,
-        gameRoundHistoryHandler?: GameRoundHistoryHandler
+        gameRoundHistoryHandler?: GameRoundHistoryHandler,
+        gameSoundHandler?: GameSoundHandler
     ) {
         super(props);
 
@@ -129,6 +132,11 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             gameRoundHistoryHandler ??
             new GameRoundHistoryHandler({ dispatch, gameStateContextModel: this.getGameStateContext.bind(this) });
 
+        this.gameSoundHandler =
+            gameSoundHandler ??
+            new GameSoundHandler({
+                gameSound: this.getGameSound.bind(this),
+            });
         this.placeBet = this.placeBet.bind(this);
         this.updateUserBalance = this.updateUserBalance.bind(this);
         this.setActiveScoreboardTab = this.setActiveScoreboardTab.bind(this);
@@ -136,6 +144,10 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
     getGameStateContext = () => {
         return this.props.gameStateContextModel;
+    };
+
+    getGameSound = () => {
+        return this.props.gameSound;
     };
 
     componentDidMount() {
@@ -393,26 +405,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 type: GameEventActionType.SET_NEW_GAME_STATE,
                 payload: { newGameState },
             });
-            const enableSound = StorageHelper.get(localStorageKeys.enableSound) ?? false;
-            enableSound && this.playSound(gameStateContextModel.roundState);
-        }
-    }
-
-    private playSound(roundState: RoundState) {
-        const { stopBettingSound, receiveFinishSound, startRoundSound, startBettingSound } = this.props.gameSound;
-        switch (roundState) {
-            case RoundState.InRound:
-                stopBettingSound();
-                break;
-
-            case RoundState.LockingBet:
-                receiveFinishSound();
-                break;
-
-            case RoundState.DisplayResult:
-                startRoundSound();
-                startBettingSound();
-                break;
+            this.gameSoundHandler.handleSound(gameStateContextModel.roundState);
         }
     }
 
