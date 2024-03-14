@@ -307,9 +307,15 @@ class Dashboard extends React.PureComponent<Props, State> {
         );
     }
 
+    openGameFromLobby() {
+        StorageHelper.set(localStorageKeys.backToLobby, false);
+        this.setState({ openGameId: 1001 })
+    }
+
     renderLobby() {
-        const openGame = () => this.setState({ openGameId: 1001 });
-        return <Lobby openGame={openGame} />;
+        this.setState({ openGameId: null })
+        StorageHelper.set(localStorageKeys.backToLobby, true);
+        return <Lobby openGame={() => this.openGameFromLobby()} />;
     }
 
     renderDashBoard() {
@@ -322,6 +328,8 @@ class Dashboard extends React.PureComponent<Props, State> {
             fractionalOddsFormat: authorizeInfo.user?.fractionalOddsFormat ?? false,
         };
         const offerGames: number[] = authorizeInfo?.user?.offerGames?.map((game: any) => game?.gameId) ?? [];
+        const backToLobby = Boolean(StorageHelper.get(localStorageKeys.backToLobby));
+        const isRenderGames = offerGames.includes(openGameId) && !backToLobby;
 
         return (
             <PlayerContextProvider value={authContextValue}>
@@ -331,9 +339,10 @@ class Dashboard extends React.PureComponent<Props, State> {
                         toggleAnnouncementModal={this.toggleAnnouncementModal}
                         offerGames={offerGames}
                         isShowToolbarGuide={isShowToolbarGuide}
+                        isRenderGames={isRenderGames}
                     />
 
-                    {offerGames.includes(openGameId) ? this.renderGames() : this.renderLobby()}
+                    {isRenderGames ? this.renderGames() : this.renderLobby()}
 
                     <Footer />
 

@@ -1,5 +1,7 @@
 import { createContext, useContext } from "react";
 import { StorageHelper, localStorageKeys } from "../helpers";
+import Router from "next/router";
+import { GameUtils } from "../helpers/base-64-helper";
 
 export type URLContextModel = {
     token?: string;
@@ -7,7 +9,8 @@ export type URLContextModel = {
     gameId?: number;
     isDirectMode?: boolean;
     redirectUrl?: string;
-    backToLobby?: Function;
+    backToLobby?: boolean;
+    backToRedirectUrl?: Function;
 };
 
 export function parseContextFromURL(): URLContextModel | undefined {
@@ -43,8 +46,14 @@ export function loadURLContext(): URLContextModel {
 
 export const initialURLContextData = {
     ...loadURLContext(),
-    backToLobby: () => {
-        globalThis.location.reload();
+    backToRedirectUrl: (redirectUrl: string) => {
+        if (redirectUrl !== "") {
+            console.log(`redirectUrl: ${redirectUrl}`);
+            globalThis.location.href = GameUtils.base64Decode(redirectUrl);
+        }
+
+        StorageHelper.set(localStorageKeys.backToLobby, true);
+        Router.push({ pathname: "/" });
     },
 };
 

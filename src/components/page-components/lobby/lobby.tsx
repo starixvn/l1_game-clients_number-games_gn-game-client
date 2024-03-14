@@ -5,6 +5,7 @@ import { initLobbySocket } from "./lobby-socket-connection";
 import Styles from "./lobby.module.scss";
 import { usePlayerContext } from "../../../_shared/react-contexts";
 import { Socket } from "socket.io-client";
+import { StorageHelper, localStorageKeys } from "../../../_shared/helpers";
 
 export const Lobby: React.FC<any> = ({ openGame }) => {
     const [socket, setSocket] = useState<Socket>(null);
@@ -22,7 +23,6 @@ export const Lobby: React.FC<any> = ({ openGame }) => {
             setSocket(null);
         };
     }, []);
-
     return (
         socket && (
             <div className={Styles["lobby-container"]}>

@@ -12,7 +12,7 @@ const ButtonSettingClassName = "setting-button";
 export function Settings() {
     const dispatch = useGameStatesDispatch();
     const clickSound = useClickSound();
-    const { backToLobby, isDirectMode } = useContext(URLContext);
+    const { backToRedirectUrl, isDirectMode, redirectUrl } = useContext(URLContext);
 
     const handleClickPFSetting = () => {
         clickSound();
@@ -24,6 +24,7 @@ export function Settings() {
         });
     };
 
+    console.log(`redirectUrl: ${redirectUrl}`);
     return (
         <div className={styles["settings-container"]}>
             <div className={`${styles["setting-right"]} ${styles[getLogoName()]}`}>
@@ -31,7 +32,7 @@ export function Settings() {
                     <span id="icon-pf" className="icon-pf" />
                 </button>
 
-                {!isDirectMode && <button className={styles[ButtonSettingClassName]} onClick={() => backToLobby()}>
+                {(!isDirectMode || redirectUrl !== "") && <button className={styles[ButtonSettingClassName]} onClick={() => backToRedirectUrl(redirectUrl)}>
                     <span id="icon-home" className="icon-home" />
                 </button>}
 
