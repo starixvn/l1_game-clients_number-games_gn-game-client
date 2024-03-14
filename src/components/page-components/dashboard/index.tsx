@@ -4,7 +4,7 @@ import React from "react";
 import { AuthorizeResponse, ReCheckInResponse } from "sc-user-service-client/dist/auth";
 import { getAppSettings } from "../../../_shared/app-settings";
 import { buildUrl, GetLocalizedErrorMessage, localStorageKeys, StorageHelper } from "../../../_shared/helpers";
-import { PlayerContextProvider } from "../../../_shared/react-contexts";
+import { PlayerContextProvider, updateURLContext } from "../../../_shared/react-contexts";
 import { authorize, createNickname, getSettingGames, reCheckIn } from "../../../services/auth-service";
 import { updateSignInSMStatus } from "../../../services/user-setting-service";
 import { Props, State } from "./type";
@@ -136,7 +136,7 @@ class Dashboard extends React.PureComponent<Props, State> {
 
     async componentDidMount() {
         document.addEventListener("visibilitychange", this.onVisibilityChange);
-        const { session, directMode } = this.props;
+        const { session, directMode, queryGame } = this.props;
         const authorizeResponse = await authorize(session);
 
         const errorResponse = authorizeResponse as any;
@@ -164,6 +164,8 @@ class Dashboard extends React.PureComponent<Props, State> {
 
         this.connectNotificationSocket();
         await this.updateBetSettingGames();
+
+        queryGame && this.openGame(queryGame);
     }
 
     componentWillUnmount() {
@@ -209,12 +211,12 @@ class Dashboard extends React.PureComponent<Props, State> {
     }
 
     handleReload() {
-        window.location.reload();
+        globalThis.location.reload();
     }
 
     handleKickedOut(data: any) {
         const { umInfo } = data;
-        const { router, setIsUm } = this.props;
+        const { setIsUm } = this.props;
 
         if (umInfo) {
             this.reCheckInInterval && clearInterval(this.reCheckInInterval);
@@ -277,6 +279,8 @@ class Dashboard extends React.PureComponent<Props, State> {
 
     openGame(gameId: number) {
         this.setState({ queryGame: gameId, isJoinGame: true, openGameId: gameId });
+
+        updateURLContext({ gameId });
     }
 
     closeToolbarGuide() {
@@ -315,7 +319,7 @@ class Dashboard extends React.PureComponent<Props, State> {
                     <div className="layer"></div>
                 </div>
                 <Banner />
-                <div className={Styles["game-board-detail"]} id="ico-bacball" onClick={() => this.setState({ openGameId: 1001 })}>
+                <div className={Styles["game-board-detail"]} id="ico-bacball" onClick={() => this.openGame(1001)}>
                     <GameIcon gameName="Bac Ball" onlineUsers={15} />
                     <div className={Styles["detail"]}>
                         <div className={Styles["detail-top"]}>
@@ -350,7 +354,7 @@ class Dashboard extends React.PureComponent<Props, State> {
                         isShowToolbarGuide={isShowToolbarGuide}
                     />
 
-                    {openGameId ? this.renderGames() : this.renderLobby()}
+                    {offerGames.includes(openGameId) ? this.renderGames() : this.renderLobby()}
 
                     <Footer />
 
@@ -392,6 +396,7 @@ class Dashboard extends React.PureComponent<Props, State> {
 
     renderComponents = (authorizeInfo: AuthorizeResponse) => {
         const { authorized } = authorizeInfo;
+
         if (authorized) {
             return this.renderDashBoard();
         }
@@ -410,11 +415,11 @@ class Dashboard extends React.PureComponent<Props, State> {
                 <script
                     dangerouslySetInnerHTML={{
                         __html: `
-                            window.dataLayer = window.dataLayer || [];
+                            globalThis.dataLayer = globalThis.dataLayer || [];
                             function gtag(){dataLayer.push(arguments);}
                             gtag('js', new Date());
                             gtag('config', '${getAppSettings().googleAnalyticId}', {
-                            page_path: window.location.pathname,
+                            page_path: globalThis.location.pathname,
                             });
                         `,
                     }}

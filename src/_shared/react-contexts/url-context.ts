@@ -51,5 +51,13 @@ export const initialURLContextData = {
 export const URLContext = createContext<URLContextModel>(initialURLContextData);
 
 export const URLContextProvider = URLContext.Provider;
+
 export const URLContextConsumer = URLContext.Consumer;
+
 export const useURLContext = () => useContext(URLContext);
+
+export function updateURLContext(context: Partial<URLContextModel>) {
+    const contextFromLocalStorage = StorageHelper.get<URLContextModel>(localStorageKeys.url) || {};
+
+    StorageHelper.set(localStorageKeys.url, { ...contextFromLocalStorage, ...context });
+}

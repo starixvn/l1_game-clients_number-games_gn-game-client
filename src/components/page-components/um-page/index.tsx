@@ -7,7 +7,7 @@ import { convertToGMT8, formatDate } from "../../../_shared/helpers/time-helper"
 import { useTranslator } from "../../../_shared/react-hooks/use-translator";
 import { ResourceTypes } from "../../../_shared/resources";
 
-const UMPage: React.FC<{ locale: string }> = ({ locale }) => {
+const UMPage: React.FC = () => {
     const router = useRouter();
     const { t } = useTranslator();
     const [startTime, setStartTime] = useState<string>(null);

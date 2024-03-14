@@ -63,7 +63,7 @@ export function SplashScreen(): ReactNode {
     const { session, locale } = usePlayerContext();
 
     if (session?.isUM) {
-        return <UMPage locale={locale} />;
+        return <UMPage />;
     } else {
         return (
             <div className={`${Styles.page}`}>
