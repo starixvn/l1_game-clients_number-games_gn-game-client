@@ -8,9 +8,8 @@ import Cage, { CageColor, CagePosition } from "../../components/game-components/
 import { BacBallResultSlotContainer } from "./bac-ball-result-slot-container";
 import Style from "./bac-ball.module.scss";
 import { BacBallBetOptions } from "./constants";
-import { BacBallResult, BacBallSettlementResult } from "./types";
 
-export type BacBallResultBlockProps = Partial<GameStateContextModel<BacBallResult, BacBallSettlementResult>>;
+export type BacBallResultBlockProps = Partial<GameStateContextModel>;
 
 export const BacBallResultBlock: FC<BacBallResultBlockProps> = (props: BacBallResultBlockProps) => {
     const [cageBallFrames, setCageBallFrames] = useState<IBallColor>({ blue: [], red: [], blue2: [], red2: [] });

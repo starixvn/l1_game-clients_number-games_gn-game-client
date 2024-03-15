@@ -10,10 +10,11 @@ export type IResultSlotContainer = {
     delayTime: number;
     betChoice: string;
     className?: string;
-} & Partial<GameStateContextModel<BacBallResult, BacBallSettlementResult>>;
+} & Partial<GameStateContextModel>;
 
 export const BacBallResultSlotContainer: React.FC<IResultSlotContainer> = (props) => {
     const { delayTime, betChoice, className, result, roundState, roundData, turnCounter, drawId } = props;
+
     const betChoiceBalls = `${betChoice}Balls`;
     const defaultRoundData = [
         { number: 0, status: BallStatus.NONE, delayTime: 0 },

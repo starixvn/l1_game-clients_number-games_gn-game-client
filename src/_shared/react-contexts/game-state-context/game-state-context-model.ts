@@ -10,8 +10,8 @@ export interface GameStateContextModel {
     roundData: any;
     roundHistory: Round<object, object>[];
     roundId: number;
-    result?: object;
-    settlementResult?: object;
+    result?: any;
+    settlementResult?: any;
     totalBets: object;
     ownBets: object;
     betPercentage?: object;
