@@ -83,7 +83,7 @@ const BaseDialog: React.FC<Props> = ({
 
     return (
         <>
-            {enableBackdrop && !isMobileOnly && <div className={`overlay-mask ${Styles["overlay"]}`}></div>}
+            {enableBackdrop && <div className={`overlay-mask ${Styles["overlay"]}`}></div>}
             <div
                 style={getCustomStyle({ betContainerPosition })}
                 ref={wrapperRef}

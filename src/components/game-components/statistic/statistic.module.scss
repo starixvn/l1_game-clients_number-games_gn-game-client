@@ -49,14 +49,14 @@
 .tie {
     @extend %statistic-icon;
     --colorText: #3eac3e;
-    background: url("/static/images/dot/dot-green.svg") no-repeat;
+    background: url("/static/images/dot/dot-green-medium.svg") no-repeat;
     background-size: contain;
 }
 
 .banker {
     @extend %statistic-icon;
     --colorText: #ff5e5e;
-    background: url("/static/images/dot/dot-red.svg") no-repeat;
+    background: url("/static/images/dot/dot-red-medium.svg") no-repeat;
     background-size: contain;
 
     &.big-road-tie {
@@ -67,7 +67,7 @@
 .player {
     @extend %statistic-icon;
     --colorText: #1c7bdf;
-    background: url("/static/images/dot/dot-blue.svg") no-repeat;
+    background: url("/static/images/dot/dot-blue-medium.svg") no-repeat;
     background-size: contain;
 
     &.big-road-tie {
