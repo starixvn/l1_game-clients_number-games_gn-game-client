@@ -1,3 +1,4 @@
+import { Markup } from "interweave";
 import { useEffect, useRef, useState } from "react";
 import { isIOS, isMobileOnly } from "react-device-detect";
 import { StorageHelper, localStorageKeys } from "../../../../_shared/helpers";
@@ -17,12 +18,14 @@ export const QuickBetBtn = () => {
     const isShowToolbarGuide = StorageHelper.get(localStorageKeys.toolbarGuide) ?? true;
 
     const [isShowModalConfirm, setIsShowModalConfirm] = useState(false);
-    const [isShowTooltip, setIsShowTooltip] = useState(false);
+    const [isShowTooltip, setIsShowTooltip] = useState(true);
     const tooltipRef = useRef<HTMLDivElement>(null);
+
     let deviceClass = "";
     if (isMobileOnly) {
         deviceClass = isIOS ? Styles["ios-device"] : Styles["android-device"];
     }
+
     const { t } = useSNTranslate();
     const clickSound = useClickSound();
 
@@ -55,6 +58,14 @@ export const QuickBetBtn = () => {
         };
     }, [tooltipRef, isShowToolbarGuide]);
 
+    const onEnableFirstLogin = () => {
+        clickSound();
+        setIsShowTooltip(false);
+
+        updateUserQuickBetSetting(authContext.session, true);
+        authContext.authorizeInfo.user.settings.quickBet = true;
+    };
+
     const onClickQuickBet = () => {
         clickSound();
         if (!enabledQuickBet) {
@@ -71,6 +82,28 @@ export const QuickBetBtn = () => {
             <BaseDialog type={ModalType.Center} isOpen={isShowModalConfirm} onCloseModal={closeModal}>
                 <QuickBetHint closeModal={closeModal} confirmQuickBet={confirmQuickBet} />
             </BaseDialog>
+        </div>
+    );
+
+    const closeHintTooltip = () => {
+        setIsShowTooltip(false);
+        updateUserQuickBetSetting(authContext.session, false);
+    };
+
+    const toolTipPositionClass = isMobileOnly ? `bottom ${Styles["isMobile"]}` : "top",
+        toolTipClass = `popover-custom ${toolTipPositionClass} ${Styles["hint-one-click-bet"]} `;
+
+    const firstLoginQuickBetPopup = (
+        <div ref={tooltipRef} className={toolTipClass}>
+            <div className={Styles.content}>{<Markup content={t(`enable_quick_bet_hint`).replaceTolgeeFormat()}></Markup>}</div>
+            <div className={Styles.action}>
+                <button id="btn-cancel-quickbet" className={`btn-grey ${Styles["btn"]}`} onClick={closeHintTooltip}>
+                    {t("button_cancel")}
+                </button>
+                <button id="btn-on-quickbet" className={`btn-red ${Styles["btn"]}`} onClick={onEnableFirstLogin}>
+                    {t("button_enable_quickbet")}
+                </button>
+            </div>
         </div>
     );
 
@@ -95,7 +128,7 @@ export const QuickBetBtn = () => {
                 </label>
             </div>
             {isShowModalConfirm && !!enabledQuickBet === false && quickBetPopup}
-            {enabledQuickBet === undefined && isShowTooltip && quickBetPopup}
+            {enabledQuickBet === undefined && isShowTooltip && firstLoginQuickBetPopup}
         </div>
     );
 };
