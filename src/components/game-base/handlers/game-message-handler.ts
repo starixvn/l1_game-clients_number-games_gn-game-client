@@ -36,6 +36,7 @@ export const messageEventType = {
     PROVABLY_FAIR: "pf",
     IN_GAME_SERVER_SEED: "serverSeedHash",
     SEND_SOCKET_MESSAGE_WITH_CLIENT_SEED: "sendSocketMessageWithClientSeed",
+    ROUND_ID: "roundId",
 };
 
 export class GameMessageHandler {

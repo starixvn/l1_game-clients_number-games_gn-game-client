@@ -1,8 +1,10 @@
+import { TurnStateHandler } from "./turn-state-handler";
 import { GameEventActionType } from "../../_shared/react-contexts/game-state-context/game-event-action";
 import { GameStateContextModel } from "../../_shared/react-contexts/game-state-context/game-state-context-model";
 import { GameDurations, RoundState } from "../game-base/type";
 import { GameMessageHandler, messageEventType } from "../game-base/handlers/game-message-handler";
 import { randomNumberSeries, writeDebugLog } from "../../_shared/helpers";
+import { Turn, TurnTimelineCounter } from "./turn-time-counter-handler";
 
 export type TurnIdHandlerProps = {
     dispatch: Function;
@@ -15,23 +17,31 @@ export type TurnIdHandlerProps = {
 export class TurnIdHandler {
     private turnCounter = 0;
     private roundState: RoundState = RoundState.None;
-    private reloadHandler = false;
+    private shouldRunWhenFirstLoad = false;
     private roundRemainingTime = 0;
     private drawId = 0;
+    private roundId = 0;
+    private turnTimelineCounter: TurnTimelineCounter;
 
-    constructor(private props: TurnIdHandlerProps) {}
+    constructor(private props: TurnIdHandlerProps, turnTimelineCounter?: TurnTimelineCounter) {
+        this.turnTimelineCounter = turnTimelineCounter ?? new TurnTimelineCounter(props.durations);
+    }
 
     registerEvents = () => {
         console.log("TurnIdHandler re-init");
-        this.reloadHandler = true;
+        this.shouldRunWhenFirstLoad = true;
         this.roundRemainingTime = 0;
+        this.turnCounter = 0;
+        this.drawId = 0;
+        this.roundState = RoundState.None;
         this.props.gameMessageHandler.register(messageEventType.REMAINING_TIME, this.handleRemainingTime.bind(this));
+        this.props.gameMessageHandler.register(messageEventType.ROUND_ID, this.handleRoundId.bind(this));
         this.props.gameMessageHandler.register(messageEventType.DRAW_ID, this.handleDrawId.bind(this));
         this.props.gameMessageHandler.register(messageEventType.ROUND_STATE, this.handleRoundState.bind(this));
     };
 
     handleRemainingTime = ({ remainingTime }) => {
-        if (this.reloadHandler) {
+        if (this.shouldRunWhenFirstLoad) {
             this.roundRemainingTime = remainingTime;
             writeDebugLog({
                 name: "TurnIdHandler - handleRemainingTime",
@@ -40,47 +50,38 @@ export class TurnIdHandler {
         }
     };
 
+    handleRoundId = ({ roundId }) => {
+        this.roundId = roundId;
+    };
+
     handleDrawId = ({ drawId }) => {
+        const turnIndex = drawId % this.props.totalTurns;
+        this.turnCounter = turnIndex === 0 ? this.props.totalTurns : turnIndex;
         this.drawId = drawId;
-        const numberOfTurnsPerRound = this.props.totalTurns;
-        const turnIndex = drawId % numberOfTurnsPerRound;
-        this.turnCounter = turnIndex === 0 ? numberOfTurnsPerRound : turnIndex;
-        const { showResult, wholeTurn, beforePlaceBet, switchRoundAnimation } = this.props.durations;
+
+        let turn: Turn = {
+            id: this.drawId,
+            index: this.turnCounter,
+        };
+
+        if (this.shouldRunWhenFirstLoad) {
+            this.shouldRunWhenFirstLoad = false;
+            turn = this.turnTimelineCounter.calculateTurn(this.roundRemainingTime, this.roundId, this.drawId);
+
+            this.dispatchTurnCounter(true, turn.index);
+            this.dispatchDrawId(turn.id);
+        } else if (!this.isInDisplayResultState()) {
+            this.dispatchTurnCounter(true, this.turnCounter);
+            this.dispatchDrawId(this.drawId);
+        }
 
         writeDebugLog({
             name: "TurnIdHandler - handleDrawId",
             innerRoundState: RoundState[this.roundState],
-            showResult,
-            wholeTurn,
-            remainingTime: this.roundRemainingTime,
             drawId,
+            turnCounter: this.turnCounter,
+            turn,
         });
-
-        if (this.reloadHandler) {
-            const isInDisplayResultState = this.roundRemainingTime % wholeTurn > wholeTurn - (showResult + beforePlaceBet);
-            const isInSwitchRoundState = this.roundRemainingTime <= switchRoundAnimation;
-            const isInSwitchTurnState = this.roundRemainingTime % wholeTurn === 0;
-            this.reloadHandler = false;
-
-            if (isInDisplayResultState) {
-                let publishTurnCounter = this.turnCounter === 1 ? numberOfTurnsPerRound : this.turnCounter - 1;
-                this.dispatchTurnCounter(true, publishTurnCounter);
-                this.dispatchDrawId(drawId - 1);
-
-                return;
-            } else if (isInSwitchRoundState || isInSwitchTurnState) {
-                this.dispatchTurnCounter(true, this.turnCounter);
-                this.dispatchDrawId(drawId);
-                this.reloadHandler = false;
-
-                return;
-            }
-        }
-
-        if (!this.isInDisplayResultState()) {
-            this.dispatchTurnCounter(true, this.turnCounter);
-            this.dispatchDrawId(drawId);
-        }
     };
 
     handleRoundState = ({ roundState }) => {
