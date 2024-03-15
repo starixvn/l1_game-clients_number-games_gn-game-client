@@ -103,6 +103,9 @@ const PFSetting: FC = () => {
 
     return (
         <div className={Styles["pf-setting-container"]}>
+            <button className={Styles["btn-pf-guide"]}>
+                <span className="icon-guide" />
+            </button>
             <div>
                 <ul>
                     <li>{translateCommon("pf_settings_para_1")}</li>
