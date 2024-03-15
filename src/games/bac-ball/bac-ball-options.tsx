@@ -105,7 +105,9 @@ export const BacBallBetOptionsComponent = () => {
                     onClick={() => {
                         onClickBet(choice);
                     }}
-                ></button>
+                >
+                    <span className="ripple-effect"></span>
+                </button>
                 {isShowDisabledLayer && <div className={Style["disable-layer"]}></div>}
                 {<div className={Style["winning-effect"]}>{winningResult}</div>}
                 {showHighlightPrevResult({ betChoice: choice }) && winningPrev}
@@ -147,7 +149,9 @@ export const BacBallBetOptionsComponent = () => {
                     onClick={() => {
                         onClickBet(BacBallBetOptions.TIE);
                     }}
-                ></button>
+                >
+                    <span className="ripple-effect"></span>
+                </button>
                 {isShowDisabledLayer && <div className={Style["disable-layer"]}></div>}
                 {<div className={Style["winning-effect"]}>{winningResult}</div>}
                 {showHighlightPrevResult({ betChoice: BacBallBetOptions.TIE }) && winningPrev}
@@ -161,7 +165,7 @@ export const BacBallBetOptionsComponent = () => {
             {renderBetOptionTie()}
             <style>
                 {`
-                 .${Style["btn-ripple"]}:after {
+                 .ripple-effect {
                     top: calc(1 / var(--zoom-game) * ${ripplePosY}px);
                     left: calc(1 / var(--zoom-game) * ${ripplePosX}px);
                    }
