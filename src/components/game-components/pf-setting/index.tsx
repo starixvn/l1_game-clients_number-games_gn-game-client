@@ -117,9 +117,9 @@ const PFSetting: FC = () => {
                 {Object.keys(ownBets).length > 0 && <div className={Styles["form-overlay"]}></div>}
                 <div className={Styles["client-seed-options"]}>
                     <div className={Styles["client-seed-option"]}>
-                        <div>
+                        <div className="form-check">
                             <input
-                                className={Styles["radio-input"]}
+                                className="form-check-input"
                                 ref={randomRadio}
                                 type="radio"
                                 id="random-seed"
@@ -128,24 +128,23 @@ const PFSetting: FC = () => {
                                 value={pfSetting.randomClientSeed}
                                 onChange={handleCheckRadio}
                             />
-                            <label className={Styles["radio-label"]} htmlFor="random-seed">
+                            <label className="form-check-label" htmlFor="random-seed">
                                 {translateCommon("pf_client_seed_para_4")}
                             </label>
                         </div>
-                        <div>
-                            <input
-                                className={Styles["client-seed-input"]}
-                                ref={randomSeed}
-                                type="text"
-                                id="random-client-seed"
-                                value={pfSetting.randomClientSeed}
-                                readOnly={true}
-                                disabled={isManualMode}
-                            />
-                        </div>
+
+                        <input
+                            className="form-control"
+                            ref={randomSeed}
+                            type="text"
+                            id="random-client-seed"
+                            value={pfSetting.randomClientSeed}
+                            readOnly={true}
+                            disabled={isManualMode}
+                        />
                     </div>
                     <div className={Styles["client-seed-option"]}>
-                        <div>
+                        <div className="form-check">
                             <input
                                 ref={manualRadio}
                                 type="radio"
@@ -153,32 +152,31 @@ const PFSetting: FC = () => {
                                 name="client-seed"
                                 checked={isManualMode}
                                 onChange={handleCheckRadio}
-                                className={Styles["radio-input"]}
+                                className="form-check-input"
                             />
-                            <label className={Styles["radio-label"]} htmlFor="manual-seed">{`${translateCommon(
+                            <label className="form-check-label" htmlFor="manual-seed">{`${translateCommon(
                                 "pf_client_seed_para_3"
                             )}`}</label>
                         </div>
-                        <div className={Styles["manual-seed-input"]}>
-                            <input
-                                className={Styles["client-seed-input"]}
-                                id="manual-client-seed"
-                                ref={manualSeed}
-                                type="text"
-                                inputMode="numeric"
-                                onKeyDown={handleOnKeyPress}
-                                disabled={!isManualMode}
-                                defaultValue={pfSetting?.manualClientSeed ?? ""}
-                            />
-                        </div>
+
+                        <input
+                            className="form-control"
+                            id="manual-client-seed"
+                            ref={manualSeed}
+                            type="text"
+                            inputMode="numeric"
+                            onKeyDown={handleOnKeyPress}
+                            disabled={!isManualMode}
+                            defaultValue={pfSetting?.manualClientSeed ?? ""}
+                        />
                     </div>
                 </div>
             </div>
 
             <h3 className={Styles["section-title"]}>{translateCommon("pf_header_server_seed")}</h3>
             <div className={Styles["client-seed-form"]}>
-                <div className={Styles["server-seed-field"]}>
-                    <input id="server-seed-hash" className={Styles["server-seed-hash"]} value={pfSetting?.serverSeedHash} readOnly />
+                <div className="input-group width-full">
+                    <input id="server-seed-hash" className="form-control" value={pfSetting?.serverSeedHash} readOnly />
                     <button className={Styles["copy-btn"]} onClick={handleCopyServerSeedHash}>
                         <span className="icon-copy" />
                     </button>

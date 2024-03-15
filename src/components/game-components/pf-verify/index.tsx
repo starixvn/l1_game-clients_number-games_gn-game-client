@@ -64,16 +64,16 @@ const PFVerify: FC<{ drawId: number }> = () => {
 
             <div className={Styles["client-seed-form"]}>
                 <h3 className={Styles["section-title"]}>{translateCommon("pf_header_server_seed_sha256")}</h3>
-                <div className={Styles["server-seed-field"]}>
-                    <input className={Styles["server-seed-hash"]} type="text" name="" id="" />
+                <div className="input-group width-full">
+                    <input className="form-control" type="text" name="" id="" readOnly />
                     <button className={Styles["copy-btn"]}>
                         <span className="icon-copy" />
                     </button>
                 </div>
 
                 <h3 className={`${Styles["section-title"]} mt-3`}>{translateCommon("pf_header_server_seed")}</h3>
-                <div className={Styles["server-seed-field"]}>
-                    <input className={Styles["server-seed-hash"]} type="text" name="" id="" />
+                <div className="input-group width-full">
+                    <input className="form-control" type="text" name="" id="" readOnly />
                     <button className={Styles["copy-btn"]}>
                         <span className="icon-copy" />
                     </button>
@@ -97,8 +97,8 @@ const PFVerify: FC<{ drawId: number }> = () => {
                         Details
                     </a>
                 </div>
-                <div className={Styles["server-seed-field"]}>
-                    <input className={Styles["server-seed-hash"]} type="text" name="" id="" />
+                <div className="input-group width-full">
+                    <input className="form-control" type="text" name="" id="" readOnly />
                     <button className={Styles["copy-btn"]}>
                         <span className="icon-copy" />
                     </button>
@@ -112,15 +112,15 @@ const PFVerify: FC<{ drawId: number }> = () => {
                     </button>
                 </div>
 
-                <div className={`${Styles["server-seed-field"]} mt-4`}>
-                    <input className={Styles["server-seed-hash"]} type="text" name="" id="" />
+                <div className="input-group width-full mt-4">
+                    <input className="form-control" type="text" name="" id="" readOnly />
                     <button className={Styles["copy-btn"]}>
                         <span className="icon-copy" />
                     </button>
                 </div>
             </div>
 
-            <button className={`btn-green ${Styles["btn-verify"]}`}>{translateCommon("pf_verify")}</button>
+            <button className={`btn-green ${Styles["btn-verify"]}`}>{translateCommon("pf_button_verify")}</button>
             <p className="text-center mt-2">{translateCommon("pf_provably_fair_para_2")}</p>
         </div>
     );
