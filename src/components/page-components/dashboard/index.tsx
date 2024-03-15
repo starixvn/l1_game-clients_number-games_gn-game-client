@@ -308,8 +308,7 @@ class Dashboard extends React.PureComponent<Props, State> {
     }
 
     openGameFromLobby() {
-        updateURLContext({ backToLobby: true });
-        updateURLContext({ gameId: 1001 });
+        updateURLContext({ backToLobby: true, gameId: 1001 });
         this.setState({ openGameId: 1001 })
     }
 
@@ -331,7 +330,7 @@ class Dashboard extends React.PureComponent<Props, State> {
         const offerGames: number[] = authorizeInfo?.user?.offerGames?.map((game: any) => game?.gameId) ?? [];
         const urlContextModel = StorageHelper.get(localStorageKeys.url) as URLContextModel;
         const backToLobby = urlContextModel.backToLobby || false;
-        const ssoRedirectGameId = urlContextModel.gameId;
+        const ssoRedirectGameId = urlContextModel.gameId || 0;
         const isRenderGames = (offerGames.includes(openGameId) && !backToLobby) || ssoRedirectGameId > 0;
 
         return (
