@@ -28,10 +28,17 @@ export const Odds: React.FC<Props> = ({ gameName, choice, className, animationDu
     }, [gameConfigs?.odds?.[choice] ?? 0]);
 
     useEffect(() => {
-        showOddsIcon &&
-            setTimeout(() => {
+        let timeOut: NodeJS.Timeout;
+
+        if (showOddsIcon) {
+            timeOut = setTimeout(() => {
                 setShowOddsIcon(false);
             }, animationDuration * 1000);
+        }
+
+        return () => {
+            clearTimeout(timeOut);
+        };
     }, [showOddsIcon, animationDuration]);
     const odds = formatOdds(oddsValue, fractionalOddsFormat);
     return useMemo(() => {
@@ -47,5 +54,5 @@ export const Odds: React.FC<Props> = ({ gameName, choice, className, animationDu
         ) : (
             <></>
         );
-    }, [odds]);
+    }, [odds, showOddsIcon]);
 };
