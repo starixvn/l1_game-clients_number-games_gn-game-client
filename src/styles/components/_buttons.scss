@@ -119,10 +119,8 @@
     transform-origin: 50% 50%;
 }
 
-.btn-ripple:focus:not(:active)::after {
+.btn-ripple:focus:not(:active):after {
     animation: ripple 1s ease-out;
-    -webkit-animation: ripple 1s ease-out;
-    -moz-animation: ripple 1s ease-out;
 }
 
 /*for not auto response when screen load*/
