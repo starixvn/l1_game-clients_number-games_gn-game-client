@@ -81,20 +81,22 @@ const PFVerify: FC<{ pfResult: PFResult; handleOpenClientSeedInfo: Function }> =
                 {translateSNGames("glossary_draw_id")}: #{drawResult?.drawID} ({drawResult?.order} Draw)
             </div>
             <div className="flex justify-around">
-                {["player", "banker"].map((item) => {
-                    return (
-                        <div className="text-center" key={uuidv4()}>
-                            <div className="text-white font-weight-medium text-uppercase">{translateBacBall(`glossary_${item}`)}</div>
-                            <div className={Styles["balls-container"]}>
-                                {drawResult.result.map((child, index) => (
-                                    <span key={uuidv4()} className={`${Styles["ball"]} ${Styles[ballColor({ number: child[item] })]}`}>
-                                        {child[item]}
-                                    </span>
-                                ))}
+                {useMemo(() => {
+                    return ["player", "banker"].map((item) => {
+                        return (
+                            <div className="text-center" key={uuidv4()}>
+                                <div className="text-white font-weight-medium text-uppercase">{translateBacBall(`glossary_${item}`)}</div>
+                                <div className={Styles["balls-container"]}>
+                                    {drawResult.result.map((child, index) => (
+                                        <span key={uuidv4()} className={`${Styles["ball"]} ${Styles[ballColor({ number: child[item] })]}`}>
+                                            {child[item]}
+                                        </span>
+                                    ))}
+                                </div>
                             </div>
-                        </div>
-                    );
-                })}
+                        );
+                    });
+                }, [drawResult])}
             </div>
 
             <div className={Styles["client-seed-form"]}>
