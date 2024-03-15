@@ -1,71 +1,106 @@
-import { FC, useEffect } from "react";
+import { FC, useMemo, useState } from "react";
 import ModalContainer from "../modal-container";
 import { useCommonTranslate, useSNTranslate, useTranslator } from "../../../_shared/react-hooks";
 import { useGameContext } from "../../../_shared/react-contexts";
 import { createPortal } from "react-dom";
 import Styles from "../pf-setting/pf-setting.module.scss";
 import { useBallColor } from "../../../_shared/helpers/ball-color-helper";
+import { PFResult } from "../../game-base/type";
+import { getOrdinalNumber } from "../../../_shared/helpers";
+import { v4 as uuidv4 } from "uuid";
+import PFClientSeedInfoModal from "../pf-client-seed-info";
 
-const PFVerifyModal: FC<{ handleCloseModal: Function; isShowPFVerify: boolean; drawId: number }> = ({
+const PFVerifyModal: FC<{ handleCloseModal: Function; isShowPFVerify: boolean; pfResult: PFResult }> = ({
     handleCloseModal,
     isShowPFVerify,
-    drawId,
+    pfResult,
 }) => {
     const { t: translateCommon } = useCommonTranslate();
+    const [isShowClientSeedInfo, setIsShowClientSeedInfo] = useState(false);
+
+    const handleOpenClientSeedInfo = () => {
+        setIsShowClientSeedInfo(true);
+    };
+
+    const handleCloseClientSeedInfo = () => {
+        setIsShowClientSeedInfo(false);
+    };
 
     return (
         isShowPFVerify &&
         createPortal(
             <ModalContainer
-                title={translateCommon("pf_title_provably_fair_settings")}
-                isOpen={isShowPFVerify}
+                title={translateCommon("pf_title_provably_fair").capitalizeFirstLetter()}
+                isOpen={isShowPFVerify && !isShowClientSeedInfo}
                 isOverlap={true}
                 onCloseModal={handleCloseModal}
             >
-                <PFVerify drawId={drawId} />
+                <PFVerify pfResult={pfResult} handleOpenClientSeedInfo={handleOpenClientSeedInfo} />
+                <PFClientSeedInfoModal
+                    handleCloseModal={handleCloseClientSeedInfo}
+                    isShowPFClientSeedInfo={isShowClientSeedInfo}
+                    clientSeedInfo={pfResult?.clientSeeds}
+                />
             </ModalContainer>,
             document.getElementById("dashboard")
         )
     );
 };
 
-const PFVerify: FC<{ drawId: number }> = () => {
+const PFVerify: FC<{ pfResult: PFResult; handleOpenClientSeedInfo: Function }> = ({ pfResult, handleOpenClientSeedInfo }) => {
     const { gameName } = useGameContext();
     const { t: translateCommon } = useCommonTranslate();
     const { t: translateSNGames } = useSNTranslate();
     const { t: translateBacBall } = useTranslator([gameName]);
-    const { gameMessageHandler } = useGameContext();
+    const drawResult = useMemo(() => {
+        const beforeDrawResult = [];
+        for (const item of pfResult?.roundResult || []) {
+            beforeDrawResult.push(item);
+            if (item?.drawId == pfResult?.drawId) {
+                break;
+            }
+        }
+
+        return {
+            drawID: pfResult?.drawId,
+            order: getOrdinalNumber(beforeDrawResult.length),
+            result: beforeDrawResult,
+        };
+    }, [pfResult]);
     const ballColor = useBallColor;
+    const handleClickClientSeedInfo = () => {
+        handleOpenClientSeedInfo();
+    };
 
     return (
         <div className={Styles["pf-setting-container"]}>
             <button className={Styles["btn-pf-guide"]}>
                 <span className="icon-guide" />
             </button>
-            <div className="text-white font-weight-medium mb-2">{translateSNGames("glossary_draw_id")}: #1234 (3rd Draw)</div>
+            <div className="text-white font-weight-medium mb-2">
+                {translateSNGames("glossary_draw_id")}: #{drawResult?.drawID} ({drawResult?.order} Draw)
+            </div>
             <div className="flex justify-around">
-                <div className="text-center">
-                    <div className="text-white font-weight-medium text-uppercase">{translateBacBall("glossary_player")}</div>
-                    <div className={Styles["balls-container"]}>
-                        <span className={`${Styles["ball"]} ${Styles[ballColor({ number: 16 })]}`}>16</span>
-                        <span className={`${Styles["ball"]} ${Styles[ballColor({ number: 54 })]}`}>54</span>
-                        <span className={`${Styles["ball"]} ${Styles[ballColor({ number: 35 })]}`}>35</span>
-                    </div>
-                </div>
-                <div className="text-center">
-                    <div className="text-white font-weight-medium text-uppercase">{translateBacBall("glossary_banker")}</div>
-                    <div className={Styles["balls-container"]}>
-                        <span className={`${Styles["ball"]} ${Styles[ballColor({ number: 41 })]}`}>4</span>
-                        <span className={`${Styles["ball"]} ${Styles[ballColor({ number: 8 })]}`}>8</span>
-                        <span className={`${Styles["ball"]} ${Styles[ballColor({ number: 12 })]}`}>12</span>
-                    </div>
-                </div>
+                {["player", "banker"].map((item) => {
+                    return (
+                        <div className="text-center" key={uuidv4()}>
+                            <div className="text-white font-weight-medium text-uppercase">{translateBacBall(`glossary_${item}`)}</div>
+                            <div className={Styles["balls-container"]}>
+                                {drawResult.result.map((child, index) => (
+                                    <span key={uuidv4()} className={`${Styles["ball"]} ${Styles[ballColor({ number: child[item] })]}`}>
+                                        {child[item]}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                    );
+                })}
             </div>
 
             <div className={Styles["client-seed-form"]}>
                 <h3 className={Styles["section-title"]}>{translateCommon("pf_header_server_seed_sha256")}</h3>
                 <div className="input-group width-full">
-                    <input className="form-control" type="text" name="" id="" readOnly />
+                    <input className="form-control" type="text" name="" id="" readOnly value={pfResult?.serverSeedHash} />
                     <button className={Styles["copy-btn"]}>
                         <span className="icon-copy" />
                     </button>
@@ -73,7 +108,7 @@ const PFVerify: FC<{ drawId: number }> = () => {
 
                 <h3 className={`${Styles["section-title"]} mt-3`}>{translateCommon("pf_header_server_seed")}</h3>
                 <div className="input-group width-full">
-                    <input className="form-control" type="text" name="" id="" readOnly />
+                    <input className="form-control" type="text" name="" id="" readOnly value={pfResult?.mergeSeed} />
                     <button className={Styles["copy-btn"]}>
                         <span className="icon-copy" />
                     </button>
@@ -86,19 +121,18 @@ const PFVerify: FC<{ drawId: number }> = () => {
                         <span className="icon-info" />
                     </button>
                     <div className={Styles["pf-tooltip"]}>
-                        Client seed is generated from Player’s side. Merge client seeds of all betting players in sequential order from the
-                        first player to the last one without any space.
+                        {translateCommon("pf_client_seed_tooltip_para_1")} <br /> {translateCommon("pf_client_seed_tooltip_para_2")}
                     </div>
                 </div>
 
                 <div className="relative">
                     <h3 className={Styles["section-title"]}>{translateCommon("pf_ header_merge_client_seed")}</h3>
-                    <a className={Styles["link-detail"]} href="#">
+                    <span className={Styles["link-detail"]} onClick={handleClickClientSeedInfo}>
                         Details
-                    </a>
+                    </span>
                 </div>
                 <div className="input-group width-full">
-                    <input className="form-control" type="text" name="" id="" readOnly />
+                    <input className="form-control" type="text" name="" id="" readOnly value={pfResult?.mergeSeed} />
                     <button className={Styles["copy-btn"]}>
                         <span className="icon-copy" />
                     </button>
@@ -113,7 +147,7 @@ const PFVerify: FC<{ drawId: number }> = () => {
                 </div>
 
                 <div className="input-group width-full mt-4">
-                    <input className="form-control" type="text" name="" id="" readOnly />
+                    <input className="form-control" type="text" name="" id="" readOnly value={pfResult?.finalHash} />
                     <button className={Styles["copy-btn"]}>
                         <span className="icon-copy" />
                     </button>

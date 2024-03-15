@@ -32,6 +32,7 @@ const PFSetting: FC = () => {
     const manualSeed = useRef<HTMLInputElement>();
     const { pfSetting, ownBets } = useGameStateContext();
     const [isFirstLoad, setIsFirstLoad] = useState<boolean>(true);
+    const [isCopySuccess, setIsCopySuccess] = useState<boolean>(false);
     const [isManualMode, setIsManualMode] = useState<boolean>(pfSetting?.useManualClientSeed || false);
     const { t: translateCommon } = useCommonTranslate();
     const dispatch = useGameStatesDispatch();
@@ -73,6 +74,10 @@ const PFSetting: FC = () => {
     const handleCopyServerSeedHash = () => {
         const serverSeed = document.getElementById("server-seed-hash") as HTMLInputElement;
         navigator.clipboard.writeText(serverSeed.value);
+        setIsCopySuccess(true);
+        setInterval(() => {
+            setIsCopySuccess(false);
+        }, 5000);
     };
 
     const handleCheckRadio = () => {
@@ -180,6 +185,7 @@ const PFSetting: FC = () => {
                     <button className={Styles["copy-btn"]} onClick={handleCopyServerSeedHash}>
                         <span className="icon-copy" />
                     </button>
+                    {isCopySuccess && <span>{translateCommon("pf_copy_successfully")}</span>}
                 </div>
                 {Object.keys(ownBets).length > 0 && <div className={Styles["pf-note"]}>{translateCommon("pf_client_seed_para_1")}</div>}
             </div>

@@ -7,6 +7,7 @@ import { useCommonTranslate, useSNTranslate } from "../../../_shared/react-hooks
 import { BetLogProps } from "../../../components/game-components/bet-history";
 import Styles from "./common.module.scss";
 import TableRow from "./row-table";
+import { PFResult } from "../../../components/game-base/type";
 
 export interface BetHistory {
     time: Date;
@@ -31,6 +32,7 @@ export interface BetHistory {
         banker: boolean;
         tie: boolean;
     };
+    pfResult: PFResult;
 }
 
 const renderBetLog = ({ betLogs, handleScroll, onCloseModal, renderBetDetail, isLoadMore }: BetLogProps) => {
@@ -97,6 +99,7 @@ const BetLog: FC<BetLogProps> = ({ betLogs, handleScroll, onCloseModal: toggleBe
                     result: betLogDetail?.result,
                     odds: betLogDetail?.odds,
                     settlementResult: betLogDetail?.settlementResult,
+                    pfResult: betLogDetail?.pfResult,
                 },
             })}
             {betLogs.length === 0 && <div className={Styles["no-more-data"]}>{translateSNGames("table_no_data")}</div>}

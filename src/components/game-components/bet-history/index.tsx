@@ -7,7 +7,8 @@ import { GameMessageHandler, messageEventType } from "../../game-base/handlers";
 import Loader from "../loader";
 import ModalContainer from "../modal-container";
 import Styles from "./bet-history.module.scss";
-import { useCommonTranslate, useSNTranslate } from "../../../_shared/react-hooks/use-translator";
+import { useCommonTranslate } from "../../../_shared/react-hooks/use-translator";
+import { DrawInfo } from "../../game-base/type";
 
 const GET_HISTORY = "getHistory";
 const HISTORY_EVENT = "history";
@@ -24,12 +25,7 @@ export interface BetLogDetailProps {
     betLogDetails: any[];
     onCloseModal: Function;
     isShowBetDetail: boolean;
-    drawInfo: {
-        drawId: number;
-        result: any;
-        odds: any;
-        settlementResult: any;
-    };
+    drawInfo: DrawInfo;
 }
 
 export interface BetHistoryProps {
@@ -48,7 +44,6 @@ const BetHistoryModal: FC<BetHistoryProps> = ({ renderBetLog, renderBetLogDetail
     const [page, setPage] = useState<number>(0);
     const gameContext = useGameContext();
     const { t: translateCommon } = useCommonTranslate();
-    const { t: translateSNGames } = useSNTranslate();
 
     const toggleBetHistory = () => {
         dispatch({

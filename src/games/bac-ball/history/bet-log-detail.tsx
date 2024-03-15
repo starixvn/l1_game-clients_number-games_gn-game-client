@@ -12,12 +12,13 @@ import TableRow from "./row-table";
 import { usePlayerContext } from "../../../_shared/react-contexts";
 import { BacBallBetOptions } from "../constants";
 import PFVerifyModal from "../../../components/game-components/pf-verify";
+import { DrawInfo, PFResult } from "../../../components/game-base/type";
 
 interface BacBallBetDetailProps extends BetLogDetailProps {
-    drawInfo: DrawInfo;
+    drawInfo: DrawInfoBacBall;
 }
 
-interface DrawInfo {
+interface DrawInfoBacBall extends DrawInfo {
     drawId: number;
     result: {
         player: number;
@@ -33,6 +34,7 @@ interface DrawInfo {
         banker: boolean;
         tie: boolean;
     };
+    pfResult: PFResult;
 }
 
 const renderBetLogDetail = ({ betLogDetails, onCloseModal, isShowBetDetail, drawInfo }: BacBallBetDetailProps) => {
@@ -61,7 +63,6 @@ const BetDetail: FC<BetLogDetailProps> = ({ betLogDetails, onCloseModal, isShowB
     };
 
     const handleClickProbalyFair = () => {
-        console.log("Click Probaly Fair");
         setIsShowPFVerify(true);
     };
 
@@ -122,13 +123,17 @@ const BetDetail: FC<BetLogDetailProps> = ({ betLogDetails, onCloseModal, isShowB
                     </table>
                     {!isHaveMoreData && <div className={Styles["no-more-data"]}>{translateSNGames("table_no_more_data")}</div>}
                 </div>
-                <PFVerifyModal handleCloseModal={handleClosePFVerifyModal} isShowPFVerify={isShowPFVerify} drawId={drawId}></PFVerifyModal>
+                <PFVerifyModal
+                    handleCloseModal={handleClosePFVerifyModal}
+                    isShowPFVerify={isShowPFVerify}
+                    pfResult={drawInfo?.pfResult}
+                ></PFVerifyModal>
             </ModalContainer>
         )
     );
 };
 
-const produceDataBetDetailRow = (item: any, drawInfo: DrawInfo) => {
+const produceDataBetDetailRow = (item: any, drawInfo: DrawInfoBacBall) => {
     const calculateWin = (isTie: boolean, isWin: true, amount: number, odds: number) => {
         if (isTie) {
             return isWin ? amount * odds : amount;

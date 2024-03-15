@@ -178,3 +178,22 @@ export interface PFSettingData {
     manualClientSeed: string;
     useManualClientSeed: boolean;
 }
+
+export interface PFResult {
+    drawId: number;
+    roundId: number;
+    serverSeedHash: string;
+    serverSeed: string;
+    clientSeeds: string[];
+    mergeSeed: string;
+    roundResult: any[];
+    finalHash: string;
+}
+
+export interface DrawInfo {
+    drawId: number;
+    result: any;
+    settlementResult: any;
+    odds: any;
+    pfResult: PFResult;
+}

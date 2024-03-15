@@ -26,4 +26,18 @@ const formatOdds = (value: number | string | undefined, isFractionalFormat = fal
     return isFractionalFormat ? `${numberWithCommas(+value - 1, 2, 2)}:1` : `1:${numberWithCommas(+value, 2, 2)}`;
 };
 
-export { numberRoundDownWithCommas, numberWithCommas, randomInteger, sumArray, formatOdds, randomNumberSeries };
+const getOrdinalNumber = (value: number) => {
+    let ord = "th";
+
+    if (value % 10 == 1 && value % 100 != 11) {
+        ord = "st";
+    } else if (value % 10 == 2 && value % 100 != 12) {
+        ord = "nd";
+    } else if (value % 10 == 3 && value % 100 != 13) {
+        ord = "rd";
+    }
+
+    return `${value}${ord}`;
+};
+
+export { numberRoundDownWithCommas, numberWithCommas, randomInteger, sumArray, formatOdds, randomNumberSeries, getOrdinalNumber };
