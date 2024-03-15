@@ -100,7 +100,7 @@ export const QuickBetBtn = () => {
                 <button id="btn-cancel-quickbet" className={`btn-grey ${Styles["btn"]}`} onClick={closeHintTooltip}>
                     {t("button_cancel")}
                 </button>
-                <button id="btn-on-quickbet" className={`btn-red ${Styles["btn"]}`} onClick={onEnableFirstLogin}>
+                <button id="btn-on-quickbet" className={`btn-green ${Styles["btn"]}`} onClick={onEnableFirstLogin}>
                     {t("button_enable_quickbet")}
                 </button>
             </div>
