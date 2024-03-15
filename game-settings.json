@@ -8,11 +8,11 @@
             "serviceName": "baccarat-ball"
         },
         "durations": {
-            "wholeRound": 122,
-            "wholeTurn": 30,
+            "wholeRound": 114,
+            "wholeTurn": 28,
             "placingBets": 20,
             "lockingBet": 3,
-            "showResult": 10,
+            "showResult": 8,
             "resultAnimation": 3,
             "beforePlaceBet": 0,
             "switchRoundAnimation": 2
