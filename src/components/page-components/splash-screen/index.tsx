@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/nextjs";
 import { WithRouterProps } from "next/dist/client/with-router";
 import { useRouter } from "next/router";
 import { ReactNode, useContext } from "react";
@@ -10,7 +11,6 @@ import { tolgee } from "../../../_shared/tolgee";
 import { sso, verifySession } from "../../../services/auth-service";
 import UMPage from "../um-page";
 import Styles from "./splash-screen.module.scss";
-import * as Sentry from "@sentry/nextjs";
 
 export type SplashScreenProps = WithRouterProps;
 
@@ -49,16 +49,15 @@ export async function useCustomStartup(): Promise<void> {
     router.push("");
 }
 
-export function useStartupErrorCatcher(error: Error): void {
+export function onStartupError(error: Error): void {
+    console.error(error);
     Sentry.captureException(error);
 
-    const router = useRouter();
-
-    router.push("timeout");
+    globalThis.location.pathname = "timeout";
 }
 
 export function SplashScreen(): ReactNode {
-    useCustomStartup().catch(useStartupErrorCatcher);
+    useCustomStartup().catch(onStartupError);
 
     const { session, locale } = usePlayerContext();
 
