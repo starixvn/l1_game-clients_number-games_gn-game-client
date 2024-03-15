@@ -5,18 +5,15 @@ import styles from "./countdown-timer.module.scss";
 import { useSNTranslate } from "../../../_shared/react-hooks/use-translator";
 
 export type Rotation = "clockwise" | "counterclockwise";
-const CountdownTimer = () => {
+export const CountdownTimer = ({ SimpleTimerProp = SimpleTimer, GameStatusProp = GameStatus }) => {
     const { roundState } = useGameStateContext();
     const { t } = useSNTranslate();
 
     switch (roundState) {
-        case RoundState.BeforePlaceBet:
-        case RoundState.SwitchRound:
-            return <></>;
         case RoundState.InRound:
             return (
                 <>
-                    <SimpleTimer />
+                    <SimpleTimerProp />
                     <GameStatus>
                         <div className={styles["start-betting"]}>{t("status_start_bet")}</div>
                     </GameStatus>
@@ -25,17 +22,14 @@ const CountdownTimer = () => {
         case RoundState.LockingBet:
             return (
                 <>
-                    <SimpleTimer />
-                    <GameStatus>
+                    <SimpleTimerProp />
+                    <GameStatusProp>
                         <div className={styles["no-more-bets"]}>{t("status_stop_bet")}</div>
-                    </GameStatus>
+                    </GameStatusProp>
                 </>
             );
 
-        case RoundState.None:
-            return <div className={`loader-show-result`}></div>;
-
-        default:
+        case RoundState.DisplayResult:
             return (
                 <>
                     <div className={`loader-show-result`}></div>
@@ -44,6 +38,12 @@ const CountdownTimer = () => {
                     </GameStatus>
                 </>
             );
+
+        case RoundState.None:
+            return <div className={`loader-show-result`}></div>;
+
+        default:
+            return <></>;
     }
 };
 
