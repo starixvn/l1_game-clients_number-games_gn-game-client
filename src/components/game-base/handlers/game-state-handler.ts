@@ -3,7 +3,7 @@ import { GameStateContextModel } from "../../../_shared/react-contexts/game-stat
 import { GameDurations, RoundState } from "../type";
 
 type GameStateHandlerProps = {
-    gameStateContextModel: GameStateContextModel<any, any>;
+    gameStateContextModel: GameStateContextModel;
     nextRoundState: RoundState;
     durations: GameDurations;
     defaultResult: any;

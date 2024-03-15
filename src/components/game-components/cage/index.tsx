@@ -27,7 +27,7 @@ export type CageProps = {
     result: number;
     delayShowResultTime?: number;
     position: string;
-} & Partial<GameStateContextModel<unknown, unknown>>;
+} & Partial<GameStateContextModel>;
 
 const Cage: React.FC<CageProps> = (cageProps) => {
     const { position, isSmall, cageBallsLoopFrames, cageBallFrames, result, delayShowResultTime, color, playResultAnimation, roundState } =

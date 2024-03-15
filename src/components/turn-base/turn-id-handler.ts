@@ -6,7 +6,7 @@ import { randomNumberSeries, writeDebugLog } from "../../_shared/helpers";
 
 export type TurnIdHandlerProps = {
     dispatch: Function;
-    gameStateContextModel(): GameStateContextModel<any, any>;
+    gameStateContextModel(): GameStateContextModel;
     gameMessageHandler: GameMessageHandler;
     totalTurns?: number;
     durations: GameDurations;

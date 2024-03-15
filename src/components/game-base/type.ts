@@ -49,7 +49,7 @@ export type GamePropsContext = {
     finishJoinGame?: Function;
     isJoinedGame?: boolean;
     dispatch?: (action: GameEventAction) => {};
-    gameStateContextModel?: GameStateContextModel<{}, {}>;
+    gameStateContextModel?: GameStateContextModel;
     systemContextModel?: SystemContextModel;
     systemDispatch?: (action: SystemEventAction) => {};
     translate?: TFnType<DefaultParamType, string, TranslationKey>;

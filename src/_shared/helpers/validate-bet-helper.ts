@@ -85,14 +85,14 @@ export const isMaxBetRound = (currentTotalAmount: number, roundMaxBet: number, t
     return currentTotalAmount > roundMaxBet || totalBetAmount > roundMaxBet;
 };
 
-export const isInPhasePreventBet = (gameStateContext: GameStateContextModel<unknown, unknown>) => {
+export const isInPhasePreventBet = (gameStateContext: GameStateContextModel) => {
     return gameStateContext.roundState !== RoundState.InRound;
 };
 
 export const isBalanceUnavailable = (
     availableBalance: number,
     amount: number,
-    gameStateContext: GameStateContextModel<unknown, unknown>,
+    gameStateContext: GameStateContextModel,
     enabledQuickBet: boolean
 ): boolean => {
     if (enabledQuickBet) {
@@ -106,7 +106,7 @@ export const isHedgeBet = (
     hedgeBetGroups: string[],
     betChoice: string,
     amount: number,
-    gameStateContext: GameStateContextModel<unknown, unknown>
+    gameStateContext: GameStateContextModel
 ): boolean => {
     return validateHedgeBet(hedgeBetGroups, gameStateContext.ownBets, gameStateContext?.notConfirmOwnBets, betChoice, amount);
 };
@@ -137,7 +137,7 @@ export const getMaxAvailableAmountOfChoice = (
 };
 
 export const getCriteriaValidateBet = (
-    gameStateContext: GameStateContextModel<unknown, unknown>,
+    gameStateContext: GameStateContextModel,
     betChoice: string,
     amount: number,
     accountBalance: number,
@@ -169,7 +169,7 @@ export const getCriteriaValidateBet = (
 const composeValidationCriteria = (
     amount: number,
     accountBalance: number,
-    context: GameStateContextModel<unknown, unknown>,
+    context: GameStateContextModel,
     betChoice: string,
     totalBetAmount: number,
     enabledQuickBet: boolean
@@ -285,7 +285,7 @@ const isSuggestBetAvailable = (
     );
 };
 
-export const getTotalBetAmount = (gameStateContext: GameStateContextModel<unknown, unknown>): number => {
+export const getTotalBetAmount = (gameStateContext: GameStateContextModel): number => {
     return (
         Object.values(gameStateContext.notConfirmOwnBets).reduce((a, b) => a + b, 0) +
         Object.values(gameStateContext.ownBets).reduce((a, b) => a + b, 0)

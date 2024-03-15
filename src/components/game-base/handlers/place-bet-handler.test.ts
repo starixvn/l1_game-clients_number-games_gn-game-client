@@ -8,7 +8,7 @@ import { PlaceBetHandler, PlaceBetHandlerProps } from "./place-bet-handler";
 describe("placeBet", () => {
     let placeBetHandler: PlaceBetHandler;
     let gameMessageHandler: GameMessageHandler;
-    let gameStateContextModel: GameStateContextModel<any, any>;
+    let gameStateContextModel: GameStateContextModel;
     let systemContextModel: SystemContextModel;
     let placeBetHandlerProps: PlaceBetHandlerProps;
     let gameConfigs: GameConfigs;
@@ -34,7 +34,7 @@ describe("placeBet", () => {
     describe("isInPhasePreventBet", () => {
         it("should return if in phase prevent bet", () => {
             // Arrange
-            gameStateContextModel = stub<GameStateContextModel<any, any>>({ roundState: RoundState.LockingBet });
+            gameStateContextModel = stub<GameStateContextModel>({ roundState: RoundState.LockingBet });
             const handlePreventBetSpy = jest.spyOn(placeBetHandler, "handlePreventBet");
 
             // Act
@@ -46,7 +46,7 @@ describe("placeBet", () => {
 
         it("Not return if in phase not prevent bet", () => {
             // Arrange
-            gameStateContextModel = stub<GameStateContextModel<any, any>>({ roundState: RoundState.InRound });
+            gameStateContextModel = stub<GameStateContextModel>({ roundState: RoundState.InRound });
             const handlePreventBetSpy = jest.spyOn(placeBetHandler, "handlePreventBet");
 
             // Act
@@ -64,7 +64,7 @@ describe("placeBet", () => {
         it("calls handleProcessingBet when isProcessingBet is true", () => {
             // Arrange
             const gameStateContext = { isProcessingBet: true, roundState: RoundState.InRound };
-            gameStateContextModel = stub<GameStateContextModel<any, any>>(gameStateContext);
+            gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
             const handleProcessingBetSpy = jest.spyOn(placeBetHandler, "handleProcessingBet");
 
             // Act
@@ -78,7 +78,7 @@ describe("placeBet", () => {
             // Arrange
 
             const gameStateContext = { isProcessingBet: false, roundState: RoundState.InRound, gameConfigs };
-            gameStateContextModel = stub<GameStateContextModel<any, any>>(gameStateContext);
+            gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
             const handleProcessingBetSpy = jest.spyOn(placeBetHandler, "handleProcessingBet");
 
             // Act
@@ -101,7 +101,7 @@ describe("placeBet", () => {
                 notConfirmOwnBets: {},
                 ownBets: {},
             };
-            gameStateContextModel = stub<GameStateContextModel<any, any>>(gameStateContext);
+            gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
             const sendNoticeSpy = jest.spyOn(placeBetHandler, "sendNotice");
             const notice = {
                 gameName: "test",
@@ -134,7 +134,7 @@ describe("placeBet", () => {
                 ownBets: { bet3: 20 },
             };
 
-            gameStateContextModel = stub<GameStateContextModel<any, any>>(gameStateContext);
+            gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
             const sendNoticeSpy = jest.spyOn(placeBetHandler, "sendNotice");
             const notice = {
                 gameName: "test",
@@ -165,7 +165,7 @@ describe("placeBet", () => {
                 ownBets: { bet3: 20 },
                 gameConfigs,
             };
-            gameStateContextModel = stub<GameStateContextModel<any, any>>(gameStateContext);
+            gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
             const sendNoticeSpy = jest.spyOn(placeBetHandler, "sendNotice");
 
             // Act
@@ -197,7 +197,7 @@ describe("placeBet", () => {
                 notConfirmOwnBets: {},
                 ownBets: { choice2: 20 },
             };
-            gameStateContextModel = stub<GameStateContextModel<any, any>>(gameStateContext);
+            gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
             const sendNoticeSpy = jest.spyOn(placeBetHandler, "sendNotice");
             const notice = {
                 gameName: "test",
@@ -233,7 +233,7 @@ describe("placeBet", () => {
                 ownBets: {},
                 gameConfigs,
             };
-            gameStateContextModel = stub<GameStateContextModel<any, any>>(gameStateContext);
+            gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
             const sendNoticeSpy = jest.spyOn(placeBetHandler, "sendNotice");
             const notice = {
                 gameName: "test",

@@ -35,7 +35,7 @@ export class PlaceBetHandler {
 
     constructor(private props: PlaceBetHandlerProps) {}
 
-    registerEvents = (signOut: () => void, gameStateContext: GameStateContextModel<unknown, unknown>) => {
+    registerEvents = (signOut: () => void, gameStateContext: GameStateContextModel) => {
         this.props.gameMessageHandler.register(messageEventType.END_BET, (gameMessage) => {
             this.handleEndBet(gameMessage, signOut, gameStateContext);
         });
@@ -77,11 +77,7 @@ export class PlaceBetHandler {
         return this.getNotice(errorCode, betChoice, notice);
     };
 
-    handleEndBet = (
-        { endBet, ownBets, notice, kickedOut, apiError },
-        signOut: () => void,
-        gameStateContext: GameStateContextModel<unknown, unknown>
-    ) => {
+    handleEndBet = ({ endBet, ownBets, notice, kickedOut, apiError }, signOut: () => void, gameStateContext: GameStateContextModel) => {
         const { playPlaceBetSound, dispatch, gameMessageHandler } = this.props;
         const enableSound = StorageHelper.get(localStorageKeys.enableSound) ?? false;
         dispatch({ type: GameEventActionType.END_BET_PROCESSING, payload: {} });
@@ -115,7 +111,7 @@ export class PlaceBetHandler {
         });
     };
 
-    playAcceptedBetAnimation = (amount: number, gameStateContext: GameStateContextModel<unknown, unknown>) => {
+    playAcceptedBetAnimation = (amount: number, gameStateContext: GameStateContextModel) => {
         const { acceptedBetQueue } = gameStateContext;
         const key = uuidv4();
         acceptedBetQueue[key] = {
@@ -133,7 +129,7 @@ export class PlaceBetHandler {
         }, animationTime);
     };
 
-    removeAcceptedBetQueue = (key: number, gameStateContext: GameStateContextModel<unknown, unknown>) => {
+    removeAcceptedBetQueue = (key: number, gameStateContext: GameStateContextModel) => {
         const { acceptedBetQueue } = gameStateContext;
         delete acceptedBetQueue[key];
         this.props.dispatch({
@@ -146,7 +142,7 @@ export class PlaceBetHandler {
         betChoice: string,
         amount: number,
         enabledQuickBet: boolean,
-        gameStateContext: GameStateContextModel<unknown, unknown>,
+        gameStateContext: GameStateContextModel,
         systemContext: SystemContextModel
     ) => {
         if (isInPhasePreventBet(gameStateContext)) {
@@ -183,7 +179,7 @@ export class PlaceBetHandler {
         });
     };
 
-    handlePreventBet = (gameStateContext: GameStateContextModel<unknown, unknown>) => {
+    handlePreventBet = (gameStateContext: GameStateContextModel) => {
         const isStartingRound = gameStateContext.roundState === RoundState.BeforePlaceBet;
         const notice = isStartingRound ? this.getNotice(NoticeErrorCode.cannotBet) : this.getNotice(NoticeErrorCode.placeBetNextRound);
 
@@ -191,7 +187,7 @@ export class PlaceBetHandler {
     };
 
     protected handleBetValidation = (
-        gameStateContext: GameStateContextModel<unknown, unknown>,
+        gameStateContext: GameStateContextModel,
         betChoice: string,
         amount: number,
         enabledQuickBet: boolean,
@@ -219,7 +215,7 @@ export class PlaceBetHandler {
         enabledQuickBet: boolean,
         amount: number,
         betChoice: string,
-        gameStateContext: GameStateContextModel<unknown, unknown>,
+        gameStateContext: GameStateContextModel,
         systemContext: SystemContextModel
     ) => {
         if (enabledQuickBet) {
@@ -258,7 +254,7 @@ export class PlaceBetHandler {
         this.props.dispatch({ type: GameEventActionType.SUGGEST_BET, payload: { suggestBet } });
     };
 
-    private showConfirmBet(gameStateContext: GameStateContextModel<unknown, unknown>) {
+    private showConfirmBet(gameStateContext: GameStateContextModel) {
         !gameStateContext.showConfirmBet &&
             this.props.dispatch({
                 type: GameEventActionType.SHOW_CONFIRM_BET,
@@ -268,11 +264,7 @@ export class PlaceBetHandler {
             });
     }
 
-    protected updateNotConfirmedBetState(
-        gameStateContext: GameStateContextModel<unknown, unknown>,
-        betChoice: string,
-        systemContext: SystemContextModel
-    ) {
+    protected updateNotConfirmedBetState(gameStateContext: GameStateContextModel, betChoice: string, systemContext: SystemContextModel) {
         const notConfirmOwnBets = gameStateContext.notConfirmOwnBets;
         notConfirmOwnBets[betChoice] = (notConfirmOwnBets[betChoice] ?? 0) + systemContext.selectedChip;
         this.props.dispatch({
@@ -317,7 +309,7 @@ export class PlaceBetHandler {
         };
     };
 
-    protected sendConfirmBet(gameStateContext: GameStateContextModel<unknown, unknown>) {
+    protected sendConfirmBet(gameStateContext: GameStateContextModel) {
         const notConfirmOwnBets = gameStateContext.notConfirmOwnBets;
         const betChoices = {};
         Object.entries(notConfirmOwnBets).forEach(([key, value]) => {

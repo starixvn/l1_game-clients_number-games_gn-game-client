@@ -1,6 +1,6 @@
 import { GameConfigs, IBallColor, Notice, PFSettingData, Round, RoundState, SuggestBet } from "../../../components/game-base/type";
 
-export interface GameStateContextModel<Result, SettlementResult> {
+export interface GameStateContextModel {
     isConnect: boolean;
     signedIn: boolean;
     roundState: RoundState;
@@ -8,10 +8,10 @@ export interface GameStateContextModel<Result, SettlementResult> {
     remainingTime: number;
     gameConfigs: GameConfigs;
     roundData: any;
-    roundHistory: Round<Result, SettlementResult>[];
+    roundHistory: Round<object, object>[];
     roundId: number;
-    result?: Result;
-    settlementResult?: SettlementResult;
+    result?: object;
+    settlementResult?: object;
     totalBets: object;
     ownBets: object;
     betPercentage?: object;
@@ -53,7 +53,7 @@ export interface GameStateContextModel<Result, SettlementResult> {
     pfSetting?: PFSettingData;
 }
 
-export const initialGameStateContextModel = ({ defaultResult, defaultSettlementResult }) => {
+export const initialGameStateContextModel = () => {
     return {
         isConnect: false,
         signedIn: false,
@@ -88,8 +88,8 @@ export const initialGameStateContextModel = ({ defaultResult, defaultSettlementR
         betWin: 0,
         kickedOut: {},
         drawId: 0,
-        result: defaultResult,
-        settlementResult: defaultSettlementResult,
+        result: {},
+        settlementResult: {},
         showConfirmBet: false,
         showConfirmDialog: false,
         turnCounter: 0,

@@ -9,7 +9,7 @@ export type GameDisabledHandlerProps = {
     dispatch: Function;
     gameMessageHandler: GameMessageHandler;
     roundStateHandler: IRoundStateHandler;
-    gameStateContextModel(): GameStateContextModel<any, any>;
+    gameStateContextModel(): GameStateContextModel;
     durations: GameDurations;
 };
 

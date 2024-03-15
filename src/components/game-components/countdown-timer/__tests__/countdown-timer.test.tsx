@@ -20,7 +20,7 @@ describe('CountdownTimer', () => {
     const MockGameStatus = () => <div className="game-status"></div>;
 
     test('renders SimpleTimer and GameStatus for InRound state', () => {
-        mockUseGameStateContext.mockReturnValue({ roundState: RoundState.InRound } as GameStateContextModel<any, any>);
+        mockUseGameStateContext.mockReturnValue({ roundState: RoundState.InRound } as GameStateContextModel);
 
         const { container } = render(<CountdownTimer SimpleTimerProp={MockSimpleTimer} GameStatusProp={MockGameStatus} />);
 
@@ -33,7 +33,7 @@ describe('CountdownTimer', () => {
     });
 
     test('only renders loading show result and GameStatus for DisplayResult state', () => {
-        mockUseGameStateContext.mockReturnValue({ roundState: RoundState.DisplayResult } as GameStateContextModel<any, any>);
+        mockUseGameStateContext.mockReturnValue({ roundState: RoundState.DisplayResult } as GameStateContextModel);
 
         const { container } = render(<CountdownTimer SimpleTimerProp={MockSimpleTimer} GameStatusProp={MockGameStatus} />);
 
@@ -46,7 +46,7 @@ describe('CountdownTimer', () => {
     });
 
     test('only renders loading show result for None state', () => {
-        mockUseGameStateContext.mockReturnValue({ roundState: RoundState.None } as GameStateContextModel<any, any>);
+        mockUseGameStateContext.mockReturnValue({ roundState: RoundState.None } as GameStateContextModel);
 
         const { container } = render(<CountdownTimer SimpleTimerProp={MockSimpleTimer} GameStatusProp={MockGameStatus} />);
 
@@ -62,7 +62,7 @@ describe('CountdownTimer', () => {
     test.each([RoundState.BeforePlaceBet, RoundState.SwitchRound, RoundState.ConnectFailed, RoundState.Disabled])
         ("renders nothing for BeforePlaceBet or SwitchRound or ConnectFailed or Disabled state", (roundState) => {
 
-            mockUseGameStateContext.mockReturnValue({ roundState } as GameStateContextModel<any, any>);
+            mockUseGameStateContext.mockReturnValue({ roundState } as GameStateContextModel);
 
             const { container } = render(<CountdownTimer SimpleTimerProp={MockSimpleTimer} />);
 
@@ -78,7 +78,7 @@ describe('CountdownTimer', () => {
 
 describe('SimpleTimer', () => {
     test('renders nothing when remainingTime is 0 or less', () => {
-        mockUseGameStateContext.mockReturnValue({ roundState: RoundState.BeforePlaceBet, remainingTime: 0 } as GameStateContextModel<any, any>)
+        mockUseGameStateContext.mockReturnValue({ roundState: RoundState.BeforePlaceBet, remainingTime: 0 } as GameStateContextModel)
 
         const { container } = render(<SimpleTimer />);
 
@@ -88,7 +88,7 @@ describe('SimpleTimer', () => {
     test.each([[RoundState.InRound, 4, 0, '04'], [RoundState.LockingBet, 3, 1, '03']])
         ("renders timer with correct classes and formatted time when remainingTime > 0", (
             roundState, remainingTime, expectedLockBetClassLength, expectedTextContent) => {
-            mockUseGameStateContext.mockReturnValue({ roundState, remainingTime } as GameStateContextModel<any, any>);
+            mockUseGameStateContext.mockReturnValue({ roundState, remainingTime } as GameStateContextModel);
 
             const { container } = render(<SimpleTimer />);
 
@@ -102,7 +102,7 @@ describe('SimpleTimer', () => {
 describe('GameStatus', () => {
     const MockGameStatusChildren = () => <div>test</div>;
     test('displays the turn counter text when turnCounter is greater than 0', () => {
-        mockUseGameStateContext.mockReturnValue({ turnCounter: 1 } as GameStateContextModel<any, any>)
+        mockUseGameStateContext.mockReturnValue({ turnCounter: 1 } as GameStateContextModel)
 
         const screen = render(<GameStatus><MockGameStatusChildren /></GameStatus>);
 
@@ -110,7 +110,7 @@ describe('GameStatus', () => {
     });
 
     test('does not display the turn counter text when turnCounter is 0', () => {
-        mockUseGameStateContext.mockReturnValue({ turnCounter: 0 } as GameStateContextModel<any, any>)
+        mockUseGameStateContext.mockReturnValue({ turnCounter: 0 } as GameStateContextModel)
 
         const screen = render(<GameStatus><MockGameStatusChildren /></GameStatus>);
 

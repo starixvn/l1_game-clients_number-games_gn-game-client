@@ -31,7 +31,7 @@ export class GameFinishHandler {
         this.betWin = win ? bet : 0;
     };
 
-    handleFinish = ({ finish }, gameStateContext: GameStateContextModel<any, any>, durations?: GameDurations) => {
+    handleFinish = ({ finish }, gameStateContext: GameStateContextModel, durations?: GameDurations) => {
         const { dispatch, gameMessageHandler } = this.props;
         const { roundHistory } = gameStateContext;
         const roundHistoryClone = [...roundHistory];

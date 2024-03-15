@@ -1,6 +1,5 @@
 import { useTranslate } from "@tolgee/react";
 import { createContext, useContext, useReducer } from "react";
-
 import { RoundState } from "../../../components/game-base/type";
 import { LanguageLocaleMapper } from "../../constants";
 import { GetLocalizedErrorMessage } from "../../helpers/notice-helper";
@@ -9,14 +8,14 @@ import { GameStateContextModel, initialGameStateContextModel } from "./game-stat
 import { tolgee } from "../../tolgee";
 import { randomNumberSeries } from "../../helpers";
 
-export const GameStateContext = createContext({ rate: 1 } as GameStateContextModel<any, any>);
+export const GameStateContext = createContext({ rate: 1 } as GameStateContextModel);
 const GameStateDispatchContext = createContext(null);
 const GameTranslateContext = createContext(null);
 
-export function GameStateProvider({ children, defaultResult, defaultSettlementResult }) {
+export function GameStateProvider({ children }) {
     const [gameStateContextModel, dispatch] = useReducer(
         gameStateReducer,
-        initialGameStateContextModel({ defaultResult, defaultSettlementResult })
+        initialGameStateContextModel()
     );
     return (
         <GameStateContext.Provider value={gameStateContextModel}>
@@ -39,7 +38,7 @@ export function useGameTranslateContext() {
     return useContext(GameTranslateContext);
 }
 
-function gameStateReducer(state: GameStateContextModel<{}, {}>, action: GameEventAction) {
+function gameStateReducer(state: GameStateContextModel, action: GameEventAction) {
     const { type, payload } = action;
     const {
         remainingTime,

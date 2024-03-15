@@ -4,7 +4,7 @@ import { RoundState } from "../type";
 
 export type GameRoundHistorydHandlerProps = {
     dispatch: Function;
-    gameStateContextModel(): GameStateContextModel<any, any>;
+    gameStateContextModel(): GameStateContextModel;
 };
 
 export class GameRoundHistoryHandler {

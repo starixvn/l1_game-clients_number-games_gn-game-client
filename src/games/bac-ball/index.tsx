@@ -95,17 +95,8 @@ class BacBall extends GameBase<GameBaseProps> {
 }
 
 const BacBallWrapper = (props) => {
-    const defaultResult: BacBallResult = null;
-
-    const defaultSettlementResult: BacBallSettlementResult = {
-        banker: true,
-        drawId: 0,
-        player: false,
-        tie: false,
-    };
-
     return (
-        <GameStateProvider defaultResult={defaultResult} defaultSettlementResult={defaultSettlementResult}>
+        <GameStateProvider>
             <BacBallFC {...props} />
         </GameStateProvider>
     );
