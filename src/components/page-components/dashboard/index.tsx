@@ -308,14 +308,14 @@ class Dashboard extends React.PureComponent<Props, State> {
     }
 
     openGameFromLobby() {
-        StorageHelper.set(localStorageKeys.backToLobby, false);
+        updateURLContext({ backToLobby: true });
         updateURLContext({ gameId: 1001 });
         this.setState({ openGameId: 1001 })
     }
 
     renderLobby() {
         this.setState({ openGameId: null });
-        StorageHelper.set(localStorageKeys.backToLobby, true);
+        updateURLContext({ backToLobby: true });
         return <Lobby openGame={() => this.openGameFromLobby()} />;
     }
 
@@ -329,10 +329,11 @@ class Dashboard extends React.PureComponent<Props, State> {
             fractionalOddsFormat: authorizeInfo.user?.fractionalOddsFormat ?? false,
         };
         const offerGames: number[] = authorizeInfo?.user?.offerGames?.map((game: any) => game?.gameId) ?? [];
-        const backToLobby = Boolean(StorageHelper.get(localStorageKeys.backToLobby));
-
-        const ssoRedirectGameId = (StorageHelper.get(localStorageKeys.url) as URLContextModel).gameId;
+        const urlContextModel = StorageHelper.get(localStorageKeys.url) as URLContextModel;
+        const backToLobby = urlContextModel.backToLobby || false;
+        const ssoRedirectGameId = urlContextModel.gameId;
         const isRenderGames = (offerGames.includes(openGameId) && !backToLobby) || ssoRedirectGameId > 0;
+
         return (
             <PlayerContextProvider value={authContextValue}>
                 <div className={`${Styles["dashboard"]}`} id={"dashboard"}>

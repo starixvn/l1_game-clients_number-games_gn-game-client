@@ -49,7 +49,7 @@ export const initialURLContextData = {
         if (redirectUrl !== "") {
             globalThis.location.href = GameUtils.base64Decode(redirectUrl);
         } else {
-            StorageHelper.set(localStorageKeys.backToLobby, true);
+            updateURLContext({ backToLobby: true });
             Router.push({ pathname: "/" });
         }
     },

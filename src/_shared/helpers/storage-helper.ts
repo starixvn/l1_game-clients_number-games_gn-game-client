@@ -121,7 +121,6 @@ export const localStorageKeys = {
     pfSetting: buildLocalStorageKey("pf-setting"),
     debug: buildLocalStorageKey("debug"),
     url: buildLocalStorageKey("url"),
-    backToLobby: buildLocalStorageKey("back-to-lobby"),
 };
 
 export function buildLocalStorageKey(key: string) {
