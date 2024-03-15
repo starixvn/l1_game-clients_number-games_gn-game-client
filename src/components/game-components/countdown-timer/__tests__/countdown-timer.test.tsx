@@ -1,8 +1,8 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { useGameStateContext } from '../../../../_shared/react-contexts/game-state-context/game-state-context';
 import { RoundState } from '../../../game-base/type';
-import CountdownTimer, { SimpleTimer } from '../countdown-timer';
+import CountdownTimer, { GameStatus, SimpleTimer } from '../countdown-timer';
 import { GameStateContextModel } from '../../../../_shared/react-contexts/game-state-context/game-state-context-model';
 
 const mockUseGameStateContext = useGameStateContext as jest.Mock;
@@ -20,7 +20,7 @@ describe('CountdownTimer', () => {
     const MockGameStatus = () => <div className="game-status"></div>;
 
     test('renders SimpleTimer and GameStatus for InRound state', () => {
-        mockUseGameStateContext.mockReturnValue({ roundState: RoundState.InRound } as GameStateContextModel<any, any>)
+        mockUseGameStateContext.mockReturnValue({ roundState: RoundState.InRound } as GameStateContextModel<any, any>);
 
         const { container } = render(<CountdownTimer SimpleTimerProp={MockSimpleTimer} GameStatusProp={MockGameStatus} />);
 
@@ -33,7 +33,7 @@ describe('CountdownTimer', () => {
     });
 
     test('only renders loading show result and GameStatus for DisplayResult state', () => {
-        mockUseGameStateContext.mockReturnValue({ roundState: RoundState.DisplayResult } as GameStateContextModel<any, any>)
+        mockUseGameStateContext.mockReturnValue({ roundState: RoundState.DisplayResult } as GameStateContextModel<any, any>);
 
         const { container } = render(<CountdownTimer SimpleTimerProp={MockSimpleTimer} GameStatusProp={MockGameStatus} />);
 
@@ -46,7 +46,7 @@ describe('CountdownTimer', () => {
     });
 
     test('only renders loading show result for None state', () => {
-        mockUseGameStateContext.mockReturnValue({ roundState: RoundState.None } as GameStateContextModel<any, any>)
+        mockUseGameStateContext.mockReturnValue({ roundState: RoundState.None } as GameStateContextModel<any, any>);
 
         const { container } = render(<CountdownTimer SimpleTimerProp={MockSimpleTimer} GameStatusProp={MockGameStatus} />);
 
@@ -62,7 +62,7 @@ describe('CountdownTimer', () => {
     test.each([RoundState.BeforePlaceBet, RoundState.SwitchRound, RoundState.ConnectFailed, RoundState.Disabled])
         ("renders nothing for BeforePlaceBet or SwitchRound or ConnectFailed or Disabled state", (roundState) => {
 
-            mockUseGameStateContext.mockReturnValue({ roundState } as GameStateContextModel<any, any>)
+            mockUseGameStateContext.mockReturnValue({ roundState } as GameStateContextModel<any, any>);
 
             const { container } = render(<CountdownTimer SimpleTimerProp={MockSimpleTimer} />);
 
@@ -88,7 +88,7 @@ describe('SimpleTimer', () => {
     test.each([[RoundState.InRound, 4, 0, '04'], [RoundState.LockingBet, 3, 1, '03']])
         ("renders timer with correct classes and formatted time when remainingTime > 0", (
             roundState, remainingTime, expectedLockBetClassLength, expectedTextContent) => {
-            mockUseGameStateContext.mockReturnValue({ roundState, remainingTime } as GameStateContextModel<any, any>)
+            mockUseGameStateContext.mockReturnValue({ roundState, remainingTime } as GameStateContextModel<any, any>);
 
             const { container } = render(<SimpleTimer />);
 
@@ -97,4 +97,29 @@ describe('SimpleTimer', () => {
             expect(container.querySelectorAll('.lock-bet').length).toBe(expectedLockBetClassLength);
             expect(container.querySelector('.countdown-timer').textContent).toBe(expectedTextContent);
         });
+});
+
+describe('GameStatus', () => {
+    const MockGameStatusChildren = () => <div>test</div>;
+    test('displays the turn counter text when turnCounter is greater than 0', () => {
+        mockUseGameStateContext.mockReturnValue({ turnCounter: 1 } as GameStateContextModel<any, any>)
+
+        const screen = render(<GameStatus><MockGameStatusChildren /></GameStatus>);
+
+        expect(screen.getByText('draw_1')).toBeInTheDocument();
+    });
+
+    test('does not display the turn counter text when turnCounter is 0', () => {
+        mockUseGameStateContext.mockReturnValue({ turnCounter: 0 } as GameStateContextModel<any, any>)
+
+        const screen = render(<GameStatus><MockGameStatusChildren /></GameStatus>);
+
+        expect(screen.queryByText(/draw_/)).not.toBeInTheDocument();
+    });
+
+    test('renders children content', () => {
+        const childContent = 'Test Child Content';
+        render(<GameStatus>{childContent}</GameStatus>);
+        expect(screen.getByText(childContent)).toBeInTheDocument();
+    });
 });

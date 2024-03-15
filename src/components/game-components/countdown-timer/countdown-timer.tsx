@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import { RoundState } from "../../game-base/type";
 import styles from "./countdown-timer.module.scss";
@@ -61,20 +60,13 @@ export const SimpleTimer = () => {
     </div>;
 };
 
-const GameStatus: React.FC<{ children: React.ReactNode }> = ({ children }: { children: React.ReactNode }) => {
-    const { turnCounter, roundState } = useGameStateContext();
-    const [displayedTurnId, setDisplayedTurnId] = useState(turnCounter);
+export const GameStatus = ({ children }) => {
+    const { turnCounter } = useGameStateContext();
     const { t } = useSNTranslate();
-
-    useEffect(() => {
-        setDisplayedTurnId(turnCounter);
-    }, [roundState, turnCounter]);
-
-    const turnCounterText = displayedTurnId > 0 ? t(`draw_${displayedTurnId}`) : "";
 
     return (
         <div className={`${styles["game-status"]}`}>
-            <span>{turnCounterText}</span>
+            <span>{turnCounter > 0 ? t(`draw_${turnCounter}`) : ""}</span>
             {children}
         </div>
     );
