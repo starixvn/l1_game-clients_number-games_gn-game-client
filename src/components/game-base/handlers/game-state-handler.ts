@@ -1,15 +1,41 @@
-import { RoundState } from "../type";
+import { GameEventAction, GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
+import { GameStateContextModel } from "../../../_shared/react-contexts/game-state-context/game-state-context-model";
+import { GameDurations, RoundState } from "../type";
+
+type GameStateHandlerProps = {
+    gameStateContextModel: GameStateContextModel<any, any>;
+    nextRoundState: RoundState;
+    durations: GameDurations;
+    defaultResult: any;
+    defaultSettlementResult: any;
+    remainingTime: number;
+};
 
 export interface IGameStateHandler {
-    getNextRoundState({ gameStateContextModel, nextRoundState, durations, defaultResult, defaultSettlementResult, remainingTime });
+    getNextRoundState({
+        gameStateContextModel,
+        nextRoundState,
+        durations,
+        defaultResult,
+        defaultSettlementResult,
+        remainingTime,
+    }: GameStateHandlerProps);
+    setReturnToGameState(dispatch: (action: GameEventAction) => {});
 }
 
 export class GameStateHandler implements IGameStateHandler {
-    protected shouldIncreaseRoundId({ nextRoundState, durations }): boolean {
+    protected shouldIncreaseRoundId({ nextRoundState, durations }: { nextRoundState: RoundState; durations: GameDurations }): boolean {
         return false;
     }
 
-    getNextRoundState({ gameStateContextModel, nextRoundState, durations, defaultResult, defaultSettlementResult, remainingTime }) {
+    getNextRoundState({
+        gameStateContextModel,
+        nextRoundState,
+        durations,
+        defaultResult,
+        defaultSettlementResult,
+        remainingTime,
+    }: GameStateHandlerProps) {
         if (gameStateContextModel) {
             const { notice, result, settlementResult, roundId } = gameStateContextModel;
 
@@ -65,7 +91,30 @@ export class GameStateHandler implements IGameStateHandler {
         }
     }
 
-    private getTimeCounter({ remainingTime, durations, roundState }): number {
+    setReturnToGameState(dispatch: (action: GameEventAction) => {}) {
+        const returnToGameState = {
+            ownBets: {},
+            totalBets: {},
+            showConfirmBet: false,
+            showConfirmDialog: false,
+            suggestBet: {},
+        };
+
+        dispatch({
+            type: GameEventActionType.SET_NEW_GAME_STATE,
+            payload: { newGameState: returnToGameState },
+        });
+    }
+
+    private getTimeCounter({
+        remainingTime,
+        durations,
+        roundState,
+    }: {
+        remainingTime: number;
+        durations: GameDurations;
+        roundState: RoundState;
+    }): number {
         switch (roundState) {
             case RoundState.InRound:
             case RoundState.LockingBet:

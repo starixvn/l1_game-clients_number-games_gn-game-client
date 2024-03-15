@@ -199,6 +199,8 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                     isUserGesture: true,
                 },
             });
+
+        this.gameStateHandler.setReturnToGameState(this.props.dispatch);
     }
 
     protected async connectToGameService() {
