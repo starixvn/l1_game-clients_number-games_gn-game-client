@@ -294,8 +294,13 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         const { event, data } = message[messageEventType.SEND_SOCKET_MESSAGE_WITH_CLIENT_SEED];
         const { pfSetting } = this.props.gameStateContextModel;
         const clientSeed = pfSetting?.useManualClientSeed ? pfSetting?.manualClientSeed : pfSetting?.randomClientSeed;
+        const clientSeedDetail = {
+            randomClientSeed: pfSetting?.randomClientSeed,
+            manualClientSeed: pfSetting?.manualClientSeed,
+            useManualClientSeed: pfSetting?.useManualClientSeed,
+        };
 
-        this.socket.emit(event, { ...data, clientSeed });
+        this.socket.emit(event, { ...data, clientSeed, clientSeedDetail });
     };
 
     loadPFSetting() {

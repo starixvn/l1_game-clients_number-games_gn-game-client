@@ -91,6 +91,7 @@ const BetHistoryModal: FC<BetHistoryProps> = ({ renderBetLog, renderBetLogDetail
 
     return (
         <ModalContainer
+            id="bet-history-modal"
             isOpen={isShowBetHistory && !isShowBetDetail}
             title={translateCommon("bet_history")}
             onCloseModal={handleCloseModal}

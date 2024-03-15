@@ -30,6 +30,7 @@ const PFVerifyModal: FC<{ handleCloseModal: Function; isShowPFVerify: boolean; p
         isShowPFVerify &&
         createPortal(
             <ModalContainer
+                id="pf-verify"
                 title={translateCommon("pf_title_provably_fair").capitalizeFirstLetter()}
                 isOpen={isShowPFVerify && !isShowClientSeedInfo}
                 isOverlap={true}

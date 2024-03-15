@@ -6,17 +6,18 @@ import { ModalType } from "../base-dialog/type";
 import Styles from "./modal-container.module.scss";
 
 const ModalContainer: FC<{
+    id?: string;
     title: string;
     children?: React.ReactNode;
     onCloseModal: Function;
     isOpen: boolean;
     isOverlap?: boolean;
-}> = ({ title, children, onCloseModal, isOpen, isOverlap }) => {
+}> = ({ title, children, onCloseModal, isOpen, isOverlap, id }) => {
     const clickSound = useClickSound();
 
     return (
         <BaseDialog type={ModalType.Full} enableBackdrop={true} isOverlap={isOverlap}>
-            <div className={`${Styles["modal-full"]} ${isOpen ? Styles["open"] : Styles["close"]}`}>
+            <div id={id} className={`${Styles["modal-full"]} ${isOpen ? Styles["open"] : Styles["close"]}`}>
                 <div className={Styles["title"]}>
                     {title}
                     <span

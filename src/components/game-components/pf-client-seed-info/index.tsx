@@ -14,6 +14,7 @@ const PFClientSeedInfoModal: FC<{ handleCloseModal: Function; isShowPFClientSeed
         isShowPFClientSeedInfo &&
         createPortal(
             <ModalContainer
+                id="pf-client-seed-info-modal"
                 title={translateCommon("pf_header_client_seed_info")}
                 isOpen={isShowPFClientSeedInfo}
                 isOverlap={true}

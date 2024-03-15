@@ -85,6 +85,7 @@ const BetDetail: FC<BetLogDetailProps> = ({ betLogDetails, onCloseModal, isShowB
     return (
         isShowBetDetail && (
             <ModalContainer
+                id="bet-detail"
                 isOpen={isShowBetDetail && !isShowPFVerify}
                 title={translateCommon("bet_detail")}
                 onCloseModal={handleCloseModal}

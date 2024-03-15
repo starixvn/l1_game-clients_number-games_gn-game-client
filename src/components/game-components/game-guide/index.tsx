@@ -20,7 +20,7 @@ const GameGuideModal: FC = () => {
 
     return (
         isShowGameGuide && (
-            <ModalContainer isOpen={true} onCloseModal={handleCloseModal} title={translate("game_guide")}>
+            <ModalContainer id="game-guide" isOpen={true} onCloseModal={handleCloseModal} title={translate("game_guide")}>
                 <WrapperGameGuide />
             </ModalContainer>
         )

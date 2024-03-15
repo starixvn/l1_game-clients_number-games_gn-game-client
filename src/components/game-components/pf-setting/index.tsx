@@ -18,7 +18,12 @@ const PFSettingModal: FC = () => {
 
     return (
         isShowPFSetting && (
-            <ModalContainer title={translateCommon("pf_title_provably_fair_settings")} isOpen={true} onCloseModal={handleCloseModal}>
+            <ModalContainer
+                id="pf-setting"
+                title={translateCommon("pf_title_provably_fair_settings")}
+                isOpen={true}
+                onCloseModal={handleCloseModal}
+            >
                 <PFSetting />
             </ModalContainer>
         )
