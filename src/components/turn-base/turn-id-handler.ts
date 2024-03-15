@@ -45,9 +45,7 @@ export class TurnIdHandler {
         const numberOfTurnsPerRound = this.props.totalTurns;
         const turnIndex = drawId % numberOfTurnsPerRound;
         this.turnCounter = turnIndex === 0 ? numberOfTurnsPerRound : turnIndex;
-        // const { pfSetting } = this.props.gameStateContextModel();
         const { showResult, wholeTurn, beforePlaceBet, switchRoundAnimation } = this.props.durations;
-        const isInDisplayResultState = this.roundRemainingTime % wholeTurn > wholeTurn - (showResult + beforePlaceBet);
 
         writeDebugLog({
             name: "TurnIdHandler - handleDrawId",
@@ -56,17 +54,30 @@ export class TurnIdHandler {
             wholeTurn,
             remainingTime: this.roundRemainingTime,
             drawId,
-            isInDisplayResultState,
         });
 
-        const isInSwitchRoundState = this.roundRemainingTime <= switchRoundAnimation;
-
-        if (this.reloadHandler && isInDisplayResultState) {
-            let publishTurnCounter = this.turnCounter === 1 ? numberOfTurnsPerRound : this.turnCounter - 1;
+        if (this.reloadHandler) {
+            const isInDisplayResultState = this.roundRemainingTime % wholeTurn > wholeTurn - (showResult + beforePlaceBet);
+            const isInSwitchRoundState = this.roundRemainingTime <= switchRoundAnimation;
+            const isInSwitchTurnState = this.roundRemainingTime % wholeTurn === 0;
             this.reloadHandler = false;
-            this.dispatchTurnCounter(true, publishTurnCounter);
-            this.dispatchDrawId(drawId - 1);
-        } else if (!this.isInDisplayResultState() || isInSwitchRoundState) {
+
+            if (isInDisplayResultState) {
+                let publishTurnCounter = this.turnCounter === 1 ? numberOfTurnsPerRound : this.turnCounter - 1;
+                this.dispatchTurnCounter(true, publishTurnCounter);
+                this.dispatchDrawId(drawId - 1);
+
+                return;
+            } else if (isInSwitchRoundState || isInSwitchTurnState) {
+                this.dispatchTurnCounter(true, this.turnCounter);
+                this.dispatchDrawId(drawId);
+                this.reloadHandler = false;
+
+                return;
+            }
+        }
+
+        if (!this.isInDisplayResultState()) {
             this.dispatchTurnCounter(true, this.turnCounter);
             this.dispatchDrawId(drawId);
         }
