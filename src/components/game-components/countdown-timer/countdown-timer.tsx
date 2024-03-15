@@ -3,7 +3,6 @@ import { useGameStateContext } from "../../../_shared/react-contexts/game-state-
 import { RoundState } from "../../game-base/type";
 import styles from "./countdown-timer.module.scss";
 import { useSNTranslate } from "../../../_shared/react-hooks/use-translator";
-import { writeDebugLog } from "../../../_shared/helpers";
 
 export type Rotation = "clockwise" | "counterclockwise";
 const CountdownTimer = () => {
@@ -48,28 +47,18 @@ const CountdownTimer = () => {
     }
 };
 
-const SimpleTimer = () => {
+export const SimpleTimer = () => {
     const { roundState, remainingTime } = useGameStateContext();
-    const [timeLeft, setTimeLeft] = useState(remainingTime);
-    const [classNames, setClassNames] = useState("");
 
-    useEffect(() => {
-        if (remainingTime !== timeLeft) {
-            writeDebugLog({ timeLeft, remainingTime, roundState: RoundState[roundState] });
-            setTimeLeft(remainingTime);
-            setClassNames(roundState === RoundState.LockingBet ? styles["lock-bet"] : "");
-        }
-    }, [timeLeft, remainingTime, roundState]);
+    if (remainingTime <= 0) {
+        return <></>;
+    }
 
-    return remainingTime <= 0 ? (
-        <></>
-    ) : (
-        <div className={styles.timer}>
-            <div className={`${styles["countdown-timer"]} ${classNames}`}>
-                <span>{(timeLeft % 60).toString().padStart(2, "0")}</span>
-            </div>
+    return <div className={styles.timer}>
+        <div className={`${styles["countdown-timer"]} ${roundState === RoundState.LockingBet ? styles["lock-bet"] : ""}`}>
+            <span>{(remainingTime % 60).toString().padStart(2, "0")}</span>
         </div>
-    );
+    </div>;
 };
 
 const GameStatus: React.FC<{ children: React.ReactNode }> = ({ children }: { children: React.ReactNode }) => {

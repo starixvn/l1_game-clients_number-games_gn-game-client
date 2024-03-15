@@ -9,7 +9,7 @@ import { GameStateContextModel, initialGameStateContextModel } from "./game-stat
 import { tolgee } from "../../tolgee";
 import { randomNumberSeries } from "../../helpers";
 
-const GameStateContext = createContext({ rate: 1 } as GameStateContextModel<any, any>);
+export const GameStateContext = createContext({ rate: 1 } as GameStateContextModel<any, any>);
 const GameStateDispatchContext = createContext(null);
 const GameTranslateContext = createContext(null);
 
@@ -27,7 +27,7 @@ export function GameStateProvider({ children, defaultResult, defaultSettlementRe
     );
 }
 
-export function useGameStateContext() {
+export const useGameStateContext = () => {
     return useContext(GameStateContext);
 }
 
