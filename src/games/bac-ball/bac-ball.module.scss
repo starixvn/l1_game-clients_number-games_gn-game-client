@@ -247,21 +247,17 @@
 
 %winning-effect {
     position: absolute;
-    background: linear-gradient(0deg, rgba(255, 239, 0, 1) 0%, rgba(139, 190, 123, 0) 48%, rgba(255, 239, 0, 1) 100%);
+    background: url("/static/images/bac-number/hover-inner-player.png");
     opacity: 0;
     animation: winning 1.2s linear infinite;
 }
 
-.winning-player {
-    width: 17.8rem;
-    height: 18.8rem;
-    @extend %winning-effect;
-    @extend %player-clip-path;
-}
-
+.winning-player,
 .winning-banker {
     width: 17.8rem;
     height: 18.8rem;
+    background: url("/static/images/bac-number/hover-inner-player.png");
+
     @extend %winning-effect;
     @extend %player-clip-path;
 }
@@ -271,6 +267,7 @@
     top: 0.5rem;
     width: 9.5rem;
     height: 17.2rem;
+    background: url("/static/images/bac-number/hover-inner-tie.png");
     @extend %tie-clip-path;
     @extend %winning-effect;
 }
@@ -280,7 +277,7 @@
         opacity: 0;
     }
     to {
-        opacity: 0.5;
+        opacity: 1;
     }
 }
 
