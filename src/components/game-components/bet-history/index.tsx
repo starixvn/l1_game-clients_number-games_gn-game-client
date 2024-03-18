@@ -3,12 +3,12 @@ import { FC, useEffect, useMemo, useState } from "react";
 import { useGameContext } from "../../../_shared/react-contexts";
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
+import { useCommonTranslate } from "../../../_shared/react-hooks/use-translator";
 import { GameMessageHandler, messageEventType } from "../../game-base/handlers";
+import { DrawInfo } from "../../game-base/type";
 import Loader from "../loader";
 import ModalContainer from "../modal-container";
 import Styles from "./bet-history.module.scss";
-import { useCommonTranslate } from "../../../_shared/react-hooks/use-translator";
-import { DrawInfo } from "../../game-base/type";
 
 const GET_HISTORY = "getHistory";
 const HISTORY_EVENT = "history";
@@ -53,7 +53,8 @@ const BetHistoryModal: FC<BetHistoryProps> = ({ renderBetLog, renderBetLogDetail
     };
 
     const handleScroll = (nextPage: number) => (event: any) => {
-        const bottom = event.target.scrollHeight - event.target.scrollTop === event.target.clientHeight;
+        const bottom = Math.round(event.target.scrollHeight - event.target.scrollTop) === Math.round(event.target.clientHeight);
+
         if (bottom && !isFetching) {
             getHistory(gameContext.gameMessageHandler, nextPage);
             setIsFetching(true);
