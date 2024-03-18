@@ -2,6 +2,7 @@ import { createContext, useContext } from "react";
 import { StorageHelper, localStorageKeys } from "../helpers";
 import Router from "next/router";
 import { GameUtils } from "../helpers/base-64-helper";
+import { isEmpty } from "lodash";
 
 export type URLContextModel = {
     token?: string;
@@ -46,7 +47,7 @@ export function loadURLContext(): URLContextModel {
 export const initialURLContextData = {
     ...loadURLContext(),
     backToRedirectUrl: (redirectUrl: string) => {
-        if (redirectUrl !== "") {
+        if (!isEmpty(redirectUrl)) {
             globalThis.location.href = GameUtils.base64Decode(redirectUrl);
         } else {
             updateURLContext({ backToLobby: true });

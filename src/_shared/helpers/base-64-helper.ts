@@ -1,9 +1,14 @@
 import { Base64 } from "base64-string";
+import { isNull } from "lodash";
 
 export class GameUtils {
     static base64: Base64;
 
     public static base64Decode(data: string): string {
+        if (isNull(data)) {
+            return "";
+        }
+
         if (!GameUtils.base64) {
             GameUtils.base64 = new Base64();
         }
@@ -11,6 +16,10 @@ export class GameUtils {
     }
 
     public static base64Encode(data: string): string {
+        if (isNull(data)) {
+            return "";
+        }
+
         if (!GameUtils.base64) {
             GameUtils.base64 = new Base64();
         }
