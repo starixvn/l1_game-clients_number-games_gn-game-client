@@ -32,19 +32,19 @@ describe("TurnStateHandler", () => {
             { roundRemainingTime: 103, turnIndex: 1, turnId: 5 },
             { roundRemainingTime: 90, turnIndex: 1, turnId: 5 },
             { roundRemainingTime: 77, turnIndex: 1, turnId: 5 },
-            { roundRemainingTime: 76, turnIndex: 1, turnId: 5 },
 
+            { roundRemainingTime: 76, turnIndex: 2, turnId: 6 },
             { roundRemainingTime: 75, turnIndex: 2, turnId: 6 },
             { roundRemainingTime: 70, turnIndex: 2, turnId: 6 },
             { roundRemainingTime: 59, turnIndex: 2, turnId: 6 },
-            { roundRemainingTime: 48, turnIndex: 2, turnId: 6 },
+            { roundRemainingTime: 49, turnIndex: 2, turnId: 6 },
 
-            { roundRemainingTime: 47, turnIndex: 3, turnId: 7 },
+            { roundRemainingTime: 48, turnIndex: 3, turnId: 7 },
             { roundRemainingTime: 45, turnIndex: 3, turnId: 7 },
             { roundRemainingTime: 36, turnIndex: 3, turnId: 7 },
             { roundRemainingTime: 21, turnIndex: 3, turnId: 7 },
-            { roundRemainingTime: 20, turnIndex: 3, turnId: 7 },
 
+            { roundRemainingTime: 20, turnIndex: 4, turnId: 8 },
             { roundRemainingTime: 19, turnIndex: 4, turnId: 8 },
             { roundRemainingTime: 10, turnIndex: 4, turnId: 8 },
             { roundRemainingTime: 5, turnIndex: 4, turnId: 8 },
