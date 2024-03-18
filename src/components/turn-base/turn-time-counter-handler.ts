@@ -74,22 +74,9 @@ export class TurnTimelineCounter {
             index: 0,
         };
 
-        for (let index = 0; index < this.allTurnTimeline.length; index++) {
-            const turnTimeline = this.allTurnTimeline[index];
-
+        for (const turnTimeline of this.allTurnTimeline) {
             if (turnTimeline.isInPlacingBetTime(roundRemainingTime) || turnTimeline.isInDisplayingResultTime(roundRemainingTime)) {
-                turn.index = turnTimeline.turnIndex;
-
-                if (roundId > 0) {
-                    const actualRoundId = this.isLastTurn(roundRemainingTime, turnTimeline) ? roundId - 1 : roundId;
-                    turn.id = (actualRoundId - 1) * this.totalTurn + turn.index;
-
-                    if (turnId > 0 && turnId != turn.id) {
-                        console.log(turn, roundId, actualRoundId, roundRemainingTime, turnId);
-                    }
-                }
-
-                return turn;
+                return this.calculateTurnIndexAndId(turn, turnTimeline, roundId, roundRemainingTime, turnId);
             }
         }
 
@@ -99,4 +86,19 @@ export class TurnTimelineCounter {
     isLastTurn = (roundRemainingTime: number, turnTimeline: TurnTimeline) => {
         return turnTimeline.turnIndex === this.totalTurn && turnTimeline.isInDisplayingResultTime(roundRemainingTime);
     };
+
+    private calculateTurnIndexAndId(turn: Turn, turnTimeline: TurnTimeline, roundId: number, roundRemainingTime: number, turnId: number) {
+        turn.index = turnTimeline.turnIndex;
+
+        if (roundId > 0) {
+            const actualRoundId = this.isLastTurn(roundRemainingTime, turnTimeline) ? roundId - 1 : roundId;
+            turn.id = (actualRoundId - 1) * this.totalTurn + turn.index;
+
+            if (turnId > 0 && turnId != turn.id) {
+                console.log(turn, roundId, actualRoundId, roundRemainingTime, turnId);
+            }
+        }
+
+        return turn;
+    }
 }

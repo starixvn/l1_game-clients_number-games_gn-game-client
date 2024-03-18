@@ -3,7 +3,6 @@ import { RoundState } from "../../game-base/type";
 import styles from "./countdown-timer.module.scss";
 import { useSNTranslate } from "../../../_shared/react-hooks/use-translator";
 import { useEffect, useState } from "react";
-import { writeDebugLog } from "../../../_shared/helpers";
 import { useGameContext } from "../../../_shared/react-contexts";
 import { messageEventType } from "../../game-base/handlers";
 
