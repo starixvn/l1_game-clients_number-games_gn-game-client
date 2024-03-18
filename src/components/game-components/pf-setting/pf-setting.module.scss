@@ -95,6 +95,19 @@
     }
 }
 
+.copy-success {
+    position: absolute;
+    bottom: 4rem;
+    height: 3.6rem;
+    line-height: 3.6rem;
+    right: 0;
+    padding: 0 1.8rem;
+    border-radius: 1rem;
+    color: #fff;
+    font-size: 1.3rem;
+    background: #159639;
+}
+
 .pf-tooltip {
     display: none;
     position: absolute;

@@ -82,7 +82,7 @@ const PFSetting: FC = () => {
         setIsCopySuccess(true);
         setInterval(() => {
             setIsCopySuccess(false);
-        }, 5000);
+        }, 3000);
     };
 
     const handleCheckRadio = () => {
@@ -183,14 +183,14 @@ const PFSetting: FC = () => {
                 </div>
             </div>
 
-            <h3 className={Styles["section-title"]}>{translateCommon("pf_header_server_seed")}</h3>
+            <h3 className={Styles["section-title"]}>{translateCommon("pf_header_server_seed_sha256")}</h3>
             <div className={Styles["client-seed-form"]}>
                 <div className="input-group width-full">
                     <input id="server-seed-hash" className="form-control" value={pfSetting?.serverSeedHash} readOnly />
                     <button className={Styles["copy-btn"]} onClick={handleCopyServerSeedHash}>
                         <span className="icon-copy" />
                     </button>
-                    {isCopySuccess && <span>{translateCommon("pf_copy_successfully")}</span>}
+                    {isCopySuccess && <div className={Styles["copy-success"]}>{translateCommon("pf_copy_successfully ")}</div>}
                 </div>
                 {Object.keys(ownBets).length > 0 && <div className={Styles["pf-note"]}>{translateCommon("pf_client_seed_para_1")}</div>}
             </div>
