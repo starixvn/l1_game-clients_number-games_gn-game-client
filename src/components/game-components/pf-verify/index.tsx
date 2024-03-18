@@ -10,6 +10,7 @@ import { getOrdinalNumber } from "../../../_shared/helpers";
 import { v4 as uuidv4 } from "uuid";
 import PFClientSeedInfoModal from "../pf-client-seed-info";
 import PFVerifyDetailModal from "../pf-verify-detail";
+import { ButtonPFGuide } from "../pf-guide";
 
 enum PFDispatchAction {
     OPEN_CLIENT_SEED_INFO = "openClientSeedInfo",
@@ -69,9 +70,7 @@ const PFVerifyModal: FC<{ handleCloseModal: Function; isShowPFVerify: boolean; p
                 id="pf-verify"
                 title={
                     <div>
-                        <button className={Styles["btn-pf-guide"]}>
-                            <span className="icon-guide" />
-                        </button>
+                        <ButtonPFGuide />
                         {translateCommon("pf_title_provably_fair").capitalizeFirstLetter()}
                     </div>
                 }

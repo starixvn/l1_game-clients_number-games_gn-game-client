@@ -2,8 +2,9 @@ import { FC } from "react";
 import { useCommonTranslate, useTranslator } from "../../../_shared/react-hooks";
 import { createPortal } from "react-dom";
 import ModalContainer from "../modal-container";
-import Styles from "../pf-setting/pf-setting.module.scss";
+import { ButtonPFGuide } from "../pf-guide";
 import { useGameContext } from "../../../_shared/react-contexts";
+import Styles from "../pf-setting/pf-setting.module.scss";
 
 const PFClientSeedInfoModal: FC<{ handleCloseModal: Function; isShowPFClientSeedInfo: boolean; clientSeedInfo: any[] }> = ({
     handleCloseModal,
@@ -20,9 +21,7 @@ const PFClientSeedInfoModal: FC<{ handleCloseModal: Function; isShowPFClientSeed
                 id="pf-client-seed-info-modal"
                 title={
                     <div>
-                        <button className={Styles["btn-pf-guide"]}>
-                            <span className="icon-guide" />
-                        </button>
+                        <ButtonPFGuide />
                         {translateBacBall("pf_title_client_seed_info")}
                     </div>
                 }

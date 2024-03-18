@@ -2,13 +2,9 @@ import { FC } from "react";
 import { useCommonTranslate } from "../../../_shared/react-hooks";
 import { createPortal } from "react-dom";
 import ModalContainer from "../modal-container";
-import Styles from "../pf-setting/pf-setting.module.scss";
+import { ButtonPFGuide } from "../pf-guide";
 
-const PFVerifyDetailModal: FC<{ handleCloseModal: Function; isOpen: boolean; data?: any }> = ({
-    handleCloseModal,
-    isOpen: isOpen,
-    data,
-}) => {
+const PFVerifyDetailModal: FC<{ handleCloseModal: Function; isOpen: boolean; data?: any }> = ({ handleCloseModal, isOpen, data }) => {
     const { t: translateCommon } = useCommonTranslate();
 
     return (
@@ -18,9 +14,7 @@ const PFVerifyDetailModal: FC<{ handleCloseModal: Function; isOpen: boolean; dat
                 id="pf-verify-detail-modal"
                 title={
                     <div>
-                        <button className={Styles["btn-pf-guide"]}>
-                            <span className="icon-guide" />
-                        </button>
+                        <ButtonPFGuide />
                         {translateCommon("pf_title_verification").capitalizeFirstLetter()}
                     </div>
                 }
@@ -28,7 +22,6 @@ const PFVerifyDetailModal: FC<{ handleCloseModal: Function; isOpen: boolean; dat
                 isOverlap={true}
                 onCloseModal={handleCloseModal}
             >
-                {" "}
                 <PFVerifyDetail />
             </ModalContainer>,
             document.getElementById("dashboard")

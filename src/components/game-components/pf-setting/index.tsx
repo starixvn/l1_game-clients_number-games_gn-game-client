@@ -4,6 +4,7 @@ import ModalContainer from "../modal-container";
 import { useCommonTranslate } from "../../../_shared/react-hooks";
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 import Styles from "./pf-setting.module.scss";
+import { ButtonPFGuide } from "../pf-guide";
 
 const NUMBER_VALUES = "0123456789";
 
@@ -22,9 +23,7 @@ const PFSettingModal: FC = () => {
                 id="pf-setting"
                 title={
                     <div>
-                        <button className={Styles["btn-pf-guide"]}>
-                            <span className="icon-guide" />
-                        </button>
+                        <ButtonPFGuide />
                         {translateCommon("pf_title_provably_fair_settings").capitalizeFirstLetter()}
                     </div>
                 }
