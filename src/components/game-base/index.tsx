@@ -201,6 +201,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             });
 
         this.gameStateHandler.setReturnToGameState(this.props.dispatch);
+        this.cancelConfirmBetAndResetBets();
     }
 
     protected async connectToGameService() {
@@ -210,6 +211,22 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
         this.socket = socket;
     }
+
+    cancelConfirmBetAndResetBets = () => {
+        const { dispatch } = this.props;
+        dispatch({
+            type: GameEventActionType.NOT_CONFIRM_OWN_BETS,
+            payload: {
+                notConfirmOwnBets: {},
+            },
+        });
+        dispatch({
+            type: GameEventActionType.SHOW_CONFIRM_BET,
+            payload: {
+                showConfirmBet: false,
+            },
+        });
+    };
 
     onVisibilityChange = () => {
         document.visibilityState === "hidden" ? this.onDestroy() : this.onStart();
