@@ -50,6 +50,7 @@
     --text-content-color: #9ca3ae;
     --text-header-color: #a6c0fc;
     --text-link-color: #2187ff;
+    --text-color-highlight: #ffbc11;
 
     position: relative;
     color: var(--text-content-color);
@@ -69,6 +70,10 @@
             line-height: 1.7;
         }
     }
+}
+
+.text-highlight {
+    color: var(--text-color-highlight);
 }
 
 .btn-pf-guide {
@@ -142,11 +147,21 @@
     top: 0.1rem;
     font-size: 1.3rem;
     cursor: pointer;
+    text-decoration: underline;
 }
 
 .btn-verify {
     height: 4.4rem;
     width: 100%;
+}
+
+.btn-export {
+    border: 0;
+    background: none;
+
+    > span {
+        font-size: 2.3rem;
+    }
 }
 
 .section-title {
@@ -193,11 +208,12 @@
     background: none;
     border: none;
     cursor: pointer;
-    width: 3rem;
+    width: 3.4rem;
 
     > span {
         display: block;
         margin-top: 0.1rem;
+        font-size: 1.8rem;
     }
 }
 
@@ -210,4 +226,18 @@
 
 .hide {
     display: none;
+}
+.pf-info {
+    font-size: 1.1rem;
+    font-weight: 600;
+
+    .table td,
+    .table thead th {
+        border: 1px solid #3c3e43;
+        height: 3.6rem;
+    }
+
+    .table-highlight {
+        color: #20e500;
+    }
 }

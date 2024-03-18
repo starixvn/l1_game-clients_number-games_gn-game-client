@@ -74,6 +74,11 @@
         --input-padding: 0;
     }
 
+    &.width-small {
+        --input-width: 15rem;
+        --input-padding: 0;
+    }
+
     &::after {
         content: "";
         position: absolute;

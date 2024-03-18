@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?ss9t6w');
-  src:  url('fonts/icomoon.eot?ss9t6w#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?ss9t6w') format('truetype'),
-    url('fonts/icomoon.woff?ss9t6w') format('woff'),
-    url('fonts/icomoon.svg?ss9t6w#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?gxe8ri');
+  src:  url('fonts/icomoon.eot?gxe8ri#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?gxe8ri') format('truetype'),
+    url('fonts/icomoon.woff?gxe8ri') format('woff'),
+    url('fonts/icomoon.svg?gxe8ri#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,34 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-edit:before {
+  content: "\e914";
+  color: #6c737b;
+}
+.icon-file-csv .path1:before {
+  content: "\e915";
+  color: rgb(7, 177, 72);
+}
+.icon-file-csv .path2:before {
+  content: "\e916";
+  margin-left: -1em;
+  color: rgb(7, 177, 72);
+}
+.icon-file-csv .path3:before {
+  content: "\e917";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-file-csv .path4:before {
+  content: "\e918";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-file-csv .path5:before {
+  content: "\e919";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
 .icon-setting:before {
   content: "\e913";
   color: #fff;
