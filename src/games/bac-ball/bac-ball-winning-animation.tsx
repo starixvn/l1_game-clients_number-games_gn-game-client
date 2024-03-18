@@ -34,14 +34,13 @@ export const BacBallWinningAnimation: React.FC<Props> = ({ choice, resourceName,
     return (
         winningHighLightResult({ betChoice: choice }) &&
         winningFrames?.length > 0 && (
-            <div>
-                <div className={Styles[`winning-${choice}`]}></div>
-            <Stage
-                width={width}
-                height={height}
-                options={{ backgroundAlpha: 0, antialias: false, powerPreference: "low-power" }}
-                className={className}
-            >
+            <div className="d-grid">
+                <Stage
+                    width={width}
+                    height={height}
+                    options={{ backgroundAlpha: 0, antialias: false, powerPreference: "low-power" }}
+                    className={className}
+                >
                     <Container position={position}>
                         <AnimatedSprite
                             anchor={0.5}
@@ -54,6 +53,8 @@ export const BacBallWinningAnimation: React.FC<Props> = ({ choice, resourceName,
                         />
                     </Container>
                 </Stage>
+
+                <div className={Styles[`winning-${choice}`]}></div>
             </div>
         )
     );

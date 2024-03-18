@@ -98,6 +98,7 @@ export const BacBallBetOptionsComponent = () => {
                 </div>
 
                 {ownBet}
+                {<div className={Style["winning-effect"]}>{winningResult}</div>}
                 <button
                     ref={(el) => (rippleButtons.current[choice === "player" ? 0 : 1] = el)}
                     className={`btn-ripple ${Style["btn-ripple"]} ${isShowDisabledLayer}`}
@@ -109,7 +110,7 @@ export const BacBallBetOptionsComponent = () => {
                     <span className="ripple-effect"></span>
                 </button>
                 {isShowDisabledLayer && <div className={Style["disable-layer"]}></div>}
-                {<div className={Style["winning-effect"]}>{winningResult}</div>}
+
                 {showHighlightPrevResult({ betChoice: choice }) && winningPrev}
             </div>
         );
@@ -142,6 +143,7 @@ export const BacBallBetOptionsComponent = () => {
                     {odds}
                 </div>
                 {ownBet}
+                {<div className={Style["winning-effect"]}>{winningResult}</div>}
                 <button
                     ref={(el) => (rippleButtons.current[2] = el)}
                     className={`btn-ripple ${Style["btn-ripple"]} ${isShowDisabledLayer}`}
@@ -153,7 +155,7 @@ export const BacBallBetOptionsComponent = () => {
                     <span className="ripple-effect"></span>
                 </button>
                 {isShowDisabledLayer && <div className={Style["disable-layer"]}></div>}
-                {<div className={Style["winning-effect"]}>{winningResult}</div>}
+
                 {showHighlightPrevResult({ betChoice: BacBallBetOptions.TIE }) && winningPrev}
             </div>
         );
