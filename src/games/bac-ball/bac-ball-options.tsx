@@ -48,7 +48,7 @@ export const BacBallBetOptionsComponent = () => {
     };
 
     const renderOdds = (choice: string) => {
-        return <Odds choice={choice} gameName={gameName} animationDuration={5} />;
+        return <Odds choice={choice} gameName={gameName} animationDuration={6} />;
     };
 
     const renderOwnBet = (choice: string) => {

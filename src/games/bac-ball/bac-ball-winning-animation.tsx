@@ -48,7 +48,7 @@ export const BacBallWinningAnimation: React.FC<Props> = ({ choice, resourceName,
                             autoUpdate
                             isPlaying={true}
                             initialFrame={0}
-                            animationSpeed={0.3}
+                            animationSpeed={0.29}
                             loop={true}
                         />
                     </Container>
