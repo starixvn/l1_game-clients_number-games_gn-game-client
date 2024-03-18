@@ -7,7 +7,7 @@ import Styles from "./modal-container.module.scss";
 
 const ModalContainer: FC<{
     id?: string;
-    title: string;
+    title: React.ReactNode;
     children?: React.ReactNode;
     onCloseModal: Function;
     isOpen: boolean;

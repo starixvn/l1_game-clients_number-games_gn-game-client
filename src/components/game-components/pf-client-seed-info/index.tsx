@@ -2,6 +2,7 @@ import { FC } from "react";
 import { useCommonTranslate } from "../../../_shared/react-hooks";
 import { createPortal } from "react-dom";
 import ModalContainer from "../modal-container";
+import Styles from "../pf-setting/pf-setting.module.scss";
 
 const PFClientSeedInfoModal: FC<{ handleCloseModal: Function; isShowPFClientSeedInfo: boolean; clientSeedInfo: any[] }> = ({
     handleCloseModal,
@@ -15,7 +16,14 @@ const PFClientSeedInfoModal: FC<{ handleCloseModal: Function; isShowPFClientSeed
         createPortal(
             <ModalContainer
                 id="pf-client-seed-info-modal"
-                title={translateCommon("pf_header_client_seed_info")}
+                title={
+                    <div>
+                        <button className={Styles["btn-pf-guide"]}>
+                            <span className="icon-guide" />
+                        </button>
+                        {translateCommon("pf_header_client_seed")}
+                    </div>
+                }
                 isOpen={isShowPFClientSeedInfo}
                 isOverlap={true}
                 onCloseModal={handleCloseModal}

@@ -186,6 +186,7 @@ export interface PFResult {
     serverSeed: string;
     clientSeeds: string[];
     mergeSeed: string;
+    mergeClientSeed: string;
     roundResult: any[];
     finalHash: string;
 }

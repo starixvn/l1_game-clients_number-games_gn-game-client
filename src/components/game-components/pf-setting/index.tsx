@@ -20,7 +20,14 @@ const PFSettingModal: FC = () => {
         isShowPFSetting && (
             <ModalContainer
                 id="pf-setting"
-                title={translateCommon("pf_title_provably_fair_settings")}
+                title={
+                    <div>
+                        <button className={Styles["btn-pf-guide"]}>
+                            <span className="icon-guide" />
+                        </button>
+                        {translateCommon("pf_title_provably_fair_settings").capitalizeFirstLetter()}
+                    </div>
+                }
                 isOpen={true}
                 onCloseModal={handleCloseModal}
             >
@@ -80,9 +87,9 @@ const PFSetting: FC = () => {
         const serverSeed = document.getElementById("server-seed-hash") as HTMLInputElement;
         navigator.clipboard.writeText(serverSeed.value);
         setIsCopySuccess(true);
-        setInterval(() => {
+        setTimeout(() => {
             setIsCopySuccess(false);
-        }, 3000);
+        }, 500);
     };
 
     const handleCheckRadio = () => {
@@ -113,9 +120,6 @@ const PFSetting: FC = () => {
 
     return (
         <div className={Styles["pf-setting-container"]}>
-            <button className={Styles["btn-pf-guide"]}>
-                <span className="icon-guide" />
-            </button>
             <div>
                 <ul>
                     <li>{translateCommon("pf_settings_para_1")}</li>
