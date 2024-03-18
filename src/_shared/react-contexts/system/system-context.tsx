@@ -22,7 +22,7 @@ export const useSystemDispatch = () => useContext(SystemDispatchContext);
 
 const systemReducer = (state: any, action: SystemEventAction) => {
     const { type, payload } = action;
-    const { selectedChip, isUserGesture } = payload;
+    const { selectedChip, isUserGesture, isEnableQuickBet } = payload;
 
     switch (type) {
         case SystemEventActionType.SELECT_CHIP: {
@@ -36,6 +36,13 @@ const systemReducer = (state: any, action: SystemEventAction) => {
             return {
                 ...state,
                 isUserGesture,
+            };
+        }
+
+        case SystemEventActionType.SET_QUICK_BET: {
+            return {
+                ...state,
+                isEnableQuickBet,
             };
         }
 

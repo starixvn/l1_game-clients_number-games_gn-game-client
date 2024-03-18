@@ -2,7 +2,7 @@ import { Markup } from "interweave";
 import { useEffect, useRef, useState } from "react";
 import { isIOS, isMobileOnly } from "react-device-detect";
 import { StorageHelper, localStorageKeys } from "../../../../_shared/helpers";
-import { usePlayerContext } from "../../../../_shared/react-contexts";
+import { SystemEventActionType, usePlayerContext, useSystemContext, useSystemDispatch } from "../../../../_shared/react-contexts";
 import { useGameStateContext } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
 import { useClickSound, useSNTranslate } from "../../../../_shared/react-hooks";
 import { updateUserQuickBetSetting } from "../../../../services/user-setting-service";
@@ -14,7 +14,8 @@ import Styles from "./quick-bet-btn.module.scss";
 export const QuickBetBtn = () => {
     const { showConfirmBet } = useGameStateContext();
     const authContext = usePlayerContext();
-    const enabledQuickBet = authContext.authorizeInfo?.user?.settings?.quickBet;
+    const enabledQuickBet = useSystemContext().isEnableQuickBet;
+    const systemDispatch = useSystemDispatch();
     const isShowToolbarGuide = StorageHelper.get(localStorageKeys.toolbarGuide) ?? true;
 
     const [isShowModalConfirm, setIsShowModalConfirm] = useState(false);
@@ -33,8 +34,16 @@ export const QuickBetBtn = () => {
         clickSound();
         setIsShowTooltip(false);
         closeModal();
-        updateUserQuickBetSetting(authContext.session, true);
-        authContext.authorizeInfo.user.settings.quickBet = true;
+        updateUserQuickBet(true);
+    };
+
+    const updateUserQuickBet = (isEnableQuickBet) => {
+        updateUserQuickBetSetting(authContext.session, isEnableQuickBet);
+        authContext.authorizeInfo.user.settings.quickBet = isEnableQuickBet;
+        systemDispatch({
+            type: SystemEventActionType.SET_QUICK_BET,
+            payload: { isEnableQuickBet },
+        });
     };
 
     const closeModal = () => {
@@ -62,8 +71,7 @@ export const QuickBetBtn = () => {
         clickSound();
         setIsShowTooltip(false);
 
-        updateUserQuickBetSetting(authContext.session, true);
-        authContext.authorizeInfo.user.settings.quickBet = true;
+        updateUserQuickBet(true);
     };
 
     const onClickQuickBet = () => {
@@ -71,8 +79,7 @@ export const QuickBetBtn = () => {
         if (!enabledQuickBet) {
             setIsShowModalConfirm(true);
         } else {
-            updateUserQuickBetSetting(authContext.session, false);
-            authContext.authorizeInfo.user.settings.quickBet = false;
+            updateUserQuickBet(false);
         }
     };
 
@@ -87,7 +94,7 @@ export const QuickBetBtn = () => {
 
     const closeHintTooltip = () => {
         setIsShowTooltip(false);
-        updateUserQuickBetSetting(authContext.session, false);
+        updateUserQuickBet(false);
     };
 
     const toolTipPositionClass = isMobileOnly ? `bottom ${Styles["isMobile"]}` : "top",

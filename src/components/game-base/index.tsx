@@ -190,7 +190,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.props.dispatch({ type: GameEventActionType.END_BET_PROCESSING, payload: {} });
         this.clearDisconnectTimeout();
         this.registerHandlers();
-        this.loadPFSetting();
+        this.loadAuthorizeUserSetting();
         this.connectToGameService();
         !this.props.systemContextModel.isUserGesture &&
             this.props.systemDispatch({
@@ -319,6 +319,21 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
         this.socket.emit(event, { ...data, clientSeed, clientSeedDetail });
     };
+
+    loadQuickBetSetting() {
+        const isEnableQuickBet = (this.context as PlayerContextModel).authorizeInfo?.user?.settings.quickBet;
+        this.props.systemDispatch({
+            type: SystemEventActionType.SET_QUICK_BET,
+            payload: {
+                isEnableQuickBet,
+            },
+        });
+    }
+
+    loadAuthorizeUserSetting() {
+        this.loadQuickBetSetting();
+        this.loadPFSetting();
+    }
 
     loadPFSetting() {
         const uid = (this.context as PlayerContextModel).authorizeInfo?.user?.UID;

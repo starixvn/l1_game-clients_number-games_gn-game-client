@@ -1,11 +1,10 @@
 import { SSOResponse } from "sc-user-service-client/dist/auth";
 import { UserClientCommunication } from "./user-client-communication";
-import { Themes } from "../_shared/constants";
 
 const { userSettings: userSettingsService } = UserClientCommunication.getUserClientInstance();
 
-export const updateUserQuickBetSetting = (session: SSOResponse, value: boolean) => {
-    userSettingsService.updateUserQuickBetSetting(session.ss, session.username, value);
+export const updateUserQuickBetSetting = async (session: SSOResponse, value: boolean) => {
+    return userSettingsService.updateUserQuickBetSetting(session.ss, session.username, value);
 };
 
 export const updateSignInSMStatus = async (userSession: SSOResponse) => {
