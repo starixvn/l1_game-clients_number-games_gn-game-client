@@ -26,7 +26,7 @@ export const GameBoard: React.FC<Props> = ({ gameSettings, socket, openGame }) =
     }, [socket, gameSettings.gameName]);
 
     return (
-        <div className={Styles["game-board-detail"]} id="ico-bacball" onClick={() => openGame(1001)}>
+        <div className={Styles["game-board-detail"]} id="ico-bacball" onClick={() => openGame(gameSettings.id)}>
             <GameIcon gameName={gameSettings.gameName} lobbyGameTransmitter={transmitter} />
             <div className={Styles["detail"]}>
                 <div className={Styles["detail-top"]}>

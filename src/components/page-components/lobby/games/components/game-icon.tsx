@@ -4,7 +4,7 @@ import { OnlinePlayer } from "./online-player";
 
 type Props = {
     gameName: string;
-    lobbyGameTransmitter?: LobbyGameTransmitter;
+    lobbyGameTransmitter: LobbyGameTransmitter;
 };
 
 export const GameIcon: React.FC<Props> = (props) => {
