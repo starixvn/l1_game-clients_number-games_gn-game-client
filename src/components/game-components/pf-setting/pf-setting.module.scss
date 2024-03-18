@@ -114,9 +114,7 @@
 }
 
 .pf-tooltip {
-    display: none;
     position: absolute;
-    top: -10.2rem;
     right: -1.2rem;
     width: 35rem;
     background: linear-gradient(90deg, rgba(94, 54, 242, 1) 0%, rgba(110, 75, 240, 1) 100%);
@@ -227,6 +225,7 @@
 .hide {
     display: none;
 }
+
 .pf-info {
     font-size: 1.1rem;
     font-weight: 600;

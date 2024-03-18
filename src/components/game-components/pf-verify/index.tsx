@@ -129,6 +129,19 @@ const PFVerify: FC<{ pfResult: PFResult; dispatchChildModalState: Dispatch<PFDis
         }, 500);
     };
 
+    const handleClickTooltip = (event: React.MouseEvent<HTMLButtonElement> & React.FocusEvent<HTMLButtonElement>) => {
+        const currentTarget = event.currentTarget as HTMLElement;
+        const tooltip = currentTarget.nextElementSibling as HTMLDivElement;
+        tooltip.style.top = `-${currentTarget.offsetTop + 10}rem`;
+        tooltip.classList.toggle(Styles["hide"]);
+    };
+
+    const handleBlurTooltip = (event: React.FocusEvent<HTMLButtonElement>) => {
+        const currentTarget = event.currentTarget as HTMLElement;
+        const tooltip = currentTarget.nextElementSibling as HTMLDivElement;
+        tooltip.classList.add(Styles["hide"]);
+    };
+
     return (
         <div className={Styles["pf-setting-container"]}>
             <div className="text-white font-weight-medium mb-2">
@@ -186,10 +199,10 @@ const PFVerify: FC<{ pfResult: PFResult; dispatchChildModalState: Dispatch<PFDis
             <div className={Styles["client-seed-form"]}>
                 <h3 className={Styles["section-title"]}>{translateCommon("pf_header_client_seed")}</h3>
                 <div className={Styles["tooltip-container"]}>
-                    <button className={Styles["btn-pf-intro"]}>
+                    <button className={Styles["btn-pf-intro"]} onClick={handleClickTooltip} onBlur={handleBlurTooltip}>
                         <span className="icon-info" />
                     </button>
-                    <div className={Styles["pf-tooltip"]}>
+                    <div className={`${Styles["hide"]} ${Styles["pf-tooltip"]}`}>
                         {translateCommon("pf_client_seed_tooltip_para_1")} <br /> {translateCommon("pf_client_seed_tooltip_para_2")}
                     </div>
                 </div>
@@ -220,9 +233,10 @@ const PFVerify: FC<{ pfResult: PFResult; dispatchChildModalState: Dispatch<PFDis
             <div className={Styles["client-seed-form"]}>
                 <h3 className={Styles["section-title"]}>{translateCommon("pf_header_combined_sha512_hash")}</h3>
                 <div className={Styles["tooltip-container"]}>
-                    <button className={Styles["btn-pf-intro"]}>
+                    <button className={Styles["btn-pf-intro"]} onClick={handleClickTooltip} onBlur={handleBlurTooltip}>
                         <span className="icon-info" />
                     </button>
+                    <div className={`${Styles["hide"]} ${Styles["pf-tooltip"]}`}>{translateBacBall("pf_combined_sha512_hash_tooltip")}</div>
                 </div>
 
                 <div className="input-group width-full mt-4">
