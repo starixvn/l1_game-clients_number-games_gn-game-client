@@ -1,12 +1,14 @@
+import { uniqueNamesGenerator } from "unique-names-generator";
 import { new_202010 } from "./name-dictionaries/202010_new";
 import { animals } from "./name-dictionaries/animals";
 import { colors } from "./name-dictionaries/colors";
 import { cools } from "./name-dictionaries/cools";
 import { fruits } from "./name-dictionaries/fruits";
 import { marvels } from "./name-dictionaries/marvels";
-import { uniqueNamesGenerator } from "unique-names-generator";
 
 export default class NameGenerator {
+    public static PATTERN = "^[a-zA-Z0-9]{3,14}$";
+
     public static generateName(): string {
         const dictionaries = [colors, animals, marvels, fruits, cools, new_202010];
 
@@ -27,5 +29,12 @@ export default class NameGenerator {
         const randomNumber = Math.floor(Math.random() * +maxNumber);
 
         return `${shortName}${randomNumber}`;
+    }
+
+    public static validateName(name: string): boolean {
+        const regex = new RegExp(NameGenerator.PATTERN);
+
+        console.log(name, name.match(regex));
+        return name.match(regex) !== null;
     }
 }
