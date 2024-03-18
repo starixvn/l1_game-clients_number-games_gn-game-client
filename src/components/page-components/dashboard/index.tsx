@@ -45,6 +45,7 @@ class Dashboard extends React.PureComponent<Props, State> {
             openGameId: null,
             openGameName: "",
             isShowToolbarGuide: StorageHelper.get(localStorageKeys.toolbarGuide) ?? true,
+            isOnLobby: true
         };
 
         this.handleFirstLogin = this.handleFirstLogin.bind(this);
@@ -64,6 +65,7 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.closeToolbarGuide = this.closeToolbarGuide.bind(this);
         this.handleRecheckInResponse = this.handleRecheckInResponse.bind(this);
         this.onVisibilityChange = this.onVisibilityChange.bind(this);
+        this.openGameFromLobby = this.openGameFromLobby.bind(this);
 
         const buildId = process.env.buildVersion;
         const buildVersion = StorageHelper.get(localStorageKeys.buildVersion) ?? 0;
@@ -168,6 +170,23 @@ class Dashboard extends React.PureComponent<Props, State> {
         // await this.updateBetLobbyConfigs();
 
         queryGame && this.openGame(queryGame);
+    }
+
+    shouldRenderGames(offerGames) {
+        const urlContextModel = StorageHelper.get(localStorageKeys.url) as URLContextModel;
+        const backToLobby = urlContextModel.backToLobby || false;
+        const ssoRedirectGameId = urlContextModel.gameId || 0;
+        return (offerGames.includes(this.state.openGameId) && !backToLobby) || ssoRedirectGameId > 0;
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (this.state.isOnLobby) {
+            this.setState({ openGameId: null });
+        }
+
+        if (this.state.isOnLobby !== prevState.isShowLobby) {
+            this.setState({ isOnLobby: !prevState.isShowLobby });
+        }
     }
 
     componentWillUnmount() {
@@ -320,7 +339,7 @@ class Dashboard extends React.PureComponent<Props, State> {
     }
 
     renderDashBoard() {
-        const { isShowErrorModal, authorizeInfo, isBlockUI, isShowToolbarGuide, openGameId } = this.state;
+        const { isShowErrorModal, authorizeInfo, isBlockUI, isShowToolbarGuide } = this.state;
         const authContextValue = {
             authorizeInfo: authorizeInfo,
             session: this.props.session,
@@ -328,11 +347,9 @@ class Dashboard extends React.PureComponent<Props, State> {
             signOut: this.signOut,
             fractionalOddsFormat: authorizeInfo.user?.fractionalOddsFormat ?? false,
         };
+
         const offerGames: number[] = authorizeInfo?.user?.offerGames?.map((game: any) => game?.gameId) ?? [];
-        const urlContextModel = StorageHelper.get(localStorageKeys.url) as URLContextModel;
-        const backToLobby = urlContextModel.backToLobby || false;
-        const ssoRedirectGameId = urlContextModel.gameId || 0;
-        const isRenderGames = (offerGames.includes(openGameId) && !backToLobby) || ssoRedirectGameId > 0;
+        const isRenderGames = this.shouldRenderGames(offerGames);
 
         return (
             <PlayerContextProvider value={authContextValue}>

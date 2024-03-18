@@ -29,6 +29,7 @@ export type State = {
     openGameId: number;
     openGameName: string;
     isShowToolbarGuide: boolean;
+    isOnLobby: boolean;
 };
 
 export type GameOffer = {
