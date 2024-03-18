@@ -104,4 +104,15 @@
     position: absolute;
     z-index: 10;
     transform: scale(0.92);
+    z-index: 1;
+}
+
+.cage-bg-highlight {
+    grid-area: container;
+    width: 12.8rem;
+    height: 12.8rem;
+    background: rgba(255, 255, 255, 0.5);
+    background-size: 15.2rem 15.2rem;
+    border-radius: 50%;
+    box-shadow: 0 0 2.4rem 0.8rem rgba(255, 255, 255, 0.5);
 }

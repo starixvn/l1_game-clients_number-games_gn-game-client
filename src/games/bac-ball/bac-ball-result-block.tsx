@@ -3,6 +3,7 @@ import { FC, memo, useEffect, useState } from "react";
 
 import { loadPixiAnimations } from "../../_shared/helpers/pixi-resource-loader";
 import { GameStateContextModel } from "../../_shared/react-contexts/game-state-context/game-state-context-model";
+import { useWinningHighLightResult } from "../../_shared/react-hooks/use-high-light";
 import { IBallColor, RoundState } from "../../components/game-base/type";
 import Cage, { CageColor, CagePosition } from "../../components/game-components/cage";
 import { BacBallResultSlotContainer } from "./bac-ball-result-slot-container";
@@ -14,6 +15,7 @@ export type BacBallResultBlockProps = Partial<GameStateContextModel>;
 export const BacBallResultBlock: FC<BacBallResultBlockProps> = (props: BacBallResultBlockProps) => {
     const [cageBallFrames, setCageBallFrames] = useState<IBallColor>({ blue: [], red: [], blue2: [], red2: [] });
     const [cageBallsLoopFrames, setCageBallsLoopFrames] = useState<Texture<Resource>[]>([]);
+    const winningHighLightResult = useWinningHighLightResult;
     const { result, roundState, roundHistory, playResultAnimation } = props;
 
     let currentResult;
@@ -93,6 +95,7 @@ export const BacBallResultBlock: FC<BacBallResultBlockProps> = (props: BacBallRe
                     delayShowResultTime={0}
                     playResultAnimation={playResultAnimation}
                     roundState={roundState}
+                    highlight={winningHighLightResult({ betChoice: BacBallBetOptions.PLAYER })}
                 />
                 <BacBallResultSlotContainer delayTime={0} betChoice={BacBallBetOptions.PLAYER} className="player-balls" {...props} />
             </div>
@@ -107,6 +110,7 @@ export const BacBallResultBlock: FC<BacBallResultBlockProps> = (props: BacBallRe
                     delayShowResultTime={bankerDelayTime}
                     playResultAnimation={playResultAnimation}
                     roundState={roundState}
+                    highlight={winningHighLightResult({ betChoice: BacBallBetOptions.BANKER })}
                 />
                 <BacBallResultSlotContainer
                     delayTime={bankerDelayTime}

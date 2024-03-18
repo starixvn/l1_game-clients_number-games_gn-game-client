@@ -7,6 +7,8 @@ import { loadPixiAnimations } from "../../../_shared/helpers/pixi-resource-loade
 import { GameStateContextModel } from "../../../_shared/react-contexts/game-state-context/game-state-context-model";
 import { IBallColor, RoundState } from "../../game-base/type";
 import Styles from "./cage.module.scss";
+import ResultBall from "./result-ball";
+import ResultNumber from "./result-number";
 
 export enum CageColor {
     BLUE = "blue",
@@ -27,11 +29,22 @@ export type CageProps = {
     result: number;
     delayShowResultTime?: number;
     position: string;
+    highlight: boolean;
 } & Partial<GameStateContextModel>;
 
 const Cage: React.FC<CageProps> = (cageProps) => {
-    const { position, isSmall, cageBallsLoopFrames, cageBallFrames, result, delayShowResultTime, color, playResultAnimation, roundState } =
-        cageProps;
+    const {
+        position,
+        isSmall,
+        cageBallsLoopFrames,
+        cageBallFrames,
+        result,
+        delayShowResultTime,
+        color,
+        playResultAnimation,
+        roundState,
+        highlight,
+    } = cageProps;
     const animName = result <= 9 ? `number0${result}` : `number${result}`;
     const ballColor = `${useBallColor({ number: result })}${position === CagePosition.LEFT ? "" : "2"}`;
     const ballSpeed = playResultAnimation ? 0.5 : 1;
@@ -69,96 +82,50 @@ const Cage: React.FC<CageProps> = (cageProps) => {
         };
     }, [delayShowResultTime, playResultAnimation, roundState]);
 
-    const showResultBall = () => {
-        if (isDelayShowResult && roundState === RoundState.DisplayResult) {
-            return (
-                <div id="show-ball-anim" className={Styles["show-ball-anim"]}>
-                    {cageBallFrames && cageBallFrames[ballColor]?.length > 0 && (
-                        <Stage
-                            key={currentTime}
-                            width={250}
-                            height={250}
-                            options={{ backgroundAlpha: 0, antialias: false, powerPreference: "low-power" }}
-                        >
-                            <Container key={currentTime} position={[82, 85]}>
-                                <AnimatedSprite
-                                    anchor={0.5}
-                                    textures={cageBallFrames[ballColor]}
-                                    autoUpdate
-                                    isPlaying={true}
-                                    initialFrame={0}
-                                    animationSpeed={ballSpeed}
-                                    loop={false}
-                                />
-                            </Container>
-                        </Stage>
-                    )}
-                </div>
-            );
-        } else {
-            return <></>;
-        }
-    };
-
-    const showResultNumber = () => {
-        if (isDelayShowResult && roundState === RoundState.DisplayResult && numberBallFrames?.length !== 0) {
-            return (
-                <div key={currentTime} id="result-text" className={Styles["number"]}>
-                    <Stage
-                        key={currentTime}
-                        width={153}
-                        height={153}
-                        options={{ backgroundAlpha: 0, antialias: false, powerPreference: "low-power" }}
-                    >
-                        <Container key={currentTime} position={[82, 85]}>
+    return (
+        <div className={`${Styles["cage-area"]} ${isSmall ? Styles["small"] : ""} ${Styles[position]}`}>
+            {highlight && <div className={`fade-in ${Styles["cage-bg-highlight"]}`}></div>}
+            <div id="cage-bg" className={Styles["cage-bg"]}></div>
+            <div id="cage-balls" className={Styles["cage-balls"]}>
+                {cageBallsLoopFrames?.length > 0 && (
+                    <Stage width={130} height={130} options={{ backgroundAlpha: 0, antialias: false, powerPreference: "low-power" }}>
+                        <Container position={[65, 65]}>
                             <AnimatedSprite
                                 anchor={0.5}
-                                textures={numberBallFrames}
+                                textures={cageBallsLoopFrames}
                                 autoUpdate
                                 isPlaying={true}
                                 initialFrame={0}
-                                animationSpeed={ballSpeed}
-                                loop={false}
+                                animationSpeed={0.6}
+                                loop={true}
                             />
                         </Container>
                     </Stage>
-                </div>
-            );
-        } else {
-            return <></>;
-        }
-    };
-
-    return useMemo(() => {
-        return (
-            <div className={`${Styles["cage-area"]} ${isSmall ? Styles["small"] : ""} ${Styles[position]}`}>
-                <div id="cage-bg" className={Styles["cage-bg"]}></div>
-                <div id="cage-balls" className={Styles["cage-balls"]}>
-                    {cageBallsLoopFrames?.length > 0 && (
-                        <Stage width={130} height={130} options={{ backgroundAlpha: 0, antialias: false, powerPreference: "low-power" }}>
-                            <Container position={[65, 65]}>
-                                <AnimatedSprite
-                                    anchor={0.5}
-                                    textures={cageBallsLoopFrames}
-                                    autoUpdate
-                                    isPlaying={true}
-                                    initialFrame={0}
-                                    animationSpeed={0.6}
-                                    loop={true}
-                                />
-                            </Container>
-                        </Stage>
-                    )}
-                </div>
-                <div id="cage-cover" className={Styles["cage-cover"]}></div>
-                <div id="cage-border" className={`${Styles["cage-border"]} ${Styles[color]}`}>
-                    {!isDelayShowResult && <div id="cage-lid" className={Styles["cage-lid"]} />}
-                    {showResultBall()}
-                </div>
-                {showResultNumber()}
+                )}
             </div>
-        );
-    }, [isDelayShowResult, numberBallFrames]);
+            <div id="cage-cover" className={Styles["cage-cover"]}></div>
+            <div id="cage-border" className={`${Styles["cage-border"]} ${Styles[color]}`}>
+                {!isDelayShowResult && <div id="cage-lid" className={Styles["cage-lid"]} />}
+                <ResultBall
+                    isDelayShowResult={isDelayShowResult}
+                    roundState={roundState}
+                    cageBallFrames={cageBallFrames}
+                    ballColor={ballColor}
+                    currentTime={currentTime}
+                    ballSpeed={ballSpeed}
+                    color={color}
+                />
+            </div>
+
+            <ResultNumber
+                isDelayShowResult={isDelayShowResult}
+                roundState={roundState}
+                numberBallFrames={numberBallFrames}
+                currentTime={currentTime}
+                ballSpeed={ballSpeed}
+            />
+        </div>
+    );
 };
 
 export default Cage;
