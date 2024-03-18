@@ -4,8 +4,6 @@ export interface GameStateContextModel {
     isConnect: boolean;
     signedIn: boolean;
     roundState: RoundState;
-    roundRemainingTime: number;
-    remainingTime: number;
     gameConfigs: GameConfigs;
     roundData: any;
     roundHistory: Round<object, object>[];
@@ -58,8 +56,6 @@ export const initialGameStateContextModel = () => {
         isConnect: false,
         signedIn: false,
         roundState: RoundState.None,
-        roundRemainingTime: 0,
-        remainingTime: 0,
         roundData: {},
         roundHistory: [],
         roundId: 0,

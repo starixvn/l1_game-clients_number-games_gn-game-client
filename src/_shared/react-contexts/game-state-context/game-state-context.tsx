@@ -13,10 +13,7 @@ const GameStateDispatchContext = createContext(null);
 const GameTranslateContext = createContext(null);
 
 export function GameStateProvider({ children }) {
-    const [gameStateContextModel, dispatch] = useReducer(
-        gameStateReducer,
-        initialGameStateContextModel()
-    );
+    const [gameStateContextModel, dispatch] = useReducer(gameStateReducer, initialGameStateContextModel());
     return (
         <GameStateContext.Provider value={gameStateContextModel}>
             <GameStateDispatchContext.Provider value={dispatch}>
@@ -28,7 +25,7 @@ export function GameStateProvider({ children }) {
 
 export const useGameStateContext = () => {
     return useContext(GameStateContext);
-}
+};
 
 export function useGameStatesDispatch() {
     return useContext(GameStateDispatchContext);
@@ -41,7 +38,6 @@ export function useGameTranslateContext() {
 function gameStateReducer(state: GameStateContextModel, action: GameEventAction) {
     const { type, payload } = action;
     const {
-        remainingTime,
         um_message,
         gameConfigs,
         roundData,
@@ -52,13 +48,10 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
         status,
         userData,
         ownBets,
-        betPercentage,
-        playerBetCount,
         apiError,
         userStakeLevel,
         odds,
         drawId,
-        totalBets,
         notice,
         acceptedBetQueue,
         disconnectReason,
@@ -124,14 +117,6 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
             };
         }
 
-        case GameEventActionType.REMAINING_TIME: {
-            return {
-                ...state,
-                roundRemainingTime: remainingTime,
-                remainingTime,
-            };
-        }
-
         case GameEventActionType.GAME_CONFIGS: {
             // console.log(`\x1B[31m SocketEventActionTypes : ${type}`);
             return {
@@ -190,7 +175,6 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
         }
 
         case GameEventActionType.USER: {
-            //this.context.setBalance(user.red);
             if (userData.gameConfigs) {
                 return {
                     ...state,
@@ -207,20 +191,6 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
             return {
                 ...state,
                 ownBets,
-            };
-        }
-
-        case GameEventActionType.BET_PERCENTAGE: {
-            return {
-                ...state,
-                betPercentage: betPercentage,
-            };
-        }
-
-        case GameEventActionType.PLAYER_BET_COUNT: {
-            return {
-                ...state,
-                playerBetCount: playerBetCount,
             };
         }
 
@@ -294,13 +264,6 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
             return {
                 ...state,
                 turnCounter,
-            };
-        }
-
-        case GameEventActionType.TOTAL_BET: {
-            return {
-                ...state,
-                totalBets,
             };
         }
 

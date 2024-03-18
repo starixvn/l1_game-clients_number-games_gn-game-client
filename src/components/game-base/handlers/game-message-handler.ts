@@ -6,6 +6,7 @@ export const messageEventType = {
     GAME_CONFIG: "gameConfigs",
     ROUND_HISTORY: "roundHistory",
     REMAINING_TIME: "remainingTime",
+    CLIENT_REMAINING_TIME: "clientRemainingTime",
     FINISH: "finish",
     STATUS: "status",
     USER: "user",
@@ -46,13 +47,10 @@ export class GameMessageHandler {
 
     registerSocketEvents = () => {
         this.register(messageEventType.GAME_CONFIG, this.handleGameConfigs);
-        this.register(messageEventType.TOTAL_BETS, this.handleTotalBet);
         this.register(messageEventType.OWN_BETS, this.handleOwnBets);
         this.register(messageEventType.ODDS, this.handleOdds);
         this.register(messageEventType.ROUND_DATA, this.handleRoundData);
         this.register(messageEventType.SIGNED_IN, this.handleSignedIn);
-        this.register(messageEventType.BET_PERCENTAGE, this.handleBetPercentage);
-        this.register(messageEventType.PLAYER_BET_COUNT, this.handlePlayerBetCount);
         this.register(messageEventType.PROVABLY_FAIR, this.handleProvablyFair);
         this.register(messageEventType.IN_GAME_SERVER_SEED, this.handleInGameServerSeedHash);
     };
@@ -62,7 +60,11 @@ export class GameMessageHandler {
     }
 
     register = (eventType: string, handler: Function) => {
-        this.messageTransmitter.register(eventType, handler);
+        return this.messageTransmitter.register(eventType, handler);
+    };
+
+    removeHandler = (handlerId: string) => {
+        return this.messageTransmitter.unsubscribe(handlerId);
     };
 
     broadcastGameMessage = (message) => {
@@ -95,15 +97,6 @@ export class GameMessageHandler {
         });
     };
 
-    handleTotalBet = ({ totalBets }) => {
-        this.dispatch({
-            type: GameEventActionType.TOTAL_BET,
-            payload: {
-                totalBets,
-            },
-        });
-    };
-
     handleOdds = ({ odds }) => {
         this.dispatch({
             type: GameEventActionType.ODDS,
@@ -125,24 +118,6 @@ export class GameMessageHandler {
             type: GameEventActionType.ROUND_DATA,
             payload: {
                 roundData,
-            },
-        });
-    };
-
-    handleBetPercentage = ({ betPercentage }) => {
-        this.dispatch({
-            type: GameEventActionType.BET_PERCENTAGE,
-            payload: {
-                betPercentage,
-            },
-        });
-    };
-
-    handlePlayerBetCount = ({ playerBetCount }) => {
-        this.dispatch({
-            type: GameEventActionType.PLAYER_BET_COUNT,
-            payload: {
-                playerBetCount,
             },
         });
     };

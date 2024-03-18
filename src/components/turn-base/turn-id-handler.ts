@@ -28,7 +28,6 @@ export class TurnIdHandler {
     }
 
     registerEvents = () => {
-        console.log("TurnIdHandler re-init");
         this.shouldRunWhenFirstLoad = true;
         this.roundRemainingTime = 0;
         this.turnCounter = 0;
@@ -43,10 +42,6 @@ export class TurnIdHandler {
     handleRemainingTime = ({ remainingTime }) => {
         if (this.shouldRunWhenFirstLoad) {
             this.roundRemainingTime = remainingTime;
-            writeDebugLog({
-                name: "TurnIdHandler - handleRemainingTime",
-                remainingTime,
-            });
         }
     };
 
@@ -121,12 +116,6 @@ export class TurnIdHandler {
                     randomClientSeed: randomNumberSeries(4),
                 },
             },
-        });
-
-        writeDebugLog({
-            name: "TurnIdHandler dispatch drawId",
-            drawId,
-            roundState: RoundState[this.roundState],
         });
     };
 

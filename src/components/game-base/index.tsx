@@ -329,14 +329,14 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     handleRemainingTime({ remainingTime }) {
-        writeDebugLog({ name: "recieve-remaining-time", remainingTime });
         const { durations, gameStateContextModel } = this.props;
         const { roundState, isUMInFirstLoad } = gameStateContextModel;
 
         if (roundState === RoundState.None || !isUMInFirstLoad) {
             this.roundTimeCounter = remainingTime;
-            this.props.gameStateContextModel.remainingTime = this.roundStateHandler.getRemainingTime({ remainingTime, durations });
-            this.runGame(this.props.gameStateContextModel.remainingTime);
+            const clientRemainingTime = this.roundStateHandler.getRemainingTime({ remainingTime, durations });
+            this.broadcastClientRemainingTime(clientRemainingTime);
+            this.runGame(clientRemainingTime);
         }
     }
 
@@ -374,10 +374,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             turnCounter: gameStateContextModel.turnCounter,
         });
 
-        dispatch({
-            type: GameEventActionType.REMAINING_TIME,
-            payload: { remainingTime },
-        });
+        this.broadcastClientRemainingTime(remainingTime);
 
         const newRoundState = this.roundStateHandler.determineRoundBaseState({
             roundRemainingTime: this.roundTimeCounter,
@@ -415,6 +412,10 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             this.gameSoundHandler.handleSound(gameStateContextModel.roundState);
         }
     }
+
+    broadcastClientRemainingTime = (clientRemainingTime: number) => {
+        this.gameMessageHandler.broadcastGameEvent({ [messageEventType.CLIENT_REMAINING_TIME]: clientRemainingTime });
+    };
 
     async updateUserBalance() {
         const authContext = this.context as PlayerContextModel;

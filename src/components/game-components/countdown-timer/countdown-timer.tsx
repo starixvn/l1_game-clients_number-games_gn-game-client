@@ -4,6 +4,8 @@ import styles from "./countdown-timer.module.scss";
 import { useSNTranslate } from "../../../_shared/react-hooks/use-translator";
 import { useEffect, useState } from "react";
 import { writeDebugLog } from "../../../_shared/helpers";
+import { useGameContext } from "../../../_shared/react-contexts";
+import { messageEventType } from "../../game-base/handlers";
 
 export type Rotation = "clockwise" | "counterclockwise";
 export const CountdownTimer = ({ SimpleTimerProp = SimpleTimer, GameStatusProp = GameStatus }) => {
@@ -49,17 +51,23 @@ export const CountdownTimer = ({ SimpleTimerProp = SimpleTimer, GameStatusProp =
 };
 
 export const SimpleTimer = () => {
-    const { roundState, remainingTime } = useGameStateContext();
-    const [timeLeft, setTimeLeft] = useState(remainingTime);
+    const { gameMessageHandler } = useGameContext();
+    const { roundState } = useGameStateContext();
+    const [timeLeft, setTimeLeft] = useState(0);
 
     useEffect(() => {
-        if (remainingTime !== timeLeft) {
-            writeDebugLog({ timeLeft, remainingTime });
-            setTimeLeft(remainingTime);
-        }
-    }, [timeLeft, remainingTime]);
+        const handlerId = gameMessageHandler?.register(messageEventType.CLIENT_REMAINING_TIME, ({ clientRemainingTime }) => {
+            if (clientRemainingTime !== timeLeft) {
+                setTimeLeft(clientRemainingTime);
+            }
+        });
 
-    return remainingTime <= 0 ? (
+        return () => {
+            gameMessageHandler?.removeHandler(handlerId);
+        };
+    }, [timeLeft, gameMessageHandler]);
+
+    return timeLeft <= 0 ? (
         <></>
     ) : (
         <div className={styles.timer}>

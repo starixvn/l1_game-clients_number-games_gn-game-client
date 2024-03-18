@@ -6,7 +6,7 @@ export enum GameEventActionType {
     SIGN_IN = "SIGN_IN",
     SIGN_OUT = "SIGN_OUT",
     UM = "UM",
-    REMAINING_TIME = "REMAINING_TIME",
+    // REMAINING_TIME = "REMAINING_TIME",
     GAME_CONFIGS = "GAME_CONFIGS",
     ROUND_DATA = "ROUND_DATA",
     ROUND_HISTORY = "ROUND_HISTORY",
@@ -49,7 +49,6 @@ export enum GameEventActionType {
 export interface GameEventPayload {
     signedIn?: boolean;
     isConnect?: boolean;
-    remainingTime?: number;
     um?: boolean;
     um_message?: string[];
     gameConfigs?: GameConfigs;
@@ -100,7 +99,6 @@ export interface GameEventPayload {
     showResultInfo?: boolean;
     isShowBlink?: boolean;
     roundState?: RoundState;
-    roundRemainingTime?: number;
     showConfirmBet?: boolean;
     showConfirmDialog?: boolean;
     turnCounter?: number;

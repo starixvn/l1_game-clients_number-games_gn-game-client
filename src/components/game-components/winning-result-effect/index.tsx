@@ -5,7 +5,7 @@ import { useGameStateContext } from "../../../_shared/react-contexts/game-state-
 import Styles from "./winning-result-effect.module.scss";
 
 const WinningResultEffect: FC = () => {
-    const { betWin, showResultInfo, rate } = useGameStateContext();
+    const { betWin, showResultInfo } = useGameStateContext();
 
     if (betWin <= 0 || !showResultInfo) {
         return <></>;

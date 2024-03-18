@@ -1,9 +1,9 @@
 import PercentageCircle from "../percentage-circle";
-import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import { BaseProps } from "./types";
+import { useGameBettingZoneContext } from "../../../_shared/react-contexts";
 
 export const BetPercentage: React.FC<BaseProps> = ({ gameName, choice, className, percentageColor }) => {
-    const { betPercentage } = useGameStateContext();
+    const { betPercentage } = useGameBettingZoneContext();
 
     return (
         <div id={`${gameName}-${choice}-percent`} className={className}>

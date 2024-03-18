@@ -1,7 +1,7 @@
 import { GameDurations } from "../../game-base/type";
 import { TurnTimelineCounter } from "../turn-time-counter-handler";
 
-describe("TurnStateHandler", () => {
+describe("TurnTimeCounterHandler", () => {
     let handler: TurnTimelineCounter;
     let durations: GameDurations;
 
