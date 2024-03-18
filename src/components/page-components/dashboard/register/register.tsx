@@ -112,7 +112,7 @@ export class Register extends Component<RegisterProps, RegisterState> {
                             placeholder={t("Common.enter_your_name")}
                         />
 
-                        <span className={`icon-close ${styles.clear}`} onClick={() => this.setOrGenerateName()} />
+                        <span className={`icon-close ${styles.clear}`} onClick={() => this.setOrGenerateName("")} />
 
                         <button className={styles.refresh} onClick={() => this.setOrGenerateName()} type="button">
                             <span className="icon-warning" />
