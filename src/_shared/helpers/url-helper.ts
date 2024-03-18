@@ -27,14 +27,6 @@ export const buildGameGuideUrl = () => {
     return buildUrl(getAppSettings().subGuideDomain, "");
 };
 
-export const buildSocketGatewayUrl = () => {
-    return buildUrl(getAppSettings().subSocketGatewayDomain, "");
-};
-
-export const buildSocketUrlByGameName = (gameName: string) => {
-    return buildUrl(getAppSettings().subSocketGatewayDomain, gameName);
-};
-
 export const buildServerUrl = (path: string) => {
     const pathStr = `/user/${path}`;
     return buildUrlWithPath(pathStr);

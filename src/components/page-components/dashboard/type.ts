@@ -25,7 +25,7 @@ export type State = {
     isBlockUI: boolean;
     queryGame: number;
     isJoinGame: boolean;
-    settingGames: number[];
+    lobbyConfigs: any;
     openGameId: number;
     openGameName: string;
     isShowToolbarGuide: boolean;

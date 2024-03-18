@@ -15,4 +15,5 @@ window.envConfig = {
     system: "GN",
     appType: 1,
     enableDebugLogs: true,
+    socketGatewayPath: "gateway",
 };

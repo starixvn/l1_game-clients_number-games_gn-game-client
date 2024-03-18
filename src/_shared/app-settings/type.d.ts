@@ -13,7 +13,7 @@ interface SentryOptions {
 
 export default interface AppSettings {
     serverDomainMapper: Array<string>;
-    subSocketGatewayDomain: string;
+    socketGatewayPath: string;
     proxy: ProxySetting;
     sentry: SentryOptions;
     offeredGames: number[];

@@ -5,7 +5,7 @@ import { AuthorizeResponse, ReCheckInResponse } from "sc-user-service-client/dis
 import { getAppSettings } from "../../../_shared/app-settings";
 import { buildUrl, GetLocalizedErrorMessage, localStorageKeys, StorageHelper } from "../../../_shared/helpers";
 import { PlayerContextProvider, URLContextModel, updateURLContext } from "../../../_shared/react-contexts";
-import { authorize, createNickname, getSettingGames, reCheckIn } from "../../../services/auth-service";
+import { authorize, createNickname, getLobbyConfigs, reCheckIn } from "../../../services/auth-service";
 import { updateSignInSMStatus } from "../../../services/user-setting-service";
 import { Props, State } from "./type";
 import { io, Socket } from "socket.io-client";
@@ -22,8 +22,6 @@ import Register from "../../page-components/dashboard/register";
 import Header from "../header";
 import Styles from "./dashboard.module.scss";
 import NameGenerator from "./register/name-generator";
-import { Banner } from "../banner";
-import { GameIcon } from "./game-icon";
 import { Lobby } from "../lobby/lobby";
 
 class Dashboard extends React.PureComponent<Props, State> {
@@ -43,7 +41,7 @@ class Dashboard extends React.PureComponent<Props, State> {
             isBlockUI: false,
             queryGame: this.props.queryGame,
             isJoinGame: false,
-            settingGames: [],
+            lobbyConfigs: {},
             openGameId: null,
             openGameName: "",
             isShowToolbarGuide: StorageHelper.get(localStorageKeys.toolbarGuide) ?? true,
@@ -136,6 +134,9 @@ class Dashboard extends React.PureComponent<Props, State> {
     }
 
     async componentDidMount() {
+        if (typeof window === "undefined") {
+            return;
+        }
         document.addEventListener("visibilitychange", this.onVisibilityChange);
         const { session, directMode, queryGame } = this.props;
         const authorizeResponse = await authorize(session);
@@ -164,7 +165,7 @@ class Dashboard extends React.PureComponent<Props, State> {
         }, 60 * 1000);
 
         this.connectNotificationSocket();
-        await this.updateBetSettingGames();
+        // await this.updateBetLobbyConfigs();
 
         queryGame && this.openGame(queryGame);
     }
@@ -261,10 +262,10 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.isKickOut && this.signOut();
     }
 
-    async updateBetSettingGames() {
+    async updateBetLobbyConfigs() {
         const { session } = this.props;
-        const betSettings = await getSettingGames(session);
-        this.setState({ settingGames: betSettings.settingGames as any });
+        const response = await getLobbyConfigs(session);
+        this.setState({ lobbyConfigs: response?.lobbyConfigs as any });
     }
 
     toggleAnnouncementModal() {
@@ -309,13 +310,13 @@ class Dashboard extends React.PureComponent<Props, State> {
 
     openGameFromLobby() {
         updateURLContext({ backToLobby: true, gameId: 1001 });
-        this.setState({ openGameId: 1001 })
+        this.setState({ openGameId: 1001 });
     }
 
     renderLobby() {
-        this.setState({ openGameId: null });
+        const { lobbyConfigs } = this.state;
         updateURLContext({ backToLobby: true });
-        return <Lobby openGame={() => this.openGameFromLobby()} />;
+        return <Lobby openGame={() => this.openGameFromLobby()} lobbyConfigs={lobbyConfigs} />;
     }
 
     renderDashBoard() {

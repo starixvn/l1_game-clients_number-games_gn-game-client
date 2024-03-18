@@ -19,6 +19,7 @@ jest.mock("next/config", () => () => ({
         system: "GN",
         appType: 1,
         useTolgeeStatic: false,
+        socketGatewayPath: "gateway",
         gameSettings: {
             "1001": {
                 id: 1001,

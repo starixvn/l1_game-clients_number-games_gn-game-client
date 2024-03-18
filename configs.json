@@ -19,5 +19,6 @@
     "system": "GN",
     "appType": 1,
     "useTolgeeStatic": false,
-    "enableDebugLogs": true
+    "enableDebugLogs": true,
+    "socketGatewayPath": "gateway"
 }

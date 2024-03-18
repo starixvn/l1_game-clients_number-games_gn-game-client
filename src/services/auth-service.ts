@@ -3,7 +3,7 @@ import { SSOResponse } from "sc-user-service-client/dist/auth";
 import { localStorageKeys, StorageHelper } from "../_shared/helpers";
 import { UserClientCommunication } from "./user-client-communication";
 
-const { auth: authService, userSettings: userSettingsService } = UserClientCommunication.getUserClientInstance();
+const { auth: authService, lobby: lobbyService } = UserClientCommunication.getUserClientInstance();
 
 export const sso = async (token: string, appType: number): Promise<SSOResponse> => {
     const userSession = await authService.sso(token, appType);
@@ -52,6 +52,6 @@ export const getBalance = async (userSession: SSOResponse) => {
     return authService.getBalance(userSession.ss, userSession.username);
 };
 
-export const getSettingGames = async (userSession: SSOResponse) => {
-    return authService.getSettingGames(userSession.ss, userSession.username);
+export const getLobbyConfigs = async (userSession: SSOResponse) => {
+    return lobbyService.getLobbyConfigs(userSession.ss, userSession.username);
 };

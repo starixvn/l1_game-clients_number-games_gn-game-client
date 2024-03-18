@@ -1,28 +1,50 @@
-import { useEffect, useState } from "react";
-import { Banner } from "../banner";
-import { GameIcon } from "../dashboard/game-icon";
+import { useEffect, useMemo, useState } from "react";
+import { Banner } from "./games/components/banner";
+import { GameIcon } from "./games/components/game-icon";
 import { initLobbySocket } from "./lobby-socket-connection";
 import Styles from "./lobby.module.scss";
 import { usePlayerContext } from "../../../_shared/react-contexts";
 import { Socket } from "socket.io-client";
-import { StorageHelper, localStorageKeys } from "../../../_shared/helpers";
+import { LobbyConfigs } from "./type";
+import { GameBoard } from "./games/components/game-board";
+import { getAppSettings } from "../../../_shared/app-settings";
 
-export const Lobby: React.FC<any> = ({ openGame }) => {
+type Props = {
+    openGame: Function;
+    lobbyConfigs: LobbyConfigs;
+};
+
+export const Lobby: React.FC<Props> = ({ openGame, lobbyConfigs }) => {
     const [socket, setSocket] = useState<Socket>(null);
     const { session } = usePlayerContext();
 
-    // TODO: get offerGames from user service
-    const offerGameIds = [1001];
-
     useEffect(() => {
-        const socketGateWay = initLobbySocket(session, offerGameIds);
+        let socketGateWay;
+        // if (lobbyConfigs?.categories?.length > 0) {
+        // const offerGameIds = lobbyConfigs.categories[0].gameSettings.map((setting) => setting.gameId);
+        const offerGameIds = [1001];
+        socketGateWay = initLobbySocket(session, offerGameIds);
         setSocket(socketGateWay);
+        // }
 
         return () => {
             socketGateWay?.disconnect();
             setSocket(null);
         };
+        // }, [lobbyConfigs.categories]);
     }, []);
+
+    // const gamesSettings = useMemo(() => {
+    //     if (lobbyConfigs?.categories?.length > 0) {
+    //         const { gameSettings: allGameSetting } = getAppSettings();
+    //         const gameIds = lobbyConfigs.categories[0].gameSettings.map((config) => config.gameId);
+    //         return Object.values(allGameSetting).filter((setting) => gameIds.includes(setting.id));
+    //     }
+    // }, [lobbyConfigs.categories]);
+
+    const { gameSettings: allGameSetting } = getAppSettings();
+    const gamesSettings = Object.values(allGameSetting);
+
     return (
         socket && (
             <div className={Styles["lobby-container"]}>
@@ -36,16 +58,14 @@ export const Lobby: React.FC<any> = ({ openGame }) => {
                     <div className="layer"></div>
                 </div>
                 <Banner />
-                <div className={Styles["game-board-detail"]} id="ico-bacball" onClick={() => openGame(1001)}>
-                    <GameIcon gameName="Bac Ball" onlineUsers={15} />
-                    <div className={Styles["detail"]}>
-                        <div className={Styles["detail-top"]}>
-                            <span className="icon-clock" />
-                            Starting bet
-                        </div>
-                        <img src="/static/images/game-board-detail/scoreboard.svg" alt="scoreboard" />
-                    </div>
-                </div>
+                {gamesSettings?.map((gameSettings) => (
+                    <GameBoard
+                        key={`game-board-${gameSettings.gameName}`}
+                        gameSettings={gameSettings}
+                        socket={socket}
+                        openGame={openGame}
+                    />
+                ))}
             </div>
         )
     );
