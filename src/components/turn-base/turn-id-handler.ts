@@ -67,6 +67,7 @@ export class TurnIdHandler {
             this.dispatchDrawId(turn.id);
         } else if (!this.isInDisplayResultState()) {
             this.dispatchTurnCounter(true, this.turnCounter);
+            this.dispatchClientSeed(this.drawId);
             this.dispatchDrawId(this.drawId);
         }
 
@@ -107,16 +108,21 @@ export class TurnIdHandler {
             type: GameEventActionType.DRAW_ID,
             payload: { drawId },
         });
+    };
 
-        this.props.dispatch({
-            type: GameEventActionType.UPDATE_PF_SETTING,
-            payload: {
-                pfSetting: {
-                    drawId,
-                    randomClientSeed: randomNumberSeries(4),
+    dispatchClientSeed = (drawId) => {
+        const { drawId: oldDrawId } = this.props.gameStateContextModel();
+        if (oldDrawId !== drawId) {
+            this.props.dispatch({
+                type: GameEventActionType.UPDATE_PF_SETTING,
+                payload: {
+                    pfSetting: {
+                        drawId: drawId,
+                        randomClientSeed: randomNumberSeries(4),
+                    },
                 },
-            },
-        });
+            });
+        }
     };
 
     private isInDisplayResultState() {
