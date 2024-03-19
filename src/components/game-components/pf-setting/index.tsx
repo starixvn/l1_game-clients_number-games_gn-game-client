@@ -49,7 +49,7 @@ const PFSetting: FC = () => {
     const { t: translateBacBall } = useTranslator(["BacBall"]);
     const dispatch = useGameStatesDispatch();
     const handleOnKeyPress = (event: any) => {
-        const chr = String.fromCharCode(event.which);
+        const chr = event.key;
         if ((NUMBER_VALUES.indexOf(chr) < 0 && event.which !== 8) || (event.target.value.length >= 4 && event.which !== 8)) {
             event.preventDefault();
         }
