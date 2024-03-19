@@ -9,7 +9,7 @@ export type TranslatorProps = {
 export function withTranslator(component: ComponentClass<any>) {
     const { Consumer } = getProviderInstance();
 
-    return function (props: object, ...children: ReactNode[]) {
+    return function Translator(props: any, ...children: ReactNode[]) {
         return (
             <Consumer>
                 {({ tolgee }) => {
