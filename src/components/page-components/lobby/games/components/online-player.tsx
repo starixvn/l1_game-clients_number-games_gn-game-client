@@ -13,7 +13,7 @@ const messagesEventTypes = {
 };
 
 export const OnlinePlayer: React.FC<Props> = ({ lobbyGameTransmitter }) => {
-    const [onlinePlayers, setOnlinePlayers] = useState<string[]>(null);
+    const [onlinePlayers, setOnlinePlayers] = useState<string[]>([]);
 
     useEffect(() => {
         lobbyGameTransmitter && registerPlayerEvents();
