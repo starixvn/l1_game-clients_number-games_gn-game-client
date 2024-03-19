@@ -10,6 +10,9 @@ export const BacBallBetOptionsPercentageColor = {
     tie: "#2FC856",
 };
 
+const isFirstLoad = (countResult) =>
+    !countResult[BacBallBetOptions.PLAYER] && !countResult[BacBallBetOptions.TIE] && !countResult[BacBallBetOptions.BANKER];
+
 function percentOf(countResult: object, property: string, total: number) {
     const counted = countResult[property] || 0;
 
@@ -19,7 +22,9 @@ function percentOf(countResult: object, property: string, total: number) {
 export const StatisticRuleEntries = Object.entries({
     [BacBallBetOptions.PLAYER]: (countResult: object, total: number) => percentOf(countResult, BacBallBetOptions.PLAYER, total),
     [BacBallBetOptions.BANKER]: (countResult: object, total: number) =>
-        100 - percentOf(countResult, BacBallBetOptions.PLAYER, total) - percentOf(countResult, BacBallBetOptions.TIE, total),
+        isFirstLoad(countResult)
+            ? 0
+            : 100 - percentOf(countResult, BacBallBetOptions.PLAYER, total) - percentOf(countResult, BacBallBetOptions.TIE, total),
     [BacBallBetOptions.TIE]: (countResult: object, total: number) => percentOf(countResult, BacBallBetOptions.TIE, total),
 });
 
