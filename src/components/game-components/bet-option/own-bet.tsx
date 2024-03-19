@@ -33,10 +33,15 @@ export const OwnBet: React.FC<BaseProps> = ({ gameName, choice, className }) => 
     }, [gameStateContext.ownBets[choice]]);
 
     useEffect(() => {
-        if (gameStateContext?.notConfirmOwnBets?.[choice] > 0) {
-            setLatestNotConfirmBet(gameStateContext.notConfirmOwnBets[choice]);
+        const lastBet = [...Object.values(gameStateContext?.acceptedBetQueue || [])];
+        if (lastBet.length > 0) {
+            const amount = lastBet[0]?.amount || 0;
+
+            if (amount > 0) {
+                setLatestNotConfirmBet(amount);
+            }
         }
-    }, [gameStateContext?.notConfirmOwnBets?.[choice]]);
+    }, [gameStateContext?.acceptedBetQueue]);
 
     const ownBetUI = (value: string, animClass = "") => {
         return (
