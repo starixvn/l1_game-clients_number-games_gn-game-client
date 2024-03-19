@@ -1,4 +1,13 @@
-import { GameConfigs, IBallColor, Notice, PFSettingData, Round, RoundState, SuggestBet } from "../../../components/game-base/type";
+import {
+    GameConfigs,
+    IBallColor,
+    IUserStakeLevel,
+    Notice,
+    PFSettingData,
+    Round,
+    RoundState,
+    SuggestBet,
+} from "../../../components/game-base/type";
 
 export interface GameStateContextModel {
     isConnect: boolean;
@@ -40,10 +49,7 @@ export interface GameStateContextModel {
     showConfirmDialog: boolean;
     turnCounter: number;
     notConfirmOwnBets: object;
-    userStakeLevel: {
-        minBet: number;
-        maxBet: number;
-    };
+    userStakeLevel: IUserStakeLevel;
     isShowBetHistory: boolean;
     isShowGameGuide: boolean;
     isShowPFSetting: boolean;

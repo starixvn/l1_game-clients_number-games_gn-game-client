@@ -198,3 +198,8 @@ export interface DrawInfo {
     odds: any;
     pfResult: PFResult;
 }
+
+export interface IUserStakeLevel {
+    minBet: number;
+    maxBet: number;
+}

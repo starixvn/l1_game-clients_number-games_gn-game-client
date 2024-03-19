@@ -1,4 +1,5 @@
 import { GameConfigs, RoundState } from "../../components/game-base/type";
+import { confirmBet } from "../constants";
 import { NoticeErrorCode } from "../constants/error-code-dictionary";
 import { GameStateContextModel } from "../react-contexts/game-state-context/game-state-context-model";
 
@@ -77,7 +78,10 @@ export const isOptionReachMaxBet = (currentTotalAmountOfChoice: number, maxBetPe
     return currentTotalAmountOfChoice > maxBetPerChoice;
 };
 
-export const isMinBet = (amount: number, roundMinBet: number): boolean => {
+export const isMinBet = (amount: number, roundMinBet: number, suggestAmount: number): boolean => {
+    if (suggestAmount > 0) {
+        return suggestAmount < roundMinBet;
+    }
     return amount > 0 && amount < roundMinBet;
 };
 
@@ -128,9 +132,10 @@ export const getMaxAvailableAmountOfChoice = (
     if (totalBetAmount === roundMaxBet) {
         return 0;
     }
+
     let remainAmount = maxBetPerChoice - currentAmountOfChoice;
-    if (remainAmount + currentAmountOfChoice + totalBetAmount >= roundMaxBet) {
-        remainAmount = roundMaxBet - totalBetAmount;
+    if (remainAmount + currentAmountOfChoice >= roundMaxBet) {
+        remainAmount = roundMaxBet - currentAmountOfChoice;
     }
 
     return remainAmount > 0 ? remainAmount : 0;
@@ -141,8 +146,7 @@ export const getCriteriaValidateBet = (
     betChoice: string,
     amount: number,
     accountBalance: number,
-    enabledQuickBet: boolean,
-    handleSuggestBet?: (betChoice: string, availableSuggestBet: IAvailableSuggestBetAmount) => void
+    enabledQuickBet: boolean
 ): { errorCode: string; args?: object } => {
     const criteria = composeValidationCriteria(
         amount,
@@ -153,10 +157,8 @@ export const getCriteriaValidateBet = (
         enabledQuickBet
     );
 
-    if (criteria.suggestAmount > 0 && criteria.isSuggestBet) {
-        handleSuggestBet?.(betChoice, criteria);
-
-        return;
+    if (criteria?.suggestAmount > 0 && criteria?.isSuggestBet) {
+        return { errorCode: NoticeErrorCode.suggestBet, args: criteria };
     }
 
     if (criteria?.errorCode) {
@@ -174,6 +176,10 @@ const composeValidationCriteria = (
     totalBetAmount: number,
     enabledQuickBet: boolean
 ): IAvailableSuggestBetAmount => {
+    if (betChoice === confirmBet) {
+        return;
+    }
+
     const { gameConfigs, userStakeLevel, notConfirmOwnBets, ownBets } = context;
     const { minBet: userMinBet, maxBet: userMaxBet } = userStakeLevel;
 
@@ -186,7 +192,7 @@ const composeValidationCriteria = (
     const isOptionReachMaxBetResult = isOptionReachMaxBet(currentAmountOfChoice + amount, maxBetPerChoice);
     const isInsufficientFundsResult = isInsufficientFunds(amount, accountBalance, totalBetAmount, enabledQuickBet);
 
-    const isMinBetResult = isMinBet(amount, roundMinBet);
+    const isMinBetResult = isMinBet(amount, roundMinBet, suggestAmount);
     const isMaxBetRoundResult = isMaxBetRound(totalBetAmount + amount, roundMaxBet, totalBetAmount);
 
     return determineBetMode({
@@ -213,16 +219,16 @@ const determineBetMode = ({
     roundMinBet,
     currentAmountOfChoice,
 }: SuggestBetOptions): IAvailableSuggestBetAmount => {
+    if (isMinBet) {
+        return getMinBetMode(roundMinBet, maxBetPerChoice);
+    }
+
     if (suggestAmount === 0) {
         if (isMaxBetRound) {
             return getMaxBetRoundMode(roundMaxBet, maxBetPerChoice);
         }
         if (isOptionReachMaxBet) {
             return getReachMaxBetMode(maxBetPerChoice);
-        }
-
-        if (isMinBet) {
-            return getMinBetMode(roundMinBet, maxBetPerChoice);
         }
     }
 
