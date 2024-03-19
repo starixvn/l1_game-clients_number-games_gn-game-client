@@ -164,22 +164,24 @@ export const getCriteriaValidateBet = (
     accountBalance: number,
     enabledQuickBet: boolean
 ): { errorCode: string; args?: object } => {
-    const criteria = composeValidationCriteria(
-        amount,
-        accountBalance,
-        gameStateContext,
-        betChoice,
-        getTotalNotConfirmBet(gameStateContext),
-        getTotalBetAmount(gameStateContext),
-        enabledQuickBet
-    );
+    if (betChoice !== confirmBet) {
+        const criteria = composeValidationCriteria(
+            amount,
+            accountBalance,
+            gameStateContext,
+            betChoice,
+            getTotalNotConfirmBet(gameStateContext),
+            getTotalBetAmount(gameStateContext),
+            enabledQuickBet
+        );
 
-    if (criteria?.suggestAmount > 0 && criteria?.isSuggestBet) {
-        return { errorCode: NoticeErrorCode.suggestBet, args: criteria };
-    }
+        if (criteria?.suggestAmount > 0 && criteria?.isSuggestBet) {
+            return { errorCode: NoticeErrorCode.suggestBet, args: criteria };
+        }
 
-    if (criteria?.errorCode) {
-        return { errorCode: criteria?.errorCode, args: criteria?.args };
+        if (criteria?.errorCode) {
+            return { errorCode: criteria?.errorCode, args: criteria?.args };
+        }
     }
 
     return { errorCode: NoticeErrorCode.validBet };
@@ -194,10 +196,6 @@ const composeValidationCriteria = (
     totalBeAmount: number,
     enabledQuickBet: boolean
 ): IAvailableSuggestBetAmount => {
-    if (betChoice === confirmBet) {
-        return;
-    }
-
     const { gameConfigs, userStakeLevel, notConfirmOwnBets, ownBets } = context;
     const { minBet: userMinBet, maxBet: userMaxBet } = userStakeLevel;
 
