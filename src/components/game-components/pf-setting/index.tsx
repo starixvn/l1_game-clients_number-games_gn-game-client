@@ -1,7 +1,7 @@
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, ReactEventHandler, useEffect, useRef, useState } from "react";
 import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import ModalContainer from "../modal-container";
-import { useCommonTranslate } from "../../../_shared/react-hooks";
+import { useCommonTranslate, useTranslator } from "../../../_shared/react-hooks";
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 import Styles from "./pf-setting.module.scss";
 import { ButtonPFGuide } from "../pf-guide";
@@ -46,10 +46,19 @@ const PFSetting: FC = () => {
     const [isCopySuccess, setIsCopySuccess] = useState<boolean>(false);
     const [isManualMode, setIsManualMode] = useState<boolean>(pfSetting?.useManualClientSeed || false);
     const { t: translateCommon } = useCommonTranslate();
+    const { t: translateBacBall } = useTranslator(["BacBall"]);
     const dispatch = useGameStatesDispatch();
     const handleOnKeyPress = (event: any) => {
         const chr = String.fromCharCode(event.which);
         if ((NUMBER_VALUES.indexOf(chr) < 0 && event.which !== 8) || (event.target.value.length >= 4 && event.which !== 8)) {
+            event.preventDefault();
+        }
+    };
+
+    const handlePaste = (event: any) => {
+        const value = event.target.value;
+        const numberRegex = /^\d+$/;
+        if (value.length > 4 || !numberRegex.test(value)) {
             event.preventDefault();
         }
     };
@@ -121,7 +130,7 @@ const PFSetting: FC = () => {
         <div className={Styles["pf-setting-container"]}>
             <div>
                 <ul>
-                    <li>{translateCommon("pf_settings_para_1")}</li>
+                    <li>{translateBacBall("pf_settings_para_1")}</li>
                     <li>{translateCommon("pf_settings_para_2")}</li>
                 </ul>
             </div>
@@ -167,9 +176,10 @@ const PFSetting: FC = () => {
                                 onChange={handleCheckRadio}
                                 className="form-check-input"
                             />
-                            <label className="form-check-label" htmlFor="manual-seed">{`${translateCommon(
-                                "pf_client_seed_para_3"
-                            )}`}</label>
+                            <label className="form-check-label" htmlFor="manual-seed">
+                                {`${translateCommon("pf_client_seed_para_3")}`}
+                            </label>
+                            <div style={{ marginLeft: "3rem" }}>(0-9999)</div>
                         </div>
 
                         <input
@@ -179,6 +189,7 @@ const PFSetting: FC = () => {
                             type="text"
                             inputMode="numeric"
                             onKeyDown={handleOnKeyPress}
+                            onPaste={handlePaste}
                             disabled={!isManualMode}
                             defaultValue={pfSetting?.manualClientSeed ?? ""}
                         />
