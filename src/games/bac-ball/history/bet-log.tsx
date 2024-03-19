@@ -33,6 +33,7 @@ export interface BetHistory {
         tie: boolean;
     };
     pfResult: PFResult;
+    clientSeed: string;
 }
 
 const renderBetLog = ({ betLogs, handleScroll, onCloseModal, renderBetDetail, isLoadMore }: BetLogProps) => {
@@ -100,6 +101,7 @@ const BetLog: FC<BetLogProps> = ({ betLogs, handleScroll, onCloseModal: toggleBe
                     odds: betLogDetail?.odds,
                     settlementResult: betLogDetail?.settlementResult,
                     pfResult: betLogDetail?.pfResult,
+                    clientSeed: betLogDetail?.clientSeed,
                 },
             })}
             {betLogs.length === 0 && <div className={Styles["no-more-data"]}>{translateSNGames("table_no_data")}</div>}

@@ -130,7 +130,10 @@ const BetDetail: FC<BetLogDetailProps> = ({ betLogDetails, onCloseModal, isShowB
                 <PFVerifyModal
                     handleCloseModal={handleClosePFVerifyModal}
                     isShowPFVerify={isShowPFVerify}
-                    pfResult={drawInfo?.pfResult}
+                    pfResult={{
+                        ...drawInfo?.pfResult,
+                        clientSeed: drawInfo?.clientSeed,
+                    }}
                 ></PFVerifyModal>
             </ModalContainer>
         )

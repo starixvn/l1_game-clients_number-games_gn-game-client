@@ -170,6 +170,17 @@ export type SuggestBet = {
     isInsufficientFunds?: boolean;
 };
 
+export type ClientSeed = {
+    name: string;
+    clientSeed: string;
+};
+
+export type ClientSeedInfo = {
+    clientSeed: string;
+    clientSeeds: ClientSeed[];
+    mergeClientSeed: string;
+};
+
 export interface PFSettingData {
     drawId: number;
     roundId: number;
@@ -184,11 +195,12 @@ export interface PFResult {
     roundId: number;
     serverSeedHash: string;
     serverSeed: string;
-    clientSeeds: string[];
+    clientSeeds: ClientSeed[];
     mergeSeed: string;
     mergeClientSeed: string;
     roundResult: any[];
     finalHash: string;
+    clientSeed: string;
 }
 
 export interface DrawInfo {
@@ -197,6 +209,7 @@ export interface DrawInfo {
     settlementResult: any;
     odds: any;
     pfResult: PFResult;
+    clientSeed: string;
 }
 
 export interface IUserStakeLevel {

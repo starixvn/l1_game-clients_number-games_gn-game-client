@@ -82,7 +82,7 @@ const PFVerifyModal: FC<{ handleCloseModal: Function; isShowPFVerify: boolean; p
                 <PFClientSeedInfoModal
                     handleCloseModal={() => dispatch(PFDispatchAction.CLOSE_CLIENT_SEED_INFO)}
                     isShowPFClientSeedInfo={childeModalState.isShowClientSeedInfo}
-                    clientSeedInfo={pfResult?.clientSeeds}
+                    clientSeedInfo={pfResult}
                 />
                 <PFVerifyDetailModal
                     isOpen={childeModalState.isShowPFVerifyDetail}
@@ -190,7 +190,7 @@ const PFVerify: FC<{ pfResult: PFResult; dispatchChildModalState: Dispatch<PFDis
 
                 <h3 className={`${Styles["section-title"]} mt-3`}>{translateCommon("pf_header_server_seed")}</h3>
                 <div className="input-group width-full">
-                    <input className="form-control" type="text" name="server-seed" id="server-seed" readOnly value={pfResult?.mergeSeed} />
+                    <input className="form-control" type="text" name="server-seed" id="server-seed" readOnly value={pfResult?.serverSeed} />
                     <button className={Styles["copy-btn"]} onClick={handleCopy} data-copy="server-seed">
                         <span className="icon-copy" />
                         <div className={`copy-effect ${Styles["hide"]} ${Styles["copy-success"]}`}>
@@ -217,7 +217,7 @@ const PFVerify: FC<{ pfResult: PFResult; dispatchChildModalState: Dispatch<PFDis
                             dispatch(PFDispatchAction.OPEN_CLIENT_SEED_INFO);
                         }}
                     >
-                        Details
+                        {translateBacBall("pf_provably_fair_details")}
                     </span>
                 </div>
                 <div className="input-group width-full">
