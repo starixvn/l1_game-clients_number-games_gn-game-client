@@ -44,6 +44,7 @@
     gap: var(--spacing-size-2);
     margin-top: 0.4rem;
     margin-bottom: 1rem;
+    justify-content: center;
 }
 
 .pf-setting-container {
@@ -51,6 +52,8 @@
     --text-header-color: #a6c0fc;
     --text-link-color: #2187ff;
     --text-color-highlight: #ffbc11;
+    --text-color-success: #20e500;
+    --text-color-unsuccess: #ff1717;
 
     position: relative;
     color: var(--text-content-color);
@@ -72,8 +75,25 @@
     }
 }
 
+.text-yellow {
+    color: var(--text-color-highlight);
+}
+
 .text-highlight {
     color: var(--text-color-highlight);
+    font-weight: 600;
+}
+
+.text-successful {
+    color: var(--text-color-success);
+}
+
+.text-unsuccessful {
+    color: var(--text-color-unsuccess);
+}
+
+.title-fix-width {
+    width: 9rem;
 }
 
 .btn-pf-guide {
@@ -239,4 +259,11 @@
     .table-highlight {
         color: #20e500;
     }
+}
+
+.result-numbers {
+    background: #191a1e;
+    border: 1px solid #3c3e43;
+    border-radius: 0.5rem;
+    padding: var(--spacing-size-2);
 }
