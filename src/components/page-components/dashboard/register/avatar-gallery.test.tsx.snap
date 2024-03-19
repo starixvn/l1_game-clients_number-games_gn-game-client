@@ -1,0 +1,919 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AvatarGallery render should match the snapshot 1`] = `
+<div>
+  <div
+    class="gallery-wrapper"
+  >
+    <div
+      class="popup modal-center  "
+    >
+      <h3
+        class="gallery-title"
+      >
+        translated
+      </h3>
+      <div
+        class="icon-close icon-close"
+        data-testid="btn-close-gallery"
+      />
+      <div
+        class="container-avatars"
+      >
+        <img
+          alt="Avatar"
+          class="avatar avatar-selected"
+          src="/static/images/avatar/1.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/2.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/3.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/4.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/5.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/6.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/7.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/8.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/9.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/10.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/11.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/12.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/13.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/14.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/15.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/16.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/17.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/18.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/19.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/20.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/21.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/22.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/23.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/24.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/25.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/26.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/27.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/28.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/29.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/30.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/31.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/32.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/33.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/34.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/35.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/36.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/37.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/38.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/39.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/40.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/41.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/42.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/43.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/44.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/45.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/46.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/47.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/48.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/49.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/50.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/51.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/52.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/53.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/54.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/55.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/56.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/57.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/58.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/59.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/60.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/61.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/62.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/63.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/64.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/65.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/66.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/67.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/68.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/69.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/70.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/71.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/72.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/73.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/74.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/75.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/76.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/77.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/78.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/79.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/80.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/81.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/82.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/83.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/84.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/85.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/86.png"
+        />
+        <img
+          alt="Avatar"
+          class="avatar "
+          src="/static/images/avatar/87.png"
+        />
+      </div>
+      <div
+        class="list-actions"
+      >
+        <button
+          class="btn-grey"
+          type="button"
+        >
+          translated
+        </button>
+        <button
+          class="btn-red"
+          data-testid="btn-submit-gallery"
+          type="button"
+        >
+          translated
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Avatars render should match the snapshot 1`] = `
+<div>
+  <img
+    alt="Avatar"
+    class="avatar avatar-selected"
+    src="/static/images/avatar/1.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/2.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/3.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/4.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/5.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/6.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/7.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/8.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/9.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/10.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/11.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/12.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/13.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/14.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/15.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/16.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/17.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/18.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/19.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/20.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/21.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/22.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/23.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/24.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/25.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/26.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/27.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/28.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/29.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/30.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/31.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/32.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/33.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/34.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/35.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/36.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/37.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/38.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/39.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/40.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/41.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/42.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/43.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/44.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/45.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/46.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/47.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/48.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/49.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/50.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/51.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/52.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/53.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/54.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/55.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/56.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/57.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/58.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/59.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/60.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/61.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/62.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/63.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/64.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/65.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/66.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/67.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/68.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/69.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/70.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/71.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/72.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/73.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/74.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/75.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/76.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/77.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/78.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/79.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/80.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/81.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/82.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/83.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/84.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/85.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/86.png"
+  />
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/87.png"
+  />
+</div>
+`;

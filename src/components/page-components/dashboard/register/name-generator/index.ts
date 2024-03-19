@@ -34,7 +34,6 @@ export default class NameGenerator {
     public static validateName(name: string): boolean {
         const regex = new RegExp(NameGenerator.PATTERN);
 
-        console.log(name, name.match(regex));
-        return name.match(regex) !== null;
+        return (name || "").match(regex) !== null;
     }
 }

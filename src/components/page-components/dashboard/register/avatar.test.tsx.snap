@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Avatar render with normal avatar should match the snapshot 1`] = `
+<div>
+  <img
+    alt="Avatar"
+    class="avatar "
+    src="/static/images/avatar/1.png"
+  />
+</div>
+`;
+
+exports[`Avatar render with selected avatar should match the snapshot 1`] = `
+<div>
+  <img
+    alt="Avatar"
+    class="avatar avatar-selected"
+    src="/static/images/avatar/1.png"
+  />
+</div>
+`;

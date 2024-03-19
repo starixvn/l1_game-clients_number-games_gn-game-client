@@ -1,7 +1,6 @@
 import { Component, FormEvent, ReactNode } from "react";
 import { AuthorizeResponse, SSOResponse } from "sc-user-service-client/dist/auth";
 
-import { getAppSettings } from "../../../../_shared/app-settings";
 import { Themes } from "../../../../_shared/constants";
 import { GetLocalizedErrorMessage } from "../../../../_shared/helpers/notice-helper";
 import { randomInteger } from "../../../../_shared/helpers/number-helper";

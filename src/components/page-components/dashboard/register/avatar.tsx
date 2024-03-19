@@ -8,7 +8,7 @@ export type AvatarProps = {
 };
 
 export function Avatar({ id, onClick, selected }: AvatarProps): ReactNode {
-    const className = `${styles.avatar} ${selected === id && styles["avatar-selected"]}`;
+    const className = `${styles.avatar} ${selected === id ? styles["avatar-selected"] : ""}`;
 
     return <img onClick={onClick} src={`/static/images/avatar/${id}.png`} className={className} alt="Avatar" />;
 }
