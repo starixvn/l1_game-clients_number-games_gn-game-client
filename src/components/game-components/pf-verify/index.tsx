@@ -136,7 +136,6 @@ const PFVerify: FC<{ pfResult: PFResult; dispatchChildModalState: Dispatch<PFDis
         clickSound();
         const currentTarget = event.currentTarget as HTMLElement;
         const tooltip = currentTarget.nextElementSibling as HTMLDivElement;
-        tooltip.style.top = `-${currentTarget.offsetTop + 10}rem`;
         tooltip.classList.toggle(Styles["hide"]);
     };
 
@@ -206,9 +205,7 @@ const PFVerify: FC<{ pfResult: PFResult; dispatchChildModalState: Dispatch<PFDis
                     <button className={Styles["btn-pf-intro"]} onClick={handleClickTooltip} onBlur={handleBlurTooltip}>
                         <span className="icon-info" />
                     </button>
-                    <div className={`${Styles["hide"]} ${Styles["pf-tooltip"]}`}>
-                        {translateCommon("pf_client_seed_tooltip_para_1")} <br /> {translateCommon("pf_client_seed_tooltip_para_2")}
-                    </div>
+                    <div className={`${Styles["hide"]} ${Styles["pf-tooltip"]} break`}>{translateBacBall("pf_client_seed_tooltip")}</div>
                 </div>
 
                 <div className="relative">

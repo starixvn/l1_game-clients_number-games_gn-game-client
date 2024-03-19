@@ -176,10 +176,11 @@ const PFSetting: FC = () => {
                                 onChange={handleCheckRadio}
                                 className="form-check-input"
                             />
-                            <label className="form-check-label" htmlFor="manual-seed">
-                                {`${translateCommon("pf_client_seed_para_3")}`}
+                            <label className={`form-check-label ${Styles["form-check-label"]}`} htmlFor="manual-seed">
+                                <div className={Styles["form-check-label-note"]}>
+                                    {`${translateCommon("pf_client_seed_para_3")}`} <br /> (0 - 9999)
+                                </div>
                             </label>
-                            <div style={{ marginLeft: "3rem" }}>(0-9999)</div>
                         </div>
 
                         <input
