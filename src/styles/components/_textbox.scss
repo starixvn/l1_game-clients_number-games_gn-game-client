@@ -18,6 +18,10 @@
         border-color: #a1adca;
         box-shadow: 0 0 3px 0 rgba(255, 255, 255, 0.6);
     }
+
+    &.checked {
+        color: #fff;
+    }
 }
 
 .form-check-input {
@@ -25,8 +29,16 @@
     width: 0;
     margin: 0;
 
+    &:checked + .form-check-label {
+        color: #fff;
+    }
+
     &:checked + .form-check-label:after {
         transform: scale(1);
+    }
+
+    &:checked + .form-check-label::before {
+        border-color: #858992;
     }
 }
 

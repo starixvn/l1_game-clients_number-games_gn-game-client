@@ -3,6 +3,7 @@ import { FC } from "react";
 import { useClickSound } from "../../../_shared/react-hooks";
 import BaseDialog from "../base-dialog";
 import { ModalType } from "../base-dialog/type";
+import { isMobileOnly } from "react-device-detect";
 import Styles from "./modal-container.module.scss";
 
 const ModalContainer: FC<{
@@ -29,7 +30,7 @@ const ModalContainer: FC<{
                     ></span>
                 </div>
 
-                <div className={`${Styles["content"]}`}>{children}</div>
+                <div className={`${Styles["content"]} ${isMobileOnly ? Styles["mobile"] : ""}`}>{children}</div>
             </div>
         </BaseDialog>
     );

@@ -156,7 +156,7 @@ const PFSetting: FC = () => {
                         </div>
 
                         <input
-                            className="form-control"
+                            className={"form-control" + (isManualMode ? "" : " checked")}
                             ref={randomSeed}
                             type="text"
                             id="random-client-seed"
@@ -184,7 +184,7 @@ const PFSetting: FC = () => {
                         </div>
 
                         <input
-                            className="form-control"
+                            className={"form-control" + (isManualMode ? " checked" : "")}
                             id="manual-client-seed"
                             ref={manualSeed}
                             type="text"
