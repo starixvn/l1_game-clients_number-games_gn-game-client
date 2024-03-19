@@ -19,20 +19,38 @@ export const Lobby: React.FC<Props> = ({ openGame, lobbyConfigs }) => {
     const { session } = usePlayerContext();
 
     useEffect(() => {
-        let socketGateWay;
+        document.addEventListener("visibilitychange", onVisibilityChange);
+        onStart();
+        // let socketGateWay;
         // if (lobbyConfigs?.categories?.length > 0) {
         // const offerGameIds = lobbyConfigs.categories[0].gameSettings.map((setting) => setting.gameId);
-        const offerGameIds = [1001];
-        socketGateWay = initLobbySocket(session, offerGameIds);
-        setSocket(socketGateWay);
+        // socketGateWay = initLobbySocket(session, offerGameIds);
+        // setSocket(socketGateWay);
         // }
 
         return () => {
-            socketGateWay?.disconnect();
-            setSocket(null);
+            removeEventListener("visibilitychange", onVisibilityChange);
         };
         // }, [lobbyConfigs.categories]);
     }, []);
+
+    const onStart = () => {
+        let socketGateWay;
+        const offerGameIds = [1001];
+        socketGateWay = initLobbySocket(session, offerGameIds);
+        setSocket(socketGateWay);
+    };
+
+    const onDestroy = () => {
+        setSocket((prevSocket) => {
+            prevSocket?.disconnect();
+            return null;
+        });
+    };
+
+    const onVisibilityChange = () => {
+        document.visibilityState === "hidden" ? onDestroy() : onStart();
+    };
 
     // const gamesSettings = useMemo(() => {
     //     if (lobbyConfigs?.categories?.length > 0) {
