@@ -10,19 +10,17 @@ export const BacBallBetOptionsPercentageColor = {
     tie: "#2FC856",
 };
 
-const isFirstLoad = (countResult) =>
-    !countResult[BacBallBetOptions.PLAYER] && !countResult[BacBallBetOptions.TIE] && !countResult[BacBallBetOptions.BANKER];
+function percentOf(countResult: object, property: string, total: number) {
+    const counted = countResult[property] || 0;
+
+    return Math.round((counted * 100) / total);
+}
+
 export const StatisticRuleEntries = Object.entries({
-    [BacBallBetOptions.PLAYER]: (countResult: object, total: number) =>
-        countResult[BacBallBetOptions.PLAYER] ? Math.round((countResult[BacBallBetOptions.PLAYER] * 100) / total) : 0,
+    [BacBallBetOptions.PLAYER]: (countResult: object, total: number) => percentOf(countResult, BacBallBetOptions.PLAYER, total),
     [BacBallBetOptions.BANKER]: (countResult: object, total: number) =>
-        isFirstLoad(countResult)
-            ? 0
-            : 100 -
-              ((countResult[BacBallBetOptions.PLAYER] ? Math.round((countResult[BacBallBetOptions.PLAYER] * 100) / total) : 0) +
-                  (countResult[BacBallBetOptions.TIE] ? Math.round((countResult[BacBallBetOptions.TIE] * 100) / total) : 0)),
-    [BacBallBetOptions.TIE]: (countResult: object, total: number) =>
-        countResult[BacBallBetOptions.TIE] ? Math.round((countResult[BacBallBetOptions.TIE] * 100) / total) : 0,
+        100 - percentOf(countResult, BacBallBetOptions.PLAYER, total) - percentOf(countResult, BacBallBetOptions.TIE, total),
+    [BacBallBetOptions.TIE]: (countResult: object, total: number) => percentOf(countResult, BacBallBetOptions.TIE, total),
 });
 
 export const MinProbability = {

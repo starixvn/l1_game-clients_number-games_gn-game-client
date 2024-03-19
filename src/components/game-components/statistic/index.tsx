@@ -1,6 +1,5 @@
-import React, { memo, useMemo } from "react";
+import React, { memo } from "react";
 
-import { useGameContext } from "../../../_shared/react-contexts";
 import { Round } from "../../game-base/type";
 import Styles from "./statistic.module.scss";
 import { PercentageStatisticProps, Props } from "./types";
@@ -42,7 +41,8 @@ const StatisticItem: React.FC<Props> = (props) => {
 
 export const PercentageStatistic: React.FC<PercentageStatisticProps> = (props) => {
     const { statisticRuleEntries, roundHistory } = props;
-    const statisticResult = calculatePercent(statisticRuleEntries, countSettlementResult(roundHistory), roundHistory.length);
+    const counted = countSettlementResult(roundHistory);
+    const statisticResult = calculatePercent(statisticRuleEntries, counted, roundHistory.length);
 
     return (
         <div className={`${Styles["statistic-container"]} flex`} id="bar-statistic">
