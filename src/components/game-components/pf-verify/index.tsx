@@ -1,16 +1,16 @@
-import { Dispatch, FC, useMemo, useReducer, useState } from "react";
-import ModalContainer from "../modal-container";
-import { useCommonTranslate, useSNTranslate, useTranslator } from "../../../_shared/react-hooks";
-import { useGameContext } from "../../../_shared/react-contexts";
+import { Dispatch, FC, useMemo, useReducer } from "react";
 import { createPortal } from "react-dom";
-import Styles from "../pf-setting/pf-setting.module.scss";
-import { useBallColor } from "../../../_shared/helpers/ball-color-helper";
-import { PFResult } from "../../game-base/type";
-import { getOrdinalNumber } from "../../../_shared/helpers";
 import { v4 as uuidv4 } from "uuid";
+import { getOrdinalNumber } from "../../../_shared/helpers";
+import { useBallColor } from "../../../_shared/helpers/ball-color-helper";
+import { useGameContext } from "../../../_shared/react-contexts";
+import { useClickSound, useCommonTranslate, useSNTranslate, useTranslator } from "../../../_shared/react-hooks";
+import { PFResult } from "../../game-base/type";
+import ModalContainer from "../modal-container";
 import PFClientSeedInfoModal from "../pf-client-seed-info";
-import PFVerifyDetailModal from "../pf-verify-detail";
 import { ButtonPFGuide } from "../pf-guide";
+import Styles from "../pf-setting/pf-setting.module.scss";
+import PFVerifyDetailModal from "../pf-verify-detail";
 
 enum PFDispatchAction {
     OPEN_CLIENT_SEED_INFO = "openClientSeedInfo",
@@ -102,6 +102,8 @@ const PFVerify: FC<{ pfResult: PFResult; dispatchChildModalState: Dispatch<PFDis
     const { t: translateCommon } = useCommonTranslate();
     const { t: translateSNGames } = useSNTranslate();
     const { t: translateBacBall } = useTranslator([gameName]);
+    const clickSound = useClickSound();
+
     const drawResult = useMemo(() => {
         const beforeDrawResult = [];
         for (const item of pfResult?.roundResult || []) {
@@ -119,6 +121,7 @@ const PFVerify: FC<{ pfResult: PFResult; dispatchChildModalState: Dispatch<PFDis
     }, [pfResult]);
     const ballColor = useBallColor;
     const handleCopy = (event: React.MouseEvent<HTMLButtonElement>) => {
+        clickSound();
         const currentTarget = event.currentTarget as HTMLElement;
         const data = document.getElementById(currentTarget.dataset?.copy) as HTMLInputElement;
         const effect = currentTarget.querySelector(".copy-effect");
@@ -130,6 +133,7 @@ const PFVerify: FC<{ pfResult: PFResult; dispatchChildModalState: Dispatch<PFDis
     };
 
     const handleClickTooltip = (event: React.MouseEvent<HTMLButtonElement> & React.FocusEvent<HTMLButtonElement>) => {
+        clickSound();
         const currentTarget = event.currentTarget as HTMLElement;
         const tooltip = currentTarget.nextElementSibling as HTMLDivElement;
         tooltip.style.top = `-${currentTarget.offsetTop + 10}rem`;
@@ -209,7 +213,13 @@ const PFVerify: FC<{ pfResult: PFResult; dispatchChildModalState: Dispatch<PFDis
 
                 <div className="relative">
                     <h3 className={Styles["section-title"]}>{translateCommon("pf_ header_merge_client_seed")}</h3>
-                    <span className={Styles["link-detail"]} onClick={() => dispatch(PFDispatchAction.OPEN_CLIENT_SEED_INFO)}>
+                    <span
+                        className={Styles["link-detail"]}
+                        onClick={() => {
+                            clickSound();
+                            dispatch(PFDispatchAction.OPEN_CLIENT_SEED_INFO);
+                        }}
+                    >
                         Details
                     </span>
                 </div>
@@ -257,7 +267,13 @@ const PFVerify: FC<{ pfResult: PFResult; dispatchChildModalState: Dispatch<PFDis
                 </div>
             </div>
 
-            <button className={`btn-green ${Styles["btn-verify"]}`} onClick={() => dispatch(PFDispatchAction.OPEN_PF_VERIFY_DETAIL)}>
+            <button
+                className={`btn-green ${Styles["btn-verify"]}`}
+                onClick={() => {
+                    clickSound();
+                    dispatch(PFDispatchAction.OPEN_PF_VERIFY_DETAIL);
+                }}
+            >
                 {translateCommon("pf_button_verify")}
             </button>
             <p className="text-center mt-2">{translateCommon("pf_provably_fair_para_2")}</p>

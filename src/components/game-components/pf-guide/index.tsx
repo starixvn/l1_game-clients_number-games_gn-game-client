@@ -1,14 +1,14 @@
 import { FC, memo, useMemo, useRef, useState } from "react";
-import { useCommonTranslate } from "../../../_shared/react-hooks";
 import { createPortal } from "react-dom";
+import { v4 as uuidv4 } from "uuid";
+import { Themes, buildVersion } from "../../../_shared/constants";
+import { buildGameGuideUrl } from "../../../_shared/helpers";
+import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
+import { useClickSound, useCommonTranslate } from "../../../_shared/react-hooks";
+import { tolgee } from "../../../_shared/tolgee";
+import Loader from "../loader";
 import ModalContainer from "../modal-container";
 import Styles from "./pf-guide.module.scss";
-import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
-import { Themes, buildVersion } from "../../../_shared/constants";
-import { tolgee } from "../../../_shared/tolgee";
-import { buildGameGuideUrl } from "../../../_shared/helpers";
-import Loader from "../loader";
-import { v4 as uuidv4 } from "uuid";
 
 const PFGuide: FC = () => {
     const { gameConfigs } = useGameStateContext();
@@ -78,10 +78,17 @@ const ButtonPFGuide: FC = () => {
     const onCloseModal = () => {
         setIsShowPFGuide(false);
     };
+    const clickSound = useClickSound();
 
     return (
         <>
-            <button className={Styles["btn-pf-guide"]} onClick={() => setIsShowPFGuide(true)}>
+            <button
+                className={Styles["btn-pf-guide"]}
+                onClick={() => {
+                    clickSound();
+                    setIsShowPFGuide(true);
+                }}
+            >
                 <span className="icon-guide" />
             </button>
             <PFGuideModal isOpen={isShowPFGuide} handleCloseModal={onCloseModal} />
@@ -89,4 +96,4 @@ const ButtonPFGuide: FC = () => {
     );
 };
 
-export { PFGuideModal, ButtonPFGuide };
+export { ButtonPFGuide, PFGuideModal };

@@ -4,15 +4,16 @@ import { createPortal } from "react-dom";
 
 import { numberWithCommas, seperateDateTime, sortedCollectionByTime } from "../../../_shared/helpers";
 import { useBallColor } from "../../../_shared/helpers/ball-color-helper";
+import { usePlayerContext } from "../../../_shared/react-contexts";
+import { useClickSound } from "../../../_shared/react-hooks";
 import { useCommonTranslate, useSNTranslate, useTranslator } from "../../../_shared/react-hooks/use-translator";
+import { DrawInfo, PFResult } from "../../../components/game-base/type";
 import { BetLogDetailProps } from "../../../components/game-components/bet-history";
 import ModalContainer from "../../../components/game-components/modal-container";
+import PFVerifyModal from "../../../components/game-components/pf-verify";
+import { BacBallBetOptions } from "../constants";
 import Styles from "./common.module.scss";
 import TableRow from "./row-table";
-import { usePlayerContext } from "../../../_shared/react-contexts";
-import { BacBallBetOptions } from "../constants";
-import PFVerifyModal from "../../../components/game-components/pf-verify";
-import { DrawInfo, PFResult } from "../../../components/game-base/type";
 
 interface BacBallBetDetailProps extends BetLogDetailProps {
     drawInfo: DrawInfoBacBall;
@@ -52,6 +53,7 @@ const BetDetail: FC<BetLogDetailProps> = ({ betLogDetails, onCloseModal, isShowB
     const { t: translateCommon } = useCommonTranslate();
     const { t: translateSNGames } = useSNTranslate();
     const { t: translateBacBall } = useTranslator(["BacBall"]);
+    const clickSound = useClickSound();
 
     const handleCloseModal = () => {
         onCloseModal();
@@ -62,7 +64,8 @@ const BetDetail: FC<BetLogDetailProps> = ({ betLogDetails, onCloseModal, isShowB
         setIsShowPFVerify(false);
     };
 
-    const handleClickProbalyFair = () => {
+    const handleClickProvablyFair = () => {
+        clickSound();
         setIsShowPFVerify(true);
     };
 
@@ -107,7 +110,7 @@ const BetDetail: FC<BetLogDetailProps> = ({ betLogDetails, onCloseModal, isShowB
                     </div>
                 )}
 
-                <button className={`clickable ${Styles["provably-fair"]}`} onClick={handleClickProbalyFair}>
+                <button className={`clickable ${Styles["provably-fair"]}`} onClick={handleClickProvablyFair}>
                     <span className={`icon-pf ${Styles["icon-pf"]}`}></span>
                     {translateCommon("pf_title_provably_fair").capitalizeFirstLetter()}
                 </button>
