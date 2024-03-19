@@ -217,9 +217,17 @@
 }
 
 .client-seed-option {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr 15rem;
     align-items: center;
+}
+
+.form-check-label-note {
+    position: absolute;
+    display: block;
+    width: 15rem;
+    text-align: center;
+    top: 0;
 }
 
 .copy-btn {
@@ -227,6 +235,7 @@
     border: none;
     cursor: pointer;
     width: 3.4rem;
+    font-family: inherit;
 
     > span {
         display: block;
