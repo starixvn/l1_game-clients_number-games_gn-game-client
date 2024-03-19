@@ -77,7 +77,7 @@ export const initialGameStateContextModel = () => {
         isShowBlink: false,
         notice: null,
         activeScoreboardTab: 0,
-        rate: 1,
+        rate: 0,
         disconnectReason: "",
         gameConfigs: {
             odds: {},

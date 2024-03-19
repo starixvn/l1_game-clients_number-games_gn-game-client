@@ -27,7 +27,7 @@ export const TotalBet: React.FC<BaseProps> = ({ gameName, choice, className }) =
     const { rate } = useGameStateContext();
     const totalBet = totalBets?.[choice] ?? 0;
 
-    if (totalBet <= 0) {
+    if (totalBet <= 0 || rate == 0) {
         return <div className={className}></div>;
     }
 
