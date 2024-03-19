@@ -83,12 +83,12 @@ const PFClientSeedInfo: FC<{ clientSeedInfo: ClientSeedInfo }> = ({ clientSeedIn
 
     const handleClickExport = () => {
         clickSound();
-        const header = `${translateCommon("glossary_player")},${translateCommon("character_name")},${translateCommon(
+        const header = `${translateBacBall("glossary_player")},${translateCommon("character_name")},${translateBacBall(
             "pf_client_seed_info_subtitle_seed"
         )}`;
         const content = clientSeedInfo.clientSeeds
             .map((item, index) => {
-                return `${index},${item.name == name ? item.name : encryptName(item.name)},${item.clientSeed}`;
+                return `${index + 1},${item.name == name ? item.name : encryptName(item.name)},${item.clientSeed}`;
             })
             .join("\n");
         const data = `${header}\n${content}`;
