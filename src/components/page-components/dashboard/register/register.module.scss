@@ -3,6 +3,7 @@
 .welcome {
     text-align: center;
     margin-top: 0.7rem;
+    color: #e6e6e6;
 
     &.highlight-system-4 {
         div:first-child {
@@ -16,6 +17,7 @@
 .form {
     position: relative;
     margin-bottom: 1rem;
+    color: #e6e6e6;
 
     .title {
         margin-bottom: 0.6rem;
@@ -26,14 +28,20 @@
         display: flex;
         margin-bottom: 1.6rem;
         width: 100%;
+        height: 4.4rem;
 
         .input {
             width: 100%;
-            height: 4.4rem;
-            padding-left: 1.6rem;
-            padding-right: 1.6rem;
+            height: 100%;
+            padding-left: 1rem;
+            padding-right: 1rem;
             font-size: 1.8rem;
             font-weight: 500;
+            color: #9ca3ae;
+            background-color: #3c3e43;
+            border: 1px solid;
+            border-radius: 5px;
+            margin-right: 1rem;
         }
 
         .clear {
@@ -41,24 +49,35 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 4.4rem;
+            height: 100%;
             width: 4.4rem;
-            right: 10rem;
+            right: 5.4rem;
 
             &::before {
-                color: #000;
+                color: #9ca3ae;
+                scale: 1.5;
             }
         }
 
         .refresh {
-            @extend .btn-green;
+            @extend %btn;
 
             display: flex;
             align-items: center;
             justify-content: center;
             height: 4.4rem;
-            width: 1rem;
-            padding: 0;
+            min-width: 4.4rem;
+            padding: 0 0;
+
+            background-color: #4e73f9;
+            &:hover:enabled {
+                background: var(--btn-green-background-hover) radial-gradient(circle, transparent 1%, var(--btn-green-background-hover) 1%)
+                    center/15000%;
+            }
+
+            &:active {
+                background-color: var(--btn-green-background-hover);
+            }
         }
     }
 
@@ -79,12 +98,15 @@
     }
 
     .submit {
-        @extend .btn-red;
+        @extend .btn-green;
 
         width: 100%;
         margin-top: 0.6rem;
+        height: 5rem;
+        font-size: 1.8rem;
     }
 }
 
 .note {
+    color: #e6e6e6;
 }

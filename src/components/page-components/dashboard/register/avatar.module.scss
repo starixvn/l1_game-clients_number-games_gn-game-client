@@ -1,17 +1,16 @@
 .avatar {
-    width: 94px;
-    height: 94px;
+    width: 72px;
+    height: 72px;
 
-    border: 2px solid #c8c8c866;
     border-radius: 50%;
 
     &:hover {
         transition: ease-out 0.2s;
-        border: 2px solid blue;
+        border: 2px solid #fff;
         -webkit-transition: ease-out 0.2s;
     }
 }
 
 .avatar-selected {
-    border: 2px solid blue;
+    border: 2px solid #fff;
 }

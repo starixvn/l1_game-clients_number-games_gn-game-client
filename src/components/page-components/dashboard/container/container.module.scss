@@ -1,6 +1,6 @@
 [data-theme="light"] .wrapper {
-    --page-background: #fff;
-    --page-border: #fff;
+    --page-background: #242c32;
+    --page-border: #585858;
     --page-shadow: 0px 0px 20px rgba(0, 0, 0, 0.3);
 }
 
@@ -38,7 +38,7 @@
         width: 67.3rem;
         align-items: center;
         padding: 4.8rem 2rem;
-        border-radius: 0.5rem;
+        border-radius: 1.5rem;
         background-color: var(--page-background);
         border: 1px solid var(--page-border);
         box-shadow: var(--page-shadow);
