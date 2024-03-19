@@ -66,8 +66,8 @@ export class TurnIdHandler {
             this.dispatchTurnCounter(true, turn.index);
             this.dispatchDrawId(turn.id);
         } else if (!this.isInDisplayResultState()) {
-            this.dispatchTurnCounter(true, this.turnCounter);
             this.dispatchClientSeed(this.drawId);
+            this.dispatchTurnCounter(true, this.turnCounter);
             this.dispatchDrawId(this.drawId);
         }
 
@@ -82,6 +82,7 @@ export class TurnIdHandler {
 
     handleRoundState = ({ roundState }) => {
         if (roundState == RoundState.InRound && this.isInDisplayResultState()) {
+            this.dispatchClientSeed(this.drawId);
             this.dispatchTurnCounter(false, this.turnCounter);
             this.dispatchDrawId(this.drawId);
         }
