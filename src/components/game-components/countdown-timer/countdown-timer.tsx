@@ -11,12 +11,25 @@ export type Rotation = "clockwise" | "counterclockwise";
 export const CountdownTimer = ({ SimpleTimerProp = SimpleTimer, GameStatusProp = GameStatus }) => {
     const { roundState } = useGameStateContext();
     const { t } = useSNTranslate();
+    const { gameMessageHandler } = useGameContext();
+    const [clientRemainingTime, setClientRemainingTime] = useState(0);
+
+    useEffect(() => {
+        const handlerId = gameMessageHandler?.register(messageEventType.CLIENT_REMAINING_TIME, ({ clientRemainingTime }) => {
+            setClientRemainingTime(clientRemainingTime);
+        });
+
+        return () => {
+            gameMessageHandler?.removeHandler(handlerId);
+        };
+    }, []);
+
 
     switch (roundState) {
         case RoundState.InRound:
             return (
                 <>
-                    <SimpleTimerProp />
+                    <SimpleTimerProp clientRemainingTime={clientRemainingTime} />
                     <GameStatus>
                         <div className={styles["start-betting"]}>{t("status_start_bet")}</div>
                     </GameStatus>
@@ -25,7 +38,7 @@ export const CountdownTimer = ({ SimpleTimerProp = SimpleTimer, GameStatusProp =
         case RoundState.LockingBet:
             return (
                 <>
-                    <SimpleTimerProp />
+                    <SimpleTimerProp clientRemainingTime={clientRemainingTime} />
                     <GameStatusProp>
                         <div className={styles["no-more-bets"]}>{t("status_stop_bet")}</div>
                     </GameStatusProp>
@@ -50,22 +63,15 @@ export const CountdownTimer = ({ SimpleTimerProp = SimpleTimer, GameStatusProp =
     }
 };
 
-export const SimpleTimer = () => {
-    const { gameMessageHandler } = useGameContext();
+export const SimpleTimer = ({ clientRemainingTime }) => {
     const { roundState } = useGameStateContext();
-    const [timeLeft, setTimeLeft] = useState(0);
+    const [timeLeft, setTimeLeft] = useState(clientRemainingTime);
 
     useEffect(() => {
-        const handlerId = gameMessageHandler?.register(messageEventType.CLIENT_REMAINING_TIME, ({ clientRemainingTime }) => {
-            if (clientRemainingTime !== timeLeft) {
-                setTimeLeft(clientRemainingTime);
-            }
-        });
-
-        return () => {
-            gameMessageHandler?.removeHandler(handlerId);
-        };
-    }, [timeLeft, gameMessageHandler]);
+        if (clientRemainingTime !== timeLeft) {
+            setTimeLeft(clientRemainingTime);
+        }
+    }, [clientRemainingTime, timeLeft]);
 
     return timeLeft <= 0 ? (
         <></>
