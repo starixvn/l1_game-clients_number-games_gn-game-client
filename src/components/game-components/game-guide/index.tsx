@@ -8,6 +8,7 @@ import { tolgee } from "../../../_shared/tolgee";
 import Loader from "../loader";
 import ModalContainer from "../modal-container";
 import Styles from "./game-guide.module.scss";
+import { usePlayerContext } from "../../../_shared/react-contexts";
 
 const GameGuideModal: FC = () => {
     const { isShowGameGuide } = useGameStateContext();
@@ -34,9 +35,10 @@ const GameGuide: FC = () => {
     const wrapperRef = useRef<HTMLIFrameElement>();
     const wrapperIframeRef = useRef<HTMLIFrameElement>();
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    const { fractionalOddsFormat } = usePlayerContext();
     const minMaxBetParams = `&minBet=${userStakeLevel?.minBet}&maxBet=${userStakeLevel?.maxBet}`;
     const guideUrl = buildGameGuideUrl();
-    const srcPath = `${guideUrl}/${language}/?gId=${gameConfigs["gameId"]}&t=${theme}${minMaxBetParams}&dy=1&v=${buildVersion}`;
+    const srcPath = `${guideUrl}/${language}/?gId=${gameConfigs["gameId"]}&t=${theme}${minMaxBetParams}&dy=1&v=${buildVersion}&fof=${fractionalOddsFormat}`;
 
     const hideSpinner = () => {
         setIsLoading(false);
