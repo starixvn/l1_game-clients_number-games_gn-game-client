@@ -6,8 +6,9 @@ import { ModalType } from "../base-dialog/type";
 import Styles from "./error-message.module.scss";
 import { ConnectFailedReasonKey } from "./type";
 
-export const ConnectFailedMessage: React.FC<{ gameName: string; onSubmit: () => void; reason: string }> = ({
+export const ConnectFailedMessage: React.FC<{ gameName: string; id: number; onSubmit: () => void; reason: string }> = ({
     gameName,
+    id,
     onSubmit,
     reason,
 }) => {
@@ -18,7 +19,7 @@ export const ConnectFailedMessage: React.FC<{ gameName: string; onSubmit: () => 
                 <div className={`${Styles["warning-container"]}`}>
                     <div className={`icon-warning ${Styles["icon-warning"]}`}></div>
                 </div>
-                <div className={Styles["title"]}>{t(`${gameName}.game_name`)}</div>
+                <div className={Styles["title"]}>{t(`${gameName}.game_name_${id}`)}</div>
                 <div className={Styles["content"]}>{t(reason, { gameName }).replaceTolgeeFormat().replace(gameName, "")}</div>
                 <div className={Styles["list-action"]}>
                     <button onClick={() => onSubmit()} className={`btn-green w-100 ${Styles["reconnect"]}`}>

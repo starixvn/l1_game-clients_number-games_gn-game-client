@@ -607,10 +607,12 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     private renderConnectFailed(roundState: RoundState, disconnectReason: string): React.ReactNode {
+        const { gameName, id } = this.props;
         return (
             roundState === RoundState.ConnectFailed && (
                 <ConnectFailedMessage
-                    gameName={this.props.gameName}
+                    gameName={gameName}
+                    id={id}
                     onSubmit={
                         ConnectFailedReasonKey.restrictPlayPermission === disconnectReason
                             ? () => window.location.reload()
