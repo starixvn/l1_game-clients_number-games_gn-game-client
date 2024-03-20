@@ -5,8 +5,7 @@
         "gameName": "BacBall1",
         "socketInfo": {
             "namespace": "bacball1",
-            "path": "bacball1",
-            "serviceName": "baccarat-ball1"
+            "path": "bacball1"
         },
         "durations": {
             "wholeRound": 114,
@@ -26,8 +25,7 @@
         "tolgeeNamespace": "BacBall",
         "socketInfo": {
             "namespace": "bacball2",
-            "path": "bacball2",
-            "serviceName": "bac-ball-2"
+            "path": "bacball2"
         },
         "durations": {
             "wholeRound": 114,

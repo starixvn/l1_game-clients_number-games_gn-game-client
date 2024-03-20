@@ -36,9 +36,8 @@ export const Lobby: React.FC<Props> = ({ openGame, lobbyConfigs }) => {
     }, []);
 
     const onStart = () => {
-        let socketGateWay;
-        const offerGameIds = [1001];
-        socketGateWay = initLobbySocket(session, offerGameIds);
+        const offerGameIds = [1001, 1002];
+        const socketGateWay = initLobbySocket(session, offerGameIds);
         setSocket(socketGateWay);
     };
 

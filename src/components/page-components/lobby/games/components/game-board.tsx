@@ -5,11 +5,16 @@ import { GameSettings } from "../../../../game-base/type";
 import { useEffect, useState } from "react";
 import { initLobbyGameTransmitter } from "../lobby-game-transmitter";
 
+const messageEventTypes = {
+    SIGNED_IN: "signedIn",
+};
+
 type Props = {
     gameSettings: GameSettings;
     socket: Socket;
     openGame: Function;
 };
+
 export type LobbyGameTransmitter = {
     register: (messageKey: string, handleMessage: Function) => string;
 };
@@ -24,6 +29,16 @@ export const GameBoard: React.FC<Props> = ({ gameSettings, socket, openGame }) =
             lobbyGameTransmitter.clearAllListener();
         };
     }, [socket, gameSettings.gameName]);
+
+    useEffect(() => {
+        if (transmitter) {
+            transmitter.register(messageEventTypes.SIGNED_IN, handleSignedIn);
+        }
+    }, [transmitter]);
+
+    const handleSignedIn = ({ signedIn }) => {
+        signedIn && socket.emit("getLobbyData", { gameName: gameSettings.gameName });
+    };
 
     return (
         <div className={Styles["game-board-detail"]} id="ico-bacball" onClick={() => openGame(gameSettings.id)}>
