@@ -1,0 +1,95 @@
+.settings {
+    position: absolute;
+    background: var(--opacity-background);
+    top: 40px;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+
+    .settings-popup {
+        width: 90%;
+        background-color: white;
+        margin-right: auto;
+        margin-left: auto;
+        text-align: center;
+        margin-top: 100px;
+
+        .settings-header {
+            border: solid 1px black;
+            border-bottom: none;
+            padding: 10px 10px;
+            position: relative;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+
+            .text {
+            }
+
+            .icon {
+                right: 10px;
+                position: absolute;
+                cursor: pointer;
+                background: url(/static/images/settings/close-icon.png) no-repeat;
+                background-size: 24px 20px;
+                width: 24px;
+                height: 20px;
+            }
+
+            .icon:hover {
+                font-weight: bold;
+            }
+        }
+
+        .settings-content {
+            padding: 20px 20px;
+            border: solid 1px black;
+
+            .settings-sound {
+                border: solid 1px gray;
+                padding: 20px 30px;
+
+                .row {
+                    position: relative;
+                    display: flex;
+                    flex-direction: row;
+                    height: 30px;
+
+                    .text,
+                    .icon {
+                        display: flex;
+                        flex-direction: column;
+                    }
+
+                    .text {
+                        flex-basis: 60%;
+                        text-align: left;
+                    }
+
+                    .icon {
+                        text-align: right;
+                        flex-basis: 40%;
+                        width: 31px;
+                    }
+
+                    .icon-on {
+                        background: url(/static/images/settings/toggle-on.png) no-repeat;
+                        background-size: 31px 18px;
+                        width: 31px;
+                        margin-left: auto;
+                        cursor: pointer;
+                    }
+
+                    .icon-off {
+                        background: url(/static/images/settings/toggle-off.png) no-repeat;
+                        background-size: 31px 18px;
+                        width: 31px;
+                        width: 31px;
+                        margin-left: auto;
+                        cursor: pointer;
+                    }
+                }
+            }
+        }
+    }
+}

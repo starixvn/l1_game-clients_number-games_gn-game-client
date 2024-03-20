@@ -3,6 +3,7 @@ import { User } from "sc-user-service-client/dist/auth";
 import { UserInfo } from "../user-info";
 import Styles from "./header.module.scss";
 import { URLContext } from "../../../_shared/react-contexts/url-context";
+import { SetingEventActionType, useSettingDispatch } from "../../../_shared/react-contexts";
 
 type Props = {
     user: User;
@@ -17,7 +18,17 @@ export const getLogoName = () => {
 };
 
 const Header: React.FC<Props> = (props) => {
-    const imageUrl = `/static/images/${props.isRenderGames ? "bac-number/game-name" : "logo-site"}.svg`
+    const settingDispatch = useSettingDispatch();
+    const openSetting = () => {
+        settingDispatch({
+            type: SetingEventActionType.TOGGLE_SETTING,
+            payload: {
+                isShowedSetting: true,
+            },
+        });
+    };
+
+    const imageUrl = `/static/images/${props.isRenderGames ? "bac-number/game-name" : "logo-site"}.svg`;
 
     return (
         <header className={`${Styles.header}`} data-testid="header">
@@ -28,12 +39,11 @@ const Header: React.FC<Props> = (props) => {
                     </div>
                     <div className={Styles["header-right"]}>
                         <UserInfo user={props.user} />
-                        {
-                            !props.isRenderGames && <button className={Styles["button-setting"]}>
+                        {!props.isRenderGames && (
+                            <button className={Styles["button-setting"]} onClick={openSetting}>
                                 <span className={`icon-setting ${Styles["icon-setting"]}`} />
                             </button>
-                        }
-
+                        )}
                     </div>
                 </div>
             </div>

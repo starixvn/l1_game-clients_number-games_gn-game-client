@@ -23,6 +23,7 @@ import Header from "../header";
 import Styles from "./dashboard.module.scss";
 import NameGenerator from "./register/name-generator";
 import { Lobby } from "../lobby/lobby";
+import { SettingContextProvider } from "../../../_shared/react-contexts";
 
 class Dashboard extends React.PureComponent<Props, State> {
     private notificationSocket: Socket = null;
@@ -353,36 +354,41 @@ class Dashboard extends React.PureComponent<Props, State> {
 
         return (
             <PlayerContextProvider value={authContextValue}>
-                <div className={`${Styles["dashboard"]}`} id={"dashboard"}>
-                    <Header
-                        user={authorizeInfo.user}
-                        toggleAnnouncementModal={this.toggleAnnouncementModal}
-                        offerGames={offerGames}
-                        isShowToolbarGuide={isShowToolbarGuide}
-                        isRenderGames={isRenderGames}
-                    />
+                <SettingContextProvider>
+                    <div className={`${Styles["dashboard"]}`} id={"dashboard"}>
+                        <Header
+                            user={authorizeInfo.user}
+                            toggleAnnouncementModal={this.toggleAnnouncementModal}
+                            offerGames={offerGames}
+                            isShowToolbarGuide={isShowToolbarGuide}
+                            isRenderGames={isRenderGames}
+                        />
 
-                    {isRenderGames ? this.renderGames() : this.renderLobby()}
+                        {isRenderGames ? this.renderGames() : this.renderLobby()}
 
-                    <Footer />
+                        <Footer />
 
-                    {isShowErrorModal && (
-                        <div className={Styles["container-modal"]}>
-                            <div className={`${Styles["bg-opacity"]} ${isBlockUI ? Styles["block-ui-backdrop"] : ""}`}></div>
-                            <BaseDialog
-                                type={ModalType.Center}
-                                isOpen={isShowErrorModal}
-                                onCloseModal={this.closeDialog}
-                                isBlockUI={isBlockUI}
-                            >
-                                <div className={`modal-center red-color ${isBlockUI ? Styles["block-ui-message"] : ""}`}>
-                                    {!isBlockUI && <div className={`icon-close modal-icon-close`} onClick={this.closeDialog}></div>}
-                                    <ErrorApiText errorMessage={this.state.apiError?.message} errorCode={this.state.apiError?.errorCode} />
-                                </div>
-                            </BaseDialog>
-                        </div>
-                    )}
-                </div>
+                        {isShowErrorModal && (
+                            <div className={Styles["container-modal"]}>
+                                <div className={`${Styles["bg-opacity"]} ${isBlockUI ? Styles["block-ui-backdrop"] : ""}`}></div>
+                                <BaseDialog
+                                    type={ModalType.Center}
+                                    isOpen={isShowErrorModal}
+                                    onCloseModal={this.closeDialog}
+                                    isBlockUI={isBlockUI}
+                                >
+                                    <div className={`modal-center red-color ${isBlockUI ? Styles["block-ui-message"] : ""}`}>
+                                        {!isBlockUI && <div className={`icon-close modal-icon-close`} onClick={this.closeDialog}></div>}
+                                        <ErrorApiText
+                                            errorMessage={this.state.apiError?.message}
+                                            errorCode={this.state.apiError?.errorCode}
+                                        />
+                                    </div>
+                                </BaseDialog>
+                            </div>
+                        )}
+                    </div>
+                </SettingContextProvider>
             </PlayerContextProvider>
         );
     }

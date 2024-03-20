@@ -8,6 +8,7 @@ import { Socket } from "socket.io-client";
 import { LobbyConfigs } from "./type";
 import { GameBoard } from "./games/components/game-board";
 import { getAppSettings } from "../../../_shared/app-settings";
+import Settings from "../settings";
 
 type Props = {
     openGame: Function;
@@ -84,6 +85,7 @@ export const Lobby: React.FC<Props> = ({ openGame, lobbyConfigs }) => {
                         openGame={openGame}
                     />
                 ))}
+                <Settings />
             </div>
         )
     );
