@@ -1,11 +1,12 @@
 {
     "1001": {
         "id": 1001,
-        "gameName": "BacBall",
+        "tolgeeNamespace": "BacBall",
+        "gameName": "BacBall1",
         "socketInfo": {
-            "namespace": "bacball",
+            "namespace": "bacball1",
             "path": "bacball",
-            "serviceName": "baccarat-ball"
+            "serviceName": "baccarat-ball1"
         },
         "durations": {
             "wholeRound": 114,

@@ -30,6 +30,7 @@ export enum RoundState {
 
 export interface GameSettings {
     id: number;
+    tolgeeNamespace: string;
     gameName: string;
     socketInfo: SocketInfo;
     durations: GameDurations;
