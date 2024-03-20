@@ -5,7 +5,7 @@
         "gameName": "BacBall1",
         "socketInfo": {
             "namespace": "bacball1",
-            "path": "bacball",
+            "path": "bacball1",
             "serviceName": "baccarat-ball1"
         },
         "durations": {
