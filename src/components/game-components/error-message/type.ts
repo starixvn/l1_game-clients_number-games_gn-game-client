@@ -6,6 +6,6 @@ export interface Props {
 }
 
 export const ConnectFailedReasonKey = {
-    lostConnection: `${ResourceTypes.COMMON}.splash_connection_lost`,
+    lostConnection: `${ResourceTypes.COMMON}.message_lost_game_connection`,
     restrictPlayPermission: `${ResourceTypes.COMMON}.game_excluded`,
 };
