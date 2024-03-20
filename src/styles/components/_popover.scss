@@ -1,34 +1,52 @@
 .popover-custom {
     position: absolute;
     line-height: 2rem;
-    padding: 1.2rem;
-    border-radius: 1rem;
-    box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.4);
-    background: linear-gradient(90deg, rgba(94, 54, 242, 1) 0%, rgba(110, 75, 240, 1) 100%);
+    padding: 2rem;
+    background: linear-gradient(180deg, rgba(0, 86, 40, 0.62) 5%, rgba(0, 204, 57, 1) 100%);
+    border-radius: 1.6rem;
     color: #fff;
+
+    .popover-bg {
+        position: absolute;
+        border-radius: 1.6rem;
+        top: 0.1rem;
+        left: 0.1rem;
+        right: 0.1rem;
+        bottom: 0.1rem;
+        background: linear-gradient(180deg, rgba(0, 21, 6, 0.9) 5%, rgb(0, 54, 15) 100%);
+        backdrop-filter: blur(0.1rem);
+    }
 
     &:before,
     &:after {
         content: "";
+        border: 1rem solid;
         position: absolute;
     }
 
     &.top:after {
-        bottom: -1.5rem;
-        right: 1.6rem;
+        bottom: -1.8rem;
+        right: 6.6rem;
+        z-index: 1;
+        border-color: #00360f transparent transparent transparent;
+    }
+
+    &.top:before {
+        bottom: -2rem;
+        right: 6.6rem;
+        border-color: #159639 transparent transparent transparent;
+    }
+
+    &.bottom:after {
+        top: -14px;
+        right: 6.6rem;
         border: 0.8rem solid;
-        border-color: #6c49f0 transparent transparent transparent;
+        border-color: transparent transparent #001506 transparent;
     }
 
     &.bottom:before {
-        top: -1.5rem;
-        right: 1.6rem;
-        border: 0.8rem solid;
-        border-color: transparent transparent #6c49f0 transparent;
-    }
-
-    .btn {
-        height: 3.6rem;
-        line-height: 3.6rem;
+        top: -18px;
+        right: 6.4rem;
+        border-color: transparent transparent #013b11 transparent;
     }
 }

@@ -17,38 +17,21 @@
     }
 }
 
-@keyframes move-up-result-animation-cards {
-    0% {
-        transform: translate3d(0, 0, 0);
-    }
+.pulse {
+    animation: pulse var(--pulse-duration) infinite;
+}
 
-    30% {
-        transform: translate3d(0, calc(var(--move-up-distance) * 0.3), 0);
+@keyframes pulse {
+    from {
+        background-color: var(--btn-green-background-hover);
+        box-shadow: 0 0 9px #333;
     }
-
     50% {
-        transform: translate3d(0, calc(var(--move-up-distance) * 0.5), 0);
+        background-color: var(--btn-green-background);
+        box-shadow: 0 0 18px var(--btn-green-glow-color);
     }
-
-    70% {
-        transform: translate3d(0, calc(var(--move-up-distance) * 0.7), 0);
-    }
-
-    100% {
-        transform: translate3d(0, var(--move-up-distance), 0);
-    }
-}
-
-.hide-result-animation {
-    animation: hide-result-animation 0.5s linear forwards !important;
-}
-
-@keyframes hide-result-animation {
-    0% {
-        opacity: 1;
-    }
-
-    100% {
-        opacity: 0;
+    to {
+        background-color: (var(--btn-green-background-hover));
+        box-shadow: 0 0 9px #333;
     }
 }

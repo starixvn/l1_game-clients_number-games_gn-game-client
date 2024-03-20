@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
+
 import { confirmBet } from "../../../_shared/constants";
-import { usePlayerContext, useGameActionContext } from "../../../_shared/react-contexts";
+import { useGameActionContext, usePlayerContext } from "../../../_shared/react-contexts";
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import { useClickSound, useSNTranslate } from "../../../_shared/react-hooks";
@@ -73,7 +74,7 @@ const ConfirmBet: React.FC = () => {
                     {t({ key: "button_cancel" })}
                 </button>
                 <button
-                    className={`btn-green ${Styles["btn-confirm-bet"]}`}
+                    className={`btn-green pulse ${Styles["btn-confirm-bet"]}`}
                     onClick={() => onConfirm()}
                     type="button"
                     data-testid="btn-confirm-bet"

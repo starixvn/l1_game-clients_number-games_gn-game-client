@@ -32,6 +32,7 @@
 }
 
 .btn-green {
+    --pulse-duration: 2s;
     @extend %btn;
     background-color: var(--btn-green-background);
 

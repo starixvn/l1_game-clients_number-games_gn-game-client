@@ -1,7 +1,8 @@
 import { Markup } from "interweave";
 import { useEffect, useRef, useState } from "react";
 import { isIOS, isMobileOnly } from "react-device-detect";
-import { StorageHelper, localStorageKeys } from "../../../../_shared/helpers";
+
+import { localStorageKeys, StorageHelper } from "../../../../_shared/helpers";
 import { SystemEventActionType, usePlayerContext, useSystemContext, useSystemDispatch } from "../../../../_shared/react-contexts";
 import { useGameStateContext } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
 import { useClickSound, useSNTranslate } from "../../../../_shared/react-hooks";
@@ -102,12 +103,13 @@ export const QuickBetBtn = () => {
 
     const firstLoginQuickBetPopup = (
         <div ref={tooltipRef} className={toolTipClass}>
-            <div className={Styles.content}>{<Markup content={t(`enable_quick_bet_hint`).replaceTolgeeFormat()}></Markup>}</div>
+            <div className="popover-bg"></div>
+            <div className="relative">{<Markup content={t(`enable_quick_bet_hint`).replaceTolgeeFormat()}></Markup>}</div>
             <div className={Styles.action}>
                 <button id="btn-cancel-quickbet" className={`btn-grey ${Styles["btn"]}`} onClick={closeHintTooltip}>
                     {t("button_cancel")}
                 </button>
-                <button id="btn-on-quickbet" className={`btn-green ${Styles["btn"]}`} onClick={onEnableFirstLogin}>
+                <button id="btn-on-quickbet" className={`btn-green pulse ${Styles["btn"]}`} onClick={onEnableFirstLogin}>
                     {t("button_enable_quickbet")}
                 </button>
             </div>
