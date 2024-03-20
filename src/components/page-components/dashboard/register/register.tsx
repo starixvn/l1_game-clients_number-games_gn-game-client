@@ -108,6 +108,7 @@ export class Register extends Component<RegisterProps, RegisterState> {
                             type="text"
                             className={styles.input}
                             value={name}
+                            data-testid="username"
                             onChange={(event) => this.setOrGenerateName(event.target.value)}
                             placeholder={t("Common.enter_your_name")}
                         />
