@@ -1,14 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
+import { Socket } from "socket.io-client";
+
+import { getAppSettings } from "../../../_shared/app-settings";
+import { usePlayerContext } from "../../../_shared/react-contexts";
+import { BackgroundGalaxy } from "../background";
+import Settings from "../settings";
 import { Banner } from "./games/components/banner";
-import { GameIcon } from "./games/components/game-icon";
+import { GameBoard } from "./games/components/game-board";
 import { initLobbySocket } from "./lobby-socket-connection";
 import Styles from "./lobby.module.scss";
-import { usePlayerContext } from "../../../_shared/react-contexts";
-import { Socket } from "socket.io-client";
 import { LobbyConfigs } from "./type";
-import { GameBoard } from "./games/components/game-board";
-import { getAppSettings } from "../../../_shared/app-settings";
-import Settings from "../settings";
 
 type Props = {
     openGame: Function;
@@ -66,15 +67,7 @@ export const Lobby: React.FC<Props> = ({ openGame, lobbyConfigs }) => {
     return (
         socket && (
             <div className={Styles["lobby-container"]}>
-                <div className="background-galaxy">
-                    <img className="galaxy-2" src="/static/images/bg-galaxy.jpg" alt="galaxy" />
-                    <img className="galaxy-1" src="/static/images/bg-galaxy.jpg" alt="galaxy" />
-                </div>
-                <div className="star-field">
-                    <div className="layer"></div>
-                    <div className="layer"></div>
-                    <div className="layer"></div>
-                </div>
+                <BackgroundGalaxy />
                 <Banner />
                 {gamesSettings?.map((gameSettings) => (
                     <GameBoard

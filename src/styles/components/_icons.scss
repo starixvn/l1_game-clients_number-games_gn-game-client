@@ -1,7 +1,7 @@
 [class^="icon-"],
 [class*=" icon-"] {
     /* use !important to prevent issues with browser extensions that change fonts */
-    font-family: "icomoon", serif !important;
+    font-family: "icomoon" !important;
     speak: never;
     font-style: normal;
     font-weight: normal;
@@ -14,6 +14,16 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-pencil:before {
+    content: "\e91a";
+    font-size: 4.4rem;
+    color: #eaeaea;
+}
+.icon-refresh:before {
+    content: "\e91b";
+    font-size: 4.4rem;
+    color: #fff;
+}
 .icon-edit:before {
     content: "\e914";
     color: #6c737b;
@@ -42,73 +52,65 @@
     margin-left: -1em;
     color: rgb(255, 255, 255);
 }
-
 .icon-setting:before {
     content: "\e913";
     color: #fff;
 }
-
 .icon-copy:before {
     content: "\e911";
     color: #9ca3ae;
 }
-
 .icon-info:before {
     content: "\e912";
     color: #fff;
 }
-
 .icon-clock:before {
     content: "\e910";
+    color: #fff;
 }
-
 .icon-music-off:before {
     content: "\e90d";
     color: #fff;
 }
-
 .icon-music-on:before {
     content: "\e90e";
     color: #fff;
 }
-
 .icon-pf:before {
     content: "\e90f";
     color: #fff;
 }
-
 .icon-history:before {
     content: "\e90a";
     color: #fff;
 }
-
 .icon-menu:before {
     content: "\e90b";
     color: #fff;
 }
-
 .icon-music:before {
     content: "\e90c";
     color: #fff;
 }
-
 .icon-warning:before {
     content: "\e908";
+    color: #fff;
 }
 .icon-close:before {
     content: "\e909";
     color: #fff;
 }
-
 .icon-coin-outline:before {
     content: "\e907";
     color: #fff;
 }
 .icon-coin:before {
     content: "\e905";
+    color: #fff;
 }
 .icon-user:before {
     content: "\e906";
+    color: #fff;
 }
 .icon-back:before {
     content: "\e900";

@@ -32,7 +32,7 @@ const ProfilePicture: React.FC<{ avatarId: number; isEditable?: boolean; onClick
 const EditIcon = () => {
     return (
         <div className={Styles["chose-avatar"]} data-testid="edit-icon">
-            <span className={`icon-edit ${Styles["icon-edit"]}`}></span>
+            <span className={`icon-pencil ${Styles["icon-edit"]}`}></span>
         </div>
     );
 };

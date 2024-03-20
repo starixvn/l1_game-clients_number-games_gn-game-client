@@ -103,8 +103,8 @@ body {
 body {
     padding: 0;
     margin: 0;
-    background: var(--page-background-color) var(--background-image) no-repeat top center fixed;
-    font: 500 1.4rem/1.5 var(--font-family);
+    background: var(--page-background-color) var(--game-background-image) no-repeat top center fixed;
+    font: 1.4rem/1.5 var(--font-family);
     color: var(--text-color);
     overscroll-behavior: contain;
     background-size: cover;

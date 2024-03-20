@@ -95,6 +95,7 @@ export class Register extends Component<RegisterProps, RegisterState> {
             <FirstLoginContainer>
                 <div className={styles.welcome}>
                     <TextBlock>{t("SabaNumber.message_welcome")}</TextBlock>
+                    <h1 className={styles["welcom-numbergame"]}>{t("SabaNumber.message_welcome_numbergame")}</h1>
                 </div>
 
                 <ProfilePicture avatarId={avatar} isEditable={true} onClick={this.toggleAvatarGallery.bind(this)} />
@@ -114,17 +115,17 @@ export class Register extends Component<RegisterProps, RegisterState> {
                         <span className={`icon-close ${styles.clear}`} onClick={() => this.setOrGenerateName("")} />
 
                         <button className={styles.refresh} onClick={() => this.setOrGenerateName()} type="button">
-                            <span className="icon-warning" />
+                            <span className="icon-refresh" />
                         </button>
                     </div>
                     {!isValidUsername && <label className={styles.error}>{formValidity}</label>}
 
-                    <button className={styles.submit} type="submit">
+                    <button className={`btn-green ${styles.submit}`} type="submit">
                         {t("SabaNumber.button_play_now")}
                     </button>
                 </form>
 
-                <label className={styles.note}>{t("SabaNumber.create_nickname_note")}</label>
+                <p className={styles.note}>{t("SabaNumber.create_nickname_note")}</p>
 
                 {isGalleryOpened && (
                     <AvatarGallery

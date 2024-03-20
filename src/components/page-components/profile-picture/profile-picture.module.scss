@@ -1,25 +1,17 @@
 [data-theme="light"] {
     .profile-picture {
-        --icon-edit-background: radial-gradient(50% 50% at 50% 50%, #ffffff 0%, #f0f0f0 100%);
-        --icon-edit-border: #f2f2f2;
-        --icon-edit-color: #9c9c9c;
+        --icon-edit-background: #426278;
+        --icon-edit-border: #242c32;
+        --icon-edit-color: #eaeaea;
     }
 }
 
 .profile-picture {
     position: relative;
-    width: 9.4rem;
-    height: 9.4rem;
+    width: 9.7rem;
+    height: 9.7rem;
     margin: 3rem auto 2.2rem;
     border-radius: 50%;
-    border: 0.2rem solid #5574A7;
-
-    @media (min-width: 768px) {
-        width: 13rem;
-        height: 13rem;
-        max-width: 100%;
-        max-height: 100%;
-    }
 
     .avatar {
         width: 100%;
