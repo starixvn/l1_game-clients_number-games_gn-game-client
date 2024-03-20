@@ -5,6 +5,7 @@ import { usePlayerContext } from "../../../_shared/react-contexts";
 import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import Styles from "./bet-option.module.scss";
 import { BaseProps } from "./types";
+import { RoundState } from "../../game-base/type";
 
 type Props = {
     animationClass?: string;
@@ -15,17 +16,18 @@ export const Odds: React.FC<Props> = ({ tolgeeNamespace, choice, className, anim
     const [showOddsIcon, setShowOddsIcon] = useState(false);
     const [isOddUp, setIsOddUp] = useState(false);
     const [oddsValue, setOddsValue] = useState(0);
-    const { gameConfigs } = useGameStateContext();
+    const { gameConfigs, roundState } = useGameStateContext();
     const { fractionalOddsFormat } = usePlayerContext();
 
     useEffect(() => {
         const odds = gameConfigs?.odds?.[choice] ?? 0;
-
-        oddsValue > 0 && oddsValue !== +odds && setShowOddsIcon(true);
-
-        setIsOddUp(odds > oddsValue);
-        setOddsValue(odds);
-    }, [gameConfigs?.odds?.[choice] ?? 0]);
+        oddsValue === 0 && setOddsValue(odds);
+        if (roundState === RoundState.InRound) {
+            oddsValue > 0 && oddsValue !== +odds && setShowOddsIcon(true);
+            setIsOddUp(odds > oddsValue);
+            setOddsValue(odds);
+        }
+    }, [gameConfigs?.odds?.[choice] ?? 0, roundState]);
 
     useEffect(() => {
         let timeOut: NodeJS.Timeout;
