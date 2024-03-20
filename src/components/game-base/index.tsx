@@ -200,18 +200,8 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                     isUserGesture: true,
                 },
             });
-        this.updateTranslateNameSpace();
         this.gameStateHandler.setReturnToGameState(this.props.dispatch);
         this.cancelConfirmBetAndResetBets();
-    }
-
-    updateTranslateNameSpace() {
-        this.props.dispatch({
-            type: GameEventActionType.TOLGEE_NAMESPACE,
-            payload: {
-                tolgeeNamespace: this.props.tolgeeNamespace,
-            },
-        });
     }
 
     protected async connectToGameService() {
@@ -617,17 +607,11 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     private renderConnectFailed(roundState: RoundState, disconnectReason: string): React.ReactNode {
-        const { tolgeeNamespace, id } = this.props;
+        const isGameExcluded = disconnectReason === ConnectFailedReasonKey.restrictPlayPermission;
         return (
             roundState === RoundState.ConnectFailed && (
                 <ConnectFailedMessage
-                    tolgeeNamespace={tolgeeNamespace}
-                    id={id}
-                    onSubmit={
-                        ConnectFailedReasonKey.restrictPlayPermission === disconnectReason
-                            ? () => window.location.reload()
-                            : this.retryConnect.bind(this)
-                    }
+                    onSubmit={isGameExcluded ? () => window.location.reload() : this.retryConnect.bind(this)}
                     reason={disconnectReason}
                 />
             )

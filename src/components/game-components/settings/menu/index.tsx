@@ -4,7 +4,6 @@ import { GameEventActionType } from "../../../../_shared/react-contexts/game-sta
 import { useGameStatesDispatch } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
 import { useClickSound } from "../../../../_shared/react-hooks";
 import { useSNTranslate } from "../../../../_shared/react-hooks/use-translator";
-import { Tooltip } from "../../tooltip";
 import Styles from "./menu.module.scss";
 import { Music } from "./music";
 import { Sound } from "./sound";
@@ -15,7 +14,6 @@ export const Menu: React.FC = () => {
     const { t } = useSNTranslate();
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const wrapperRef = useRef<HTMLDivElement>(null);
-    const toggleBtnRef = useRef<HTMLDivElement>(null);
     const specialClassByDevice = !isMobileOnly ? "desktop-style" : "";
     const dispatch = useGameStatesDispatch();
     const clickSound = useClickSound();
@@ -58,7 +56,6 @@ export const Menu: React.FC = () => {
     return (
         <div ref={wrapperRef} className={`${Styles["game-menu"]} ${Styles[specialClassByDevice]}`}>
             <div
-                ref={toggleBtnRef}
                 className={`${Styles["menu-toggle-btn"]}`}
                 id="icon-menu"
                 onClick={() => {
@@ -67,7 +64,6 @@ export const Menu: React.FC = () => {
                 }}
             >
                 <span className={`icon-menu ${Styles["icon-menu"]}`}></span>
-                <Tooltip message={t("menu")} hoverWrapper={toggleBtnRef}></Tooltip>
             </div>
             <div className="dropdown">
                 <div className={`dropdown-menu right ${Styles["dropdown-menu"]} ${dropdownOpen ? "show" : ""}`}>

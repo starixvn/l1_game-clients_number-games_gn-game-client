@@ -10,7 +10,6 @@ import {
 } from "../../../components/game-base/type";
 
 export interface GameStateContextModel {
-    tolgeeNamespace: string;
     isConnect: boolean;
     signedIn: boolean;
     roundState: RoundState;
@@ -60,7 +59,6 @@ export interface GameStateContextModel {
 
 export const initialGameStateContextModel = () => {
     return {
-        tolgeeNamespace: "",
         isConnect: false,
         signedIn: false,
         roundState: RoundState.None,

@@ -40,7 +40,6 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
     const {
         um_message,
         gameConfigs,
-        tolgeeNamespace,
         roundData,
         roundHistory,
         roundId,
@@ -115,13 +114,6 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
                 roundState: RoundState.Disabled,
                 disabledMessage: um_message[LanguageLocaleMapper[tolgee.getLanguage() || "en"]], // TO DO: remove hard code
                 showResultInfo: false,
-            };
-        }
-
-        case GameEventActionType.TOLGEE_NAMESPACE: {
-            return {
-                ...state,
-                tolgeeNamespace,
             };
         }
 

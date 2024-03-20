@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { useGameActionContext, useSystemContext } from "../../_shared/react-contexts";
+import { useGameActionContext, useGameContext, useSystemContext } from "../../_shared/react-contexts";
 import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
 import { useShowHighlightPrevResult } from "../../_shared/react-hooks/use-high-light";
 import { RoundState } from "../../components/game-base/type";
@@ -24,7 +24,8 @@ export const BacBallBetOptionsComponent = () => {
     );
 
     const showHighlightPrevResult = useShowHighlightPrevResult;
-    const { roundState, tolgeeNamespace } = useGameStateContext();
+    const { roundState } = useGameStateContext();
+    const { tolgeeNamespace } = useGameContext();
 
     const isShowDisabledLayer = roundState === RoundState.LockingBet;
 
