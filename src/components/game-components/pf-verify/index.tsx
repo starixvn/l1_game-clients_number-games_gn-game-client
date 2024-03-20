@@ -1,7 +1,7 @@
 import { Dispatch, FC, useMemo, useReducer } from "react";
 import { createPortal } from "react-dom";
 import { v4 as uuidv4 } from "uuid";
-import { getOrdinalNumber } from "../../../_shared/helpers";
+import { getGlossaryTranslate, getOrdinalNumber } from "../../../_shared/helpers";
 import { useBallColor } from "../../../_shared/helpers/ball-color-helper";
 import { useGameContext } from "../../../_shared/react-contexts";
 import { useClickSound, useCommonTranslate, useSNTranslate, useTranslator } from "../../../_shared/react-hooks";
@@ -98,10 +98,10 @@ const PFVerify: FC<{ pfResult: PFResult; dispatchChildModalState: Dispatch<PFDis
     pfResult,
     dispatchChildModalState: dispatch,
 }) => {
-    const { gameName } = useGameContext();
+    const { tolgeeNamespace } = useGameContext();
     const { t: translateCommon } = useCommonTranslate();
     const { t: translateSNGames } = useSNTranslate();
-    const { t: translateBacBall } = useTranslator([gameName]);
+    const { t: translateBacBall } = useTranslator([tolgeeNamespace]);
     const clickSound = useClickSound();
 
     const drawResult = useMemo(() => {
@@ -155,7 +155,9 @@ const PFVerify: FC<{ pfResult: PFResult; dispatchChildModalState: Dispatch<PFDis
                     return ["player", "banker"].map((item) => {
                         return (
                             <div className="text-center" key={uuidv4()}>
-                                <div className="text-white font-weight-medium text-uppercase">{translateBacBall(`glossary_${item}`)}</div>
+                                <div className="text-white font-weight-medium text-uppercase">
+                                    {translateBacBall(getGlossaryTranslate(tolgeeNamespace, item))}
+                                </div>
                                 <div className={Styles["balls-container"]}>
                                     {drawResult.result.map((child, index) => (
                                         <span key={uuidv4()} className={`${Styles["ball"]} ${Styles[ballColor({ number: child[item] })]}`}>

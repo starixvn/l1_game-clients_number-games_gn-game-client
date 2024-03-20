@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import { confirmBet } from "../../../_shared/constants";
 import { NoticeErrorCode } from "../../../_shared/constants/error-code-dictionary";
-import { GetLocalizedErrorMessage, localStorageKeys, StorageHelper } from "../../../_shared/helpers";
+import { getGlossaryTranslate, GetLocalizedErrorMessage, localStorageKeys, StorageHelper } from "../../../_shared/helpers";
 import {
     findHedgeBetGroup,
     getAccountBalance,
@@ -21,6 +21,7 @@ import { Notice, RoundState, SuggestBet } from "../type";
 import { GameMessageHandler, messageEventType } from "./";
 
 export type PlaceBetHandlerProps = {
+    tolgeeNamespace: string;
     gameName: string;
     dispatch: Function;
     gameMessageHandler: GameMessageHandler;
@@ -304,10 +305,9 @@ export class PlaceBetHandler {
         let betChoice1 = "";
         let betChoice2 = "";
         const hedgeBetGroup = this.props.hedgeBetGroups.find((group) => group.includes(betChoice));
-
         if (betChoice && hedgeBetGroup) {
-            betChoice1 = this.props.translate(hedgeBetGroup[0]);
-            betChoice2 = this.props.translate(hedgeBetGroup[1]);
+            betChoice1 = this.props.translate(getGlossaryTranslate(this.props.tolgeeNamespace, hedgeBetGroup[0]));
+            betChoice2 = this.props.translate(getGlossaryTranslate(this.props.tolgeeNamespace, hedgeBetGroup[1]));
         }
 
         return {

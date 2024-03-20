@@ -2,11 +2,11 @@ import { useTranslate } from "@tolgee/react";
 import { createContext, useContext, useReducer } from "react";
 import { RoundState } from "../../../components/game-base/type";
 import { LanguageLocaleMapper } from "../../constants";
+import { randomNumberSeries } from "../../helpers";
 import { GetLocalizedErrorMessage } from "../../helpers/notice-helper";
+import { tolgee } from "../../tolgee";
 import { GameEventAction, GameEventActionType } from "./game-event-action";
 import { GameStateContextModel, initialGameStateContextModel } from "./game-state-context-model";
-import { tolgee } from "../../tolgee";
-import { randomNumberSeries } from "../../helpers";
 
 export const GameStateContext = createContext({ rate: 1 } as GameStateContextModel);
 const GameStateDispatchContext = createContext(null);
@@ -40,6 +40,7 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
     const {
         um_message,
         gameConfigs,
+        tolgeeNamespace,
         roundData,
         roundHistory,
         roundId,
@@ -114,6 +115,13 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
                 roundState: RoundState.Disabled,
                 disabledMessage: um_message[LanguageLocaleMapper[tolgee.getLanguage() || "en"]], // TO DO: remove hard code
                 showResultInfo: false,
+            };
+        }
+
+        case GameEventActionType.TOLGEE_NAMESPACE: {
+            return {
+                ...state,
+                tolgeeNamespace,
             };
         }
 
@@ -205,7 +213,6 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
             const isPlaceBet = apiError.isPlaceBetFailed ? apiError.isPlaceBetFailed : false;
             const errorCode = apiError.errorCode;
             const message = GetLocalizedErrorMessage(errorCode, isPlaceBet);
-            // const gameName = this.props.t(`${this.props.gameName.toLowerCase()}:${GameResourceKeys.GAME_NAME}`);
             return {
                 ...state,
                 notice: {

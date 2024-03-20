@@ -22,14 +22,21 @@ export const BacBallBetOptionsComponent = () => {
         (choice: string) => gameActionContext.placeBet(choice, systemContext.selectedChip),
         [gameActionContext, systemContext.selectedChip]
     );
-    const gameName = "BacBall";
+
     const showHighlightPrevResult = useShowHighlightPrevResult;
-    const { roundState } = useGameStateContext();
+    const { roundState, tolgeeNamespace } = useGameStateContext();
+
     const isShowDisabledLayer = roundState === RoundState.LockingBet;
 
     const renderTotalBet = (choice: string) => {
         const tieClassName = `justify-center mt-1`;
-        return <TotalBet choice={choice} className={`${choice === BacBallBetOptions.TIE ? tieClassName : ""}`} gameName={gameName} />;
+        return (
+            <TotalBet
+                choice={choice}
+                className={`${choice === BacBallBetOptions.TIE ? tieClassName : ""}`}
+                tolgeeNamespace={tolgeeNamespace}
+            />
+        );
     };
 
     const renderBetPercentage = (choice: string) => {
@@ -37,22 +44,22 @@ export const BacBallBetOptionsComponent = () => {
             <BetPercentage
                 choice={choice}
                 className={Style.percent}
-                gameName={gameName}
+                tolgeeNamespace={tolgeeNamespace}
                 percentageColor={BacBallBetOptionsPercentageColor[choice]}
             />
         );
     };
 
     const renderBetChoice = (choice: string) => {
-        return <BetChoice choice={choice} className={`${Style[`bet-name-${choice}`]}`} gameName={gameName} />;
+        return <BetChoice choice={choice} className={`${Style[`bet-name-${choice}`]}`} tolgeeNamespace={tolgeeNamespace} />;
     };
 
     const renderOdds = (choice: string) => {
-        return <Odds choice={choice} gameName={gameName} animationDuration={6} />;
+        return <Odds choice={choice} tolgeeNamespace={tolgeeNamespace} animationDuration={6} />;
     };
 
     const renderOwnBet = (choice: string) => {
-        return <OwnBet choice={choice} gameName={gameName} />;
+        return <OwnBet choice={choice} tolgeeNamespace={tolgeeNamespace} />;
     };
 
     useEffect(() => {
@@ -102,7 +109,7 @@ export const BacBallBetOptionsComponent = () => {
                 <button
                     ref={(el) => (rippleButtons.current[choice === "player" ? 0 : 1] = el)}
                     className={`btn-ripple ${Style["btn-ripple"]} ${isShowDisabledLayer}`}
-                    id={`${gameName}-choice-${choice}`}
+                    id={`${tolgeeNamespace}-choice-${choice}`}
                     onClick={() => {
                         onClickBet(choice);
                     }}
@@ -147,7 +154,7 @@ export const BacBallBetOptionsComponent = () => {
                 <button
                     ref={(el) => (rippleButtons.current[2] = el)}
                     className={`btn-ripple ${Style["btn-ripple"]} ${isShowDisabledLayer}`}
-                    id={`${gameName}-choice-tie`}
+                    id={`${tolgeeNamespace}-choice-tie`}
                     onClick={() => {
                         onClickBet(BacBallBetOptions.TIE);
                     }}

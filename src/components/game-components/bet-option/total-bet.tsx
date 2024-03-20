@@ -22,7 +22,7 @@ const convertStakeToString = (amount: number, rate: number) => {
     return "";
 };
 
-export const TotalBet: React.FC<BaseProps> = ({ gameName, choice, className }) => {
+export const TotalBet: React.FC<BaseProps> = ({ tolgeeNamespace, choice, className }) => {
     const { totalBets } = useGameBettingZoneContext();
     const { rate } = useGameStateContext();
     const totalBet = totalBets?.[choice] ?? 0;
@@ -34,7 +34,7 @@ export const TotalBet: React.FC<BaseProps> = ({ gameName, choice, className }) =
     return (
         <div className={`flex items-center gap-1 ${Styles["total-stakes"]} ${className}`}>
             <span className={`icon-coin ${Styles["icon-coin"]}`}></span>
-            <span id={`${gameName}-${choice}-total-stakes`} className={Styles["stakes-value"]}>
+            <span id={`${tolgeeNamespace}-${choice}-total-stakes`} className={Styles["stakes-value"]}>
                 {convertStakeToString(totalBet, rate)}
             </span>
         </div>

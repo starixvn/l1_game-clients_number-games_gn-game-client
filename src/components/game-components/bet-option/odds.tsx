@@ -11,7 +11,7 @@ type Props = {
     animationDuration?: number;
 } & BaseProps;
 
-export const Odds: React.FC<Props> = ({ gameName, choice, className, animationDuration }) => {
+export const Odds: React.FC<Props> = ({ tolgeeNamespace, choice, className, animationDuration }) => {
     const [showOddsIcon, setShowOddsIcon] = useState(false);
     const [isOddUp, setIsOddUp] = useState(false);
     const [oddsValue, setOddsValue] = useState(0);
@@ -44,7 +44,7 @@ export const Odds: React.FC<Props> = ({ gameName, choice, className, animationDu
     return useMemo(() => {
         return oddsValue != 0 ? (
             <div
-                id={`${gameName}-${choice}-odds`}
+                id={`${tolgeeNamespace}-${choice}-odds`}
                 className={`text-center ${Styles["bet-odds"]} ${className} ${isOddUp ? Styles["up"] : Styles["down"]} ${
                     showOddsIcon ? Styles["show-odds-icon"] : ""
                 }`}

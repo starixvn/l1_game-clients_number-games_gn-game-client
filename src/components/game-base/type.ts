@@ -39,6 +39,7 @@ export interface GameSettings {
 
 export type GamePropsContext = {
     id?: number;
+    tolgeeNamespace?: string;
     gameName?: string;
     socketInfo?: SocketInfo;
     durations?: GameDurations;

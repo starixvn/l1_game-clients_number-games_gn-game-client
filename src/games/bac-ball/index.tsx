@@ -103,7 +103,8 @@ const BacBallWrapper = (props) => {
 };
 
 const BacBallFC = (props) => {
-    const { t } = useTranslator();
+    const tolgeeNamespace = props["tolgeeNamespace"];
+    const { t } = useTranslator(tolgeeNamespace);
 
     return (
         <BacBall
@@ -114,6 +115,7 @@ const BacBallFC = (props) => {
                 systemContextModel: useSystemContext(),
                 systemDispatch: useSystemDispatch(),
                 translate: t,
+                tolgeeNamespace,
                 hedgeBetGroups: [[BacBallBetOptions.PLAYER, BacBallBetOptions.BANKER]],
             }}
         />

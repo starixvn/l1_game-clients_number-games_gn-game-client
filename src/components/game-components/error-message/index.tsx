@@ -6,21 +6,23 @@ import { ModalType } from "../base-dialog/type";
 import Styles from "./error-message.module.scss";
 import { ConnectFailedReasonKey } from "./type";
 
-export const ConnectFailedMessage: React.FC<{ gameName: string; id: number; onSubmit: () => void; reason: string }> = ({
-    gameName,
+export const ConnectFailedMessage: React.FC<{ tolgeeNamespace: string; id: number; onSubmit: () => void; reason: string }> = ({
+    tolgeeNamespace,
     id,
     onSubmit,
     reason,
 }) => {
-    const { t } = useTranslator([gameName]);
+    const { t } = useTranslator([tolgeeNamespace]);
     return (
         <BaseDialog type={ModalType.Center} isOpen={true}>
             <div className={`modal-center yellow-color ${Styles["error-message-container"]}`}>
                 <div className={`${Styles["warning-container"]}`}>
                     <div className={`icon-warning ${Styles["icon-warning"]}`}></div>
                 </div>
-                <div className={Styles["title"]}>{t(`${gameName}.game_name_${id}`)}</div>
-                <div className={Styles["content"]}>{t(reason, { gameName }).replaceTolgeeFormat().replace(gameName, "")}</div>
+                <div className={Styles["title"]}>{t(`${tolgeeNamespace}.game_name_${id}`)}</div>
+                <div className={Styles["content"]}>
+                    {t(reason, { gameName: tolgeeNamespace }).replaceTolgeeFormat().replace(tolgeeNamespace, "")}
+                </div>
                 <div className={Styles["list-action"]}>
                     <button onClick={() => onSubmit()} className={`btn-green w-100 ${Styles["reconnect"]}`}>
                         {reason === ConnectFailedReasonKey.lostConnection

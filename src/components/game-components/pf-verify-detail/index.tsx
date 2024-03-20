@@ -1,10 +1,10 @@
 import { FC } from "react";
-import { useCommonTranslate, useTranslator } from "../../../_shared/react-hooks";
 import { createPortal } from "react-dom";
+import { useBallColor } from "../../../_shared/helpers/ball-color-helper";
+import { useGameContext } from "../../../_shared/react-contexts";
+import { useCommonTranslate, useTranslator } from "../../../_shared/react-hooks";
 import ModalContainer from "../modal-container";
 import { ButtonPFGuide } from "../pf-guide";
-import { useGameContext } from "../../../_shared/react-contexts";
-import { useBallColor } from "../../../_shared/helpers/ball-color-helper";
 import Styles from "../pf-setting/pf-setting.module.scss";
 
 const PFVerifyDetailModal: FC<{ handleCloseModal: Function; isOpen: boolean; data?: any }> = ({ handleCloseModal, isOpen, data }) => {
@@ -33,9 +33,9 @@ const PFVerifyDetailModal: FC<{ handleCloseModal: Function; isOpen: boolean; dat
 };
 
 const PFVerifyDetail: FC = () => {
-    const { gameName } = useGameContext();
+    const { tolgeeNamespace } = useGameContext();
     const { t: translateCommon } = useCommonTranslate();
-    const { t: translateBacBall } = useTranslator([gameName]);
+    const { t: translateBacBall } = useTranslator([tolgeeNamespace]);
     const ballColor = useBallColor;
     return (
         <div className={Styles["pf-setting-container"]}>

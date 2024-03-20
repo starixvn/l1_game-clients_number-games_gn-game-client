@@ -1,20 +1,20 @@
 import { FC, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
-import { useClickSound, useCommonTranslate, useTranslator } from "../../../_shared/react-hooks";
 import { createPortal } from "react-dom";
+import { v4 as uuidv4 } from "uuid";
+import { useGameContext, usePlayerContext } from "../../../_shared/react-contexts";
+import { useClickSound, useCommonTranslate, useTranslator } from "../../../_shared/react-hooks";
+import { ClientSeedInfo } from "../../game-base/type";
 import ModalContainer from "../modal-container";
 import { ButtonPFGuide } from "../pf-guide";
-import { useGameContext, usePlayerContext } from "../../../_shared/react-contexts";
 import Styles from "../pf-setting/pf-setting.module.scss";
-import { ClientSeedInfo } from "../../game-base/type";
 
 const PFClientSeedInfoModal: FC<{ handleCloseModal: Function; isShowPFClientSeedInfo: boolean; clientSeedInfo: ClientSeedInfo }> = ({
     handleCloseModal,
     isShowPFClientSeedInfo,
     clientSeedInfo,
 }) => {
-    const { gameName } = useGameContext();
-    const { t: translateBacBall } = useTranslator([gameName]);
+    const { tolgeeNamespace } = useGameContext();
+    const { t: translateBacBall } = useTranslator([tolgeeNamespace]);
 
     return (
         isShowPFClientSeedInfo &&
@@ -72,9 +72,9 @@ const encryptName = (name: string) => {
 
 const PFClientSeedInfo: FC<{ clientSeedInfo: ClientSeedInfo }> = ({ clientSeedInfo }) => {
     const clickSound = useClickSound();
-    const { gameName } = useGameContext();
+    const { tolgeeNamespace } = useGameContext();
     const { t: translateCommon } = useCommonTranslate();
-    const { t: translateBacBall } = useTranslator([gameName]);
+    const { t: translateBacBall } = useTranslator([tolgeeNamespace]);
     const {
         authorizeInfo: {
             user: { name },

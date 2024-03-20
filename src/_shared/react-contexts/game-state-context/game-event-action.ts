@@ -6,6 +6,7 @@ export enum GameEventActionType {
     SIGN_IN = "SIGN_IN",
     SIGN_OUT = "SIGN_OUT",
     UM = "UM",
+    TOLGEE_NAMESPACE = "TOLGEE_NAMESPACE",
     // REMAINING_TIME = "REMAINING_TIME",
     GAME_CONFIGS = "GAME_CONFIGS",
     ROUND_DATA = "ROUND_DATA",
@@ -47,6 +48,7 @@ export enum GameEventActionType {
 }
 
 export interface GameEventPayload {
+    tolgeeNamespace?: string;
     signedIn?: boolean;
     isConnect?: boolean;
     um?: boolean;

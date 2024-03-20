@@ -35,7 +35,7 @@ export type BetOptionProps = BaseProps & {
 };
 
 export type BaseProps = {
-    gameName?: string;
+    tolgeeNamespace?: string;
     choice: string;
     children?: React.ReactNode;
     className?: string;

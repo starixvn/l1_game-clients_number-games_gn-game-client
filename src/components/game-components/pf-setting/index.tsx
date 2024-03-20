@@ -1,11 +1,11 @@
 import { FC, useEffect, useRef, useState } from "react";
-import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
-import ModalContainer from "../modal-container";
-import { useCommonTranslate, useTranslator } from "../../../_shared/react-hooks";
-import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
-import Styles from "./pf-setting.module.scss";
-import { ButtonPFGuide } from "../pf-guide";
 import { useGameContext } from "../../../_shared/react-contexts";
+import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
+import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
+import { useCommonTranslate, useTranslator } from "../../../_shared/react-hooks";
+import ModalContainer from "../modal-container";
+import { ButtonPFGuide } from "../pf-guide";
+import Styles from "./pf-setting.module.scss";
 
 const NUMBER_VALUES = "0123456789";
 
@@ -47,8 +47,8 @@ const PFSetting: FC = () => {
     const [isCopySuccess, setIsCopySuccess] = useState<boolean>(false);
     const [isManualMode, setIsManualMode] = useState<boolean>(pfSetting?.useManualClientSeed || false);
     const { t: translateCommon } = useCommonTranslate();
-    const { gameName } = useGameContext();
-    const { t: translateBacBall } = useTranslator([gameName]);
+    const { tolgeeNamespace } = useGameContext();
+    const { t: translateBacBall } = useTranslator([tolgeeNamespace]);
     const dispatch = useGameStatesDispatch();
     const handleOnKeyPress = (event: any) => {
         const chr = event.key;

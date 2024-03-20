@@ -23,10 +23,12 @@ export const GetLocalizedErrorMessage = (errorCode: string, isPlaceBet = false) 
     return key;
 };
 
-export const createOptionForHedgeBetGroup = (hedgeBetGroup: string[]) => {
+export const createOptionForHedgeBetGroup = (hedgeBetGroup: string[], tolgeeNamespace) => {
     const option = {};
     hedgeBetGroup?.forEach((choice, index) => {
-        option[`betChoice${index + 1}`] = `glossary_${choice}`;
+        option[`betChoice${index + 1}`] = getGlossaryTranslate(tolgeeNamespace, choice);
     });
     return option;
 };
+
+export const getGlossaryTranslate = (ns: string, key: string) => `${ns}.glossary_${key}`;

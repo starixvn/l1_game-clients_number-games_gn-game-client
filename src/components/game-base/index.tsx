@@ -74,7 +74,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     ) {
         super(props);
 
-        const { dispatch, gameStateContextModel } = this.props;
+        const { dispatch } = this.props;
 
         this.roundStateHandler = roundStateHandler;
         this.gameStateHandler = gameStateHandler;
@@ -98,6 +98,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.placeBetHandler =
             placeBetHandler ??
             new PlaceBetHandler({
+                tolgeeNamespace: this.props.tolgeeNamespace,
                 dispatch,
                 gameMessageHandler: this.gameMessageHandler,
                 gameName: this.props.gameName,
@@ -199,9 +200,18 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                     isUserGesture: true,
                 },
             });
-
+        this.updateTranslateNameSpace();
         this.gameStateHandler.setReturnToGameState(this.props.dispatch);
         this.cancelConfirmBetAndResetBets();
+    }
+
+    updateTranslateNameSpace() {
+        this.props.dispatch({
+            type: GameEventActionType.TOLGEE_NAMESPACE,
+            payload: {
+                tolgeeNamespace: this.props.tolgeeNamespace,
+            },
+        });
     }
 
     protected async connectToGameService() {
@@ -607,11 +617,11 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     private renderConnectFailed(roundState: RoundState, disconnectReason: string): React.ReactNode {
-        const { gameName, id } = this.props;
+        const { tolgeeNamespace, id } = this.props;
         return (
             roundState === RoundState.ConnectFailed && (
                 <ConnectFailedMessage
-                    gameName={gameName}
+                    tolgeeNamespace={tolgeeNamespace}
                     id={id}
                     onSubmit={
                         ConnectFailedReasonKey.restrictPlayPermission === disconnectReason

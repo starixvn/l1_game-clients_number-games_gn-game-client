@@ -70,7 +70,7 @@ export const Notice = () => {
         const onCloseNotice = onClose || (() => closeNotice());
         let hedgeBet = {};
         if (hedgeBetGroup) {
-            hedgeBet = createOptionForHedgeBetGroup(hedgeBetGroup);
+            hedgeBet = createOptionForHedgeBetGroup(hedgeBetGroup, gameStateContext.tolgeeNamespace);
         }
 
         const opt = {

@@ -5,7 +5,7 @@ import { useGameStateContext } from "../../../_shared/react-contexts/game-state-
 import Styles from "./bet-option.module.scss";
 import { BaseProps } from "./types";
 
-export const OwnBet: React.FC<BaseProps> = ({ gameName, choice, className }) => {
+export const OwnBet: React.FC<BaseProps> = ({ tolgeeNamespace, choice, className }) => {
     const gameStateContext = useGameStateContext();
     const ownBet = gameStateContext?.ownBets?.[choice] ?? 0;
     const notConfirmOwnBets = gameStateContext?.notConfirmOwnBets?.[choice] ?? 0;
@@ -46,7 +46,7 @@ export const OwnBet: React.FC<BaseProps> = ({ gameName, choice, className }) => 
     const ownBetUI = (value: string, animClass = "") => {
         return (
             <div className={`${Styles["own-bet"]} ${className} ${animClass}`}>
-                <span id={`${gameName}-${choice}-own-bet`} className={Styles["bet-value"]}>
+                <span id={`${tolgeeNamespace}-${choice}-own-bet`} className={Styles["bet-value"]}>
                     {value}
                 </span>
             </div>

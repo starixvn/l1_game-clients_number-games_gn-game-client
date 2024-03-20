@@ -2,9 +2,9 @@ import { randomBytes } from "crypto";
 import { FC, useState } from "react";
 import { createPortal } from "react-dom";
 
-import { numberWithCommas, separateDateTime, sortedCollectionByTime } from "../../../_shared/helpers";
+import { getGlossaryTranslate, numberWithCommas, separateDateTime, sortedCollectionByTime } from "../../../_shared/helpers";
 import { useBallColor } from "../../../_shared/helpers/ball-color-helper";
-import { usePlayerContext } from "../../../_shared/react-contexts";
+import { useGameContext, usePlayerContext } from "../../../_shared/react-contexts";
 import { useClickSound } from "../../../_shared/react-hooks";
 import { useCommonTranslate, useSNTranslate, useTranslator } from "../../../_shared/react-hooks/use-translator";
 import { DrawInfo, PFResult } from "../../../components/game-base/type";
@@ -52,7 +52,9 @@ const BetDetail: FC<BetLogDetailProps> = ({ betLogDetails, onCloseModal, isShowB
     const ballColor = useBallColor;
     const { t: translateCommon } = useCommonTranslate();
     const { t: translateSNGames } = useSNTranslate();
-    const { t: translateBacBall } = useTranslator(["BacBall"]);
+    const { tolgeeNamespace } = useGameContext();
+
+    const { t: translateBacBall } = useTranslator([tolgeeNamespace]);
     const clickSound = useClickSound();
 
     const handleCloseModal = () => {
@@ -176,7 +178,9 @@ interface BacBallBetLogDetailRowProps {
 
 const BetDetailRow: FC<BacBallBetLogDetailRowProps> = ({ rawTime, amount, choice, odds, win, hightlight }) => {
     const { date, time } = separateDateTime(rawTime);
-    const { t: translateBacBall } = useTranslator(["BacBall"]);
+    const { tolgeeNamespace } = useGameContext();
+
+    const { t: translateBacBall } = useTranslator([tolgeeNamespace]);
     const { fractionalOddsFormat } = usePlayerContext();
     const content = [
         {
@@ -190,7 +194,7 @@ const BetDetailRow: FC<BacBallBetLogDetailRowProps> = ({ rawTime, amount, choice
             size: 2,
         },
         ...[
-            translateBacBall(`glossary_${choice}`),
+            translateBacBall(getGlossaryTranslate(tolgeeNamespace, choice)),
             numberWithCommas(fractionalOddsFormat ? odds - 1 : odds),
             numberWithCommas(amount) ?? 0,
         ].map((item) => {
