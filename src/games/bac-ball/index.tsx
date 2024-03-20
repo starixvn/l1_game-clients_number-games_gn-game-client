@@ -104,7 +104,7 @@ const BacBallWrapper = (props) => {
 
 const BacBallFC = (props) => {
     const tolgeeNamespace = props["tolgeeNamespace"];
-    const { t } = useTranslator(tolgeeNamespace);
+    const { t } = useTranslator([tolgeeNamespace]);
 
     return (
         <BacBall

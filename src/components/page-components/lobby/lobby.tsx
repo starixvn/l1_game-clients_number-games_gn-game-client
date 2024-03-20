@@ -19,9 +19,8 @@ type Props = {
 export const Lobby: React.FC<Props> = ({ openGame, lobbyConfigs }) => {
     const [socket, setSocket] = useState<Socket>(null);
     const { session } = usePlayerContext();
-
     useEffect(() => {
-        document.addEventListener("visibilitychange", onVisibilityChange);
+        window.addEventListener("visibilitychange", onVisibilityChange);
         onStart();
         // let socketGateWay;
         // if (lobbyConfigs?.categories?.length > 0) {
@@ -31,7 +30,7 @@ export const Lobby: React.FC<Props> = ({ openGame, lobbyConfigs }) => {
         // }
 
         return () => {
-            removeEventListener("visibilitychange", onVisibilityChange);
+            window.removeEventListener("visibilitychange", onVisibilityChange);
         };
         // }, [lobbyConfigs.categories]);
     }, []);
