@@ -24,8 +24,8 @@ export function Settings() {
         });
     };
     const handleBackToLobbyOnclick = () => {
-        backToRedirectUrl(redirectUrl)
         updateURLContext({ gameId: 0 });
+        backToRedirectUrl(redirectUrl);
     };
 
     return (
@@ -35,12 +35,14 @@ export function Settings() {
                     <span id="icon-pf" className="icon-pf" />
                 </button>
 
-                {(!isDirectMode || redirectUrl !== "") && <button className={styles[ButtonSettingClassName]} onClick={() => handleBackToLobbyOnclick()}>
-                    <span id="icon-home" className="icon-home" />
-                </button>}
+                {(!isDirectMode || redirectUrl !== "") && (
+                    <button className={styles[ButtonSettingClassName]} onClick={() => handleBackToLobbyOnclick()}>
+                        <span id="icon-home" className="icon-home" />
+                    </button>
+                )}
 
                 <Menu />
             </div>
         </div>
     );
-};
+}

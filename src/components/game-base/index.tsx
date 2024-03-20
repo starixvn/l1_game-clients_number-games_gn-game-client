@@ -94,7 +94,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 gameMessageHandler: this.gameMessageHandler,
                 gameName: this.props.gameName,
             });
-        console.log(placeBetHandler);
+
         this.placeBetHandler =
             placeBetHandler ??
             new PlaceBetHandler({

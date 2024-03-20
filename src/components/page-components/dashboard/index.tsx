@@ -179,15 +179,6 @@ class Dashboard extends React.PureComponent<Props, State> {
         return (offerGames.includes(this.state.openGameId) && !backToLobby) || ssoRedirectGameId > 0;
     }
 
-    componentDidUpdate(prevProps, prevState) {
-        if (this.state.isOnLobby) {
-            this.setState({ openGameId: null });
-        }
-        if (this.state.isOnLobby !== prevState.isShowLobby) {
-            this.setState({ isOnLobby: !prevState.isShowLobby });
-        }
-    }
-
     componentWillUnmount() {
         document.removeEventListener("visibilitychange", this.onVisibilityChange);
         this.notificationSocket?.close();
@@ -327,7 +318,11 @@ class Dashboard extends React.PureComponent<Props, State> {
     openGameFromLobby(gameId: number) {
         updateURLContext({ backToLobby: true, gameId: gameId });
         console.log("openGameFromLobby", gameId);
-        this.setState({ openGameId: gameId });
+        if (this.state.openGameId != gameId) {
+            this.setState({ openGameId: gameId });
+        } else {
+            this.forceUpdate(); // TODO: Temporary force rerender, should review here
+        }
     }
 
     renderLobby() {

@@ -65,3 +65,7 @@ export function updateURLContext(context: Partial<URLContextModel>) {
 
     StorageHelper.set(localStorageKeys.url, { ...contextFromLocalStorage, ...context });
 }
+
+export function getURLContext() {
+    return StorageHelper.get<URLContextModel>(localStorageKeys.url) || {};
+}

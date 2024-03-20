@@ -1,3 +1,4 @@
+import { updateURLContext, getURLContext } from "../../../_shared/react-contexts";
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 import { GameStateContextModel } from "../../../_shared/react-contexts/game-state-context/game-state-context-model";
 import { IRoundStateHandler } from "../../round-base/round-state-handler";
@@ -41,6 +42,10 @@ export class GameDisableHandler {
                     um_message,
                 },
             });
+
+            if (!getURLContext().isDirectMode) {
+                updateURLContext({ gameId: 0 });
+            }
         }
     }
 }
