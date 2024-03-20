@@ -4,7 +4,7 @@ import React from "react";
 import { AuthorizeResponse, ReCheckInResponse } from "sc-user-service-client/dist/auth";
 import { getAppSettings } from "../../../_shared/app-settings";
 import { buildUrl, GetLocalizedErrorMessage, localStorageKeys, StorageHelper } from "../../../_shared/helpers";
-import { PlayerContextProvider, URLContextModel, updateURLContext } from "../../../_shared/react-contexts";
+import { PlayerContextProvider, URLContextModel, loadURLContext, updateURLContext } from "../../../_shared/react-contexts";
 import { authorize, createNickname, getLobbyConfigs, reCheckIn } from "../../../services/auth-service";
 import { updateSignInSMStatus } from "../../../services/user-setting-service";
 import { Props, State } from "./type";
@@ -46,7 +46,7 @@ class Dashboard extends React.PureComponent<Props, State> {
             openGameId: null,
             openGameName: "",
             isShowToolbarGuide: StorageHelper.get(localStorageKeys.toolbarGuide) ?? true,
-            isOnLobby: true
+            isOnLobby: true,
         };
 
         this.handleFirstLogin = this.handleFirstLogin.bind(this);
@@ -168,7 +168,6 @@ class Dashboard extends React.PureComponent<Props, State> {
         }, 60 * 1000);
 
         this.connectNotificationSocket();
-        // await this.updateBetLobbyConfigs();
 
         queryGame && this.openGame(queryGame);
     }
@@ -184,7 +183,6 @@ class Dashboard extends React.PureComponent<Props, State> {
         if (this.state.isOnLobby) {
             this.setState({ openGameId: null });
         }
-
         if (this.state.isOnLobby !== prevState.isShowLobby) {
             this.setState({ isOnLobby: !prevState.isShowLobby });
         }
@@ -310,33 +308,32 @@ class Dashboard extends React.PureComponent<Props, State> {
     }
 
     renderGames() {
-        const { userStakeLevel, authorizeInfo, queryGame, isJoinGame, openGameId, openGameName } = this.state;
+        const { userStakeLevel, openGameName, authorizeInfo } = this.state;
         const offerGames: number[] = authorizeInfo?.user?.offerGames?.map((game: any) => game?.gameId) ?? [];
-
+        const urlContext = loadURLContext();
+        console.log("renderGames", urlContext.gameId);
         return (
             <Games
                 setApiErrorMessage={this.handleShowApiErrorMessage}
+                userOfferGames={offerGames}
                 userStakeLevel={userStakeLevel}
                 updateUserStakeLevel={this.handleUpdateUserStakeLevel}
-                userOfferGames={offerGames}
-                queryGame={queryGame}
-                updateQueryGames={this.updateQueryGame}
-                isJoinGame={isJoinGame}
-                openGameId={openGameId}
+                openGameId={urlContext.gameId}
                 openGameName={openGameName}
             />
         );
     }
 
-    openGameFromLobby() {
-        updateURLContext({ backToLobby: true, gameId: 1001 });
-        this.setState({ openGameId: 1001 });
+    openGameFromLobby(gameId: number) {
+        updateURLContext({ backToLobby: true, gameId: gameId });
+        console.log("openGameFromLobby", gameId);
+        this.setState({ openGameId: gameId });
     }
 
     renderLobby() {
         const { lobbyConfigs } = this.state;
         updateURLContext({ backToLobby: true });
-        return <Lobby openGame={() => this.openGameFromLobby()} lobbyConfigs={lobbyConfigs} />;
+        return <Lobby openGame={(gameId) => this.openGameFromLobby(gameId)} lobbyConfigs={lobbyConfigs} />;
     }
 
     renderDashBoard() {
@@ -351,6 +348,8 @@ class Dashboard extends React.PureComponent<Props, State> {
 
         const offerGames: number[] = authorizeInfo?.user?.offerGames?.map((game: any) => game?.gameId) ?? [];
         const isRenderGames = this.shouldRenderGames(offerGames);
+
+        console.log("renderDashBoard", { isRenderGames });
 
         return (
             <PlayerContextProvider value={authContextValue}>

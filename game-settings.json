@@ -19,5 +19,26 @@
             "switchRoundAnimation": 2
         },
         "totalTurns": 4
+    },
+    "1002": {
+        "id": 1002,
+        "gameName": "BacBall2",
+        "tolgeeNamespace": "BacBall",
+        "socketInfo": {
+            "namespace": "bacball2",
+            "path": "bacball2",
+            "serviceName": "bac-ball-2"
+        },
+        "durations": {
+            "wholeRound": 114,
+            "wholeTurn": 28,
+            "placingBets": 20,
+            "lockingBet": 3,
+            "showResult": 8,
+            "resultAnimation": 3,
+            "beforePlaceBet": 0,
+            "switchRoundAnimation": 2
+        },
+        "totalTurns": 4
     }
 }

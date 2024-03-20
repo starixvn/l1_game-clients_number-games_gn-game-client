@@ -1,8 +1,8 @@
 import { useTheme } from "next-themes";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { isIOS, isMobileOnly } from "react-device-detect";
 import { getAppSettings } from "../_shared/app-settings";
-import { AppTypes, GameIds } from "../_shared/constants";
+import { GameIds } from "../_shared/constants";
 import { SystemContextProvider } from "../_shared/react-contexts";
 import {
     usePlaceBetSound,
@@ -12,13 +12,6 @@ import {
     useStopBettingSound,
 } from "../_shared/react-hooks";
 import { tolgee } from "../_shared/tolgee";
-import { GameCategory } from "../components/page-components/game-category";
-import {
-    GameCategoryConfig,
-    GameCategoryKeys,
-    GameCategoryType,
-    GamesInOnePage,
-} from "../components/page-components/game-category/constants";
 import BacBall from "./bac-ball";
 import styles from "./games.module.scss";
 import HappyFour from "./happy-four/page";
@@ -29,71 +22,8 @@ import SicBalls from "./sic-balls/page";
 import { Props } from "./type";
 import { BackgroundGalaxy } from "../components/page-components/background";
 
-let gamesOrder = [];
-const getRenderGames = (selectedCategory: GameCategoryType, selectedPage: number, userOfferGames: number[]) => {
-    if (selectedCategory === GameCategoryType.newNumberGames) {
-        return GameCategoryConfig[AppTypes.mobile].newNumberGames;
-    }
-
-    if (selectedCategory === GameCategoryType.game) {
-        return GameCategoryConfig[AppTypes.mobile].game;
-    }
-    const tabGames = GameCategoryConfig[getAppSettings().appType][GameCategoryType[selectedCategory]];
-
-    gamesOrder = getAppSettings().offeredGames.filter((gameId) => tabGames.includes(gameId));
-
-    const startIndex = gamesOrder.length > (selectedPage - 1) * GamesInOnePage ? (selectedPage - 1) * GamesInOnePage : 0;
-
-    return gamesOrder.filter((game) => userOfferGames.includes(game)).slice(startIndex, startIndex + GamesInOnePage);
-};
-
-const getCategoryByGameId = (gameId: number) => {
-    return (
-        GameCategoryKeys.find(
-            (category) =>
-                GameCategoryConfig[getAppSettings().appType][category] &&
-                GameCategoryConfig[getAppSettings().appType][category].includes(gameId)
-        ) ?? getDefaultCategory()
-    );
-};
-
-const getDefaultCategory = () => {
-    return "game";
-};
-
-const getCategoryByQueryGameId = (gameId: number) => {
-    return (
-        GameCategoryKeys.find(
-            (category) =>
-                category !== "game" &&
-                GameCategoryConfig[getAppSettings().appType][category] &&
-                GameCategoryConfig[getAppSettings().appType][category].includes(gameId)
-        ) ?? getDefaultCategory()
-    );
-};
-
-const getCategoryHashTag = (category: string, pageIndex: number) => {
-    return pageIndex > 1 ? `${category}_${pageIndex - 1}` : category;
-};
-
-export const Games: React.FC<Props> = ({
-    setApiErrorMessage,
-    userStakeLevel,
-    updateUserStakeLevel,
-    queryGame,
-    userOfferGames,
-    isJoinGame,
-    updateQueryGames,
-    openGameId,
-}) => {
-    const urlHashtag = window.location.hash.replace("#", "").split("_");
-    const queryCategory = isJoinGame ? getCategoryByQueryGameId(queryGame) : urlHashtag[0] || getCategoryByGameId(queryGame);
-    const [selectedCategory, setSelectedCategory] = useState<GameCategoryType>(GameCategoryType[queryCategory]);
-    const [selectedPage, setSelectedPage] = useState(+urlHashtag[1] + 1 || 1);
+export const Games: React.FC<Props> = ({ setApiErrorMessage, userStakeLevel, updateUserStakeLevel, openGameId, userOfferGames }) => {
     const { theme } = useTheme();
-    location.hash = `#${getCategoryHashTag(queryCategory, selectedPage)}`;
-    const [isJoinedGame, setIsJoinedGame] = useState(false);
-
     const locale = tolgee.getLanguage();
 
     const gameSound = {
@@ -104,13 +34,8 @@ export const Games: React.FC<Props> = ({
         stopBettingSound: useStopBettingSound(locale),
     };
 
-    const renderListGames = () => {
-        const renderGames = getRenderGames(selectedCategory, selectedPage, userOfferGames);
-
-        return renderGames.map((gameId) => getGameComponentById(gameId));
-    };
-
     const getGameComponentById = (gameId: number) => {
+        const isGameOffered = userOfferGames.includes(gameId);
         const { gameSettings } = getAppSettings();
 
         const gameProps = {
@@ -120,12 +45,15 @@ export const Games: React.FC<Props> = ({
             theme,
             userStakeLevel,
             updateUserStakeLevel,
-            finishJoinGame: () => setIsJoinedGame(true),
-            isJoinedGame: isJoinedGame,
         };
 
+        if (!isGameOffered) {
+            return <>Not Offer Game</>;
+        }
+
         switch (gameId) {
-            case GameIds.BacBall:
+            case GameIds.BacBall1:
+            case GameIds.BacBall2:
                 return <BacBall key={`game-${gameId}`} {...gameProps} />;
             case GameIds.HappyFour:
                 return <HappyFour key={`game-${gameId}`} />;
@@ -143,32 +71,12 @@ export const Games: React.FC<Props> = ({
         }
     };
 
-    const selectCategoryPage = (category: string, pageIndex: number, isClearOpenGame = false) => {
-        updateQueryGames(NaN, false, isClearOpenGame);
-        setSelectedCategory(GameCategoryType[category]);
-        setSelectedPage(pageIndex);
-        history.pushState(null, "", `#${getCategoryHashTag(category, pageIndex)}`);
-    };
-
-    useEffect(() => {
-        setIsJoinedGame(false);
-    }, [openGameId, isJoinGame]);
-
-    useEffect(() => {
-        window.scrollTo(0, 0);
-    }, []);
-
-    useEffect(() => {
-        selectCategoryPage(queryCategory, 1);
-    }, [queryGame]);
-
     return (
         <div className={`game-container game-wrapper ${styles["open-chips"]}`}>
             <SystemContextProvider>
-                <GameCategory selectedPage={selectedPage} selectCategoryPage={selectCategoryPage} selectedCategory={selectedCategory} />
                 <div className={`${styles["game-list"]} ${isMobileOnly ? styles[isIOS ? "ios-device" : "android-device"] : ""}`}>
                     <BackgroundGalaxy />
-                    {renderListGames()}
+                    {getGameComponentById(openGameId)}
                 </div>
             </SystemContextProvider>
         </div>

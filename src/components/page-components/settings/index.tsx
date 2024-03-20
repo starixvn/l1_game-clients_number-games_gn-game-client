@@ -20,19 +20,19 @@ const Settings = ({}) => {
     };
 
     const handleOutsideClick = (ref) => {
-        useEffect(() => {
-            function handleClickOutside(event) {
-                if (ref.current && !ref.current.contains(event.target)) {
-                    closePopup();
-                }
-            }
-
-            document.addEventListener("mousedown", handleClickOutside);
-            return () => {
-                // Unbind the event listener on clean up
-                document.removeEventListener("mousedown", handleClickOutside);
-            };
-        }, [ref]);
+        // Temporary comment for build code
+        //  useEffect(() => {
+        //     function handleClickOutside(event) {
+        //         if (ref.current && !ref.current.contains(event.target)) {
+        //             closePopup();
+        //         }
+        //     }
+        //     document.addEventListener("mousedown", handleClickOutside);
+        //     return () => {
+        //         // Unbind the event listener on clean up
+        //         document.removeEventListener("mousedown", handleClickOutside);
+        //     };
+        // }, [ref]);
     };
 
     const wrapperRef = useRef(null);

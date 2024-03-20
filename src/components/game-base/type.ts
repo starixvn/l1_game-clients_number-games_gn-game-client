@@ -47,7 +47,6 @@ export type GamePropsContext = {
     setApiErrorMessage?: Function;
     userStakeLevel?: UserStakeLevel;
     updateUserStakeLevel?: Function;
-    finishJoinGame?: Function;
     isJoinedGame?: boolean;
     dispatch?: (action: GameEventAction) => {};
     gameStateContextModel?: GameStateContextModel;
