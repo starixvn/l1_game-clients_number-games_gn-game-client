@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { createOptionForHedgeBetGroup } from "../../../_shared/helpers";
 import { numberWithCommas } from "../../../_shared/helpers/number-helper";
+import { useGameContext } from "../../../_shared/react-contexts";
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import { useClickSound, useTranslator } from "../../../_shared/react-hooks";
@@ -40,6 +41,7 @@ const BaseNotice: React.FC<{ onClose: () => void; duration: number; isOpen?: boo
 export const Notice = () => {
     const { t } = useTranslator();
     const gameStateContext = useGameStateContext();
+    const { tolgeeNamespace } = useGameContext();
     const dispatch = useGameStatesDispatch();
 
     if (gameStateContext.notice) {
@@ -70,7 +72,7 @@ export const Notice = () => {
         const onCloseNotice = onClose || (() => closeNotice());
         let hedgeBet = {};
         if (hedgeBetGroup) {
-            hedgeBet = createOptionForHedgeBetGroup(hedgeBetGroup, gameStateContext.tolgeeNamespace);
+            hedgeBet = createOptionForHedgeBetGroup(hedgeBetGroup, tolgeeNamespace);
         }
 
         const opt = {
