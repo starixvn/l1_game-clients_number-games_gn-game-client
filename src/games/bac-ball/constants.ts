@@ -20,12 +20,14 @@ function percentOf(countResult: object, property: string, total: number) {
 }
 
 export const StatisticRuleEntries = Object.entries({
-    [BacBallBetOptions.PLAYER]: (countResult: object, total: number) => percentOf(countResult, BacBallBetOptions.PLAYER, total),
+    [BacBallBetOptions.PLAYER]: (countResult: object, total: number) =>
+        isFirstLoad(countResult) ? 0 : percentOf(countResult, BacBallBetOptions.PLAYER, total),
     [BacBallBetOptions.BANKER]: (countResult: object, total: number) =>
         isFirstLoad(countResult)
             ? 0
             : 100 - percentOf(countResult, BacBallBetOptions.PLAYER, total) - percentOf(countResult, BacBallBetOptions.TIE, total),
-    [BacBallBetOptions.TIE]: (countResult: object, total: number) => percentOf(countResult, BacBallBetOptions.TIE, total),
+    [BacBallBetOptions.TIE]: (countResult: object, total: number) =>
+        isFirstLoad(countResult) ? 0 : percentOf(countResult, BacBallBetOptions.TIE, total),
 });
 
 export const MinProbability = {
