@@ -15,73 +15,72 @@ jest.mock("../../../../_shared/react-hooks/use-translator", () => ({
     useSNTranslate: jest.fn().mockReturnValue({ t: (key: string) => key }),
 }));
 
-// describe("CountdownTimer", () => {
-//     const MockSimpleTimer = () => <div className="simple-timer"></div>;
-//     const MockGameStatus = () => <div className="game-status"></div>;
-
-//     test("renders SimpleTimer and GameStatus for InRound state", () => {
-//         mockUseGameStateContext.mockReturnValue({ roundState: RoundState.InRound } as GameStateContextModel);
-
-//         const { container } = render(<CountdownTimer SimpleTimerProp={MockSimpleTimer} GameStatusProp={MockGameStatus} />);
-
-//         expect(container.querySelector(".simple-timer")).toBeInTheDocument();
-//         expect(container.querySelector(".start-betting")).toBeInTheDocument();
-//         expect(container.querySelector(".status_stop_bet")).not.toBeInTheDocument();
-//         expect(container.querySelector(".status_result")).not.toBeInTheDocument();
-//         expect(container.querySelector(".loader-show-result")).not.toBeInTheDocument();
-//         expect(container.querySelector(".game-status")).toBeInTheDocument();
-//     });
-
-//     test("only renders loading show result and GameStatus for DisplayResult state", () => {
-//         mockUseGameStateContext.mockReturnValue({ roundState: RoundState.DisplayResult } as GameStateContextModel);
-
-//         const { container } = render(<CountdownTimer SimpleTimerProp={MockSimpleTimer} GameStatusProp={MockGameStatus} />);
-
-//         expect(container.querySelector(".simple-timer")).not.toBeInTheDocument();
-//         expect(container.querySelector(".start-betting")).not.toBeInTheDocument();
-//         expect(container.querySelector(".status_stop_bet")).not.toBeInTheDocument();
-//         expect(container.querySelector(".status_result")).not.toBeInTheDocument();
-//         expect(container.querySelector(".loader-show-result")).toBeInTheDocument();
-//         expect(container.querySelector(".game-status")).toBeInTheDocument();
-//     });
-
-//     test("only renders loading show result for None state", () => {
-//         mockUseGameStateContext.mockReturnValue({ roundState: RoundState.None } as GameStateContextModel);
-
-//         const { container } = render(<CountdownTimer SimpleTimerProp={MockSimpleTimer} GameStatusProp={MockGameStatus} />);
-
-//         expect(container.querySelector(".simple-timer")).not.toBeInTheDocument();
-//         expect(container.querySelector(".start-betting")).not.toBeInTheDocument();
-//         expect(container.querySelector(".status_stop_bet")).not.toBeInTheDocument();
-//         expect(container.querySelector(".status_result")).not.toBeInTheDocument();
-//         expect(container.querySelector(".loader-show-result")).toBeInTheDocument();
-//         expect(container.querySelector(".game-status")).not.toBeInTheDocument();
-//     });
-
-//     test.each([RoundState.BeforePlaceBet, RoundState.SwitchRound, RoundState.ConnectFailed, RoundState.Disabled])(
-//         "renders nothing for BeforePlaceBet or SwitchRound or ConnectFailed or Disabled state",
-//         (roundState) => {
-//             mockUseGameStateContext.mockReturnValue({ roundState } as GameStateContextModel);
-
-//             const { container } = render(<CountdownTimer SimpleTimerProp={MockSimpleTimer} />);
-
-//             expect(container.querySelector(".simple-timer")).not.toBeInTheDocument();
-//             expect(container.querySelector(".start-betting")).not.toBeInTheDocument();
-//             expect(container.querySelector(".status_stop_bet")).not.toBeInTheDocument();
-//             expect(container.querySelector(".status_result")).not.toBeInTheDocument();
-//             expect(container.querySelector(".loader-show-result")).not.toBeInTheDocument();
-//             expect(container.querySelector(".game-status")).not.toBeInTheDocument();
-//         }
-//     );
-// });
-
 jest.mock("react", () => ({
     ...jest.requireActual("react"),
-    useState: jest.fn(),
+    useState: (initialValue) => [initialValue, jest.fn()]
 }));
-
 const setState = jest.fn();
 const useStateMock = useState as jest.Mock;
+
+describe("CountdownTimer", () => {
+    const MockSimpleTimer = () => <div className="simple-timer"></div>;
+    const MockGameStatus = () => <div className="game-status"></div>;
+
+    test("renders SimpleTimer and GameStatus for InRound state", () => {
+        mockUseGameStateContext.mockReturnValue({ roundState: RoundState.InRound } as GameStateContextModel);
+
+        const { container } = render(<CountdownTimer SimpleTimerProp={MockSimpleTimer} GameStatusProp={MockGameStatus} />);
+
+        expect(container.querySelector(".simple-timer")).toBeInTheDocument();
+        expect(container.querySelector(".start-betting")).toBeInTheDocument();
+        expect(container.querySelector(".status_stop_bet")).not.toBeInTheDocument();
+        expect(container.querySelector(".status_result")).not.toBeInTheDocument();
+        expect(container.querySelector(".loader-show-result")).not.toBeInTheDocument();
+        expect(container.querySelector(".game-status")).toBeInTheDocument();
+    });
+
+    test("only renders loading show result and GameStatus for DisplayResult state", () => {
+        mockUseGameStateContext.mockReturnValue({ roundState: RoundState.DisplayResult } as GameStateContextModel);
+
+        const { container } = render(<CountdownTimer SimpleTimerProp={MockSimpleTimer} GameStatusProp={MockGameStatus} />);
+
+        expect(container.querySelector(".simple-timer")).not.toBeInTheDocument();
+        expect(container.querySelector(".start-betting")).not.toBeInTheDocument();
+        expect(container.querySelector(".status_stop_bet")).not.toBeInTheDocument();
+        expect(container.querySelector(".status_result")).not.toBeInTheDocument();
+        expect(container.querySelector(".loader-show-result")).toBeInTheDocument();
+        expect(container.querySelector(".game-status")).toBeInTheDocument();
+    });
+
+    test("only renders loading show result for None state", () => {
+        mockUseGameStateContext.mockReturnValue({ roundState: RoundState.None } as GameStateContextModel);
+
+        const { container } = render(<CountdownTimer SimpleTimerProp={MockSimpleTimer} GameStatusProp={MockGameStatus} />);
+
+        expect(container.querySelector(".simple-timer")).not.toBeInTheDocument();
+        expect(container.querySelector(".start-betting")).not.toBeInTheDocument();
+        expect(container.querySelector(".status_stop_bet")).not.toBeInTheDocument();
+        expect(container.querySelector(".status_result")).not.toBeInTheDocument();
+        expect(container.querySelector(".loader-show-result")).toBeInTheDocument();
+        expect(container.querySelector(".game-status")).not.toBeInTheDocument();
+    });
+
+    test.each([RoundState.BeforePlaceBet, RoundState.SwitchRound, RoundState.ConnectFailed, RoundState.Disabled])(
+        "renders nothing for BeforePlaceBet or SwitchRound or ConnectFailed or Disabled state",
+        (roundState) => {
+            mockUseGameStateContext.mockReturnValue({ roundState } as GameStateContextModel);
+
+            const { container } = render(<CountdownTimer SimpleTimerProp={MockSimpleTimer} />);
+
+            expect(container.querySelector(".simple-timer")).not.toBeInTheDocument();
+            expect(container.querySelector(".start-betting")).not.toBeInTheDocument();
+            expect(container.querySelector(".status_stop_bet")).not.toBeInTheDocument();
+            expect(container.querySelector(".status_result")).not.toBeInTheDocument();
+            expect(container.querySelector(".loader-show-result")).not.toBeInTheDocument();
+            expect(container.querySelector(".game-status")).not.toBeInTheDocument();
+        }
+    );
+});
 
 describe("SimpleTimer", () => {
     beforeEach(() => {
@@ -104,7 +103,6 @@ describe("SimpleTimer", () => {
         "renders timer with correct classes and formatted time when remainingTime > 0",
         (roundState, remainingTime, expectedLockBetClassLength, expectedTextContent) => {
             mockUseGameStateContext.mockReturnValue({ roundState } as GameStateContextModel);
-
 
             const simpleTimer = render(<SimpleTimer clientRemainingTime={remainingTime} />);
 
