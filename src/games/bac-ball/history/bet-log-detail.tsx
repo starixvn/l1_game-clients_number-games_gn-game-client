@@ -2,7 +2,7 @@ import { randomBytes } from "crypto";
 import { FC, useState } from "react";
 import { createPortal } from "react-dom";
 
-import { numberWithCommas, seperateDateTime, sortedCollectionByTime } from "../../../_shared/helpers";
+import { numberWithCommas, separateDateTime, sortedCollectionByTime } from "../../../_shared/helpers";
 import { useBallColor } from "../../../_shared/helpers/ball-color-helper";
 import { usePlayerContext } from "../../../_shared/react-contexts";
 import { useClickSound } from "../../../_shared/react-hooks";
@@ -175,7 +175,7 @@ interface BacBallBetLogDetailRowProps {
 }
 
 const BetDetailRow: FC<BacBallBetLogDetailRowProps> = ({ rawTime, amount, choice, odds, win, hightlight }) => {
-    const { date, time } = seperateDateTime(rawTime);
+    const { date, time } = separateDateTime(rawTime);
     const { t: translateBacBall } = useTranslator(["BacBall"]);
     const { fractionalOddsFormat } = usePlayerContext();
     const content = [

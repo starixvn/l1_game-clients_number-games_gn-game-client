@@ -1,13 +1,13 @@
 import { FC, useState } from "react";
 
-import { numberWithCommas, seperateDateTime, sortedCollectionByTime } from "../../../_shared/helpers";
+import { numberWithCommas, separateDateTime, sortedCollectionByTime } from "../../../_shared/helpers";
 import { useBallColor } from "../../../_shared/helpers/ball-color-helper";
 import { useClickSound } from "../../../_shared/react-hooks";
 import { useCommonTranslate, useSNTranslate } from "../../../_shared/react-hooks/use-translator";
+import { PFResult } from "../../../components/game-base/type";
 import { BetLogProps } from "../../../components/game-components/bet-history";
 import Styles from "./common.module.scss";
 import TableRow from "./row-table";
-import { PFResult } from "../../../components/game-base/type";
 
 export interface BetHistory {
     time: Date;
@@ -113,7 +113,7 @@ const BetLog: FC<BetLogProps> = ({ betLogs, handleScroll, onCloseModal: toggleBe
 const BetHistoryRow: FC<{ betHistory: BetHistory; handleClickDrawId: Function }> = ({ betHistory, handleClickDrawId }) => {
     const { drawId, result, totalAmount, betwin } = betHistory;
     const ballColor = useBallColor;
-    const { date, time } = seperateDateTime(betHistory.time);
+    const { date, time } = separateDateTime(betHistory.time);
 
     const { player, banker } = result;
 
