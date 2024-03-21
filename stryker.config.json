@@ -7,10 +7,13 @@
     "clear-text",
     "html"
   ],
-  "mutate": [
-    "{src}/**/!(*.+(s|S)pec|*.+(t|T)est).+(cjs|mjs|js|ts|jsx|tsx|html)"
-  ],
-  "coverageAnalysis": "off",
+  "coverageAnalysis": "perTest",
   "tempDirName": "stryker-tmp",
-  "concurrency": 6
+  "concurrency": 6,
+  "ignorePatterns": [
+    "*.test.ts",
+    "*.snap"
+  ],
+  "ignoreStatic": true,
+  "jest": {}
 }
