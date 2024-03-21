@@ -1,4 +1,4 @@
-import { io } from "socket.io-client";
+import { Socket, io } from "socket.io-client";
 import MsgpackParser from "socket.io-msgpack-parser";
 import { getAppSettings } from "../../../_shared/app-settings";
 import { messageEventType } from "../../game-base/handlers";
@@ -35,4 +35,17 @@ export function initLobbySocket(session: any, offerGameIds: number[]) {
         });
     }
     return socket;
+}
+
+export function reconnectToGameOnLobby(socket: Socket, session: any, gameId: number) {
+    if (!socket || !session) {
+        return;
+    }
+    const { gameSettings } = getAppSettings();
+    const gameSetting = gameSettings[gameId];
+    if (gameSetting) {
+        const serviceName = gameSetting.socketInfo?.serviceName;
+        const appMini = 3;
+        socket.emit("signIn", { gameName: gameSetting.gameName, session: { ...session, system: appMini }, serviceName });
+    }
 }

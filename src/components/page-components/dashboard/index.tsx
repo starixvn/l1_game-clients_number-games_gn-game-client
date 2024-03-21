@@ -31,6 +31,7 @@ import Register from "./register";
 import { MAX_AVATAR_ID } from "./register/avatar-gallery";
 import NameGenerator from "./register/name-generator";
 import { Props, State } from "./type";
+import { initLobbySocket, reconnectToGameOnLobby } from "../lobby/lobby-socket-connection";
 
 class Dashboard extends React.PureComponent<Props, State> {
     private notificationSocket: Socket = null;
@@ -54,6 +55,7 @@ class Dashboard extends React.PureComponent<Props, State> {
             openGameName: "",
             isShowToolbarGuide: StorageHelper.get(localStorageKeys.toolbarGuide) ?? true,
             isOnLobby: true,
+            lobbySocket: null,
         };
 
         this.handleFirstLogin = this.handleFirstLogin.bind(this);
@@ -127,12 +129,10 @@ class Dashboard extends React.PureComponent<Props, State> {
     handleRecheckInResponse(response: ReCheckInResponse) {
         if (!response || !response.isSuccessful) {
             this.signOut();
+        } else if (response.apiError) {
+            this.handleShowApiErrorMessage(response.apiError.errorCode, response.isDisableAccount);
         } else {
-            if (response.apiError) {
-                this.handleShowApiErrorMessage(response.apiError.errorCode, response.isDisableAccount);
-            } else {
-                this.updateUserBalance(response.balance);
-            }
+            this.updateUserBalance(response.balance);
         }
     }
 
@@ -140,6 +140,9 @@ class Dashboard extends React.PureComponent<Props, State> {
         if (!document["hidden"]) {
             const reCheckInResponse = await reCheckIn(this.props.session);
             this.handleRecheckInResponse(reCheckInResponse);
+            this.connectLobbySocket();
+        } else {
+            this.closeLobbySocket();
         }
     }
 
@@ -175,7 +178,7 @@ class Dashboard extends React.PureComponent<Props, State> {
         }, 60 * 1000);
 
         this.connectNotificationSocket();
-
+        this.connectLobbySocket();
         queryGame && this.openGame(queryGame);
     }
 
@@ -215,6 +218,25 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.notificationSocket = io(socketUri, socketOption);
         this.registerMainSocketEvent(this.notificationSocket);
     }
+
+    connectLobbySocket = () => {
+        const { authorizeInfo } = this.state;
+        if (!authorizeInfo) {
+            return;
+        }
+        const lobbySocket = initLobbySocket(this.props.session, [1001, 1002]);
+        this.setState({ lobbySocket });
+    };
+
+    closeLobbySocket = () => {
+        const { lobbySocket } = this.state;
+        lobbySocket?.close();
+        this.setState({ lobbySocket: null });
+    };
+
+    reconnectToGameOnLobby = (gameId: number) => {
+        reconnectToGameOnLobby(this.state.lobbySocket, this.props.session, gameId);
+    };
 
     registerMainSocketEvent(mainSocket: Socket) {
         mainSocket.on("auth", this.handleAuth);
@@ -278,14 +300,15 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.isKickOut && this.signOut();
     }
 
-    async updateBetLobbyConfigs() {
+    async updateLobbyConfigs() {
         const { session } = this.props;
         const response = await getLobbyConfigs(session);
         this.setState({ lobbyConfigs: response?.lobbyConfigs as any });
     }
 
     toggleAnnouncementModal() {
-        this.setState({ isShowAnnouncement: !this.state.isShowAnnouncement });
+        const { isShowAnnouncement } = this.state;
+        this.setState({ isShowAnnouncement: !isShowAnnouncement });
     }
 
     updateQueryGame(gameId: number, isJoinGame: boolean, isClearOpenGame = false) {
@@ -335,7 +358,7 @@ class Dashboard extends React.PureComponent<Props, State> {
     renderLobby() {
         const { lobbyConfigs } = this.state;
         updateURLContext({ backToLobby: true });
-        return <Lobby openGame={(gameId) => this.openGameFromLobby(gameId)} lobbyConfigs={lobbyConfigs} />;
+        return <Lobby openGame={(gameId) => this.openGameFromLobby(gameId)} lobbyConfigs={lobbyConfigs} socket={this.state.lobbySocket} />;
     }
 
     renderDashBoard() {
@@ -402,7 +425,7 @@ class Dashboard extends React.PureComponent<Props, State> {
         const selectedAvatarId = randomInteger(1, maxAvatarId);
         const response = await createNickname(session, nickname, selectedAvatarId);
         const authorizeResponse = response as any;
-        if (authorizeResponse && authorizeResponse.authorized) {
+        if (authorizeResponse?.authorized) {
             Object.assign(authorizeResponse.user, { settings: { theme: Themes.light } });
             this.handleRegister(authorizeResponse);
         } else {
