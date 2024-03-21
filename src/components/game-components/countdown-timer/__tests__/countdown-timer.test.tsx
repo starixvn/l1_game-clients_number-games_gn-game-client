@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { render, screen } from "@testing-library/react";
 import { useGameStateContext } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
 import { RoundState } from "../../../game-base/type";
@@ -14,7 +14,6 @@ jest.mock("../../../../_shared/react-contexts/game-state-context/game-state-cont
 jest.mock("../../../../_shared/react-hooks/use-translator", () => ({
     useSNTranslate: jest.fn().mockReturnValue({ t: (key: string) => key }),
 }));
-
 
 jest.mock("react", () => ({
     ...jest.requireActual("react"),

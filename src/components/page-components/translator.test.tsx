@@ -4,6 +4,9 @@ import { Component, ReactNode, createContext } from "react";
 import { TranslatorProps, withTranslator } from "./translator";
 
 jest.mock("@tolgee/react");
+jest.mock("../../_shared/react-contexts", () => ({
+    loadURLContext: jest.fn(),
+}));
 
 class StubComponent extends Component<TranslatorProps> {
     render(): ReactNode {

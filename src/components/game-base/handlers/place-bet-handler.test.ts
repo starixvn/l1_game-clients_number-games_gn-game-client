@@ -5,6 +5,10 @@ import { GameConfigs, IUserStakeLevel, RoundState } from "../type";
 import { GameMessageHandler } from "./game-message-handler";
 import { PlaceBetHandler, PlaceBetHandlerProps } from "./place-bet-handler";
 
+jest.mock("../../../_shared/react-contexts", () => ({
+    loadURLContext: jest.fn(),
+}));
+
 describe("placeBet", () => {
     let placeBetHandler: PlaceBetHandler;
     let gameMessageHandler: GameMessageHandler;
@@ -29,10 +33,12 @@ describe("placeBet", () => {
             playPlaceBetSound: jest.fn(),
             hedgeBetGroups: [["player", "banker"]],
             getPlayerBalance: jest.fn(),
+            tolgeeNamespace: "test",
         };
 
         placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
     });
+
     describe("isInPhasePreventBet", () => {
         it("should return if in phase prevent bet", () => {
             // Arrange

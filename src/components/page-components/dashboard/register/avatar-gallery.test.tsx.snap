@@ -466,7 +466,7 @@ exports[`AvatarGallery render should match the snapshot 1`] = `
           translated
         </button>
         <button
-          class="btn-red"
+          class="btn-green"
           data-testid="btn-submit-gallery"
           type="button"
         >
