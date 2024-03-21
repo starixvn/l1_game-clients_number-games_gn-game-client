@@ -1,7 +1,7 @@
 import { createContext, useContext, useReducer } from "react";
 
 import { SettingContextModel, initialSettingContextModel } from "./setting-context-model";
-import { SettingEventAction, SetingEventActionType } from "./setting-event-action";
+import { SettingEventAction, SettingEventActionType } from "./setting-event-action";
 
 export const SettingContext = createContext<Partial<SettingContextModel>>({});
 export const SettingDispatchContext = createContext(null);
@@ -25,7 +25,7 @@ const settingReducer = (state: any, action: SettingEventAction) => {
     const { isShowedSetting } = payload;
 
     switch (type) {
-        case SetingEventActionType.TOGGLE_SETTING: {
+        case SettingEventActionType.TOGGLE_SETTING: {
             return {
                 ...state,
                 isShowedSetting,

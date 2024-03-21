@@ -1,10 +1,10 @@
 import { SettingContextModel } from "./setting-context-model";
 
-export enum SetingEventActionType {
+export enum SettingEventActionType {
     TOGGLE_SETTING = "TOGGLE_SETTING",
 }
 
 export interface SettingEventAction {
-    type: SetingEventActionType;
+    type: SettingEventActionType;
     payload?: SettingContextModel;
 }

@@ -1,10 +1,11 @@
 import React from "react";
 import { User } from "sc-user-service-client/dist/auth";
 import { getAppSettings } from "../../../_shared/app-settings";
-import { SetingEventActionType, useSettingDispatch } from "../../../_shared/react-contexts";
 import { useTranslator } from "../../../_shared/react-hooks";
 import { UserInfo } from "../user-info";
 import Styles from "./header.module.scss";
+import { URLContext } from "../../../_shared/react-contexts/url-context";
+import { SettingEventActionType, useSettingDispatch } from "../../../_shared/react-contexts";
 
 type Props = {
     openingGameId: number;
@@ -30,7 +31,7 @@ const Header: React.FC<Props> = (props) => {
     const settingDispatch = useSettingDispatch();
     const openSetting = () => {
         settingDispatch({
-            type: SetingEventActionType.TOGGLE_SETTING,
+            type: SettingEventActionType.TOGGLE_SETTING,
             payload: {
                 isShowedSetting: true,
             },
