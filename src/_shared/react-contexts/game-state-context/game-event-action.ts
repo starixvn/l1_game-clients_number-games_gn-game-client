@@ -14,8 +14,6 @@ export enum GameEventActionType {
     WIN_STATUS = "WIN_STATUS",
     USER = "USER",
     OWN_BETS = "OWN_BETS",
-    BET_PERCENTAGE = "BET_PERCENTAGE",
-    PLAYER_BET_COUNT = "PLAYER_BET_COUNT",
     END_BET = "END_BET",
     API_ERROR = "API_ERROR",
     DISCONNECT_ERROR = "DISCONNECT_ERROR",
@@ -24,7 +22,6 @@ export enum GameEventActionType {
     ODDS = "ODDS",
     DRAW_ID = "DRAW_ID",
     TURN_COUNTER = "TURN_COUNTER",
-    TOTAL_BET = "TOTAL_BET",
     DISPLAY_POPUP = "DISPLAY_POPUP",
     ACCEPTED_BET_QUEUE = "ACCEPTED_BET_QUEUE",
     ROUND_REMAINING_TIME = "ROUND_REMAINING_TIME",
@@ -69,8 +66,6 @@ export interface GameEventPayload {
         gameConfigs?: any;
     };
     ownBets?: any;
-    betPercentage?: {};
-    playerBetCount?: {};
     endBetData?: {
         endBet?: number;
         betChoice?: any;
@@ -86,7 +81,6 @@ export interface GameEventPayload {
     };
     odds?: any;
     drawId?: number;
-    totalBets?: any;
     kickedOut?: any;
     notice?: Notice;
     acceptedBetQueue?: any;

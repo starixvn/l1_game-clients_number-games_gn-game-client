@@ -4,7 +4,7 @@ import { useGameActionContext, useGameContext, useSystemContext } from "../../_s
 import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
 import { useShowHighlightPrevResult } from "../../_shared/react-hooks/use-high-light";
 import { RoundState } from "../../components/game-base/type";
-import { BetChoice, BetPercentage, Odds, OwnBet, TotalBet } from "../../components/game-components/bet-option";
+import { BetChoice, BetPercentage, Odds, OwnBet, PlayerBetCount, TotalBet } from "../../components/game-components/bet-option";
 import { setRipplePosition } from "../../components/game-components/bet-option/ripple-effect";
 import { BacBallWinningAnimation } from "./bac-ball-winning-animation";
 import Style from "./bac-ball.module.scss";
@@ -50,7 +50,16 @@ export const BacBallBetOptionsComponent = () => {
             />
         );
     };
-
+    const renderPlayerBetCount = (choice: string) => {
+        const tieClassName = "justify-center";
+        return (
+            <PlayerBetCount
+                choice={choice}
+                className={`flex items-center players gap-1 ${choice === BacBallBetOptions.TIE ? tieClassName : ""}`}
+                tolgeeNamespace={tolgeeNamespace}
+            />
+        );
+    };
     const renderBetChoice = (choice: string) => {
         return <BetChoice choice={choice} className={`${Style[`bet-name-${choice}`]}`} tolgeeNamespace={tolgeeNamespace} />;
     };
@@ -90,6 +99,7 @@ export const BacBallBetOptionsComponent = () => {
         );
         const winningPrev = renderHighlightWinningPrevResult(choice);
         const totalBetComponent = renderTotalBet(choice);
+        const playerBetCount = renderPlayerBetCount(choice);
         const betPercentage = renderBetPercentage(choice);
         const betChoice = renderBetChoice(choice);
         const odds = renderOdds(choice);
@@ -97,7 +107,10 @@ export const BacBallBetOptionsComponent = () => {
         return (
             <div className={`${Style[choice]} text-white relative`}>
                 <div className={`${Style["choice-info"]} ${Style[`choice-${choice}`]}`}>
-                    <div className={Style.stake}>{totalBetComponent}</div>
+                    <div className={Style.stake}>
+                        {totalBetComponent}
+                        {playerBetCount}
+                    </div>
                     {betPercentage}
                 </div>
                 <div className={`${Style["choice-odds-area"]} ${Style[`${choice}-choice`]}`}>
@@ -139,13 +152,17 @@ export const BacBallBetOptionsComponent = () => {
         const winningPrev = renderHighlightWinningPrevResult(BacBallBetOptions.TIE);
         const totalBetComponent = renderTotalBet(BacBallBetOptions.TIE);
         const betPercentage = renderBetPercentage(BacBallBetOptions.TIE);
+        const playerBetCount = renderPlayerBetCount(BacBallBetOptions.TIE);
         const betChoice = renderBetChoice(BacBallBetOptions.TIE);
         const odds = renderOdds(BacBallBetOptions.TIE);
         const ownBet = renderOwnBet(BacBallBetOptions.TIE);
         return (
             <div className={`${Style[BacBallBetOptions.TIE]} text-white flex flex-col items-center pt-2`}>
                 {betPercentage}
-                <div className={Style.stake}>{totalBetComponent}</div>
+                <div className={Style.stake}>
+                    {totalBetComponent}
+                    {playerBetCount}
+                </div>
                 <div className={`${Style["choice-odds-area"]} ${Style[`${BacBallBetOptions.TIE}-choice`]}`}>
                     {betChoice}
                     {odds}

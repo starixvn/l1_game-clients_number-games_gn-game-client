@@ -19,10 +19,7 @@ export interface GameStateContextModel {
     roundId: number;
     result?: any;
     settlementResult?: any;
-    totalBets: object;
     ownBets: object;
-    betPercentage?: object;
-    playerBetCount?: object;
     errorMessage?: string | string[];
     selectedBetChoice?: string;
     isProcessingBet?: boolean;
@@ -66,10 +63,7 @@ export const initialGameStateContextModel = () => {
         roundHistory: [],
         roundId: 0,
         ownBets: {},
-        totalBets: {},
         displayPopup: null,
-        betPercentage: {},
-        playerBetCount: {},
         showResultInfo: false,
         acceptedBetQueue: {},
         showWinningAnimation: false,
