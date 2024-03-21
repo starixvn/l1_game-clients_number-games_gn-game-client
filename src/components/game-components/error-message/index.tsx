@@ -1,5 +1,4 @@
 import React from "react";
-import { useGameContext } from "../../../_shared/react-contexts";
 import { useTranslator } from "../../../_shared/react-hooks/use-translator";
 import { ResourceTypes } from "../../../_shared/resources";
 import BaseDialog from "../base-dialog";
@@ -7,9 +6,12 @@ import { ModalType } from "../base-dialog/type";
 import Styles from "./error-message.module.scss";
 import { ConnectFailedReasonKey } from "./type";
 
-export const ConnectFailedMessage: React.FC<{ onSubmit: () => void; reason: string }> = ({ onSubmit, reason }) => {
-    const { tolgeeNamespace, id } = useGameContext();
-
+export const ConnectFailedMessage: React.FC<{ tolgeeNamespace: string; id: number; onSubmit: () => void; reason: string }> = ({
+    tolgeeNamespace,
+    id,
+    onSubmit,
+    reason,
+}) => {
     const { t } = useTranslator([tolgeeNamespace]);
     return (
         <BaseDialog type={ModalType.Center} isOpen={true}>
