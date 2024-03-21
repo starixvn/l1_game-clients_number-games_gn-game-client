@@ -11,6 +11,7 @@ import {
     SystemEventActionType,
 } from "../../_shared/react-contexts";
 import { GameEventActionType } from "../../_shared/react-contexts/game-state-context/game-event-action";
+import { GameResourceKeys } from "../../_shared/resources";
 import { getBalance } from "../../services/auth-service";
 import BetConfirmDialog from "../game-components/bet-confirm-dialog";
 import ConfirmBet from "../game-components/confirm-bet";
@@ -75,7 +76,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         super(props);
 
         const { dispatch } = this.props;
-
+        const gamName = this.props.translate(`${GameResourceKeys.GAME_NAME}_${this.props.id}`);
         this.roundStateHandler = roundStateHandler;
         this.gameStateHandler = gameStateHandler;
         this.gameMessageHandler = gameMessageHandler;
@@ -84,7 +85,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             new GameErrorHandler({
                 dispatch,
                 gameMessageHandler: this.gameMessageHandler,
-                gameName: this.props.gameName,
+                gamName,
             });
 
         this.playerHandler =
@@ -101,7 +102,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 tolgeeNamespace: this.props.tolgeeNamespace,
                 dispatch,
                 gameMessageHandler: this.gameMessageHandler,
-                gameName: this.props.gameName,
+                gameName: gamName,
                 getPlayerBalance: this.getPlayerBalance,
                 hedgeBetGroups: this.props.hedgeBetGroups,
                 translate: props.translate,
@@ -115,7 +116,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             new GameFinishHandler({
                 dispatch,
                 gameMessageHandler: this.gameMessageHandler,
-                gameName: this.props.gameName,
             });
 
         this.gameDisabledHandler =
@@ -123,7 +123,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             new GameDisableHandler({
                 dispatch,
                 gameMessageHandler: this.gameMessageHandler,
-                gameName: this.props.gameName,
                 durations: this.props.durations,
                 gameStateContextModel: this.getGameStateContext.bind(this),
                 roundStateHandler: roundStateHandler,

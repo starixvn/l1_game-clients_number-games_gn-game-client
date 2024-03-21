@@ -1,4 +1,4 @@
-import { updateURLContext, getURLContext } from "../../../_shared/react-contexts";
+import { getURLContext, updateURLContext } from "../../../_shared/react-contexts";
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 import { GameStateContextModel } from "../../../_shared/react-contexts/game-state-context/game-state-context-model";
 import { IRoundStateHandler } from "../../round-base/round-state-handler";
@@ -6,7 +6,6 @@ import { GameDurations, RoundState } from "../type";
 import { GameMessageHandler, messageEventType } from "./game-message-handler";
 
 export type GameDisabledHandlerProps = {
-    gameName: string;
     dispatch: Function;
     gameMessageHandler: GameMessageHandler;
     roundStateHandler: IRoundStateHandler;

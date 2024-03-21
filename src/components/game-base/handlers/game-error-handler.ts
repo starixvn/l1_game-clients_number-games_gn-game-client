@@ -3,9 +3,9 @@ import { GameEventActionType } from "../../../_shared/react-contexts/game-state-
 import { GameMessageHandler, messageEventType } from "./game-message-handler";
 
 export type GameErrorHandlerProps = {
-    gameName: string;
     dispatch: Function;
     gameMessageHandler: GameMessageHandler;
+    gamName: string;
 };
 
 export interface ApiError {
@@ -32,15 +32,13 @@ export class GameErrorHandler {
         const errorCode = apiError.errorCode;
         const isKickOutError = this.isKickOutError(errorCode.toString());
         const onClose = isKickOutError ? signOut : null;
-
         const message = GetLocalizedErrorMessage(errorCode, isPlaceBet);
-        const gameName = `${this.props.gameName}`;
 
         this.props.dispatch({
             type: GameEventActionType.DISPLAY_POPUP,
             payload: {
                 notice: {
-                    gameName: gameName,
+                    gameName: this.props.gamName,
                     roundId: apiError?.gameRoundId,
                     message: message,
                     duration: isKickOutError ? 10 : 3,

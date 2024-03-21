@@ -16,7 +16,6 @@ import {
 import { SystemContextModel } from "../../../_shared/react-contexts";
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 import { GameStateContextModel } from "../../../_shared/react-contexts/game-state-context/game-state-context-model";
-import { GameResourceKeys } from "../../../_shared/resources";
 import { Notice, RoundState, SuggestBet } from "../type";
 import { GameMessageHandler, messageEventType } from "./";
 
@@ -43,7 +42,7 @@ export class PlaceBetHandler {
     };
 
     handleBetFailed = ({ notice, kickedOut }, signOut: () => void) => {
-        const { dispatch, gameName } = this.props;
+        const { dispatch } = this.props;
         const isDisabledAccount = kickedOut?.isDisabledAccount;
         dispatch({
             type: GameEventActionType.DISPLAY_POPUP,
@@ -53,17 +52,17 @@ export class PlaceBetHandler {
         });
 
         const noticePayload = this.getNoticePayloadBetFailed(notice, kickedOut);
+
+        noticePayload.gameName = this.props.gameName;
         if (isDisabledAccount) {
             noticePayload.onClose = signOut;
             noticePayload.duration = 10;
             noticePayload.roundId = 0;
-            noticePayload.gameName = gameName;
         } else {
             noticePayload.duration = 3;
             noticePayload.minBet = notice?.minBet;
             noticePayload.maxBet = notice?.maxBet;
             noticePayload.roundId = notice?.gameRoundId;
-            noticePayload.gameName = `${gameName.toLowerCase()}:${GameResourceKeys.GAME_NAME}`;
         }
 
         dispatch({ type: GameEventActionType.DISPLAY_POPUP, payload: { notice: noticePayload } });

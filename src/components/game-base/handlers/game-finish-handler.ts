@@ -4,7 +4,6 @@ import { GameDurations } from "../type";
 import { GameMessageHandler, messageEventType } from "./";
 
 export type GameFinishHandlerProps = {
-    gameName: string;
     dispatch: Function;
     gameMessageHandler: GameMessageHandler;
 };
