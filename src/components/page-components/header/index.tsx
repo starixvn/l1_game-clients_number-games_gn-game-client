@@ -1,11 +1,11 @@
 import React from "react";
 import { User } from "sc-user-service-client/dist/auth";
 import { getAppSettings } from "../../../_shared/app-settings";
+import { SettingEventActionType, useSettingDispatch } from "../../../_shared/react-contexts";
 import { useTranslator } from "../../../_shared/react-hooks";
+import { ResourceTypes } from "../../../_shared/resources";
 import { UserInfo } from "../user-info";
 import Styles from "./header.module.scss";
-import { URLContext } from "../../../_shared/react-contexts/url-context";
-import { SettingEventActionType, useSettingDispatch } from "../../../_shared/react-contexts";
 
 type Props = {
     openingGameId: number;
@@ -24,7 +24,7 @@ const Header: React.FC<Props> = (props) => {
     const { gameSettings } = getAppSettings();
     const appSetting = gameSettings[props.openingGameId];
 
-    const tolgeeNamespace = appSetting ? appSetting["tolgeeNamespace"] : "";
+    const tolgeeNamespace = appSetting ? appSetting["tolgeeNamespace"] : ResourceTypes.SABA_NUMBER;
 
     const { t } = useTranslator([tolgeeNamespace]);
 
@@ -38,7 +38,9 @@ const Header: React.FC<Props> = (props) => {
         });
     };
 
-    const headerTitle = `${props.isRenderGames ? `${t(`${tolgeeNamespace}.game_name_${props.openingGameId}`)}` : "SABA NUMBER GAME"}`;
+    const headerTitle = `${
+        props.isRenderGames ? `${t(`${tolgeeNamespace}.game_name_${props.openingGameId}`).toUpperCase()}` : "SABA NUMBER GAME"
+    }`;
 
     return (
         <header className={`${Styles.header}`} data-testid="header">
