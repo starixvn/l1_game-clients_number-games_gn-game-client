@@ -23,7 +23,7 @@ jest.mock("react", () => ({
 describe("CountdownTimer File", () => {
     describe("CountdownTimer Component", () => {
         const MockSimpleTimer = () => <div className="simple-timer"></div>;
-        const MockGameStatus = () => <div className="game-status"></div>;
+        const MockGameStatus = ({ children }) => <div className="game-status">{children}</div>;
 
         test("renders SimpleTimer and GameStatus for InRound state", () => {
             mockUseGameStateContext.mockReturnValue({ roundState: RoundState.InRound } as GameStateContextModel);
@@ -32,7 +32,20 @@ describe("CountdownTimer File", () => {
 
             expect(container.querySelector(".simple-timer")).toBeInTheDocument();
             expect(container.querySelector(".start-betting")).toBeInTheDocument();
-            expect(container.querySelector(".status_stop_bet")).not.toBeInTheDocument();
+            expect(container.querySelector(".no-more-bets")).not.toBeInTheDocument();
+            expect(container.querySelector(".status_result")).not.toBeInTheDocument();
+            expect(container.querySelector(".loader-show-result")).not.toBeInTheDocument();
+            expect(container.querySelector(".game-status")).toBeInTheDocument();
+        });
+
+        test("renders SimpleTimer and GameStatus for LockingBet state", () => {
+            mockUseGameStateContext.mockReturnValue({ roundState: RoundState.LockingBet } as GameStateContextModel);
+
+            const { container } = render(<CountdownTimer SimpleTimerProp={MockSimpleTimer} GameStatusProp={MockGameStatus} />);
+
+            expect(container.querySelector(".simple-timer")).toBeInTheDocument();
+            expect(container.querySelector(".start-betting")).not.toBeInTheDocument();
+            expect(container.querySelector(".no-more-bets")).toBeInTheDocument();
             expect(container.querySelector(".status_result")).not.toBeInTheDocument();
             expect(container.querySelector(".loader-show-result")).not.toBeInTheDocument();
             expect(container.querySelector(".game-status")).toBeInTheDocument();
@@ -45,7 +58,7 @@ describe("CountdownTimer File", () => {
 
             expect(container.querySelector(".simple-timer")).not.toBeInTheDocument();
             expect(container.querySelector(".start-betting")).not.toBeInTheDocument();
-            expect(container.querySelector(".status_stop_bet")).not.toBeInTheDocument();
+            expect(container.querySelector(".no-more-bets")).not.toBeInTheDocument();
             expect(container.querySelector(".status_result")).not.toBeInTheDocument();
             expect(container.querySelector(".loader-show-result")).toBeInTheDocument();
             expect(container.querySelector(".game-status")).toBeInTheDocument();
@@ -58,14 +71,14 @@ describe("CountdownTimer File", () => {
 
             expect(container.querySelector(".simple-timer")).not.toBeInTheDocument();
             expect(container.querySelector(".start-betting")).not.toBeInTheDocument();
-            expect(container.querySelector(".status_stop_bet")).not.toBeInTheDocument();
+            expect(container.querySelector(".no-more-bets")).not.toBeInTheDocument();
             expect(container.querySelector(".status_result")).not.toBeInTheDocument();
             expect(container.querySelector(".loader-show-result")).toBeInTheDocument();
             expect(container.querySelector(".game-status")).not.toBeInTheDocument();
         });
 
-        test.each([RoundState.BeforePlaceBet, RoundState.SwitchRound, RoundState.ConnectFailed, RoundState.Disabled])(
-            "renders nothing for BeforePlaceBet or SwitchRound or ConnectFailed or Disabled state",
+        test.each([RoundState.BeforePlaceBet, RoundState.SwitchRound, RoundState.ConnectFailed, RoundState.Disabled, 9])(
+            "renders nothing for BeforePlaceBet or SwitchRound or ConnectFailed or Disabled state or wrong state",
             (roundState) => {
                 mockUseGameStateContext.mockReturnValue({ roundState } as GameStateContextModel);
 
@@ -73,7 +86,7 @@ describe("CountdownTimer File", () => {
 
                 expect(container.querySelector(".simple-timer")).not.toBeInTheDocument();
                 expect(container.querySelector(".start-betting")).not.toBeInTheDocument();
-                expect(container.querySelector(".status_stop_bet")).not.toBeInTheDocument();
+                expect(container.querySelector(".no-more-bets")).not.toBeInTheDocument();
                 expect(container.querySelector(".status_result")).not.toBeInTheDocument();
                 expect(container.querySelector(".loader-show-result")).not.toBeInTheDocument();
                 expect(container.querySelector(".game-status")).not.toBeInTheDocument();
