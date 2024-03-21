@@ -1,7 +1,6 @@
 import { randomBytes } from "crypto";
 import { FC, useState } from "react";
 import { createPortal } from "react-dom";
-
 import { getGlossaryTranslate, numberWithCommas, separateDateTime, sortedCollectionByTime } from "../../../_shared/helpers";
 import { useBallColor } from "../../../_shared/helpers/ball-color-helper";
 import { useGameContext, usePlayerContext } from "../../../_shared/react-contexts";
@@ -10,10 +9,10 @@ import { useCommonTranslate, useSNTranslate, useTranslator } from "../../../_sha
 import { DrawInfo, PFResult } from "../../../components/game-base/type";
 import { BetLogDetailProps } from "../../../components/game-components/bet-history";
 import ModalContainer from "../../../components/game-components/modal-container";
-import PFVerifyModal from "../../../components/game-components/pf-verify";
 import { BacBallBetOptions } from "../constants";
 import Styles from "./common.module.scss";
 import TableRow from "./row-table";
+import { PFVerifyModal } from "../../../components/game-components/provably-fair";
 
 interface BacBallBetDetailProps extends BetLogDetailProps {
     drawInfo: DrawInfoBacBall;

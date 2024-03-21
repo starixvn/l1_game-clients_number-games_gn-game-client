@@ -35,10 +35,8 @@ export const messageEventType = {
     UPDATE_PLAYER_BALANCE: "updatePlayerBalance",
     CLEAR_GAME_TIMEOUT_AND_INTERVAL: "clearGameTimeoutAndInterval",
     PROVABLY_FAIR: "pf",
-    IN_GAME_SERVER_SEED: "serverSeedHash",
     SEND_SOCKET_MESSAGE_WITH_CLIENT_SEED: "sendSocketMessageWithClientSeed",
     ROUND_ID: "roundId",
-    CLIENT_SEED_DETAIL: "clientSeedDetail",
 };
 
 export class GameMessageHandler {
@@ -53,8 +51,6 @@ export class GameMessageHandler {
         this.register(messageEventType.ROUND_DATA, this.handleRoundData);
         this.register(messageEventType.SIGNED_IN, this.handleSignedIn);
         this.register(messageEventType.PROVABLY_FAIR, this.handleProvablyFair);
-        this.register(messageEventType.IN_GAME_SERVER_SEED, this.handleInGameServerSeedHash);
-        this.register(messageEventType.CLIENT_SEED_DETAIL, this.handleClientSeedDetail);
     };
 
     getMessageTransmitter() {
@@ -130,28 +126,6 @@ export class GameMessageHandler {
             payload: {
                 pfSetting: {
                     ...pf,
-                },
-            },
-        });
-    };
-
-    handleInGameServerSeedHash = ({ serverSeedHash }) => {
-        this.dispatch({
-            type: GameEventActionType.UPDATE_PF_SETTING,
-            payload: {
-                pfSetting: {
-                    serverSeedHash,
-                },
-            },
-        });
-    };
-
-    handleClientSeedDetail = ({ clientSeedDetail }) => {
-        this.dispatch({
-            type: GameEventActionType.UPDATE_PF_SETTING,
-            payload: {
-                pfSetting: {
-                    ...clientSeedDetail,
                 },
             },
         });

@@ -177,6 +177,7 @@ export type ClientSeed = {
 };
 
 export type ClientSeedInfo = {
+    drawId: number;
     clientSeed: string;
     clientSeeds: ClientSeed[];
     mergeClientSeed: string;

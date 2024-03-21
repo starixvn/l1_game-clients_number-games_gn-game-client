@@ -1,13 +1,19 @@
 import { FC } from "react";
 import { createPortal } from "react-dom";
-import { useBallColor } from "../../../_shared/helpers/ball-color-helper";
-import { useGameContext } from "../../../_shared/react-contexts";
-import { useCommonTranslate, useTranslator } from "../../../_shared/react-hooks";
-import ModalContainer from "../modal-container";
-import { ButtonPFGuide } from "../pf-guide";
-import Styles from "../pf-setting/pf-setting.module.scss";
+import { useBallColor } from "../../../../../_shared/helpers/ball-color-helper";
+import { useGameContext } from "../../../../../_shared/react-contexts";
+import { useCommonTranslate, useTranslator } from "../../../../../_shared/react-hooks";
+import ModalContainer from "../../../modal-container";
+import { ButtonPFGuide } from "../../pf-guide";
 
-const PFVerifyDetailModal: FC<{ handleCloseModal: Function; isOpen: boolean; data?: any }> = ({ handleCloseModal, isOpen, data }) => {
+import Styles from "../../provably-fair.module.scss";
+import { PFResult } from "../../../../game-base/type";
+
+const PFVerifyDetailModal: FC<{ handleCloseModal: Function; isOpen: boolean; pfResult: PFResult }> = ({
+    handleCloseModal,
+    isOpen,
+    pfResult,
+}) => {
     const { t: translateCommon } = useCommonTranslate();
 
     return (
@@ -25,14 +31,14 @@ const PFVerifyDetailModal: FC<{ handleCloseModal: Function; isOpen: boolean; dat
                 isOverlap={true}
                 onCloseModal={handleCloseModal}
             >
-                <PFVerifyDetail />
+                <PFVerifyDetail pfResult={pfResult} />
             </ModalContainer>,
             document.getElementById("dashboard")
         )
     );
 };
 
-const PFVerifyDetail: FC = () => {
+const PFVerifyDetail: FC<{ pfResult: PFResult }> = () => {
     const { tolgeeNamespace } = useGameContext();
     const { t: translateCommon } = useCommonTranslate();
     const { t: translateBacBall } = useTranslator([tolgeeNamespace]);
@@ -56,9 +62,7 @@ const PFVerifyDetail: FC = () => {
             </div>
 
             <h3 className={`${Styles["section-title"]}`}>{translateCommon("pf_header_combined_sha512_hash")}</h3>
-            <p className="text-wrap">
-                4eb1ec458c6001e7c12fe3ef534794cb3b0f670596b1c6e1a643106a9d9bfa61a0064838dec0db10d3e9f8b2676be9c41fe9ffa0d6abed796d02aef4b7af968d
-            </p>
+            <p className="text-wrap"></p>
             <p className={Styles["text-successful"]}>{translateBacBall("pf_verification_msg_verify_successful")}</p>
             <p className={Styles["text-unsuccessful"]}>{translateBacBall("pf_verification_msg_verify_unsuccessful")}</p>
 

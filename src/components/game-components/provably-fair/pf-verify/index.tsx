@@ -1,16 +1,17 @@
 import { Dispatch, FC, useMemo, useReducer } from "react";
 import { createPortal } from "react-dom";
 import { v4 as uuidv4 } from "uuid";
-import { getGlossaryTranslate, getOrdinalNumber } from "../../../_shared/helpers";
-import { useBallColor } from "../../../_shared/helpers/ball-color-helper";
-import { useGameContext } from "../../../_shared/react-contexts";
-import { useClickSound, useCommonTranslate, useSNTranslate, useTranslator } from "../../../_shared/react-hooks";
-import { PFResult } from "../../game-base/type";
-import ModalContainer from "../modal-container";
-import PFClientSeedInfoModal from "../pf-client-seed-info";
+import { getGlossaryTranslate, getOrdinalNumber } from "../../../../_shared/helpers";
+import { useBallColor } from "../../../../_shared/helpers/ball-color-helper";
+import { useGameContext } from "../../../../_shared/react-contexts";
+import { useClickSound, useCommonTranslate, useSNTranslate, useTranslator } from "../../../../_shared/react-hooks";
+import { PFResult } from "../../../game-base/type";
+import ModalContainer from "../../modal-container";
+import PFClientSeedInfoModal from "./pf-client-seed-info";
 import { ButtonPFGuide } from "../pf-guide";
-import Styles from "../pf-setting/pf-setting.module.scss";
-import PFVerifyDetailModal from "../pf-verify-detail";
+import Styles from "../provably-fair.module.scss";
+import PFVerifyDetailModal from "./pf-verify-detail";
+import CopyableTextInput from "../copyable-text-input";
 
 enum PFDispatchAction {
     OPEN_CLIENT_SEED_INFO = "openClientSeedInfo",
@@ -87,6 +88,7 @@ const PFVerifyModal: FC<{ handleCloseModal: Function; isShowPFVerify: boolean; p
                 <PFVerifyDetailModal
                     isOpen={childeModalState.isShowPFVerifyDetail}
                     handleCloseModal={() => dispatch(PFDispatchAction.CLOSE_PF_VERIFY_DETAIL)}
+                    pfResult={pfResult}
                 />
             </ModalContainer>,
             document.getElementById("dashboard")
@@ -115,22 +117,11 @@ const PFVerify: FC<{ pfResult: PFResult; dispatchChildModalState: Dispatch<PFDis
 
         return {
             drawID: pfResult?.drawId,
-            order: getOrdinalNumber(beforeDrawResult.length),
+            order: translateSNGames(`draw_${beforeDrawResult.length}`)?.replace(":", ""),
             result: beforeDrawResult,
         };
     }, [pfResult]);
     const ballColor = useBallColor;
-    const handleCopy = (event: React.MouseEvent<HTMLButtonElement>) => {
-        clickSound();
-        const currentTarget = event.currentTarget as HTMLElement;
-        const data = document.getElementById(currentTarget.dataset?.copy) as HTMLInputElement;
-        const effect = currentTarget.querySelector(".copy-effect");
-        navigator.clipboard.writeText(data.value);
-        effect.classList.remove(Styles["hide"]);
-        setTimeout(() => {
-            effect.classList.add(Styles["hide"]);
-        }, 500);
-    };
 
     const handleClickTooltip = (event: React.MouseEvent<HTMLButtonElement> & React.FocusEvent<HTMLButtonElement>) => {
         clickSound();
@@ -148,7 +139,7 @@ const PFVerify: FC<{ pfResult: PFResult; dispatchChildModalState: Dispatch<PFDis
     return (
         <div className={Styles["pf-setting-container"]}>
             <div className="text-white font-weight-medium mb-2">
-                {translateSNGames("glossary_draw_id")}: #{drawResult?.drawID} ({drawResult?.order} Draw)
+                {translateSNGames("glossary_draw_id")}: #{drawResult?.drawID} ({drawResult?.order})
             </div>
             <div className="flex justify-around">
                 {useMemo(() => {
@@ -174,31 +165,12 @@ const PFVerify: FC<{ pfResult: PFResult; dispatchChildModalState: Dispatch<PFDis
             <div className={Styles["client-seed-form"]}>
                 <h3 className={Styles["section-title"]}>{translateCommon("pf_header_server_seed_sha256")}</h3>
                 <div className="input-group width-full">
-                    <input
-                        className="form-control"
-                        type="text"
-                        name="server-seed-sha256"
-                        id="server-seed-sha256"
-                        readOnly
-                        value={pfResult?.serverSeedHash}
-                    />
-                    <button className={Styles["copy-btn"]} onClick={handleCopy} data-copy="server-seed-sha256">
-                        <span className="icon-copy" />
-                        <div className={`copy-effect ${Styles["hide"]} ${Styles["copy-success"]}`}>
-                            {translateCommon("pf_copy_successfully ")}
-                        </div>
-                    </button>
+                    <CopyableTextInput value={pfResult?.serverSeedHash} id="server-seed-sha256" />
                 </div>
 
                 <h3 className={`${Styles["section-title"]} mt-3`}>{translateCommon("pf_header_server_seed")}</h3>
                 <div className="input-group width-full">
-                    <input className="form-control" type="text" name="server-seed" id="server-seed" readOnly value={pfResult?.serverSeed} />
-                    <button className={Styles["copy-btn"]} onClick={handleCopy} data-copy="server-seed">
-                        <span className="icon-copy" />
-                        <div className={`copy-effect ${Styles["hide"]} ${Styles["copy-success"]}`}>
-                            {translateCommon("pf_copy_successfully ")}
-                        </div>
-                    </button>
+                    <CopyableTextInput value={pfResult?.serverSeed} id="server-seed" />
                 </div>
             </div>
             <div className={Styles["client-seed-form"]}>
@@ -223,20 +195,7 @@ const PFVerify: FC<{ pfResult: PFResult; dispatchChildModalState: Dispatch<PFDis
                     </span>
                 </div>
                 <div className="input-group width-full">
-                    <input
-                        className="form-control"
-                        type="text"
-                        name="merge-client-seed"
-                        id="merge-client-seed"
-                        readOnly
-                        value={pfResult?.mergeClientSeed}
-                    />
-                    <button className={Styles["copy-btn"]} onClick={handleCopy} data-copy="merge-client-seed">
-                        <span className="icon-copy" />
-                        <div className={`copy-effect ${Styles["hide"]} ${Styles["copy-success"]}`}>
-                            {translateCommon("pf_copy_successfully ")}
-                        </div>
-                    </button>
+                    <CopyableTextInput value={pfResult?.mergeClientSeed} id="merge-client-seed" />
                 </div>
             </div>
             <div className={Styles["client-seed-form"]}>
@@ -249,20 +208,7 @@ const PFVerify: FC<{ pfResult: PFResult; dispatchChildModalState: Dispatch<PFDis
                 </div>
 
                 <div className="input-group width-full mt-4">
-                    <input
-                        className="form-control"
-                        type="text"
-                        name="combined-sha512-hash"
-                        id="combined-sha512-hash"
-                        readOnly
-                        value={pfResult?.finalHash}
-                    />
-                    <button className={Styles["copy-btn"]} onClick={handleCopy} data-copy="combined-sha512-hash">
-                        <span className="icon-copy" />
-                        <div className={`copy-effect ${Styles["hide"]} ${Styles["copy-success"]}`}>
-                            {translateCommon("pf_copy_successfully ")}
-                        </div>
-                    </button>
+                    <CopyableTextInput value={pfResult?.finalHash} id="combined-sha512-hash" />
                 </div>
             </div>
 

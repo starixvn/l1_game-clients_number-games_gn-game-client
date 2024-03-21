@@ -1,13 +1,13 @@
 import { FC, memo, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { v4 as uuidv4 } from "uuid";
-import { Themes, buildVersion } from "../../../_shared/constants";
-import { buildGameGuideUrl } from "../../../_shared/helpers";
-import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
-import { useClickSound, useCommonTranslate } from "../../../_shared/react-hooks";
-import { tolgee } from "../../../_shared/tolgee";
-import Loader from "../loader";
-import ModalContainer from "../modal-container";
+import { Themes, buildVersion } from "../../../../_shared/constants";
+import { buildGameGuideUrl } from "../../../../_shared/helpers";
+import { useGameStateContext } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
+import { useClickSound, useCommonTranslate } from "../../../../_shared/react-hooks";
+import { tolgee } from "../../../../_shared/tolgee";
+import Loader from "../../loader";
+import ModalContainer from "../../modal-container";
 import Styles from "./pf-guide.module.scss";
 
 const PFGuide: FC = () => {

@@ -23,7 +23,6 @@ import GameGuideModal from "../game-components/game-guide";
 import GameLoading from "../game-components/game-loading";
 import NewRoundTransition from "../game-components/new-round-transition";
 import { Notice } from "../game-components/notice";
-import PFSettingModal from "../game-components/pf-setting";
 import { Settings } from "../game-components/settings";
 import BetSettings from "../page-components/bet-settings";
 import { IRoundStateHandler } from "../round-base/round-state-handler";
@@ -40,6 +39,7 @@ import {
 import { GameSoundHandler } from "./handlers/game-sound-handler";
 import { IGameStateHandler } from "./handlers/game-state-handler";
 import { GameBaseProps, PFSettingData, RoundState } from "./type";
+import { PFSettingModal } from "../game-components/provably-fair";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
     protected socket: Socket;
