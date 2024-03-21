@@ -23,7 +23,7 @@ const ProfilePicture: React.FC<{ avatarId: number; isEditable?: boolean; onClick
                     alt="Avatar"
                 />
             ) : (
-                <span data-testid="default-avatar" className={`icon-user ${Styles["icon-user"]}`}></span>
+                <div data-testid="default-avatar" className={Styles["default-avatar"]}></div>
             )}
             {isEditable && <EditIcon />}
         </div>
