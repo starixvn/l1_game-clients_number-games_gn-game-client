@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+
 import styles from "./avatar.module.scss";
 
 export type AvatarProps = {
@@ -10,5 +11,5 @@ export type AvatarProps = {
 export function Avatar({ id, onClick, selected }: AvatarProps): ReactNode {
     const className = `${styles.avatar} ${selected === id ? styles["avatar-selected"] : ""}`;
 
-    return <img onClick={onClick} src={`/static/images/avatar/${id}.png`} className={className} alt="Avatar" />;
+    return <img onClick={onClick} src={`/static/images/avatar/${id}.jpg`} className={className} alt="Avatar" />;
 }

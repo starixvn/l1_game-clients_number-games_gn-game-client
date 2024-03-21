@@ -1,11 +1,12 @@
 import { ReactNode, useState } from "react";
+
 import { useTranslator } from "../../../../_shared/react-hooks";
-import Styles from "./avatar-gallery.module.scss";
-import { Avatar } from "./avatar";
 import BaseDialog from "../../../game-components/base-dialog";
 import { ModalType } from "../../../game-components/base-dialog/type";
+import { Avatar } from "./avatar";
+import Styles from "./avatar-gallery.module.scss";
 
-export const MAX_AVATAR_ID = 88;
+export const MAX_AVATAR_ID = 40;
 
 export type AvatarGalleryProps = {
     selectedAvatarId: number;
@@ -21,7 +22,7 @@ export type AvatarsProps = {
 export function Avatars({ onSelect, selected }: AvatarsProps): ReactNode {
     const avatars = [];
 
-    for (let index = 1; index < MAX_AVATAR_ID; index++) {
+    for (let index = 1; index <= MAX_AVATAR_ID; index++) {
         avatars.push(<Avatar key={index} id={index} selected={selected} onClick={() => onSelect(index)} />);
     }
 
@@ -40,7 +41,7 @@ export function AvatarGallery({ selectedAvatarId, onSelectAvatar, onClose }: Ava
     return (
         <div className={Styles["gallery-wrapper"]}>
             <BaseDialog type={ModalType.Center} isOpen={true} onCloseModal={onClose}>
-                <h3 className={Styles["gallery-title"]}>{t("SabaNumber.change_avatar")}</h3>
+                <h1 className={Styles["gallery-title"]}>{t("SabaNumber.change_avatar")}</h1>
                 <div className={`icon-close ${Styles["icon-close"]}`} onClick={onClose} data-testid="btn-close-gallery"></div>
                 <div className={Styles["container-avatars"]}>
                     <Avatars selected={selectedId} onSelect={setSelectedId} />

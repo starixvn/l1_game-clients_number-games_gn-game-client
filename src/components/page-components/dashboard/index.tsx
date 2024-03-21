@@ -2,18 +2,19 @@ import Head from "next/head";
 import { withRouter } from "next/router";
 import React from "react";
 import { AuthorizeResponse, ReCheckInResponse } from "sc-user-service-client/dist/auth";
-import { Socket, io } from "socket.io-client";
+import { io, Socket } from "socket.io-client";
 import MsgpackParser from "socket.io-msgpack-parser";
+
 import { getAppSettings } from "../../../_shared/app-settings";
 import { Themes } from "../../../_shared/constants";
-import { GetLocalizedErrorMessage, StorageHelper, buildUrl, localStorageKeys } from "../../../_shared/helpers";
+import { buildUrl, GetLocalizedErrorMessage, localStorageKeys, StorageHelper } from "../../../_shared/helpers";
 import { randomInteger } from "../../../_shared/helpers/number-helper";
 import {
+    loadURLContext,
     PlayerContextProvider,
     SettingContextProvider,
-    URLContextModel,
-    loadURLContext,
     updateURLContext,
+    URLContextModel,
 } from "../../../_shared/react-contexts";
 import Games from "../../../games/games";
 import { authorize, createNickname, getLobbyConfigs, reCheckIn } from "../../../services/auth-service";
@@ -27,6 +28,7 @@ import Header from "../header";
 import { Lobby } from "../lobby/lobby";
 import Styles from "./dashboard.module.scss";
 import Register from "./register";
+import { MAX_AVATAR_ID } from "./register/avatar-gallery";
 import NameGenerator from "./register/name-generator";
 import { Props, State } from "./type";
 
@@ -396,7 +398,7 @@ class Dashboard extends React.PureComponent<Props, State> {
     autoCreateNickname = async () => {
         const { session } = this.props;
         const nickname = NameGenerator.generateName();
-        const maxAvatarId = 87;
+        const maxAvatarId = MAX_AVATAR_ID;
         const selectedAvatarId = randomInteger(1, maxAvatarId);
         const response = await createNickname(session, nickname, selectedAvatarId);
         const authorizeResponse = response as any;

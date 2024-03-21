@@ -1,6 +1,6 @@
 [data-theme="light"] {
     .profile-picture {
-        --icon-edit-background: #426278;
+        --icon-edit-background: #577af9;
         --icon-edit-border: #242c32;
         --icon-edit-color: #eaeaea;
     }
@@ -15,6 +15,7 @@
 
     .avatar {
         width: 100%;
+        border-radius: 50%;
     }
 
     .icon-user {
