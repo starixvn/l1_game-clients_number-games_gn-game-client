@@ -2,28 +2,33 @@ import Head from "next/head";
 import { withRouter } from "next/router";
 import React from "react";
 import { AuthorizeResponse, ReCheckInResponse } from "sc-user-service-client/dist/auth";
+import { Socket, io } from "socket.io-client";
+import MsgpackParser from "socket.io-msgpack-parser";
 import { getAppSettings } from "../../../_shared/app-settings";
-import { buildUrl, GetLocalizedErrorMessage, localStorageKeys, StorageHelper } from "../../../_shared/helpers";
-import { PlayerContextProvider, URLContextModel, loadURLContext, updateURLContext } from "../../../_shared/react-contexts";
+import { Themes } from "../../../_shared/constants";
+import { GetLocalizedErrorMessage, StorageHelper, buildUrl, localStorageKeys } from "../../../_shared/helpers";
+import { randomInteger } from "../../../_shared/helpers/number-helper";
+import {
+    PlayerContextProvider,
+    SettingContextProvider,
+    URLContextModel,
+    loadURLContext,
+    updateURLContext,
+} from "../../../_shared/react-contexts";
+import Games from "../../../games/games";
 import { authorize, createNickname, getLobbyConfigs, reCheckIn } from "../../../services/auth-service";
 import { updateSignInSMStatus } from "../../../services/user-setting-service";
-import { Props, State } from "./type";
-import { io, Socket } from "socket.io-client";
-import MsgpackParser from "socket.io-msgpack-parser";
-import { Themes } from "../../../_shared/constants";
-import { randomInteger } from "../../../_shared/helpers/number-helper";
-import Games from "../../../games/games";
 import { UserStakeLevel } from "../../game-base/type";
 import BaseDialog from "../../game-components/base-dialog";
 import { ModalType } from "../../game-components/base-dialog/type";
 import { ErrorApiText } from "../../game-components/error-api-text";
 import Footer from "../../game-components/footer";
-import Register from "./register";
 import Header from "../header";
-import Styles from "./dashboard.module.scss";
-import NameGenerator from "./register/name-generator";
 import { Lobby } from "../lobby/lobby";
-import { SettingContextProvider } from "../../../_shared/react-contexts";
+import Styles from "./dashboard.module.scss";
+import Register from "./register";
+import NameGenerator from "./register/name-generator";
+import { Props, State } from "./type";
 
 class Dashboard extends React.PureComponent<Props, State> {
     private notificationSocket: Socket = null;
@@ -351,6 +356,7 @@ class Dashboard extends React.PureComponent<Props, State> {
                 <SettingContextProvider>
                     <div className={`${Styles["dashboard"]}`} id={"dashboard"}>
                         <Header
+                            openingGameId={this.state.openGameId}
                             user={authorizeInfo.user}
                             toggleAnnouncementModal={this.toggleAnnouncementModal}
                             offerGames={offerGames}
