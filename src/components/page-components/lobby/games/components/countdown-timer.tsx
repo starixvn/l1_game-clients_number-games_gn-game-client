@@ -12,12 +12,11 @@ type Props = {
 const messageEventTypes = {
     REMAINING_TIME: "remainingTime",
     START_PLACE_BET: "spb",
-    END_PLACE_BET: "epb",
     FINISH: "finish",
 };
 
 export const CountdownTimer: React.FC<Props> = ({ lobbyGameTransmitter, gameSettings }) => {
-    const [timeCounter, setTimeCounter] = useState(0);
+    const [timeCounter, setTimeCounter] = useState<number>(null);
     const [roundState, setRoundState] = useState<RoundState>(RoundState.None);
     const { t } = useTranslator();
 
@@ -28,7 +27,6 @@ export const CountdownTimer: React.FC<Props> = ({ lobbyGameTransmitter, gameSett
     const registerTimerEvents = () => {
         lobbyGameTransmitter.register(messageEventTypes.REMAINING_TIME, handleRemainingTime);
         lobbyGameTransmitter.register(messageEventTypes.START_PLACE_BET, handleStartPlacingBet);
-        lobbyGameTransmitter.register(messageEventTypes.END_PLACE_BET, handleLockPlacingBet);
         lobbyGameTransmitter.register(messageEventTypes.FINISH, handleDisplayResult);
     };
 
@@ -39,11 +37,6 @@ export const CountdownTimer: React.FC<Props> = ({ lobbyGameTransmitter, gameSett
     const handleStartPlacingBet = () => {
         const { durations } = gameSettings;
         setTimeCounter(durations.placingBets + 1);
-    };
-
-    const handleLockPlacingBet = () => {
-        const { durations } = gameSettings;
-        setTimeCounter(durations.lockingBet);
     };
 
     const getRemainingTime = (remainingTime: number) => {
@@ -64,13 +57,16 @@ export const CountdownTimer: React.FC<Props> = ({ lobbyGameTransmitter, gameSett
     useEffect(() => {
         const timeInterval = setInterval(() => {
             setTimeCounter((prevTimeCounter) => {
-                return prevTimeCounter - 1;
+                return prevTimeCounter > 0 ? prevTimeCounter - 1 : prevTimeCounter;
             });
         }, 1000);
         return () => clearInterval(timeInterval);
     }, []);
 
     useEffect(() => {
+        if (timeCounter === null) {
+            return;
+        }
         const { durations } = gameSettings;
         if (timeCounter > durations.placingBets || timeCounter <= 0) {
             setRoundState(RoundState.DisplayResult);
@@ -103,6 +99,6 @@ export const CountdownTimer: React.FC<Props> = ({ lobbyGameTransmitter, gameSett
         case RoundState.DisplayResult:
             return <div className={`${Styles["countdown-timer"]} ${Styles["show-result"]}`}>{t("status_result")}</div>;
         default:
-            return <div className={Styles["countdown-timer"]}>. . .</div>;
+            return <div className={Styles["countdown-timer"]}></div>;
     }
 };
