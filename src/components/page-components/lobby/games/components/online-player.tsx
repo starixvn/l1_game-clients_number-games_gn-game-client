@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { LobbyGameTransmitter } from "./game-board";
-import Styles from "./game-icon.module.scss";
+import Styles from "../../lobby.module.scss";
 
 type Props = {
     lobbyGameTransmitter: LobbyGameTransmitter;

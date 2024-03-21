@@ -21,7 +21,8 @@ export function initLobbySocket(session: any, offerGameIds: number[]) {
                 const gameSetting = gameSettings[gameId];
                 if (gameSetting) {
                     const serviceName = gameSetting.socketInfo?.serviceName;
-                    socket.emit("signIn", { gameName: gameSetting.gameName, session, serviceName });
+                    const appMini = 3;
+                    socket.emit("signIn", { gameName: gameSetting.gameName, session: { ...session, system: appMini }, serviceName });
                 }
             });
         });

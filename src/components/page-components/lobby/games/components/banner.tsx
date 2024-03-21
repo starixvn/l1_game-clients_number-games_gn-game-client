@@ -16,13 +16,13 @@ export const Banner = () => {
             className="swiper-banner"
         >
             <SwiperSlide>
-                <img className="banner-img" src="/static/images/banner/banner-1.png" alt="banner-1" />
+                <img className="banner-img" src="/static/images/lobby/banner/banner-1.png" alt="banner-1" />
             </SwiperSlide>
             <SwiperSlide>
-                <img className="banner-img" src="/static/images/banner/banner-2.png" alt="banner-2" />
+                <img className="banner-img" src="/static/images/lobby/banner/banner-2.png" alt="banner-2" />
             </SwiperSlide>
             <SwiperSlide>
-                <img className="banner-img" src="/static/images/banner/banner-2.png" alt="banner-2" />
+                <img className="banner-img" src="/static/images/lobby/banner/banner-2.png" alt="banner-2" />
             </SwiperSlide>
         </Swiper>
     );

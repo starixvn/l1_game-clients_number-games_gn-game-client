@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
 import { Socket } from "socket.io-client";
-
 import { getAppSettings } from "../../../_shared/app-settings";
 import { usePlayerContext } from "../../../_shared/react-contexts";
 import { BackgroundGalaxy } from "../background";
@@ -31,6 +30,7 @@ export const Lobby: React.FC<Props> = ({ openGame, lobbyConfigs }) => {
 
         return () => {
             window.removeEventListener("visibilitychange", onVisibilityChange);
+            onDestroy();
         };
         // }, [lobbyConfigs.categories]);
     }, []);
