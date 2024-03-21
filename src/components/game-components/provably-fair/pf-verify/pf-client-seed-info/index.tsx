@@ -61,7 +61,7 @@ const PFClientSeedInfo: FC<{ clientSeedInfo: ClientSeedInfo }> = ({ clientSeedIn
 
     const handleClickExport = () => {
         clickSound();
-        const header = `${translateBacBall("glossary_player")},${translateCommon("pf_provably_fair_info_nickname")},${translateBacBall(
+        const header = `${translateBacBall("glossary_player")},${translateBacBall("pf_provably_fair_info_nickname")},${translateBacBall(
             "pf_client_seed_info_subtitle_seed"
         )}`;
         const content = clientSeedInfo.clientSeeds
@@ -72,7 +72,7 @@ const PFClientSeedInfo: FC<{ clientSeedInfo: ClientSeedInfo }> = ({ clientSeedIn
         const data = `${header}\n${content}`;
         const link = document.createElement("a");
         link.href = `data:text/csv;charset=utf-8,${encodeURIComponent(data)}`;
-        link.download = `DRAW_${clientSeedInfo.drawId}_${formatDate(new Date(), "YYYYMMDD")}.csv`;
+        link.download = `DRAW_${clientSeedInfo.drawId}_${formatDate(new Date(), "yyyyMMdd")}.csv`;
         link.click();
     };
 
@@ -113,7 +113,7 @@ const PFClientSeedInfo: FC<{ clientSeedInfo: ClientSeedInfo }> = ({ clientSeedIn
                             <thead>
                                 <tr>
                                     <th style={{ width: "25%" }}>{translateBacBall("glossary_player")}</th>
-                                    <th>{translateCommon("pf_provably_fair_info_nickname")}</th>
+                                    <th>{translateBacBall("pf_provably_fair_info_nickname")}</th>
                                     <th>{translateBacBall("pf_client_seed_info_subtitle_seed")}</th>
                                 </tr>
                             </thead>
