@@ -88,6 +88,8 @@ const ErrorCodeDictionary = {
     SB1935: "Common.invalid_bet",
     SB1939: "Common.message_hedge_bet",
     SB1940: "SabaNumber.message_max_payout",
+    SB1941: "SabaNumber.message_placebet_next_draw",
+    SB1942: "SabaNumber.message_draw_maxbet",
 };
 
 export const CommonErrorCodeList = [

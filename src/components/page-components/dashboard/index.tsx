@@ -140,7 +140,7 @@ class Dashboard extends React.PureComponent<Props, State> {
         if (!document["hidden"]) {
             const reCheckInResponse = await reCheckIn(this.props.session);
             this.handleRecheckInResponse(reCheckInResponse);
-            this.connectLobbySocket();
+            this.connectLobbySocket(this.state.authorizeInfo);
         } else {
             this.closeLobbySocket();
         }
@@ -178,7 +178,7 @@ class Dashboard extends React.PureComponent<Props, State> {
         }, 60 * 1000);
 
         this.connectNotificationSocket();
-        this.connectLobbySocket();
+        this.connectLobbySocket(authorizeInfo);
         queryGame && this.openGame(queryGame);
     }
 
@@ -192,6 +192,7 @@ class Dashboard extends React.PureComponent<Props, State> {
     componentWillUnmount() {
         document.removeEventListener("visibilitychange", this.onVisibilityChange);
         this.notificationSocket?.close();
+        this.state.lobbySocket?.close();
         clearInterval(this.reCheckInInterval);
     }
 
@@ -219,8 +220,7 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.registerMainSocketEvent(this.notificationSocket);
     }
 
-    connectLobbySocket = () => {
-        const { authorizeInfo } = this.state;
+    connectLobbySocket = (authorizeInfo) => {
         if (!authorizeInfo) {
             return;
         }
@@ -469,7 +469,6 @@ class Dashboard extends React.PureComponent<Props, State> {
 
     render() {
         const { authorizeInfo } = this.state;
-
         return authorizeInfo ? (
             <>
                 <Head>{this.renderGoogleAnalytic()}</Head>
