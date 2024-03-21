@@ -43,7 +43,12 @@ const Header: React.FC<Props> = (props) => {
         <header className={`${Styles.header}`} data-testid="header">
             <div className="game-container d-flex">
                 <div className={Styles["header-container"]}>
-                    <div className={Styles["header-left"]}>{headerTitle}</div>
+                    <div
+                        id="img-game-name"
+                        className={`${Styles["header-left"]} ${Styles[`${!props.isRenderGames ? "lobby-title" : ""}`]}`}
+                    >
+                        {headerTitle}
+                    </div>
                     <div className={Styles["header-right"]}>
                         <UserInfo user={props.user} />
                         {!props.isRenderGames && (
