@@ -22,13 +22,20 @@ export const useSettingDispatch = () => useContext(SettingDispatchContext);
 
 const settingReducer = (state: any, action: SettingEventAction) => {
     const { type, payload } = action;
-    const { isShowedSetting } = payload;
+    const { isShowedSetting, enabledMusic } = payload;
 
     switch (type) {
         case SettingEventActionType.TOGGLE_SETTING: {
             return {
                 ...state,
                 isShowedSetting,
+            };
+        }
+
+        case SettingEventActionType.TOGGLE_MUSIC: {
+            return {
+                ...state,
+                enabledMusic,
             };
         }
 

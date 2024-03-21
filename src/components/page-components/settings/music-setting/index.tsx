@@ -1,29 +1,34 @@
 import Styles from "../settings.module.scss";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { StorageHelper, localStorageKeys } from "../../../../_shared/helpers";
-import MusicPlayer from "../../music-player";
+import { useSettingDispatch, SettingEventActionType } from "../../../../_shared/react-contexts";
+import { useClickSound } from "../../../../_shared/react-hooks";
 
 const MusicSetting = ({}) => {
+    const settingDispatch = useSettingDispatch();
+    const clickSound = useClickSound();
     const [enabledMusic, setEnabledMusic] = useState(StorageHelper.get(localStorageKeys.enableMusic) ?? false);
     const toggle = () => {
-        console.log("toggle background music");
+        clickSound();
         setEnabledMusic(!enabledMusic);
         StorageHelper.set(localStorageKeys.enableMusic, !enabledMusic);
-    };
-
-    const getIconClass = (isOn: boolean) => {
-        return isOn ? "icon-on" : "icon-off";
+        settingDispatch({
+            type: SettingEventActionType.TOGGLE_MUSIC,
+            payload: {
+                enabledMusic: !enabledMusic,
+            },
+        });
     };
 
     return (
-        <MusicPlayer enabledMusic={enabledMusic}>
-            <div className={`${Styles["row"]} `}>
-                <span className={`${Styles["text"]} `}>Background music</span>
-                <span className={`${Styles["icon"]}`} onClick={toggle}>
-                    <span className={`${Styles[getIconClass(enabledMusic)]}`}>&nbsp;</span>
+        <div className={`${Styles["row"]} `}>
+            <span className={`${Styles["text"]} `}>Background music</span>
+            <span className={`${Styles["icon"]}`}>
+                <span className={`${Styles[enabledMusic ? "icon-on" : "icon-off"]}`} onClick={toggle}>
+                    &nbsp;
                 </span>
-            </div>
-        </MusicPlayer>
+            </span>
+        </div>
     );
 };
 

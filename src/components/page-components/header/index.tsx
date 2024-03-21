@@ -1,11 +1,12 @@
 import React from "react";
 import { User } from "sc-user-service-client/dist/auth";
 import { getAppSettings } from "../../../_shared/app-settings";
-import { SettingEventActionType, useSettingDispatch } from "../../../_shared/react-contexts";
 import { useTranslator } from "../../../_shared/react-hooks";
 import { ResourceTypes } from "../../../_shared/resources";
 import { UserInfo } from "../user-info";
 import Styles from "./header.module.scss";
+import { SettingEventActionType, useSettingDispatch } from "../../../_shared/react-contexts";
+import { useClickSound } from "../../../_shared/react-hooks";
 
 type Props = {
     openingGameId: number;
@@ -23,6 +24,7 @@ export const getLogoName = () => {
 const Header: React.FC<Props> = (props) => {
     const { gameSettings } = getAppSettings();
     const appSetting = gameSettings[props.openingGameId];
+    const clickSound = useClickSound();
 
     const tolgeeNamespace = appSetting ? appSetting["tolgeeNamespace"] : ResourceTypes.SABA_NUMBER;
 
@@ -30,6 +32,7 @@ const Header: React.FC<Props> = (props) => {
 
     const settingDispatch = useSettingDispatch();
     const openSetting = () => {
+        clickSound();
         settingDispatch({
             type: SettingEventActionType.TOGGLE_SETTING,
             payload: {

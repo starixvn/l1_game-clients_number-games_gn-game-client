@@ -9,6 +9,7 @@ import { GameBoard } from "./games/components/game-board";
 import { initLobbySocket } from "./lobby-socket-connection";
 import Styles from "./lobby.module.scss";
 import { LobbyConfigs } from "./type";
+import MusicPlayer from "../music-player";
 
 type Props = {
     openGame: Function;
@@ -77,6 +78,7 @@ export const Lobby: React.FC<Props> = ({ openGame, lobbyConfigs }) => {
                     />
                 ))}
                 <Settings />
+                <MusicPlayer />
             </div>
         )
     );

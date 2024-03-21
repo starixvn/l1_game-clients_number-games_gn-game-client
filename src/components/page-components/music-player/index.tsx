@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { getRandomSong } from "../../../_shared/react-hooks";
 import useSound from "use-sound";
+import { useSettingContext } from "../../../_shared/react-contexts";
 
-const MusicPlayer = ({ children, enabledMusic }) => {
+const MusicPlayer = ({}) => {
+    const settingContext = useSettingContext();
+
     const [song, setSong] = useState(getRandomSong(""));
     const [play, { stop }] = useSound(song, {
         onend: () => {
@@ -11,7 +14,7 @@ const MusicPlayer = ({ children, enabledMusic }) => {
     });
 
     useEffect(() => {
-        enabledMusic && play();
+        settingContext.enabledMusic && play();
 
         return () => {
             stop();
@@ -19,15 +22,15 @@ const MusicPlayer = ({ children, enabledMusic }) => {
     }, [play]);
 
     useEffect(() => {
-        if (enabledMusic) {
+        if (settingContext.enabledMusic) {
             play();
         } else {
             stop();
             setSong(getRandomSong(song));
         }
-    }, [enabledMusic]);
+    }, [settingContext.enabledMusic]);
 
-    return <div>{children}</div>;
+    return <div>&nbsp;</div>;
 };
 
 export default MusicPlayer;
