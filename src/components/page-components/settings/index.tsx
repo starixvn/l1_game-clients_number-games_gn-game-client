@@ -1,11 +1,12 @@
-import Styles from "./settings.module.scss";
-import { useSettingContext, useSettingDispatch, SettingEventActionType } from "../../../_shared/react-contexts";
-import React, { useRef, useEffect, useState } from "react";
-import MusicSetting from "./music-setting";
-import SoundSetting from "./sound-setting";
+import React, { useEffect, useRef, useState } from "react";
+
+import { SettingEventActionType, useSettingContext, useSettingDispatch } from "../../../_shared/react-contexts";
+import { useClickSound } from "../../../_shared/react-hooks";
 import BaseDialog from "../../game-components/base-dialog";
 import { ModalType } from "../../game-components/base-dialog/type";
-import { useClickSound } from "../../../_shared/react-hooks";
+import MusicSetting from "./music-setting";
+import Styles from "./settings.module.scss";
+import SoundSetting from "./sound-setting";
 
 const Settings = ({}) => {
     const settingContext = useSettingContext();
@@ -29,13 +30,11 @@ const Settings = ({}) => {
                 <BaseDialog type={ModalType.Center} isOpen={settingContext.isShowedSetting} onCloseModal={closePopup}>
                     <div className={`modal-center yellow-color ${Styles["settings-popup"]} `}>
                         <div className={`${Styles["settings-header"]}`}>
-                            <span className={`${Styles["text"]}`}>Setting</span>
-                            <span className={`${Styles["icon"]}`} onClick={() => closePopup()}>
-                                &nbsp;
-                            </span>
+                            <div className={`${Styles["setting-title"]}`}>Setting</div>
+                            <span className={`icon-close ${Styles["icon-close"]}`} onClick={() => closePopup()}></span>
                         </div>
                         <div className={`${Styles["settings-content"]} `}>
-                            <div className={`${Styles["settings-sound"]} `}>
+                            <div className={`${Styles["settings-group"]} `}>
                                 <MusicSetting />
                                 <SoundSetting />
                             </div>

@@ -1,7 +1,8 @@
-import Styles from "../settings.module.scss";
 import React, { useState } from "react";
-import { StorageHelper, localStorageKeys } from "../../../../_shared/helpers";
+
+import { localStorageKeys, StorageHelper } from "../../../../_shared/helpers";
 import { useClickSound } from "../../../../_shared/react-hooks";
+import Styles from "../settings.module.scss";
 
 const SoundSetting = ({}) => {
     const [enabledSound, setEnabledSound] = useState(StorageHelper.get(localStorageKeys.enableSound) ?? false);
@@ -15,11 +16,10 @@ const SoundSetting = ({}) => {
 
     return (
         <div className={`${Styles["row"]} `}>
-            <span className={`${Styles["text"]} `}>Sound Effect</span>
-            <span className={`${Styles["icon"]}`}>
-                <span className={`${Styles[enabledSound ? "icon-on" : "icon-off"]}`} onClick={toggle}>
-                    &nbsp;
-                </span>
+            <label className={`${Styles["text"]} `}>Sound Effect</label>
+            <span className={`${Styles["icon"]} ${Styles["switch"]}`}>
+                <input id="switch-sound" type="checkbox" checked={enabledSound} onChange={toggle} />
+                <label htmlFor="switch-sound"></label>
             </span>
         </div>
     );

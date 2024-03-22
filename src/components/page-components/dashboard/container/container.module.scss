@@ -41,8 +41,7 @@
         height: 50rem;
         content: "";
         background: #ffd427;
-        background: radial-gradient(circle, rgba(255, 239, 0, 1) -50%, rgba(255, 239, 0, 0) 70%);
-        opacity: 0.15;
+        background: radial-gradient(circle, rgba(255, 239, 0, 0.2) -50%, rgba(255, 239, 0, 0) 70%);
     }
 }
 

@@ -1,8 +1,9 @@
-import Styles from "../settings.module.scss";
 import React, { useState } from "react";
-import { StorageHelper, localStorageKeys } from "../../../../_shared/helpers";
-import { useSettingDispatch, SettingEventActionType } from "../../../../_shared/react-contexts";
+
+import { localStorageKeys, StorageHelper } from "../../../../_shared/helpers";
+import { SettingEventActionType, useSettingDispatch } from "../../../../_shared/react-contexts";
 import { useClickSound } from "../../../../_shared/react-hooks";
+import Styles from "../settings.module.scss";
 
 const MusicSetting = ({}) => {
     const settingDispatch = useSettingDispatch();
@@ -22,11 +23,10 @@ const MusicSetting = ({}) => {
 
     return (
         <div className={`${Styles["row"]} `}>
-            <span className={`${Styles["text"]} `}>Background music</span>
-            <span className={`${Styles["icon"]}`}>
-                <span className={`${Styles[enabledMusic ? "icon-on" : "icon-off"]}`} onClick={toggle}>
-                    &nbsp;
-                </span>
+            <label className={`${Styles["text"]} `}>Background music</label>
+            <span className={`${Styles["icon"]} ${Styles["switch"]}`}>
+                <input id="switch-music" type="checkbox" checked={enabledMusic} onChange={toggle} />
+                <label htmlFor="switch-music"></label>
             </span>
         </div>
     );

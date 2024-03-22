@@ -4,6 +4,11 @@
     width: 100%;
     z-index: 2;
 
+    .setting-title {
+        font-weight: 500;
+        font-size: 1.6rem;
+    }
+
     .settings-bg {
         background: var(--opacity-background);
         height: 100vh;
@@ -13,9 +18,10 @@
     .settings-popup {
         background-color: #242c32;
         border-radius: 1.6rem !important;
-        color: #fff;
+        color: #e6e6e6;
         padding: 5px;
-        top: 20%;
+        top: 25%;
+        min-width: 36rem;
 
         .settings-header {
             border-bottom: none;
@@ -23,49 +29,37 @@
             display: flex;
             flex-direction: row;
             justify-content: center;
+            align-items: center;
+            height: 3.8rem;
             padding-top: 10px;
+        }
 
-            .icon {
-                right: 5px;
-                position: absolute;
-                cursor: pointer;
-                background: url(/static/images/settings/close-icon.png) no-repeat;
-                background-size: 24px 20px;
-                width: 24px;
-                height: 20px;
-            }
-
-            .icon:hover {
-                font-weight: bold;
-            }
+        .icon-close:before {
+            color: #6c737b;
         }
 
         .settings-content {
-            .settings-sound {
-                padding: 20px 10px 10px;
-                font-size: 1.2rem;
+            .settings-group {
+                display: flex;
+                flex-direction: column;
+                gap: 1.6rem;
+                padding: 1.6rem;
 
                 .row {
                     position: relative;
-                    display: flex;
-                    flex-direction: row;
-                    height: 40px;
-
-                    .text,
-                    .icon {
-                        display: flex;
-                        flex-direction: column;
-                    }
+                    display: grid;
+                    grid-template-columns: 1fr 5rem;
+                    justify-content: space-between;
+                    align-items: center;
+                    height: 3rem;
 
                     .text {
-                        flex-basis: 60%;
                         text-align: left;
                     }
 
                     .icon {
-                        text-align: right;
-                        flex-basis: 40%;
-                        width: 31px;
+                        display: flex;
+                        justify-content: end;
                     }
 
                     .icon-on {
@@ -87,6 +81,52 @@
                         padding: 5px 15px;
                     }
                 }
+            }
+
+            .switch {
+                display: inline-block;
+            }
+
+            .switch input {
+                display: none;
+            }
+
+            .switch label {
+                display: block;
+                width: 3.1rem;
+                height: 1.8rem;
+                padding: 3px;
+                border-radius: 15px;
+                border: 1px solid #fff;
+                cursor: pointer;
+                transition: 0.3s;
+            }
+
+            .switch label::after {
+                position: relative;
+                top: -0.2rem;
+                left: -0.1rem;
+                content: "";
+                display: inherit;
+                width: 1.4rem;
+                height: 1.4rem;
+                border-radius: 50%;
+                background: #ffffff;
+                transition: 0.3s;
+            }
+
+            .switch input:checked ~ label {
+                border-color: #33aa33;
+            }
+
+            .switch input:checked ~ label::after {
+                translate: 1.1rem 0;
+                background: #33aa33;
+            }
+
+            .switch input:disabled ~ label {
+                opacity: 0.5;
+                cursor: not-allowed;
             }
         }
     }
