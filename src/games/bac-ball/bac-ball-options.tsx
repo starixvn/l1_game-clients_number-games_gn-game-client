@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import { useGameActionContext, useGameContext, useSystemContext } from "../../_shared/react-contexts";
 import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
-import { useShowHighlightPrevResult } from "../../_shared/react-hooks/use-high-light";
+import { isShowHighlightPrevResult } from "../../_shared/react-hooks/use-high-light";
 import { RoundState } from "../../components/game-base/type";
 import { BetChoice, BetPercentage, Odds, OwnBet, PlayerBetCount, TotalBet } from "../../components/game-components/bet-option";
 import { setRipplePosition } from "../../components/game-components/bet-option/ripple-effect";
@@ -23,8 +23,7 @@ export const BacBallBetOptionsComponent = () => {
         [gameActionContext, systemContext.selectedChip]
     );
 
-    const showHighlightPrevResult = useShowHighlightPrevResult;
-    const { roundState } = useGameStateContext();
+    const { roundState, settlementResult, showResultInfo, roundHistory } = useGameStateContext();
     const { tolgeeNamespace } = useGameContext();
 
     const isShowDisabledLayer = roundState === RoundState.LockingBet;
@@ -95,7 +94,16 @@ export const BacBallBetOptionsComponent = () => {
 
     const renderMainOption = (choice: string) => {
         const winningResult = (
-            <BacBallWinningAnimation choice={choice} resourceName={BacBallBetOptions.PLAYER} width={210} height={210} position={[90, 95]} />
+            <BacBallWinningAnimation
+                showResultInfo={showResultInfo}
+                roundState={roundState}
+                settlementResult={settlementResult}
+                choice={choice}
+                resourceName={BacBallBetOptions.PLAYER}
+                width={210}
+                height={210}
+                position={[90, 95]}
+            />
         );
         const winningPrev = renderHighlightWinningPrevResult(choice);
         const totalBetComponent = renderTotalBet(choice);
@@ -132,7 +140,7 @@ export const BacBallBetOptionsComponent = () => {
                 </button>
                 {isShowDisabledLayer && <div className={Style["disable-layer"]}></div>}
 
-                {showHighlightPrevResult({ betChoice: choice }) && winningPrev}
+                {isShowHighlightPrevResult({ betChoice: choice, roundState, roundHistory }) && winningPrev}
             </div>
         );
     };
@@ -140,6 +148,9 @@ export const BacBallBetOptionsComponent = () => {
     const renderBetOptionTie = () => {
         const winningResult = (
             <BacBallWinningAnimation
+                roundState={roundState}
+                settlementResult={settlementResult}
+                showResultInfo={showResultInfo}
                 choice={BacBallBetOptions.TIE}
                 resourceName={BacBallBetOptions.TIE}
                 width={210}
@@ -181,7 +192,7 @@ export const BacBallBetOptionsComponent = () => {
                 </button>
                 {isShowDisabledLayer && <div className={Style["disable-layer"]}></div>}
 
-                {showHighlightPrevResult({ betChoice: BacBallBetOptions.TIE }) && winningPrev}
+                {isShowHighlightPrevResult({ betChoice: BacBallBetOptions.TIE, roundHistory, roundState }) && winningPrev}
             </div>
         );
     };

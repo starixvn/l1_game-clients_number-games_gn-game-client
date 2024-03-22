@@ -3,8 +3,9 @@ import { Resource, Texture } from "pixi.js";
 import { useEffect, useState } from "react";
 
 import { loadPixiAnimations } from "../../_shared/helpers/pixi-resource-loader";
-import { useWinningHighLightResult } from "../../_shared/react-hooks/use-high-light";
+import { isHighLightWinningResult } from "../../_shared/react-hooks/use-high-light";
 import Styles from "./bac-ball.module.scss";
+import { RoundState } from "../../components/game-base/type";
 
 type Props = {
     choice: string;
@@ -13,11 +14,24 @@ type Props = {
     height: number;
     position: [number, number];
     className?: string;
+    roundState: RoundState;
+    settlementResult: any;
+    showResultInfo: any;
 };
 
-export const BacBallWinningAnimation: React.FC<Props> = ({ choice, resourceName, width, height, position, className }) => {
+export const BacBallWinningAnimation: React.FC<Props> = ({
+    choice,
+    resourceName,
+    width,
+    height,
+    position,
+    className,
+    roundState,
+    settlementResult,
+    showResultInfo,
+}) => {
     const [winningFrames, setWinningFrames] = useState<Texture<Resource>[]>([]);
-    const winningHighLightResult = useWinningHighLightResult;
+    const winningHighLightResult = isHighLightWinningResult;
 
     useEffect(() => {
         if (winningFrames?.length === 0) {
@@ -32,7 +46,7 @@ export const BacBallWinningAnimation: React.FC<Props> = ({ choice, resourceName,
     }, [resourceName]);
 
     return (
-        winningHighLightResult({ betChoice: choice }) &&
+        winningHighLightResult({ betChoice: choice, roundState, settlementResult, showResultInfo }) &&
         winningFrames?.length > 0 && (
             <div className="d-grid">
                 <Stage
