@@ -34,6 +34,7 @@ describe("placeBet", () => {
             hedgeBetGroups: [["player", "banker"]],
             getPlayerBalance: jest.fn(),
             tolgeeNamespace: "test",
+            gameId: 1,
         };
 
         placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);

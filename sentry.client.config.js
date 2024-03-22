@@ -4,6 +4,7 @@
 
 import * as Sentry from "@sentry/nextjs";
 
-import configs from "./configs.json";
-
-Sentry.init({ ...configs.sentry, ignoreErrors: ["Network Error"] });
+if (window.envConfig) {
+    console.log(window.envConfig);
+    Sentry.init({ ...window.envConfig.sentry, ignoreErrors: ["Network Error"] });
+}

@@ -1,6 +1,6 @@
-import * as Sentry from "@sentry/nextjs";
+import * as Sentry from "@sentry/react";
 
-export const setUser = (user) => {
+export const setSentryUser = (user) => {
     if (user) {
         setTimeout(function () {
             try {
