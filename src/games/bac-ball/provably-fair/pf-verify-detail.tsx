@@ -16,16 +16,8 @@ const PFVerifyDetail: FC<{ pfResult: PFResult }> = ({ pfResult }) => {
     const clickSound = useClickSound();
     const ballColor = useBallColor;
 
-    const currentResult = useMemo(() => {
-        for (const item of pfResult?.roundResult || []) {
-            if (item?.drawId == pfResult?.drawId) {
-                return item;
-            }
-        }
-    }, []);
-
     const verifyInfo = useMemo(() => {
-        const rawTwoFirstDigits = pfResult.finalHash?.substring(0, 2);
+        const rawTwoFirstDigits = combinedHash.substring(0, 2);
         const valueTwoFirstDigits = parseInt(rawTwoFirstDigits, 16);
         const serverSeed = JSON.parse(pfResult?.serverSeed || "{}");
         const randomNumbers = (serverSeed?.random || "-1;-1").split(";");
@@ -37,20 +29,23 @@ const PFVerifyDetail: FC<{ pfResult: PFResult }> = ({ pfResult }) => {
         const playerResult = ((player + valueTwoFirstDigits) % playerBalls.length) + 1;
         const bankerResult = ((banker + valueTwoFirstDigits) % bankerBalls.length) + 1;
         return {
+            rawTwoFirstDigits,
             valueTwoFirstDigits,
             numberRemainBalls: playerBalls.length,
             player: {
                 random: player,
                 result: playerResult,
                 balls: playerBalls,
+                value: playerBalls[playerResult - 1],
             },
             banker: {
                 random: banker,
                 result: bankerResult,
                 balls: bankerBalls,
+                value: bankerBalls[bankerResult - 1],
             },
         };
-    }, []);
+    }, [combinedHash]);
 
     const handleClickEdit = () => {
         clickSound();
@@ -95,7 +90,7 @@ const PFVerifyDetail: FC<{ pfResult: PFResult }> = ({ pfResult }) => {
             </div>
 
             <h3 className={`${Styles["section-title"]}`}>{translateCommon("pf_header_combined_sha512_hash")}</h3>
-            <p className="text-wrap">{combinedHash}</p>
+            <p className="text-wrap">{pfResult?.finalHash}</p>
             {combinedHash == pfResult?.finalHash ? (
                 <p className={Styles["text-successful"]}>{translateInGame("pf_verification_msg_verify_successful")}</p>
             ) : (
@@ -110,28 +105,31 @@ const PFVerifyDetail: FC<{ pfResult: PFResult }> = ({ pfResult }) => {
                     <div className="flex gap-4 items-center">
                         <div className="flex items-center gap-1">
                             <span className="text-uppercase font-weight-medium text-white">{translateInGame("glossary_player")}</span>
-                            <div className={`${Styles["ball"]} ${Styles[ballColor({ number: currentResult?.player })]}`}>
-                                {currentResult?.player}
+                            <div className={`${Styles["ball"]} ${Styles[ballColor({ number: verifyInfo.player.value })]}`}>
+                                {verifyInfo.player.value}
                             </div>
                         </div>
                         <div className="flex items-center gap-1">
                             <span className="text-uppercase font-weight-medium text-white">{translateInGame("glossary_banker")}</span>
-                            <div className={`${Styles["ball"]} ${Styles[ballColor({ number: currentResult?.banker })]}`}>
-                                {currentResult?.banker}
+                            <div className={`${Styles["ball"]} ${Styles[ballColor({ number: verifyInfo.banker.value })]}`}>
+                                {verifyInfo.banker.value}
                             </div>
                         </div>
                     </div>
                 </div>
                 <h3 className={`${Styles["section-title"]} mt-2`}>{translateCommon("pf_header_combined_sha512_hash")}</h3>
-                <p className="text-wrap">{pfResult.finalHash}</p>
+                <p className="text-wrap">{combinedHash}</p>
 
                 <h3 className={`${Styles["section-title"]}`}>{translateInGame("pf_verification_para_3")}</h3>
                 <p className="font-weight-medium">
-                    {pfResult.finalHash?.substring(0, 2)} {"=>"} {verifyInfo.valueTwoFirstDigits}
+                    {verifyInfo.rawTwoFirstDigits} {"=>"} {verifyInfo.valueTwoFirstDigits}
                 </p>
                 <p>
                     <span className={Styles["text-highlight"]}>{translateInGame("pf_verification_para_4")}</span>
-                    <span> = ((Random number + X) mod Number of balls left) + 1</span>
+                    <span>
+                        {" "}
+                        = (({translateInGame("pf_algorithm_random_number")} + X) mod {translateInGame("pf_verification_para_5")}) + 1
+                    </span>
                 </p>
                 <p>
                     <span className={Styles["text-highlight"]}>
