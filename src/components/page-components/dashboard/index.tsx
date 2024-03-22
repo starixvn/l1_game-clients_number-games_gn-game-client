@@ -224,11 +224,14 @@ class Dashboard extends React.PureComponent<Props, State> {
         if (!authorizeInfo) {
             return;
         }
-        const { openGameId } = this.state;
+
+        const { gameId } = loadURLContext();
+        const offerGamesIds = this.getOfferGamesIds(authorizeInfo);
         const lobbySocket = initLobbySocket(
             this.props.session,
-            [1001, 1002].filter((gameId) => gameId != openGameId)
+            offerGamesIds.filter((id) => id != gameId)
         );
+
         this.setState({ lobbySocket });
     };
 
@@ -332,9 +335,13 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.setState({ isShowToolbarGuide: false });
     }
 
+    getOfferGamesIds(authorizeInfo) {
+        return (authorizeInfo?.user?.offerGames?.map((game: any) => +game?.gameId) ?? []) as number[];
+    }
+
     renderGames() {
         const { userStakeLevel, openGameName, authorizeInfo } = this.state;
-        const offerGames: number[] = authorizeInfo?.user?.offerGames?.map((game: any) => game?.gameId) ?? [];
+        const offerGames = this.getOfferGamesIds(authorizeInfo);
         const urlContext = loadURLContext();
         console.log("renderGames", urlContext.gameId);
         return (
@@ -375,7 +382,7 @@ class Dashboard extends React.PureComponent<Props, State> {
             fractionalOddsFormat: authorizeInfo.user?.fractionalOddsFormat ?? false,
         };
 
-        const offerGames: number[] = authorizeInfo?.user?.offerGames?.map((game: any) => game?.gameId) ?? [];
+        const offerGames = this.getOfferGamesIds(authorizeInfo);
         const isRenderGames = this.shouldRenderGames(offerGames);
 
         console.log("renderDashBoard", { isRenderGames });
