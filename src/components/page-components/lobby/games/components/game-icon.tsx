@@ -7,10 +7,9 @@ import { GameSettings } from "../../../../game-base/type";
 type Props = {
     gameSettings: GameSettings;
     lobbyGameTransmitter: LobbyGameTransmitter;
-    isDisabledGame: boolean;
 };
 
-export const GameIcon: React.FC<Props> = ({ gameSettings, lobbyGameTransmitter, isDisabledGame }) => {
+export const GameIcon: React.FC<Props> = ({ gameSettings, lobbyGameTransmitter }) => {
     const { tolgeeNamespace, gameName, id } = gameSettings;
     const { t } = useTranslator([tolgeeNamespace]);
 
@@ -18,7 +17,7 @@ export const GameIcon: React.FC<Props> = ({ gameSettings, lobbyGameTransmitter, 
         <div className={`${Styles["icon-game"]}`}>
             <img src={`/static/images/lobby/game-board-detail/icon-${gameName.toLowerCase()}.png`} alt="icon-game-1" />
             <span className={`${Styles["game-name"]}`}>{t(`game_icon_name_${id}`)}</span>
-            {!isDisabledGame && <OnlinePlayer lobbyGameTransmitter={lobbyGameTransmitter} />}
+            <OnlinePlayer lobbyGameTransmitter={lobbyGameTransmitter} />
         </div>
     );
 };

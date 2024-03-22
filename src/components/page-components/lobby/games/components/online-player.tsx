@@ -7,12 +7,14 @@ type Props = {
 };
 
 const messagesEventTypes = {
+    SHOW_DATA: "showData",
     PLAYERS: "players",
     PLAYER: "player",
     OUTGAME: "outgame",
 };
 
 export const OnlinePlayer: React.FC<Props> = ({ lobbyGameTransmitter }) => {
+    const [isShow, setIsShow] = useState(false);
     const [onlinePlayers, setOnlinePlayers] = useState<string[]>([]);
 
     useEffect(() => {
@@ -20,9 +22,14 @@ export const OnlinePlayer: React.FC<Props> = ({ lobbyGameTransmitter }) => {
     }, [lobbyGameTransmitter]);
 
     const registerPlayerEvents = () => {
+        lobbyGameTransmitter.register(messagesEventTypes.SHOW_DATA, handleShowData);
         lobbyGameTransmitter.register(messagesEventTypes.PLAYERS, handlePlayers);
         lobbyGameTransmitter.register(messagesEventTypes.PLAYER, handlePlayerJoinGame);
         lobbyGameTransmitter.register(messagesEventTypes.OUTGAME, handlePlayerOutGame);
+    };
+
+    const handleShowData = ({ showData }: { showData: boolean }) => {
+        setIsShow(showData);
     };
 
     const handlePlayers = ({ players }) => {
@@ -52,9 +59,11 @@ export const OnlinePlayer: React.FC<Props> = ({ lobbyGameTransmitter }) => {
     };
 
     return (
-        <div className={Styles["user-playing"]}>
-            <span className={Styles["user-playing-icon"]}></span>
-            <span className={Styles["user-playing-value"]}>{onlinePlayers?.length || 0}</span> playing
-        </div>
+        isShow && (
+            <div className={Styles["user-playing"]}>
+                <span className={Styles["user-playing-icon"]}></span>
+                <span className={Styles["user-playing-value"]}>{onlinePlayers?.length || 0}</span> playing
+            </div>
+        )
     );
 };
