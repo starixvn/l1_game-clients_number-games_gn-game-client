@@ -25,13 +25,19 @@ export const UserInfo: React.FC<{ user: User; customizeClass?: string }> = ({ us
                 </div>
                 <div key={user.red} className={`${Styles.balance}`} data-testid="balance">
                     <span id="user-info_balance">{numberRoundDownWithCommas(user.red ? user.red : 0)}</span>
-                    {/* <span>{currencyUser}</span> */}
+
                     <img src="/static/images/icon-coin.svg" className="img-fluid" alt="icon-coin" />
                 </div>
             </div>
             <div className={Styles["avatar"]}>
                 {user.avatarId > 0 && user.avatarId <= MAX_AVATAR_ID ? (
-                    <img src={`/static/images/avatar/${user.avatarId}.jpg`} className="img-fluid" height="40" width="40" alt="Avatar" />
+                    <img
+                        src={`/static/images/avatar/${user.avatarId}.jpg`}
+                        className="img-fluid circle"
+                        height="40"
+                        width="40"
+                        alt="Avatar"
+                    />
                 ) : (
                     <span className={`icon-user ${Styles["icon-user"]}`} data-testid="icon-user"></span>
                 )}

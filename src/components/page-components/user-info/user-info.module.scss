@@ -31,10 +31,11 @@
 
     .icon-user {
         position: relative;
-        top: 18px;
-        left: -2px;
-        font-size: 3.9rem;
+        top: 0.5rem;
+        left: 0.6rem;
+        font-size: 1.5rem;
     }
+
     &.footer {
         margin-left: 0.8rem;
         flex-direction: row-reverse;
@@ -78,11 +79,4 @@
     align-items: center;
     gap: 0.2rem;
     justify-content: flex-end;
-}
-
-.icon-user {
-    position: relative;
-    top: 0.3rem;
-    line-height: 0;
-    font-size: 2rem;
 }
