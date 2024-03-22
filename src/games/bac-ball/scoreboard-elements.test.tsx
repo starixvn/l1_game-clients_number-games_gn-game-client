@@ -1,6 +1,7 @@
 import { render } from "@testing-library/react";
 import {
     BacBallBeadRoadCharacterElement,
+    BacBallBeadRoadCharacterElementWithTranslator,
     BacBallBeadRoadValueElement,
     BacBallBigEyeElement,
     BacBallBigRoadConverter,
@@ -26,7 +27,7 @@ describe(BacBallBeadRoadCharacterElement.name, () => {
                         : null;
 
                     // Act
-                    const { container } = render(<BacBallBeadRoadCharacterElement round={round} />);
+                    const { container } = render(<BacBallBeadRoadCharacterElementWithTranslator round={round} />);
 
                     // Assert
                     expect(container).toMatchSnapshot();
@@ -37,7 +38,7 @@ describe(BacBallBeadRoadCharacterElement.name, () => {
         describe(`when the round result is blink node`, () => {
             it("should match the snapshot", () => {
                 // Act
-                const { container } = render(<BacBallBeadRoadCharacterElement round={{} as any} />);
+                const { container } = render(<BacBallBeadRoadCharacterElementWithTranslator round={{} as any} />);
 
                 // Assert
                 expect(container).toMatchSnapshot();

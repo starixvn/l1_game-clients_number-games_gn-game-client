@@ -1,7 +1,8 @@
 import { Component, ReactNode } from "react";
+import { TranslatorProps } from "../../../../page-components/translator";
 import { Scoreboard, ScoreboardItemProps } from "../scoreboard";
-
-export abstract class BeadRoadElement<Round> extends Component<ScoreboardItemProps<Round>> {
+type BeadRoadScoreboardItemProps<Round> = ScoreboardItemProps<Round> & TranslatorProps;
+export abstract class BeadRoadElement<Round> extends Component<BeadRoadScoreboardItemProps<Round>> {
     static arrange<Round>(rounds: Round[], scoreboard: Scoreboard<Round>) {
         const clonedRounds = [...rounds];
         const total = scoreboard.props.column * scoreboard.props.row;

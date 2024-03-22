@@ -3,7 +3,7 @@ import { ComponentClass, ReactNode, createElement } from "react";
 import { parseTranslationKey } from "../../_shared/react-hooks";
 
 export type TranslatorProps = {
-    t: (key: string) => string;
+    t?: (key: string) => string;
 } & {};
 
 export function withTranslator(component: ComponentClass<any>) {
