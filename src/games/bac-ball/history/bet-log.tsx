@@ -62,7 +62,10 @@ const BetLog: FC<BetLogProps> = ({ betLogs, handleScroll, onCloseModal: toggleBe
     };
 
     const renderbody = () => {
-        const preprocessedBetLogs = sortedCollectionByTime(betLogs);
+        const betLogsWithSettleTime = betLogs.map((item) => {
+            return { ...item, time: item?.result?.time };
+        });
+        const preprocessedBetLogs = sortedCollectionByTime(betLogsWithSettleTime);
         return preprocessedBetLogs?.map((item) => {
             return <BetHistoryRow betHistory={item} key={item.drawId} handleClickDrawId={handleClickDrawId} />;
         });
@@ -75,7 +78,7 @@ const BetLog: FC<BetLogProps> = ({ betLogs, handleScroll, onCloseModal: toggleBe
 
     const header = [
         { node: translateCommon("time"), size: 3 },
-        { node: translateSNGames("glossary_draw_id"), size: 2 },
+        { node: translateSNGames("glossary_draw_id").capitalizeFirstLetter(), size: 2 },
         {
             node: <>{translateCommon("result")}</>,
             size: 3,
