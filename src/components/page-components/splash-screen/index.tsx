@@ -1,4 +1,4 @@
-import * as Sentry from "@sentry/nextjs";
+import * as Sentry from "@sentry/react";
 import { WithRouterProps } from "next/dist/client/with-router";
 import { useRouter } from "next/router";
 import { ReactNode, useContext } from "react";
@@ -6,7 +6,7 @@ import { getAppSettings } from "../../../_shared/app-settings";
 import { buildVersion, languageMapper, locales, systemName } from "../../../_shared/constants";
 import { StorageHelper, localStorageKeys } from "../../../_shared/helpers";
 import { URLContext, usePlayerContext } from "../../../_shared/react-contexts";
-import { setUser } from "../../../_shared/sentry";
+import { setSentryUser } from "../../../_shared/sentry";
 import { tolgee } from "../../../_shared/tolgee";
 import { sso, verifySession } from "../../../services/auth-service";
 import UMPage from "../um-page";
@@ -41,8 +41,7 @@ export async function useCustomStartup(): Promise<void> {
     }
 
     if (session?.isAuthenticated) {
-        setUser(session);
-
+        setSentryUser(session);
         player.session = session;
     }
 
@@ -51,6 +50,7 @@ export async function useCustomStartup(): Promise<void> {
 
 export function onStartupError(error: Error): void {
     console.error(error);
+
     Sentry.captureException(error);
 
     globalThis.location.pathname = "timeout";

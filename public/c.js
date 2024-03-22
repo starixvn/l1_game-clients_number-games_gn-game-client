@@ -9,8 +9,8 @@ window.envConfig = {
         path: "",
     },
     sentry: {
-        dsn: "https://c8f93631be824a14b9f114f53e3a2bfc@sentry.lumigame.com/3",
-        environment: "LOCAL_1",
+        dsn: "https://c65e9ef4f6c64d928f7b31ba355a44c2@sentry.lumigame.com/84",
+        environment: "LOCAL",
     },
     offeredGames: [1001],
     enableSourceMap: true,
