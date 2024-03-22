@@ -1,4 +1,5 @@
 import PFSettingModal from "./pf-setting";
 import PFVerifyModal from "./pf-verify";
+import DefaultPFStyles from "./provably-fair.module.scss";
 
-export { PFSettingModal, PFVerifyModal };
+export { PFSettingModal, PFVerifyModal, DefaultPFStyles };

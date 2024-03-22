@@ -1,22 +1,22 @@
-import { FC, useMemo, useState } from "react";
+import { FC, useMemo } from "react";
 import { createPortal } from "react-dom";
 import { v4 as uuidv4 } from "uuid";
-import { useGameContext, usePlayerContext } from "../../../../../_shared/react-contexts";
-import { useClickSound, useCommonTranslate, useTranslator } from "../../../../../_shared/react-hooks";
-import { ClientSeedInfo } from "../../../../game-base/type";
-import ModalContainer from "../../../modal-container";
-import { ButtonPFGuide } from "../../pf-guide";
-import Styles from "../../provably-fair.module.scss";
-import CopyableTextInput from "../../copyable-text-input";
-import { formatDate } from "../../../../../_shared/helpers";
+import { ClientSeedInfo } from "../../../game-base/type";
+import { useGameContext, usePlayerContext } from "../../../../_shared/react-contexts";
+import { useClickSound, useCommonTranslate, useTranslator } from "../../../../_shared/react-hooks";
+import ModalContainer from "../../modal-container";
+import { ButtonPFGuide } from "../pf-guide";
+import CopyableTextInput from "../copyable-text-input";
+import Styles from "../provably-fair.module.scss";
 
-const PFClientSeedInfoModal: FC<{ handleCloseModal: Function; isShowPFClientSeedInfo: boolean; clientSeedInfo: ClientSeedInfo }> = ({
-    handleCloseModal,
-    isShowPFClientSeedInfo,
-    clientSeedInfo,
-}) => {
+const PFClientSeedInfoModal: FC<{
+    handleCloseModal: Function;
+    isShowPFClientSeedInfo: boolean;
+    clientSeedInfo: ClientSeedInfo;
+    fileNameExport: (data?: any) => string;
+}> = ({ handleCloseModal, isShowPFClientSeedInfo, clientSeedInfo, fileNameExport }) => {
     const { tolgeeNamespace } = useGameContext();
-    const { t: translateBacBall } = useTranslator([tolgeeNamespace]);
+    const { t: translateInGame } = useTranslator([tolgeeNamespace]);
 
     return (
         isShowPFClientSeedInfo &&
@@ -26,14 +26,14 @@ const PFClientSeedInfoModal: FC<{ handleCloseModal: Function; isShowPFClientSeed
                 title={
                     <div>
                         <ButtonPFGuide />
-                        {translateBacBall("pf_title_client_seed_info")}
+                        {translateInGame("pf_title_client_seed_info")}
                     </div>
                 }
                 isOpen={isShowPFClientSeedInfo}
                 isOverlap={true}
                 onCloseModal={handleCloseModal}
             >
-                <PFClientSeedInfo clientSeedInfo={clientSeedInfo} />
+                <PFClientSeedInfo clientSeedInfo={clientSeedInfo} fileNameExport={fileNameExport} />
             </ModalContainer>,
             document.getElementById("dashboard")
         )
@@ -48,11 +48,14 @@ const encryptName = (name: string) => {
     return `${name.substring(0, 1)}***${name.substring(name.length - 3, name.length)}`;
 };
 
-const PFClientSeedInfo: FC<{ clientSeedInfo: ClientSeedInfo }> = ({ clientSeedInfo }) => {
+const PFClientSeedInfo: FC<{ clientSeedInfo: ClientSeedInfo; fileNameExport: (data?: any) => string }> = ({
+    clientSeedInfo,
+    fileNameExport,
+}) => {
     const clickSound = useClickSound();
     const { tolgeeNamespace } = useGameContext();
     const { t: translateCommon } = useCommonTranslate();
-    const { t: translateBacBall } = useTranslator([tolgeeNamespace]);
+    const { t: translateInGame } = useTranslator([tolgeeNamespace]);
     const {
         authorizeInfo: {
             user: { name },
@@ -61,7 +64,7 @@ const PFClientSeedInfo: FC<{ clientSeedInfo: ClientSeedInfo }> = ({ clientSeedIn
 
     const handleClickExport = () => {
         clickSound();
-        const header = `${translateBacBall("glossary_player")},${translateBacBall("pf_provably_fair_info_nickname")},${translateBacBall(
+        const header = `${translateInGame("glossary_player")},${translateInGame("pf_provably_fair_info_nickname")},${translateInGame(
             "pf_client_seed_info_subtitle_seed"
         )}`;
         const content = clientSeedInfo.clientSeeds
@@ -72,7 +75,7 @@ const PFClientSeedInfo: FC<{ clientSeedInfo: ClientSeedInfo }> = ({ clientSeedIn
         const data = `${header}\n${content}`;
         const link = document.createElement("a");
         link.href = `data:text/csv;charset=utf-8,${encodeURIComponent(data)}`;
-        link.download = `DRAW_${clientSeedInfo.drawId}_${formatDate(new Date(), "yyyyMMdd")}.csv`;
+        link.download = `${fileNameExport(clientSeedInfo.drawId)}`;
         link.click();
     };
 
@@ -95,7 +98,7 @@ const PFClientSeedInfo: FC<{ clientSeedInfo: ClientSeedInfo }> = ({ clientSeedIn
                 <div className="form">
                     <div className="flex items-center justify-between mb-2">
                         <h3 className={`${Styles["section-title"]} m-0`}>
-                            {translateBacBall("pf_client_seed_info_total_players")}{" "}
+                            {translateInGame("pf_client_seed_info_total_players")}{" "}
                             <span className={Styles["text-highlight"]}>{clientSeedInfo.clientSeeds?.length}</span>
                         </h3>
                         <button className={Styles["btn-export"]} onClick={handleClickExport}>
@@ -112,9 +115,9 @@ const PFClientSeedInfo: FC<{ clientSeedInfo: ClientSeedInfo }> = ({ clientSeedIn
                         <table className={`table text-center ${Styles["table"]}`}>
                             <thead>
                                 <tr>
-                                    <th style={{ width: "25%" }}>{translateBacBall("glossary_player")}</th>
-                                    <th>{translateBacBall("pf_provably_fair_info_nickname")}</th>
-                                    <th>{translateBacBall("pf_client_seed_info_subtitle_seed")}</th>
+                                    <th style={{ width: "25%" }}>{translateInGame("glossary_player")}</th>
+                                    <th>{translateInGame("pf_provably_fair_info_nickname")}</th>
+                                    <th>{translateInGame("pf_client_seed_info_subtitle_seed")}</th>
                                 </tr>
                             </thead>
                             <tbody>

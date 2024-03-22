@@ -1,8 +1,5 @@
-import { Dispatch, FC, useMemo, useReducer } from "react";
+import { Dispatch, FC, ReactNode, useReducer } from "react";
 import { createPortal } from "react-dom";
-import { v4 as uuidv4 } from "uuid";
-import { getGlossaryTranslate, getOrdinalNumber } from "../../../../_shared/helpers";
-import { useBallColor } from "../../../../_shared/helpers/ball-color-helper";
 import { useGameContext } from "../../../../_shared/react-contexts";
 import { useClickSound, useCommonTranslate, useSNTranslate, useTranslator } from "../../../../_shared/react-hooks";
 import { PFResult } from "../../../game-base/type";
@@ -25,11 +22,14 @@ interface PFChildModalState {
     isShowPFVerifyDetail: boolean;
 }
 
-const PFVerifyModal: FC<{ handleCloseModal: Function; isShowPFVerify: boolean; pfResult: PFResult }> = ({
-    handleCloseModal,
-    isShowPFVerify,
-    pfResult,
-}) => {
+const PFVerifyModal: FC<{
+    handleCloseModal: Function;
+    isShowPFVerify: boolean;
+    pfResult: PFResult;
+    renderResultBlock: Function;
+    fileNameExport: (data?: any) => string;
+    pfVerify: ReactNode;
+}> = ({ handleCloseModal, isShowPFVerify, pfResult, renderResultBlock, fileNameExport, pfVerify }) => {
     const { t: translateCommon } = useCommonTranslate();
 
     const reducer = (state: PFChildModalState, action: PFDispatchAction) => {
@@ -79,49 +79,34 @@ const PFVerifyModal: FC<{ handleCloseModal: Function; isShowPFVerify: boolean; p
                 isOverlap={true}
                 onCloseModal={handleCloseModal}
             >
-                <PFVerify pfResult={pfResult} dispatchChildModalState={dispatch} />
+                <PFVerify pfResult={pfResult} dispatchChildModalState={dispatch} renderResultBlock={renderResultBlock} />
                 <PFClientSeedInfoModal
                     handleCloseModal={() => dispatch(PFDispatchAction.CLOSE_CLIENT_SEED_INFO)}
                     isShowPFClientSeedInfo={childeModalState.isShowClientSeedInfo}
                     clientSeedInfo={pfResult}
+                    fileNameExport={fileNameExport}
                 />
                 <PFVerifyDetailModal
                     isOpen={childeModalState.isShowPFVerifyDetail}
                     handleCloseModal={() => dispatch(PFDispatchAction.CLOSE_PF_VERIFY_DETAIL)}
-                    pfResult={pfResult}
-                />
+                >
+                    {pfVerify}
+                </PFVerifyDetailModal>
             </ModalContainer>,
             document.getElementById("dashboard")
         )
     );
 };
 
-const PFVerify: FC<{ pfResult: PFResult; dispatchChildModalState: Dispatch<PFDispatchAction> }> = ({
+const PFVerify: FC<{ pfResult: PFResult; dispatchChildModalState: Dispatch<PFDispatchAction>; renderResultBlock: Function }> = ({
     pfResult,
+    renderResultBlock,
     dispatchChildModalState: dispatch,
 }) => {
     const { tolgeeNamespace } = useGameContext();
     const { t: translateCommon } = useCommonTranslate();
-    const { t: translateSNGames } = useSNTranslate();
-    const { t: translateBacBall } = useTranslator([tolgeeNamespace]);
+    const { t: translateInGame } = useTranslator([tolgeeNamespace]);
     const clickSound = useClickSound();
-
-    const drawResult = useMemo(() => {
-        const beforeDrawResult = [];
-        for (const item of pfResult?.roundResult || []) {
-            beforeDrawResult.push(item);
-            if (item?.drawId == pfResult?.drawId) {
-                break;
-            }
-        }
-
-        return {
-            drawID: pfResult?.drawId,
-            order: translateSNGames(`draw_${beforeDrawResult.length}`)?.replace(":", ""),
-            result: beforeDrawResult,
-        };
-    }, [pfResult]);
-    const ballColor = useBallColor;
 
     const handleClickTooltip = (event: React.MouseEvent<HTMLButtonElement> & React.FocusEvent<HTMLButtonElement>) => {
         clickSound();
@@ -138,29 +123,7 @@ const PFVerify: FC<{ pfResult: PFResult; dispatchChildModalState: Dispatch<PFDis
 
     return (
         <div className={Styles["pf-setting-container"]}>
-            <div className="text-white font-weight-medium mb-2">
-                {translateSNGames("glossary_draw_id")}: #{drawResult?.drawID} ({drawResult?.order})
-            </div>
-            <div className="flex justify-around">
-                {useMemo(() => {
-                    return ["player", "banker"].map((item) => {
-                        return (
-                            <div className="text-center" key={uuidv4()}>
-                                <div className="text-white font-weight-medium text-uppercase">
-                                    {translateBacBall(getGlossaryTranslate(tolgeeNamespace, item))}
-                                </div>
-                                <div className={Styles["balls-container"]}>
-                                    {drawResult.result.map((child, index) => (
-                                        <span key={uuidv4()} className={`${Styles["ball"]} ${Styles[ballColor({ number: child[item] })]}`}>
-                                            {child[item]}
-                                        </span>
-                                    ))}
-                                </div>
-                            </div>
-                        );
-                    });
-                }, [drawResult])}
-            </div>
+            <div className="result-block">{renderResultBlock(pfResult)}</div>
 
             <div className={Styles["client-seed-form"]}>
                 <h3 className={Styles["section-title"]}>{translateCommon("pf_header_server_seed_sha256")}</h3>
@@ -179,7 +142,7 @@ const PFVerify: FC<{ pfResult: PFResult; dispatchChildModalState: Dispatch<PFDis
                     <button className={Styles["btn-pf-intro"]} onClick={handleClickTooltip} onBlur={handleBlurTooltip}>
                         <span className="icon-info" />
                     </button>
-                    <div className={`${Styles["hide"]} ${Styles["pf-tooltip"]} break`}>{translateBacBall("pf_client_seed_tooltip")}</div>
+                    <div className={`${Styles["hide"]} ${Styles["pf-tooltip"]} break`}>{translateInGame("pf_client_seed_tooltip")}</div>
                 </div>
 
                 <div className="relative">
@@ -191,7 +154,7 @@ const PFVerify: FC<{ pfResult: PFResult; dispatchChildModalState: Dispatch<PFDis
                             dispatch(PFDispatchAction.OPEN_CLIENT_SEED_INFO);
                         }}
                     >
-                        {translateBacBall("pf_provably_fair_details")}
+                        {translateInGame("pf_provably_fair_details")}
                     </span>
                 </div>
                 <div className="input-group width-full">
@@ -204,7 +167,7 @@ const PFVerify: FC<{ pfResult: PFResult; dispatchChildModalState: Dispatch<PFDis
                     <button className={Styles["btn-pf-intro"]} onClick={handleClickTooltip} onBlur={handleBlurTooltip}>
                         <span className="icon-info" />
                     </button>
-                    <div className={`${Styles["hide"]} ${Styles["pf-tooltip"]}`}>{translateBacBall("pf_combined_sha512_hash_tooltip")}</div>
+                    <div className={`${Styles["hide"]} ${Styles["pf-tooltip"]}`}>{translateInGame("pf_combined_sha512_hash_tooltip")}</div>
                 </div>
 
                 <div className="input-group width-full mt-4">

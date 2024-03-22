@@ -13,6 +13,7 @@ import { BacBallBetOptions } from "../constants";
 import Styles from "./common.module.scss";
 import TableRow from "./row-table";
 import { PFVerifyModal } from "../../../components/game-components/provably-fair";
+import { PFVerifyDetail, makeFileNameExport, renderPFVerifyResultBlock } from "../provably-fair";
 
 interface BacBallBetDetailProps extends BetLogDetailProps {
     drawInfo: DrawInfoBacBall;
@@ -135,6 +136,9 @@ const BetDetail: FC<BetLogDetailProps> = ({ betLogDetails, onCloseModal, isShowB
                         ...drawInfo?.pfResult,
                         clientSeed: drawInfo?.clientSeed,
                     }}
+                    renderResultBlock={renderPFVerifyResultBlock}
+                    fileNameExport={makeFileNameExport}
+                    pfVerify={<PFVerifyDetail pfResult={drawInfo?.pfResult} />}
                 ></PFVerifyModal>
             </ModalContainer>
         )

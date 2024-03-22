@@ -54,7 +54,7 @@ const PFSetting: FC = () => {
     const [isManualMode, setIsManualMode] = useState<boolean>(pfSetting?.useManualClientSeed || false);
     const { t: translateCommon } = useCommonTranslate();
     const { tolgeeNamespace, gameMessageHandler } = useGameContext();
-    const { t: translateBacBall } = useTranslator([tolgeeNamespace]);
+    const { t: translateInGame } = useTranslator([tolgeeNamespace]);
     const dispatch = useGameStatesDispatch();
 
     useEffect(() => {
@@ -159,7 +159,7 @@ const PFSetting: FC = () => {
         <div className={Styles["pf-setting-container"]}>
             <div>
                 <ul>
-                    <li>{translateBacBall("pf_settings_para_1")}</li>
+                    <li>{translateInGame("pf_settings_para_1")}</li>
                     <li>{translateCommon("pf_settings_para_2")}</li>
                 </ul>
             </div>
