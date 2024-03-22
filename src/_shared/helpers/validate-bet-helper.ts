@@ -274,7 +274,7 @@ const getMaxBetRoundMode = (roundMaxBet: number, maxBetPerChoice: number): IAvai
     return {
         mode: SuggestBetMode.MaxBetRound,
         maxBetPerChoice,
-        errorCode: NoticeErrorCode.roundMaxBet,
+        errorCode: NoticeErrorCode.drawMaxBet,
         args: { maxBet: roundMaxBet },
     };
 };

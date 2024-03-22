@@ -18,6 +18,7 @@ import { GameEventActionType } from "../../../_shared/react-contexts/game-state-
 import { GameStateContextModel } from "../../../_shared/react-contexts/game-state-context/game-state-context-model";
 import { Notice, RoundState, SuggestBet } from "../type";
 import { GameMessageHandler, messageEventType } from "./";
+import { getAppSettings } from "../../../_shared/app-settings";
 
 export type PlaceBetHandlerProps = {
     tolgeeNamespace: string;
@@ -181,7 +182,12 @@ export class PlaceBetHandler {
 
     handlePreventBet = (gameStateContext: GameStateContextModel) => {
         const isStartingRound = gameStateContext.roundState === RoundState.BeforePlaceBet;
-        const notice = isStartingRound ? this.getNotice(NoticeErrorCode.cannotBet) : this.getNotice(NoticeErrorCode.placeBetNextRound);
+        const { gameName } = this.props;
+        const gameSettings = getAppSettings().gameSettings?.find((setting) => setting.gameName === gameName);
+        const totalTurns = gameSettings?.totalTurns;
+        const notice = isStartingRound
+            ? this.getNotice(NoticeErrorCode.cannotBet)
+            : this.getNotice(totalTurns > 1 ? NoticeErrorCode.placeBetNextDraw : NoticeErrorCode.placeBetNextRound);
 
         this.sendNotice(notice);
     };
