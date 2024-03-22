@@ -2,13 +2,7 @@
     --header-background: #000;
     --header-text-color: var(--text-color);
     --header-balance-color: #ffc909;
-    --header-border-bottom: #c5c5c5;
     --username-color: #c0c0c0;
-    --icon-menu-color: #6e809a;
-    --slide-nav-background: #fff;
-    --icon-menu-background-hover: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.4) 100%);
-    --site-name-color: #fff;
-    --settings-container-background: #a9cee7;
 }
 
 .header {
@@ -35,94 +29,10 @@
         padding-right: 1.2rem;
     }
 
-    .header-left {
-        display: flex;
-        align-items: center;
-        font-size: 1.6rem;
-        font-weight: 800;
-        color: #fff;
-        line-height: 2.8rem;
-    }
-
-    .lobby-title {
-        font-size: 1.1rem;
-    }
-
     .header-container {
         display: flex;
         justify-content: space-between;
         align-items: center;
         width: 100%;
-    }
-
-    .site-name {
-        text-decoration: none;
-
-        &:hover {
-            text-decoration: none;
-            cursor: pointer;
-        }
-    }
-
-    .back-to-home {
-        display: block;
-        width: 3.2rem;
-        text-align: center;
-    }
-
-    &.mobile {
-        height: 3.8rem;
-        position: initial;
-
-        .site-name > img {
-            height: 3rem;
-        }
-    }
-}
-
-.icon-user {
-    position: relative;
-    top: 0.3rem;
-    line-height: 0;
-    font-size: 2rem;
-}
-
-.icon-menu {
-    position: relative;
-    font-size: 3.2rem;
-
-    &:after {
-        content: "";
-        position: absolute;
-        left: 0;
-        top: -0.3rem;
-        width: 3.8rem;
-        height: 3.8rem;
-        margin: auto;
-        border-radius: 50%;
-        background: var(--icon-menu-background-hover);
-        transform: scale(0);
-        opacity: 0;
-        transition: all 0.3s;
-    }
-
-    &:hover {
-        cursor: pointer;
-        &:after {
-            transform: scale(1);
-            opacity: 1;
-        }
-    }
-}
-
-.button-setting {
-    background: none;
-    border: none;
-    padding-right: 0;
-    padding-left: 1.6rem;
-    cursor: pointer;
-
-    .icon-setting {
-        font-size: 1.6rem;
     }
 }

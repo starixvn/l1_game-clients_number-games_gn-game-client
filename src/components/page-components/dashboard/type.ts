@@ -1,8 +1,8 @@
 import { TolgeeInstance } from "@tolgee/react";
 import { WithRouterProps } from "next/dist/client/with-router";
 import { AuthorizeResponse, SSOResponse } from "sc-user-service-client/dist/auth";
-import { UserStakeLevel } from "../../game-base/type";
 import { Socket } from "socket.io-client";
+import { UserStakeLevel } from "../../game-base/type";
 
 export type Props = {
     session: SSOResponse;
@@ -29,7 +29,6 @@ export type State = {
     lobbyConfigs: any;
     openGameId: number;
     openGameName: string;
-    isShowToolbarGuide: boolean;
     isOnLobby: boolean;
     lobbySocket: Socket;
 };

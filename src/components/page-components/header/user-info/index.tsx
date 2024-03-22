@@ -1,12 +1,14 @@
 import React from "react";
 import { isIOS, isMobileOnly } from "react-device-detect";
-import { User } from "sc-user-service-client/dist/auth";
 
-import { numberRoundDownWithCommas } from "../../../_shared/helpers/number-helper";
-import { MAX_AVATAR_ID } from "../dashboard/register/avatar-gallery";
+import { numberRoundDownWithCommas } from "../../../../_shared/helpers/number-helper";
+import { usePlayerContext } from "../../../../_shared/react-contexts";
+import { MAX_AVATAR_ID } from "../../dashboard/register/avatar-gallery";
 import Styles from "./user-info.module.scss";
 
-export const UserInfo: React.FC<{ user: User; customizeClass?: string }> = ({ user, customizeClass }) => {
+export const UserInfo: React.FC<{ customizeClass?: string }> = ({ customizeClass }) => {
+    const { authorizeInfo } = usePlayerContext();
+    const user = authorizeInfo.user;
     let deviceClass = "";
     let currencyUser = "";
     if (isMobileOnly) {

@@ -117,7 +117,6 @@ export const localStorageKeys = {
     enableSound: buildLocalStorageKey("enable-sound"),
     enableMusic: buildLocalStorageKey("enable-music"),
     buildVersion: buildLocalStorageKey("build-version"),
-    toolbarGuide: buildLocalStorageKey("toolbarGuide"),
     pfSetting: buildLocalStorageKey("pf-setting"),
     debug: buildLocalStorageKey("debug"),
     url: buildLocalStorageKey("url"),

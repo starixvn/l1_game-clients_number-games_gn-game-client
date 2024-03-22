@@ -2,7 +2,6 @@ import { Markup } from "interweave";
 import { useEffect, useRef, useState } from "react";
 import { isIOS, isMobileOnly } from "react-device-detect";
 
-import { localStorageKeys, StorageHelper } from "../../../../_shared/helpers";
 import { SystemEventActionType, usePlayerContext, useSystemContext, useSystemDispatch } from "../../../../_shared/react-contexts";
 import { useGameStateContext } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
 import { useClickSound, useSNTranslate } from "../../../../_shared/react-hooks";
@@ -17,7 +16,6 @@ export const QuickBetBtn = () => {
     const authContext = usePlayerContext();
     const enabledQuickBet = useSystemContext().isEnableQuickBet;
     const systemDispatch = useSystemDispatch();
-    const isShowToolbarGuide = StorageHelper.get(localStorageKeys.toolbarGuide) ?? true;
 
     const [isShowModalConfirm, setIsShowModalConfirm] = useState(false);
     const [isShowTooltip, setIsShowTooltip] = useState(true);
@@ -54,9 +52,6 @@ export const QuickBetBtn = () => {
 
     useEffect(() => {
         function handleClickOutside(event) {
-            if (isShowToolbarGuide) {
-                return;
-            }
             if (isShowTooltip && tooltipRef && tooltipRef.current && !tooltipRef.current.contains(event.target)) {
                 setIsShowTooltip(false);
             }
@@ -66,7 +61,7 @@ export const QuickBetBtn = () => {
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
-    }, [tooltipRef, isShowToolbarGuide]);
+    }, [tooltipRef]);
 
     const onEnableFirstLogin = () => {
         clickSound();

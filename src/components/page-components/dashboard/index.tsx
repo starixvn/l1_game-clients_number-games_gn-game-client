@@ -26,12 +26,12 @@ import { ErrorApiText } from "../../game-components/error-api-text";
 import Footer from "../../game-components/footer";
 import Header from "../header";
 import { Lobby } from "../lobby/lobby";
+import { initLobbySocket, reconnectToGameOnLobby } from "../lobby/lobby-socket-connection";
 import Styles from "./dashboard.module.scss";
 import Register from "./register";
 import { MAX_AVATAR_ID } from "./register/avatar-gallery";
 import NameGenerator from "./register/name-generator";
 import { Props, State } from "./type";
-import { initLobbySocket, reconnectToGameOnLobby } from "../lobby/lobby-socket-connection";
 
 class Dashboard extends React.PureComponent<Props, State> {
     private notificationSocket: Socket = null;
@@ -53,7 +53,6 @@ class Dashboard extends React.PureComponent<Props, State> {
             lobbyConfigs: {},
             openGameId: null,
             openGameName: "",
-            isShowToolbarGuide: StorageHelper.get(localStorageKeys.toolbarGuide) ?? true,
             isOnLobby: true,
             lobbySocket: null,
         };
@@ -71,7 +70,6 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.toggleAnnouncementModal = this.toggleAnnouncementModal.bind(this);
         this.updateQueryGame = this.updateQueryGame.bind(this);
         this.openGame = this.openGame.bind(this);
-        this.closeToolbarGuide = this.closeToolbarGuide.bind(this);
         this.handleRecheckInResponse = this.handleRecheckInResponse.bind(this);
         this.onVisibilityChange = this.onVisibilityChange.bind(this);
         this.openGameFromLobby = this.openGameFromLobby.bind(this);
@@ -319,10 +317,6 @@ class Dashboard extends React.PureComponent<Props, State> {
         updateURLContext({ gameId });
     }
 
-    closeToolbarGuide() {
-        this.setState({ isShowToolbarGuide: false });
-    }
-
     getOfferGamesIds(authorizeInfo) {
         return (authorizeInfo?.user?.offerGames?.map((game: any) => +game?.gameId) ?? []) as number[];
     }
@@ -361,7 +355,7 @@ class Dashboard extends React.PureComponent<Props, State> {
     }
 
     renderDashBoard() {
-        const { isShowErrorModal, authorizeInfo, isBlockUI, isShowToolbarGuide } = this.state;
+        const { isShowErrorModal, authorizeInfo, isBlockUI } = this.state;
         const authContextValue = {
             authorizeInfo: authorizeInfo,
             session: this.props.session,
@@ -379,14 +373,7 @@ class Dashboard extends React.PureComponent<Props, State> {
             <PlayerContextProvider value={authContextValue}>
                 <SettingContextProvider>
                     <div className={`${Styles["dashboard"]}`} id={"dashboard"}>
-                        <Header
-                            openingGameId={this.state.openGameId}
-                            user={authorizeInfo.user}
-                            toggleAnnouncementModal={this.toggleAnnouncementModal}
-                            offerGames={offerGames}
-                            isShowToolbarGuide={isShowToolbarGuide}
-                            isRenderGames={isRenderGames}
-                        />
+                        <Header openingGameId={this.state.openGameId} isRenderGames={isRenderGames} />
 
                         {isRenderGames ? this.renderGames() : this.renderLobby()}
 
