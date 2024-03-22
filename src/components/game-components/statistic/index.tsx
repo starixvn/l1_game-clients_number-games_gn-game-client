@@ -1,5 +1,7 @@
 import React, { memo } from "react";
 
+import { useGameContext } from "../../../_shared/react-contexts";
+import { useTranslator } from "../../../_shared/react-hooks";
 import { Round } from "../../game-base/type";
 import Styles from "./statistic.module.scss";
 import { PercentageStatisticProps, Props } from "./types";
@@ -43,12 +45,14 @@ export const PercentageStatistic: React.FC<PercentageStatisticProps> = (props) =
     const { statisticRuleEntries, roundHistory } = props;
     const counted = countSettlementResult(roundHistory);
     const statisticResult = calculatePercent(statisticRuleEntries, counted, roundHistory.length);
+    const { tolgeeNamespace } = useGameContext();
+    const { t } = useTranslator([tolgeeNamespace]);
 
     return (
         <div className={`${Styles["statistic-container"]} flex`} id="bar-statistic">
             {Object.keys(statisticResult).map((choice) => (
                 <StatisticItem key={choice} value={`${statisticResult[choice]}%`}>
-                    <span className={`${Styles[choice]} ${Styles["statistic-choice-icon"]}`}>{choice.charAt(0).toUpperCase()}</span>
+                    <span className={`${Styles[choice]} ${Styles["statistic-choice-icon"]}`}>{t(`beadboard_${choice}`)}</span>
                 </StatisticItem>
             ))}
         </div>

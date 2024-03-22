@@ -7,23 +7,35 @@ import {
     BigRoadRound,
     DerivedElement,
 } from "../../components/game-components/round-history/scoreboard/elements";
+import { withTranslator } from "../../components/page-components/translator";
 import { BacBallBetOptions } from "./constants";
 import styles from "./scoreboard-elements.module.scss";
 import { BacBallResult, BacBallSettlementResult } from "./types";
 
 export class BacBallBeadRoadCharacterElement extends BeadRoadElement<Round<BacBallResult, BacBallSettlementResult>> {
-    renderElement(round: Round<BacBallResult, BacBallSettlementResult>): ReactNode {
+    renderElement(round: Round<BacBallResult, BacBallSettlementResult>, t?: (key: string) => string): ReactNode {
+        const character = (betChoice) => t(`BacBall.beadboard_${betChoice}`);
         if (!round.settlementResult) {
             return <span className={`${styles.blink}`}></span>;
         } else if (round.settlementResult.tie) {
-            return <span className={`${styles.tie}`}>T</span>;
+            return <span className={`${styles.tie}`}>{character(BacBallBetOptions.TIE)}</span>;
         } else if (round.settlementResult.banker) {
-            return <span className={`${styles.banker}`}>B</span>;
+            return <span className={`${styles.banker}`}>{character(BacBallBetOptions.BANKER)}</span>;
         } else {
-            return <span className={`${styles.player}`}>P</span>;
+            return <span className={`${styles.player}`}>{character(BacBallBetOptions.PLAYER)}</span>;
+        }
+    }
+
+    render(): ReactNode {
+        const { round, t } = this.props;
+
+        if (round) {
+            return this.renderElement(round, t);
         }
     }
 }
+
+export const BacBallBeadRoadCharacterElementWithTranslator = withTranslator(BacBallBeadRoadCharacterElement);
 
 export class BacBallBeadRoadValueElement extends BeadRoadElement<Round<BacBallResult, BacBallSettlementResult>> {
     renderElement(round: Round<BacBallResult, BacBallSettlementResult>): ReactNode {

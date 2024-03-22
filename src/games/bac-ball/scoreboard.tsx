@@ -4,7 +4,12 @@ import "swiper/css/pagination";
 import { Component, ReactNode, memo } from "react";
 import { Round } from "../../components/game-base/type";
 import { ScoreboardProps, SlidableScoreboard, SwitchableScoreboard } from "../../components/game-components/round-history/scoreboard";
-import { BacBallBeadRoadCharacterElement, BacBallBigRoadConverter, BacBallBigRoadElement } from "./scoreboard-elements";
+import {
+    BacBallBeadRoadCharacterElement,
+    BacBallBeadRoadCharacterElementWithTranslator,
+    BacBallBigRoadConverter,
+    BacBallBigRoadElement,
+} from "./scoreboard-elements";
 import Styles from "./scoreboard.module.scss";
 import { BacBallResult, BacBallSettlementResult } from "./types";
 
@@ -56,7 +61,7 @@ export class Scoreboard extends Component<ScoreboardComponentProps> {
                     type="switch"
                     scoreboards={[
                         {
-                            element: BacBallBeadRoadCharacterElement,
+                            element: BacBallBeadRoadCharacterElementWithTranslator,
                             arrange: BacBallBeadRoadCharacterElement.arrange,
                             column: 18,
                             row: 6,

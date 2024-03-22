@@ -1,4 +1,5 @@
 import { Attributes, CSSProperties, Component, ComponentType, HTMLAttributes, ReactNode, createElement } from "react";
+import { TranslatorProps } from "../../../page-components/translator";
 import styles from "./scoreboard.module.scss";
 import { chunk } from "./utilities";
 
@@ -17,7 +18,7 @@ export type ScoreboardProps<Round> = {
 export type ScoreboardItemProps<Round> = {
     round: Round;
     scoreboard?: Scoreboard<Round>;
-};
+} & TranslatorProps;
 
 export class Scoreboard<Round> extends Component<ScoreboardProps<Round>> {
     static defaultProps: Partial<ScoreboardProps<unknown>> = {
