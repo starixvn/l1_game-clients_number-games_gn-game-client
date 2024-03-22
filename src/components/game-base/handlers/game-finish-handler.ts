@@ -1,23 +1,50 @@
+import { getAppSettings } from "../../../_shared/app-settings";
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
-import { GameStateContextModel } from "../../../_shared/react-contexts/game-state-context/game-state-context-model";
-import { GameDurations } from "../type";
-import { GameMessageHandler, messageEventType } from "./";
+import { IRoundStateHandler } from "../../round-base/round-state-handler";
+import { GameDurations, Round } from "../type";
+import { GameMessageHandler, PlaceBetHandler, messageEventType } from "./";
 
 export type GameFinishHandlerProps = {
     dispatch: Function;
     gameMessageHandler: GameMessageHandler;
+    placeBetHandler: PlaceBetHandler;
+    durations: GameDurations;
+    roundStateHandler: IRoundStateHandler;
+    runGame: Function;
 };
 
 export class GameFinishHandler {
     protected showResultInfoTimeout: NodeJS.Timeout;
     protected showWinningAnimationTimeout: NodeJS.Timeout;
-    private betWin: number = 0;
+
+    private _betWin: number = 0;
+    private _roundHistory: Round<object, object>[];
+    private _finish: Round<object, object>;
 
     constructor(private props: GameFinishHandlerProps) {}
 
+    set betWin(betWin: number) {
+        this._betWin = betWin;
+    }
+
     registerEvents = () => {
+        this.props.gameMessageHandler.register(messageEventType.FINISH, this.handleFinishHandler.bind(this));
         this.props.gameMessageHandler.register(messageEventType.STATUS, this.handleStatus);
+        this.props.gameMessageHandler.register(messageEventType.ROUND_HISTORY, this.handleRoundHistoryHandler.bind(this));
     };
+
+    handleFinishHandler(finish) {
+        this.props.placeBetHandler.clearRetryInterval();
+        this.handleFinish(finish);
+        this.props.runGame?.(this.props.roundStateHandler.getWholeRoundDuration({ durations: this.props.durations }));
+    }
+
+    handleRoundHistoryHandler(history) {
+        const { roundHistory } = history;
+        if (roundHistory) {
+            this._roundHistory = roundHistory;
+        }
+    }
 
     handleStatus = ({ status }) => {
         const { win, bet } = status;
@@ -27,19 +54,19 @@ export class GameFinishHandler {
                 payload: { status },
             });
 
-        this.betWin = win ? bet : 0;
+        this._betWin = win ? bet : 0;
     };
 
-    handleFinish = ({ finish }, gameStateContext: GameStateContextModel, durations?: GameDurations) => {
+    handleFinish = ({ finish }) => {
+        if (!finish) {
+            return;
+        }
+
         const { dispatch, gameMessageHandler } = this.props;
-        const { roundHistory } = gameStateContext;
-        const roundHistoryClone = [...roundHistory];
+        const durations = this.props.durations;
+        this._finish = finish;
 
         dispatch({ type: GameEventActionType.END_BET_PROCESSING, payload: {} });
-        //this.storeOwnBet(finish.roundId);
-        roundHistoryClone.unshift(finish);
-        roundHistoryClone.length > 100 && roundHistoryClone.pop();
-
         dispatch({
             type: GameEventActionType.FINISH,
             payload: {
@@ -52,16 +79,8 @@ export class GameFinishHandler {
         });
 
         const animationDuration = durations.resultAnimation * 1000;
-
         this.showResultInfoTimeout = setTimeout(() => {
-            dispatch({
-                type: GameEventActionType.SHOW_RESULT_INFO_TIME_OUT,
-                payload: {
-                    showResultInfo: true,
-                    isShowBlink: false,
-                    roundHistory: roundHistoryClone,
-                },
-            });
+            this.handleRoundHistory();
         }, animationDuration);
 
         this.showWinningAnimationTimeout = setTimeout(() => {
@@ -72,8 +91,27 @@ export class GameFinishHandler {
                 },
             });
 
-            this.betWin > 0 && gameMessageHandler.broadcastGameEvent({ [messageEventType.UPDATE_PLAYER_BALANCE]: true });
+            this._betWin > 0 && gameMessageHandler.broadcastGameEvent({ [messageEventType.UPDATE_PLAYER_BALANCE]: true });
         }, durations.showResult * 1000);
+    };
+
+    handleRoundHistory = () => {
+        const roundHistoryClone = [...this._roundHistory];
+        const { gameSettings } = getAppSettings();
+
+        this._finish && roundHistoryClone?.unshift(this._finish);
+        if (roundHistoryClone.length > gameSettings.numberOfRoundHistory) {
+            roundHistoryClone.pop();
+        }
+
+        this.props.dispatch({
+            type: GameEventActionType.SHOW_RESULT_INFO_TIME_OUT,
+            payload: {
+                showResultInfo: true,
+                isShowBlink: false,
+                roundHistory: roundHistoryClone,
+            },
+        });
     };
 
     clearTimeout = () => {

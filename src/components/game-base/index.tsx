@@ -117,6 +117,10 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             new GameFinishHandler({
                 dispatch,
                 gameMessageHandler: this.gameMessageHandler,
+                placeBetHandler: this.placeBetHandler,
+                durations: this.props.durations,
+                roundStateHandler: this.roundStateHandler,
+                runGame: (remainingTime: number) => this.runGame(remainingTime),
             });
 
         this.gameDisabledHandler =
@@ -173,11 +177,11 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.socket?.disconnect();
         this.savePFSetting();
 
-        this.clearGameTimoutAndInterval();
+        this.clearGameTimeoutAndInterval();
         this.clearDisconnectTimeout();
     }
 
-    clearGameTimoutAndInterval = () => {
+    clearGameTimeoutAndInterval = () => {
         clearInterval(this.gameCronInterval);
         this.gameFinishHandler.clearTimeout();
         this.placeBetHandler.clearRetryInterval();
@@ -274,10 +278,10 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.gameMessageHandler.register(messageEventType.SOCKET_DISCONNECTED, this.onSocketDisconnect.bind(this));
         this.gameMessageHandler.register(messageEventType.UNDER_MAINTENANCE, this.handleUM.bind(this));
         this.gameMessageHandler.register(messageEventType.REMAINING_TIME, this.handleRemainingTime.bind(this));
-        this.gameMessageHandler.register(messageEventType.FINISH, this.handleFinish.bind(this));
+        this.gameFinishHandler.registerEvents();
         this.placeBetHandler.registerEvents(signOut, this.props.gameStateContextModel);
         this.gameMessageHandler.register(messageEventType.GAME_DESTROY, this.onDestroy.bind(this));
-        this.gameMessageHandler.register(messageEventType.CLEAR_GAME_TIMEOUT_AND_INTERVAL, this.clearGameTimoutAndInterval.bind(this));
+        this.gameMessageHandler.register(messageEventType.CLEAR_GAME_TIMEOUT_AND_INTERVAL, this.clearGameTimeoutAndInterval.bind(this));
         this.gameMessageHandler.register(messageEventType.SEND_SOCKET_MESSAGE, this.sendSocketMessage.bind(this));
         this.gameMessageHandler.register(messageEventType.UPDATE_PLAYER_BALANCE, this.updateUserBalance.bind(this));
         this.gameMessageHandler.register(
@@ -286,7 +290,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         );
         this.playerHandler.registerEvents(setBalance);
         this.gameErrorHandler.registerEvents(signOut);
-        this.gameFinishHandler.registerEvents();
         this.gameMessageHandler.register(messageEventType.ROUND_HISTORY, this.handleRoundHistory.bind(this));
     }
 
@@ -457,12 +460,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         } else {
             this.props.setApiErrorMessage(balanceResponse.errorCode);
         }
-    }
-
-    handleFinish(finish) {
-        this.placeBetHandler.clearRetryInterval();
-        this.gameFinishHandler.handleFinish(finish, this.props.gameStateContextModel, this.props.durations);
-        this.runGame(this.roundStateHandler.getWholeRoundDuration({ durations: this.props.durations }));
     }
 
     placeBet(betChoice: string, amount: number) {

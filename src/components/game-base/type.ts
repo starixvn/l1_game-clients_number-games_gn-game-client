@@ -35,6 +35,7 @@ export interface GameSettings {
     socketInfo: SocketInfo;
     durations: GameDurations;
     totalTurns: number;
+    numberOfRoundHistory: number;
 }
 
 export type GamePropsContext = {
@@ -150,6 +151,8 @@ export interface Round<R, S> {
     roundId: number;
     result: R;
     settlementResult: S;
+    drawId?: number;
+    pf?: object;
 }
 
 export interface IBallColor {

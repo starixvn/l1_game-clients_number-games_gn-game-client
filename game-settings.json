@@ -17,7 +17,8 @@
             "beforePlaceBet": 0,
             "switchRoundAnimation": 2
         },
-        "totalTurns": 4
+        "totalTurns": 4,
+        "numberOfRoundHistory": 100
     },
     "1002": {
         "id": 1002,
@@ -37,6 +38,7 @@
             "beforePlaceBet": 0,
             "switchRoundAnimation": 2
         },
-        "totalTurns": 4
+        "totalTurns": 4,
+        "numberOfRoundHistory": 100
     }
 }
