@@ -224,7 +224,11 @@ class Dashboard extends React.PureComponent<Props, State> {
         if (!authorizeInfo) {
             return;
         }
-        const lobbySocket = initLobbySocket(this.props.session, [1001, 1002]);
+        const { openGameId } = this.state;
+        const lobbySocket = initLobbySocket(
+            this.props.session,
+            [1001, 1002].filter((gameId) => gameId != openGameId)
+        );
         this.setState({ lobbySocket });
     };
 
