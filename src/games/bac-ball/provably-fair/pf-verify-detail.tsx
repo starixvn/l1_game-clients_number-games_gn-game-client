@@ -1,7 +1,7 @@
 import { FC, useMemo, useState } from "react";
 import { PFResult } from "../../../components/game-base/type";
 import { useGameContext } from "../../../_shared/react-contexts";
-import { useCommonTranslate, useTranslator } from "../../../_shared/react-hooks";
+import { useClickSound, useCommonTranslate, useTranslator } from "../../../_shared/react-hooks";
 import { useBallColor } from "../../../_shared/helpers";
 import { createHash } from "crypto";
 import CopyableTextInput from "../../../components/game-components/provably-fair/copyable-text-input";
@@ -13,6 +13,7 @@ const PFVerifyDetail: FC<{ pfResult: PFResult }> = ({ pfResult }) => {
     const { t: translateCommon } = useCommonTranslate();
     const { t: translateInGame } = useTranslator([tolgeeNamespace]);
     const [combinedHash, setCombinedHash] = useState(pfResult.finalHash);
+    const clickSound = useClickSound();
     const ballColor = useBallColor;
 
     const currentResult = useMemo(() => {
@@ -52,6 +53,7 @@ const PFVerifyDetail: FC<{ pfResult: PFResult }> = ({ pfResult }) => {
     }, []);
 
     const handleClickEdit = () => {
+        clickSound();
         const input = document.getElementById("merge-client-seed-verification") as HTMLInputElement;
         input.readOnly = false;
         input.select();
