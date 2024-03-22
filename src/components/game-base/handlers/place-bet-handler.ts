@@ -29,6 +29,7 @@ export type PlaceBetHandlerProps = {
     playPlaceBetSound?: Function;
     hedgeBetGroups: string[][];
     getPlayerBalance: Function;
+    gameId: number;
 };
 
 export class PlaceBetHandler {
@@ -182,8 +183,8 @@ export class PlaceBetHandler {
 
     handlePreventBet = (gameStateContext: GameStateContextModel) => {
         const isStartingRound = gameStateContext.roundState === RoundState.BeforePlaceBet;
-        const { gameName } = this.props;
-        const gameSettings = getAppSettings().gameSettings?.find((setting) => setting.gameName === gameName);
+        const { gameId } = this.props;
+        const gameSettings = Object.values(getAppSettings().gameSettings)?.find((setting) => setting.id === +gameId);
         const totalTurns = gameSettings?.totalTurns;
         const notice = isStartingRound
             ? this.getNotice(NoticeErrorCode.cannotBet)

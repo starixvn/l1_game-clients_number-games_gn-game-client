@@ -109,6 +109,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 playPlaceBetSound: () => {
                     this.props.gameSound.playPlaceBetSound();
                 },
+                gameId: this.props.id,
             });
 
         this.gameFinishHandler =
