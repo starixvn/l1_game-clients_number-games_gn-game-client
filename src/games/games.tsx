@@ -53,16 +53,20 @@ export const Games: React.FC<Props> = ({ setApiErrorMessage, userStakeLevel, upd
 
         switch (gameId) {
             case GameIds.BacBall1:
-            case GameIds.BacBall2:
+
                 return <BacBall key={`game-${gameId}`} {...gameProps} />;
+
+            case GameIds.BacBall2:
+            case GameIds.NextBall1:
+            case GameIds.NextBall2:
+                return <NextBall key={`game-${gameId}`}  {...gameProps} />;
+
             case GameIds.HappyFour:
                 return <HappyFour key={`game-${gameId}`} />;
             case GameIds.HappyWheel:
                 return <HappyWheel key={`game-${gameId}`} />;
             case GameIds.LuckyThree:
                 return <LuckyThree key={`game-${gameId}`} />;
-            case GameIds.NextBall:
-                return <NextBall key={`game-${gameId}`} />;
             case GameIds.SicBalls:
                 return <SicBalls key={`game-${gameId}`} />;
 

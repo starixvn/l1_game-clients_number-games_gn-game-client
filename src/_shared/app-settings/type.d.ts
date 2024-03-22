@@ -16,7 +16,6 @@ export default interface AppSettings {
     socketGatewayPath: string;
     proxy: ProxySetting;
     sentry: SentryOptions;
-    offeredGames: number[];
     gameSettings: { [id: string]: GameBaseProps };
     subGuideDomain: string;
     googleAnalyticId: string;

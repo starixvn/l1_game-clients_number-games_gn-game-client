@@ -113,9 +113,10 @@ export const confirmBet = "confirmBet";
 export const GameIds = {
     BacBall1: 1001,
     BacBall2: 1002,
+    NextBall1: 1003,
+    NextBall2: 1004,
     HappyFour: 1112,
     HappyWheel: 1113,
     LuckyThree: 1114,
-    NextBall: 1115,
     SicBalls: 1116,
 };

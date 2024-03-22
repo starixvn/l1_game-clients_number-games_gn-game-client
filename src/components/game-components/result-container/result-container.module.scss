@@ -1,0 +1,15 @@
+.result-container {
+    display: grid;
+    justify-content: center;
+    grid-template-columns: repeat(2, 15.3rem);
+    grid-gap: 4rem;
+    height: 18.5rem;
+}
+
+
+.ball-container {
+    display: flex;
+    justify-content: center;
+    gap: 0.6rem;
+    margin-top: -0.4rem;
+}

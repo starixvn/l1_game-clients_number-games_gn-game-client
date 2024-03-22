@@ -1,129 +1,126 @@
-import { RoundResultData } from "../../_shared/constants";
-import Ball from "../../components/game-components/ball";
-import PercentageCircle from "../../components/game-components/percentage-circle";
-import Style from "./next-ball.module.scss";
+import { withRouter } from "next/router";
+import { JSX } from "react";
+import { loadPixiAnimations } from "../../_shared/helpers/pixi-resource-loader";
+import { useSystemContext, useSystemDispatch } from "../../_shared/react-contexts";
+import {
+    GameStateProvider,
+    useGameStateContext,
+    useGameStatesDispatch,
+} from "../../_shared/react-contexts/game-state-context/game-state-context";
+import { useTranslator } from "../../_shared/react-hooks";
+import GameBase from "../../components/game-base/";
+import { GameMessageHandler, TurnIdHandler } from "../../components/game-base/handlers";
+import { GameBaseProps, Round } from "../../components/game-base/type";
+import PercentageStatistic from "../../components/game-components/statistic";
+import { TurnGameStateHandler } from "../../components/turn-base/turn-game-state-handler";
+import { TurnStateHandler } from "../../components/turn-base/turn-state-handler";
+import { BacBallResult, BacBallSettlementResult } from "../bac-ball/types";
+import { BacBallBetHistoryModal } from "../bac-ball/history";
+import Scoreboard from "../bac-ball/scoreboard";
+import { DrawIdBlock } from "../bac-ball/draw-id-block";
+import { BacBallBetOptions, StatisticRuleEntries } from "../bac-ball/constants";
+import NextBallResultBlock from "./next-ball-result-block";
+import { NextBallBettingBlock } from "./next-ball-betting-block";
+import { NextBallResult, NextBallSettlementResult } from "./types";
 
-interface BetOptionData {
-    betChoice: string;
-    odds: number;
-    totalStakes: number;
-    players: number;
-    percent: number;
-    bgColor: string;
-    isRight?: boolean;
+class NextBall extends GameBase<GameBaseProps> {
+    private turnIdHandler?: TurnIdHandler;
+
+    constructor(props: GameBaseProps) {
+        const gameMessageHandler = new GameMessageHandler(props.dispatch);
+        super(props, new TurnStateHandler(), new TurnGameStateHandler(), gameMessageHandler);
+
+        this.turnIdHandler = new TurnIdHandler({
+            dispatch: props.dispatch,
+            gameStateContextModel: this.getGameStateContext.bind(this),
+            gameMessageHandler,
+            totalTurns: props.totalTurns,
+            durations: props.durations,
+        });
+    }
+
+    override registerHandlers(): void {
+        super.registerHandlers();
+
+        this.turnIdHandler?.registerEvents();
+    }
+
+    componentDidMount() {
+        super.componentDidMount();
+
+        // Load all animation resources in background
+        Array.from({ length: 75 }, (_, i) => i + 1).forEach((result) =>
+            loadPixiAnimations(`/static/images/cage/number/${result}.json`, () => ({}))
+        );
+    }
+
+    renderResultBlock() {
+        const { roundHistory, result, roundState, roundData, turnCounter, drawId, playResultAnimation } = this.props.gameStateContextModel;
+
+        return (
+            <NextBallResultBlock
+                roundHistory={roundHistory as Round<NextBallResult, NextBallSettlementResult>[]}
+                result={result}
+                roundState={roundState}
+                roundData={roundData}
+                turnCounter={turnCounter}
+                drawId={drawId}
+                playResultAnimation={playResultAnimation}
+            />
+        );
+    }
+
+    renderBettingBlock() {
+        return <NextBallBettingBlock />;
+    }
+
+    renderBetHistoryModal() {
+        return <BacBallBetHistoryModal />;
+    }
+
+    renderStatistic() {
+        const { roundHistory } = this.props.gameStateContextModel;
+
+        return <PercentageStatistic roundHistory={roundHistory} statisticRuleEntries={StatisticRuleEntries} />;
+    }
+
+    renderScoreboards() {
+        const { roundHistory, isShowBlink } = this.props.gameStateContextModel;
+
+        return <Scoreboard isShowBlink={isShowBlink} roundHistory={roundHistory as Round<BacBallResult, BacBallSettlementResult>[]} />;
+    }
+
+    renderRoundIdSection(): JSX.Element {
+        return <DrawIdBlock />;
+    }
 }
 
-const betData: BetOptionData[] = [
-    {
-        betChoice: "Over",
-        odds: 1.97,
-        totalStakes: 100000,
-        players: 17,
-        percent: 55,
-        bgColor: "blue",
-    },
-    {
-        betChoice: "Under",
-        odds: 1.97,
-        totalStakes: 100000,
-        players: 17,
-        percent: 55,
-        bgColor: "blue",
-        isRight: true,
-    },
-    {
-        betChoice: "Odd",
-        odds: 1.97,
-        totalStakes: 100000,
-        players: 17,
-        percent: 55,
-        bgColor: "red",
-    },
-    {
-        betChoice: "Even",
-        odds: 1.97,
-        totalStakes: 100000,
-        players: 17,
-        percent: 55,
-        bgColor: "red",
-        isRight: true,
-    },
-];
-
-const resultData: RoundResultData[] = [
-    {
-        betChoiceShort: "O",
-        color: "blue",
-        count: 37,
-    },
-    {
-        betChoiceShort: "U",
-        color: "blue",
-        count: 15,
-    },
-    {
-        betChoiceShort: "O",
-        color: "red",
-        count: 25,
-    },
-    {
-        betChoiceShort: "E",
-        color: "red",
-        count: 23,
-    },
-];
-
-export default function NextBall() {
+const NextBalllWrapper = (props) => {
     return (
-        <>
-            <div className="round-id">#2345</div>
-            <div className="countdown-timer">00:30</div>
-            <div className={Style["result-container"]}>
-                <div className="flex justify-center">
-                    <img src="/static/images/next-ball/lottery.png" alt="arrow-bg" />
-                </div>
-
-                <div className={Style["ball-container"]}>
-                    <Ball number={38} />
-                    <Ball number={27} />
-                    <Ball number={64} />
-                    <Ball number={1} />
-                    <Ball number={1} />
-                    <Ball number={1} />
-                    <Ball number={1} />
-                    <Ball number={1} />
-                </div>
-            </div>
-            <div className={`${Style["bet-choice-container"]}`}>
-                {betData.map((items) => (
-                    <div
-                        className={`${Style["bet-choice"]}  ${Style[items.bgColor]} ${items.isRight ? Style["right"] : ""}`}
-                        key={items.betChoice}
-                    >
-                        <div className={`flex justify-between ${Style["bet-choice-info"]}`}>
-                            <div className={Style.percent}>
-                                <PercentageCircle percentage={items.percent} color="#2fc856" />
-                            </div>
-                            <div className={Style.stake}>
-                                <div className={`flex items-center ${Style["total-stakes"]} gap-1`}>
-                                    <span className="icon-coin"></span>
-                                    <span>{items.totalStakes}</span>
-                                </div>
-                                <div className={`flex items-center  ${Style["players"]} gap-1`}>
-                                    <span className="icon-user"></span>
-                                    <span>{items.players}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div className={`bet-name text-center ${Style["bet-name"]}`}>{items.betChoice}</div>
-                        <div className="bet-odds text-center">{items.odds}</div>
-                        <div className="own-bet">
-                            <span className="bet-value">100</span>
-                        </div>
-                    </div>
-                ))}
-            </div>
-            {/* <RoundResult results={resultData} /> */}
-        </>
+        <GameStateProvider>
+            <NextBalllFC {...props} />
+        </GameStateProvider>
     );
-}
+};
+
+const NextBalllFC = (props) => {
+    const tolgeeNamespace = props["tolgeeNamespace"];
+    const { t } = useTranslator([tolgeeNamespace]);
+
+    return (
+        <NextBall
+            {...props}
+            {...{
+                dispatch: useGameStatesDispatch(),
+                gameStateContextModel: useGameStateContext(),
+                systemContextModel: useSystemContext(),
+                systemDispatch: useSystemDispatch(),
+                translate: t,
+                tolgeeNamespace,
+                hedgeBetGroups: [[BacBallBetOptions.PLAYER, BacBallBetOptions.BANKER]],
+            }}
+        />
+    );
+};
+
+export default withRouter(NextBalllWrapper);

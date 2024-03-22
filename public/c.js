@@ -12,7 +12,6 @@ window.envConfig = {
         dsn: "",
         environment: "LOCAL",
     },
-    offeredGames: [1001],
     enableSourceMap: true,
     subGuideDomain: "gn-guide",
     enableMsgpackParser: false,

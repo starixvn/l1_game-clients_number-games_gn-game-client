@@ -19,6 +19,7 @@ export enum CageColor {
 export enum CagePosition {
     LEFT = "left",
     RIGHT = "right",
+    CENTER = "center"
 }
 
 export type CageProps = {

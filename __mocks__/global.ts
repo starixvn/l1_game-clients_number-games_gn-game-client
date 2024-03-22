@@ -12,7 +12,6 @@ jest.mock("next/config", () => () => ({
             environment: "",
             tracesSampleRate: 1,
         },
-        offeredGames: [1001],
         enableSourceMap: true,
         subGuideDomain: "gn-guide",
         enableMsgpackParser: false,
