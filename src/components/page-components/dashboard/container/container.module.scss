@@ -9,15 +9,10 @@
     justify-content: stretch;
     align-items: center;
     height: 100%;
-    align-items: center;
+    margin: 0 auto;
 
-    @media (max-width: 767px) {
-        &.mobile {
-            min-height: 76rem;
-            .page-bg {
-                height: 76rem;
-            }
-        }
+    @media screen and (min-width: 500px) {
+        max-width: 37.5rem;
     }
 }
 
@@ -30,24 +25,20 @@
     border-radius: 1.5rem;
     background-color: var(--page-background);
     border: 1px solid var(--page-border);
-    box-shadow: var(--page-shadow);
     margin: auto;
     overflow: hidden;
-
-    @media (min-width: 768px) {
-        width: 67.3rem;
-    }
 }
 
 .first-login {
+    position: relative;
     color: #e6e6e6;
 
     .page-bg:before {
         position: absolute;
-        top: 1px;
-        left: -107px;
-        width: 500px;
-        height: 500px;
+        top: 0.1rem;
+        left: -22.6rem;
+        width: 50rem;
+        height: 50rem;
         content: "";
         background: #ffd427;
         background: radial-gradient(circle, rgba(255, 239, 0, 1) -50%, rgba(255, 239, 0, 0) 70%);
@@ -60,34 +51,10 @@
     background-color: var(--page-background);
 }
 
-.logo {
-    display: block;
-    text-align: center;
-    margin-bottom: 0.7rem;
-
-    @media (min-width: 768px) {
-        margin-bottom: 1.5rem;
-    }
-
-    .img-logo {
-        width: 10.6rem;
-    }
-
-    .logo-customize {
-        height: 9.7rem;
-    }
-}
-
 .page-container {
     position: relative;
     z-index: 1;
     width: 100%;
     margin: 0 auto;
     line-height: 2.4rem;
-
-    @media (min-width: 768px) {
-        width: 49rem;
-        padding-left: 0;
-        padding-right: 0;
-    }
 }

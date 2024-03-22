@@ -68,7 +68,7 @@ html {
 [data-theme="light"] {
     --page-background-color: #000000;
     --game-background-image: url("/static/images/bg-galaxy.jpg");
-    --background-image: url("/static/images/bg-1.jpg");
+    --background-image: url("/static/images/bg.jpg");
     --text-color: #2c2f3e;
 
     --border-color: #c5cbdb;
@@ -103,7 +103,7 @@ body {
 body {
     padding: 0;
     margin: 0;
-    background: var(--page-background-color) var(--game-background-image) no-repeat top center fixed;
+    background: var(--page-background-color) var(--background-image) no-repeat top center fixed;
     font: 1.4rem/1.5 var(--font-family);
     color: var(--text-color);
     overscroll-behavior: contain;

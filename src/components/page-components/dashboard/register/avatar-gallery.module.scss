@@ -25,12 +25,12 @@
     border: 1px solid var(--page-border);
     transform: scale(1) translateX((var(--translateX)));
     transform-origin: center;
-    animation: zoom-in 0.6s forwards;
+    // animation: zoom-in 0.6s forwards;
 
-    @media (min-width: 768px) {
-        --wrapper-width: 67.3rem;
+    @media screen and (min-width: 500px) {
+        --wrapper-width: 36.5rem;
         --left: 50%;
-        --translateX: -33.7rem;
+        --translateX: -18rem;
     }
 
     .container-avatars {
@@ -43,11 +43,6 @@
         padding: 1rem;
         margin-top: 1rem;
         scrollbar-width: none;
-
-        @media (min-width: 768px) {
-            grid-gap: 3rem;
-            margin-top: 2rem;
-        }
     }
 
     .gallery-title {
