@@ -55,7 +55,11 @@ const PFVerifyDetail: FC<{ pfResult: PFResult }> = ({ pfResult }) => {
     const handleClickEdit = () => {
         clickSound();
         const input = document.getElementById("merge-client-seed-verification") as HTMLInputElement;
+        const inputGroupEditable = document.getElementById("merge-client-seed-group-editable") as HTMLInputElement;
+        inputGroupEditable.className = `input-group ${Styles["input-group-editable"]} width-full mb-3`;
         input.readOnly = false;
+        input.className = `form-control ${Styles["form-control-editable"]}`;
+        input.focus();
         input.select();
     };
 
@@ -70,7 +74,7 @@ const PFVerifyDetail: FC<{ pfResult: PFResult }> = ({ pfResult }) => {
     return (
         <div className={Styles["pf-setting-container"]}>
             <h3 className={`${Styles["section-title"]}`}>{translateCommon("pf_ header_merge_client_seed")}</h3>
-            <div className="input-group width-full mb-3">
+            <div id="merge-client-seed-group-editable" className="input-group width-full mb-3">
                 <input
                     className="form-control"
                     type="text"

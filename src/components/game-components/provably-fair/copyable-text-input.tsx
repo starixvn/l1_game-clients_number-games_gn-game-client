@@ -2,7 +2,7 @@ import { FC, useState } from "react";
 import { useClickSound, useCommonTranslate } from "../../../_shared/react-hooks";
 import Styles from "./provably-fair.module.scss";
 
-const CopyableTextInput: FC<{ value: string; id: string }> = ({ value, id }) => {
+const CopyableTextInput: FC<{ value: string; id: string; position?: string }> = ({ value, id, position = "top" }) => {
     const [isCopySuccess, setIsCopySuccess] = useState(false);
     const { t: translateCommon } = useCommonTranslate();
     const clickSound = useClickSound();
@@ -21,7 +21,9 @@ const CopyableTextInput: FC<{ value: string; id: string }> = ({ value, id }) => 
             <button className={Styles["copy-btn"]} onClick={handleCopy}>
                 <span className="icon-copy" />
             </button>
-            {isCopySuccess && <div className={Styles["copy-success"]}>{translateCommon("pf_copy_successfully ")}</div>}
+            {isCopySuccess && (
+                <div className={`${Styles["copy-success"]} ${Styles[position]}`}>{translateCommon("pf_copy_successfully ")}</div>
+            )}
         </>
     );
 };
