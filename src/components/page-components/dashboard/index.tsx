@@ -58,7 +58,6 @@ class Dashboard extends React.PureComponent<Props, State> {
             lobbySocket: null,
         };
 
-        this.handleFirstLogin = this.handleFirstLogin.bind(this);
         this.handleRegister = this.handleRegister.bind(this);
         this.registerMainSocketEvent = this.registerMainSocketEvent.bind(this);
         this.handleKickedOut = this.handleKickedOut.bind(this);
@@ -220,13 +219,14 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.registerMainSocketEvent(this.notificationSocket);
     }
 
-    connectLobbySocket = (authorizeInfo) => {
-        if (!authorizeInfo) {
+    connectLobbySocket = (authorizeInfo: AuthorizeResponse) => {
+        const offerGamesIds = this.getOfferGamesIds(authorizeInfo);
+
+        if (!authorizeInfo?.authorized || offerGamesIds.length === 0) {
             return;
         }
 
         const { gameId } = loadURLContext();
-        const offerGamesIds = this.getOfferGamesIds(authorizeInfo);
         const lobbySocket = initLobbySocket(
             this.props.session,
             offerGamesIds.filter((id) => id != gameId)
@@ -276,19 +276,6 @@ class Dashboard extends React.PureComponent<Props, State> {
         }
     }
 
-    handleFirstLogin() {
-        const { session } = this.props;
-        const authorizeInfo = { ...this.state.authorizeInfo };
-        if (authorizeInfo && authorizeInfo.authorized) {
-            updateSignInSMStatus(session);
-
-            authorizeInfo.user.settings = { theme: Themes.light };
-            authorizeInfo.user.isSignedInSM = true;
-
-            this.updateAuthorizeInfo(authorizeInfo);
-        }
-    }
-
     handleUpdateUserStakeLevel(userStakeLevel: UserStakeLevel) {
         this.setState({ userStakeLevel: userStakeLevel });
     }
@@ -300,6 +287,7 @@ class Dashboard extends React.PureComponent<Props, State> {
         authorizeInfo.user.isSignedInSM = true;
 
         this.updateAuthorizeInfo(authorizeInfo);
+        this.connectLobbySocket(authorizeInfo);
     }
 
     closeDialog() {

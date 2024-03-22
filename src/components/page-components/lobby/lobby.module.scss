@@ -25,7 +25,7 @@
         margin-right: 8px;
     }
 
-    .um-message {
+    .error-message {
         position: relative;
         padding-right: 1rem;
         width: calc(100% - 13rem);
@@ -33,6 +33,11 @@
         font-size: 1.4rem;
         text-align: center;
         align-self: center;
+
+        .btn-reconnect {
+            margin-top: 1rem;
+            width: 70%;
+        }
     }
 }
 
