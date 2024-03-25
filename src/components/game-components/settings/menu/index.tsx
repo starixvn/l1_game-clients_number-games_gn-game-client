@@ -1,17 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
 import { isMobileOnly } from "react-device-detect";
 import { GameEventActionType } from "../../../../_shared/react-contexts/game-state-context/game-event-action";
-import { useGameStatesDispatch } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
+import { useGameStateContext, useGameStatesDispatch } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
 import { useClickSound } from "../../../../_shared/react-hooks";
-import { useSNTranslate } from "../../../../_shared/react-hooks/use-translator";
 import Styles from "./menu.module.scss";
 import { Music } from "./music";
 import { Sound } from "./sound";
+import { RoundState } from "../../../game-base/type";
 
 const dropdownItemClassName = "dropdown-item";
 
 export const Menu: React.FC = () => {
-    const { t } = useSNTranslate();
+    const { roundState } = useGameStateContext();
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const wrapperRef = useRef<HTMLDivElement>(null);
     const specialClassByDevice = !isMobileOnly ? "desktop-style" : "";
@@ -19,6 +19,10 @@ export const Menu: React.FC = () => {
     const clickSound = useClickSound();
 
     const openBetHistory = () => {
+        if (roundState === RoundState.Disabled) {
+            return;
+        }
+
         clickSound();
         dispatch({
             type: GameEventActionType.TOGGLE_BET_HISTORY,
@@ -30,6 +34,10 @@ export const Menu: React.FC = () => {
     };
 
     const openGuide = () => {
+        if (roundState === RoundState.Disabled) {
+            return;
+        }
+
         clickSound();
         dispatch({
             type: GameEventActionType.TOGGLE_GAME_GUIDE,
