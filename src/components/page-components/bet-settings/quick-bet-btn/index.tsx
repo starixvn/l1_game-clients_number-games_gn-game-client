@@ -1,5 +1,4 @@
-import { Markup } from "interweave";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { isIOS, isMobileOnly } from "react-device-detect";
 
 import { SystemEventActionType, usePlayerContext, useSystemContext, useSystemDispatch } from "../../../../_shared/react-contexts";
@@ -18,8 +17,6 @@ export const QuickBetBtn = () => {
     const systemDispatch = useSystemDispatch();
 
     const [isShowModalConfirm, setIsShowModalConfirm] = useState(false);
-    const [isShowTooltip, setIsShowTooltip] = useState(true);
-    const tooltipRef = useRef<HTMLDivElement>(null);
 
     let deviceClass = "";
     if (isMobileOnly) {
@@ -31,7 +28,6 @@ export const QuickBetBtn = () => {
 
     const confirmQuickBet = () => {
         clickSound();
-        setIsShowTooltip(false);
         closeModal();
         updateUserQuickBet(true);
     };
@@ -50,26 +46,6 @@ export const QuickBetBtn = () => {
         setIsShowModalConfirm(false);
     };
 
-    useEffect(() => {
-        function handleClickOutside(event) {
-            if (isShowTooltip && tooltipRef && tooltipRef.current && !tooltipRef.current.contains(event.target)) {
-                setIsShowTooltip(false);
-            }
-        }
-
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, [tooltipRef]);
-
-    const onEnableFirstLogin = () => {
-        clickSound();
-        setIsShowTooltip(false);
-
-        updateUserQuickBet(true);
-    };
-
     const onClickQuickBet = () => {
         clickSound();
         if (!enabledQuickBet) {
@@ -85,29 +61,6 @@ export const QuickBetBtn = () => {
             <BaseDialog type={ModalType.Center} isOpen={isShowModalConfirm} onCloseModal={closeModal}>
                 <QuickBetHint closeModal={closeModal} confirmQuickBet={confirmQuickBet} />
             </BaseDialog>
-        </div>
-    );
-
-    const closeHintTooltip = () => {
-        setIsShowTooltip(false);
-        updateUserQuickBet(false);
-    };
-
-    const toolTipPositionClass = isMobileOnly ? `bottom ${Styles["isMobile"]}` : "top",
-        toolTipClass = `popover-custom ${toolTipPositionClass} ${Styles["hint-one-click-bet"]} `;
-
-    const firstLoginQuickBetPopup = (
-        <div ref={tooltipRef} className={toolTipClass}>
-            <div className="popover-bg"></div>
-            <div className="relative">{<Markup content={t(`enable_quick_bet_hint`).replaceTolgeeFormat()}></Markup>}</div>
-            <div className={Styles.action}>
-                <button id="btn-cancel-quickbet" className={`btn-grey ${Styles["btn"]}`} onClick={closeHintTooltip}>
-                    {t("button_cancel")}
-                </button>
-                <button id="btn-on-quickbet" className={`btn-green pulse ${Styles["btn"]}`} onClick={onEnableFirstLogin}>
-                    {t("button_enable_quickbet")}
-                </button>
-            </div>
         </div>
     );
 
@@ -132,7 +85,6 @@ export const QuickBetBtn = () => {
                 </label>
             </div>
             {isShowModalConfirm && !!enabledQuickBet === false && quickBetPopup}
-            {enabledQuickBet === undefined && isShowTooltip && firstLoginQuickBetPopup}
         </div>
     );
 };

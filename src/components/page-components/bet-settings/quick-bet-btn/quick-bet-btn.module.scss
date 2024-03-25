@@ -94,38 +94,6 @@
     }
 }
 
-.hint-one-click-bet {
-    right: 0;
-    width: 35rem;
-    z-index: 1;
-    bottom: 3.5rem;
-
-    &.isMobile {
-        bottom: 3.6rem;
-        right: -0.6rem;
-        width: calc(100vw - 1rem);
-
-        &:before {
-            bottom: -1.5rem;
-            border-color: #6c49f0 transparent transparent transparent;
-            top: unset;
-        }
-    }
-
-    .action {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        grid-gap: 2rem;
-        margin-top: 1.2rem;
-    }
-
-    .btn {
-        min-width: 13.5rem;
-        padding: 0 0.8rem;
-        overflow: hidden;
-    }
-}
-
 @keyframes bottomFadeIn {
     0% {
         bottom: 0rem;
