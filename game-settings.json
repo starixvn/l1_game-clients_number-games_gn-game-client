@@ -29,14 +29,14 @@
             "path": "bacball2"
         },
         "durations": {
-            "wholeRound": 112,
-            "wholeTurn": 27,
+            "wholeRound": 114,
+            "wholeTurn": 28,
             "placingBets": 20,
             "lockingBet": 3,
-            "showResult": 7,
+            "showResult": 8,
             "resultAnimation": 3,
             "beforePlaceBet": 0,
-            "switchRoundAnimation": 4
+            "switchRoundAnimation": 2
         },
         "totalTurns": 4,
         "numberOfRoundHistory": 100
