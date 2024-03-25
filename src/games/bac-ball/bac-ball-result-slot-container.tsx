@@ -4,7 +4,6 @@ import { GameStateContextModel } from "../../_shared/react-contexts/game-state-c
 import { RoundState } from "../../components/game-base/type";
 import Ball, { BallStatus, IBall } from "../../components/game-components/ball";
 import Style from "./bac-ball.module.scss";
-import { BacBallResult, BacBallSettlementResult } from "./types";
 
 export type IResultSlotContainer = {
     delayTime: number;
@@ -66,15 +65,23 @@ export const BacBallResultSlotContainer: React.FC<IResultSlotContainer> = (props
         }
     }, [result]);
 
+    const resetBalls = () => {
+        const defaultData = cloneDefaultData();
+        updateLoadingIcon(defaultData);
+        setBallsData(defaultData);
+    };
+
     useEffect(() => {
         if (roundState === RoundState.LockingBet || roundState === RoundState.InRound) {
             if (turnCounter === 1) {
-                const defaultData = cloneDefaultData();
-                updateLoadingIcon(defaultData);
-                setBallsData(defaultData);
+                resetBalls();
             } else {
                 updateLoadingIcon([...ballsData]);
             }
+        }
+
+        if (roundState === RoundState.SwitchRound) {
+            resetBalls();
         }
     }, [roundState, turnCounter]);
 
