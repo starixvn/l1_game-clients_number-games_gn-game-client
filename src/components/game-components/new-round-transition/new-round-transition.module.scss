@@ -1,36 +1,212 @@
 .new-round-transition {
     position: absolute;
     left: 0;
-    top: 0;
-    height: 32.6rem;
+    top: 35px;
+    height: 20.6rem;
     width: 100%;
     z-index: var(--result-animation-index);
 
-    .bg {
-        background: url(/static/images/smoke-transition.svg) no-repeat center;
-        width: 32.6rem;
-        height: 32.6rem;
-        animation: move-left-to-right 1s ease-out forwards;
+    --anim-part-1-duration: 0.3s;
+    --anim-delay: 1.5s;
+    --anim-part-2-duration: 0.5s;
+
+    .transition-layer {
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        top: 0;
+
+        &:before,
+        &:after {
+            content: "";
+            height: 10.4rem;
+            width: 100%;
+            position: absolute;
+            left: 0;
+            // background: #1c2020;
+            z-index: 1;
+            opacity: 0;
+        }
+
+        &:before {
+            top: 0;
+            background: linear-gradient(
+                0deg,
+                rgba(74, 70, 70, 0.9752275910364145) 21%,
+                rgba(54, 51, 51, 0.639093137254902) 61%,
+                rgba(0, 0, 0, 0) 100%
+            );
+            transform: translateY(-100%);
+            animation: top-part-slide-down var(--anim-part-1-duration) forwards,
+                top-part-slide-up var(--anim-part-2-duration) var(--anim-delay) forwards;
+        }
+
+        &:after {
+            bottom: 0;
+
+            background: linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0) 21%,
+                rgba(54, 51, 51, 0.639093137254902) 61%,
+                rgba(74, 70, 70, 0.9752275910364145) 100%
+            );
+            transform: translateY(100%);
+            animation: bottom-part-slide-up var(--anim-part-1-duration) forwards,
+                bottom-part-slide-down var(--anim-part-2-duration) var(--anim-delay) forwards;
+        }
     }
 }
 
-@keyframes move-left-to-right {
-    0% {
+@keyframes top-part-slide-down {
+    from {
+        top: 0;
         opacity: 0;
-        transform: translateX(-30rem);
     }
 
-    5% {
-        opacity: 1;
-        transform: translateX(-30rem);
-    }
-
-    60% {
+    to {
+        top: 10.4rem;
         opacity: 1;
     }
+}
 
+@keyframes top-part-slide-up {
+    from {
+        top: 10.4rem;
+        opacity: 1;
+    }
+
+    to {
+        top: 0;
+        opacity: 0;
+    }
+}
+
+@keyframes bottom-part-slide-up {
+    from {
+        bottom: 0;
+        opacity: 0;
+    }
+
+    to {
+        bottom: 10.4rem;
+        opacity: 1;
+    }
+}
+
+@keyframes bottom-part-slide-down {
+    from {
+        bottom: 10.4rem;
+        opacity: 1;
+    }
+
+    to {
+        bottom: 0;
+        opacity: 0;
+    }
+}
+
+.loader {
+    margin: 0 auto;
+    width: 60px;
+    height: 50px;
+    text-align: center;
+    font-size: 10px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
+    z-index: 500;
+    opacity: 0;
+    animation: show-loading 0.3s 0.3s forwards, hide-loading 0.3s 1.5s forwards;
+
+    > div {
+        height: 100%;
+        width: 8px;
+        display: inline-block;
+        float: left;
+        margin-left: 2px;
+        animation: delay 0.8s infinite ease-in-out;
+    }
+
+    .bar1 {
+        background-color: #754fa0;
+    }
+    .bar2 {
+        background-color: #09b7bf;
+        animation-delay: -0.7s;
+    }
+    .bar3 {
+        background-color: #90d36b;
+        animation-delay: -0.6s;
+    }
+    .bar4 {
+        background-color: #f2d40d;
+        animation-delay: -0.5s;
+    }
+    .bar5 {
+        background-color: #fcb12b;
+        animation-delay: -0.4s;
+    }
+    .bar6 {
+        background-color: #ed1b72;
+        animation-delay: -0.3s;
+    }
+}
+
+@keyframes delay {
+    0%,
+    40%,
     100% {
-        opacity: 0;
-        transform: translateX(30rem) scale(3);
+        transform: scaleY(0.05);
+        -webkit-transform: scaleY(0.05);
+    }
+    20% {
+        transform: scaleY(1);
+        -webkit-transform: scaleY(1);
     }
 }
+
+@keyframes show-loading {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes hide-loading {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+// @keyframes animate {
+//     10% {
+//         transform: scale(1, 0.002);
+//     }
+//     35% {
+//         transform: scale(0.2, 0.002);
+//         opacity: 1;
+//     }
+
+//     50% {
+//         transform: scale(0.2, 0.002);
+//         opacity: 0;
+//     }
+
+//     85% {
+//         transform: scale(1, 0.002);
+//         opacity: 1;
+//     }
+
+//     100% {
+//         transform: scale(1, 1);
+//     }
+// }

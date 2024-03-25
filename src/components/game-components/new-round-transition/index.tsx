@@ -11,7 +11,16 @@ const NewRoundTransition: React.FC<any> = (props) => {
 
     return (
         <div className={Styles["new-round-transition"]}>
-            <div className={Styles.bg}></div>
+            <div className={Styles["transition-layer"]}>
+                <div className={Styles["loader"]}>
+                    <div className={Styles["bar1"]}></div>
+                    <div className={Styles["bar2"]}></div>
+                    <div className={Styles["bar3"]}></div>
+                    <div className={Styles["bar4"]}></div>
+                    <div className={Styles["bar5"]}></div>
+                    <div className={Styles["bar6"]}></div>
+                </div>
+            </div>
         </div>
     );
 };
