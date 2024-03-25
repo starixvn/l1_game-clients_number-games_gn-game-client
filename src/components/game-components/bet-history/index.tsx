@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, ReactNode, useEffect, useMemo, useState } from "react";
 
 import { useGameContext } from "../../../_shared/react-contexts";
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
@@ -9,6 +9,7 @@ import { DrawInfo } from "../../game-base/type";
 import Loader from "../loader";
 import ModalContainer from "../modal-container";
 import Styles from "./bet-history.module.scss";
+import BetDetailModal from "./bet-detail-modal";
 
 const GET_HISTORY = "getHistory";
 const HISTORY_EVENT = "history";
@@ -16,7 +17,6 @@ const HISTORY_EVENT = "history";
 export interface BetLogProps {
     betLogs: any[];
     handleScroll: (event: any) => void;
-    renderBetDetail: (betDetailProps: BetLogDetailProps) => JSX.Element;
     onCloseModal: Function;
     isLoadMore: boolean;
 }
@@ -110,7 +110,6 @@ const BetHistoryModal: FC<BetHistoryProps> = ({ renderBetLog, renderBetLogDetail
                     betLogs,
                     handleScroll: handleScroll(page + 1),
                     onCloseModal: handleCloseInBetDetail,
-                    renderBetDetail: renderBetLogDetail,
                     isLoadMore: isHaveMoreData,
                 });
             }, [betLogs, isHaveMoreData])}

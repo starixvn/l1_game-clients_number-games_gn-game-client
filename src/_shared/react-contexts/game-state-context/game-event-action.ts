@@ -1,4 +1,13 @@
-import { GameConfigs, GameDurations, Notice, PFSettingData, RoundState, SuggestBet } from "../../../components/game-base/type";
+import {
+    DrawInfo,
+    GameConfigs,
+    GameDurations,
+    Notice,
+    PFResult,
+    PFSettingData,
+    RoundState,
+    SuggestBet,
+} from "../../../components/game-base/type";
 
 export enum GameEventActionType {
     CONNECT = "CONNECT",
@@ -37,6 +46,12 @@ export enum GameEventActionType {
     NOT_CONFIRM_OWN_BETS = "NOT_CONFIRM_OWN_BETS",
     SET_UM_FIRST_LOADING = "SET_UM_FIRST_LOADING",
     TOGGLE_BET_HISTORY = "TOGGLE_BET_HISTORY",
+    TOGGLE_BET_DETAIL = "TOGGLE_BET_DETAIL",
+    UPDATE_BET_DETAIL = "UPDATE_BET_DETAIL",
+    TOGGLE_PF_VERIFY = "TOGGLE_PF_VERIFY",
+    UPDATE_PF_VERIFY = "UPDATE_PF_VERIFY",
+    TOGGLE_PF_CLIENT_SEED_INFO = "TOGGLE_PF_CLIENT_SEED_INFO",
+    TOGGLE_PF_VERIFICATION = "TOGGLE_PF_VERIFICATION",
     TOGGLE_GAME_GUIDE = "TOGGLE_GAME_GUIDE",
     TOGGLE_PF_SETTING = "TOGGLE_PF_SETTING",
     UPDATE_PF_SETTING = "UPDATE_PF_SETTING",
@@ -101,8 +116,17 @@ export interface GameEventPayload {
     isShowBetHistory?: boolean;
     isShowGameGuide?: boolean;
     isShowPFSetting?: boolean;
+    isShowBetDetail?: boolean;
+    isShowPFVerify?: boolean;
+    isShowPFClientSeedInfo: boolean;
+    isShowPFVerification: boolean;
     suggestBet?: SuggestBet;
     pfSetting?: PFSettingData;
+    betDetailModalData: {
+        drawInfo: DrawInfo;
+        betLogDetails: any[];
+    };
+    pfVerifyModalData: PFResult;
 }
 
 export interface GameEventAction {

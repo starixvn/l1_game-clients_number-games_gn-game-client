@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect } from "react";
 
 import { numberWithCommas, separateDateTime, sortedCollectionByTime } from "../../../_shared/helpers";
 import { useBallColor } from "../../../_shared/helpers/ball-color-helper";
@@ -8,6 +8,8 @@ import { PFResult } from "../../../components/game-base/type";
 import { BetLogProps } from "../../../components/game-components/bet-history";
 import Styles from "./common.module.scss";
 import TableRow from "./row-table";
+import { useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
+import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 
 export interface BetHistory {
     time: Date;
@@ -36,20 +38,12 @@ export interface BetHistory {
     clientSeed: string;
 }
 
-const renderBetLog = ({ betLogs, handleScroll, onCloseModal, renderBetDetail, isLoadMore }: BetLogProps) => {
-    return (
-        <BetLog
-            betLogs={betLogs}
-            handleScroll={handleScroll}
-            onCloseModal={onCloseModal}
-            renderBetDetail={renderBetDetail}
-            isLoadMore={isLoadMore}
-        />
-    );
+const renderBetLog = ({ betLogs, handleScroll, onCloseModal, isLoadMore }: BetLogProps) => {
+    return <BetLog betLogs={betLogs} handleScroll={handleScroll} onCloseModal={onCloseModal} isLoadMore={isLoadMore} />;
 };
 
-const BetLog: FC<BetLogProps> = ({ betLogs, handleScroll, onCloseModal: toggleBetHistory, renderBetDetail, isLoadMore }) => {
-    const [betLogDetail, setBetLogDetail] = useState<BetHistory>(undefined);
+const BetLog: FC<BetLogProps> = ({ betLogs, handleScroll, isLoadMore }) => {
+    const dispatch = useGameStatesDispatch();
     const { t: translateCommon } = useCommonTranslate();
     const { t: translateSNGames } = useSNTranslate();
 
@@ -57,8 +51,28 @@ const BetLog: FC<BetLogProps> = ({ betLogs, handleScroll, onCloseModal: toggleBe
 
     const handleClickDrawId = (betLogDetail: BetHistory) => {
         clickSound();
-        toggleBetHistory();
-        setBetLogDetail(betLogDetail);
+        dispatch({
+            type: GameEventActionType.UPDATE_BET_DETAIL,
+            payload: {
+                betDetailModalData: {
+                    ...betLogDetail,
+                    drawInfo: {
+                        drawId: betLogDetail?.drawId,
+                        result: betLogDetail?.result,
+                        odds: betLogDetail?.odds,
+                        settlementResult: betLogDetail?.settlementResult,
+                        pfResult: betLogDetail?.pfResult,
+                        clientSeed: betLogDetail?.clientSeed,
+                    },
+                },
+            },
+        });
+        dispatch({
+            type: GameEventActionType.TOGGLE_BET_DETAIL,
+            payload: {
+                isShowBetDetail: true,
+            },
+        });
     };
 
     const renderbody = () => {
@@ -69,11 +83,6 @@ const BetLog: FC<BetLogProps> = ({ betLogs, handleScroll, onCloseModal: toggleBe
         return preprocessedBetLogs?.map((item) => {
             return <BetHistoryRow betHistory={item} key={item.drawId} handleClickDrawId={handleClickDrawId} />;
         });
-    };
-
-    const handleCloseBetDetail = () => {
-        setBetLogDetail(undefined);
-        toggleBetHistory();
     };
 
     const header = [
@@ -94,19 +103,6 @@ const BetLog: FC<BetLogProps> = ({ betLogs, handleScroll, onCloseModal: toggleBe
                 </thead>
                 <tbody>{renderbody()}</tbody>
             </table>
-            {renderBetDetail({
-                betLogDetails: betLogDetail?.betLogDetails,
-                onCloseModal: handleCloseBetDetail,
-                isShowBetDetail: !!betLogDetail,
-                drawInfo: {
-                    drawId: betLogDetail?.drawId,
-                    result: betLogDetail?.result,
-                    odds: betLogDetail?.odds,
-                    settlementResult: betLogDetail?.settlementResult,
-                    pfResult: betLogDetail?.pfResult,
-                    clientSeed: betLogDetail?.clientSeed,
-                },
-            })}
             {betLogs.length === 0 && <div className={Styles["no-more-data"]}>{translateSNGames("table_no_data")}</div>}
             {!isLoadMore && betLogs.length > 0 && <div className={Styles["no-more-data"]}>{translateSNGames("table_no_more_data")}</div>}
         </div>

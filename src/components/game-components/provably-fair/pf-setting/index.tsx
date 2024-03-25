@@ -2,7 +2,7 @@ import { FC, useEffect, useRef, useState } from "react";
 import { useGameContext } from "../../../../_shared/react-contexts";
 import { GameEventActionType } from "../../../../_shared/react-contexts/game-state-context/game-event-action";
 import { useGameStateContext, useGameStatesDispatch } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
-import { useCommonTranslate, useTranslator } from "../../../../_shared/react-hooks";
+import { useCommonTranslate, useSNTranslate, useTranslator } from "../../../../_shared/react-hooks";
 import ModalContainer from "../../modal-container";
 import { ButtonPFGuide } from "../pf-guide";
 import Styles from "../provably-fair.module.scss";
@@ -17,7 +17,7 @@ const ClientSeedDetail = "clientSeedDetail";
 
 const PFSettingModal: FC = () => {
     const { isShowPFSetting } = useGameStateContext();
-    const { t: translateCommon } = useCommonTranslate();
+    const { t: translateSNGames } = useSNTranslate();
     const dispatch = useGameStatesDispatch();
 
     const handleCloseModal = () => {
@@ -31,7 +31,7 @@ const PFSettingModal: FC = () => {
                 title={
                     <div>
                         <ButtonPFGuide />
-                        {translateCommon("pf_title_provably_fair_settings").capitalizeFirstLetter()}
+                        {translateSNGames("pf_title_bacball_provably_fair_settings")}
                     </div>
                 }
                 isOpen={true}

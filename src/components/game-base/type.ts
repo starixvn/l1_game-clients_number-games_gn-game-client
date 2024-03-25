@@ -206,6 +206,7 @@ export interface PFResult {
     roundResult: any[];
     finalHash: string;
     clientSeed: string;
+    editedMergeClientSeed: string;
 }
 
 export interface DrawInfo {

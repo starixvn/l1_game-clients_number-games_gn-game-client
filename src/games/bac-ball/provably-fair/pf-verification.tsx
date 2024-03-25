@@ -1,5 +1,4 @@
-import { FC, useMemo, useState } from "react";
-import { PFResult } from "../../../components/game-base/type";
+import { FC, useEffect, useMemo, useState } from "react";
 import { useGameContext } from "../../../_shared/react-contexts";
 import { useClickSound, useCommonTranslate, useTranslator } from "../../../_shared/react-hooks";
 import { useBallColor } from "../../../_shared/helpers";
@@ -7,9 +6,14 @@ import { createHash } from "crypto";
 import CopyableTextInput from "../../../components/game-components/provably-fair/copyable-text-input";
 import { DefaultPFStyles as Styles } from "../../../components/game-components/provably-fair";
 import { v4 as uuidv4 } from "uuid";
+import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
+import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 
-const PFVerifyDetail: FC<{ pfResult: PFResult }> = ({ pfResult }) => {
+const PFVerification: FC = () => {
     const { tolgeeNamespace } = useGameContext();
+    const { pfVerifyModalData: pfResult, isShowPFVerification } = useGameStateContext();
+    const [mergeClientSeed, setMergeClientSeed] = useState(pfResult?.editedMergeClientSeed || pfResult?.mergeClientSeed || "");
+    const dispatch = useGameStatesDispatch();
     const { t: translateCommon } = useCommonTranslate();
     const { t: translateInGame } = useTranslator([tolgeeNamespace]);
     const [combinedHash, setCombinedHash] = useState(pfResult.finalHash);
@@ -60,11 +64,25 @@ const PFVerifyDetail: FC<{ pfResult: PFResult }> = ({ pfResult }) => {
 
     const handleChangeMergeClientSeed = (event: React.ChangeEvent<HTMLInputElement>) => {
         const input = event.target as HTMLInputElement;
-        const mergeSeed = `${pfResult.serverSeed}${input.value}`;
-        console.log(mergeSeed);
+        setMergeClientSeed(input.value);
+    };
+
+    useEffect(() => {
+        const mergeSeed = `${pfResult.serverSeed}${mergeClientSeed}`;
         const hash = createHash("sha512").update(mergeSeed).digest("hex");
         setCombinedHash(hash);
-    };
+        return () => {
+            dispatch({
+                type: GameEventActionType.UPDATE_PF_VERIFY,
+                payload: {
+                    pfVerifyModalData: {
+                        ...pfResult,
+                        editedMergeClientSeed: mergeClientSeed,
+                    },
+                },
+            });
+        };
+    }, [mergeClientSeed]);
 
     return (
         <div className={Styles["pf-setting-container"]}>
@@ -75,8 +93,8 @@ const PFVerifyDetail: FC<{ pfResult: PFResult }> = ({ pfResult }) => {
                     type="text"
                     name="merge-client-seed-verification"
                     id="merge-client-seed-verification"
+                    value={mergeClientSeed}
                     readOnly
-                    defaultValue={pfResult?.mergeClientSeed}
                     onChange={handleChangeMergeClientSeed}
                 />
                 <button className={Styles["copy-btn"]} onClick={handleClickEdit}>
@@ -177,4 +195,4 @@ const PFVerifyDetail: FC<{ pfResult: PFResult }> = ({ pfResult }) => {
     );
 };
 
-export default PFVerifyDetail;
+export default PFVerification;

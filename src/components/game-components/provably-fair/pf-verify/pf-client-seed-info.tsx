@@ -1,22 +1,31 @@
 import { FC, useMemo } from "react";
 import { createPortal } from "react-dom";
 import { v4 as uuidv4 } from "uuid";
-import { ClientSeedInfo } from "../../../game-base/type";
 import { useGameContext, usePlayerContext } from "../../../../_shared/react-contexts";
 import { useClickSound, useCommonTranslate, useTranslator } from "../../../../_shared/react-hooks";
 import ModalContainer from "../../modal-container";
 import { ButtonPFGuide } from "../pf-guide";
 import CopyableTextInput from "../copyable-text-input";
 import Styles from "../provably-fair.module.scss";
+import { useGameStateContext, useGameStatesDispatch } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
+import { GameEventActionType } from "../../../../_shared/react-contexts/game-state-context/game-event-action";
 
 const PFClientSeedInfoModal: FC<{
-    handleCloseModal: Function;
-    isShowPFClientSeedInfo: boolean;
-    clientSeedInfo: ClientSeedInfo;
     fileNameExport: (data?: any) => string;
-}> = ({ handleCloseModal, isShowPFClientSeedInfo, clientSeedInfo, fileNameExport }) => {
+}> = ({ fileNameExport }) => {
+    const { isShowPFClientSeedInfo } = useGameStateContext();
     const { tolgeeNamespace } = useGameContext();
     const { t: translateInGame } = useTranslator([tolgeeNamespace]);
+    const dispatch = useGameStatesDispatch();
+
+    const handleCloseModal = () => {
+        dispatch({
+            type: GameEventActionType.TOGGLE_PF_CLIENT_SEED_INFO,
+            payload: {
+                isShowPFClientSeedInfo: false,
+            },
+        });
+    };
 
     return (
         isShowPFClientSeedInfo &&
@@ -33,7 +42,7 @@ const PFClientSeedInfoModal: FC<{
                 isOverlap={true}
                 onCloseModal={handleCloseModal}
             >
-                <PFClientSeedInfo clientSeedInfo={clientSeedInfo} fileNameExport={fileNameExport} />
+                <PFClientSeedInfo fileNameExport={fileNameExport} />
             </ModalContainer>,
             document.getElementById("dashboard")
         )
@@ -48,14 +57,12 @@ const encryptName = (name: string) => {
     return `${name.substring(0, 1)}***${name.substring(name.length - 3, name.length)}`;
 };
 
-const PFClientSeedInfo: FC<{ clientSeedInfo: ClientSeedInfo; fileNameExport: (data?: any) => string }> = ({
-    clientSeedInfo,
-    fileNameExport,
-}) => {
+const PFClientSeedInfo: FC<{ fileNameExport: (data?: any) => string }> = ({ fileNameExport }) => {
     const clickSound = useClickSound();
     const { tolgeeNamespace } = useGameContext();
     const { t: translateCommon } = useCommonTranslate();
     const { t: translateInGame } = useTranslator([tolgeeNamespace]);
+    const { pfVerifyModalData: clientSeedInfo } = useGameStateContext();
     const {
         authorizeInfo: {
             user: { name },

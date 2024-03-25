@@ -1,8 +1,10 @@
 import {
+    DrawInfo,
     GameConfigs,
     IBallColor,
     IUserStakeLevel,
     Notice,
+    PFResult,
     PFSettingData,
     Round,
     RoundState,
@@ -48,10 +50,19 @@ export interface GameStateContextModel {
     notConfirmOwnBets: object;
     userStakeLevel: IUserStakeLevel;
     isShowBetHistory: boolean;
+    isShowBetDetail: boolean;
     isShowGameGuide: boolean;
     isShowPFSetting: boolean;
+    isShowPFVerify: boolean;
+    isShowPFClientSeedInfo: boolean;
+    isShowPFVerification: boolean;
     suggestBet: SuggestBet;
     pfSetting?: PFSettingData;
+    betDetailModalData: {
+        drawInfo: DrawInfo;
+        betLogDetails: any[];
+    };
+    pfVerifyModalData: PFResult;
 }
 
 export const initialGameStateContextModel = () => {

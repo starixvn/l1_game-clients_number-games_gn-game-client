@@ -22,7 +22,7 @@ const PFVerifyResultBlock: FC<{ pfResult: PFResult }> = ({ pfResult }) => {
 
         return {
             drawID: pfResult?.drawId,
-            order: translateSNGames(`draw_${beforeDrawResult.length}`)?.replace(":", ""),
+            order: translateSNGames(`pf_draw_${beforeDrawResult.length}`),
             result: beforeDrawResult,
         };
     }, [pfResult]);

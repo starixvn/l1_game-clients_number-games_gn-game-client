@@ -69,8 +69,14 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
         isShowBetHistory,
         isShowGameGuide,
         isShowPFSetting,
+        isShowBetDetail,
         suggestBet,
         pfSetting,
+        betDetailModalData,
+        isShowPFVerify,
+        pfVerifyModalData,
+        isShowPFClientSeedInfo,
+        isShowPFVerification,
     } = payload;
 
     // console.log("payload: ", JSON.stringify(payload));
@@ -368,6 +374,13 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
             };
         }
 
+        case GameEventActionType.TOGGLE_BET_DETAIL: {
+            return {
+                ...state,
+                isShowBetDetail,
+            };
+        }
+
         case GameEventActionType.TOGGLE_GAME_GUIDE: {
             return {
                 ...state,
@@ -396,6 +409,41 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
                     ...state.pfSetting,
                     ...pfSetting,
                 },
+            };
+        }
+
+        case GameEventActionType.UPDATE_BET_DETAIL: {
+            return {
+                ...state,
+                betDetailModalData,
+            };
+        }
+
+        case GameEventActionType.TOGGLE_PF_VERIFY: {
+            return {
+                ...state,
+                isShowPFVerify,
+            };
+        }
+
+        case GameEventActionType.UPDATE_PF_VERIFY: {
+            return {
+                ...state,
+                pfVerifyModalData,
+            };
+        }
+
+        case GameEventActionType.TOGGLE_PF_CLIENT_SEED_INFO: {
+            return {
+                ...state,
+                isShowPFClientSeedInfo,
+            };
+        }
+
+        case GameEventActionType.TOGGLE_PF_VERIFICATION: {
+            return {
+                ...state,
+                isShowPFVerification,
             };
         }
 

@@ -1,68 +1,28 @@
-import { Dispatch, FC, ReactNode, useReducer } from "react";
+import { FC, ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { useGameContext } from "../../../../_shared/react-contexts";
-import { useClickSound, useCommonTranslate, useSNTranslate, useTranslator } from "../../../../_shared/react-hooks";
-import { PFResult } from "../../../game-base/type";
+import { useClickSound, useCommonTranslate, useTranslator } from "../../../../_shared/react-hooks";
 import ModalContainer from "../../modal-container";
-import PFClientSeedInfoModal from "./pf-client-seed-info";
 import { ButtonPFGuide } from "../pf-guide";
 import Styles from "../provably-fair.module.scss";
-import PFVerifyDetailModal from "./pf-verify-detail";
 import CopyableTextInput from "../copyable-text-input";
-
-enum PFDispatchAction {
-    OPEN_CLIENT_SEED_INFO = "openClientSeedInfo",
-    CLOSE_CLIENT_SEED_INFO = "closeClientSeedInfo",
-    OPEN_PF_VERIFY_DETAIL = "openPFVerifyDetail",
-    CLOSE_PF_VERIFY_DETAIL = "closePFVerifyDetail",
-}
-
-interface PFChildModalState {
-    isShowClientSeedInfo: boolean;
-    isShowPFVerifyDetail: boolean;
-}
+import { useGameStateContext, useGameStatesDispatch } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
+import { GameEventActionType } from "../../../../_shared/react-contexts/game-state-context/game-event-action";
 
 const PFVerifyModal: FC<{
-    handleCloseModal: Function;
-    isShowPFVerify: boolean;
-    pfResult: PFResult;
     renderResultBlock: Function;
-    fileNameExport: (data?: any) => string;
     pfVerify: ReactNode;
-}> = ({ handleCloseModal, isShowPFVerify, pfResult, renderResultBlock, fileNameExport, pfVerify }) => {
+}> = ({ renderResultBlock }) => {
     const { t: translateCommon } = useCommonTranslate();
+    const { isShowPFVerify } = useGameStateContext();
+    const gameStateDispatch = useGameStatesDispatch();
 
-    const reducer = (state: PFChildModalState, action: PFDispatchAction) => {
-        switch (action) {
-            case PFDispatchAction.OPEN_CLIENT_SEED_INFO:
-                return {
-                    ...state,
-                    isShowClientSeedInfo: true,
-                };
-            case PFDispatchAction.CLOSE_CLIENT_SEED_INFO:
-                return {
-                    ...state,
-                    isShowClientSeedInfo: false,
-                };
-            case PFDispatchAction.OPEN_PF_VERIFY_DETAIL:
-                return {
-                    ...state,
-                    isShowPFVerifyDetail: true,
-                };
-            case PFDispatchAction.CLOSE_PF_VERIFY_DETAIL:
-                return {
-                    ...state,
-                    isShowPFVerifyDetail: false,
-                };
-            default:
-                return state;
-        }
+    const handleCloseModal = () => {
+        gameStateDispatch({
+            type: GameEventActionType.TOGGLE_PF_VERIFY,
+            payload: { isShowPFVerify: false },
+        });
     };
-
-    const [childeModalState, dispatch] = useReducer(reducer, {
-        isShowClientSeedInfo: false,
-        isShowPFVerifyDetail: false,
-    });
 
     return (
         isShowPFVerify &&
@@ -75,38 +35,24 @@ const PFVerifyModal: FC<{
                         {translateCommon("pf_title_provably_fair").capitalizeFirstLetter()}
                     </div>
                 }
-                isOpen={isShowPFVerify && !childeModalState.isShowClientSeedInfo && !childeModalState.isShowPFVerifyDetail}
+                isOpen={isShowPFVerify}
                 isOverlap={true}
                 onCloseModal={handleCloseModal}
             >
-                <PFVerify pfResult={pfResult} dispatchChildModalState={dispatch} renderResultBlock={renderResultBlock} />
-                <PFClientSeedInfoModal
-                    handleCloseModal={() => dispatch(PFDispatchAction.CLOSE_CLIENT_SEED_INFO)}
-                    isShowPFClientSeedInfo={childeModalState.isShowClientSeedInfo}
-                    clientSeedInfo={pfResult}
-                    fileNameExport={fileNameExport}
-                />
-                <PFVerifyDetailModal
-                    isOpen={childeModalState.isShowPFVerifyDetail}
-                    handleCloseModal={() => dispatch(PFDispatchAction.CLOSE_PF_VERIFY_DETAIL)}
-                >
-                    {pfVerify}
-                </PFVerifyDetailModal>
+                <PFVerify renderResultBlock={renderResultBlock} />
             </ModalContainer>,
             document.getElementById("dashboard")
         )
     );
 };
 
-const PFVerify: FC<{ pfResult: PFResult; dispatchChildModalState: Dispatch<PFDispatchAction>; renderResultBlock: Function }> = ({
-    pfResult,
-    renderResultBlock,
-    dispatchChildModalState: dispatch,
-}) => {
+const PFVerify: FC<{ renderResultBlock: Function }> = ({ renderResultBlock }) => {
+    const { pfVerifyModalData: pfResult } = useGameStateContext();
     const { tolgeeNamespace } = useGameContext();
     const { t: translateCommon } = useCommonTranslate();
     const { t: translateInGame } = useTranslator([tolgeeNamespace]);
     const clickSound = useClickSound();
+    const dispatch = useGameStatesDispatch();
 
     const handleClickTooltip = (event: React.MouseEvent<HTMLButtonElement> & React.FocusEvent<HTMLButtonElement>) => {
         clickSound();
@@ -119,6 +65,16 @@ const PFVerify: FC<{ pfResult: PFResult; dispatchChildModalState: Dispatch<PFDis
         const currentTarget = event.currentTarget as HTMLElement;
         const tooltip = currentTarget.nextElementSibling as HTMLDivElement;
         tooltip.classList.add(Styles["hide"]);
+    };
+
+    const handleOnClickClientSeedInfo = () => {
+        clickSound();
+        dispatch({ type: GameEventActionType.TOGGLE_PF_CLIENT_SEED_INFO, payload: { isShowPFClientSeedInfo: true } });
+    };
+
+    const handleOnClickVerification = () => {
+        clickSound();
+        dispatch({ type: GameEventActionType.TOGGLE_PF_VERIFICATION, payload: { isShowPFVerification: true } });
     };
 
     return (
@@ -147,13 +103,7 @@ const PFVerify: FC<{ pfResult: PFResult; dispatchChildModalState: Dispatch<PFDis
 
                 <div className="relative">
                     <h3 className={Styles["section-title"]}>{translateCommon("pf_ header_merge_client_seed")}</h3>
-                    <span
-                        className={Styles["link-detail"]}
-                        onClick={() => {
-                            clickSound();
-                            dispatch(PFDispatchAction.OPEN_CLIENT_SEED_INFO);
-                        }}
-                    >
+                    <span className={Styles["link-detail"]} onClick={handleOnClickClientSeedInfo}>
                         {translateInGame("pf_provably_fair_details")}
                     </span>
                 </div>
@@ -175,13 +125,7 @@ const PFVerify: FC<{ pfResult: PFResult; dispatchChildModalState: Dispatch<PFDis
                 </div>
             </div>
 
-            <button
-                className={`btn-green ${Styles["btn-verify"]}`}
-                onClick={() => {
-                    clickSound();
-                    dispatch(PFDispatchAction.OPEN_PF_VERIFY_DETAIL);
-                }}
-            >
+            <button className={`btn-green ${Styles["btn-verify"]}`} onClick={handleOnClickVerification}>
                 {translateCommon("pf_button_verify")}
             </button>
             <p className="text-center mt-2">{translateCommon("pf_provably_fair_para_2")}</p>
