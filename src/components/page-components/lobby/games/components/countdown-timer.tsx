@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import Styles from "../../lobby.module.scss";
-import { LobbyGameTransmitter } from "./game-board";
 import { GameSettings, RoundState } from "../../../../game-base/type";
 import { useTranslator } from "../../../../../_shared/react-hooks";
+import { LobbyGameTransmitter } from "../../lobby-socket-connection";
 
 type Props = {
-    lobbyGameTransmitter: LobbyGameTransmitter;
+    transmitter: LobbyGameTransmitter;
     gameSettings: GameSettings;
 };
 
@@ -15,20 +15,22 @@ const messageEventTypes = {
     FINISH: "finish",
 };
 
-export const CountdownTimer: React.FC<Props> = ({ lobbyGameTransmitter, gameSettings }) => {
+export const CountdownTimer: React.FC<Props> = ({ transmitter, gameSettings }) => {
     const [timeCounter, setTimeCounter] = useState<number>(null);
     const [roundState, setRoundState] = useState<RoundState>(RoundState.None);
     const { t } = useTranslator();
 
     useEffect(() => {
-        lobbyGameTransmitter && registerTimerEvents();
-    }, [lobbyGameTransmitter]);
-
-    const registerTimerEvents = () => {
-        lobbyGameTransmitter.register(messageEventTypes.REMAINING_TIME, handleRemainingTime);
-        lobbyGameTransmitter.register(messageEventTypes.START_PLACE_BET, handleStartPlacingBet);
-        lobbyGameTransmitter.register(messageEventTypes.FINISH, handleDisplayResult);
-    };
+        const listenerIds: string[] = [];
+        if (transmitter) {
+            listenerIds.push(transmitter.register(messageEventTypes.REMAINING_TIME, handleRemainingTime));
+            listenerIds.push(transmitter.register(messageEventTypes.START_PLACE_BET, handleStartPlacingBet));
+            listenerIds.push(transmitter.register(messageEventTypes.FINISH, handleDisplayResult));
+        }
+        return () => {
+            listenerIds.forEach((listenerId) => transmitter?.unsubscribe(listenerId));
+        };
+    }, [transmitter]);
 
     const handleDisplayResult = () => {
         setRoundState(RoundState.DisplayResult);
@@ -80,6 +82,10 @@ export const CountdownTimer: React.FC<Props> = ({ lobbyGameTransmitter, gameSett
             setRoundState(RoundState.LockingBet);
         }
     }, [timeCounter]);
+
+    if (timeCounter === null) {
+        return;
+    }
 
     switch (roundState) {
         case RoundState.InRound:

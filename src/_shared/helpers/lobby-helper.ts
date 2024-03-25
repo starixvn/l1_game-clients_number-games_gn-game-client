@@ -9,6 +9,10 @@ export const getOfferGamesIds = (authorizeInfo: AuthorizeResponse): number[] => 
     return authorizeInfo?.user?.offerGames?.map((game: any) => +game?.gameId) || [];
 };
 
+export const getLobbyGameIds = (lobbyConfigs: ILobbyConfigs): number[] => {
+    return lobbyConfigs.categories?.[0]?.gameSettings?.map((setting) => setting.gameId);
+};
+
 export const getBannerIds = (lobbyConfigs: ILobbyConfigs) => {
     const banners = lobbyConfigs?.banners;
 

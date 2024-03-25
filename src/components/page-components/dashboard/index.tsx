@@ -8,10 +8,18 @@ import MsgpackParser from "socket.io-msgpack-parser";
 import { LobbyResponse } from "sc-user-service-client/dist/lobby";
 import { getAppSettings } from "../../../_shared/app-settings";
 import { Themes } from "../../../_shared/constants";
-import { buildUrl, GetLocalizedErrorMessage, localStorageKeys, StorageHelper } from "../../../_shared/helpers";
+import {
+    buildUrl,
+    getLobbyGameIds,
+    GetLocalizedErrorMessage,
+    getOfferGamesIds,
+    localStorageKeys,
+    StorageHelper,
+} from "../../../_shared/helpers";
 import { randomInteger } from "../../../_shared/helpers/number-helper";
 import {
     loadURLContext,
+    LobbyConnectionContextProvider,
     PlayerContextProvider,
     SettingContextProvider,
     updateURLContext,
@@ -27,17 +35,18 @@ import { ErrorApiText } from "../../game-components/error-api-text";
 import Footer from "../../game-components/footer";
 import Header from "../header";
 import { Lobby } from "../lobby/lobby";
-import { initLobbySocket, reconnectToGameOnLobby } from "../lobby/lobby-socket-connection";
 import Styles from "./dashboard.module.scss";
 import Register from "./register";
 import { MAX_AVATAR_ID } from "./register/avatar-gallery";
 import NameGenerator from "./register/name-generator";
-import { Props, State } from "./type";
+import { ILobbyConfigs, Props, State } from "./type";
+import { LobbySocketConnection } from "../lobby/lobby-socket-connection";
 
 class Dashboard extends React.PureComponent<Props, State> {
     private notificationSocket: Socket = null;
     private reCheckInInterval: NodeJS.Timeout;
     private isKickOut = false;
+    private lobbyConnectionHandler: LobbySocketConnection;
 
     constructor(props: Props) {
         super(props);
@@ -57,6 +66,7 @@ class Dashboard extends React.PureComponent<Props, State> {
             isOnLobby: true,
             lobbySocket: null,
         };
+        this.lobbyConnectionHandler = new LobbySocketConnection();
 
         this.handleRegister = this.handleRegister.bind(this);
         this.registerMainSocketEvent = this.registerMainSocketEvent.bind(this);
@@ -74,6 +84,8 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.handleRecheckInResponse = this.handleRecheckInResponse.bind(this);
         this.onVisibilityChange = this.onVisibilityChange.bind(this);
         this.openGameFromLobby = this.openGameFromLobby.bind(this);
+        this.removeGameTransmitter = this.removeGameTransmitter.bind(this);
+        this.reconnectGameTransmitter = this.reconnectGameTransmitter.bind(this);
 
         const buildId = process.env.buildVersion;
         const buildVersion = StorageHelper.get(localStorageKeys.buildVersion) ?? 0;
@@ -138,7 +150,7 @@ class Dashboard extends React.PureComponent<Props, State> {
         if (!document["hidden"]) {
             const reCheckInResponse = await reCheckIn(this.props.session);
             this.handleRecheckInResponse(reCheckInResponse);
-            this.connectLobbySocket(this.state.authorizeInfo);
+            await this.connectLobbySocket(this.state.authorizeInfo, this.state.lobbyConfigs);
         } else {
             this.closeLobbySocket();
         }
@@ -166,6 +178,8 @@ class Dashboard extends React.PureComponent<Props, State> {
             return await this.autoCreateNickname();
         }
 
+        const lobbyConfigs = await this.getAllLobbyConfigs();
+        await this.connectLobbySocket(authorizeInfo, lobbyConfigs);
         this.updateAuthorizeInfo(authorizeInfo);
         this.updateUserBalance(authorizeInfo?.user?.red);
 
@@ -175,9 +189,7 @@ class Dashboard extends React.PureComponent<Props, State> {
         }, 60 * 1000);
 
         this.connectNotificationSocket();
-        this.connectLobbySocket(authorizeInfo);
         queryGame && this.openGame(queryGame);
-        await this.getAllLobbyConfigs();
     }
 
     shouldRenderGames(offerGames) {
@@ -190,7 +202,7 @@ class Dashboard extends React.PureComponent<Props, State> {
     componentWillUnmount() {
         document.removeEventListener("visibilitychange", this.onVisibilityChange);
         this.notificationSocket?.close();
-        this.state.lobbySocket?.close();
+        this.lobbyConnectionHandler.closeSocket();
         clearInterval(this.reCheckInInterval);
     }
 
@@ -218,30 +230,21 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.registerMainSocketEvent(this.notificationSocket);
     }
 
-    connectLobbySocket = (authorizeInfo: AuthorizeResponse) => {
-        const offerGamesIds = this.getOfferGamesIds(authorizeInfo);
+    connectLobbySocket = async (authorizeInfo: AuthorizeResponse, lobbyConfigs: ILobbyConfigs) => {
+        const { gameId } = loadURLContext();
+        const offerGamesIds = getOfferGamesIds(authorizeInfo)?.filter((id) => id != gameId);
+        const lobbyGamesIds = getLobbyGameIds(lobbyConfigs)?.filter((gameId) => offerGamesIds.includes(gameId));
 
-        if (!authorizeInfo?.authorized || offerGamesIds.length === 0) {
+        if (!authorizeInfo?.authorized || lobbyGamesIds?.length === 0) {
             return;
         }
-
-        const { gameId } = loadURLContext();
-        const lobbySocket = initLobbySocket(
-            this.props.session,
-            offerGamesIds.filter((id) => id != gameId)
-        );
-
-        this.setState({ lobbySocket });
+        const lobbySocket = await this.lobbyConnectionHandler.initLobbySocket(this.props.session, lobbyGamesIds);
+        this.setState({ lobbySocket: lobbySocket });
     };
 
     closeLobbySocket = () => {
-        const { lobbySocket } = this.state;
-        lobbySocket?.close();
         this.setState({ lobbySocket: null });
-    };
-
-    reconnectToGameOnLobby = (gameId: number) => {
-        reconnectToGameOnLobby(this.state.lobbySocket, this.props.session, gameId);
+        this.lobbyConnectionHandler.closeSocket();
     };
 
     registerMainSocketEvent(mainSocket: Socket) {
@@ -279,14 +282,15 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.setState({ userStakeLevel: userStakeLevel });
     }
 
-    handleRegister(authorizeInfo: AuthorizeResponse) {
+    async handleRegister(authorizeInfo: AuthorizeResponse) {
         const { session } = this.props;
 
         updateSignInSMStatus(session);
         authorizeInfo.user.isSignedInSM = true;
 
+        const lobbyConfigs = await this.getAllLobbyConfigs();
+        await this.connectLobbySocket(authorizeInfo, lobbyConfigs);
         this.updateAuthorizeInfo(authorizeInfo);
-        this.connectLobbySocket(authorizeInfo);
     }
 
     closeDialog() {
@@ -312,23 +316,20 @@ class Dashboard extends React.PureComponent<Props, State> {
         updateURLContext({ gameId });
     }
 
-    getOfferGamesIds(authorizeInfo) {
-        return (authorizeInfo?.user?.offerGames?.map((game: any) => +game?.gameId) ?? []) as number[];
-    }
-
     async getAllLobbyConfigs() {
         const { session } = this.props;
         const lobby: LobbyResponse = await getLobbyConfigs(session);
         if (lobby?.lobbyConfigs) {
             this.setState({ lobbyConfigs: lobby?.lobbyConfigs });
         } else {
-            throw new Error("Can not get Lobby configs");
+            console.error("Can not get Lobby configs");
         }
+        return lobby?.lobbyConfigs;
     }
 
     renderGames() {
         const { userStakeLevel, openGameName, authorizeInfo } = this.state;
-        const offerGames = this.getOfferGamesIds(authorizeInfo);
+        const offerGames = getOfferGamesIds(authorizeInfo);
         const urlContext = loadURLContext();
         console.log("renderGames", urlContext.gameId);
         return (
@@ -345,8 +346,8 @@ class Dashboard extends React.PureComponent<Props, State> {
 
     openGameFromLobby(gameId: number) {
         updateURLContext({ backToLobby: true, gameId: gameId });
-        console.log("openGameFromLobby", gameId);
         if (this.state.openGameId != gameId) {
+            this.removeGameTransmitter(gameId);
             this.setState({ openGameId: gameId });
         } else {
             this.forceUpdate(); // TODO: Temporary force rerender, should review here
@@ -354,14 +355,25 @@ class Dashboard extends React.PureComponent<Props, State> {
     }
 
     renderLobby() {
+        const { lobbyConfigs, lobbySocket, authorizeInfo } = this.state;
         updateURLContext({ backToLobby: true });
         return (
             <Lobby
                 openGame={(gameId) => this.openGameFromLobby(gameId)}
-                socket={this.state.lobbySocket}
-                lobbyConfigs={this.state.lobbyConfigs}
+                lobbyConfigs={lobbyConfigs}
+                socket={lobbySocket}
+                gameTransmitters={this.lobbyConnectionHandler.getTransmitters()}
             />
         );
+    }
+
+    removeGameTransmitter(gameId: number) {
+        this.lobbyConnectionHandler.unsubscribeGame(gameId);
+    }
+
+    reconnectGameTransmitter(gameId: number) {
+        this.lobbyConnectionHandler.signInGame(this.props.session, gameId);
+        return this.lobbyConnectionHandler.initGameTransmitter(gameId);
     }
 
     renderDashBoard() {
@@ -374,41 +386,48 @@ class Dashboard extends React.PureComponent<Props, State> {
             fractionalOddsFormat: authorizeInfo.user?.fractionalOddsFormat ?? false,
         };
 
-        const offerGames = this.getOfferGamesIds(authorizeInfo);
+        const offerGames = getOfferGamesIds(authorizeInfo);
         const isRenderGames = this.shouldRenderGames(offerGames);
 
         console.log("renderDashBoard", { isRenderGames });
+        const lobbyConnectionContextValue = {
+            socket: this.lobbyConnectionHandler.getSocket(),
+            gameTransmitters: this.lobbyConnectionHandler.getTransmitters(),
+            removeGameTransmitter: this.removeGameTransmitter,
+            reconnectGameTransmitter: this.reconnectGameTransmitter,
+        };
 
         return (
             <PlayerContextProvider value={authContextValue}>
                 <SettingContextProvider>
-                    <div className={`${Styles["dashboard"]}`} id={"dashboard"}>
-                        <Header openingGameId={this.state.openGameId} isRenderGames={isRenderGames} />
+                    <LobbyConnectionContextProvider value={lobbyConnectionContextValue}>
+                        <div className={`${Styles["dashboard"]}`} id={"dashboard"}>
+                            <Header openingGameId={this.state.openGameId} isRenderGames={isRenderGames} />
+                            {isRenderGames ? this.renderGames() : this.renderLobby()}
 
-                        {isRenderGames ? this.renderGames() : this.renderLobby()}
+                            <Footer />
 
-                        <Footer />
-
-                        {isShowErrorModal && (
-                            <div className={Styles["container-modal"]}>
-                                <div className={`${Styles["bg-opacity"]} ${isBlockUI ? Styles["block-ui-backdrop"] : ""}`}></div>
-                                <BaseDialog
-                                    type={ModalType.Center}
-                                    isOpen={isShowErrorModal}
-                                    onCloseModal={this.closeDialog}
-                                    isBlockUI={isBlockUI}
-                                >
-                                    <div className={`modal-center red-color ${isBlockUI ? Styles["block-ui-message"] : ""}`}>
-                                        {!isBlockUI && <div className={`icon-close modal-icon-close`} onClick={this.closeDialog}></div>}
-                                        <ErrorApiText
-                                            errorMessage={this.state.apiError?.message}
-                                            errorCode={this.state.apiError?.errorCode}
-                                        />
-                                    </div>
-                                </BaseDialog>
-                            </div>
-                        )}
-                    </div>
+                            {isShowErrorModal && (
+                                <div className={Styles["container-modal"]}>
+                                    <div className={`${Styles["bg-opacity"]} ${isBlockUI ? Styles["block-ui-backdrop"] : ""}`}></div>
+                                    <BaseDialog
+                                        type={ModalType.Center}
+                                        isOpen={isShowErrorModal}
+                                        onCloseModal={this.closeDialog}
+                                        isBlockUI={isBlockUI}
+                                    >
+                                        <div className={`modal-center red-color ${isBlockUI ? Styles["block-ui-message"] : ""}`}>
+                                            {!isBlockUI && <div className={`icon-close modal-icon-close`} onClick={this.closeDialog}></div>}
+                                            <ErrorApiText
+                                                errorMessage={this.state.apiError?.message}
+                                                errorCode={this.state.apiError?.errorCode}
+                                            />
+                                        </div>
+                                    </BaseDialog>
+                                </div>
+                            )}
+                        </div>
+                    </LobbyConnectionContextProvider>
                 </SettingContextProvider>
             </PlayerContextProvider>
         );
@@ -423,7 +442,7 @@ class Dashboard extends React.PureComponent<Props, State> {
         const authorizeResponse = response as any;
         if (authorizeResponse?.authorized) {
             Object.assign(authorizeResponse.user, { settings: { theme: Themes.light } });
-            this.handleRegister(authorizeResponse);
+            await this.handleRegister(authorizeResponse);
         } else {
             this.signOut();
         }

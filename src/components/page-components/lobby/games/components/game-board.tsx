@@ -7,6 +7,8 @@ import { CountdownTimer } from "./countdown-timer";
 import { DisabledGameBlock } from "./disable-game-block";
 import { GameIcon } from "./game-icon";
 import { LobbyScoreboard } from "./scoreboard";
+import { LobbyGameTransmitter, getLobbyData, signInGame } from "../../lobby-socket-connection";
+import { useLobbyConnectionContext, usePlayerContext } from "../../../../../_shared/react-contexts";
 
 const messageEventTypes = {
     SIGNED_IN: "signedIn",
@@ -17,44 +19,41 @@ type Props = {
     gameSettings: GameSettings;
     socket: Socket;
     openGame: Function;
+    gameTransmitter: LobbyGameTransmitter;
 };
 
-export type LobbyGameTransmitter = {
-    register: (messageKey: string, handleMessage: Function) => string;
-    broadcast: (message: any) => void;
-};
-
-export const GameBoard: React.FC<Props> = ({ gameSettings, socket, openGame }) => {
-    const [isShow, setIsShow] = useState<boolean>(null);
-
+export const GameBoard: React.FC<Props> = ({ gameSettings, socket, openGame, gameTransmitter }) => {
+    const [isShow, setIsShow] = useState<boolean>(true);
     const [transmitter, setTransmitter] = useState<LobbyGameTransmitter>(null);
+    const { reconnectGameTransmitter } = useLobbyConnectionContext();
 
     useEffect(() => {
-        const lobbyGameTransmitter = initLobbyGameTransmitter(socket, gameSettings.gameName);
-        setTransmitter(lobbyGameTransmitter);
-        return () => {
-            setTransmitter(null);
-            lobbyGameTransmitter.clearAllListener();
-        };
-    }, [socket, gameSettings.gameName]);
-
-    useEffect(() => {
-        if (transmitter) {
-            transmitter.register(messageEventTypes.SIGNED_IN, handleSignedIn);
-            transmitter.register(messageEventTypes.SHOW_DATA, handleShowData);
+        if (gameTransmitter) {
+            setTransmitter(gameTransmitter);
+        } else {
+            const newTransmitter = reconnectGameTransmitter(gameSettings.id);
+            setTransmitter(newTransmitter);
         }
+    }, [gameTransmitter]);
+
+    useEffect(() => {
+        const listenerIds: string[] = [];
+        if (transmitter) {
+            listenerIds.push(transmitter.register(messageEventTypes.SIGNED_IN, handleSignedIn));
+            listenerIds.push(transmitter.register(messageEventTypes.SHOW_DATA, handleShowData));
+            transmitter.signedIn && getLobbyData(socket, gameSettings.id);
+        }
+        return () => {
+            listenerIds.forEach((listenerId) => transmitter?.unsubscribe(listenerId));
+        };
     }, [transmitter]);
 
     const handleSignedIn = ({ signedIn }) => {
-        signedIn && getLobbyData();
+        signedIn && getLobbyData(socket, gameSettings.id);
     };
 
     const handleShowData = ({ showData }: { showData: boolean }) => {
         setIsShow(showData);
-    };
-
-    const getLobbyData = () => {
-        socket.emit("getLobbyData", { gameName: gameSettings.gameName });
     };
 
     return (
@@ -63,12 +62,12 @@ export const GameBoard: React.FC<Props> = ({ gameSettings, socket, openGame }) =
             id={`icon-${gameSettings.gameName.toLowerCase()}`}
             onClick={() => isShow && openGame(gameSettings.id)}
         >
-            <GameIcon gameSettings={gameSettings} lobbyGameTransmitter={transmitter} />
+            <GameIcon gameSettings={gameSettings} transmitter={transmitter} />
             <DisabledGameBlock socket={socket} transmitter={transmitter} gameSettings={gameSettings} />
             {isShow && (
                 <div className={Styles["detail"]}>
-                    <CountdownTimer lobbyGameTransmitter={transmitter} gameSettings={gameSettings} />
-                    <LobbyScoreboard gameSettings={gameSettings} transmitter={transmitter} />
+                    <CountdownTimer transmitter={transmitter} gameSettings={gameSettings} />
+                    {transmitter && <LobbyScoreboard gameSettings={gameSettings} transmitter={transmitter} />}
                 </div>
             )}
         </div>

@@ -3,11 +3,10 @@ import { useTranslator } from "../../../../../_shared/react-hooks";
 import { ResourceTypes } from "../../../../../_shared/resources";
 import Styles from "../../lobby.module.scss";
 import { Socket } from "socket.io-client";
-import { LobbyGameTransmitter } from "./game-board";
-import { usePlayerContext } from "../../../../../_shared/react-contexts";
+import { useLobbyConnectionContext, usePlayerContext } from "../../../../../_shared/react-contexts";
 import { useTolgee } from "@tolgee/react";
-import { reconnectToGameOnLobby } from "../../lobby-socket-connection";
 import { GameSettings } from "../../../../game-base/type";
+import { LobbyGameTransmitter, getLobbyData, signInGame } from "../../lobby-socket-connection";
 
 const messageEventTypes = {
     SIGNED_IN: "signedIn",
@@ -32,17 +31,21 @@ export const DisabledGameBlock: React.FC<Props> = ({ socket, transmitter, gameSe
         setIsDisabledGame(isDisabled);
     };
     const [errorMessage, setErrorMessage] = useState("");
-
+    const { removeGameTransmitter } = useLobbyConnectionContext();
     const { session } = usePlayerContext();
     const language = useTolgee().getLanguage();
 
     useEffect(() => {
+        const listenerIds: string[] = [];
         if (transmitter) {
-            transmitter.register(messageEventTypes.SIGNED_IN, handleSignedIn);
-            transmitter.register(messageEventTypes.UM, handleDisabledGame);
-            transmitter.register(messageEventTypes.START_NEW_ROUND, handleStartNewRound);
-            transmitter.register(messageEventTypes.ERRORCODE, handleDisconnect);
+            listenerIds.push(transmitter.register(messageEventTypes.SIGNED_IN, handleSignedIn));
+            listenerIds.push(transmitter.register(messageEventTypes.UM, handleDisabledGame));
+            listenerIds.push(transmitter.register(messageEventTypes.START_NEW_ROUND, handleStartNewRound));
+            listenerIds.push(transmitter.register(messageEventTypes.ERRORCODE, handleDisconnect));
         }
+        return () => {
+            listenerIds.forEach((listenerId) => transmitter?.unsubscribe(listenerId));
+        };
     }, [transmitter]);
 
     const handleSignedIn = ({ signedIn }) => {
@@ -61,7 +64,7 @@ export const DisabledGameBlock: React.FC<Props> = ({ socket, transmitter, gameSe
             transmitter.broadcast({ showData: true });
             setIsDisabledGameRef(false);
             setIsDisconnectGame(false);
-            getLobbyData();
+            getLobbyData(socket, gameSettings.id);
         }
     };
 
@@ -71,15 +74,11 @@ export const DisabledGameBlock: React.FC<Props> = ({ socket, transmitter, gameSe
             setErrorMessage(t(`${ResourceTypes.COMMON}.splash_connection_lost`));
             transmitter.broadcast({ showData: false });
             setIsDisconnectGame(true);
+            removeGameTransmitter(gameSettings.id);
         }
     };
-
-    const getLobbyData = () => {
-        socket.emit("getLobbyData", { gameName: gameSettings.gameName });
-    };
-
     const reconnectGame = () => {
-        reconnectToGameOnLobby(socket, session, gameSettings.id);
+        signInGame(socket, session, gameSettings.id);
     };
 
     const isShow = isDisabledGame || isDisconnectGame;

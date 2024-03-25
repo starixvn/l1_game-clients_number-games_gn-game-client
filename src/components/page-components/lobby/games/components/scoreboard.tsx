@@ -5,7 +5,7 @@ import { BacBallSettlementResult } from "../../../../../games/bac-ball/types";
 import { GameSettings, Round } from "../../../../game-base/type";
 import { SwitchableScoreboard } from "../../../../game-components/round-history/scoreboard";
 import Styles from "../../lobby.module.scss";
-import { LobbyGameTransmitter } from "./game-board";
+import { LobbyGameTransmitter } from "../../lobby-socket-connection";
 
 const messageEventTypes = {
     ROUND_HISTORY: "roundHistory",
@@ -21,6 +21,7 @@ export type LobbyScoreboardProps = {
 export type LobbyScoreboardState = {
     roundHistory: Round<object, object>[];
     blinkNodeFlag: boolean;
+    isShow: boolean;
 };
 
 const bigRoadElementContainer: Record<number, { ctor: any; converter: any }> = {};
@@ -39,29 +40,36 @@ export class LobbyScoreboard extends Component<LobbyScoreboardProps, LobbyScoreb
     static defaultState: LobbyScoreboardState = {
         roundHistory: [],
         blinkNodeFlag: false,
+        isShow: false,
     };
+    private listenerIds: string[] = [];
 
     constructor(props: LobbyScoreboardProps) {
         super(props);
 
         this.state = LobbyScoreboard.defaultState;
+        this.listenerIds = [];
     }
 
     componentDidMount(): void {
         const { transmitter } = this.props;
 
         if (transmitter) {
-            transmitter.register(messageEventTypes.ROUND_HISTORY, this.handleRoundHistory.bind(this));
-            transmitter.register(messageEventTypes.FINISH, this.handleRoundHistory.bind(this));
-            transmitter.register(messageEventTypes.END_PLACE_BET, this.handleRoundHistory.bind(this));
+            this.listenerIds.push(transmitter.register(messageEventTypes.ROUND_HISTORY, this.handleRoundHistory.bind(this)));
+            this.listenerIds.push(transmitter.register(messageEventTypes.FINISH, this.handleRoundHistory.bind(this)));
+            this.listenerIds.push(transmitter.register(messageEventTypes.END_PLACE_BET, this.handleRoundHistory.bind(this)));
         }
+    }
+
+    componentWillUnmount(): void {
+        this.listenerIds.forEach((listenerId) => this.props.transmitter?.unsubscribe(listenerId));
     }
 
     handleRoundHistory({ roundHistory, finish, epb }: GameStateContextModel & { finish: Round<object, object>; epb: boolean }) {
         let newState: Partial<LobbyScoreboardState> = {};
 
         if (roundHistory) {
-            newState = { roundHistory: [...roundHistory] };
+            newState = { roundHistory: [...roundHistory], isShow: true };
         }
 
         if (finish) {
@@ -76,12 +84,12 @@ export class LobbyScoreboard extends Component<LobbyScoreboardProps, LobbyScoreb
     }
 
     render(): ReactNode {
-        const { roundHistory, blinkNodeFlag } = this.state;
+        const { roundHistory, blinkNodeFlag, isShow } = this.state;
         const { gameSettings } = this.props;
         const settlements = roundHistory.map((round) => round.settlementResult);
         const { converter, ctor } = getBigRoadElement(gameSettings.id);
 
-        if (!converter || !ctor) {
+        if (!converter || !ctor || !isShow) {
             return;
         }
 

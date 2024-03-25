@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { LobbyGameTransmitter } from "./game-board";
 import Styles from "../../lobby.module.scss";
+import { LobbyGameTransmitter } from "../../lobby-socket-connection";
 
 type Props = {
-    lobbyGameTransmitter: LobbyGameTransmitter;
+    transmitter: LobbyGameTransmitter;
 };
 
 const messagesEventTypes = {
@@ -13,33 +13,36 @@ const messagesEventTypes = {
     OUTGAME: "outgame",
 };
 
-export const OnlinePlayer: React.FC<Props> = ({ lobbyGameTransmitter }) => {
+export const OnlinePlayer: React.FC<Props> = ({ transmitter }) => {
     const [isShow, setIsShow] = useState(false);
-    const [onlinePlayers, setOnlinePlayers] = useState<string[]>([]);
+    const [onlinePlayers, setOnlinePlayers] = useState<string[]>(null);
 
     useEffect(() => {
-        lobbyGameTransmitter && registerPlayerEvents();
-    }, [lobbyGameTransmitter]);
-
-    const registerPlayerEvents = () => {
-        lobbyGameTransmitter.register(messagesEventTypes.SHOW_DATA, handleShowData);
-        lobbyGameTransmitter.register(messagesEventTypes.PLAYERS, handlePlayers);
-        lobbyGameTransmitter.register(messagesEventTypes.PLAYER, handlePlayerJoinGame);
-        lobbyGameTransmitter.register(messagesEventTypes.OUTGAME, handlePlayerOutGame);
-    };
+        const listenerIds: string[] = [];
+        if (transmitter) {
+            listenerIds.push(transmitter.register(messagesEventTypes.SHOW_DATA, handleShowData));
+            listenerIds.push(transmitter.register(messagesEventTypes.PLAYERS, handlePlayers));
+            listenerIds.push(transmitter.register(messagesEventTypes.PLAYER, handlePlayerJoinGame));
+            listenerIds.push(transmitter.register(messagesEventTypes.OUTGAME, handlePlayerOutGame));
+        }
+        return () => {
+            listenerIds.forEach((listenerId) => transmitter?.unsubscribe(listenerId));
+        };
+    }, [transmitter]);
 
     const handleShowData = ({ showData }: { showData: boolean }) => {
         setIsShow(showData);
     };
 
     const handlePlayers = ({ players }) => {
+        setIsShow(true);
         setOnlinePlayers(Object.keys(players));
     };
 
     const handlePlayerJoinGame = ({ player }) => {
         setOnlinePlayers((prevPlayers) => {
-            const onlinePlayer = prevPlayers.find((playerId) => playerId === player.id);
-            if (!onlinePlayer) {
+            const onlinePlayer = prevPlayers?.find((playerId) => playerId === player.id);
+            if (!onlinePlayer && prevPlayers) {
                 return [...prevPlayers, player.id];
             }
             return prevPlayers;
@@ -48,7 +51,7 @@ export const OnlinePlayer: React.FC<Props> = ({ lobbyGameTransmitter }) => {
 
     const handlePlayerOutGame = ({ outgame }) => {
         setOnlinePlayers((prevPlayers) => {
-            const index = prevPlayers.indexOf(outgame.playerId);
+            const index = prevPlayers?.indexOf(outgame.playerId);
             if (index >= 0) {
                 const players = [...prevPlayers];
                 players.splice(index, 1);
@@ -59,7 +62,8 @@ export const OnlinePlayer: React.FC<Props> = ({ lobbyGameTransmitter }) => {
     };
 
     return (
-        isShow && (
+        isShow &&
+        onlinePlayers !== null && (
             <div className={Styles["user-playing"]}>
                 <span className={Styles["user-playing-icon"]}></span>
                 <span className={Styles["user-playing-value"]}>{onlinePlayers?.length || 0}</span> playing
