@@ -5,6 +5,7 @@ import { AuthorizeResponse, ReCheckInResponse } from "sc-user-service-client/dis
 import { io, Socket } from "socket.io-client";
 import MsgpackParser from "socket.io-msgpack-parser";
 
+import { LobbyResponse } from "sc-user-service-client/dist/lobby";
 import { getAppSettings } from "../../../_shared/app-settings";
 import { Themes } from "../../../_shared/constants";
 import { buildUrl, GetLocalizedErrorMessage, localStorageKeys, StorageHelper } from "../../../_shared/helpers";
@@ -51,7 +52,7 @@ class Dashboard extends React.PureComponent<Props, State> {
             isBlockUI: false,
             queryGame: this.props.queryGame,
             isJoinGame: false,
-            lobbyConfigs: {},
+            lobbyConfigs: null,
             openGameId: null,
             openGameName: "",
             isOnLobby: true,
@@ -322,6 +323,16 @@ class Dashboard extends React.PureComponent<Props, State> {
         return (authorizeInfo?.user?.offerGames?.map((game: any) => +game?.gameId) ?? []) as number[];
     }
 
+    async getAllLobbyConfigs() {
+        const { session } = this.props;
+        const lobby: LobbyResponse = await getLobbyConfigs(session);
+        if (lobby?.lobbyConfigs) {
+            this.setState({ lobbyConfigs: lobby?.lobbyConfigs });
+        } else {
+            throw new Error("Can not get Lobby configs");
+        }
+    }
+
     renderGames() {
         const { userStakeLevel, openGameName, authorizeInfo } = this.state;
         const offerGames = this.getOfferGamesIds(authorizeInfo);
@@ -350,13 +361,12 @@ class Dashboard extends React.PureComponent<Props, State> {
     }
 
     renderLobby() {
-        const { lobbyConfigs } = this.state;
         updateURLContext({ backToLobby: true });
-        return <Lobby openGame={(gameId) => this.openGameFromLobby(gameId)} lobbyConfigs={lobbyConfigs} socket={this.state.lobbySocket} />;
+        return <Lobby openGame={(gameId) => this.openGameFromLobby(gameId)} socket={this.state.lobbySocket} />;
     }
 
     renderDashBoard() {
-        const { isShowErrorModal, authorizeInfo, isBlockUI } = this.state;
+        const { isShowErrorModal, authorizeInfo, isBlockUI, lobbyConfigs } = this.state;
         const authContextValue = {
             authorizeInfo: authorizeInfo,
             session: this.props.session,
@@ -367,12 +377,17 @@ class Dashboard extends React.PureComponent<Props, State> {
 
         const offerGames = this.getOfferGamesIds(authorizeInfo);
         const isRenderGames = this.shouldRenderGames(offerGames);
+        this.getAllLobbyConfigs();
+
+        const lobbyContextValue = {
+            lobbyConfigs,
+        };
 
         console.log("renderDashBoard", { isRenderGames });
 
         return (
             <PlayerContextProvider value={authContextValue}>
-                <LobbyContextProvider>
+                <LobbyContextProvider value={lobbyContextValue}>
                     <SettingContextProvider>
                         <div className={`${Styles["dashboard"]}`} id={"dashboard"}>
                             <Header openingGameId={this.state.openGameId} isRenderGames={isRenderGames} />

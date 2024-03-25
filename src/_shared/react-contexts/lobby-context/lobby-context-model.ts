@@ -23,11 +23,5 @@ export interface IGameSetting {
 }
 
 export interface ILobbyContextModel {
-    lobbyConfigs: ILobbyConfigs;
+    lobbyConfigs?: ILobbyConfigs;
 }
-
-export const initialLobbyContextModel = (): ILobbyContextModel => {
-    return {
-        lobbyConfigs: null,
-    };
-};

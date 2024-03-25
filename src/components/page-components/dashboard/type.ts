@@ -2,6 +2,7 @@ import { TolgeeInstance } from "@tolgee/react";
 import { WithRouterProps } from "next/dist/client/with-router";
 import { AuthorizeResponse, SSOResponse } from "sc-user-service-client/dist/auth";
 import { Socket } from "socket.io-client";
+import { ILobbyConfigs } from "../../../_shared/react-contexts/lobby-context";
 import { UserStakeLevel } from "../../game-base/type";
 
 export type Props = {
@@ -26,7 +27,7 @@ export type State = {
     isBlockUI: boolean;
     queryGame: number;
     isJoinGame: boolean;
-    lobbyConfigs: any;
+    lobbyConfigs: ILobbyConfigs;
     openGameId: number;
     openGameName: string;
     isOnLobby: boolean;
