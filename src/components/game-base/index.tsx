@@ -352,7 +352,12 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     savePFSetting() {
         const uid = (this.context as PlayerContextModel).authorizeInfo?.user?.UID;
         const { pfSetting } = this.props.gameStateContextModel;
-        StorageHelper.set(`${localStorageKeys.pfSetting}-${uid}`, pfSetting);
+        const dataPFSettingSave = {
+            randomClientSeed: pfSetting?.randomClientSeed,
+            manualClientSeed: pfSetting?.manualClientSeed,
+            useManualClientSeed: pfSetting?.useManualClientSeed,
+        };
+        StorageHelper.set(`${localStorageKeys.pfSetting}-${uid}`, dataPFSettingSave);
     }
 
     handleUM(gameMessage) {
