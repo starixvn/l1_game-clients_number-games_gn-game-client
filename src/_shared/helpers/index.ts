@@ -1,5 +1,6 @@
 export * from "./ball-color-helper";
 export * from "./debug-helper";
+export * from "./lobby-helper";
 export * from "./message-transmitter/index";
 export * from "./notice-helper";
 export * from "./number-helper";

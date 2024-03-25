@@ -16,6 +16,7 @@ import {
     updateURLContext,
     URLContextModel,
 } from "../../../_shared/react-contexts";
+import { LobbyContextProvider } from "../../../_shared/react-contexts/lobby-context";
 import Games from "../../../games/games";
 import { authorize, createNickname, getLobbyConfigs, reCheckIn } from "../../../services/auth-service";
 import { updateSignInSMStatus } from "../../../services/user-setting-service";
@@ -371,35 +372,37 @@ class Dashboard extends React.PureComponent<Props, State> {
 
         return (
             <PlayerContextProvider value={authContextValue}>
-                <SettingContextProvider>
-                    <div className={`${Styles["dashboard"]}`} id={"dashboard"}>
-                        <Header openingGameId={this.state.openGameId} isRenderGames={isRenderGames} />
+                <LobbyContextProvider>
+                    <SettingContextProvider>
+                        <div className={`${Styles["dashboard"]}`} id={"dashboard"}>
+                            <Header openingGameId={this.state.openGameId} isRenderGames={isRenderGames} />
 
-                        {isRenderGames ? this.renderGames() : this.renderLobby()}
+                            {isRenderGames ? this.renderGames() : this.renderLobby()}
 
-                        <Footer />
+                            <Footer />
 
-                        {isShowErrorModal && (
-                            <div className={Styles["container-modal"]}>
-                                <div className={`${Styles["bg-opacity"]} ${isBlockUI ? Styles["block-ui-backdrop"] : ""}`}></div>
-                                <BaseDialog
-                                    type={ModalType.Center}
-                                    isOpen={isShowErrorModal}
-                                    onCloseModal={this.closeDialog}
-                                    isBlockUI={isBlockUI}
-                                >
-                                    <div className={`modal-center red-color ${isBlockUI ? Styles["block-ui-message"] : ""}`}>
-                                        {!isBlockUI && <div className={`icon-close modal-icon-close`} onClick={this.closeDialog}></div>}
-                                        <ErrorApiText
-                                            errorMessage={this.state.apiError?.message}
-                                            errorCode={this.state.apiError?.errorCode}
-                                        />
-                                    </div>
-                                </BaseDialog>
-                            </div>
-                        )}
-                    </div>
-                </SettingContextProvider>
+                            {isShowErrorModal && (
+                                <div className={Styles["container-modal"]}>
+                                    <div className={`${Styles["bg-opacity"]} ${isBlockUI ? Styles["block-ui-backdrop"] : ""}`}></div>
+                                    <BaseDialog
+                                        type={ModalType.Center}
+                                        isOpen={isShowErrorModal}
+                                        onCloseModal={this.closeDialog}
+                                        isBlockUI={isBlockUI}
+                                    >
+                                        <div className={`modal-center red-color ${isBlockUI ? Styles["block-ui-message"] : ""}`}>
+                                            {!isBlockUI && <div className={`icon-close modal-icon-close`} onClick={this.closeDialog}></div>}
+                                            <ErrorApiText
+                                                errorMessage={this.state.apiError?.message}
+                                                errorCode={this.state.apiError?.errorCode}
+                                            />
+                                        </div>
+                                    </BaseDialog>
+                                </div>
+                            )}
+                        </div>
+                    </SettingContextProvider>
+                </LobbyContextProvider>
             </PlayerContextProvider>
         );
     }
