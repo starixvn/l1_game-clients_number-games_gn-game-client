@@ -51,7 +51,7 @@ export function AvatarGallery({ selectedAvatarId, onSelectAvatar, onClose }: Ava
                         {t("button_cancel")}
                     </button>
                     <button className="btn-green" onClick={onSubmit} type="button" data-testid="btn-submit-gallery">
-                        {t("ok")}
+                        {t("Common.ok")}
                     </button>
                 </div>
             </BaseDialog>
