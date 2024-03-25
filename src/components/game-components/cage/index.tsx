@@ -87,7 +87,8 @@ const Cage: React.FC<CageProps> = (cageProps) => {
             {highlight && <div className={`${Styles["cage-bg-highlight"]}`}></div>}
             <div id="cage-bg" className={Styles["cage-bg"]}></div>
             <div id="cage-balls" className={Styles["cage-balls"]}>
-                {cageBallsLoopFrames?.length > 0 && (
+                {roundState === RoundState.SwitchRound && <div className={Styles["idle-balls"]}></div>}
+                {cageBallsLoopFrames?.length > 0 && roundState !== RoundState.SwitchRound && (
                     <Stage width={130} height={130} options={{ backgroundAlpha: 0, antialias: false, powerPreference: "low-power" }}>
                         <Container position={[65, 65]}>
                             <AnimatedSprite

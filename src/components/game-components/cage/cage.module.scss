@@ -53,6 +53,16 @@
     place-self: center center;
 }
 
+.idle-balls {
+    position: absolute;
+    bottom: 0.1rem;
+    left: 1.4rem;
+    width: var(--cage-width);
+    height: var(--cage-width);
+    background: url("/static/images/cage/idle-balls.png") no-repeat;
+    opacity: 0.8;
+}
+
 .cage-cover {
     @extend %result;
     background-image: url("/static/images/cage/cage-cover.png");
