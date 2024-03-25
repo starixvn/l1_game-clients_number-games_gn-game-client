@@ -118,15 +118,15 @@ export interface GameEventPayload {
     isShowPFSetting?: boolean;
     isShowBetDetail?: boolean;
     isShowPFVerify?: boolean;
-    isShowPFClientSeedInfo: boolean;
-    isShowPFVerification: boolean;
+    isShowPFClientSeedInfo?: boolean;
+    isShowPFVerification?: boolean;
     suggestBet?: SuggestBet;
     pfSetting?: PFSettingData;
-    betDetailModalData: {
+    betDetailModalData?: {
         drawInfo: DrawInfo;
         betLogDetails: any[];
     };
-    pfVerifyModalData: PFResult;
+    pfVerifyModalData?: PFResult;
 }
 
 export interface GameEventAction {

@@ -58,11 +58,11 @@ export interface GameStateContextModel {
     isShowPFVerification: boolean;
     suggestBet: SuggestBet;
     pfSetting?: PFSettingData;
-    betDetailModalData: {
+    betDetailModalData?: {
         drawInfo: DrawInfo;
         betLogDetails: any[];
     };
-    pfVerifyModalData: PFResult;
+    pfVerifyModalData?: PFResult;
 }
 
 export const initialGameStateContextModel = () => {

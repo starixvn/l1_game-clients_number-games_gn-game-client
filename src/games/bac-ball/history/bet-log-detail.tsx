@@ -130,17 +130,6 @@ const BetDetail: FC<BetLogDetailProps> = ({ betLogDetails, onCloseModal, isShowB
                     </table>
                     {!isHaveMoreData && <div className={Styles["no-more-data"]}>{translateSNGames("table_no_more_data")}</div>}
                 </div>
-                <PFVerifyModal
-                    handleCloseModal={handleClosePFVerifyModal}
-                    isShowPFVerify={isShowPFVerify}
-                    pfResult={{
-                        ...drawInfo?.pfResult,
-                        clientSeed: drawInfo?.clientSeed,
-                    }}
-                    renderResultBlock={renderPFVerifyResultBlock}
-                    fileNameExport={makeFileNameExport}
-                    pfVerify={<PFVerification pfResult={drawInfo?.pfResult} />}
-                ></PFVerifyModal>
             </ModalContainer>
         )
     );
