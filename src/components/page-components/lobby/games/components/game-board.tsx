@@ -1,23 +1,16 @@
-import { useTolgee } from "@tolgee/react";
 import { useEffect, useState } from "react";
 import { Socket } from "socket.io-client";
-import { GameStateContextModel } from "../../../../../_shared/react-contexts/game-state-context/game-state-context-model";
-import { BacBallBigRoadConverter, BacBallBigRoadElement } from "../../../../../games/bac-ball/scoreboard-elements";
-import { BacBallSettlementResult } from "../../../../../games/bac-ball/types";
-import { GameSettings, Round } from "../../../../game-base/type";
-import { SwitchableScoreboard } from "../../../../game-components/round-history/scoreboard";
+import { GameSettings } from "../../../../game-base/type";
 import Styles from "../../lobby.module.scss";
 import { initLobbyGameTransmitter } from "../lobby-game-transmitter";
 import { CountdownTimer } from "./countdown-timer";
 import { DisabledGameBlock } from "./disable-game-block";
 import { GameIcon } from "./game-icon";
+import { LobbyScoreboard } from "./scoreboard";
 
 const messageEventTypes = {
     SIGNED_IN: "signedIn",
     SHOW_DATA: "showData",
-    ROUND_HISTORY: "roundHistory",
-    FINISH: "finish",
-    END_PLACE_BET: "epb",
 };
 
 type Props = {
@@ -35,8 +28,6 @@ export const GameBoard: React.FC<Props> = ({ gameSettings, socket, openGame }) =
     const [isShow, setIsShow] = useState<boolean>(null);
 
     const [transmitter, setTransmitter] = useState<LobbyGameTransmitter>(null);
-    const [roundHistory, setRoundHistory] = useState<Round<object, object>[]>([]);
-    const [blinkNodeFlag, setBlinkNodeFlag] = useState<boolean>(false);
 
     useEffect(() => {
         const lobbyGameTransmitter = initLobbyGameTransmitter(socket, gameSettings.gameName);
@@ -51,9 +42,6 @@ export const GameBoard: React.FC<Props> = ({ gameSettings, socket, openGame }) =
         if (transmitter) {
             transmitter.register(messageEventTypes.SIGNED_IN, handleSignedIn);
             transmitter.register(messageEventTypes.SHOW_DATA, handleShowData);
-            transmitter.register(messageEventTypes.ROUND_HISTORY, handleRoundHistory);
-            transmitter.register(messageEventTypes.FINISH, handleRoundHistory);
-            transmitter.register(messageEventTypes.END_PLACE_BET, handleRoundHistory);
         }
     }, [transmitter]);
 
@@ -65,37 +53,9 @@ export const GameBoard: React.FC<Props> = ({ gameSettings, socket, openGame }) =
         setIsShow(showData);
     };
 
-    const handleRoundHistory = ({
-        roundHistory,
-        finish,
-        epb,
-    }: GameStateContextModel & { finish: Round<object, object>; epb: boolean }): void => {
-        console.log({ roundHistory, finish });
-
-        if (roundHistory) {
-            setRoundHistory([...roundHistory]);
-        }
-
-        if (finish) {
-            setRoundHistory((history) => {
-                const cloned = [...history];
-                cloned.unshift(finish);
-                cloned.pop();
-
-                return cloned;
-            });
-        }
-
-        setBlinkNodeFlag(!!epb);
-    };
-
     const getLobbyData = () => {
         socket.emit("getLobbyData", { gameName: gameSettings.gameName });
     };
-
-    const settlements = roundHistory.map((round) => round.settlementResult);
-
-    blinkNodeFlag && BacBallBigRoadConverter.addBlinkNode(settlements as BacBallSettlementResult[]);
 
     return (
         <div
@@ -108,20 +68,7 @@ export const GameBoard: React.FC<Props> = ({ gameSettings, socket, openGame }) =
             {isShow && (
                 <div className={Styles["detail"]}>
                     <CountdownTimer lobbyGameTransmitter={transmitter} gameSettings={gameSettings} />
-                    <div className={Styles.scoreboard}>
-                        <SwitchableScoreboard
-                            rounds={settlements}
-                            type="switch"
-                            scoreboards={[
-                                {
-                                    element: BacBallBigRoadElement,
-                                    arrange: BacBallBigRoadElement.arrange(BacBallBigRoadConverter.instance),
-                                    column: 12,
-                                    row: 6,
-                                },
-                            ]}
-                        />
-                    </div>
+                    <LobbyScoreboard gameSettings={gameSettings} transmitter={transmitter} />
                 </div>
             )}
         </div>

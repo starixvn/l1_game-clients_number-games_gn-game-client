@@ -101,7 +101,7 @@ export class Register extends Component<RegisterProps, RegisterState> {
                 <ProfilePicture avatarId={avatar} isEditable={true} onClick={this.toggleAvatarGallery.bind(this)} />
 
                 <form className={styles.form} onSubmit={this.submit.bind(this)}>
-                    <label className={styles.title}>{t("Common.create_nick_name")}</label>
+                    <label className={styles.title}>{t("SabaNumber.lobby_create_nickname")}</label>
 
                     <div className={styles.username}>
                         <input
