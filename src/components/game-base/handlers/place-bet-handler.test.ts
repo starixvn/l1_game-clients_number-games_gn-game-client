@@ -384,7 +384,7 @@ describe("placeBet", () => {
             userStakeLevel = stub<IUserStakeLevel>(userStakeLevelMock);
         });
 
-        it("call sendNotice with maxBet Round", () => {
+        it("call sendNotice with maxBet Draw", () => {
             // Arrange
             placeBetHandlerProps.getPlayerBalance = jest.fn().mockReturnValue(300);
             placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
@@ -401,9 +401,9 @@ describe("placeBet", () => {
             const sendNoticeSpy = jest.spyOn(placeBetHandler, "sendNotice");
             const notice = {
                 gameName: "test",
-                message: "Common.message_round_maxbet",
+                message: "SabaNumber.message_draw_maxbet",
                 duration: 2,
-                errorCode: "SB1911",
+                errorCode: "SB1942",
                 betChoice1: undefined,
                 betChoice2: undefined,
                 maxBet: 200,
@@ -416,7 +416,7 @@ describe("placeBet", () => {
             expect(sendNoticeSpy).toHaveBeenCalledWith(notice);
         });
 
-        it("call sendNotice with maxBet Round - Enabled QuickBet", () => {
+        it("call sendNotice with maxBet Draw - Enabled QuickBet", () => {
             // Arrange
             placeBetHandlerProps.getPlayerBalance = jest.fn().mockReturnValue(300);
             placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
@@ -433,9 +433,9 @@ describe("placeBet", () => {
             const sendNoticeSpy = jest.spyOn(placeBetHandler, "sendNotice");
             const notice = {
                 gameName: "test",
-                message: "Common.message_round_maxbet",
+                message: "SabaNumber.message_draw_maxbet",
                 duration: 2,
-                errorCode: "SB1911",
+                errorCode: "SB1942",
                 betChoice1: undefined,
                 betChoice2: undefined,
                 maxBet: 200,
