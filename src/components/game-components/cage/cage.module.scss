@@ -108,11 +108,29 @@
 }
 
 .cage-bg-highlight {
+    position: relative;
+    z-index: -1;
     grid-area: container;
     width: 12.8rem;
     height: 12.8rem;
     background: rgba(255, 255, 255, 0.5);
-    background-size: 15.2rem 15.2rem;
     border-radius: 50%;
+    transform: scale(0);
     box-shadow: 0 0 2.4rem 0.8rem rgba(255, 255, 255, 0.5);
+    animation: pulsate-bck 1.5s linear infinite forwards;
+}
+
+@keyframes pulsate-bck {
+    0% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+    50% {
+        -webkit-transform: scale(0.9);
+        transform: scale(0.9);
+    }
+    100% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
 }

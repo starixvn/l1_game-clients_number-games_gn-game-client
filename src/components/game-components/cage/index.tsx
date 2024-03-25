@@ -84,7 +84,7 @@ const Cage: React.FC<CageProps> = (cageProps) => {
 
     return (
         <div className={`${Styles["cage-area"]} ${isSmall ? Styles["small"] : ""} ${Styles[position]}`}>
-            {highlight && <div className={`fade-in ${Styles["cage-bg-highlight"]}`}></div>}
+            {highlight && <div className={`${Styles["cage-bg-highlight"]}`}></div>}
             <div id="cage-bg" className={Styles["cage-bg"]}></div>
             <div id="cage-balls" className={Styles["cage-balls"]}>
                 {cageBallsLoopFrames?.length > 0 && (
