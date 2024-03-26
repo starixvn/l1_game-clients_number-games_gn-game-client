@@ -53,7 +53,8 @@ class BacBall extends GameBase<GameBaseProps> {
     }
 
     renderResultBlock() {
-        const { roundHistory, result, roundState, roundData, turnCounter, drawId, playResultAnimation } = this.props.gameStateContextModel;
+        const { roundHistory, result, roundState, roundData, turnCounter, drawId, playResultAnimation, settlementResult, showResultInfo } =
+            this.props.gameStateContextModel;
 
         return (
             <BacBallResultBlock
@@ -62,6 +63,8 @@ class BacBall extends GameBase<GameBaseProps> {
                 roundState={roundState}
                 roundData={roundData}
                 turnCounter={turnCounter}
+                settlementResult={settlementResult}
+                showResultInfo={showResultInfo}
                 drawId={drawId}
                 playResultAnimation={playResultAnimation}
             />

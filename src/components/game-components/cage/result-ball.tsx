@@ -43,7 +43,7 @@ const ResultBall: React.FC<{
         } else {
             return <></>;
         }
-    }, [isDelayShowResult, roundState, cageBallFrames]);
+    }, [isDelayShowResult, roundState, cageBallFrames, ballColor]);
 };
 
 export default ResultBall;

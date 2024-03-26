@@ -48,7 +48,6 @@ const Cage: React.FC<CageProps> = (cageProps) => {
     const animName = result <= 9 ? `number0${result}` : `number${result}`;
     const ballColor = `${useBallColor({ number: result })}${position === CagePosition.LEFT ? "" : "2"}`;
     const ballSpeed = playResultAnimation ? 0.5 : 1;
-    const currentTime = Date.now();
 
     const [isDelayShowResult, setIsDelayShowResult] = useState<boolean>(false);
     const [numberBallFrames, setNumberBallFrames] = useState<Texture<Resource>[]>([]);

@@ -3,7 +3,7 @@ import { FC, memo, useEffect, useState } from "react";
 
 import { loadPixiAnimations } from "../../_shared/helpers/pixi-resource-loader";
 import { GameStateContextModel } from "../../_shared/react-contexts/game-state-context/game-state-context-model";
-import { isHighLightWinningResult as winningHighLightResult } from "../../_shared/react-hooks/use-high-light";
+import { isHighLightWinningResult } from "../../_shared/react-hooks/use-high-light";
 import { IBallColor, RoundState } from "../../components/game-base/type";
 import Cage, { CageColor, CagePosition } from "../../components/game-components/cage";
 import { BacBallResultSlotContainer } from "./bac-ball-result-slot-container";
@@ -15,7 +15,7 @@ export type BacBallResultBlockProps = Partial<GameStateContextModel>;
 export const BacBallResultBlock: FC<BacBallResultBlockProps> = (props: BacBallResultBlockProps) => {
     const [cageBallFrames, setCageBallFrames] = useState<IBallColor>({ blue: [], red: [], blue2: [], red2: [] });
     const [cageBallsLoopFrames, setCageBallsLoopFrames] = useState<Texture<Resource>[]>([]);
-    const { result, roundState, roundHistory, playResultAnimation } = props;
+    const { result, roundState, roundHistory, playResultAnimation, settlementResult, showResultInfo } = props;
 
     let currentResult = null;
     if (!result && roundState === RoundState.DisplayResult) {
@@ -23,6 +23,22 @@ export const BacBallResultBlock: FC<BacBallResultBlockProps> = (props: BacBallRe
     } else if (result) {
         currentResult = result;
     }
+
+    const bankerDelayTime = 1000;
+
+    const isPlayerBallHighlight = isHighLightWinningResult({
+        betChoice: BacBallBetOptions.PLAYER,
+        roundState,
+        settlementResult,
+        showResultInfo,
+    });
+
+    const isBankerBallHighlight = isHighLightWinningResult({
+        betChoice: BacBallBetOptions.BANKER,
+        roundState,
+        settlementResult,
+        showResultInfo,
+    });
 
     useEffect(() => {
         const handleLoadResource = async () => {
@@ -78,8 +94,6 @@ export const BacBallResultBlock: FC<BacBallResultBlockProps> = (props: BacBallRe
         );
     }
 
-    const bankerDelayTime = 1000;
-
     return (
         <div className={Style["result-container"]}>
             <div className={Style["result"]}>
@@ -93,12 +107,7 @@ export const BacBallResultBlock: FC<BacBallResultBlockProps> = (props: BacBallRe
                     delayShowResultTime={0}
                     playResultAnimation={playResultAnimation}
                     roundState={roundState}
-                    highlight={winningHighLightResult({
-                        betChoice: BacBallBetOptions.PLAYER,
-                        roundState: props.roundState,
-                        settlementResult: props.settlementResult,
-                        showResultInfo: props.showResultInfo,
-                    })}
+                    highlight={isPlayerBallHighlight}
                 />
                 <BacBallResultSlotContainer delayTime={0} betChoice={BacBallBetOptions.PLAYER} className="player-balls" {...props} />
             </div>
@@ -113,12 +122,7 @@ export const BacBallResultBlock: FC<BacBallResultBlockProps> = (props: BacBallRe
                     delayShowResultTime={bankerDelayTime}
                     playResultAnimation={playResultAnimation}
                     roundState={roundState}
-                    highlight={winningHighLightResult({
-                        betChoice: BacBallBetOptions.BANKER,
-                        roundState: props.roundState,
-                        settlementResult: props.settlementResult,
-                        showResultInfo: props.showResultInfo,
-                    })}
+                    highlight={isBankerBallHighlight}
                 />
                 <BacBallResultSlotContainer
                     delayTime={bankerDelayTime}
