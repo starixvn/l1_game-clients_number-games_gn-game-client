@@ -39,6 +39,10 @@ p {
     display: grid !important;
 }
 
+.font-clock {
+    font-family: "BebasNeue";
+}
+
 img,
 svg {
     vertical-align: middle;
@@ -63,6 +67,10 @@ img {
 
 .absolute {
     position: absolute;
+}
+
+.font-weight-500 {
+    font-weight: 500;
 }
 
 .font-weight-medium {

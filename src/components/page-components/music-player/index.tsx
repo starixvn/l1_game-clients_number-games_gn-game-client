@@ -30,7 +30,7 @@ const MusicPlayer = ({}) => {
         }
     }, [settingContext.enabledMusic]);
 
-    return <div>&nbsp;</div>;
+    return <div></div>;
 };
 
 export default MusicPlayer;
