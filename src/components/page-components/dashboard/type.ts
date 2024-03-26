@@ -52,6 +52,7 @@ export interface ILobbyConfigs {
 export interface IBanner {
     gameId: number;
     displayTime: number;
+    path?: string;
 }
 
 export interface IGameCategory {
