@@ -1,7 +1,6 @@
 import { render } from "@testing-library/react";
 import {
     BacBallBeadRoadCharacterElement,
-    BacBallBeadRoadCharacterElementWithTranslator,
     BacBallBeadRoadValueElement,
     BacBallBigEyeElement,
     BacBallBigRoadConverter,
@@ -9,6 +8,11 @@ import {
     BacBallCockroachPigElement,
     BacBallSmallRoadElement,
 } from "./scoreboard-elements";
+
+jest.mock("../../components/page-components/translator", () => ({
+    loadURLContext: jest.fn(),
+    withTranslator: jest.fn(),
+}));
 
 describe(BacBallBeadRoadCharacterElement.name, () => {
     describe("render", () => {
@@ -26,8 +30,14 @@ describe(BacBallBeadRoadCharacterElement.name, () => {
                           }
                         : null;
 
+                    const t = jest
+                        .fn()
+                        .mockReturnValueOnce("T")
+                        .mockReturnValueOnce("B")
+                        .mockReturnValueOnce("P")
+                        .mockReturnValueOnce("BacBall.beadboard_null");
                     // Act
-                    const { container } = render(<BacBallBeadRoadCharacterElementWithTranslator round={round} />);
+                    const container = render(<BacBallBeadRoadCharacterElement round={round} t={t} />);
 
                     // Assert
                     expect(container).toMatchSnapshot();
@@ -38,7 +48,7 @@ describe(BacBallBeadRoadCharacterElement.name, () => {
         describe(`when the round result is blink node`, () => {
             it("should match the snapshot", () => {
                 // Act
-                const { container } = render(<BacBallBeadRoadCharacterElementWithTranslator round={{} as any} />);
+                const { container } = render(<BacBallBeadRoadCharacterElement round={{} as any} />);
 
                 // Assert
                 expect(container).toMatchSnapshot();

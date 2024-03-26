@@ -1,5 +1,10 @@
 import { Scoreboard } from "./scoreboard";
 
+jest.mock("../../components/page-components/translator", () => ({
+    loadURLContext: jest.fn(),
+    withTranslator: jest.fn(),
+}));
+
 describe(Scoreboard.name, () => {
     describe("onSwitchBigRoad", () => {
         it("should modify class name", () => {

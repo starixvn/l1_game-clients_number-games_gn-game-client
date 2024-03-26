@@ -7,11 +7,11 @@ import {
     BigRoadRound,
     DerivedElement,
 } from "../../components/game-components/round-history/scoreboard/elements";
+import { registerBigRoadElement } from "../../components/page-components/lobby/games/components/scoreboard";
 import { withTranslator } from "../../components/page-components/translator";
 import { BacBallBetOptions } from "./constants";
 import styles from "./scoreboard-elements.module.scss";
 import { BacBallResult, BacBallSettlementResult } from "./types";
-import { registerBigRoadElement } from "../../components/page-components/lobby/games/components/scoreboard";
 
 export class BacBallBeadRoadCharacterElement extends BeadRoadElement<Round<BacBallResult, BacBallSettlementResult>> {
     renderElement(round: Round<BacBallResult, BacBallSettlementResult>, t?: (key: string) => string): ReactNode {
