@@ -6,6 +6,7 @@ import { GameStateContextModel } from '../../../_shared/react-contexts/game-stat
 import { RoundState } from '../../game-base/type';
 import { Settings } from '.';
 import { useClickSound } from '../../../_shared/react-hooks/use-sound';
+import { updateURLContext } from '../../../_shared/react-contexts/url-context';
 
 const mockUseGameStateContext = useGameStateContext as jest.Mock;
 const mockUseGameStatesDispatch = useGameStatesDispatch as jest.Mock;
@@ -26,6 +27,10 @@ jest.mock('../../../_shared/react-hooks/use-sound', () => ({
     useClickSound: jest.fn(),
 }));
 
+jest.mock('../../../_shared/react-contexts/url-context', () => ({
+    updateURLContext: jest.fn(),
+}));
+
 describe('Settings Component', () => {
     const mockBackToRedirectUrl = jest.fn();
     const mockDispatch = jest.fn();
@@ -33,9 +38,12 @@ describe('Settings Component', () => {
 
     beforeEach(() => {
         jest.clearAllMocks();
+
         mockUseGameStateContext.mockReturnValue({ roundState: RoundState.InRound } as GameStateContextModel);
         mockUseGameStatesDispatch.mockImplementation(() => mockDispatch);
         mockUseClickSound.mockImplementation(() => mockClickSound);
+        (updateURLContext as jest.Mock) = jest.fn();
+
         mockUseContext.mockReturnValue({
             backToRedirectUrl: mockBackToRedirectUrl,
             isDirectMode: false,
@@ -47,10 +55,11 @@ describe('Settings Component', () => {
         render(<Settings />);
     });
 
-    test('should navigate back to lobby on back button click', () => {
+    test('should navigate back to lobby on back button click and update  game Id on URLContext to 0 ', () => {
         render(<Settings />);
         fireEvent.click(document.getElementById('icon-home'));
         expect(mockBackToRedirectUrl).toHaveBeenCalledWith('test-url');
+        expect(updateURLContext).toHaveBeenCalledWith({ gameId: 0 });
     });
 
     test.each([[false, "test-url"], [false, ""], [true, "test-url"]])(
@@ -89,11 +98,12 @@ describe('Settings Component', () => {
         });
         expect(mockClickSound).toHaveBeenCalled();
     });
+
     test('should not dispatch the correct action on PF settings button click when disable game', () => {
         mockUseGameStateContext.mockReturnValue({ roundState: RoundState.Disabled } as GameStateContextModel);
         render(<Settings />);
         fireEvent.click(document.getElementById('icon-pf'));
         expect(mockDispatch).not.toHaveBeenCalled();
         expect(mockClickSound).not.toHaveBeenCalled();
-    });
+    })
 });
