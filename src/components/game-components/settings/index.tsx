@@ -29,6 +29,7 @@ export function Settings() {
             },
         });
     };
+
     const handleBackToLobbyOnclick = () => {
         updateURLContext({ gameId: 0 });
         backToRedirectUrl(redirectUrl);
