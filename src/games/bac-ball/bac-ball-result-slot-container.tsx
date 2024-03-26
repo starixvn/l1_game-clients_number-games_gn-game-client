@@ -37,23 +37,7 @@ export const BacBallResultSlotContainer: React.FC<IResultSlotContainer> = (props
         });
     };
 
-    useEffect(() => {
-        let clonedData = cloneDefaultData();
-        if (roundData?.[betChoiceBalls]?.length > 0) {
-            for (let i = 0; i < clonedData.length; i++) {
-                const result = roundData[betChoiceBalls][i];
-                if (result) {
-                    clonedData[i].number = result;
-                    clonedData[i].status = BallStatus.SHOW;
-                    clonedData[i].delayTime = 0;
-                }
-            }
-        }
-        updateLoadingIcon(clonedData);
-        setBallsData(clonedData);
-    }, [roundData]);
-
-    useEffect(() => {
+    const updateResult = () => {
         if (result && drawId === result.drawId && ballsData.length > 0) {
             let clonedData = [...ballsData];
             if (clonedData[turnCounter - 1]) {
@@ -63,13 +47,34 @@ export const BacBallResultSlotContainer: React.FC<IResultSlotContainer> = (props
                 setBallsData(clonedData);
             }
         }
-    }, [result]);
+    };
 
     const resetBalls = () => {
         const defaultData = cloneDefaultData();
         updateLoadingIcon(defaultData);
         setBallsData(defaultData);
     };
+
+    useEffect(() => {
+        let clonedData = cloneDefaultData();
+        if (roundData?.[betChoiceBalls]?.length > 0) {
+            for (let i = 0; i < clonedData.length; i++) {
+                const number = roundData[betChoiceBalls][i];
+                if (number) {
+                    clonedData[i].number = number;
+                    clonedData[i].status = BallStatus.SHOW;
+                    clonedData[i].delayTime = 0;
+                }
+            }
+        }
+        updateLoadingIcon(clonedData);
+        updateResult();
+        setBallsData(clonedData);
+    }, [roundData]);
+
+    useEffect(() => {
+        updateResult();
+    }, [result]);
 
     useEffect(() => {
         if (roundState === RoundState.LockingBet || roundState === RoundState.InRound) {

@@ -9,9 +9,11 @@ const ResultNumber: React.FC<{
     isDelayShowResult: boolean;
     roundState: RoundState;
     numberBallFrames: Texture<Resource>[];
-    currentTime: number;
     ballSpeed: number;
-}> = ({ isDelayShowResult, roundState, numberBallFrames, currentTime, ballSpeed }) => {
+    isShowResultAnim: boolean;
+}> = ({ isDelayShowResult, roundState, numberBallFrames, ballSpeed, isShowResultAnim }) => {
+    const currentTime = Date.now();
+
     return useMemo(() => {
         if (isDelayShowResult && roundState === RoundState.DisplayResult && numberBallFrames?.length !== 0) {
             return (
@@ -28,7 +30,7 @@ const ResultNumber: React.FC<{
                                 textures={numberBallFrames}
                                 autoUpdate
                                 isPlaying={true}
-                                initialFrame={0}
+                                initialFrame={isShowResultAnim ? 0 : numberBallFrames.length - 1}
                                 animationSpeed={ballSpeed}
                                 loop={false}
                             />

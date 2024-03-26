@@ -9,10 +9,11 @@ const ResultBall: React.FC<{
     roundState: RoundState;
     cageBallFrames: IBallColor;
     ballColor: string;
-    currentTime: number;
     ballSpeed: number;
-    color: string;
-}> = ({ isDelayShowResult, roundState, cageBallFrames, ballColor, currentTime, ballSpeed, color }) => {
+    isShowResultAnim: boolean;
+}> = ({ isDelayShowResult, roundState, cageBallFrames, ballColor, ballSpeed, isShowResultAnim }) => {
+    const currentTime = Date.now();
+
     return useMemo(() => {
         if (isDelayShowResult && roundState === RoundState.DisplayResult) {
             return (
@@ -30,7 +31,7 @@ const ResultBall: React.FC<{
                                     textures={cageBallFrames[ballColor]}
                                     autoUpdate
                                     isPlaying={true}
-                                    initialFrame={0}
+                                    initialFrame={isShowResultAnim ? 0 : cageBallFrames[ballColor]?.length - 1}
                                     animationSpeed={ballSpeed}
                                     loop={false}
                                 />

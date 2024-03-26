@@ -112,9 +112,8 @@ const Cage: React.FC<CageProps> = (cageProps) => {
                     roundState={roundState}
                     cageBallFrames={cageBallFrames}
                     ballColor={ballColor}
-                    currentTime={currentTime}
                     ballSpeed={ballSpeed}
-                    color={color}
+                    isShowResultAnim={playResultAnimation}
                 />
             </div>
 
@@ -122,8 +121,8 @@ const Cage: React.FC<CageProps> = (cageProps) => {
                 isDelayShowResult={isDelayShowResult}
                 roundState={roundState}
                 numberBallFrames={numberBallFrames}
-                currentTime={currentTime}
                 ballSpeed={ballSpeed}
+                isShowResultAnim={playResultAnimation}
             />
         </div>
     );

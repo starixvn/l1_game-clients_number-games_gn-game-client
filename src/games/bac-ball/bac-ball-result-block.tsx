@@ -18,12 +18,11 @@ export const BacBallResultBlock: FC<BacBallResultBlockProps> = (props: BacBallRe
     const winningHighLightResult = useWinningHighLightResult;
     const { result, roundState, roundHistory, playResultAnimation } = props;
 
-    let currentResult;
-
-    if (result) {
-        currentResult = result;
-    } else if (roundState === RoundState.DisplayResult) {
+    let currentResult = null;
+    if (!result && roundState === RoundState.DisplayResult) {
         currentResult = roundHistory[0].result;
+    } else if (result) {
+        currentResult = result;
     }
 
     useEffect(() => {
