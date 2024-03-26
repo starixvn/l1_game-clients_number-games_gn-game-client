@@ -1,8 +1,8 @@
+import { isEmpty } from "lodash";
+import Router from "next/router";
 import { createContext, useContext } from "react";
 import { StorageHelper, localStorageKeys } from "../helpers";
-import Router from "next/router";
 import { GameUtils } from "../helpers/base-64-helper";
-import { isEmpty } from "lodash";
 
 export type URLContextModel = {
     token?: string;
@@ -16,9 +16,8 @@ export type URLContextModel = {
 
 export function parseContextFromURL(): URLContextModel | undefined {
     const params = new URLSearchParams(globalThis.location?.search);
-
     // Reload page
-    if (params.size === 0) {
+    if (Array.from(params.values()).length === 0) {
         return;
     }
 
