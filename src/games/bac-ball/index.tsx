@@ -1,12 +1,9 @@
 import { withRouter } from "next/router";
 import { JSX } from "react";
+
 import { loadPixiAnimations } from "../../_shared/helpers/pixi-resource-loader";
 import { useSystemContext, useSystemDispatch } from "../../_shared/react-contexts";
-import {
-    GameStateProvider,
-    useGameStateContext,
-    useGameStatesDispatch,
-} from "../../_shared/react-contexts/game-state-context/game-state-context";
+import { GameStateProvider, useGameStateContext, useGameStatesDispatch } from "../../_shared/react-contexts/game-state-context/game-state-context";
 import { useTranslator } from "../../_shared/react-hooks";
 import GameBase from "../../components/game-base/";
 import { GameMessageHandler, TurnIdHandler } from "../../components/game-base/handlers";
@@ -22,7 +19,7 @@ import { BacBallBetHistoryModal } from "./history";
 import Scoreboard from "./scoreboard";
 import { BacBallResult, BacBallSettlementResult } from "./types";
 
-const totalBalls = 75;
+const totalBalls = 30;
 
 class BacBall extends GameBase<GameBaseProps> {
     private turnIdHandler?: TurnIdHandler;
