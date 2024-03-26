@@ -30,10 +30,9 @@ export interface BetLogDetailProps {
 
 export interface BetHistoryProps {
     renderBetLog: (betLogProps: BetLogProps) => JSX.Element;
-    renderBetLogDetail: (betLogDetailProps: BetLogDetailProps) => JSX.Element;
 }
 
-const BetHistoryModal: FC<BetHistoryProps> = ({ renderBetLog, renderBetLogDetail }) => {
+const BetHistoryModal: FC<BetHistoryProps> = ({ renderBetLog }) => {
     const [isShowBetDetail, setIsShowBetDetail] = useState<boolean>(false);
     const [isFetching, setIsFetching] = useState<boolean>(true);
     const [isFirstLoad, setIsFirstLoad] = useState<boolean>(true);

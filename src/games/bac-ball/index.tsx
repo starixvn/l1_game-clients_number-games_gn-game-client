@@ -1,5 +1,5 @@
 import { withRouter } from "next/router";
-import { JSX, ReactPortal } from "react";
+import { JSX } from "react";
 import { loadPixiAnimations } from "../../_shared/helpers/pixi-resource-loader";
 import { useSystemContext, useSystemDispatch } from "../../_shared/react-contexts";
 import {
