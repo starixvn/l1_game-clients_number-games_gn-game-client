@@ -1,4 +1,4 @@
-import { IBanner, ILobbyConfigs } from "../react-contexts/lobby-context";
+import { IBanner, ILobbyConfigs } from "../../components/page-components/dashboard/type";
 
 export const getBanners = (lobbyConfigs: ILobbyConfigs): IBanner[] => {
     return lobbyConfigs?.banners;
