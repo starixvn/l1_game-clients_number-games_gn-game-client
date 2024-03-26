@@ -1,4 +1,4 @@
-import { getAppSettings } from "../../../_shared/app-settings";
+import { getGameSettings } from "../../../_shared/app-settings";
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 import { IRoundStateHandler } from "../../round-base/round-state-handler";
 import { GameDurations, Round } from "../type";
@@ -11,6 +11,7 @@ export type GameFinishHandlerProps = {
     durations: GameDurations;
     roundStateHandler: IRoundStateHandler;
     runGame: Function;
+    gameId: number;
 };
 
 export class GameFinishHandler {
@@ -97,13 +98,14 @@ export class GameFinishHandler {
 
     handleRoundHistory = () => {
         const roundHistoryClone = [...this._roundHistory];
-        const { gameSettings } = getAppSettings();
+        const gameSettings = getGameSettings(this.props.gameId);
 
         this._finish && roundHistoryClone?.unshift(this._finish);
         if (roundHistoryClone.length > gameSettings.numberOfRoundHistory) {
             roundHistoryClone.pop();
         }
 
+        this._roundHistory = roundHistoryClone;
         this.props.dispatch({
             type: GameEventActionType.SHOW_RESULT_INFO_TIME_OUT,
             payload: {

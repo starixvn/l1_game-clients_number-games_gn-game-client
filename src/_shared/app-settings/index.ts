@@ -20,3 +20,9 @@ export const getAppSettings = () => {
 
     return mergedAppSettings;
 };
+
+export const getGameSettings = (gameId?: number) => {
+    const { gameSettings } = getAppSettings();
+
+    return gameSettings[gameId];
+};

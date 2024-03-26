@@ -121,6 +121,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 durations: this.props.durations,
                 roundStateHandler: this.roundStateHandler,
                 runGame: (remainingTime: number) => this.runGame(remainingTime),
+                gameId: this.props.id,
             });
 
         this.gameDisabledHandler =

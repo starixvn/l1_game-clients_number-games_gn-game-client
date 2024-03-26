@@ -1,6 +1,6 @@
-import { Component, ComponentType, ReactNode } from "react";
+import { Component, ReactNode } from "react";
 import { GameStateContextModel } from "../../../../../_shared/react-contexts/game-state-context/game-state-context-model";
-import { BacBallBigRoadConverter, BacBallBigRoadElement } from "../../../../../games/bac-ball/scoreboard-elements";
+import { BacBallBigRoadConverter } from "../../../../../games/bac-ball/scoreboard-elements";
 import { BacBallSettlementResult } from "../../../../../games/bac-ball/types";
 import { GameSettings, Round } from "../../../../game-base/type";
 import { SwitchableScoreboard } from "../../../../game-components/round-history/scoreboard";
@@ -48,7 +48,7 @@ export class LobbyScoreboard extends Component<LobbyScoreboardProps, LobbyScoreb
     }
 
     componentDidMount(): void {
-        const { transmitter, gameSettings } = this.props;
+        const { transmitter } = this.props;
 
         if (transmitter) {
             transmitter.register(messageEventTypes.ROUND_HISTORY, this.handleRoundHistory.bind(this));
