@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BannerSwiper render with normal banner should match the snapshot 1`] = `
+<div>
+  <div
+    data-testid="swiper-testid"
+  >
+    <div
+      data-testid="swiper-slide-testid"
+    >
+      <img
+        alt="1001"
+        class="banner-img"
+        src="/static/images/lobby/banners/1001/1001_en.png"
+      />
+    </div>
+    <div
+      data-testid="swiper-slide-testid"
+    >
+      <img
+        alt="1002"
+        class="banner-img"
+        src="/static/images/lobby/banners/1002/1002_en.png"
+      />
+    </div>
+  </div>
+</div>
+`;
