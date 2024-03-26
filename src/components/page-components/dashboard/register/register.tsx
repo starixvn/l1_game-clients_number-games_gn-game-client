@@ -5,6 +5,8 @@ import { Themes } from "../../../../_shared/constants";
 import { GetLocalizedErrorMessage } from "../../../../_shared/helpers/notice-helper";
 import { randomInteger } from "../../../../_shared/helpers/number-helper";
 import { createNickname } from "../../../../services/auth-service";
+import BaseDialog from "../../../game-components/base-dialog";
+import { ModalType } from "../../../game-components/base-dialog/type";
 import FirstLoginContainer from "../../../page-components/dashboard/container";
 import TextBlock from "../../../page-components/dashboard/text-block";
 import ProfilePicture from "../../../page-components/profile-picture";
@@ -127,6 +129,23 @@ export class Register extends Component<RegisterProps, RegisterState> {
                 </form>
 
                 <p className={styles.note}>{t("SabaNumber.create_nickname_note")}</p>
+
+                {!isValidUsername && (
+                    <div className={styles.hint}>
+                        <BaseDialog type={ModalType.Center} isOpen={isGalleryOpened}>
+                            <div
+                                className={`icon-close ${styles["icon-close-hint"]}`}
+                                onClick={this.toggleUsernameValidation.bind(this)}
+                            ></div>
+                            <div className={styles["hint-content"]}>
+                                <ul className={styles["note"]}>
+                                    <li>{t("Common.message_nickname_distance")}</li>
+                                    <li>{t("Common.message_nickname_character")}</li>
+                                </ul>
+                            </div>
+                        </BaseDialog>
+                    </div>
+                )}
 
                 {isGalleryOpened && (
                     <AvatarGallery

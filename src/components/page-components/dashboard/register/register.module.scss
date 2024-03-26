@@ -106,3 +106,55 @@
 .note {
     font-size: 1.3rem;
 }
+
+.hint {
+    position: absolute;
+    left: 50%;
+    bottom: 5.6rem;
+    width: 100%;
+    padding: 1.2rem;
+    padding-right: 4rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 3.6rem rgb(0 0 0 / 25%);
+    transform: translate(-50%, 0);
+    background-color: #ffdede;
+    z-index: 2;
+
+    &::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        border-width: 0.8rem;
+        border-style: solid;
+        border-color: #ffdede transparent transparent transparent;
+    }
+
+    .icon-close-hint {
+        position: absolute;
+        right: 1rem;
+        top: 1rem;
+        background-color: #f9b8b8;
+
+        &:before {
+            color: #ce3a3a;
+        }
+    }
+
+    .note {
+        list-style: disc;
+        margin: 0;
+        padding-left: 1.6rem;
+        color: #b11818;
+        font-size: 1.4rem;
+
+        > li {
+            margin-bottom: 0.4rem;
+            line-height: 1.8rem;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+}
