@@ -21,9 +21,7 @@ export const Banner: React.FC<{ openGame: Function; lobbyConfigs: ILobbyConfigs 
     const getGameIdOfferBanner = () => {
         const gameIds: number[] = [];
         const offerGamesIds = getOfferGamesIds(authorizeInfo);
-        console.log("offerGamesIds", offerGamesIds);
         const bannerIds = getBannerIds(lobbyConfigs);
-        console.log("bannerIds", bannerIds);
         bannerIds.forEach((id: number) => {
             if (offerGamesIds.includes(id)) {
                 gameIds.push(id);
