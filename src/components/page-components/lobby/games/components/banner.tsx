@@ -4,21 +4,20 @@ import "swiper/css/pagination";
 import { Autoplay, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { getBanners } from "../../../../../_shared/helpers";
-import { IBanner, useLobbyContext } from "../../../../../_shared/react-contexts/lobby-context";
 import { tolgee } from "../../../../../_shared/tolgee";
+import { IBanner, ILobbyConfigs } from "../../../dashboard/type";
 
 const DEFAULT_DELAY_SLIDER = 5000;
-export const Banner: React.FC<{ openGame: Function }> = ({ openGame }) => {
-    const lobbyContext = useLobbyContext();
+export const Banner: React.FC<{ openGame: Function; lobbyConfigs: ILobbyConfigs }> = ({ openGame, lobbyConfigs }) => {
     const locale = tolgee.getLanguage() ?? "en";
     const swiperRef = useRef(null);
     const [banners, setBanners] = useState<IBanner[]>([]);
 
     useEffect(() => {
-        if (lobbyContext.lobbyConfigs) {
-            setBanners(getBanners(lobbyContext?.lobbyConfigs));
+        if (lobbyConfigs) {
+            setBanners(getBanners(lobbyConfigs));
         }
-    }, [lobbyContext.lobbyConfigs]);
+    }, [lobbyConfigs]);
 
     useEffect(() => {
         if (swiperRef?.current?.swiper) {

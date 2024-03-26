@@ -2,7 +2,6 @@ import { TolgeeInstance } from "@tolgee/react";
 import { WithRouterProps } from "next/dist/client/with-router";
 import { AuthorizeResponse, SSOResponse } from "sc-user-service-client/dist/auth";
 import { Socket } from "socket.io-client";
-import { ILobbyConfigs } from "../../../_shared/react-contexts/lobby-context";
 import { UserStakeLevel } from "../../game-base/type";
 
 export type Props = {
@@ -41,3 +40,27 @@ export type GameOffer = {
     _id: string;
     maxBetPerChoices: any;
 };
+
+export interface ILobbyConfigs {
+    name: string;
+    currencyGroupIds: string[];
+    miniPanelGameIds: number[];
+    categories: IGameCategory[];
+    banners: IBanner[];
+}
+
+export interface IBanner {
+    gameId: number;
+    displayTime: number;
+}
+
+export interface IGameCategory {
+    name: any;
+    gameSettings: IGameSetting[];
+}
+
+export interface IGameSetting {
+    gameId: number;
+    bigSize: boolean;
+    newTag: boolean;
+}

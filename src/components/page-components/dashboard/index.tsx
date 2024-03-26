@@ -17,7 +17,6 @@ import {
     updateURLContext,
     URLContextModel,
 } from "../../../_shared/react-contexts";
-import { LobbyContextProvider } from "../../../_shared/react-contexts/lobby-context";
 import Games from "../../../games/games";
 import { authorize, createNickname, getLobbyConfigs, reCheckIn } from "../../../services/auth-service";
 import { updateSignInSMStatus } from "../../../services/user-setting-service";
@@ -168,7 +167,6 @@ class Dashboard extends React.PureComponent<Props, State> {
         }
 
         this.updateAuthorizeInfo(authorizeInfo);
-
         this.updateUserBalance(authorizeInfo?.user?.red);
 
         this.reCheckInInterval = setInterval(async () => {
@@ -179,6 +177,7 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.connectNotificationSocket();
         this.connectLobbySocket(authorizeInfo);
         queryGame && this.openGame(queryGame);
+        await this.getAllLobbyConfigs();
     }
 
     shouldRenderGames(offerGames) {
@@ -295,12 +294,6 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.isKickOut && this.signOut();
     }
 
-    async updateLobbyConfigs() {
-        const { session } = this.props;
-        const response = await getLobbyConfigs(session);
-        this.setState({ lobbyConfigs: response?.lobbyConfigs as any });
-    }
-
     toggleAnnouncementModal() {
         const { isShowAnnouncement } = this.state;
         this.setState({ isShowAnnouncement: !isShowAnnouncement });
@@ -362,11 +355,17 @@ class Dashboard extends React.PureComponent<Props, State> {
 
     renderLobby() {
         updateURLContext({ backToLobby: true });
-        return <Lobby openGame={(gameId) => this.openGameFromLobby(gameId)} socket={this.state.lobbySocket} />;
+        return (
+            <Lobby
+                openGame={(gameId) => this.openGameFromLobby(gameId)}
+                socket={this.state.lobbySocket}
+                lobbyConfigs={this.state.lobbyConfigs}
+            />
+        );
     }
 
     renderDashBoard() {
-        const { isShowErrorModal, authorizeInfo, isBlockUI, lobbyConfigs } = this.state;
+        const { isShowErrorModal, authorizeInfo, isBlockUI } = this.state;
         const authContextValue = {
             authorizeInfo: authorizeInfo,
             session: this.props.session,
@@ -377,47 +376,40 @@ class Dashboard extends React.PureComponent<Props, State> {
 
         const offerGames = this.getOfferGamesIds(authorizeInfo);
         const isRenderGames = this.shouldRenderGames(offerGames);
-        this.getAllLobbyConfigs();
-
-        const lobbyContextValue = {
-            lobbyConfigs,
-        };
 
         console.log("renderDashBoard", { isRenderGames });
 
         return (
             <PlayerContextProvider value={authContextValue}>
-                <LobbyContextProvider value={lobbyContextValue}>
-                    <SettingContextProvider>
-                        <div className={`${Styles["dashboard"]}`} id={"dashboard"}>
-                            <Header openingGameId={this.state.openGameId} isRenderGames={isRenderGames} />
+                <SettingContextProvider>
+                    <div className={`${Styles["dashboard"]}`} id={"dashboard"}>
+                        <Header openingGameId={this.state.openGameId} isRenderGames={isRenderGames} />
 
-                            {isRenderGames ? this.renderGames() : this.renderLobby()}
+                        {isRenderGames ? this.renderGames() : this.renderLobby()}
 
-                            <Footer />
+                        <Footer />
 
-                            {isShowErrorModal && (
-                                <div className={Styles["container-modal"]}>
-                                    <div className={`${Styles["bg-opacity"]} ${isBlockUI ? Styles["block-ui-backdrop"] : ""}`}></div>
-                                    <BaseDialog
-                                        type={ModalType.Center}
-                                        isOpen={isShowErrorModal}
-                                        onCloseModal={this.closeDialog}
-                                        isBlockUI={isBlockUI}
-                                    >
-                                        <div className={`modal-center red-color ${isBlockUI ? Styles["block-ui-message"] : ""}`}>
-                                            {!isBlockUI && <div className={`icon-close modal-icon-close`} onClick={this.closeDialog}></div>}
-                                            <ErrorApiText
-                                                errorMessage={this.state.apiError?.message}
-                                                errorCode={this.state.apiError?.errorCode}
-                                            />
-                                        </div>
-                                    </BaseDialog>
-                                </div>
-                            )}
-                        </div>
-                    </SettingContextProvider>
-                </LobbyContextProvider>
+                        {isShowErrorModal && (
+                            <div className={Styles["container-modal"]}>
+                                <div className={`${Styles["bg-opacity"]} ${isBlockUI ? Styles["block-ui-backdrop"] : ""}`}></div>
+                                <BaseDialog
+                                    type={ModalType.Center}
+                                    isOpen={isShowErrorModal}
+                                    onCloseModal={this.closeDialog}
+                                    isBlockUI={isBlockUI}
+                                >
+                                    <div className={`modal-center red-color ${isBlockUI ? Styles["block-ui-message"] : ""}`}>
+                                        {!isBlockUI && <div className={`icon-close modal-icon-close`} onClick={this.closeDialog}></div>}
+                                        <ErrorApiText
+                                            errorMessage={this.state.apiError?.message}
+                                            errorCode={this.state.apiError?.errorCode}
+                                        />
+                                    </div>
+                                </BaseDialog>
+                            </div>
+                        )}
+                    </div>
+                </SettingContextProvider>
             </PlayerContextProvider>
         );
     }

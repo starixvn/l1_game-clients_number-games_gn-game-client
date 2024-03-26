@@ -1,6 +1,7 @@
 import { Socket } from "socket.io-client";
 import { getAppSettings } from "../../../_shared/app-settings";
 import { BackgroundGalaxy } from "../background";
+import { ILobbyConfigs } from "../dashboard/type";
 import MusicPlayer from "../music-player";
 import Settings from "../settings";
 import { Banner } from "./games/components/banner";
@@ -10,9 +11,10 @@ import Styles from "./lobby.module.scss";
 type Props = {
     openGame: Function;
     socket: Socket;
+    lobbyConfigs: ILobbyConfigs;
 };
 
-export const Lobby: React.FC<Props> = ({ openGame, socket }) => {
+export const Lobby: React.FC<Props> = ({ openGame, socket, lobbyConfigs }) => {
     const { gameSettings: allGameSetting } = getAppSettings();
     const gamesSettings = Object.values(allGameSetting);
 
@@ -20,7 +22,7 @@ export const Lobby: React.FC<Props> = ({ openGame, socket }) => {
         socket && (
             <div className={Styles["lobby-container"]}>
                 <BackgroundGalaxy />
-                <Banner openGame={openGame} />
+                <Banner openGame={openGame} lobbyConfigs={lobbyConfigs} />
                 {gamesSettings?.map((gameSettings) => (
                     <GameBoard
                         key={`game-board-${gameSettings.gameName}`}
