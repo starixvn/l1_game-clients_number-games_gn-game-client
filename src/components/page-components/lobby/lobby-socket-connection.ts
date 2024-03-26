@@ -11,12 +11,12 @@ export type LobbyGameTransmitter = {
     unsubscribe: (listenerId: string) => void;
     clearAllListener: () => void;
     signedIn?: boolean;
+    listenerIds?: string[];
 };
 
 export class LobbySocketConnection {
     socket: Socket;
     gameTransmitters: Record<number, LobbyGameTransmitter> = {};
-
     initLobbySocket(session: any, offerGameIds: number[]) {
         const { proxy, enableMsgpackParser, socketGatewayPath } = getAppSettings();
         const socketUri = buildUrl();
@@ -65,16 +65,14 @@ export class LobbySocketConnection {
         signInGame(this.socket, session, gameId);
     }
 
-    registerGameEvents(gameId: number) {
-        this.gameTransmitters[gameId]?.register("errorCode", ({ errorCode }) => {
-            const failedConnectionErrorCode = "SB0010";
-            if (errorCode === failedConnectionErrorCode) {
-                this.unsubscribeGame(gameId);
-            }
-        });
-        this.gameTransmitters[gameId]?.register("signedIn", ({ signedIn }) => {
-            this.gameTransmitters[gameId] && (this.gameTransmitters[gameId].signedIn = signedIn);
-        });
+    private registerGameEvents(gameId: number) {
+        const listenerIds = [];
+        listenerIds.push(this.gameTransmitters[gameId]?.register("signedIn", ({ signedIn }) => this.handleSignedIn(gameId, signedIn)));
+        this.gameTransmitters[gameId].listenerIds = listenerIds;
+    }
+
+    private handleSignedIn(gameId: number, signedIn: boolean) {
+        this.gameTransmitters[gameId] && (this.gameTransmitters[gameId].signedIn = signedIn);
     }
 
     closeSocket() {
@@ -82,7 +80,7 @@ export class LobbySocketConnection {
         this.socket?.close();
     }
 
-    clearAllGameTransmitters() {
+    private clearAllGameTransmitters() {
         Object.values(this.gameTransmitters)?.forEach((transmitter) => {
             transmitter?.clearAllListener();
         });
@@ -90,7 +88,8 @@ export class LobbySocketConnection {
     }
 
     unsubscribeGame(gameId: number) {
-        this.gameTransmitters[gameId]?.clearAllListener();
+        const transmitter = this.gameTransmitters[gameId];
+        transmitter?.listenerIds?.forEach((id) => transmitter.unsubscribe(id));
         this.gameTransmitters[gameId] = null;
     }
 
