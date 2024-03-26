@@ -51,7 +51,7 @@ export class Register extends Component<RegisterProps, RegisterState> {
         if (name !== undefined) {
             this.setState({ name, isValidUsername: true });
         } else {
-            this.setState({ name: NameGenerator.generateName() });
+            this.setState({ name: NameGenerator.generateName(), isValidUsername: true });
         }
     }
 
