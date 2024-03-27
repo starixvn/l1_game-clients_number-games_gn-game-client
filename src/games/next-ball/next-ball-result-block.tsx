@@ -15,14 +15,13 @@ export type NextBallResultBlockProps = Partial<GameStateContextModel>;
 export const NextBallResultBlock: FC<NextBallResultBlockProps> = (props: NextBallResultBlockProps) => {
     const [cageBallFrames, setCageBallFrames] = useState<IBallColor>({ blue: [], red: [], blue2: [], red2: [] });
     const [cageBallsLoopFrames, setCageBallsLoopFrames] = useState<Texture<Resource>[]>([]);
-    const { result, roundState, roundHistory, playResultAnimation, settlementResult, showResultInfo } = props;
+    const { result, roundState, roundHistory, playResultAnimation, settlementResult, showResultInfo, roundData } = props;
 
-    let currentResult;
-
-    if (result) {
-        currentResult = result;
-    } else if (roundState === RoundState.DisplayResult) {
+    let currentResult = null;
+    if (!result && roundState === RoundState.DisplayResult) {
         currentResult = roundHistory[0].result;
+    } else if (result) {
+        currentResult = result;
     }
 
     useEffect(() => {
@@ -69,7 +68,7 @@ export const NextBallResultBlock: FC<NextBallResultBlockProps> = (props: NextBal
             <div className={Style["result-container"]}>
                 <div className={Style["result"]}>
                     <div className="cage-blur blue"></div>
-                    <ResultSlotContainer defaultRoundData={defaultRoundData} delayTime={0} betChoice={null} className="player-balls" />
+                    <ResultSlotContainer betChoiceBalls="balls" defaultRoundData={defaultRoundData} delayTime={0} betChoice={null} className="balls" />
                 </div>
             </div>
         );
@@ -84,7 +83,7 @@ export const NextBallResultBlock: FC<NextBallResultBlockProps> = (props: NextBal
                     color={CageColor.BLUE}
                     position={CagePosition.CENTER}
                     isSmall={true}
-                    result={currentResult?.player}
+                    result={currentResult?.ball}
                     delayShowResultTime={0}
                     playResultAnimation={playResultAnimation}
                     roundState={roundState}
@@ -95,7 +94,13 @@ export const NextBallResultBlock: FC<NextBallResultBlockProps> = (props: NextBal
                         showResultInfo,
                     })}
                 />
-                <ResultSlotContainer defaultRoundData={defaultRoundData} delayTime={0} betChoice={NextBallBetOptions.ODD} className="player-balls" {...props} />
+                <ResultSlotContainer
+                    defaultRoundData={defaultRoundData}
+                    delayTime={0}
+                    betChoice={""}
+                    className="balls"
+                    betChoiceBalls="balls"
+                    {...props} />
             </div>
 
         </div>

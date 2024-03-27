@@ -9,12 +9,11 @@ export type IResultSlotContainer = {
     betChoice: string;
     className?: string;
     defaultRoundData: IBall[];
+    betChoiceBalls: string;
 } & Partial<GameStateContextModel>;
 
 export const ResultSlotContainer: React.FC<IResultSlotContainer> = (props) => {
-    const { defaultRoundData, delayTime, betChoice, className, result, roundState, roundData, turnCounter, drawId } = props;
-
-    const betChoiceBalls = `${betChoice}Balls`;
+    const { delayTime, betChoice, className, roundState, roundData, turnCounter, defaultRoundData, betChoiceBalls } = props;
 
     const [ballsData, setBallsData] = useState<IBall[]>([]);
 
@@ -25,51 +24,43 @@ export const ResultSlotContainer: React.FC<IResultSlotContainer> = (props) => {
         }
     };
 
-    const cloneDefaultData = () => {
-        return defaultRoundData.map((data) => {
-            return { ...data };
-        });
-    };
-
     useEffect(() => {
-        let clonedData = cloneDefaultData();
-        if (roundData?.[betChoiceBalls]?.length > 0) {
-            for (let i = 0; i < clonedData.length; i++) {
-                const result = roundData[betChoiceBalls][i];
-                if (result) {
-                    clonedData[i].number = result;
-                    clonedData[i].status = BallStatus.SHOW;
-                    clonedData[i].delayTime = 0;
+        const cloneDefaultData = () => {
+            return defaultRoundData.map((data) => {
+                return { ...data };
+            });
+        };
+
+        const getBallsDataFromRoundData = () => {
+            let clonedData = cloneDefaultData();
+            if (roundData?.[betChoiceBalls]?.length > 0) {
+                for (let i = 0; i < clonedData.length; i++) {
+                    const number = roundData[betChoiceBalls][i];
+                    if (number) {
+                        clonedData[i].number = number;
+                        if (i === turnCounter - 1) {
+                            clonedData[i].status = BallStatus.LOADING;
+                            clonedData[i].delayTime = delayTime;
+                        } else {
+                            clonedData[i].status = BallStatus.SHOW;
+                            clonedData[i].delayTime = 0;
+                        }
+                    }
                 }
             }
-        }
-        updateLoadingIcon(clonedData);
-        setBallsData(clonedData);
+            return clonedData;
+        };
+
+        const data = getBallsDataFromRoundData();
+        updateLoadingIcon(data);
+        setBallsData(data);
     }, [roundData]);
 
     useEffect(() => {
-        if (result && drawId === result.drawId && ballsData.length > 0) {
-            let clonedData = [...ballsData];
-            if (clonedData[turnCounter - 1]) {
-                clonedData[turnCounter - 1].status = BallStatus.LOADING;
-                clonedData[turnCounter - 1].number = result[betChoice];
-                clonedData[turnCounter - 1].delayTime = delayTime;
-                setBallsData(clonedData);
-            }
-        }
-    }, [result]);
-
-    useEffect(() => {
         if (roundState === RoundState.LockingBet || roundState === RoundState.InRound) {
-            if (turnCounter === 1) {
-                const defaultData = cloneDefaultData();
-                updateLoadingIcon(defaultData);
-                setBallsData(defaultData);
-            } else {
-                updateLoadingIcon([...ballsData]);
-            }
+            updateLoadingIcon([...ballsData]);
         }
-    }, [roundState, turnCounter]);
+    }, [roundState]);
 
     if (betChoice === null) {
         return (
@@ -80,7 +71,8 @@ export const ResultSlotContainer: React.FC<IResultSlotContainer> = (props) => {
             </div>
         );
     }
-
+    console.log(`roundData: ${JSON.stringify(roundData)}`)
+    console.log(`ballsData: ${JSON.stringify(ballsData)}`)
     return (
         <div className={`${Style["ball-container"]} ${className}`}>
             {ballsData.map((result, index) => {

@@ -22,13 +22,14 @@ import { BacBallBetOptions, StatisticRuleEntries } from "../bac-ball/constants";
 import NextBallResultBlock from "./next-ball-result-block";
 import { NextBallBettingBlock } from "./next-ball-betting-block";
 import { NextBallResult, NextBallSettlementResult } from "./types";
+import { NextGameRoundDatatHandler } from "./next-ball-game-round-data-handler";
 
 class NextBall extends GameBase<GameBaseProps> {
     private turnIdHandler?: TurnIdHandler;
 
     constructor(props: GameBaseProps) {
         const gameMessageHandler = new GameMessageHandler(props.dispatch);
-        super(props, new TurnStateHandler(), new TurnGameStateHandler(), gameMessageHandler);
+        super(props, new TurnStateHandler(), new TurnGameStateHandler(), gameMessageHandler, new NextGameRoundDatatHandler());
 
         this.turnIdHandler = new TurnIdHandler({
             dispatch: props.dispatch,
