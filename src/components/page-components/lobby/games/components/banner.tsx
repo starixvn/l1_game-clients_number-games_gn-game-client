@@ -96,6 +96,10 @@ export const Banner: React.FC<{ openGame: Function; lobbyConfigs: ILobbyConfigs 
         });
     };
 
+    if (banners.length === 0) {
+        return <></>;
+    }
+
     return (
         <>
             <BannerSwiper banners={banners} openGame={openGame} />

@@ -1,5 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`BannerSwiper render with banner empty should match the snapshot 1`] = `
+<div>
+  <div
+    data-testid="swiper-testid"
+  />
+</div>
+`;
+
 exports[`BannerSwiper render with normal banner should match the snapshot 1`] = `
 <div>
   <div
