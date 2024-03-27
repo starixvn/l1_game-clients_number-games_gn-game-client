@@ -56,6 +56,12 @@ export class GameStateHandler implements IGameStateHandler {
                     },
                 },
                 {
+                    condition: [RoundState.SwitchRound].includes(nextRoundState),
+                    state: {
+                        roundData: {},
+                    },
+                },
+                {
                     condition: this.shouldIncreaseRoundId({ nextRoundState, durations }),
                     state: { roundId: roundId + 1 },
                 },

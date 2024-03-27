@@ -1,5 +1,6 @@
 import { useTranslate } from "@tolgee/react";
 import { createContext, useContext, useReducer } from "react";
+
 import { RoundState } from "../../../components/game-base/type";
 import { LanguageLocaleMapper } from "../../constants";
 import { randomNumberSeries } from "../../helpers";
@@ -170,6 +171,12 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
                 settlementResult,
                 roundId,
                 drawId,
+                roundData: {
+                    // TODO: must be review cause of not apply for next balls
+                    bankerBalls: state.roundData.bankerBalls?.concat(roundData.bankerBalls) || roundData.bankerBalls,
+                    playerBalls: state.roundData.playerBalls?.concat(roundData.playerBalls) || roundData.playerBalls,
+                    drawId,
+                },
             };
         }
 

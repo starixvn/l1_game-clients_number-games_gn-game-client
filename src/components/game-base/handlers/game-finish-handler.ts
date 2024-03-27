@@ -2,7 +2,7 @@ import { getGameSettings } from "../../../_shared/app-settings";
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 import { IRoundStateHandler } from "../../round-base/round-state-handler";
 import { GameDurations, Round } from "../type";
-import { GameMessageHandler, PlaceBetHandler, messageEventType } from "./";
+import { GameMessageHandler, messageEventType, PlaceBetHandler } from "./";
 
 export type GameFinishHandlerProps = {
     dispatch: Function;
@@ -63,19 +63,27 @@ export class GameFinishHandler {
             return;
         }
 
+        const { result, settlementResult, roundId, drawId } = finish;
         const { dispatch, gameMessageHandler } = this.props;
         const durations = this.props.durations;
         this._finish = finish;
+
+        const roundData = {
+            bankerBalls: [result.banker],
+            playerBalls: [result.player],
+            drawId,
+        };
 
         dispatch({ type: GameEventActionType.END_BET_PROCESSING, payload: {} });
         dispatch({
             type: GameEventActionType.FINISH,
             payload: {
                 playResultAnimation: true,
-                result: finish.result,
-                settlementResult: finish.settlementResult,
-                roundId: finish.roundId,
-                drawId: finish?.drawId,
+                result: result,
+                settlementResult: settlementResult,
+                roundId: roundId,
+                drawId: drawId,
+                roundData,
             },
         });
 

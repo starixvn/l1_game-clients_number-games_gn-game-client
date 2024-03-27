@@ -1,5 +1,7 @@
 import { stub } from "jest-auto-stub";
+
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
+import { BacBallResult } from "../../../games/bac-ball/types";
 import { IRoundStateHandler } from "../../round-base/round-state-handler";
 import { Round } from "../type";
 import { GameFinishHandler, GameFinishHandlerProps } from "./game-finish-handler";
@@ -9,7 +11,7 @@ import { PlaceBetHandler } from "./place-bet-handler";
 jest.useFakeTimers();
 
 describe("GameFinishHandler", () => {
-    let mockFinish: Round<object, object>;
+    let mockFinish: Round<BacBallResult, object>;
     let gameFinishHandler: GameFinishHandler;
     let gameMessageHandler: GameMessageHandler;
     let placeBetHandler: PlaceBetHandler;
@@ -59,6 +61,14 @@ describe("GameFinishHandler", () => {
             // Arrange
             gameFinishHandler.betWin = 4;
 
+            const { result, drawId, settlementResult, roundId } = mockFinish;
+
+            const roundData = {
+                bankerBalls: [result.banker],
+                playerBalls: [result.player],
+                drawId,
+            };
+
             // Act
             gameFinishHandler.handleFinish({ finish: mockFinish });
 
@@ -72,10 +82,11 @@ describe("GameFinishHandler", () => {
                 type: GameEventActionType.FINISH,
                 payload: {
                     playResultAnimation: true,
-                    result: mockFinish.result,
-                    settlementResult: mockFinish.settlementResult,
-                    roundId: mockFinish.roundId,
-                    drawId: mockFinish.drawId,
+                    result: result,
+                    settlementResult: settlementResult,
+                    roundId: roundId,
+                    drawId: drawId,
+                    roundData,
                 },
             });
 

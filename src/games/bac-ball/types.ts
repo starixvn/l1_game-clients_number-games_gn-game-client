@@ -9,6 +9,7 @@ export type BacBallResult = {
     player?: number;
     banker?: number;
     drawId?: number;
+    time?: string;
 };
 
 export type Odd = {};
