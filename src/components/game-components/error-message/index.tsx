@@ -1,18 +1,64 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useTranslator } from "../../../_shared/react-hooks/use-translator";
 import { ResourceTypes } from "../../../_shared/resources";
 import BaseDialog from "../base-dialog";
 import { ModalType } from "../base-dialog/type";
 import Styles from "./error-message.module.scss";
 import { ConnectFailedReasonKey } from "./type";
+import { URLContext, updateURLContext } from "../../../_shared/react-contexts";
 
-export const ConnectFailedMessage: React.FC<{ tolgeeNamespace: string; id: number; onSubmit: () => void; reason: string }> = ({
+export const ConnectFailedMessage: React.FC<{ tolgeeNamespace: string; id: number; onReconnect: () => void; reason: string }> = ({
     tolgeeNamespace,
     id,
-    onSubmit,
+    onReconnect,
     reason,
 }) => {
     const { t } = useTranslator([tolgeeNamespace]);
+    const { backToRedirectUrl, redirectUrl, isDirectMode } = useContext(URLContext);
+
+    const handleBackToLobby = () => {
+        updateURLContext({ gameId: 0 });
+        backToRedirectUrl(redirectUrl);
+    };
+
+    const handleBackToLobbyWithReload = () => {
+        updateURLContext({ backToLobby: true, gameId: 0 });
+        redirectUrl ? backToRedirectUrl(redirectUrl) : window.location.reload();
+    };
+
+    const renderLostConnectionButtons = () => {
+        return (
+            <>
+                <button onClick={handleBackToLobby} className={`btn-grey`}>
+                    {t(`${ResourceTypes.COMMON}.back`)}
+                </button>
+                <button onClick={() => onReconnect()} className={`${Styles["btn-reconnect"]} btn-green`}>
+                    {t(`${ResourceTypes.SABA_NUMBER}.button_reconnect`)}
+                </button>
+            </>
+        );
+    };
+
+    const renderButtons = () => {
+        if (reason === ConnectFailedReasonKey.lostConnection) {
+            if (isDirectMode) {
+                return redirectUrl ? (
+                    renderLostConnectionButtons()
+                ) : (
+                    <button onClick={() => onReconnect()} className={`btn-green w-100`}>
+                        {t(`${ResourceTypes.SABA_NUMBER}.button_reconnect`)}
+                    </button>
+                );
+            }
+            return renderLostConnectionButtons();
+        }
+        return isDirectMode && !redirectUrl ? null : (
+            <button onClick={handleBackToLobbyWithReload} className={`btn-green w-100`}>
+                {t(`${ResourceTypes.COMMON}.ok`)}
+            </button>
+        );
+    };
+
     return (
         <BaseDialog type={ModalType.Center} isOpen={true}>
             <div className={`modal-center yellow-color ${Styles["error-message-container"]}`}>
@@ -23,13 +69,7 @@ export const ConnectFailedMessage: React.FC<{ tolgeeNamespace: string; id: numbe
                 <div className={Styles["content"]}>
                     {t(reason, { gameName: tolgeeNamespace }).replaceTolgeeFormat().replace(tolgeeNamespace, "")}
                 </div>
-                <div className={Styles["list-action"]}>
-                    <button onClick={() => onSubmit()} className={`btn-green w-100 ${Styles["reconnect"]}`}>
-                        {reason === ConnectFailedReasonKey.lostConnection
-                            ? t(`${ResourceTypes.SABA_NUMBER}.button_reconnect`)
-                            : t(`${ResourceTypes.COMMON}.ok`)}
-                    </button>
-                </div>
+                <div className={Styles["list-action"]}>{renderButtons()}</div>
             </div>
         </BaseDialog>
     );

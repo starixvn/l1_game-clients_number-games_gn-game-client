@@ -621,13 +621,13 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
     private renderConnectFailed(roundState: RoundState, disconnectReason: string): React.ReactNode {
         const { tolgeeNamespace, id } = this.props;
-        const isGameExcluded = disconnectReason === ConnectFailedReasonKey.restrictPlayPermission;
+
         return (
             roundState === RoundState.ConnectFailed && (
                 <ConnectFailedMessage
                     tolgeeNamespace={tolgeeNamespace}
                     id={id}
-                    onSubmit={isGameExcluded ? () => window.location.reload() : this.retryConnect.bind(this)}
+                    onReconnect={this.retryConnect.bind(this)}
                     reason={disconnectReason}
                 />
             )
