@@ -6,7 +6,7 @@ import { Socket } from "socket.io-client";
 import { useLobbyConnectionContext, usePlayerContext } from "../../../../../_shared/react-contexts";
 import { useTolgee } from "@tolgee/react";
 import { GameSettings } from "../../../../game-base/type";
-import { LobbyGameTransmitter, getLobbyData, signInGame } from "../../lobby-socket-connection";
+import { LobbyGameTransmitter, getLobbyData } from "../../lobby-socket-connection";
 
 const messageEventTypes = {
     SIGNED_IN: "signedIn",
@@ -31,7 +31,7 @@ export const DisabledGameBlock: React.FC<Props> = ({ socket, transmitter, gameSe
         setIsDisabledGame(isDisabled);
     };
     const [errorMessage, setErrorMessage] = useState("");
-    const { removeGameTransmitter } = useLobbyConnectionContext();
+    const { removeGameTransmitter, reconnectGameTransmitter } = useLobbyConnectionContext();
     const { session } = usePlayerContext();
     const language = useTolgee().getLanguage();
 
@@ -78,7 +78,7 @@ export const DisabledGameBlock: React.FC<Props> = ({ socket, transmitter, gameSe
         }
     };
     const reconnectGame = () => {
-        signInGame(socket, session, gameSettings.id);
+        reconnectGameTransmitter(gameSettings.id);
     };
 
     const isShow = isDisabledGame || isDisconnectGame;

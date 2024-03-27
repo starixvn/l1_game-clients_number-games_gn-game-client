@@ -233,7 +233,8 @@ class Dashboard extends React.PureComponent<Props, State> {
     connectLobbySocket = async (authorizeInfo: AuthorizeResponse, lobbyConfigs: ILobbyConfigs) => {
         const { gameId } = loadURLContext();
         const offerGamesIds = getOfferGamesIds(authorizeInfo)?.filter((id) => id != gameId);
-        const lobbyGamesIds = getLobbyGameIds(lobbyConfigs)?.filter((gameId) => offerGamesIds.includes(gameId));
+        const { gameSettings } = getAppSettings();
+        const lobbyGamesIds = getLobbyGameIds(lobbyConfigs)?.filter((gameId) => offerGamesIds.includes(gameId) && gameSettings[gameId]);
 
         if (!authorizeInfo?.authorized || lobbyGamesIds?.length === 0) {
             return;
@@ -355,7 +356,7 @@ class Dashboard extends React.PureComponent<Props, State> {
     }
 
     renderLobby() {
-        const { lobbyConfigs, lobbySocket, authorizeInfo } = this.state;
+        const { lobbyConfigs, lobbySocket } = this.state;
         updateURLContext({ backToLobby: true });
         return (
             <Lobby

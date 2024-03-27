@@ -2,13 +2,12 @@ import { useEffect, useState } from "react";
 import { Socket } from "socket.io-client";
 import { GameSettings } from "../../../../game-base/type";
 import Styles from "../../lobby.module.scss";
-import { initLobbyGameTransmitter } from "../lobby-game-transmitter";
 import { CountdownTimer } from "./countdown-timer";
 import { DisabledGameBlock } from "./disable-game-block";
 import { GameIcon } from "./game-icon";
 import { LobbyScoreboard } from "./scoreboard";
-import { LobbyGameTransmitter, getLobbyData, signInGame } from "../../lobby-socket-connection";
-import { useLobbyConnectionContext, usePlayerContext } from "../../../../../_shared/react-contexts";
+import { LobbyGameTransmitter, getLobbyData } from "../../lobby-socket-connection";
+import { useLobbyConnectionContext } from "../../../../../_shared/react-contexts";
 
 const messageEventTypes = {
     SIGNED_IN: "signedIn",

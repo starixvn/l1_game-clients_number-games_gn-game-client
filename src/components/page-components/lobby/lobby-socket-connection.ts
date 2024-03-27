@@ -62,17 +62,41 @@ export class LobbySocketConnection {
     }
 
     signInGame(session: any, gameId: number) {
-        signInGame(this.socket, session, gameId);
+        if (!this.socket || !session) {
+            return;
+        }
+
+        const gameSetting = this.getGameSettings(gameId);
+        if (gameSetting) {
+            const serviceName = gameSetting.socketInfo?.serviceName;
+            const appMini = 3;
+            this.socket.emit("signIn", { gameName: gameSetting.gameName, session: { ...session, system: appMini }, serviceName });
+        }
+    }
+
+    private getGameSettings(gameId: number) {
+        const { gameSettings } = getAppSettings();
+        return gameSettings[gameId];
     }
 
     private registerGameEvents(gameId: number) {
         const listenerIds = [];
         listenerIds.push(this.gameTransmitters[gameId]?.register("signedIn", ({ signedIn }) => this.handleSignedIn(gameId, signedIn)));
+        listenerIds.push(
+            this.gameTransmitters[gameId]?.register("errorCode", ({ errorCode }) => this.handleGameDisconnect(gameId, errorCode))
+        );
         this.gameTransmitters[gameId].listenerIds = listenerIds;
     }
 
     private handleSignedIn(gameId: number, signedIn: boolean) {
         this.gameTransmitters[gameId] && (this.gameTransmitters[gameId].signedIn = signedIn);
+    }
+
+    private handleGameDisconnect(gameId: number, errorCode: string) {
+        const failedConnectionErrorCode = "SB0010";
+        if (errorCode === failedConnectionErrorCode) {
+            this.unsubscribeGame(gameId);
+        }
     }
 
     closeSocket() {
@@ -99,19 +123,6 @@ export class LobbySocketConnection {
 
     getTransmitters() {
         return this.gameTransmitters;
-    }
-}
-
-export function signInGame(socket: Socket, session: any, gameId: number) {
-    if (!socket || !session) {
-        return;
-    }
-    const { gameSettings } = getAppSettings();
-    const gameSetting = gameSettings[gameId];
-    if (gameSetting) {
-        const serviceName = gameSetting.socketInfo?.serviceName;
-        const appMini = 3;
-        socket.emit("signIn", { gameName: gameSetting.gameName, session: { ...session, system: appMini }, serviceName });
     }
 }
 
