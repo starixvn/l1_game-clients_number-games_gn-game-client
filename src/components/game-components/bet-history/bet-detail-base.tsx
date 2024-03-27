@@ -1,0 +1,105 @@
+import { FC, ReactNode } from "react";
+import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
+import { useClickSound, useCommonTranslate, useTranslator } from "../../../_shared/react-hooks";
+import { useGameContext, usePlayerContext } from "../../../_shared/react-contexts";
+import { getGlossaryTranslate, numberWithCommas, separateDateTime, sortedCollectionByTime } from "../../../_shared/helpers";
+import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
+import { DrawInfo } from "../../game-base/type";
+import { InfiniteTable } from "../infinite-table";
+import Styles from "./bet-history.module.scss";
+
+const BetDetailBase: FC<{
+    renderBetDetailResultBlock: (drawInfo: DrawInfo) => ReactNode;
+    produceDataBetDetailRow: (
+        betLogDetail: any,
+        drawInfo: DrawInfo
+    ) => {
+        rawTime: Date;
+        amount: number;
+        choice: any;
+        odds: number;
+        win: number;
+        hightlight: boolean;
+    };
+}> = ({ renderBetDetailResultBlock, produceDataBetDetailRow }) => {
+    const {
+        betDetailModalData: { drawInfo, betLogDetails },
+    } = useGameStateContext();
+    const dispatch = useGameStatesDispatch();
+    const { t: translateCommon } = useCommonTranslate();
+    const { tolgeeNamespace } = useGameContext();
+    const { t: translateInGame } = useTranslator([tolgeeNamespace]);
+    const { fractionalOddsFormat } = usePlayerContext();
+    const clickSound = useClickSound();
+
+    const handleClickProvablyFair = () => {
+        clickSound();
+        dispatch({
+            type: GameEventActionType.UPDATE_PF_VERIFY,
+            payload: {
+                pfVerifyModalData: {
+                    ...drawInfo.pfResult,
+                    clientSeed: drawInfo.clientSeed,
+                },
+            },
+        });
+        dispatch({
+            type: GameEventActionType.TOGGLE_PF_VERIFY,
+            payload: {
+                isShowPFVerify: true,
+            },
+        });
+    };
+
+    const header = [
+        { node: translateCommon("time") },
+        { node: translateCommon("bet_choice") },
+        { node: translateCommon("odds") },
+        { node: translateCommon("stake") },
+        { node: translateCommon("win") },
+    ];
+
+    const preprocessedBetLogDetails = sortedCollectionByTime(betLogDetails);
+
+    const body = preprocessedBetLogDetails.map((betLogDetail) => {
+        const { rawTime, amount, choice, odds, win, hightlight } = produceDataBetDetailRow(betLogDetail, drawInfo);
+        const { date, time } = separateDateTime(rawTime);
+        const content = [
+            {
+                node: (
+                    <>
+                        {time}
+                        <br />
+                        {date}
+                    </>
+                ),
+            },
+            ...[
+                translateInGame(getGlossaryTranslate(tolgeeNamespace, choice)),
+                numberWithCommas(fractionalOddsFormat ? odds - 1 : odds),
+                numberWithCommas(amount) ?? 0,
+            ].map((item) => {
+                return { node: <div className={hightlight ? "highlight" : ""}>{item}</div> };
+            }),
+            {
+                node: <div className={win > 0 ? "highlight" : ""}>{numberWithCommas(win)}</div>,
+            },
+        ];
+        return content;
+    });
+
+    return (
+        <>
+            {drawInfo.result && renderBetDetailResultBlock(drawInfo)}
+
+            <button className={`clickable ${Styles["provably-fair"]}`} onClick={handleClickProvablyFair}>
+                <span className={`icon-pf ${Styles["icon-pf"]}`}></span>
+                {translateCommon("pf_title_provably_fair").capitalizeFirstLetter()}
+            </button>
+
+            <InfiniteTable header={header} body={body} customTableContainerStyles={Styles["bet-detail"]} />
+        </>
+    );
+};
+
+export default BetDetailBase;
