@@ -21,7 +21,7 @@ export const BacBallBetHistoryModal: FC = () => {
                 <BetDetailModal>
                     <BetDetail />
                 </BetDetailModal>
-                <PFVerifyModal renderResultBlock={renderPFVerifyResultBlock} pfVerify={<PFVerification />}></PFVerifyModal>
+                <PFVerifyModal renderResultBlock={renderPFVerifyResultBlock}></PFVerifyModal>
                 <PFClientSeedInfoModal fileNameExport={makeFileNameExport} />
                 <PFVerificationModal>{<PFVerification />}</PFVerificationModal>
             </>,

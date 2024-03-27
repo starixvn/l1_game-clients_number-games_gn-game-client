@@ -25,7 +25,7 @@ export const NextBallBetHistoryModal: FC = () => {
                         produceDataBetDetailRow={produceDataBetDetailRow}
                     />
                 </BetDetailModal>
-                <PFVerifyModal renderResultBlock={renderPFVerifyResultBlock} pfVerify={<></>}></PFVerifyModal>
+                <PFVerifyModal renderResultBlock={renderPFVerifyResultBlock}></PFVerifyModal>
                 <PFClientSeedInfoModal fileNameExport={makeFileNameExport} />
                 <PFVerificationModal>{<PFVerification />}</PFVerificationModal>
             </>,

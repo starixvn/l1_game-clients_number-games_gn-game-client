@@ -1,4 +1,4 @@
-import { FC, ReactNode } from "react";
+import { FC } from "react";
 import { createPortal } from "react-dom";
 import { useGameContext } from "../../../../_shared/react-contexts";
 import { useClickSound, useCommonTranslate, useTranslator } from "../../../../_shared/react-hooks";
@@ -11,7 +11,6 @@ import { GameEventActionType } from "../../../../_shared/react-contexts/game-sta
 
 const PFVerifyModal: FC<{
     renderResultBlock: Function;
-    pfVerify: ReactNode;
 }> = ({ renderResultBlock }) => {
     const { t: translateCommon } = useCommonTranslate();
     const { isShowPFVerify } = useGameStateContext();

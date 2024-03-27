@@ -1,4 +1,4 @@
-import { FC, ReactNode, useEffect, useMemo, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 
 import { useGameContext } from "../../../_shared/react-contexts";
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
@@ -9,7 +9,6 @@ import { DrawInfo } from "../../game-base/type";
 import Loader from "../loader";
 import ModalContainer from "../modal-container";
 import Styles from "./bet-history.module.scss";
-import BetDetailModal from "./bet-detail-modal";
 
 const GET_HISTORY = "getHistory";
 const HISTORY_EVENT = "history";

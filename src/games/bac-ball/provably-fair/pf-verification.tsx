@@ -11,7 +11,7 @@ import { GameEventActionType } from "../../../_shared/react-contexts/game-state-
 
 const PFVerification: FC = () => {
     const { tolgeeNamespace } = useGameContext();
-    const { pfVerifyModalData: pfResult, isShowPFVerification } = useGameStateContext();
+    const { pfVerifyModalData: pfResult } = useGameStateContext();
     const [mergeClientSeed, setMergeClientSeed] = useState(pfResult?.editedMergeClientSeed || pfResult?.mergeClientSeed || "");
     const dispatch = useGameStatesDispatch();
     const { t: translateCommon } = useCommonTranslate();
