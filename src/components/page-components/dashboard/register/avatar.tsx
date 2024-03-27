@@ -11,5 +11,9 @@ export type AvatarProps = {
 export function Avatar({ id, onClick, selected }: AvatarProps): ReactNode {
     const className = `${styles.avatar} ${selected === id ? styles["avatar-selected"] : ""}`;
 
-    return <img onClick={onClick} src={`/static/images/avatar/${id}.jpg`} className={className} alt="Avatar" />;
+    return (
+        <div className={className} onClick={onClick}>
+            <img src={`/static/images/avatar/${id}.jpg`} className="img-fluid circle" alt="Avatar" />
+        </div>
+    );
 }

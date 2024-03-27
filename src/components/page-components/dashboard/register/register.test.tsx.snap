@@ -6,7 +6,7 @@ exports[`Register render should match snapshot 1`] = `
     class="wrapper first-login "
   >
     <div
-      class="page-bg"
+      class="relative page-bg"
     >
       <div
         class="page-container"
@@ -51,7 +51,7 @@ exports[`Register render should match snapshot 1`] = `
             class="username"
           >
             <input
-              class="input"
+              class="input "
               data-testid="username"
               type="text"
               value="abc"

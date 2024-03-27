@@ -10,6 +10,7 @@
 .form {
     position: relative;
     margin-bottom: 1rem;
+    --error-color: #ff2222;
 
     .title {
         margin-bottom: 0.6rem;
@@ -39,6 +40,10 @@
             &:focus {
                 box-shadow: 0 0 4px 1px #3c3e43 inset;
                 outline: none;
+            }
+
+            &.error {
+                border-color: var(--error-color);
             }
         }
 
@@ -83,7 +88,7 @@
         width: 100%;
         margin-bottom: 1rem;
         font-size: 1.4rem;
-        color: #ff2626;
+        color: var(--error-color);
     }
 
     .custom-form-control {
@@ -110,34 +115,26 @@
 .hint {
     position: absolute;
     left: 50%;
-    bottom: 5.6rem;
+    top: 11.3rem;
     width: 100%;
-    padding: 1.2rem;
-    padding-right: 4rem;
-    border-radius: 0.5rem;
+    min-height: 11.6rem;
+    padding: 1.2rem 4rem 1.2rem 1.2rem;
+    border-radius: 1.6rem;
+    border: 0.1rem solid #6574ae;
     box-shadow: 0 0 3.6rem rgb(0 0 0 / 25%);
     transform: translate(-50%, 0);
-    background-color: #ffdede;
+    background-color: #283a7e;
     z-index: 2;
-
-    &::after {
-        content: "";
-        position: absolute;
-        top: 100%;
-        left: 50%;
-        border-width: 0.8rem;
-        border-style: solid;
-        border-color: #ffdede transparent transparent transparent;
-    }
 
     .icon-close-hint {
         position: absolute;
         right: 1rem;
         top: 1rem;
-        background-color: #f9b8b8;
+        cursor: pointer;
 
         &:before {
-            color: #ce3a3a;
+            font-size: 2rem;
+            color: #fff;
         }
     }
 
@@ -145,12 +142,12 @@
         list-style: disc;
         margin: 0;
         padding-left: 1.6rem;
-        color: #b11818;
-        font-size: 1.4rem;
+        color: #ffffff;
+        font-size: 1.3rem;
 
         > li {
-            margin-bottom: 0.4rem;
-            line-height: 1.8rem;
+            margin-bottom: 1rem;
+            line-height: 2rem;
 
             &:last-child {
                 margin-bottom: 0;

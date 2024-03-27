@@ -1,4 +1,5 @@
 import { render } from "@testing-library/react";
+
 import { Register } from "./register";
 
 jest.mock("../../../../services/auth-service", () => ({
@@ -56,7 +57,7 @@ describe(Register.name, () => {
                 component.setOrGenerateName();
 
                 // Assert
-                expect(component.setState).toHaveBeenCalledWith({ name: "abc" });
+                expect(component.setState).toHaveBeenCalledWith({ isValidUsername: true, name: "abc" });
             });
         });
 

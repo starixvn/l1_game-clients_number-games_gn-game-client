@@ -102,13 +102,30 @@ export class Register extends Component<RegisterProps, RegisterState> {
 
                 <ProfilePicture avatarId={avatar} isEditable={true} onClick={this.toggleAvatarGallery.bind(this)} />
 
+                {!isValidUsername && (
+                    <div className={styles.hint}>
+                        <BaseDialog type={ModalType.Center} isOpen={isGalleryOpened}>
+                            <div
+                                className={`icon-close ${styles["icon-close-hint"]}`}
+                                onClick={this.toggleUsernameValidation.bind(this)}
+                            ></div>
+                            <div className={styles["hint-content"]}>
+                                <ul className={styles["note"]}>
+                                    <li>{t("Common.message_nickname_distance")}</li>
+                                    <li>{t("Common.message_nickname_character")}</li>
+                                </ul>
+                            </div>
+                        </BaseDialog>
+                    </div>
+                )}
+
                 <form className={styles.form} onSubmit={this.submit.bind(this)}>
                     <label className={styles.title}>{t("SabaNumber.lobby_create_nickname")}</label>
 
                     <div className={styles.username}>
                         <input
                             type="text"
-                            className={styles.input}
+                            className={`${styles.input} ${!isValidUsername ? styles.error : ""}`}
                             value={name}
                             data-testid="username"
                             onChange={(event) => this.setOrGenerateName(event.target.value)}
@@ -129,23 +146,6 @@ export class Register extends Component<RegisterProps, RegisterState> {
                 </form>
 
                 <p className={styles.note}>{t("SabaNumber.create_nickname_note")}</p>
-
-                {!isValidUsername && (
-                    <div className={styles.hint}>
-                        <BaseDialog type={ModalType.Center} isOpen={isGalleryOpened}>
-                            <div
-                                className={`icon-close ${styles["icon-close-hint"]}`}
-                                onClick={this.toggleUsernameValidation.bind(this)}
-                            ></div>
-                            <div className={styles["hint-content"]}>
-                                <ul className={styles["note"]}>
-                                    <li>{t("Common.message_nickname_distance")}</li>
-                                    <li>{t("Common.message_nickname_character")}</li>
-                                </ul>
-                            </div>
-                        </BaseDialog>
-                    </div>
-                )}
 
                 {isGalleryOpened && (
                     <AvatarGallery

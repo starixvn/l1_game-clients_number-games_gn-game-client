@@ -1,9 +1,10 @@
 import { render } from "@testing-library/react";
+
 import { Avatar } from "./avatar";
 
 describe(Avatar.name, () => {
     describe("render", () => {
-        describe("with selected avatar", () => {
+        describe("with selected avatar ", () => {
             it("should match the snapshot", () => {
                 // Act
                 const { container } = render(<Avatar selected={1} id={1} onClick={jest.fn()} />);

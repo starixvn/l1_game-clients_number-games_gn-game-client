@@ -1,17 +1,34 @@
 .avatar {
+    position: relative;
     width: 7.2rem;
     height: 7.2rem;
     border-radius: 50%;
     cursor: pointer;
 
-    &:hover {
-        transition: ease-out 0.2s;
+    &:hover::after,
+    &.avatar-selected::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
         border: 0.2rem solid #fff;
-        -webkit-transition: ease-out 0.2s;
+        box-shadow: 0 0 0.4rem 0.1rem rgba(255, 255, 255, 0.6);
     }
-}
 
-.avatar-selected {
-    border: 0.2rem solid #fff;
-    box-shadow: 0 0 0.6rem 0.2rem rgba(255, 255, 255, 0.6);
+    &:hover:not(.avatar-selected)::after {
+        opacity: 0;
+        animation: fade-in 0.2s forwards;
+    }
+
+    @keyframes fade-in {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
 }

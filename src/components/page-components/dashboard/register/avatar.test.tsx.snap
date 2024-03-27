@@ -2,20 +2,29 @@
 
 exports[`Avatar render with normal avatar should match the snapshot 1`] = `
 <div>
-  <img
-    alt="Avatar"
+  <div
     class="avatar "
-    src="/static/images/avatar/1.jpg"
-  />
+  >
+    <img
+      alt="Avatar"
+      class="img-fluid circle"
+      src="/static/images/avatar/1.jpg"
+    />
+  </div>
 </div>
 `;
 
-exports[`Avatar render with selected avatar should match the snapshot 1`] = `
+exports[`Avatar render with selected avatar  should match the snapshot 1`] = `
 <div>
-  <img
-    alt="Avatar"
+  <div
     class="avatar avatar-selected"
-    src="/static/images/avatar/1.jpg"
-  />
+  >
+    <img
+      alt="Avatar"
+      class="img-fluid circle"
+      src="/static/images/avatar/1.jpg"
+    />
+  </div>
 </div>
 `;
+
