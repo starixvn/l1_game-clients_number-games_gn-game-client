@@ -33,7 +33,7 @@ export function registerBigRoadElement(ctor: unknown, converter: unknown, ...gam
 }
 
 export function getBigRoadElement(gameId: number) {
-    return bigRoadElementContainer[gameId];
+    return bigRoadElementContainer[gameId] || ({} as { ctor: any; converter: any });
 }
 
 export class LobbyScoreboard extends Component<LobbyScoreboardProps, LobbyScoreboardState> {
