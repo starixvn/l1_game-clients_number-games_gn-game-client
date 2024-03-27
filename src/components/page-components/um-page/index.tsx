@@ -6,6 +6,7 @@ import { StorageHelper, localStorageKeys } from "../../../_shared/helpers/storag
 import { convertToGMT8, formatDate } from "../../../_shared/helpers/time-helper";
 import { useTranslator } from "../../../_shared/react-hooks/use-translator";
 import { ResourceTypes } from "../../../_shared/resources";
+import ButtonReturnToURL from "../button-return-to-url";
 
 const UMPage: React.FC = () => {
     const router = useRouter();
@@ -58,7 +59,7 @@ const UMPage: React.FC = () => {
                 ></Markup>
             </p>
             <p>{t(`${ResourceTypes.COMMON}.under_maintenance_suggest`)}</p>
-            <button>{t(`${ResourceTypes.COMMON}.back`)}</button>
+            <ButtonReturnToURL />
         </div>
     );
 };

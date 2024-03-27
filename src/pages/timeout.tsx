@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { useCommonTranslate } from "../_shared/react-hooks/use-translator";
+import ButtonReturnToURL from "../components/page-components/button-return-to-url";
 
 const TimeOut = () => {
     const { t } = useCommonTranslate();
@@ -35,7 +36,7 @@ const TimeOut = () => {
             <p className="errorOccurred-info mt-2">
                 <p className="break">{t("message_session_timeout_break")} </p>
             </p>
-            <button>{t("back")}</button>
+            <ButtonReturnToURL />
         </div>
     );
 };
