@@ -171,12 +171,7 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
                 settlementResult,
                 roundId,
                 drawId,
-                roundData: {
-                    // TODO: must be review cause of not apply for next balls
-                    bankerBalls: state.roundData.bankerBalls?.concat(roundData.bankerBalls) || roundData.bankerBalls,
-                    playerBalls: state.roundData.playerBalls?.concat(roundData.playerBalls) || roundData.playerBalls,
-                    drawId,
-                },
+                roundData
             };
         }
 

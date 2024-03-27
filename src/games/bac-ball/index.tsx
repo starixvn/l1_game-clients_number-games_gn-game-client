@@ -18,6 +18,7 @@ import { DrawIdBlock } from "./draw-id-block";
 import { BacBallBetHistoryModal } from "./history";
 import Scoreboard from "./scoreboard";
 import { BacBallResult, BacBallSettlementResult } from "./types";
+import { BacBallGameRoundDatatHandler } from "./bac-ball-game-round-data-handler";
 
 const totalBalls = 30;
 
@@ -26,7 +27,7 @@ class BacBall extends GameBase<GameBaseProps> {
 
     constructor(props: GameBaseProps) {
         const gameMessageHandler = new GameMessageHandler(props.dispatch);
-        super(props, new TurnStateHandler(), new TurnGameStateHandler(), gameMessageHandler);
+        super(props, new TurnStateHandler(), new TurnGameStateHandler(), gameMessageHandler, new BacBallGameRoundDatatHandler());
 
         this.turnIdHandler = new TurnIdHandler({
             dispatch: props.dispatch,

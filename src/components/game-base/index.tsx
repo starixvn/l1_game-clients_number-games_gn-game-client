@@ -41,6 +41,7 @@ import {
 import { GameSoundHandler } from "./handlers/game-sound-handler";
 import { IGameStateHandler } from "./handlers/game-state-handler";
 import { GameBaseProps, PFSettingData, RoundState } from "./type";
+import { GameRoundDatatHandler } from "./handlers/game-round-data-handler";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
     protected socket: Socket;
@@ -59,19 +60,22 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     private gameDisabledHandler?: GameDisableHandler;
     private gameRoundHistoryHandler?: GameRoundHistoryHandler;
     private gameSoundHandler?: GameSoundHandler;
+    private gameRoundDatatHandler?: GameRoundDatatHandler;
 
     constructor(
         props: P,
         roundStateHandler: IRoundStateHandler,
         gameStateHandler: IGameStateHandler,
         gameMessageHandler: GameMessageHandler,
+        gameRoundDatatHandler: GameRoundDatatHandler,
         gameErrorHandler?: GameErrorHandler,
         playerHandler?: PlayerHandler,
         placeBetHandler?: PlaceBetHandler,
         gameFinishHandler?: GameFinishHandler,
         gameDisabledHandler?: GameDisableHandler,
         gameRoundHistoryHandler?: GameRoundHistoryHandler,
-        gameSoundHandler?: GameSoundHandler
+        gameSoundHandler?: GameSoundHandler,
+
     ) {
         super(props);
 
@@ -80,6 +84,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.roundStateHandler = roundStateHandler;
         this.gameStateHandler = gameStateHandler;
         this.gameMessageHandler = gameMessageHandler;
+        this.gameRoundDatatHandler = gameRoundDatatHandler ?? new GameRoundDatatHandler();
         this.gameErrorHandler =
             gameErrorHandler ??
             new GameErrorHandler({
@@ -122,6 +127,8 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 roundStateHandler: this.roundStateHandler,
                 runGame: (remainingTime: number) => this.runGame(remainingTime),
                 gameId: this.props.id,
+                gameStateContextModel: this.getGameStateContext.bind(this),
+                gameRoundDatatHandler: this.gameRoundDatatHandler
             });
 
         this.gameDisabledHandler =
@@ -143,6 +150,9 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             new GameSoundHandler({
                 gameSound: this.getGameSound.bind(this),
             });
+
+
+
         this.placeBet = this.placeBet.bind(this);
         this.updateUserBalance = this.updateUserBalance.bind(this);
         this.setActiveScoreboardTab = this.setActiveScoreboardTab.bind(this);
