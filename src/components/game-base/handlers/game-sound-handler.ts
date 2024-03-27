@@ -14,19 +14,14 @@ export class GameSoundHandler {
     };
 
     private playSound(roundState: RoundState) {
-        const { stopBettingSound, receiveFinishSound, startRoundSound, startBettingSound } = this.props.gameSound();
+        const { receiveFinishSound, startRoundSound } = this.props.gameSound();
         switch (roundState) {
-            case RoundState.InRound:
-                stopBettingSound();
-                break;
-
             case RoundState.LockingBet:
                 receiveFinishSound();
                 break;
 
             case RoundState.DisplayResult:
                 startRoundSound();
-                startBettingSound();
                 break;
         }
     }
