@@ -13,7 +13,9 @@ export const PlayerBetCount: React.FC<BaseProps> = ({ tolgeeNamespace, choice, c
     return (
         <div className={`${className} ${Styles["player-count"]} `}>
             <span className="icon-user"></span>
-            <span id={`${tolgeeNamespace}-${choice}-no`}>{playerBetCount[choice]}</span>
+            <span className={Styles["player-count-value"]} id={`${tolgeeNamespace}-${choice}-no`}>
+                {playerBetCount[choice]}
+            </span>
         </div>
     );
 };

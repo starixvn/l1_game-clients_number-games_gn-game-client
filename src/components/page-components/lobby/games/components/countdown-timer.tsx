@@ -92,14 +92,14 @@ export const CountdownTimer: React.FC<Props> = ({ transmitter, gameSettings }) =
             return (
                 <div className={Styles["countdown-timer"]}>
                     <span className="icon-clock" />
-                    {timeCounter}
+                    <span className={Styles["countdown-timer-value"]}>{timeCounter.toString().padStart(2, "0")}</span>
                 </div>
             );
         case RoundState.LockingBet:
             return (
                 <div className={`${Styles["countdown-timer"]} ${Styles["block-bet"]}`}>
                     <span className="icon-clock" />
-                    {timeCounter}
+                    <span className={Styles["countdown-timer-value"]}>{timeCounter.toString().padStart(2, "0")}</span>
                 </div>
             );
         case RoundState.DisplayResult:

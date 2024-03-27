@@ -97,9 +97,12 @@
     }
 }
 
-.stakes-value {
+.stakes-value,
+.player-count-value {
     height: 1.8rem;
-    line-height: 1.5;
+    line-height: 1.9;
+    font-family: "ProximaNova", sans-serif;
+    font-variant-numeric: tabular-nums;
 }
 
 @keyframes odd-move-up {

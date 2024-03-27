@@ -50,13 +50,22 @@
     color: #70ff00;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.2rem;
     justify-content: flex-end;
     margin-bottom: 0.5rem;
     height: 1.8rem;
+
+    .countdown-timer-value {
+        font-family: "ProximaNova", sans-serif;
+        font-variant-numeric: tabular-nums;
+        line-height: 1.7;
+        height: 1.8rem;
+    }
+
     &.block-bet {
         color: #ff4343;
     }
+
     &.show-result {
         color: aliceblue;
     }
