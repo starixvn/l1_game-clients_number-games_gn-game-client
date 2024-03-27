@@ -30,6 +30,7 @@ export const BannerSwiper: React.FC<{ banners: IBanner[]; openGame: Function }> 
         <Swiper
             slidesOffsetBefore={20}
             loop={true}
+            rewind={true}
             slidesPerView={1}
             spaceBetween={8}
             pagination={{ clickable: true }}
@@ -42,6 +43,8 @@ export const BannerSwiper: React.FC<{ banners: IBanner[]; openGame: Function }> 
             }}
             centeredSlides={true}
             centeredSlidesBounds={true}
+            longSwipes={false}
+            threshold={10}
             ref={swiperRef}
         >
             {banners.map((banner) => {

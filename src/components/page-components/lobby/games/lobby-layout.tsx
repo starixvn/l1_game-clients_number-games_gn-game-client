@@ -1,10 +1,10 @@
 import { useMemo } from "react";
-import { GameBoard } from "./components/game-board";
-import { usePlayerContext } from "../../../../_shared/react-contexts";
+import { Socket } from "socket.io-client";
 import { getAppSettings } from "../../../../_shared/app-settings";
 import { getLobbyGameIds, getOfferGamesIds } from "../../../../_shared/helpers";
+import { usePlayerContext } from "../../../../_shared/react-contexts";
 import { ILobbyConfigs } from "../../dashboard/type";
-import { Socket } from "socket.io-client";
+import { GameBoard } from "./components/game-board";
 
 type Props = {
     openGame: Function;
