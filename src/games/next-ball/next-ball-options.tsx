@@ -1,15 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-
 import { useGameActionContext, useGameContext, useSystemContext } from "../../_shared/react-contexts";
 import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
-import { useShowHighlightPrevResult } from "../../_shared/react-hooks/use-high-light";
 import { RoundState } from "../../components/game-base/type";
 import { BetChoice, BetPercentage, Odds, OwnBet, PlayerBetCount, TotalBet } from "../../components/game-components/bet-option";
 import { setRipplePosition } from "../../components/game-components/bet-option/ripple-effect";
-
 import Style from "./next-ball.module.scss";
 import { NextBallBetOptions, NextBallBetOptionsPercentageColor } from "./next-ball-constants";
 import { NextBallWinningAnimation } from "./next-ball-winning-animation";
+import { isShowHighlightPrevResult } from "../../_shared/react-hooks/use-high-light";
 
 export const NextBallBetOptionsComponent = () => {
     const rippleButtons = useRef([]);
@@ -24,8 +22,7 @@ export const NextBallBetOptionsComponent = () => {
         [gameActionContext, systemContext.selectedChip]
     );
 
-    const showHighlightPrevResult = useShowHighlightPrevResult;
-    const { roundState } = useGameStateContext();
+    const { roundState, settlementResult, showResultInfo, roundHistory } = useGameStateContext();
     const { tolgeeNamespace } = useGameContext();
 
     const isShowDisabledLayer = roundState === RoundState.LockingBet;
@@ -99,7 +96,9 @@ export const NextBallBetOptionsComponent = () => {
 
     const renderMainOption = (choice: string) => {
         const winningResult = (
-            <NextBallWinningAnimation choice={choice} resourceName={NextBallBetOptions.OVER} width={210} height={210} position={[90, 95]} />
+            <NextBallWinningAnimation showResultInfo={showResultInfo}
+                roundState={roundState}
+                settlementResult={settlementResult} choice={choice} resourceName={NextBallBetOptions.OVER} width={210} height={210} position={[90, 95]} />
         );
         const winningPrev = renderHighlightWinningPrevResult(choice);
         const totalBetComponent = renderTotalBet(choice);
@@ -135,8 +134,7 @@ export const NextBallBetOptionsComponent = () => {
                     <span className="ripple-effect"></span>
                 </button>
                 {isShowDisabledLayer && <div className={Style["disable-layer"]}></div>}
-
-                {showHighlightPrevResult({ betChoice: choice }) && winningPrev}
+                {isShowHighlightPrevResult({ betChoice: choice, roundState, roundHistory }) && winningPrev}
             </div>
         );
     };
@@ -145,10 +143,10 @@ export const NextBallBetOptionsComponent = () => {
         <>
             <div className={Style["bet-option-row"]}>
                 {renderMainOption(NextBallBetOptions.OVER)}
-                {renderMainOption(NextBallBetOptions.UNDER)}
+                {renderMainOption(NextBallBetOptions.ODD)}
             </div>
             <div className={Style["bet-option-row"]}>
-                {renderMainOption(NextBallBetOptions.ODD)}
+                {renderMainOption(NextBallBetOptions.UNDER)}
                 {renderMainOption(NextBallBetOptions.EVEN)}
             </div>
 

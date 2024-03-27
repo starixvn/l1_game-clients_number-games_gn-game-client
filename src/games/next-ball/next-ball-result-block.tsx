@@ -3,20 +3,19 @@ import { FC, memo, useEffect, useState } from "react";
 
 import { loadPixiAnimations } from "../../_shared/helpers/pixi-resource-loader";
 import { GameStateContextModel } from "../../_shared/react-contexts/game-state-context/game-state-context-model";
-import { useWinningHighLightResult } from "../../_shared/react-hooks/use-high-light";
 import { IBallColor, RoundState } from "../../components/game-base/type";
 import Cage, { CageColor, CagePosition } from "../../components/game-components/cage";
 import Style from "./next-ball.module.scss";
 import { ResultSlotContainer } from "../../components/game-components/result-container/result-container";
 import { defaultRoundData, NextBallBetOptions } from "./next-ball-constants";
+import { isHighLightWinningResult } from "../../_shared/react-hooks/use-high-light";
 
 export type NextBallResultBlockProps = Partial<GameStateContextModel>;
 
 export const NextBallResultBlock: FC<NextBallResultBlockProps> = (props: NextBallResultBlockProps) => {
     const [cageBallFrames, setCageBallFrames] = useState<IBallColor>({ blue: [], red: [], blue2: [], red2: [] });
     const [cageBallsLoopFrames, setCageBallsLoopFrames] = useState<Texture<Resource>[]>([]);
-    const winningHighLightResult = useWinningHighLightResult;
-    const { result, roundState, roundHistory, playResultAnimation } = props;
+    const { result, roundState, roundHistory, playResultAnimation, settlementResult, showResultInfo } = props;
 
     let currentResult;
 
@@ -89,7 +88,12 @@ export const NextBallResultBlock: FC<NextBallResultBlockProps> = (props: NextBal
                     delayShowResultTime={0}
                     playResultAnimation={playResultAnimation}
                     roundState={roundState}
-                    highlight={winningHighLightResult({ betChoice: NextBallBetOptions.ODD })}
+                    highlight={isHighLightWinningResult({
+                        betChoice: NextBallBetOptions.ODD,
+                        roundState,
+                        settlementResult,
+                        showResultInfo,
+                    })}
                 />
                 <ResultSlotContainer defaultRoundData={defaultRoundData} delayTime={0} betChoice={NextBallBetOptions.ODD} className="player-balls" {...props} />
             </div>

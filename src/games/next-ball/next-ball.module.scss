@@ -24,7 +24,7 @@
 %main-option {
     overflow: hidden;
     width: 17.5rem;
-    height: 8rem;
+    height: 10.5rem;
     background-size: 17.8rem 18.8rem;
     border: none;
 
@@ -53,13 +53,13 @@
 
     @extend %main-option;
     // background: url("/static/images/bac-number/bg-player.svg") no-repeat;
-    background: blue;
+    background: rgb(37, 37, 218);
     border-bottom-left-radius: 2rem;
     border-top-left-radius: 2rem;
     border-bottom-right-radius: 2rem;
     border-top-right-radius: 2rem;
-    padding-right: 0.6rem;
-    margin: 0.1rem;
+    padding-right: 0.1rem;
+    margin: 0.3rem;
 
     .own-bet {
         left: -4rem;
@@ -76,14 +76,14 @@
     @extend %main-option;
     // background: url("/static/images/bac-number/bg-banker.svg") no-repeat;
 
-    background: blue;
+    background: rgb(218, 52, 52);
     border-bottom-left-radius: 2rem;
     border-top-left-radius: 2rem;
     border-bottom-right-radius: 2rem;
     border-top-right-radius: 2rem;
     padding-right: 1.2rem;
     padding-left: 0.6rem;
-    margin: 0.1rem;
+    margin: 0.3rem;
 
     .own-bet {
         left: 4rem;
@@ -105,14 +105,14 @@
 
     @extend %main-option;
     // background: url("/static/images/bac-number/bg-player.svg") no-repeat;
-    background: red;
+    background: rgb(37, 37, 218);
     border-bottom-left-radius: 2rem;
     border-top-left-radius: 2rem;
     border-bottom-right-radius: 2rem;
     border-top-right-radius: 2rem;
     padding-left: 1.2rem;
     padding-right: 0.6rem;
-    margin: 0.1rem;
+    margin: 0.3rem;
 
     .own-bet {
         left: -4rem;
@@ -130,14 +130,14 @@
     @extend %main-option;
     // background: url("/static/images/bac-number/bg-banker.svg") no-repeat;
 
-    background: red;
+    background: rgb(218, 52, 52);
     border-bottom-left-radius: 2rem;
     border-top-left-radius: 2rem;
     border-bottom-right-radius: 2rem;
     border-top-right-radius: 2rem;
     padding-right: 1.2rem;
     padding-left: 0.6rem;
-    margin: 0.1rem;
+    margin: 0.3rem;
 
     .own-bet {
         left: 4rem;

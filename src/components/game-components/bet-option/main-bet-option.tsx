@@ -2,7 +2,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { TotalBet } from "./total-bet";
 import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import { useGameActionContext, useGameContext, useSystemContext } from "../../../_shared/react-contexts";
-import { useShowHighlightPrevResult } from "../../../_shared/react-hooks/use-high-light";
 import { RoundState } from "../../game-base/type";
 import { BetPercentage } from "./bet-percentage";
 import { PlayerBetCount } from "./player-bet-count";
@@ -12,6 +11,7 @@ import { OwnBet } from "./own-bet";
 import { setRipplePosition } from "./ripple-effect";
 import Style from "./main-bet-option.module.scss";
 import { WinningAnimation } from "./winning-animation";
+import { isShowHighlightPrevResult } from "../../../_shared/react-hooks/use-high-light";
 
 export type MainBetOptionsComponentProps = {
     betOptionsPercentageColor: { [key: string]: string };
@@ -36,8 +36,7 @@ export const MainBetOptionsComponent: React.FC<MainBetOptionsComponentProps> = (
         [gameActionContext, systemContext.selectedChip]
     );
 
-    const showHighlightPrevResult = useShowHighlightPrevResult;
-    const { roundState } = useGameStateContext();
+    const { roundState, roundHistory } = useGameStateContext();
     const { tolgeeNamespace } = useGameContext();
 
     const isShowDisabledLayer = roundState === RoundState.LockingBet;
@@ -130,7 +129,7 @@ export const MainBetOptionsComponent: React.FC<MainBetOptionsComponentProps> = (
 
                 {isShowDisabledLayer && <div className={Style["disable-layer"]}></div>}
 
-                {showHighlightPrevResult({ betChoice: choice }) && winningPrev}
+                {isShowHighlightPrevResult({ betChoice: choice, roundState, roundHistory }) && winningPrev}
             </div>
         );
     };
