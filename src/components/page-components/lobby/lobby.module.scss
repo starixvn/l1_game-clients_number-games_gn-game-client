@@ -4,8 +4,8 @@
 
 .game-board-detail {
     background: url("/static/images/lobby/game-board-detail/bg-game-board.svg") no-repeat top center;
-    background-size: 100% 100%;
-    padding: 0 0.8rem;
+
+    margin: 0 0.8rem;
     position: relative;
     display: flex;
     gap: 1rem;
@@ -98,30 +98,25 @@
         bottom: 0.8rem;
         left: 50%;
         transform: translateX(-50%);
-        width: 10rem;
+        width: 6rem;
         height: 2rem;
         display: flex;
         justify-content: center;
         align-items: center;
+        gap: 0.4rem;
         border-radius: 4rem;
         background: linear-gradient(-90deg, rgba(10, 18, 64, 0.8) 0%, rgba(21, 27, 86, 0.8) 100%);
         font-size: 1.1rem;
         color: #a7a7a7;
     }
 
-    .user-playing-icon {
-        width: 0.6rem;
-        height: 0.6rem;
-        margin-right: 0.6rem;
-        border-radius: 50%;
-        background: #00ff47;
-        box-shadow: 0px 0px 0px 0px rgba(0, 255, 71, 0.1);
-        animation: pulse-animation 2s infinite;
-    }
-
     .user-playing-value {
         color: #fff;
         padding-right: 0.2rem;
+        font-family: "ProximaNova", sans-serif;
+        font-variant-numeric: tabular-nums;
+        height: 1.8rem;
+        line-height: 1.9;
     }
 }
 
@@ -134,8 +129,22 @@
     }
 }
 
-.scoreboard {
-    border: 0.1rem solid #172d41;
-    border-radius: 0.3rem;
-    background: #021520;
+.scoreboard-lobby {
+    background: transparent;
+
+    &::before,
+    &::after {
+        content: none;
+    }
+}
+
+.scoreboard-lobby-block {
+    border: none;
+    width: 1.6rem;
+    height: 1.6rem;
+}
+
+.scoreboard-lobby-element {
+    width: 1.2rem;
+    height: 1.2rem;
 }

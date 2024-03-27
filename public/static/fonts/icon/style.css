@@ -1,142 +1,147 @@
 @font-face {
-    font-family: "icomoon";
-    src: url("fonts/icomoon.eot?wkdmua");
-    src: url("fonts/icomoon.eot?wkdmua#iefix") format("embedded-opentype"), url("fonts/icomoon.ttf?wkdmua") format("truetype"),
-        url("fonts/icomoon.woff?wkdmua") format("woff"), url("fonts/icomoon.svg?wkdmua#icomoon") format("svg");
-    font-weight: normal;
-    font-style: normal;
-    font-display: block;
+  font-family: 'icomoon';
+  src:  url('fonts/icomoon.eot?7bsy2w');
+  src:  url('fonts/icomoon.eot?7bsy2w#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?7bsy2w') format('truetype'),
+    url('fonts/icomoon.woff?7bsy2w') format('woff'),
+    url('fonts/icomoon.svg?7bsy2w#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
 }
 
-[class^="icon-"],
-[class*=" icon-"] {
-    /* use !important to prevent issues with browser extensions that change fonts */
-    font-family: "icomoon" !important;
-    speak: never;
-    font-style: normal;
-    font-weight: normal;
-    font-variant: normal;
-    text-transform: none;
-    line-height: 1;
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
 
-    /* Better Font Rendering =========== */
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-user-lobby:before {
+  content: "\e91c";
+  color: #00ff47;
+}
 .icon-pencil:before {
-    content: "\e91a";
-    color: #eaeaea;
+  content: "\e91a";
+  color: #eaeaea;
 }
 .icon-refresh:before {
-    content: "\e91b";
-    color: #fff;
+  content: "\e91b";
+  color: #fff;
 }
 .icon-edit:before {
-    content: "\e914";
-    color: #6c737b;
+  content: "\e914";
+  color: #6c737b;
 }
 .icon-file-csv .path1:before {
-    content: "\e915";
-    color: rgb(7, 177, 72);
+  content: "\e915";
+  color: rgb(7, 177, 72);
 }
 .icon-file-csv .path2:before {
-    content: "\e916";
-    margin-left: -1em;
-    color: rgb(7, 177, 72);
+  content: "\e916";
+  margin-left: -1em;
+  color: rgb(7, 177, 72);
 }
 .icon-file-csv .path3:before {
-    content: "\e917";
-    margin-left: -1em;
-    color: rgb(255, 255, 255);
+  content: "\e917";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
 }
 .icon-file-csv .path4:before {
-    content: "\e918";
-    margin-left: -1em;
-    color: rgb(255, 255, 255);
+  content: "\e918";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
 }
 .icon-file-csv .path5:before {
-    content: "\e919";
-    margin-left: -1em;
-    color: rgb(255, 255, 255);
+  content: "\e919";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
 }
 .icon-setting:before {
-    content: "\e913";
-    color: #fff;
+  content: "\e913";
+  color: #fff;
 }
 .icon-copy:before {
-    content: "\e911";
-    color: #9ca3ae;
+  content: "\e911";
+  color: #9ca3ae;
 }
 .icon-info:before {
-    content: "\e912";
-    color: #fff;
+  content: "\e912";
+  color: #fff;
 }
 .icon-clock:before {
-    content: "\e910";
-    color: #fff;
+  content: "\e910";
+  color: #fff;
 }
 .icon-music-off:before {
-    content: "\e90d";
-    color: #fff;
+  content: "\e90d";
+  color: #fff;
 }
 .icon-music-on:before {
-    content: "\e90e";
-    color: #fff;
+  content: "\e90e";
+  color: #fff;
 }
 .icon-pf:before {
-    content: "\e90f";
-    color: #fff;
+  content: "\e90f";
+  color: #fff;
 }
 .icon-history:before {
-    content: "\e90a";
-    color: #fff;
+  content: "\e90a";
+  color: #fff;
 }
 .icon-menu:before {
-    content: "\e90b";
-    color: #fff;
+  content: "\e90b";
+  color: #fff;
 }
 .icon-music:before {
-    content: "\e90c";
-    color: #fff;
+  content: "\e90c";
+  color: #fff;
 }
 .icon-warning:before {
-    content: "\e908";
-    color: #fff;
+  content: "\e908";
+  color: #fff;
 }
 .icon-close:before {
-    content: "\e909";
-    color: #fff;
+  content: "\e909";
+  color: #fff;
 }
 .icon-coin-outline:before {
-    content: "\e907";
-    color: #fff;
+  content: "\e907";
+  color: #fff;
 }
 .icon-coin:before {
-    content: "\e905";
-    color: #fff;
+  content: "\e905";
+  color: #fff;
 }
 .icon-user:before {
-    content: "\e906";
-    color: #fff;
+  content: "\e906";
+  color: #fff;
 }
 .icon-back:before {
-    content: "\e900";
-    color: #fff;
+  content: "\e900";
+  color: #fff;
 }
 .icon-guide:before {
-    content: "\e901";
-    color: #fff;
+  content: "\e901";
+  color: #fff;
 }
 .icon-home:before {
-    content: "\e902";
-    color: #fff;
+  content: "\e902";
+  color: #fff;
 }
 .icon-sound-off:before {
-    content: "\e903";
-    color: #fff;
+  content: "\e903";
+  color: #fff;
 }
 .icon-sound-on:before {
-    content: "\e904";
-    color: #fff;
+  content: "\e904";
+  color: #fff;
 }

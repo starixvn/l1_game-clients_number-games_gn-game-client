@@ -100,12 +100,15 @@ export class LobbyScoreboard extends Component<LobbyScoreboardProps, LobbyScoreb
                 <SwitchableScoreboard
                     rounds={settlements}
                     type="switch"
+                    className={Styles["scoreboard-lobby"]}
                     scoreboards={[
                         {
                             element: ctor,
                             arrange: ctor.arrange(BacBallBigRoadConverter.instance),
-                            column: 12,
+                            column: 13,
                             row: 6,
+                            blockClassName: Styles["scoreboard-lobby-block"],
+                            elementClassName: Styles["scoreboard-lobby-element"],
                         },
                     ]}
                 />

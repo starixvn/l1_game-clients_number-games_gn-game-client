@@ -14,6 +14,11 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-user-lobby:before {
+    content: "\e91c";
+    color: #00ff47;
+}
+
 .icon-pencil:before {
     content: "\e91a";
     font-size: 4.4rem;
@@ -66,7 +71,6 @@
 }
 .icon-clock:before {
     content: "\e910";
-    color: #fff;
 }
 .icon-music-off:before {
     content: "\e90d";
