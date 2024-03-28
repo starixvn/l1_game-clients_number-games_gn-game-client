@@ -14,15 +14,14 @@ import { GameBaseProps, Round } from "../../components/game-base/type";
 import PercentageStatistic from "../../components/game-components/statistic";
 import { TurnGameStateHandler } from "../../components/turn-base/turn-game-state-handler";
 import { TurnStateHandler } from "../../components/turn-base/turn-state-handler";
-import { BacBallResult, BacBallSettlementResult } from "../bac-ball/types";
-import { BacBallBetHistoryModal } from "../bac-ball/history";
-import Scoreboard from "../bac-ball/scoreboard";
-import { DrawIdBlock } from "../bac-ball/draw-id-block";
 import { BacBallBetOptions, StatisticRuleEntries } from "../bac-ball/constants";
-import NextBallResultBlock from "./next-ball-result-block";
+import { DrawIdBlock } from "../bac-ball/draw-id-block";
+import { BacBallBetHistoryModal } from "../bac-ball/history";
 import { NextBallBettingBlock } from "./next-ball-betting-block";
-import { NextBallResult, NextBallSettlementResult } from "./types";
 import { NextGameRoundDatatHandler } from "./next-ball-game-round-data-handler";
+import NextBallResultBlock from "./next-ball-result-block";
+import Scoreboard from "./scoreboard";
+import { NextBallResult, NextBallSettlementResult } from "./types";
 
 class NextBall extends GameBase<GameBaseProps> {
     private turnIdHandler?: TurnIdHandler;
@@ -88,7 +87,7 @@ class NextBall extends GameBase<GameBaseProps> {
     renderScoreboards() {
         const { roundHistory, isShowBlink } = this.props.gameStateContextModel;
 
-        return <Scoreboard isShowBlink={isShowBlink} roundHistory={roundHistory as Round<BacBallResult, BacBallSettlementResult>[]} />;
+        return <Scoreboard isShowBlink={isShowBlink} roundHistory={roundHistory as Round<NextBallResult, NextBallSettlementResult>[]} />;
     }
 
     renderRoundIdSection(): JSX.Element {

@@ -80,3 +80,49 @@
     height: 1.6rem;
     line-height: 1.6rem;
 }
+
+.positive {
+    @extend %statistic-icon;
+    --colorText: #ff5e5e;
+    background: url("/static/images/dot/dot-red-medium.svg") no-repeat;
+    background-size: contain;
+
+    &.big-road-tie {
+        @extend %big-road-tie-with-bet-choice;
+    }
+}
+
+.negative {
+    @extend %statistic-icon;
+    --colorText: #1c7bdf;
+    background: url("/static/images/dot/dot-blue-medium.svg") no-repeat;
+    background-size: contain;
+
+    &.big-road-tie {
+        @extend %big-road-tie-with-bet-choice;
+    }
+}
+
+.blink {
+    width: 1.4rem;
+    height: 1.4rem;
+    border-radius: 50%;
+    background-color: #fff38b;
+    opacity: 0.7;
+    animation: 0.5s ease-in-out 0s infinite normal both running pulsate-bck;
+}
+
+@keyframes pulsate-bck {
+    0% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+    50% {
+        -webkit-transform: scale(0.9);
+        transform: scale(0.9);
+    }
+    100% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+}

@@ -1,11 +1,10 @@
 import { Component, ReactNode } from "react";
 import { GameStateContextModel } from "../../../../../_shared/react-contexts/game-state-context/game-state-context-model";
-import { BacBallBigRoadConverter } from "../../../../../games/bac-ball/scoreboard-elements";
 import { BacBallSettlementResult } from "../../../../../games/bac-ball/types";
 import { GameSettings, Round } from "../../../../game-base/type";
 import { SwitchableScoreboard } from "../../../../game-components/round-history/scoreboard";
-import Styles from "../../lobby.module.scss";
 import { LobbyGameTransmitter } from "../../lobby-socket-connection";
+import Styles from "../../lobby.module.scss";
 
 const messageEventTypes = {
     ROUND_HISTORY: "roundHistory",
@@ -104,7 +103,7 @@ export class LobbyScoreboard extends Component<LobbyScoreboardProps, LobbyScoreb
                     scoreboards={[
                         {
                             element: ctor,
-                            arrange: ctor.arrange(BacBallBigRoadConverter.instance),
+                            arrange: ctor.arrange(converter.instance),
                             column: 13,
                             row: 6,
                             blockClassName: Styles["scoreboard-lobby-block"],
