@@ -1,0 +1,104 @@
+/*
+-------------------------------------------------------------------
+Created with TexturePacker https://www.codeandweb.com/texturepacker
+-------------------------------------------------------------------
+Inline:     <i class="yourspritesname"></i>
+Responsive: <div class="yourspritesname"></div>
+*/
+
+
+.number73_00 {max-width:153px; max-height:153px; }
+.number73_00::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 0% 0%;background-size: 500% 300%;background-image: url(73.png);padding: 0; }
+div.number73_00::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number73_01 {max-width:153px; max-height:153px; }
+.number73_01::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 0% 0%;background-size: 500% 300%;background-image: url(73.png);padding: 0; }
+div.number73_01::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number73_02 {max-width:153px; max-height:153px; }
+.number73_02::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 0% 0%;background-size: 500% 300%;background-image: url(73.png);padding: 0; }
+div.number73_02::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number73_03 {max-width:153px; max-height:153px; }
+.number73_03::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 0% 0%;background-size: 500% 300%;background-image: url(73.png);padding: 0; }
+div.number73_03::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number73_04 {max-width:153px; max-height:153px; }
+.number73_04::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 0% 0%;background-size: 500% 300%;background-image: url(73.png);padding: 0; }
+div.number73_04::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number73_05 {max-width:153px; max-height:153px; }
+.number73_05::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 0% 0%;background-size: 500% 300%;background-image: url(73.png);padding: 0; }
+div.number73_05::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number73_06 {max-width:153px; max-height:153px; }
+.number73_06::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 0% 0%;background-size: 500% 300%;background-image: url(73.png);padding: 0; }
+div.number73_06::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number73_07 {max-width:153px; max-height:153px; }
+.number73_07::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 0% 0%;background-size: 500% 300%;background-image: url(73.png);padding: 0; }
+div.number73_07::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number73_08 {max-width:153px; max-height:153px; }
+.number73_08::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 0% 0%;background-size: 500% 300%;background-image: url(73.png);padding: 0; }
+div.number73_08::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number73_09 {max-width:153px; max-height:153px; }
+.number73_09::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 0% 0%;background-size: 500% 300%;background-image: url(73.png);padding: 0; }
+div.number73_09::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number73_10 {max-width:153px; max-height:153px; }
+.number73_10::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 0% 0%;background-size: 500% 300%;background-image: url(73.png);padding: 0; }
+div.number73_10::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number73_11 {max-width:153px; max-height:153px; }
+.number73_11::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 0% 0%;background-size: 500% 300%;background-image: url(73.png);padding: 0; }
+div.number73_11::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number73_12 {max-width:153px; max-height:153px; }
+.number73_12::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 0% 0%;background-size: 500% 300%;background-image: url(73.png);padding: 0; }
+div.number73_12::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number73_13 {max-width:153px; max-height:153px; }
+.number73_13::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 0% 0%;background-size: 500% 300%;background-image: url(73.png);padding: 0; }
+div.number73_13::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number73_14 {max-width:153px; max-height:153px; }
+.number73_14::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 0% 0%;background-size: 500% 300%;background-image: url(73.png);padding: 0; }
+div.number73_14::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number73_15 {max-width:153px; max-height:153px; }
+.number73_15::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 0% 0%;background-size: 500% 300%;background-image: url(73.png);padding: 0; }
+div.number73_15::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number73_16 {max-width:153px; max-height:153px; }
+.number73_16::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 0% 0%;background-size: 500% 300%;background-image: url(73.png);padding: 0; }
+div.number73_16::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number73_17 {max-width:153px; max-height:153px; }
+.number73_17::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 25% 0%;background-size: 500% 300%;background-image: url(73.png);padding: 0; }
+div.number73_17::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number73_18 {max-width:153px; max-height:153px; }
+.number73_18::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 50% 0%;background-size: 500% 300%;background-image: url(73.png);padding: 0; }
+div.number73_18::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number73_19 {max-width:153px; max-height:153px; }
+.number73_19::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 75% 0%;background-size: 500% 300%;background-image: url(73.png);padding: 0; }
+div.number73_19::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number73_20 {max-width:153px; max-height:153px; }
+.number73_20::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 100% 0%;background-size: 500% 300%;background-image: url(73.png);padding: 0; }
+div.number73_20::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number73_21 {max-width:153px; max-height:153px; }
+.number73_21::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 0% 50%;background-size: 500% 300%;background-image: url(73.png);padding: 0; }
+div.number73_21::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number73_22 {max-width:153px; max-height:153px; }
+.number73_22::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 25% 50%;background-size: 500% 300%;background-image: url(73.png);padding: 0; }
+div.number73_22::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number73_23 {max-width:153px; max-height:153px; }
+.number73_23::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 50% 50%;background-size: 500% 300%;background-image: url(73.png);padding: 0; }
+div.number73_23::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number73_24 {max-width:153px; max-height:153px; }
+.number73_24::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 75% 50%;background-size: 500% 300%;background-image: url(73.png);padding: 0; }
+div.number73_24::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number73_25 {max-width:153px; max-height:153px; }
+.number73_25::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 100% 50%;background-size: 500% 300%;background-image: url(73.png);padding: 0; }
+div.number73_25::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number73_26 {max-width:153px; max-height:153px; }
+.number73_26::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 0% 100%;background-size: 500% 300%;background-image: url(73.png);padding: 0; }
+div.number73_26::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number73_27 {max-width:153px; max-height:153px; }
+.number73_27::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 25% 100%;background-size: 500% 300%;background-image: url(73.png);padding: 0; }
+div.number73_27::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number73_28 {max-width:153px; max-height:153px; }
+.number73_28::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 50% 100%;background-size: 500% 300%;background-image: url(73.png);padding: 0; }
+div.number73_28::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number73_29 {max-width:153px; max-height:153px; }
+.number73_29::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 75% 100%;background-size: 500% 300%;background-image: url(73.png);padding: 0; }
+div.number73_29::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number73_30 {max-width:153px; max-height:153px; }
+.number73_30::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 100% 100%;background-size: 500% 300%;background-image: url(73.png);padding: 0; }
+div.number73_30::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+
+/* $TexturePacker:SmartUpdate:20e9305eb9e75dba5ee83c9d4468a8b7:54e4160a28ea3c2cb05695cb28222425:a4d44abc3c2a9afa5060f86169bf99ad$ */

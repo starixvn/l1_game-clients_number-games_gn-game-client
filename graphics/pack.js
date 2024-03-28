@@ -334,9 +334,7 @@ function parseOptions(options, inputDir) {
     } else {
         flattenedParams.push("--disable-rotation");
     }
-    if (options.auto_alias) {
-        flattenedParams.push("--disable-auto-alias");
-    }
+    flattenedParams.push("--disable-auto-alias");
     if (options.force_identical_layout) {
         flattenedParams.push("--force-identical-layout");
     }

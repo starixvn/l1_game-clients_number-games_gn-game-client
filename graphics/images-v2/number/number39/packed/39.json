@@ -1,0 +1,104 @@
+/*
+-------------------------------------------------------------------
+Created with TexturePacker https://www.codeandweb.com/texturepacker
+-------------------------------------------------------------------
+Inline:     <i class="yourspritesname"></i>
+Responsive: <div class="yourspritesname"></div>
+*/
+
+
+.number39_00 {max-width:153px; max-height:153px; }
+.number39_00::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 0% 0%;background-size: 500% 300%;background-image: url(39.png);padding: 0; }
+div.number39_00::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number39_01 {max-width:153px; max-height:153px; }
+.number39_01::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 0% 0%;background-size: 500% 300%;background-image: url(39.png);padding: 0; }
+div.number39_01::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number39_02 {max-width:153px; max-height:153px; }
+.number39_02::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 0% 0%;background-size: 500% 300%;background-image: url(39.png);padding: 0; }
+div.number39_02::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number39_03 {max-width:153px; max-height:153px; }
+.number39_03::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 0% 0%;background-size: 500% 300%;background-image: url(39.png);padding: 0; }
+div.number39_03::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number39_04 {max-width:153px; max-height:153px; }
+.number39_04::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 0% 0%;background-size: 500% 300%;background-image: url(39.png);padding: 0; }
+div.number39_04::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number39_05 {max-width:153px; max-height:153px; }
+.number39_05::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 0% 0%;background-size: 500% 300%;background-image: url(39.png);padding: 0; }
+div.number39_05::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number39_06 {max-width:153px; max-height:153px; }
+.number39_06::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 0% 0%;background-size: 500% 300%;background-image: url(39.png);padding: 0; }
+div.number39_06::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number39_07 {max-width:153px; max-height:153px; }
+.number39_07::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 0% 0%;background-size: 500% 300%;background-image: url(39.png);padding: 0; }
+div.number39_07::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number39_08 {max-width:153px; max-height:153px; }
+.number39_08::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 0% 0%;background-size: 500% 300%;background-image: url(39.png);padding: 0; }
+div.number39_08::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number39_09 {max-width:153px; max-height:153px; }
+.number39_09::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 0% 0%;background-size: 500% 300%;background-image: url(39.png);padding: 0; }
+div.number39_09::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number39_10 {max-width:153px; max-height:153px; }
+.number39_10::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 0% 0%;background-size: 500% 300%;background-image: url(39.png);padding: 0; }
+div.number39_10::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number39_11 {max-width:153px; max-height:153px; }
+.number39_11::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 0% 0%;background-size: 500% 300%;background-image: url(39.png);padding: 0; }
+div.number39_11::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number39_12 {max-width:153px; max-height:153px; }
+.number39_12::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 0% 0%;background-size: 500% 300%;background-image: url(39.png);padding: 0; }
+div.number39_12::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number39_13 {max-width:153px; max-height:153px; }
+.number39_13::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 0% 0%;background-size: 500% 300%;background-image: url(39.png);padding: 0; }
+div.number39_13::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number39_14 {max-width:153px; max-height:153px; }
+.number39_14::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 0% 0%;background-size: 500% 300%;background-image: url(39.png);padding: 0; }
+div.number39_14::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number39_15 {max-width:153px; max-height:153px; }
+.number39_15::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 0% 0%;background-size: 500% 300%;background-image: url(39.png);padding: 0; }
+div.number39_15::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number39_16 {max-width:153px; max-height:153px; }
+.number39_16::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 0% 0%;background-size: 500% 300%;background-image: url(39.png);padding: 0; }
+div.number39_16::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number39_17 {max-width:153px; max-height:153px; }
+.number39_17::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 25% 0%;background-size: 500% 300%;background-image: url(39.png);padding: 0; }
+div.number39_17::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number39_18 {max-width:153px; max-height:153px; }
+.number39_18::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 50% 0%;background-size: 500% 300%;background-image: url(39.png);padding: 0; }
+div.number39_18::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number39_19 {max-width:153px; max-height:153px; }
+.number39_19::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 75% 0%;background-size: 500% 300%;background-image: url(39.png);padding: 0; }
+div.number39_19::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number39_20 {max-width:153px; max-height:153px; }
+.number39_20::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 100% 0%;background-size: 500% 300%;background-image: url(39.png);padding: 0; }
+div.number39_20::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number39_21 {max-width:153px; max-height:153px; }
+.number39_21::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 0% 50%;background-size: 500% 300%;background-image: url(39.png);padding: 0; }
+div.number39_21::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number39_22 {max-width:153px; max-height:153px; }
+.number39_22::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 25% 50%;background-size: 500% 300%;background-image: url(39.png);padding: 0; }
+div.number39_22::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number39_23 {max-width:153px; max-height:153px; }
+.number39_23::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 50% 50%;background-size: 500% 300%;background-image: url(39.png);padding: 0; }
+div.number39_23::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number39_24 {max-width:153px; max-height:153px; }
+.number39_24::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 75% 50%;background-size: 500% 300%;background-image: url(39.png);padding: 0; }
+div.number39_24::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number39_25 {max-width:153px; max-height:153px; }
+.number39_25::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 100% 50%;background-size: 500% 300%;background-image: url(39.png);padding: 0; }
+div.number39_25::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number39_26 {max-width:153px; max-height:153px; }
+.number39_26::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 0% 100%;background-size: 500% 300%;background-image: url(39.png);padding: 0; }
+div.number39_26::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number39_27 {max-width:153px; max-height:153px; }
+.number39_27::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 25% 100%;background-size: 500% 300%;background-image: url(39.png);padding: 0; }
+div.number39_27::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number39_28 {max-width:153px; max-height:153px; }
+.number39_28::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 50% 100%;background-size: 500% 300%;background-image: url(39.png);padding: 0; }
+div.number39_28::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number39_29 {max-width:153px; max-height:153px; }
+.number39_29::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 75% 100%;background-size: 500% 300%;background-image: url(39.png);padding: 0; }
+div.number39_29::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+.number39_30 {max-width:153px; max-height:153px; }
+.number39_30::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 100% 100%;background-size: 500% 300%;background-image: url(39.png);padding: 0; }
+div.number39_30::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
+
+/* $TexturePacker:SmartUpdate:01bf17e5e12997ac0558019669d08ef7:c41dbaee03de108c3c491f71b02b357f:dc95164bd4702961f51b9a33ad58d29a$ */
