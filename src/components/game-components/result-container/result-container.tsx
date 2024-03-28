@@ -71,8 +71,7 @@ export const ResultSlotContainer: React.FC<IResultSlotContainer> = (props) => {
             </div>
         );
     }
-    console.log(`roundData: ${JSON.stringify(roundData)}`)
-    console.log(`ballsData: ${JSON.stringify(ballsData)}`)
+
     return (
         <div className={`${Style["ball-container"]} ${className}`}>
             {ballsData.map((result, index) => {

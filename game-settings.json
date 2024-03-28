@@ -61,5 +61,26 @@
         },
         "totalTurns": 8,
         "numberOfRoundHistory": 100
+    },
+    "1004": {
+        "id": 1004,
+        "gameName": "NextBall2",
+        "tolgeeNamespace": "BacBall",
+        "socketInfo": {
+            "namespace": "nextball2",
+            "path": "nextball2"
+        },
+        "durations": {
+            "wholeRound": 212,
+            "wholeTurn": 26,
+            "placingBets": 20,
+            "lockingBet": 3,
+            "showResult": 6,
+            "resultAnimation": 3,
+            "beforePlaceBet": 0,
+            "switchRoundAnimation": 4
+        },
+        "totalTurns": 8,
+        "numberOfRoundHistory": 100
     }
 }
