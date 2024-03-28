@@ -4,8 +4,8 @@
 
 .game-board-detail {
     background: url("/static/images/lobby/game-board-detail/bg-game-board.svg") no-repeat top center;
-
-    margin: 0 0.8rem;
+    max-width: 35.9rem;
+    margin: 0 auto;
     position: relative;
     display: flex;
     gap: 1rem;
