@@ -27,7 +27,8 @@ export async function useCustomStartup(): Promise<void> {
     const locale = languageMapper[session?.language] || languageMapper[language];
     const isTimeout = !session || (!session?.isUM && !session?.isAuthenticated);
 
-    tolgee.changeLanguage(locale);
+    await tolgee.changeLanguage(locale);
+
     player.locale = locale;
 
     if (isTimeout) {
