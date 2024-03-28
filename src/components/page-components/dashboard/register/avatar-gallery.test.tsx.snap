@@ -3,7 +3,7 @@
 exports[`AvatarGallery render should match the snapshot 1`] = `
 <div>
   <div
-    class="gallery-wrapper"
+    class="gallery-wrapper "
   >
     <div
       class="popup modal-center  "

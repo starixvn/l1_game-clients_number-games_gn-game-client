@@ -40,7 +40,7 @@ export function AvatarGallery({ selectedAvatarId, onSelectAvatar, onClose, class
     };
 
     return (
-        <div className={`${Styles["gallery-wrapper"]} ${classCustomize}`}>
+        <div className={`${Styles["gallery-wrapper"]} ${classCustomize ?? ""}`}>
             <BaseDialog type={ModalType.Center} isOpen={true} onCloseModal={onClose}>
                 <h1 className={Styles["gallery-title"]}>{t("SabaNumber.change_avatar")}</h1>
                 <div className={`icon-close ${Styles["icon-close"]}`} onClick={onClose} data-testid="btn-close-gallery"></div>
