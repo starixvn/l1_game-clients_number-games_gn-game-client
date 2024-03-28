@@ -1,14 +1,18 @@
 import { stub } from "jest-auto-stub";
-
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 import { BacBallResult } from "../../../games/bac-ball/types";
 import { IRoundStateHandler } from "../../round-base/round-state-handler";
-import { Round } from "../type";
+import { Round, RoundState } from "../type";
 import { GameFinishHandler, GameFinishHandlerProps } from "./game-finish-handler";
 import { GameMessageHandler, messageEventType } from "./game-message-handler";
 import { PlaceBetHandler } from "./place-bet-handler";
+import { GameRoundDatatHandler } from "./game-round-data-handler";
+import { GameStateContextModel } from "../../../_shared/react-contexts/game-state-context/game-state-context-model";
 
 jest.useFakeTimers();
+jest.mock("../../../_shared/react-contexts/game-state-context/game-state-context", () => ({
+    useGameStateContext: jest.fn(),
+}));
 
 describe("GameFinishHandler", () => {
     let mockFinish: Round<BacBallResult, object>;
@@ -17,16 +21,23 @@ describe("GameFinishHandler", () => {
     let placeBetHandler: PlaceBetHandler;
     let roundStateHandler: IRoundStateHandler;
     let gameFinishPros: GameFinishHandlerProps;
+    let gameRoundDatatHandler: GameRoundDatatHandler;
+    let buildGameRoundDataAfterReceiveFinishEvent: jest.Mock;
 
     beforeEach(() => {
+        buildGameRoundDataAfterReceiveFinishEvent = jest.fn();
         gameFinishPros = stub<GameFinishHandlerProps>();
         gameMessageHandler = stub<GameMessageHandler>({ broadcastGameEvent: jest.fn(), register: jest.fn() });
+        gameRoundDatatHandler = stub<GameRoundDatatHandler>({ buildGameRoundDataAfterReceiveFinishEvent });
         placeBetHandler = stub<PlaceBetHandler>();
         roundStateHandler = stub<IRoundStateHandler>();
         gameFinishPros.dispatch = jest.fn();
         gameFinishPros.gameMessageHandler = gameMessageHandler;
         gameFinishPros.placeBetHandler = placeBetHandler;
+        gameFinishPros.gameRoundDatatHandler = gameRoundDatatHandler;
         gameFinishPros.roundStateHandler = roundStateHandler;
+        gameFinishPros.gameStateContextModel = jest.fn().mockReturnValue({ roundState: RoundState.InRound } as GameStateContextModel);
+
         gameFinishHandler = new GameFinishHandler(gameFinishPros);
     });
 
@@ -69,6 +80,7 @@ describe("GameFinishHandler", () => {
                 drawId,
             };
 
+            buildGameRoundDataAfterReceiveFinishEvent.mockReturnValue(roundData);
             // Act
             gameFinishHandler.handleFinish({ finish: mockFinish });
 
