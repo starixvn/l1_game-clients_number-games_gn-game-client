@@ -1,11 +1,12 @@
 import { Socket } from "socket.io-client";
 import { BackgroundGalaxy } from "../background";
+import ChangeAvatar from "../change-avatar";
 import { ILobbyConfigs } from "../dashboard/type";
 import MusicPlayer from "../music-player";
 import Settings from "../settings";
 import { Banner } from "./games/components/banner";
-import Styles from "./lobby.module.scss";
 import { LobbyLayout } from "./games/lobby-layout";
+import Styles from "./lobby.module.scss";
 
 type Props = {
     openGame: Function;
@@ -22,6 +23,7 @@ export const Lobby: React.FC<Props> = ({ openGame, lobbyConfigs, socket, gameTra
             <LobbyLayout lobbyConfigs={lobbyConfigs} socket={socket} gameTransmitters={gameTransmitters} openGame={openGame} />
             <Settings />
             <MusicPlayer />
+            <ChangeAvatar />
         </div>
     );
 };

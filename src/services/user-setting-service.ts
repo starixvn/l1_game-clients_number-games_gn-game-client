@@ -10,3 +10,7 @@ export const updateUserQuickBetSetting = async (session: SSOResponse, value: boo
 export const updateSignInSMStatus = async (userSession: SSOResponse) => {
     return userSettingsService.updateSignInSMStatus(userSession.ss, userSession.username);
 };
+
+export const updateUserAvatar = async (userSession: SSOResponse, avatarId: number) => {
+    return userSettingsService.updateAvatar(userSession.ss, userSession.username, avatarId);
+};

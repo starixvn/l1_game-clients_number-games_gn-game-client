@@ -1,12 +1,20 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { isIOS, isMobileOnly } from "react-device-detect";
 
 import { numberRoundDownWithCommas } from "../../../../_shared/helpers/number-helper";
-import { usePlayerContext } from "../../../../_shared/react-contexts";
+import { SettingEventActionType, usePlayerContext, useSettingContext, useSettingDispatch } from "../../../../_shared/react-contexts";
+import { useClickSound } from "../../../../_shared/react-hooks";
 import { MAX_AVATAR_ID } from "../../dashboard/register/avatar-gallery";
 import Styles from "./user-info.module.scss";
 
-export const UserInfo: React.FC<{ customizeClass?: string }> = ({ customizeClass }) => {
+export const UserInfo: React.FC<{
+    customizeClass?: string;
+    isLobby: boolean;
+}> = ({ customizeClass, isLobby }) => {
+    const clickSound = useClickSound();
+    const [avatarId, setAvatarId] = useState<number>();
+    const settingContext = useSettingContext();
+    const settingDispatch = useSettingDispatch();
     const { authorizeInfo } = usePlayerContext();
     const user = authorizeInfo.user;
     let deviceClass = "";
@@ -18,6 +26,24 @@ export const UserInfo: React.FC<{ customizeClass?: string }> = ({ customizeClass
     if (user.isDisplayPlayerCurrency) {
         currencyUser = user.currency;
     }
+
+    const handleClickAvatar = () => {
+        if (isLobby) {
+            clickSound();
+            settingDispatch({
+                type: SettingEventActionType.SHOW_AVATAR_GALLERY,
+                payload: {
+                    isShowAvatarGallery: true,
+                },
+            });
+        }
+    };
+
+    useEffect(() => {
+        if (settingContext.avatarId > 0 || user.avatarId) {
+            setAvatarId(settingContext.avatarId > 0 ? settingContext.avatarId : user.avatarId);
+        }
+    }, [user, settingContext.avatarId]);
 
     return (
         <div className={`${Styles["user"]} ${customizeClass ? Styles[customizeClass] : ""} ${deviceClass}`}>
@@ -31,15 +57,9 @@ export const UserInfo: React.FC<{ customizeClass?: string }> = ({ customizeClass
                     <img src="/static/images/icon-coin.svg" className="img-fluid" alt="icon-coin" />
                 </div>
             </div>
-            <div className={Styles["avatar"]}>
-                {user.avatarId > 0 && user.avatarId <= MAX_AVATAR_ID ? (
-                    <img
-                        src={`/static/images/avatar/${user.avatarId}.jpg`}
-                        className="img-fluid circle"
-                        height="40"
-                        width="40"
-                        alt="Avatar"
-                    />
+            <div className={Styles["avatar"]} onClick={handleClickAvatar}>
+                {avatarId > 0 && avatarId <= MAX_AVATAR_ID ? (
+                    <img src={`/static/images/avatar/${avatarId}.jpg`} className="img-fluid circle" height="40" width="40" alt="Avatar" />
                 ) : (
                     <span className={`icon-user ${Styles["icon-user"]}`} data-testid="icon-user"></span>
                 )}

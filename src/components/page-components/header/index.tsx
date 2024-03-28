@@ -14,14 +14,16 @@ export const getLogoName = () => {
 };
 
 const Header: React.FC<Props> = (props) => {
+    const { isRenderGames, openingGameId } = props;
+
     return (
         <header className={`${Styles.header}`} data-testid="header">
             <div className="game-container d-flex">
                 <div className={Styles["header-container"]}>
-                    <HeaderTitle isRenderGames={props.isRenderGames} openingGameId={props.openingGameId} />
+                    <HeaderTitle isRenderGames={isRenderGames} openingGameId={openingGameId} />
                     <div className={Styles["header-right"]}>
-                        <UserInfo />
-                        {!props.isRenderGames && <Setting />}
+                        <UserInfo isLobby={!isRenderGames} />
+                        {!isRenderGames && <Setting />}
                     </div>
                 </div>
             </div>

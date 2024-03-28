@@ -10,8 +10,9 @@ export const MAX_AVATAR_ID = 40;
 
 export type AvatarGalleryProps = {
     selectedAvatarId: number;
-    onSelectAvatar: (imgId: number) => void;
+    onSelectAvatar: (imgId: number) => Promise<void>;
     onClose: () => void;
+    classCustomize?: any;
 };
 
 export type AvatarsProps = {
@@ -29,17 +30,17 @@ export function Avatars({ onSelect, selected }: AvatarsProps): ReactNode {
     return avatars;
 }
 
-export function AvatarGallery({ selectedAvatarId, onSelectAvatar, onClose }: AvatarGalleryProps): ReactNode {
+export function AvatarGallery({ selectedAvatarId, onSelectAvatar, onClose, classCustomize }: AvatarGalleryProps): ReactNode {
     const { t } = useTranslator();
     const [selectedId, setSelectedId] = useState<number>(selectedAvatarId);
 
-    function onSubmit() {
-        onSelectAvatar(selectedId);
+    const onSubmit = async () => {
+        await onSelectAvatar(selectedId);
         onClose();
-    }
+    };
 
     return (
-        <div className={Styles["gallery-wrapper"]}>
+        <div className={`${Styles["gallery-wrapper"]} ${classCustomize}`}>
             <BaseDialog type={ModalType.Center} isOpen={true} onCloseModal={onClose}>
                 <h1 className={Styles["gallery-title"]}>{t("SabaNumber.change_avatar")}</h1>
                 <div className={`icon-close ${Styles["icon-close"]}`} onClick={onClose} data-testid="btn-close-gallery"></div>
