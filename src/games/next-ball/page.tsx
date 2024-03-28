@@ -14,7 +14,6 @@ import { GameBaseProps, Round } from "../../components/game-base/type";
 import PercentageStatistic from "../../components/game-components/statistic";
 import { TurnGameStateHandler } from "../../components/turn-base/turn-game-state-handler";
 import { TurnStateHandler } from "../../components/turn-base/turn-state-handler";
-import { BacBallBetOptions, StatisticRuleEntries } from "../bac-ball/constants";
 import { DrawIdBlock } from "../bac-ball/draw-id-block";
 import { BacBallBetHistoryModal } from "../bac-ball/history";
 import { NextBallBettingBlock } from "./next-ball-betting-block";
@@ -22,6 +21,7 @@ import { NextGameRoundDatatHandler } from "./next-ball-game-round-data-handler";
 import NextBallResultBlock from "./next-ball-result-block";
 import Scoreboard from "./scoreboard";
 import { NextBallResult, NextBallSettlementResult } from "./types";
+import { NextBallBetOptions } from "./next-ball-constants";
 
 class NextBall extends GameBase<GameBaseProps> {
     private turnIdHandler?: TurnIdHandler;
@@ -81,7 +81,8 @@ class NextBall extends GameBase<GameBaseProps> {
     renderStatistic() {
         const { roundHistory } = this.props.gameStateContextModel;
 
-        return <PercentageStatistic roundHistory={roundHistory} statisticRuleEntries={StatisticRuleEntries} />;
+        return <></>;
+        // return <PercentageStatistic roundHistory={roundHistory} statisticRuleEntries={ } />;
     }
 
     renderScoreboards() {
@@ -117,7 +118,10 @@ const NextBalllFC = (props) => {
                 systemDispatch: useSystemDispatch(),
                 translate: t,
                 tolgeeNamespace,
-                hedgeBetGroups: [[BacBallBetOptions.PLAYER, BacBallBetOptions.BANKER]],
+                hedgeBetGroups: [
+                    [NextBallBetOptions.OVER, NextBallBetOptions.UNDER],
+                    [NextBallBetOptions.ODD, NextBallBetOptions.EVEN]
+                ],
             }}
         />
     );

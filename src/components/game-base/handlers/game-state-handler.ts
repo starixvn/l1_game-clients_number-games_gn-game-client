@@ -45,7 +45,7 @@ export class GameStateHandler implements IGameStateHandler {
                     state: { betWin: 0 },
                 },
                 {
-                    condition: [RoundState.BeforePlaceBet, RoundState.InRound].includes(nextRoundState),
+                    condition: [RoundState.SwitchRound, RoundState.BeforePlaceBet, RoundState.InRound].includes(nextRoundState),
                     state: {
                         ownBets: {},
                         totalBets: {},
