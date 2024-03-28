@@ -82,7 +82,7 @@ const BetDetailBase: FC<{
                 return { node: <div className={hightlight ? "highlight" : ""}>{item}</div> };
             }),
             {
-                node: <div className={win > 0 ? "highlight" : ""}>{numberWithCommas(win)}</div>,
+                node: <div className={hightlight ? "highlight" : ""}>{numberWithCommas(win)}</div>,
             },
         ];
         return content;
