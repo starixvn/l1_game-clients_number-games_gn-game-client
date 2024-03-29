@@ -8,10 +8,12 @@ import { NextBallBetOptions } from "./constants";
 import styles from "./scoreboard-elements.module.scss";
 import { NextBallResult, NextBallSettlementResult } from "./types";
 
-export function createBeadRoadElement(isOddEven: boolean) {
+export const ODD_EVEN_AS_DEFAULT_SCOREBOARD = true;
+
+export function createBeadRoadElement(isOddEven: boolean = ODD_EVEN_AS_DEFAULT_SCOREBOARD) {
     class Element extends BeadRoadElement<Round<NextBallResult, NextBallSettlementResult>> {
         renderElement(round: Round<NextBallResult, NextBallSettlementResult>, t?: (key: string) => string): ReactNode {
-            const character = (betChoice) => ""; // t(`NextBall.beadboard_${betChoice}`);
+            const character = (betChoice: string) => t(`NextBall.beadboard_${betChoice}`);
 
             if (!round.settlementResult) {
                 return <span className={`${styles.blink}`}></span>;
@@ -19,15 +21,15 @@ export function createBeadRoadElement(isOddEven: boolean) {
 
             if (isOddEven) {
                 return round.settlementResult.odd ? (
-                    <span className={styles.positive}>{character(NextBallBetOptions.ODD)}</span>
+                    <span className={styles.red}>{character(NextBallBetOptions.ODD)}</span>
                 ) : (
-                    <span className={`${styles.negative}`}>{character(NextBallBetOptions.EVEN)}</span>
+                    <span className={`${styles.blue}`}>{character(NextBallBetOptions.EVEN)}</span>
                 );
             } else {
                 return round.settlementResult.over ? (
-                    <span className={`${styles.positive}`}>{character(NextBallBetOptions.OVER)}</span>
+                    <span className={`${styles.red}`}>{character(NextBallBetOptions.OVER)}</span>
                 ) : (
-                    <span className={`${styles.negative}`}>{character(NextBallBetOptions.UNDER)}</span>
+                    <span className={`${styles.blue}`}>{character(NextBallBetOptions.UNDER)}</span>
                 );
             }
         }
@@ -58,9 +60,9 @@ export class NextBallBigRoadConverter extends Converter<NextBallSettlementResult
         rounds.unshift(blinkRound);
     }
 
-    static instance = NextBallBigRoadConverter.getInstance(true);
+    static instance = NextBallBigRoadConverter.getInstance(ODD_EVEN_AS_DEFAULT_SCOREBOARD);
 
-    static getInstance(isOddEven: boolean) {
+    static getInstance(isOddEven: boolean = ODD_EVEN_AS_DEFAULT_SCOREBOARD) {
         return new NextBallBigRoadConverter(isOddEven);
     }
 
@@ -77,7 +79,7 @@ export class NextBallBigRoadConverter extends Converter<NextBallSettlementResult
     }
 }
 
-export function createBigRoadElement(isOddEven: boolean) {
+export function createBigRoadElement(isOddEven: boolean = ODD_EVEN_AS_DEFAULT_SCOREBOARD) {
     return class Element extends BigRoadElement<NextBallSettlementResult> {
         renderElement(round: BigRoadRound<NextBallSettlementResult>): ReactNode {
             const positive = round.data.some((result) => (isOddEven ? result.odd : result.over));
@@ -86,12 +88,12 @@ export function createBigRoadElement(isOddEven: boolean) {
             if (isBlinkNode) {
                 return <span className={styles.blink}></span>;
             } else if (positive) {
-                return <span className={styles.positive}></span>;
+                return <span className={styles.red}></span>;
             } else {
-                return <span className={styles.negative}></span>;
+                return <span className={styles.blue}></span>;
             }
         }
     };
 }
 
-registerBigRoadElement(createBigRoadElement(true), NextBallBigRoadConverter, 1003, 1004);
+registerBigRoadElement(createBigRoadElement(ODD_EVEN_AS_DEFAULT_SCOREBOARD), NextBallBigRoadConverter, 1003, 1004);

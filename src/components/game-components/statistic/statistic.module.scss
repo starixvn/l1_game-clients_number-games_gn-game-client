@@ -81,26 +81,25 @@
     line-height: 1.6rem;
 }
 
-.positive {
+.red {
     @extend %statistic-icon;
     --colorText: #ff5e5e;
     background: url("/static/images/dot/dot-red-medium.svg") no-repeat;
     background-size: contain;
-
-    &.big-road-tie {
-        @extend %big-road-tie-with-bet-choice;
-    }
 }
 
-.negative {
+.blue {
     @extend %statistic-icon;
     --colorText: #1c7bdf;
     background: url("/static/images/dot/dot-blue-medium.svg") no-repeat;
     background-size: contain;
+}
 
-    &.big-road-tie {
-        @extend %big-road-tie-with-bet-choice;
-    }
+.green {
+    @extend %statistic-icon;
+    --colorText: #3eac3e;
+    background: url("/static/images/dot/dot-green-medium.svg") no-repeat;
+    background-size: contain;
 }
 
 .blink {
