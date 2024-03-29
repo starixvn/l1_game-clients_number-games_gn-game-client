@@ -28,10 +28,10 @@ export const BannerSwiper: React.FC<{ banners: IBanner[]; openGame: Function }> 
 
     return (
         <Swiper
-            slidesOffsetBefore={20}
+            slidesOffsetBefore={8}
             loop={true}
             rewind={true}
-            slidesPerView={1}
+            slidesPerView={"auto"}
             spaceBetween={8}
             pagination={{ clickable: true }}
             modules={[Pagination, Autoplay]}
@@ -46,6 +46,9 @@ export const BannerSwiper: React.FC<{ banners: IBanner[]; openGame: Function }> 
             longSwipes={false}
             threshold={10}
             ref={swiperRef}
+            grid={{ fill: "row" }}
+            roundLengths={true}
+            shortSwipes={true}
         >
             {banners.map((banner) => {
                 if (!banner?.path) {
