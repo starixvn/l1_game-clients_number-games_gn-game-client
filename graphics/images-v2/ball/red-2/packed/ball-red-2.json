@@ -101,4 +101,4 @@ div.red2_29::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
 .red2_30::after {content: '\00a0';display: inline-block; width:153px; height:153px; background-position: 85.71428571428571% 100%;background-size: 800% 400%;background-image: url(ball-red-2.png);padding: 0; }
 div.red2_30::after {max-width:153px; width:100%;height:0;padding: 0 0 100% 0;}
 
-/* $TexturePacker:SmartUpdate:ab1a7561b25b39d00232553ec4930254:22f357970291c1f0ae72880297224df0:f8c34460a5698312672c84df52bee9ad$ */
+/* $TexturePacker:SmartUpdate:3723895f8db98c4532d1d480a2264a79:22f357970291c1f0ae72880297224df0:f8c34460a5698312672c84df52bee9ad$ */

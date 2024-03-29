@@ -15,14 +15,14 @@
             ]
         }
     ],
-    "options": {
+     "options": {
         "params": [
             ["--maxrects-heuristics", "Best"],
             ["--scale-mode", "Smooth"],
             ["--pack-mode", "Best"],
             ["--shape-padding", 0],
             ["--format", "css"],
-            ["--algorithm", "Grid / Strip"],
+            ["--algorithm", "Grid"],
             ["--basic-sort-by", "Name"],
             ["--opt", "RGBA8888"],
             ["--max-height", 2048],
