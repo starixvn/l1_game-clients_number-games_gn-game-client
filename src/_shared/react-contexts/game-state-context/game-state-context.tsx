@@ -133,22 +133,9 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
         }
 
         case GameEventActionType.ROUND_DATA: {
-            // if (state.drawId != state?.pfClientSeedSetting?.drawId) {
-            //     console.log("Decide", state.drawId);
-            //     return {
-            //         ...state,
-            //         roundData,
-            //         pfClientSeedSetting: {
-            //             ...state.pfClientSeedSetting,
-            //             drawId: state.drawId,
-            //             randomClientSeed: randomNumberSeries(4),
-            //         },
-            //     };
-            // }
-
             return {
                 ...state,
-                roundData,
+                roundData: state.roundState === RoundState.SwitchRound ? {} : roundData,
             };
         }
 
