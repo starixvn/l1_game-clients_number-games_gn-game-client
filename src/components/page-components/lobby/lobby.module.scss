@@ -1,3 +1,8 @@
+@mixin background-opacity($color, $opacity) {
+    background: $color;
+    background: rgba($color, $opacity);
+}
+
 .lobby-container {
     padding-top: 4rem;
 }
@@ -20,9 +25,9 @@
         opacity: 0.7;
         border-radius: 1.9rem;
         position: absolute;
-        height: 100%;
-        width: 35.9rem;
-        margin-right: 8px;
+        height: 13.9rem;
+        width: 36rem;
+        left: -0.1rem;
     }
 
     .error-message {
@@ -75,6 +80,8 @@
     position: relative;
     width: 13rem;
     height: 13.8rem;
+    $color: var(--bgHex);
+    $opacity: 0.5;
 
     &::before {
         content: "";
@@ -113,25 +120,38 @@
         height: 2rem;
         display: flex;
         justify-content: center;
-        align-items: center;
+        align-items: baseline;
         gap: 0.4rem;
         border-radius: 4rem;
         background: linear-gradient(-90deg, rgba(10, 18, 64, 0.8) 0%, rgba(21, 27, 86, 0.8) 100%);
         font-size: 1.1rem;
         color: #a7a7a7;
+        padding-top: 0.3rem;
     }
 
     .user-playing-value {
+        align-items: center;
         color: #fff;
         padding-right: 0.2rem;
         font-family: "ProximaNova", sans-serif;
         font-variant-numeric: tabular-nums;
-        height: 1.8rem;
-        line-height: 1.9;
     }
 
     &.bacball1 {
-        --bgGradient: linear-gradient(0deg, rgba(255, 206, 0, 1) 0%, rgba(255, 206, 0, 0) 50%);
+        --bgHex: #00ff47;
+        --bgGradient: linear-gradient(0deg, rgba(255, 206, 0, 1) 0%, rgba(255, 206, 0, 0.5) 38%, rgba(255, 206, 0, 0) 50%);
+    }
+
+    &.bacball2 {
+        --bgGradient: linear-gradient(0deg, rgba(0, 255, 71, 1) 0%, rgba(0, 255, 71, 0.5) 38%, rgba(0, 255, 71, 0) 50%);
+    }
+
+    &.nextball1 {
+        --bgGradient: linear-gradient(0deg, rgba(36, 227, 216, 1) 0%, rgba(36, 227, 216, 0.5) 38%, rgba(36, 227, 216, 0) 50%);
+    }
+
+    &.nextball2 {
+        --bgGradient: linear-gradient(0deg, rgba(0, 10, 255, 1) 0%, rgba(0, 10, 255, 0.5) 38%, rgba(0, 10, 255, 0) 50%);
     }
 }
 

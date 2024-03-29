@@ -49,6 +49,13 @@
 }
 
 @font-face {
+    font-family: "ProximaNova";
+    src: url("/static/fonts/ProximaNovaRegular.otf") format("opentype");
+    font-weight: 500;
+    font-display: swap;
+}
+
+@font-face {
     font-family: "Tahoma Fallback";
     src: local(Tahoma);
     size-adjust: 94%;
