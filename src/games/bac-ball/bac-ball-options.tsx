@@ -100,9 +100,6 @@ export const BacBallBetOptionsComponent = () => {
                 settlementResult={settlementResult}
                 choice={choice}
                 resourceName={BacBallBetOptions.PLAYER}
-                width={210}
-                height={210}
-                position={[90, 95]}
             />
         );
         const winningPrev = renderHighlightWinningPrevResult(choice);
@@ -153,9 +150,6 @@ export const BacBallBetOptionsComponent = () => {
                 showResultInfo={showResultInfo}
                 choice={BacBallBetOptions.TIE}
                 resourceName={BacBallBetOptions.TIE}
-                width={210}
-                height={210}
-                position={[105, 90]}
                 className="absolute"
             />
         );

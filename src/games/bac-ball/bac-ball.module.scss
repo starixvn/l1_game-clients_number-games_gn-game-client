@@ -220,7 +220,7 @@
     .disable-layer {
         position: absolute;
         left: -0.1rem;
-        top: -1px;
+        top: -0.1rem;
         width: 9.6rem;
         height: 17.6rem;
         background: url("/static/images/bac-number/tie-disabled-layer.png") no-repeat;
@@ -228,6 +228,19 @@
         opacity: 0;
         animation: show-disabled-layer 0.3s ease-in forwards;
     }
+}
+
+.winning-light-anim-player,
+.winning-light-anim-banker {
+    position: relative;
+    top: -1rem;
+    left: -1.1rem;
+}
+
+.winning-light-anim-tie {
+    position: relative;
+    top: -1.5rem;
+    left: 0.5rem;
 }
 
 .winning-effect {
@@ -238,7 +251,7 @@
 %winning-effect {
     position: absolute;
     opacity: 0;
-    animation: winning-bg 1.6s 3 linear;
+    animation: winning-bg 1.6s infinite linear;
 }
 
 .winning-player,

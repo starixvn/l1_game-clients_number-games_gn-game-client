@@ -1,47 +1,40 @@
-import { AnimatedSprite, Container, Stage } from "@pixi/react";
-import { Resource, Texture } from "pixi.js";
 import React, { useMemo } from "react";
 
 import { RoundState } from "../../game-base/type";
+import { Spritesheet } from "../sprites-sheet";
 import Styles from "./cage.module.scss";
 
 const ResultNumber: React.FC<{
     isDelayShowResult: boolean;
     roundState: RoundState;
-    numberBallFrames: Texture<Resource>[];
     ballSpeed: number;
     isShowResultAnim: boolean;
-}> = ({ isDelayShowResult, roundState, numberBallFrames, ballSpeed, isShowResultAnim }) => {
+    number: string;
+}> = ({ isDelayShowResult, roundState, ballSpeed, number, isShowResultAnim }) => {
     const currentTime = Date.now();
-
+    console.log(`/static/images/cage/new-number/${number}.png`);
     return useMemo(() => {
-        if (isDelayShowResult && roundState === RoundState.DisplayResult && numberBallFrames?.length !== 0) {
+        if (isDelayShowResult && roundState === RoundState.DisplayResult) {
             return (
                 <div key={currentTime} id="result-text" className={Styles["number"]}>
-                    <Stage
-                        key={currentTime}
-                        width={153}
-                        height={153}
-                        options={{ backgroundAlpha: 0, antialias: false, powerPreference: "low-power" }}
-                    >
-                        <Container key={currentTime} position={[82, 85]}>
-                            <AnimatedSprite
-                                anchor={0.5}
-                                textures={numberBallFrames}
-                                autoUpdate
-                                isPlaying={true}
-                                initialFrame={isShowResultAnim ? 0 : numberBallFrames.length - 1}
-                                animationSpeed={ballSpeed}
-                                loop={false}
-                            />
-                        </Container>
-                    </Stage>
+                    <Spritesheet
+                        image={`/static/images/cage/number/${number}.png`}
+                        widthFrame={153}
+                        isResponsive
+                        heightFrame={153}
+                        steps={8}
+                        autoplay={true}
+                        loop={false}
+                        fps={30}
+                        startAt={isShowResultAnim ? 0 : 31}
+                        endAt={31}
+                    />
                 </div>
             );
         } else {
             return <></>;
         }
-    }, [isDelayShowResult, roundState, numberBallFrames]);
+    }, [isDelayShowResult, roundState]);
 };
 
 export default ResultNumber;

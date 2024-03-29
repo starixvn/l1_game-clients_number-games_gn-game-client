@@ -13,15 +13,30 @@
         transform: scale(0.92);
     }
 
+    &.left {
+        .show-ball-anim {
+            position: absolute;
+            top: 0.5rem;
+            left: 0.5rem;
+        }
+
+        .number {
+            top: 0.2rem;
+            right: -0.4rem;
+        }
+    }
+
     &.right {
         .show-ball-anim {
             position: absolute;
-            right: -0.2rem;
+            top: 0.5rem;
+            right: 0.5rem;
             transform: scaleX(-1);
         }
 
         .number {
-            right: 0.1rem;
+            top: 0.2rem;
+            right: -0.4rem;
         }
 
         .cage-lid {
@@ -51,6 +66,11 @@
 .cage-balls {
     grid-area: container;
     place-self: center center;
+
+    .balls-loop {
+        position: relative;
+        transform: scale(0.9);
+    }
 }
 
 .idle-balls {

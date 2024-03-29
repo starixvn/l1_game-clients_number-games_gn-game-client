@@ -1,6 +1,6 @@
 import { withRouter } from "next/router";
 import { JSX } from "react";
-import { loadPixiAnimations } from "../../_shared/helpers/pixi-resource-loader";
+
 import { useSystemContext, useSystemDispatch } from "../../_shared/react-contexts";
 import {
     GameStateProvider,
@@ -11,17 +11,16 @@ import { useTranslator } from "../../_shared/react-hooks";
 import GameBase from "../../components/game-base/";
 import { GameMessageHandler, TurnIdHandler } from "../../components/game-base/handlers";
 import { GameBaseProps, Round } from "../../components/game-base/type";
-import PercentageStatistic from "../../components/game-components/statistic";
 import { TurnGameStateHandler } from "../../components/turn-base/turn-game-state-handler";
 import { TurnStateHandler } from "../../components/turn-base/turn-state-handler";
 import { DrawIdBlock } from "../bac-ball/draw-id-block";
-import { NextBallBettingBlock } from "./next-ball-betting-block";
-import { NextGameRoundDatatHandler } from "./next-ball-game-round-data-handler";
 import { NextBallBetHistoryModal } from "./history";
+import { NextBallBettingBlock } from "./next-ball-betting-block";
+import { NextBallBetOptions } from "./next-ball-constants";
+import { NextGameRoundDatatHandler } from "./next-ball-game-round-data-handler";
 import NextBallResultBlock from "./next-ball-result-block";
 import Scoreboard from "./scoreboard";
 import { NextBallResult, NextBallSettlementResult } from "./types";
-import { NextBallBetOptions } from "./next-ball-constants";
 
 class NextBall extends GameBase<GameBaseProps> {
     private turnIdHandler?: TurnIdHandler;
@@ -49,9 +48,9 @@ class NextBall extends GameBase<GameBaseProps> {
         super.componentDidMount();
 
         // Load all animation resources in background
-        Array.from({ length: 75 }, (_, i) => i + 1).forEach((result) =>
-            loadPixiAnimations(`/static/images/cage/number/${result}.json`, () => ({}))
-        );
+        // Array.from({ length: 75 }, (_, i) => i + 1).forEach((result) =>
+        //     loadPixiAnimations(`/static/images/cage/number/${result}.json`, () => ({}))
+        // );
     }
 
     renderResultBlock() {
