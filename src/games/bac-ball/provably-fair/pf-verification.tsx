@@ -118,7 +118,7 @@ const PFVerification: FC = () => {
             <div className={Styles["client-seed-form"]}>
                 <div className="flex justify-between items-center">
                     <h3 className={`${Styles["section-title"]} m-0 ${Styles["title-fix-width"]}`}>
-                        {translateCommon("pf_verification_para_1")}
+                        {translateInGame("pf_bacball_final result")}
                     </h3>
                     <div className="flex gap-4 items-center">
                         <div className="flex items-center gap-1">

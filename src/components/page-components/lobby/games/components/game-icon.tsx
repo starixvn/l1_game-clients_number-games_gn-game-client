@@ -12,10 +12,11 @@ type Props = {
 export const GameIcon: React.FC<Props> = ({ gameSettings, transmitter }) => {
     const { tolgeeNamespace, gameName, id } = gameSettings;
     const { t } = useTranslator([tolgeeNamespace]);
+    console.log(gameName.toLowerCase());
 
     return (
-        <div className={`${Styles["icon-game"]}`}>
-            <img src={`/static/images/lobby/game-board-detail/icon-${gameName.toLowerCase()}.png`} alt="icon-game-1" />
+        <div className={`${Styles["icon-game"]} ${Styles[gameName.toLowerCase()]}`}>
+            <img src={`/static/images/lobby/game-board-detail/icon-${gameName.toLowerCase()}.png`} alt="icon-game" />
             <span className={`${Styles["game-name"]}`}>{t(`game_icon_name_${id}`)}</span>
             <OnlinePlayer transmitter={transmitter} />
         </div>
