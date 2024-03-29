@@ -84,7 +84,6 @@ const PFSetting: FC = () => {
 
         const pfResultHandler = gameMessageHandler.register(PFResultMessage, ({ pfResult }) => {
             handleServerSeed(pfResult);
-            setIsLoading(false);
         });
 
         const clientSeedDetailHandler = gameMessageHandler.register(ClientSeedDetail, ({ clientSeedDetail }) => {

@@ -1,8 +1,8 @@
 import { FC, useMemo } from "react";
 import { createPortal } from "react-dom";
 import { v4 as uuidv4 } from "uuid";
-import { useGameContext, usePlayerContext } from "../../../../_shared/react-contexts";
-import { useClickSound, useCommonTranslate, useTranslator } from "../../../../_shared/react-hooks";
+import { usePlayerContext } from "../../../../_shared/react-contexts";
+import { useClickSound, useCommonTranslate, useSNTranslate } from "../../../../_shared/react-hooks";
 import ModalContainer from "../../modal-container";
 import { ButtonPFGuide } from "../pf-guide";
 import CopyableTextInput from "../copyable-text-input";
@@ -14,8 +14,7 @@ const PFClientSeedInfoModal: FC<{
     fileNameExport: (data?: any) => string;
 }> = ({ fileNameExport }) => {
     const { isShowPFClientSeedInfo } = useGameStateContext();
-    const { tolgeeNamespace } = useGameContext();
-    const { t: translateInGame } = useTranslator([tolgeeNamespace]);
+    const { t: translateSNGames } = useSNTranslate();
     const dispatch = useGameStatesDispatch();
 
     const handleCloseModal = () => {
@@ -35,7 +34,7 @@ const PFClientSeedInfoModal: FC<{
                 title={
                     <div>
                         <ButtonPFGuide />
-                        {translateInGame("pf_title_client_seed_info")}
+                        {translateSNGames("pf_title_client_seed_info")}
                     </div>
                 }
                 isOpen={isShowPFClientSeedInfo}
@@ -59,9 +58,8 @@ const encryptName = (name: string) => {
 
 const PFClientSeedInfo: FC<{ fileNameExport: (data?: any) => string }> = ({ fileNameExport }) => {
     const clickSound = useClickSound();
-    const { tolgeeNamespace } = useGameContext();
     const { t: translateCommon } = useCommonTranslate();
-    const { t: translateInGame } = useTranslator([tolgeeNamespace]);
+    const { t: translateSNGames } = useSNTranslate();
     const { pfVerifyModalData: clientSeedInfo } = useGameStateContext();
     const {
         authorizeInfo: {
@@ -71,7 +69,7 @@ const PFClientSeedInfo: FC<{ fileNameExport: (data?: any) => string }> = ({ file
 
     const handleClickExport = () => {
         clickSound();
-        const header = `${translateInGame("glossary_player")},${translateInGame("pf_provably_fair_info_nickname")},${translateInGame(
+        const header = `${translateSNGames("pf_player")},${translateSNGames("pf_provably_fair_info_nickname")},${translateSNGames(
             "pf_client_seed_info_subtitle_seed"
         )}`;
         const content = clientSeedInfo.clientSeeds
@@ -105,7 +103,7 @@ const PFClientSeedInfo: FC<{ fileNameExport: (data?: any) => string }> = ({ file
                 <div className="form">
                     <div className="flex items-center justify-between mb-2">
                         <h3 className={`${Styles["section-title"]} m-0`}>
-                            {translateInGame("pf_client_seed_info_total_players")}{" "}
+                            {translateSNGames("pf_client_seed_info_total_players")}{" "}
                             <span className={Styles["text-highlight"]}>{clientSeedInfo.clientSeeds?.length}</span>
                         </h3>
                         <button className={Styles["btn-export"]} onClick={handleClickExport}>
@@ -122,9 +120,9 @@ const PFClientSeedInfo: FC<{ fileNameExport: (data?: any) => string }> = ({ file
                         <table className={`table text-center ${Styles["table"]}`}>
                             <thead>
                                 <tr>
-                                    <th style={{ width: "25%" }}>{translateInGame("glossary_player")}</th>
-                                    <th>{translateInGame("pf_provably_fair_info_nickname")}</th>
-                                    <th>{translateInGame("pf_client_seed_info_subtitle_seed")}</th>
+                                    <th style={{ width: "25%" }}>{translateSNGames("pf_player")}</th>
+                                    <th>{translateSNGames("pf_provably_fair_info_nickname")}</th>
+                                    <th>{translateSNGames("pf_client_seed_info_subtitle_seed")}</th>
                                 </tr>
                             </thead>
                             <tbody>

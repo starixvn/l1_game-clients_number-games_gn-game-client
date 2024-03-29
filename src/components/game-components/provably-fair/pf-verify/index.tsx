@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { createPortal } from "react-dom";
 import { useGameContext } from "../../../../_shared/react-contexts";
-import { useClickSound, useCommonTranslate, useTranslator } from "../../../../_shared/react-hooks";
+import { useClickSound, useCommonTranslate, useSNTranslate, useTranslator } from "../../../../_shared/react-hooks";
 import ModalContainer from "../../modal-container";
 import { ButtonPFGuide } from "../pf-guide";
 import Styles from "../provably-fair.module.scss";
@@ -49,6 +49,7 @@ const PFVerify: FC<{ renderResultBlock: Function }> = ({ renderResultBlock }) =>
     const { pfVerifyModalData: pfResult } = useGameStateContext();
     const { tolgeeNamespace } = useGameContext();
     const { t: translateCommon } = useCommonTranslate();
+    const { t: translateSNGames } = useSNTranslate();
     const { t: translateInGame } = useTranslator([tolgeeNamespace]);
     const clickSound = useClickSound();
     const dispatch = useGameStatesDispatch();
@@ -103,7 +104,7 @@ const PFVerify: FC<{ renderResultBlock: Function }> = ({ renderResultBlock }) =>
                 <div className="relative">
                     <h3 className={Styles["section-title"]}>{translateCommon("pf_ header_merge_client_seed")}</h3>
                     <span className={Styles["link-detail"]} onClick={handleOnClickClientSeedInfo}>
-                        {translateInGame("pf_provably_fair_details")}
+                        {translateSNGames("pf_provably_fair_details")}
                     </span>
                 </div>
                 <div className="input-group width-full">
