@@ -97,7 +97,10 @@ class Dashboard extends React.PureComponent<Props, State> {
     }
 
     updateAuthorizeInfo(authorizeInfo: AuthorizeResponse) {
-        authorizeInfo.user.settings.quickBet = true;
+        if (authorizeInfo?.authorized) {
+            authorizeInfo.user.settings.quickBet = true;
+        }
+
         this.checkOfferedGame(authorizeInfo);
         this.setState({ authorizeInfo });
     }
