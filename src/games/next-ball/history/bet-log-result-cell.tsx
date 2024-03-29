@@ -4,8 +4,7 @@ import Styles from "./history.module.scss";
 import { BetLogProps } from "../../../components/game-components/bet-history";
 import BetHistoryBase from "../../../components/game-components/bet-history/bet-history-base";
 
-const BetLogResultCell: FC<{ result: { ball: number } }> = ({ result }) => {
-    const { ball } = result;
+const BetLogResultCell: FC<{ result: { ball: number } }> = ({ result: { ball } }) => {
     const ballColor = useBallColor;
     return (
         <div className={Styles["result-container"]}>

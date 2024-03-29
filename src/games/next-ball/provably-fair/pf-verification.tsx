@@ -24,10 +24,10 @@ const PFVerification: FC = () => {
         const rawTwoFirstDigits = combinedHash.substring(0, 2);
         const valueTwoFirstDigits = parseInt(rawTwoFirstDigits, 16);
         const serverSeed = JSON.parse(pfResult?.serverSeed || "{}");
-        const randomNumber = serverSeed?.random || "-1";
+        const randomNumber = parseInt(serverSeed?.random || "-1");
         const remainBalls = (serverSeed?.remain || "").split(":");
         const index = ((randomNumber + valueTwoFirstDigits) % remainBalls.length) + 1;
-        const result = remainBalls[index];
+        const result = remainBalls[index - 1];
 
         return {
             rawTwoFirstDigits,
@@ -139,7 +139,7 @@ const PFVerification: FC = () => {
                 <h3 className={`${Styles["section-title"]}`}>{translateInGame("pf_verification_para_9")}</h3>
                 <p className={Styles["result-numbers"]}>
                     {verifyInfo.remainBalls.map((item, index) => {
-                        return index + 1 == verifyInfo.result ? (
+                        return index + 1 == verifyInfo.index ? (
                             <span key={uuidv4()} className={Styles["text-yellow"]}>
                                 {item}{" "}
                             </span>

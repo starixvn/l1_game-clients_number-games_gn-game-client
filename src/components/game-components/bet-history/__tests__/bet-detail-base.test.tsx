@@ -24,6 +24,8 @@ jest.mock("../../../../_shared/react-hooks", () => ({
     useSNTranslate: jest.fn().mockReturnValue({ t: (key: string) => key }),
 }));
 
+const doNothing = (x: any) => x;
+
 describe(BetDetailBase.name, () => {
     describe("render", () => {
         describe("have draw result", () => {
@@ -70,6 +72,7 @@ describe(BetDetailBase.name, () => {
                         },
                     };
                     mockUseGameStateContext.mockReturnValue(state);
+
                     const produceDataBetDetailRow = jest.fn().mockReturnValue({
                         rawTime: new Date(),
                         amount: 1,
@@ -79,7 +82,13 @@ describe(BetDetailBase.name, () => {
                         hightlight: true,
                     });
 
-                    render(<BetDetailBase renderBetDetailResultBlock={jest.fn()} produceDataBetDetailRow={produceDataBetDetailRow} />);
+                    render(
+                        <BetDetailBase
+                            renderBetDetailResultBlock={jest.fn()}
+                            produceDataBetDetailRow={produceDataBetDetailRow}
+                            renderBetChoice={doNothing}
+                        />
+                    );
 
                     expect(screen.getAllByText("2")[0].classList.contains("highlight")).toBe(true);
                 });
@@ -102,7 +111,13 @@ describe(BetDetailBase.name, () => {
                         hightlight: false,
                     });
 
-                    render(<BetDetailBase renderBetDetailResultBlock={jest.fn()} produceDataBetDetailRow={produceDataBetDetailRow} />);
+                    render(
+                        <BetDetailBase
+                            renderBetDetailResultBlock={jest.fn()}
+                            produceDataBetDetailRow={produceDataBetDetailRow}
+                            renderBetChoice={doNothing}
+                        />
+                    );
 
                     expect(screen.getAllByText("2")[0].classList.contains("highlight")).toBe(false);
                 });

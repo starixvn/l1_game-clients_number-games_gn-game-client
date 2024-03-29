@@ -15,9 +15,9 @@ import PercentageStatistic from "../../components/game-components/statistic";
 import { TurnGameStateHandler } from "../../components/turn-base/turn-game-state-handler";
 import { TurnStateHandler } from "../../components/turn-base/turn-state-handler";
 import { DrawIdBlock } from "../bac-ball/draw-id-block";
-import { BacBallBetHistoryModal } from "../bac-ball/history";
 import { NextBallBettingBlock } from "./next-ball-betting-block";
 import { NextGameRoundDatatHandler } from "./next-ball-game-round-data-handler";
+import { NextBallBetHistoryModal } from "./history";
 import NextBallResultBlock from "./next-ball-result-block";
 import Scoreboard from "./scoreboard";
 import { NextBallResult, NextBallSettlementResult } from "./types";
@@ -75,7 +75,7 @@ class NextBall extends GameBase<GameBaseProps> {
     }
 
     renderBetHistoryModal() {
-        return <BacBallBetHistoryModal />;
+        return <NextBallBetHistoryModal />;
     }
 
     renderStatistic() {
@@ -120,7 +120,7 @@ const NextBalllFC = (props) => {
                 tolgeeNamespace,
                 hedgeBetGroups: [
                     [NextBallBetOptions.OVER, NextBallBetOptions.UNDER],
-                    [NextBallBetOptions.ODD, NextBallBetOptions.EVEN]
+                    [NextBallBetOptions.ODD, NextBallBetOptions.EVEN],
                 ],
             }}
         />

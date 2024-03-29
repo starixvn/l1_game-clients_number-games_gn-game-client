@@ -1,8 +1,8 @@
 import { FC, ReactNode } from "react";
 import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
-import { useClickSound, useCommonTranslate, useTranslator } from "../../../_shared/react-hooks";
-import { useGameContext, usePlayerContext } from "../../../_shared/react-contexts";
-import { getGlossaryTranslate, numberWithCommas, separateDateTime, sortedCollectionByTime } from "../../../_shared/helpers";
+import { useClickSound, useCommonTranslate } from "../../../_shared/react-hooks";
+import { usePlayerContext } from "../../../_shared/react-contexts";
+import { numberWithCommas, separateDateTime, sortedCollectionByTime } from "../../../_shared/helpers";
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 import { DrawInfo } from "../../game-base/type";
 import { InfiniteTable } from "../infinite-table";
@@ -21,14 +21,13 @@ const BetDetailBase: FC<{
         win: number;
         hightlight: boolean;
     };
-}> = ({ renderBetDetailResultBlock, produceDataBetDetailRow }) => {
+    renderBetChoice?: (choice: any) => ReactNode;
+}> = ({ renderBetDetailResultBlock, produceDataBetDetailRow, renderBetChoice }) => {
     const {
         betDetailModalData: { drawInfo, betLogDetails },
     } = useGameStateContext();
     const dispatch = useGameStatesDispatch();
     const { t: translateCommon } = useCommonTranslate();
-    const { tolgeeNamespace } = useGameContext();
-    const { t: translateInGame } = useTranslator([tolgeeNamespace]);
     const { fractionalOddsFormat } = usePlayerContext();
     const clickSound = useClickSound();
 
@@ -74,13 +73,11 @@ const BetDetailBase: FC<{
                     </>
                 ),
             },
-            ...[
-                translateInGame(getGlossaryTranslate(tolgeeNamespace, choice)),
-                numberWithCommas(fractionalOddsFormat ? odds - 1 : odds),
-                numberWithCommas(amount) ?? 0,
-            ].map((item) => {
-                return { node: <div className={hightlight ? "highlight" : ""}>{item}</div> };
-            }),
+            ...[renderBetChoice(choice), numberWithCommas(fractionalOddsFormat ? odds - 1 : odds), numberWithCommas(amount) ?? 0].map(
+                (item) => {
+                    return { node: <div className={hightlight ? "highlight" : ""}>{item}</div> };
+                }
+            ),
             {
                 node: <div className={hightlight ? "highlight" : ""}>{numberWithCommas(win)}</div>,
             },

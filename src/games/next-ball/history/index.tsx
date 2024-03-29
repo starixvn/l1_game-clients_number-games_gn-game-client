@@ -4,7 +4,7 @@ import { createPortal } from "react-dom";
 import BetHistoryModal from "../../../components/game-components/bet-history";
 import BetDetailModal from "../../../components/game-components/bet-history/bet-detail-modal";
 import BetDetailBase from "../../../components/game-components/bet-history/bet-detail-base";
-import { BetDetailResultBlock, DrawInfoNextBall, produceDataBetDetailRow } from "./bet-detail-result-block";
+import { BetChoice, BetDetailResultBlock, DrawInfoNextBall, produceDataBetDetailRow } from "./bet-detail-result-block";
 import renderBetLog from "./bet-log-result-cell";
 import { PFVerifyModal } from "../../../components/game-components/provably-fair";
 import { PFVerification, makeFileNameExport, renderPFVerifyResultBlock } from "../provably-fair";
@@ -23,6 +23,7 @@ export const NextBallBetHistoryModal: FC = () => {
                     <BetDetailBase
                         renderBetDetailResultBlock={(drawInfo: DrawInfoNextBall) => <BetDetailResultBlock drawInfo={drawInfo} />}
                         produceDataBetDetailRow={produceDataBetDetailRow}
+                        renderBetChoice={(choice) => <BetChoice choice={choice} />}
                     />
                 </BetDetailModal>
                 <PFVerifyModal renderResultBlock={renderPFVerifyResultBlock}></PFVerifyModal>

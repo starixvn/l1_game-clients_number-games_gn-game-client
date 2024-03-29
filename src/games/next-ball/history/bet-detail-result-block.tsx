@@ -1,4 +1,4 @@
-import { FC, useMemo } from "react";
+import { FC } from "react";
 import { DrawInfo, PFResult } from "../../../components/game-base/type";
 import { useSNTranslate, useTranslator } from "../../../_shared/react-hooks";
 import { useGameContext } from "../../../_shared/react-contexts";
@@ -27,15 +27,8 @@ export interface DrawInfoNextBall extends DrawInfo {
 
 export const BetDetailResultBlock: FC<{ drawInfo: DrawInfoNextBall }> = ({ drawInfo }) => {
     const { t: translateSNGames } = useSNTranslate();
-    const { tolgeeNamespace } = useGameContext();
-    const { t: translateNextBall } = useTranslator([tolgeeNamespace]);
     const ballColor = useBallColor;
-    const { drawId, result, pfResult } = drawInfo;
-
-    const order = useMemo(() => {
-        const { roundResult } = pfResult;
-        return roundResult.length;
-    }, [pfResult]);
+    const { drawId, result } = drawInfo;
 
     return (
         <div className={Styles["draw-info"]}>
@@ -43,7 +36,6 @@ export const BetDetailResultBlock: FC<{ drawInfo: DrawInfoNextBall }> = ({ drawI
                 {translateSNGames("glossary_draw_id").capitalizeFirstLetter()}: <span>{drawId}</span>
             </div>
             <div className={Styles["info-item"]}>
-                <span className="font-weight-medium">{translateNextBall(`ball_${order}`).toUpperCase()}</span>
                 <span className={`${Styles["ball"]} ${Styles[ballColor({ number: result.ball })]}`}>{result.ball}</span>
             </div>
         </div>
@@ -65,4 +57,10 @@ export const produceDataBetDetailRow = (item: any, drawInfo: DrawInfoNextBall) =
         win: win,
         hightlight: drawInfo.settlementResult?.[item.choice],
     };
+};
+
+export const BetChoice: FC<{ choice: string }> = ({ choice }) => {
+    const { tolgeeNamespace } = useGameContext();
+    const { t: translateNextBall } = useTranslator([tolgeeNamespace]);
+    return <>{translateNextBall(`glossary_betchoice_${choice}`)}</>;
 };

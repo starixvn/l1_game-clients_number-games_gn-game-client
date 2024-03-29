@@ -12,6 +12,14 @@
     background-size: 2.6rem 2.6rem;
 }
 
+.red {
+    --bg: url("/static/images/ball/ball-red.png") no-repeat;
+}
+
+.blue {
+    --bg: url("/static/images/ball/ball-blue.png") no-repeat;
+}
+
 .result-container {
     display: flex;
     justify-content: center;
@@ -33,6 +41,9 @@
         gap: 0.6rem;
         &:not(:first-child) {
             font-weight: bold;
+        }
+        &:last-child {
+            margin-left: auto;
         }
     }
 }
