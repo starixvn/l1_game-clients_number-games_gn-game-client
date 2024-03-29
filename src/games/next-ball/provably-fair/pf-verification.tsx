@@ -1,6 +1,6 @@
 import { FC, useEffect, useMemo, useState } from "react";
 import { useGameContext } from "../../../_shared/react-contexts";
-import { useClickSound, useCommonTranslate, useTranslator } from "../../../_shared/react-hooks";
+import { useClickSound, useCommonTranslate, useSNTranslate, useTranslator } from "../../../_shared/react-hooks";
 import { useBallColor } from "../../../_shared/helpers";
 import { createHash } from "crypto";
 import CopyableTextInput from "../../../components/game-components/provably-fair/copyable-text-input";
@@ -15,6 +15,7 @@ const PFVerification: FC = () => {
     const [mergeClientSeed, setMergeClientSeed] = useState(pfResult?.editedMergeClientSeed || pfResult?.mergeClientSeed || "");
     const dispatch = useGameStatesDispatch();
     const { t: translateCommon } = useCommonTranslate();
+    const { t: translateSNGames } = useSNTranslate();
     const { t: translateInGame } = useTranslator([tolgeeNamespace]);
     const [combinedHash, setCombinedHash] = useState(pfResult.finalHash);
     const clickSound = useClickSound();
@@ -99,9 +100,9 @@ const PFVerification: FC = () => {
             <h3 className={`${Styles["section-title"]}`}>{translateCommon("pf_header_combined_sha512_hash")}</h3>
             <p className="text-wrap">{pfResult?.finalHash}</p>
             {combinedHash == pfResult?.finalHash ? (
-                <p className={Styles["text-successful"]}>{translateInGame("pf_verification_msg_verify_successful")}</p>
+                <p className={Styles["text-successful"]}>{translateSNGames("pf_verification_msg_verify_successful")}</p>
             ) : (
-                <p className={Styles["text-unsuccessful"]}>{translateInGame("pf_verification_msg_verify_unsuccessful")}</p>
+                <p className={Styles["text-unsuccessful"]}>{translateSNGames("pf_verification_msg_verify_unsuccessful")}</p>
             )}
 
             <div className={Styles["client-seed-form"]}>
