@@ -52,7 +52,7 @@ export const UserInfo: React.FC<{
         if (settingContext.avatarId > 0 || user.avatarId > 0) {
             setAvatarId(settingContext.avatarId > 0 ? settingContext.avatarId : user.avatarId);
         }
-    }, []);
+    }, [user, settingContext.avatarId]);
 
     return (
         <div className={`${Styles["user"]} ${customizeClass ? Styles[customizeClass] : ""} ${deviceClass}`}>
