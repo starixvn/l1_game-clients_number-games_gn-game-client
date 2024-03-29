@@ -1,0 +1,410 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ChangeAvatar render Not render ChangeAvatar should match the snapshot 1`] = `<div />`;
+
+exports[`ChangeAvatar render With normal ChangeAvatar should match the snapshot 1`] = `
+<div>
+  <div
+    class="gallery-bg"
+  >
+    <div
+      class="gallery-wrapper gallery-wrapper-customize"
+    >
+      <div
+        class="popup modal-center  "
+      >
+        <h1
+          class="gallery-title"
+        >
+          SabaNumber.change_avatar
+        </h1>
+        <div
+          class="icon-close icon-close"
+          data-testid="btn-close-gallery"
+        />
+        <div
+          class="container-avatars"
+        >
+          <div
+            class="avatar avatar-selected"
+          >
+            <img
+              alt="Avatar"
+              class="img-fluid circle"
+              src="/static/images/avatar/1.jpg"
+            />
+          </div>
+          <div
+            class="avatar "
+          >
+            <img
+              alt="Avatar"
+              class="img-fluid circle"
+              src="/static/images/avatar/2.jpg"
+            />
+          </div>
+          <div
+            class="avatar "
+          >
+            <img
+              alt="Avatar"
+              class="img-fluid circle"
+              src="/static/images/avatar/3.jpg"
+            />
+          </div>
+          <div
+            class="avatar "
+          >
+            <img
+              alt="Avatar"
+              class="img-fluid circle"
+              src="/static/images/avatar/4.jpg"
+            />
+          </div>
+          <div
+            class="avatar "
+          >
+            <img
+              alt="Avatar"
+              class="img-fluid circle"
+              src="/static/images/avatar/5.jpg"
+            />
+          </div>
+          <div
+            class="avatar "
+          >
+            <img
+              alt="Avatar"
+              class="img-fluid circle"
+              src="/static/images/avatar/6.jpg"
+            />
+          </div>
+          <div
+            class="avatar "
+          >
+            <img
+              alt="Avatar"
+              class="img-fluid circle"
+              src="/static/images/avatar/7.jpg"
+            />
+          </div>
+          <div
+            class="avatar "
+          >
+            <img
+              alt="Avatar"
+              class="img-fluid circle"
+              src="/static/images/avatar/8.jpg"
+            />
+          </div>
+          <div
+            class="avatar "
+          >
+            <img
+              alt="Avatar"
+              class="img-fluid circle"
+              src="/static/images/avatar/9.jpg"
+            />
+          </div>
+          <div
+            class="avatar "
+          >
+            <img
+              alt="Avatar"
+              class="img-fluid circle"
+              src="/static/images/avatar/10.jpg"
+            />
+          </div>
+          <div
+            class="avatar "
+          >
+            <img
+              alt="Avatar"
+              class="img-fluid circle"
+              src="/static/images/avatar/11.jpg"
+            />
+          </div>
+          <div
+            class="avatar "
+          >
+            <img
+              alt="Avatar"
+              class="img-fluid circle"
+              src="/static/images/avatar/12.jpg"
+            />
+          </div>
+          <div
+            class="avatar "
+          >
+            <img
+              alt="Avatar"
+              class="img-fluid circle"
+              src="/static/images/avatar/13.jpg"
+            />
+          </div>
+          <div
+            class="avatar "
+          >
+            <img
+              alt="Avatar"
+              class="img-fluid circle"
+              src="/static/images/avatar/14.jpg"
+            />
+          </div>
+          <div
+            class="avatar "
+          >
+            <img
+              alt="Avatar"
+              class="img-fluid circle"
+              src="/static/images/avatar/15.jpg"
+            />
+          </div>
+          <div
+            class="avatar "
+          >
+            <img
+              alt="Avatar"
+              class="img-fluid circle"
+              src="/static/images/avatar/16.jpg"
+            />
+          </div>
+          <div
+            class="avatar "
+          >
+            <img
+              alt="Avatar"
+              class="img-fluid circle"
+              src="/static/images/avatar/17.jpg"
+            />
+          </div>
+          <div
+            class="avatar "
+          >
+            <img
+              alt="Avatar"
+              class="img-fluid circle"
+              src="/static/images/avatar/18.jpg"
+            />
+          </div>
+          <div
+            class="avatar "
+          >
+            <img
+              alt="Avatar"
+              class="img-fluid circle"
+              src="/static/images/avatar/19.jpg"
+            />
+          </div>
+          <div
+            class="avatar "
+          >
+            <img
+              alt="Avatar"
+              class="img-fluid circle"
+              src="/static/images/avatar/20.jpg"
+            />
+          </div>
+          <div
+            class="avatar "
+          >
+            <img
+              alt="Avatar"
+              class="img-fluid circle"
+              src="/static/images/avatar/21.jpg"
+            />
+          </div>
+          <div
+            class="avatar "
+          >
+            <img
+              alt="Avatar"
+              class="img-fluid circle"
+              src="/static/images/avatar/22.jpg"
+            />
+          </div>
+          <div
+            class="avatar "
+          >
+            <img
+              alt="Avatar"
+              class="img-fluid circle"
+              src="/static/images/avatar/23.jpg"
+            />
+          </div>
+          <div
+            class="avatar "
+          >
+            <img
+              alt="Avatar"
+              class="img-fluid circle"
+              src="/static/images/avatar/24.jpg"
+            />
+          </div>
+          <div
+            class="avatar "
+          >
+            <img
+              alt="Avatar"
+              class="img-fluid circle"
+              src="/static/images/avatar/25.jpg"
+            />
+          </div>
+          <div
+            class="avatar "
+          >
+            <img
+              alt="Avatar"
+              class="img-fluid circle"
+              src="/static/images/avatar/26.jpg"
+            />
+          </div>
+          <div
+            class="avatar "
+          >
+            <img
+              alt="Avatar"
+              class="img-fluid circle"
+              src="/static/images/avatar/27.jpg"
+            />
+          </div>
+          <div
+            class="avatar "
+          >
+            <img
+              alt="Avatar"
+              class="img-fluid circle"
+              src="/static/images/avatar/28.jpg"
+            />
+          </div>
+          <div
+            class="avatar "
+          >
+            <img
+              alt="Avatar"
+              class="img-fluid circle"
+              src="/static/images/avatar/29.jpg"
+            />
+          </div>
+          <div
+            class="avatar "
+          >
+            <img
+              alt="Avatar"
+              class="img-fluid circle"
+              src="/static/images/avatar/30.jpg"
+            />
+          </div>
+          <div
+            class="avatar "
+          >
+            <img
+              alt="Avatar"
+              class="img-fluid circle"
+              src="/static/images/avatar/31.jpg"
+            />
+          </div>
+          <div
+            class="avatar "
+          >
+            <img
+              alt="Avatar"
+              class="img-fluid circle"
+              src="/static/images/avatar/32.jpg"
+            />
+          </div>
+          <div
+            class="avatar "
+          >
+            <img
+              alt="Avatar"
+              class="img-fluid circle"
+              src="/static/images/avatar/33.jpg"
+            />
+          </div>
+          <div
+            class="avatar "
+          >
+            <img
+              alt="Avatar"
+              class="img-fluid circle"
+              src="/static/images/avatar/34.jpg"
+            />
+          </div>
+          <div
+            class="avatar "
+          >
+            <img
+              alt="Avatar"
+              class="img-fluid circle"
+              src="/static/images/avatar/35.jpg"
+            />
+          </div>
+          <div
+            class="avatar "
+          >
+            <img
+              alt="Avatar"
+              class="img-fluid circle"
+              src="/static/images/avatar/36.jpg"
+            />
+          </div>
+          <div
+            class="avatar "
+          >
+            <img
+              alt="Avatar"
+              class="img-fluid circle"
+              src="/static/images/avatar/37.jpg"
+            />
+          </div>
+          <div
+            class="avatar "
+          >
+            <img
+              alt="Avatar"
+              class="img-fluid circle"
+              src="/static/images/avatar/38.jpg"
+            />
+          </div>
+          <div
+            class="avatar "
+          >
+            <img
+              alt="Avatar"
+              class="img-fluid circle"
+              src="/static/images/avatar/39.jpg"
+            />
+          </div>
+          <div
+            class="avatar "
+          >
+            <img
+              alt="Avatar"
+              class="img-fluid circle"
+              src="/static/images/avatar/40.jpg"
+            />
+          </div>
+        </div>
+        <div
+          class="list-actions"
+        >
+          <button
+            class="btn-grey"
+            type="button"
+          >
+            button_cancel
+          </button>
+          <button
+            class="btn-green"
+            data-testid="btn-submit-gallery"
+            type="button"
+          >
+            Common.ok
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
