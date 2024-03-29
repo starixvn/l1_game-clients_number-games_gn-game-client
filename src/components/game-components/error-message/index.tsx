@@ -7,11 +7,12 @@ import Styles from "./error-message.module.scss";
 import { ConnectFailedReasonKey } from "./type";
 import { URLContext, updateURLContext } from "../../../_shared/react-contexts";
 
-export const ConnectFailedMessage: React.FC<{ tolgeeNamespace: string; id: number; onReconnect: () => void; reason: string }> = ({
+export const ConnectFailedMessage: React.FC<{ tolgeeNamespace: string; id: number; onReconnect: () => void; reason: string, enableBackdrop: boolean }> = ({
     tolgeeNamespace,
     id,
     onReconnect,
     reason,
+    enableBackdrop
 }) => {
     const { t } = useTranslator([tolgeeNamespace]);
     const { backToRedirectUrl, redirectUrl, isDirectMode } = useContext(URLContext);
@@ -60,7 +61,7 @@ export const ConnectFailedMessage: React.FC<{ tolgeeNamespace: string; id: numbe
     };
 
     return (
-        <BaseDialog type={ModalType.Center} isOpen={true}>
+        <BaseDialog type={ModalType.Center} isOpen={true} enableBackdrop={enableBackdrop}>
             <div className={`modal-center yellow-color ${Styles["error-message-container"]}`}>
                 <div className={`${Styles["warning-container"]}`}>
                     <div className={`icon-warning ${Styles["icon-warning"]}`}></div>
