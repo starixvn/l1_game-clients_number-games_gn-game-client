@@ -21,15 +21,15 @@ export function createBeadRoadElement(isOddEven: boolean = ODD_EVEN_AS_DEFAULT_S
 
             if (isOddEven) {
                 return round.settlementResult.odd ? (
-                    <span className={styles.red}>{character(NextBallBetOptions.ODD)}</span>
+                    <span className={styles[NextBallBetOptions.ODD]}>{character(NextBallBetOptions.ODD)}</span>
                 ) : (
-                    <span className={`${styles.blue}`}>{character(NextBallBetOptions.EVEN)}</span>
+                    <span className={styles[NextBallBetOptions.EVEN]}>{character(NextBallBetOptions.EVEN)}</span>
                 );
             } else {
                 return round.settlementResult.over ? (
-                    <span className={`${styles.red}`}>{character(NextBallBetOptions.OVER)}</span>
+                    <span className={styles[NextBallBetOptions.OVER]}>{character(NextBallBetOptions.OVER)}</span>
                 ) : (
-                    <span className={`${styles.blue}`}>{character(NextBallBetOptions.UNDER)}</span>
+                    <span className={styles[NextBallBetOptions.UNDER]}>{character(NextBallBetOptions.UNDER)}</span>
                 );
             }
         }
@@ -88,9 +88,9 @@ export function createBigRoadElement(isOddEven: boolean = ODD_EVEN_AS_DEFAULT_SC
             if (isBlinkNode) {
                 return <span className={styles.blink}></span>;
             } else if (positive) {
-                return <span className={styles.red}></span>;
-            } else {
                 return <span className={styles.blue}></span>;
+            } else {
+                return <span className={styles.red}></span>;
             }
         }
     };

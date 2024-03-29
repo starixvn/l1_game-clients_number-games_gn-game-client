@@ -46,33 +46,14 @@
     gap: 0.5rem;
 }
 
-.tie {
-    @extend %statistic-icon;
-    --colorText: #3eac3e;
-    background: url("/static/images/dot/dot-green-medium.svg") no-repeat;
-    background-size: contain;
-}
-
-.banker {
-    @extend %statistic-icon;
-    --colorText: #ff5e5e;
-    background: url("/static/images/dot/dot-red-medium.svg") no-repeat;
-    background-size: contain;
-
-    &.big-road-tie {
-        @extend %big-road-tie-with-bet-choice;
-    }
-}
-
-.player {
-    @extend %statistic-icon;
-    --colorText: #1c7bdf;
-    background: url("/static/images/dot/dot-blue-medium.svg") no-repeat;
-    background-size: contain;
-
-    &.big-road-tie {
-        @extend %big-road-tie-with-bet-choice;
-    }
+.statistic-choices {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: black;
+    border: 1px solid #1c7bdf;
+    border-radius: 5rem;
+    padding: 0.5rem;
 }
 
 .statistic-choice-icon {
@@ -86,6 +67,10 @@
     --colorText: #ff5e5e;
     background: url("/static/images/dot/dot-red-medium.svg") no-repeat;
     background-size: contain;
+
+    &.big-road-tie {
+        @extend %big-road-tie-with-bet-choice;
+    }
 }
 
 .blue {
@@ -93,6 +78,10 @@
     --colorText: #1c7bdf;
     background: url("/static/images/dot/dot-blue-medium.svg") no-repeat;
     background-size: contain;
+
+    &.big-road-tie {
+        @extend %big-road-tie-with-bet-choice;
+    }
 }
 
 .green {
@@ -123,5 +112,27 @@
     100% {
         -webkit-transform: scale(1);
         transform: scale(1);
+    }
+}
+
+$red_choices: under, even, banker;
+$blue_choices: over, odd, player;
+$green_choices: tie;
+
+@each $choice in $red_choices {
+    .#{$choice} {
+        @extend .red;
+    }
+}
+
+@each $choice in $blue_choices {
+    .#{$choice} {
+        @extend .blue;
+    }
+}
+
+@each $choice in $green_choices {
+    .#{$choice} {
+        @extend .green;
     }
 }

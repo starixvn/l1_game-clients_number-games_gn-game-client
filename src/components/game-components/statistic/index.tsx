@@ -41,22 +41,49 @@ const StatisticItem: React.FC<Props> = (props) => {
     );
 };
 
-export const PercentageStatistic: React.FC<PercentageStatisticProps> = (props) => {
+export const PercentageStatistic: React.FC<PercentageStatisticProps> = (props: PercentageStatisticProps) => {
     const { statisticRuleEntries, roundHistory } = props;
     const counted = countSettlementResult(roundHistory);
     const statisticResult = calculatePercent(statisticRuleEntries, counted, roundHistory.length);
     const { tolgeeNamespace } = useGameContext();
     const { t } = useTranslator([tolgeeNamespace]);
 
-    return (
-        <div className={`${Styles["statistic-container"]} flex`} id="bar-statistic">
-            {Object.keys(statisticResult).map((choice) => (
-                <StatisticItem key={choice} value={`${statisticResult[choice]}%`}>
-                    <span className={`${Styles[choice]} ${Styles["statistic-choice-icon"]}`}>{t(`beadboard_${choice}`)}</span>
-                </StatisticItem>
-            ))}
-        </div>
-    );
+    if (props.group) {
+        const choices = Object.keys(statisticResult);
+        const groups = [];
+
+        while (choices.length) {
+            const choicesInGroup = choices.splice(0, props.group);
+
+            groups.push(
+                choicesInGroup.map((choice) => (
+                    <StatisticItem key={choice} value={`${statisticResult[choice]}%`}>
+                        <span className={`${Styles[choice]} ${Styles["statistic-choice-icon"]}`}>{t(`beadboard_${choice}`)}</span>
+                    </StatisticItem>
+                ))
+            );
+        }
+
+        return (
+            <div className={`${Styles["statistic-container"]} flex`} id="bar-statistic">
+                {groups.map((choices, index) => (
+                    <div key={index} className={Styles["statistic-choices"]}>
+                        {choices}
+                    </div>
+                ))}
+            </div>
+        );
+    } else {
+        return (
+            <div className={`${Styles["statistic-container"]} flex`} id="bar-statistic">
+                {Object.keys(statisticResult).map((choice) => (
+                    <StatisticItem key={choice} value={`${statisticResult[choice]}%`}>
+                        <span className={`${Styles[choice]} ${Styles["statistic-choice-icon"]}`}>{t(`beadboard_${choice}`)}</span>
+                    </StatisticItem>
+                ))}
+            </div>
+        );
+    }
 };
 
 export default memo(PercentageStatistic);

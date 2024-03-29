@@ -80,9 +80,18 @@ class NextBall extends GameBase<GameBaseProps> {
 
     renderStatistic() {
         const { roundHistory } = this.props.gameStateContextModel;
+        const calculators = {
+            [NextBallBetOptions.OVER]: (countResult: object, total: number) =>
+                Math.round((countResult[NextBallBetOptions.OVER] * 100) / total),
+            [NextBallBetOptions.UNDER]: (countResult: object, total: number) =>
+                100 - Math.round((countResult[NextBallBetOptions.OVER] * 100) / total),
+            [NextBallBetOptions.ODD]: (countResult: object, total: number) =>
+                Math.round((countResult[NextBallBetOptions.ODD] * 100) / total),
+            [NextBallBetOptions.EVEN]: (countResult: object, total: number) =>
+                100 - Math.round((countResult[NextBallBetOptions.ODD] * 100) / total),
+        };
 
-        return <></>;
-        // return <PercentageStatistic roundHistory={roundHistory} statisticRuleEntries={ } />;
+        return <PercentageStatistic roundHistory={roundHistory} statisticRuleEntries={Object.entries(calculators)} group={2} />;
     }
 
     renderScoreboards() {

@@ -9,4 +9,5 @@ export type PercentageStatisticProps = {
     roundHistory: Round<any, any>[];
     statisticRuleEntries: [string, (countResult: object, total: number) => number][];
     activeScoreboardTab?: number;
+    group?: number;
 };
