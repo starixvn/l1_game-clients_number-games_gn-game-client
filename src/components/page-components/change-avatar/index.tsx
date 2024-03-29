@@ -9,14 +9,12 @@ const ChangeAvatar: React.FC = () => {
     const settingContext = useSettingContext();
     const settingDispatch = useSettingDispatch();
     const clickSound = useClickSound();
-    const { session } = usePlayerContext();
-    const { authorizeInfo } = usePlayerContext();
+    const { session, authorizeInfo, updateAvatar } = usePlayerContext();
     const { user } = authorizeInfo;
     const [avatarId, setAvatarId] = useState<number>();
 
     useEffect(() => {
         if (user.avatarId > 0) {
-            handleChangeAvatar(user.avatarId);
             setAvatarId(user.avatarId);
         }
     }, [user]);
@@ -34,16 +32,7 @@ const ChangeAvatar: React.FC = () => {
     const handleSelectAvatar = async (avatarId: number) => {
         setAvatarId(avatarId);
         await updateUserAvatar(session, avatarId);
-        handleChangeAvatar(avatarId);
-    };
-
-    const handleChangeAvatar = (avatarId: number) => {
-        settingDispatch({
-            type: SettingEventActionType.CHANGE_AVATAR_ID,
-            payload: {
-                avatarId,
-            },
-        });
+        updateAvatar(avatarId);
     };
 
     return (

@@ -9,6 +9,7 @@ export type PlayerContextModel = {
     setBalance?: (balance: number) => void;
     signOut?: () => void;
     fractionalOddsFormat?: boolean;
+    updateAvatar?: (avatarId: number) => void;
 };
 
 export const PlayerContext = React.createContext<PlayerContextModel>({ locale: locales.vi });

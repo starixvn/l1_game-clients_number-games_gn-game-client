@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { isIOS, isMobileOnly } from "react-device-detect";
 
 import { numberRoundDownWithCommas } from "../../../../_shared/helpers/number-helper";
-import { SettingEventActionType, usePlayerContext, useSettingContext, useSettingDispatch } from "../../../../_shared/react-contexts";
+import { SettingEventActionType, usePlayerContext, useSettingDispatch } from "../../../../_shared/react-contexts";
 import { useClickSound } from "../../../../_shared/react-hooks";
 import { MAX_AVATAR_ID } from "../../dashboard/register/avatar-gallery";
 import Styles from "./user-info.module.scss";
@@ -12,9 +12,7 @@ export const UserInfo: React.FC<{
     isLobby: boolean;
 }> = ({ customizeClass, isLobby }) => {
     const clickSound = useClickSound();
-    const [avatarId, setAvatarId] = useState<number>();
     const [classCursor, setClassCursor] = useState<string>();
-    const settingContext = useSettingContext();
     const settingDispatch = useSettingDispatch();
     const { authorizeInfo } = usePlayerContext();
     const user = authorizeInfo.user;
@@ -48,12 +46,6 @@ export const UserInfo: React.FC<{
         }
     }, [isLobby]);
 
-    useEffect(() => {
-        if (settingContext.avatarId > 0 || user.avatarId > 0) {
-            setAvatarId(settingContext.avatarId > 0 ? settingContext.avatarId : user.avatarId);
-        }
-    }, [user, settingContext.avatarId]);
-
     return (
         <div className={`${Styles["user"]} ${customizeClass ? Styles[customizeClass] : ""} ${deviceClass}`}>
             <div className={Styles["info"]}>
@@ -67,8 +59,14 @@ export const UserInfo: React.FC<{
                 </div>
             </div>
             <div className={`${Styles["avatar"]} ${Styles[classCursor]}`} onClick={handleClickAvatar}>
-                {avatarId > 0 && avatarId <= MAX_AVATAR_ID ? (
-                    <img src={`/static/images/avatar/${avatarId}.jpg`} className="img-fluid circle" height="40" width="40" alt="Avatar" />
+                {user.avatarId > 0 && user.avatarId <= MAX_AVATAR_ID ? (
+                    <img
+                        src={`/static/images/avatar/${user.avatarId}.jpg`}
+                        className="img-fluid circle"
+                        height="40"
+                        width="40"
+                        alt="Avatar"
+                    />
                 ) : (
                     <span className={`icon-user ${Styles["icon-user"]}`} data-testid="icon-user"></span>
                 )}

@@ -8,6 +8,6 @@ export const initialSystemContextModel = (): SystemContextModel => {
     return {
         selectedChip: 1,
         isUserGesture: false,
-        isEnableQuickBet: false,
+        isEnableQuickBet: true,
     };
 };

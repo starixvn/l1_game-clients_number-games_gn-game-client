@@ -22,7 +22,7 @@ export const useSettingDispatch = () => useContext(SettingDispatchContext);
 
 const settingReducer = (state: any, action: SettingEventAction) => {
     const { type, payload } = action;
-    const { isShowedSetting, enabledMusic, isShowAvatarGallery, avatarId } = payload;
+    const { isShowedSetting, enabledMusic, isShowAvatarGallery } = payload;
 
     switch (type) {
         case SettingEventActionType.TOGGLE_SETTING: {
@@ -43,13 +43,6 @@ const settingReducer = (state: any, action: SettingEventAction) => {
             return {
                 ...state,
                 isShowAvatarGallery,
-            };
-        }
-
-        case SettingEventActionType.CHANGE_AVATAR_ID: {
-            return {
-                ...state,
-                avatarId,
             };
         }
 

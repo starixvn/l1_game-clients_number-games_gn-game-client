@@ -35,12 +35,12 @@ import { ErrorApiText } from "../../game-components/error-api-text";
 import Footer from "../../game-components/footer";
 import Header from "../header";
 import { Lobby } from "../lobby/lobby";
+import { LobbySocketConnection } from "../lobby/lobby-socket-connection";
 import Styles from "./dashboard.module.scss";
 import Register from "./register";
 import { MAX_AVATAR_ID } from "./register/avatar-gallery";
 import NameGenerator from "./register/name-generator";
 import { ILobbyConfigs, Props, State } from "./type";
-import { LobbySocketConnection } from "../lobby/lobby-socket-connection";
 
 class Dashboard extends React.PureComponent<Props, State> {
     private notificationSocket: Socket = null;
@@ -86,6 +86,7 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.openGameFromLobby = this.openGameFromLobby.bind(this);
         this.removeGameTransmitter = this.removeGameTransmitter.bind(this);
         this.reconnectGameTransmitter = this.reconnectGameTransmitter.bind(this);
+        this.updateAvatar = this.updateAvatar.bind(this);
 
         const buildId = process.env.buildVersion;
         const buildVersion = StorageHelper.get(localStorageKeys.buildVersion) ?? 0;
@@ -96,6 +97,7 @@ class Dashboard extends React.PureComponent<Props, State> {
     }
 
     updateAuthorizeInfo(authorizeInfo: AuthorizeResponse) {
+        authorizeInfo.user.settings.quickBet = true;
         this.checkOfferedGame(authorizeInfo);
         this.setState({ authorizeInfo });
     }
@@ -106,6 +108,12 @@ class Dashboard extends React.PureComponent<Props, State> {
             authorizeInfo.user.red = balance;
             this.setState({ authorizeInfo });
         }
+    }
+
+    updateAvatar(avatarId: number) {
+        const authorizeInfo = { ...this.state.authorizeInfo };
+        authorizeInfo.user.avatarId = avatarId;
+        this.setState({ authorizeInfo });
     }
 
     handleShowApiErrorMessage(errorCode: string, isDisableAccount = false) {
@@ -385,6 +393,7 @@ class Dashboard extends React.PureComponent<Props, State> {
             setBalance: this.updateUserBalance,
             signOut: this.signOut,
             fractionalOddsFormat: authorizeInfo.user?.fractionalOddsFormat ?? false,
+            updateAvatar: this.updateAvatar,
         };
 
         const offerGames = getOfferGamesIds(authorizeInfo);

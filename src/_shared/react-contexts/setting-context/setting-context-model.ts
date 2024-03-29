@@ -4,7 +4,6 @@ export interface SettingContextModel {
     isShowedSetting: boolean;
     enabledMusic: boolean;
     isShowAvatarGallery: boolean;
-    avatarId: number;
 }
 
 export const initialSettingContextModel = (): SettingContextModel => {
@@ -12,6 +11,5 @@ export const initialSettingContextModel = (): SettingContextModel => {
         isShowedSetting: false,
         enabledMusic: StorageHelper.get(localStorageKeys.enableMusic) ?? false,
         isShowAvatarGallery: false,
-        avatarId: 0,
     };
 };
