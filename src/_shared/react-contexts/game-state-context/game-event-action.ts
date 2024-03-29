@@ -3,8 +3,8 @@ import {
     GameConfigs,
     GameDurations,
     Notice,
+    PFClientSeedSetting,
     PFResult,
-    PFSettingData,
     RoundState,
     SuggestBet,
 } from "../../../components/game-base/type";
@@ -54,7 +54,7 @@ export enum GameEventActionType {
     TOGGLE_PF_VERIFICATION = "TOGGLE_PF_VERIFICATION",
     TOGGLE_GAME_GUIDE = "TOGGLE_GAME_GUIDE",
     TOGGLE_PF_SETTING = "TOGGLE_PF_SETTING",
-    UPDATE_PF_SETTING = "UPDATE_PF_SETTING",
+    UPDATE_PF_CLIENT_SEED_SETTING = "UPDATE_PF_CLIENT_SEED_SETTING",
     SUGGEST_BET = "SUGGEST_BET",
 }
 
@@ -121,7 +121,7 @@ export interface GameEventPayload {
     isShowPFClientSeedInfo?: boolean;
     isShowPFVerification?: boolean;
     suggestBet?: SuggestBet;
-    pfSetting?: PFSettingData;
+    pfClientSeedSetting?: PFClientSeedSetting;
     betDetailModalData?: {
         drawInfo: DrawInfo;
         betLogDetails: any[];

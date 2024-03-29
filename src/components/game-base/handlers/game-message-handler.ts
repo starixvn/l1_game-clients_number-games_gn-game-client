@@ -34,7 +34,6 @@ export const messageEventType = {
     BET_HISTORY: "history",
     UPDATE_PLAYER_BALANCE: "updatePlayerBalance",
     CLEAR_GAME_TIMEOUT_AND_INTERVAL: "clearGameTimeoutAndInterval",
-    PROVABLY_FAIR: "pf",
     SEND_SOCKET_MESSAGE_WITH_CLIENT_SEED: "sendSocketMessageWithClientSeed",
     ROUND_ID: "roundId",
 };
@@ -50,7 +49,6 @@ export class GameMessageHandler {
         this.register(messageEventType.ODDS, this.handleOdds);
         this.register(messageEventType.ROUND_DATA, this.handleRoundData);
         this.register(messageEventType.SIGNED_IN, this.handleSignedIn);
-        this.register(messageEventType.PROVABLY_FAIR, this.handleProvablyFair);
     };
 
     getMessageTransmitter() {
@@ -116,17 +114,6 @@ export class GameMessageHandler {
             type: GameEventActionType.ROUND_DATA,
             payload: {
                 roundData,
-            },
-        });
-    };
-
-    handleProvablyFair = ({ pf }) => {
-        this.dispatch({
-            type: GameEventActionType.UPDATE_PF_SETTING,
-            payload: {
-                pfSetting: {
-                    ...pf,
-                },
             },
         });
     };

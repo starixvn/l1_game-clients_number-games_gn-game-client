@@ -186,13 +186,18 @@ export type ClientSeedInfo = {
     mergeClientSeed: string;
 };
 
-export interface PFSettingData {
+export interface PFClientSeedSetting {
     drawId: number;
     roundId: number;
-    serverSeedHash: string;
     randomClientSeed: string;
     manualClientSeed: string;
     useManualClientSeed: boolean;
+}
+
+export interface PFSeverSeed {
+    drawId: number;
+    roundId: number;
+    serverSeedHash: string;
 }
 
 export interface PFResult {

@@ -72,7 +72,7 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
         isShowPFSetting,
         isShowBetDetail,
         suggestBet,
-        pfSetting,
+        pfClientSeedSetting,
         betDetailModalData,
         isShowPFVerify,
         pfVerifyModalData,
@@ -133,17 +133,18 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
         }
 
         case GameEventActionType.ROUND_DATA: {
-            if (roundData.drawId != state.pfSetting.drawId) {
-                return {
-                    ...state,
-                    roundData,
-                    pfSetting: {
-                        ...state.pfSetting,
-                        drawId: roundData.drawId,
-                        randomClientSeed: randomNumberSeries(4),
-                    },
-                };
-            }
+            // if (state.drawId != state?.pfClientSeedSetting?.drawId) {
+            //     console.log("Decide", state.drawId);
+            //     return {
+            //         ...state,
+            //         roundData,
+            //         pfClientSeedSetting: {
+            //             ...state.pfClientSeedSetting,
+            //             drawId: state.drawId,
+            //             randomClientSeed: randomNumberSeries(4),
+            //         },
+            //     };
+            // }
 
             return {
                 ...state,
@@ -171,7 +172,7 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
                 settlementResult,
                 roundId,
                 drawId,
-                roundData
+                roundData,
             };
         }
 
@@ -404,12 +405,12 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
             };
         }
 
-        case GameEventActionType.UPDATE_PF_SETTING: {
+        case GameEventActionType.UPDATE_PF_CLIENT_SEED_SETTING: {
             return {
                 ...state,
-                pfSetting: {
-                    ...state.pfSetting,
-                    ...pfSetting,
+                pfClientSeedSetting: {
+                    ...state.pfClientSeedSetting,
+                    ...pfClientSeedSetting,
                 },
             };
         }

@@ -63,6 +63,7 @@ export class TurnIdHandler {
             this.shouldRunWhenFirstLoad = false;
             turn = this.turnTimelineCounter.calculateTurn(this.roundRemainingTime, this.roundId, this.drawId);
 
+            this.dispatchClientSeed(turn.id);
             this.dispatchTurnCounter(true, turn.index);
             this.dispatchDrawId(turn.id);
         } else if (!this.isInDisplayResultState()) {
@@ -112,12 +113,13 @@ export class TurnIdHandler {
     };
 
     dispatchClientSeed = (drawId) => {
-        const { drawId: oldDrawId } = this.props.gameStateContextModel();
+        const { pfClientSeedSetting } = this.props.gameStateContextModel();
+        const oldDrawId = pfClientSeedSetting?.drawId;
         if (oldDrawId !== drawId) {
             this.props.dispatch({
-                type: GameEventActionType.UPDATE_PF_SETTING,
+                type: GameEventActionType.UPDATE_PF_CLIENT_SEED_SETTING,
                 payload: {
-                    pfSetting: {
+                    pfClientSeedSetting: {
                         drawId: drawId,
                         randomClientSeed: randomNumberSeries(4),
                     },

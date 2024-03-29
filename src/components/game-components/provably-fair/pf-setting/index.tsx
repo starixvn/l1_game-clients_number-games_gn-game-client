@@ -9,10 +9,12 @@ import Styles from "../provably-fair.module.scss";
 import { messageEventType } from "../../../game-base/handlers";
 import CopyableTextInput from "../copyable-text-input";
 import Loader from "../../loader";
+import { PFSeverSeed } from "../../../game-base/type";
 
 const NUMBER_VALUES = "0123456789";
 const GetPFInfoMessage = "getPfInfo";
-const PFInfoMessage = "pfResult";
+const PFResultMessage = "pfResult";
+const PFPublishMessage = "pf";
 const ClientSeedDetail = "clientSeedDetail";
 
 const PFSettingModal: FC = () => {
@@ -48,44 +50,64 @@ const PFSetting: FC = () => {
     const randomSeed = useRef<HTMLInputElement>();
     const manualRadio = useRef<HTMLInputElement>();
     const manualSeed = useRef<HTMLInputElement>();
-    const { pfSetting, ownBets, drawId, roundId } = useGameStateContext();
+    const { pfClientSeedSetting, ownBets, drawId, roundId } = useGameStateContext();
     const [isFirstLoad, setIsFirstLoad] = useState<boolean>(true);
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [isManualMode, setIsManualMode] = useState<boolean>(pfSetting?.useManualClientSeed || false);
+    const [isManualMode, setIsManualMode] = useState<boolean>(pfClientSeedSetting?.useManualClientSeed || false);
+    const [serverSeedHash, setServerSeedHash] = useState<string>("");
+    const [manualClientSeed, setManualClientSeed] = useState<string>(pfClientSeedSetting?.manualClientSeed || "");
+    const [randomClientSeed, setRandomClientSeed] = useState<string>(pfClientSeedSetting?.randomClientSeed || "");
     const { t: translateCommon } = useCommonTranslate();
     const { tolgeeNamespace, gameMessageHandler } = useGameContext();
     const { t: translateInGame } = useTranslator([tolgeeNamespace]);
     const dispatch = useGameStatesDispatch();
 
     useEffect(() => {
+        setRandomClientSeed(pfClientSeedSetting?.randomClientSeed);
+    }, [pfClientSeedSetting?.randomClientSeed]);
+
+    useEffect(() => {
         gameMessageHandler.broadcastGameEvent({
             [messageEventType.SEND_SOCKET_MESSAGE]: { event: GetPFInfoMessage, data: { drawId, roundId } },
         });
         setIsLoading(true);
-        const pfResultHandler = gameMessageHandler.register(PFInfoMessage, ({ pfResult }) => {
+
+        const handleServerSeed = (pfServerSeed: PFSeverSeed) => {
+            if (pfServerSeed.drawId >= drawId) {
+                setServerSeedHash(pfServerSeed.serverSeedHash);
+            }
+        };
+
+        const publishPFSeverSeedHandler = gameMessageHandler.register(PFPublishMessage, ({ pf }) => {
+            handleServerSeed(pf);
+        });
+
+        const pfResultHandler = gameMessageHandler.register(PFResultMessage, ({ pfResult }) => {
+            handleServerSeed(pfResult);
             setIsLoading(false);
-            dispatch({
-                type: GameEventActionType.UPDATE_PF_SETTING,
-                payload: {
-                    pfSetting: pfResult,
-                },
-            });
         });
 
         const clientSeedDetailHandler = gameMessageHandler.register(ClientSeedDetail, ({ clientSeedDetail }) => {
-            dispatch({
-                type: GameEventActionType.UPDATE_PF_SETTING,
-                payload: {
-                    pfSetting: {
-                        ...clientSeedDetail,
+            if (Object.keys(clientSeedDetail).length > 0) {
+                setRandomClientSeed(clientSeedDetail.randomClientSeed);
+                setManualClientSeed(clientSeedDetail.manualClientSeed);
+                setIsManualMode(clientSeedDetail.useManualClientSeed);
+                dispatch({
+                    type: GameEventActionType.UPDATE_PF_CLIENT_SEED_SETTING,
+                    payload: {
+                        pfClientSeedSetting: {
+                            ...clientSeedDetail,
+                        },
                     },
-                },
-            });
+                });
+            }
+            setIsLoading(false);
         });
 
         return () => {
             gameMessageHandler.removeHandler(pfResultHandler);
             gameMessageHandler.removeHandler(clientSeedDetailHandler);
+            gameMessageHandler.removeHandler(publishPFSeverSeedHandler);
         };
     }, []);
 
@@ -109,9 +131,9 @@ const PFSetting: FC = () => {
             event.target.value = randomSeed.current.value;
         }
         dispatch({
-            type: GameEventActionType.UPDATE_PF_SETTING,
+            type: GameEventActionType.UPDATE_PF_CLIENT_SEED_SETTING,
             payload: {
-                pfSetting: {
+                pfClientSeedSetting: {
                     manualClientSeed: event.target.value,
                 },
             },
@@ -135,18 +157,18 @@ const PFSetting: FC = () => {
         if (manualRadio.current.checked) {
             manualSeed.current.value = randomSeed.current.value;
             dispatch({
-                type: GameEventActionType.UPDATE_PF_SETTING,
+                type: GameEventActionType.UPDATE_PF_CLIENT_SEED_SETTING,
                 payload: {
-                    pfSetting: {
+                    pfClientSeedSetting: {
                         useManualClientSeed: true,
                     },
                 },
             });
         } else {
             dispatch({
-                type: GameEventActionType.UPDATE_PF_SETTING,
+                type: GameEventActionType.UPDATE_PF_CLIENT_SEED_SETTING,
                 payload: {
-                    pfSetting: {
+                    pfClientSeedSetting: {
                         useManualClientSeed: false,
                         manualClientSeed: undefined,
                     },
@@ -191,7 +213,7 @@ const PFSetting: FC = () => {
                                 ref={randomSeed}
                                 type="text"
                                 id="random-client-seed"
-                                value={pfSetting?.randomClientSeed || ""}
+                                value={randomClientSeed || ""}
                                 readOnly={true}
                                 disabled={isManualMode}
                             />
@@ -213,33 +235,18 @@ const PFSetting: FC = () => {
                                     </div>
                                 </label>
                             </div>
-                            {Object.keys(ownBets).length > 0 ? (
-                                <input
-                                    className={"form-control" + (isManualMode ? " checked" : "")}
-                                    id="manual-client-seed"
-                                    ref={manualSeed}
-                                    type="text"
-                                    inputMode="numeric"
-                                    onKeyDown={handleOnKeyPress}
-                                    onPaste={handlePaste}
-                                    disabled={!isManualMode}
-                                    onBlur={handleOnBlur}
-                                    value={!isManualMode ? "" : pfSetting?.manualClientSeed || ""}
-                                />
-                            ) : (
-                                <input
-                                    className={"form-control" + (isManualMode ? " checked" : "")}
-                                    id="manual-client-seed"
-                                    ref={manualSeed}
-                                    type="text"
-                                    inputMode="numeric"
-                                    onKeyDown={handleOnKeyPress}
-                                    onPaste={handlePaste}
-                                    onBlur={handleOnBlur}
-                                    disabled={!isManualMode}
-                                    defaultValue={pfSetting?.manualClientSeed || ""}
-                                />
-                            )}
+                            <input
+                                className={"form-control" + (isManualMode ? " checked" : "")}
+                                id="manual-client-seed"
+                                ref={manualSeed}
+                                type="text"
+                                inputMode="numeric"
+                                onKeyDown={handleOnKeyPress}
+                                onPaste={handlePaste}
+                                onBlur={handleOnBlur}
+                                disabled={!isManualMode}
+                                defaultValue={manualClientSeed || ""}
+                            />
                         </div>
                     </div>
                 )}
@@ -248,7 +255,7 @@ const PFSetting: FC = () => {
             <h3 className={Styles["section-title"]}>{translateCommon("pf_header_server_seed_sha256")}</h3>
             <div className={Styles["client-seed-form"]}>
                 <div className="input-group width-full">
-                    <CopyableTextInput value={pfSetting?.serverSeedHash} id="server-seed-hash" />
+                    <CopyableTextInput value={serverSeedHash} id="server-seed-hash" />
                 </div>
                 {Object.keys(ownBets).length > 0 && <div className={Styles["pf-note"]}>{translateCommon("pf_client_seed_para_1")}</div>}
             </div>

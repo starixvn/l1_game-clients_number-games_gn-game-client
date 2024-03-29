@@ -4,8 +4,8 @@ import {
     IBallColor,
     IUserStakeLevel,
     Notice,
+    PFClientSeedSetting,
     PFResult,
-    PFSettingData,
     Round,
     RoundState,
     SuggestBet,
@@ -57,7 +57,7 @@ export interface GameStateContextModel {
     isShowPFClientSeedInfo: boolean;
     isShowPFVerification: boolean;
     suggestBet: SuggestBet;
-    pfSetting?: PFSettingData;
+    pfClientSeedSetting?: PFClientSeedSetting;
     betDetailModalData?: {
         drawInfo: DrawInfo;
         betLogDetails: any[];
@@ -112,6 +112,12 @@ export const initialGameStateContextModel = () => {
             sendOutstandingBet: null,
             suggestBetAmount: 0,
             isInsufficientFunds: null,
+        },
+        pfClientSeedSetting: {
+            drawId: 0,
+            randomClientSeed: "0000",
+            manualClientSeed: "",
+            useManualClientSeed: false,
         },
     };
 };
