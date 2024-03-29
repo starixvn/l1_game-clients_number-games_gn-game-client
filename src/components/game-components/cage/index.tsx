@@ -9,6 +9,7 @@ import { IBallColor, RoundState } from "../../game-base/type";
 import Styles from "./cage.module.scss";
 import ResultBall from "./result-ball";
 import ResultNumber from "./result-number";
+import { Spritesheet } from "../sprites-sheet";
 
 export enum CageColor {
     BLUE = "blue",
@@ -19,7 +20,7 @@ export enum CageColor {
 export enum CagePosition {
     LEFT = "left",
     RIGHT = "right",
-    CENTER = "center"
+    CENTER = "center",
 }
 
 export type CageProps = {
@@ -89,19 +90,17 @@ const Cage: React.FC<CageProps> = (cageProps) => {
             <div id="cage-balls" className={Styles["cage-balls"]}>
                 {roundState === RoundState.SwitchRound && <div className={Styles["idle-balls"]}></div>}
                 {cageBallsLoopFrames?.length > 0 && roundState !== RoundState.SwitchRound && (
-                    <Stage width={130} height={130} options={{ backgroundAlpha: 0, antialias: false, powerPreference: "low-power" }}>
-                        <Container position={[65, 65]}>
-                            <AnimatedSprite
-                                anchor={0.5}
-                                textures={cageBallsLoopFrames}
-                                autoUpdate
-                                isPlaying={true}
-                                initialFrame={0}
-                                animationSpeed={0.6}
-                                loop={true}
-                            />
-                        </Container>
-                    </Stage>
+                    <Spritesheet
+                        className={`cage-loop__class--style`}
+                        image={`/static/images/bac-number/cage-loop-anim.png`}
+                        widthFrame={130}
+                        isResponsive
+                        heightFrame={130}
+                        steps={11}
+                        autoplay={true}
+                        loop={true}
+                        fps={30}
+                    />
                 )}
             </div>
             <div id="cage-cover" className={Styles["cage-cover"]}></div>

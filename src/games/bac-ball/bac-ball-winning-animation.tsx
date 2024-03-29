@@ -6,6 +6,7 @@ import { loadPixiAnimations } from "../../_shared/helpers/pixi-resource-loader";
 import { isHighLightWinningResult } from "../../_shared/react-hooks/use-high-light";
 import Styles from "./bac-ball.module.scss";
 import { RoundState } from "../../components/game-base/type";
+import { Spritesheet } from "../../components/game-components/sprites-sheet";
 
 type Props = {
     choice: string;
@@ -49,7 +50,7 @@ export const BacBallWinningAnimation: React.FC<Props> = ({
         winningHighLightResult({ betChoice: choice, roundState, settlementResult, showResultInfo }) &&
         winningFrames?.length > 0 && (
             <div className="d-grid">
-                <Stage
+                {/* <Stage
                     width={width}
                     height={height}
                     options={{ backgroundAlpha: 0, antialias: false, powerPreference: "low-power" }}
@@ -66,8 +67,19 @@ export const BacBallWinningAnimation: React.FC<Props> = ({
                             loop={true}
                         />
                     </Container>
-                </Stage>
+                </Stage> */}
 
+                <Spritesheet
+                    className={`bet-choice__class--style`}
+                    image={`/static/images/bac-number/${resourceName}-choice-highlight-winning-anim.png`}
+                    widthFrame={200}
+                    isResponsive
+                    heightFrame={210}
+                    steps={9}
+                    autoplay={true}
+                    loop={true}
+                    fps={30}
+                />
                 <div className={Styles[`winning-${choice}`]}></div>
             </div>
         )
