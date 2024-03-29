@@ -13,6 +13,7 @@ export const UserInfo: React.FC<{
 }> = ({ customizeClass, isLobby }) => {
     const clickSound = useClickSound();
     const [avatarId, setAvatarId] = useState<number>();
+    const [classCursor, setClassCursor] = useState<string>();
     const settingContext = useSettingContext();
     const settingDispatch = useSettingDispatch();
     const { authorizeInfo } = usePlayerContext();
@@ -40,10 +41,18 @@ export const UserInfo: React.FC<{
     };
 
     useEffect(() => {
-        if (settingContext.avatarId > 0 || user.avatarId) {
+        if (isLobby) {
+            setClassCursor("user-cursor");
+        } else {
+            setClassCursor("");
+        }
+    }, [isLobby]);
+
+    useEffect(() => {
+        if (settingContext.avatarId > 0 || user.avatarId > 0) {
             setAvatarId(settingContext.avatarId > 0 ? settingContext.avatarId : user.avatarId);
         }
-    }, [user, settingContext.avatarId]);
+    }, []);
 
     return (
         <div className={`${Styles["user"]} ${customizeClass ? Styles[customizeClass] : ""} ${deviceClass}`}>
@@ -57,7 +66,7 @@ export const UserInfo: React.FC<{
                     <img src="/static/images/icon-coin.svg" className="img-fluid" alt="icon-coin" />
                 </div>
             </div>
-            <div className={Styles["avatar"]} onClick={handleClickAvatar}>
+            <div className={`${Styles["avatar"]} ${Styles[classCursor]}`} onClick={handleClickAvatar}>
                 {avatarId > 0 && avatarId <= MAX_AVATAR_ID ? (
                     <img src={`/static/images/avatar/${avatarId}.jpg`} className="img-fluid circle" height="40" width="40" alt="Avatar" />
                 ) : (
