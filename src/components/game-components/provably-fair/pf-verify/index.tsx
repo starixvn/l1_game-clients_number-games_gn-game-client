@@ -98,7 +98,7 @@ const PFVerify: FC<{ renderResultBlock: Function }> = ({ renderResultBlock }) =>
                     <button className={Styles["btn-pf-intro"]} onClick={handleClickTooltip} onBlur={handleBlurTooltip}>
                         <span className="icon-info" />
                     </button>
-                    <div className={`${Styles["hide"]} ${Styles["pf-tooltip"]} break`}>{translateInGame("pf_client_seed_tooltip")}</div>
+                    <div className={`${Styles["hide"]} ${Styles["pf-tooltip"]} break`}>{translateSNGames("pf_client_seed_tooltip")}</div>
                 </div>
 
                 <div className="relative">
@@ -117,7 +117,7 @@ const PFVerify: FC<{ renderResultBlock: Function }> = ({ renderResultBlock }) =>
                     <button className={Styles["btn-pf-intro"]} onClick={handleClickTooltip} onBlur={handleBlurTooltip}>
                         <span className="icon-info" />
                     </button>
-                    <div className={`${Styles["hide"]} ${Styles["pf-tooltip"]}`}>{translateInGame("pf_combined_sha512_hash_tooltip")}</div>
+                    <div className={`${Styles["hide"]} ${Styles["pf-tooltip"]}`}>{translateSNGames("pf_combined_sha512_hash_tooltip")}</div>
                 </div>
 
                 <div className="input-group width-full mt-4">

@@ -17,7 +17,7 @@ const PFResultMessage = "pfResult";
 const PFPublishMessage = "pf";
 const ClientSeedDetail = "clientSeedDetail";
 
-const PFSettingModal: FC = () => {
+const PFSettingModal: FC<{ customClientSeedInfo?: string }> = ({ customClientSeedInfo }) => {
     const { isShowPFSetting } = useGameStateContext();
     const { t: translateSNGames } = useSNTranslate();
     const dispatch = useGameStatesDispatch();
@@ -39,13 +39,13 @@ const PFSettingModal: FC = () => {
                 isOpen={true}
                 onCloseModal={handleCloseModal}
             >
-                <PFSetting />
+                <PFSetting customClientSeedInfo={customClientSeedInfo} />
             </ModalContainer>
         )
     );
 };
 
-const PFSetting: FC = () => {
+const PFSetting: FC<{ customClientSeedInfo?: string }> = ({ customClientSeedInfo }) => {
     const randomRadio = useRef<HTMLInputElement>();
     const randomSeed = useRef<HTMLInputElement>();
     const manualRadio = useRef<HTMLInputElement>();
@@ -58,8 +58,8 @@ const PFSetting: FC = () => {
     const [manualClientSeed, setManualClientSeed] = useState<string>(pfClientSeedSetting?.manualClientSeed || "");
     const [randomClientSeed, setRandomClientSeed] = useState<string>(pfClientSeedSetting?.randomClientSeed || "");
     const { t: translateCommon } = useCommonTranslate();
-    const { tolgeeNamespace, gameMessageHandler } = useGameContext();
-    const { t: translateInGame } = useTranslator([tolgeeNamespace]);
+    const { gameMessageHandler } = useGameContext();
+    const { t: translateSNGames } = useSNTranslate();
     const dispatch = useGameStatesDispatch();
 
     useEffect(() => {
@@ -142,7 +142,7 @@ const PFSetting: FC = () => {
     useEffect(() => {
         if (isManualMode) {
             if (!isFirstLoad) {
-                manualSeed.current?.focus();
+                manualSeed?.current?.focus();
             }
             setIsFirstLoad(false);
         } else {
@@ -192,7 +192,7 @@ const PFSetting: FC = () => {
         <div className={Styles["pf-setting-container"]}>
             <div>
                 <ul>
-                    <li>{translateInGame("pf_settings_para_1")}</li>
+                    <li>{customClientSeedInfo || translateSNGames("pf_settings_para_1")}</li>
                     <li>{translateCommon("pf_settings_para_2")}</li>
                 </ul>
             </div>
