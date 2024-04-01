@@ -8,7 +8,6 @@
 }
 
 .result-container {
-    // display: grid;
     justify-content: center;
     grid-template-columns: repeat(2, 15.3rem);
     grid-gap: 4rem;
@@ -23,9 +22,9 @@
 
 %main-option {
     overflow: hidden;
-    width: 17.5rem;
-    height: 10.5rem;
-    background-size: 17.8rem 18.8rem;
+    width: 17.7rem;
+    height: 9.4rem;
+    background-size: 17.7rem 9.4rem;
     border: none;
 
     .btn-ripple {
@@ -44,22 +43,14 @@
     }
 }
 
-.bet-option-row{
-
+.bet-option-row {
 }
 
 .over {
     --color: #98cdff;
 
     @extend %main-option;
-    // background: url("/static/images/bac-number/bg-player.svg") no-repeat;
-    background: rgb(37, 37, 218);
-    border-bottom-left-radius: 2rem;
-    border-top-left-radius: 2rem;
-    border-bottom-right-radius: 2rem;
-    border-top-right-radius: 2rem;
-    padding-right: 0.1rem;
-    margin: 0.3rem;
+    background: url("/static/images/next-ball/bg-blue.svg") no-repeat;
 
     .own-bet {
         left: -4rem;
@@ -74,16 +65,7 @@
     --color: #f9bcb9;
 
     @extend %main-option;
-    // background: url("/static/images/bac-number/bg-banker.svg") no-repeat;
-
-    background: rgb(218, 52, 52);
-    border-bottom-left-radius: 2rem;
-    border-top-left-radius: 2rem;
-    border-bottom-right-radius: 2rem;
-    border-top-right-radius: 2rem;
-    padding-right: 1.2rem;
-    padding-left: 0.6rem;
-    margin: 0.3rem;
+    background: url("/static/images/next-ball/bg-red.svg") no-repeat;
 
     .own-bet {
         left: 4rem;
@@ -98,7 +80,6 @@
         transform: scaleX(-1);
     }
 }
-
 
 .odd {
     --color: #98cdff;
@@ -122,7 +103,6 @@
         left: 0;
     }
 }
-
 
 .even {
     --color: #f9bcb9;
@@ -220,7 +200,6 @@
     }
 }
 
-
 .highlight-prev-result-odd,
 .highlight-prev-result-even {
     // background: url("/static/images/bac-number/winning-previous-player.svg") no-repeat center center;
@@ -234,7 +213,6 @@
         transform: scaleX(-1);
     }
 }
-
 
 .choice-info {
     display: flex;

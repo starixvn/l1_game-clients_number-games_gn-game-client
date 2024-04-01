@@ -16,7 +16,13 @@ export const GameIcon: React.FC<Props> = ({ gameSettings, transmitter }) => {
 
     return (
         <div className={`${Styles["icon-game"]} ${Styles[gameName.toLowerCase()]}`}>
-            <img src={`/static/images/lobby/game-board-detail/icon-${gameName.toLowerCase()}.png`} alt="icon-game" />
+            {/* <img src={`/static/images/lobby/game-board-detail/icon-${gameName.toLowerCase()}.png`} alt="icon-game" /> */}
+            <div className={Styles["video-wrapper"]} id="video-wrapper">
+                <video className={Styles["video"]} playsInline autoPlay muted loop poster="cake.jpg">
+                    <source src="/static/images/lobby/game-board-detail/icon-gif.mp4" type="video/mp4" />
+                    Your browser does not support the video tag.
+                </video>
+            </div>
             <span className={`${Styles["game-name"]}`}>{t(`game_icon_name_${id}`)}</span>
             <OnlinePlayer transmitter={transmitter} />
         </div>

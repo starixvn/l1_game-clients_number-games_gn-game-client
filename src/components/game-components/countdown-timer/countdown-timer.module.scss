@@ -44,7 +44,9 @@
 
     > span {
         display: block;
-        margin-left: -0.1rem;
+        margin-left: -0.2rem;
+        font-family: "ProximaNova", sans-serif;
+        font-variant-numeric: tabular-nums;
     }
 
     &:before {
