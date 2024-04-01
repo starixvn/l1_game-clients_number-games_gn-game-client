@@ -97,18 +97,15 @@ class Dashboard extends React.PureComponent<Props, State> {
     }
 
     updateAuthorizeInfo(authorizeInfo: AuthorizeResponse) {
-        const clonedAuthorizeInfo = { ...authorizeInfo };
-        if (authorizeInfo?.authorized) {
-            clonedAuthorizeInfo.user.settings = { ...clonedAuthorizeInfo.user.settings, quickBet: true };
-        }
-
-        this.checkOfferedGame(clonedAuthorizeInfo);
-        this.setState({ authorizeInfo: clonedAuthorizeInfo });
+        // authorizeInfo.user.settings.quickBet = true;
+        this.checkOfferedGame(authorizeInfo);
+        this.setState({ authorizeInfo });
     }
 
     updateUserBalance(balance: number) {
         const authorizeInfo = { ...this.state.authorizeInfo };
         if (authorizeInfo && authorizeInfo.authorized && authorizeInfo.user.red !== balance) {
+            authorizeInfo.user.settings.quickBet = true;
             authorizeInfo.user.red = balance;
             this.setState({ authorizeInfo });
         }
@@ -353,6 +350,7 @@ class Dashboard extends React.PureComponent<Props, State> {
                 updateUserStakeLevel={this.handleUpdateUserStakeLevel}
                 openGameId={urlContext.gameId}
                 openGameName={openGameName}
+                openGame={this.openGame}
             />
         );
     }

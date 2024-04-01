@@ -19,5 +19,11 @@
     "appType": 1,
     "useTolgeeStatic": false,
     "enableDebugLogs": true,
-    "socketGatewayPath": "gateway"
+    "socketGatewayPath": "gateway",
+    "consequencesGames ": [
+        1001,
+        1002,
+        1003,
+        1004
+    ]
 }

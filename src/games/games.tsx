@@ -1,5 +1,5 @@
 import { useTheme } from "next-themes";
-import React from "react";
+import React, { useState } from "react";
 import { isIOS, isMobileOnly } from "react-device-detect";
 import { getAppSettings } from "../_shared/app-settings";
 import { GameIds } from "../_shared/constants";
@@ -17,10 +17,39 @@ import styles from "./games.module.scss";
 import NextBall from "./next-ball/page";
 import { Props } from "./type";
 import { BackgroundGalaxy } from "../components/page-components/background";
+import { useSwipeable } from "react-swipeable";
 
-export const Games: React.FC<Props> = ({ setApiErrorMessage, userStakeLevel, updateUserStakeLevel, openGameId, userOfferGames }) => {
+export const Games: React.FC<Props> = ({
+    setApiErrorMessage,
+    userStakeLevel,
+    updateUserStakeLevel,
+    openGameId,
+    userOfferGames,
+    openGame }) => {
     const { theme } = useTheme();
     const locale = tolgee.getLanguage();
+    const [stopScroll, setStopScroll] = useState(false);
+
+    const swipeableHandler = (isSwipedUp: boolean) => {
+        const { consequencesGames } = getAppSettings();
+        const lastedGameIdIndex = consequencesGames.length - 1;
+        const currentGameIdIndex = consequencesGames.findIndex(number => number === openGameId);
+
+        if (currentGameIdIndex === -1) {
+            return;
+        }
+
+        let nextOpenedGameIdIndex = isSwipedUp ? (currentGameIdIndex === 0 ? lastedGameIdIndex : currentGameIdIndex - 1) :
+            (currentGameIdIndex === lastedGameIdIndex ? 0 : currentGameIdIndex + 1);
+
+        openGame(consequencesGames[nextOpenedGameIdIndex]);
+        setStopScroll(true);
+    }
+
+    const handlers = useSwipeable({
+        onSwipedUp: () => swipeableHandler(true),
+        onSwipedDown: () => swipeableHandler(false),
+    });
 
     const gameSound = {
         playPlaceBetSound: usePlaceBetSound(),
@@ -41,6 +70,7 @@ export const Games: React.FC<Props> = ({ setApiErrorMessage, userStakeLevel, upd
             theme,
             userStakeLevel,
             updateUserStakeLevel,
+            openGame
         };
 
         if (!isGameOffered) {
@@ -62,7 +92,7 @@ export const Games: React.FC<Props> = ({ setApiErrorMessage, userStakeLevel, upd
     };
 
     return (
-        <div className={`game-container game-wrapper ${styles["open-chips"]}`}>
+        <div className={`game-container game-wrapper ${styles["open-chips"]}`} {...handlers} style={{ touchAction: stopScroll ? 'none' : 'auto' }}>
             <SystemContextProvider>
                 <div className={`${styles["game-list"]} ${isMobileOnly ? styles[isIOS ? "ios-device" : "android-device"] : ""}`}>
                     <BackgroundGalaxy />

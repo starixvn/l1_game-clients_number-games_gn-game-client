@@ -7,4 +7,5 @@ export type Props = {
     openGameId: number;
     openGameName: string;
     userOfferGames: number[];
+    openGame: Function;
 };

@@ -58,6 +58,7 @@ export type GamePropsContext = {
     hedgeBetGroups?: [string[]];
     gameMessageHandler?: GameMessageHandler;
     gameSound?: GameSound;
+    openGame: Function;
 };
 
 export type GameSound = {

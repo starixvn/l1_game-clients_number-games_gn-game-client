@@ -18,4 +18,5 @@ window.envConfig = {
     system: "GN",
     appType: 1,
     useTolgeeStatic: false,
+    consequencesGames: [1001, 1002, 1003, 1004],
 };

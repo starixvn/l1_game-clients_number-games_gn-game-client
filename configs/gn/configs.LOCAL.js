@@ -15,4 +15,5 @@ window.envConfig = {
     appType: 1,
     enableDebugLogs: true,
     socketGatewayPath: "gateway",
+    consequencesGames: [1001, 1002, 1003, 1004],
 };
