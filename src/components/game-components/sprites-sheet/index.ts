@@ -8,13 +8,13 @@ export interface FrameAction {
 export interface SpritesheetProps {
     className?: string;
     style?: CSSProperties;
-    image: string;
-    widthFrame: number;
-    heightFrame: number;
+    image?: string;
+    widthFrame?: number;
+    heightFrame?: number;
     isResponsive?: boolean;
     writeDebugLog?: boolean;
-    steps: number;
-    fps: number;
+    steps?: number;
+    fps?: number;
     direction?: "forward" | "rewind";
     timeout?: number;
     autoplay?: boolean;
