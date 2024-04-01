@@ -174,7 +174,6 @@ const BacBallBetOptionsComponent = () => {
                 </div>
                 {ownBet}
                 {<div className={Style["winning-effect"]}>{winningResult}</div>}
-                {winningPrev}
                 <button
                     ref={(el) => (rippleButtons.current[2] = el)}
                     className={`btn-ripple ${Style["btn-ripple"]} ${isShowDisabledLayer}`}
@@ -186,6 +185,8 @@ const BacBallBetOptionsComponent = () => {
                     <span className="ripple-effect"></span>
                 </button>
                 {isShowDisabledLayer && <div className={Style["disable-layer"]}></div>}
+
+                {isShowHighlightPrevResult({ betChoice: BacBallBetOptions.TIE, roundHistory, roundState }) && winningPrev}
             </div>
         );
     };
