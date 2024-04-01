@@ -42,7 +42,7 @@ const StatisticItem: React.FC<Props> = (props) => {
 };
 
 export const PercentageStatistic: React.FC<PercentageStatisticProps> = (props: PercentageStatisticProps) => {
-    const { statisticRuleEntries, roundHistory } = props;
+    const { statisticRuleEntries, roundHistory, onSelectGroup, selectedGroup } = props;
     const counted = countSettlementResult(roundHistory);
     const statisticResult = calculatePercent(statisticRuleEntries, counted, roundHistory.length);
     const { tolgeeNamespace } = useGameContext();
@@ -67,7 +67,11 @@ export const PercentageStatistic: React.FC<PercentageStatisticProps> = (props: P
         return (
             <div className={`${Styles["statistic-container"]} flex`} id="bar-statistic">
                 {groups.map((choices, index) => (
-                    <div key={index} className={Styles["statistic-choices"]}>
+                    <div
+                        key={index}
+                        className={`${Styles["statistic-choices"]} ${index === selectedGroup ? Styles.selected : ""}`}
+                        onClick={() => onSelectGroup && onSelectGroup(index)}
+                    >
                         {choices}
                     </div>
                 ))}

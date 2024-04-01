@@ -1,3 +1,6 @@
+import "swiper/css";
+import "swiper/css/pagination";
+
 import { Component, HTMLAttributes, ReactNode } from "react";
 import Scoreboard, { ScoreboardProps } from "..";
 

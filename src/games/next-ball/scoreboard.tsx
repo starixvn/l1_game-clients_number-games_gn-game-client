@@ -1,6 +1,3 @@
-import "swiper/css";
-import "swiper/css/pagination";
-
 import { Component, ReactNode, memo } from "react";
 import { Round } from "../../components/game-base/type";
 import { SlidableScoreboard, SwitchableScoreboard } from "../../components/game-components/round-history/scoreboard";
@@ -12,19 +9,10 @@ import { NextBallResult, NextBallSettlementResult } from "./types";
 export type ScoreboardComponentProps = {
     roundHistory: Round<NextBallResult, NextBallSettlementResult>[];
     isShowBlink: boolean;
-};
-
-export type ScoreboardState = {
     isOddEven: boolean;
 };
 
-export class Scoreboard extends Component<ScoreboardComponentProps, ScoreboardState> {
-    state = { isOddEven: false };
-
-    onSwitchBoard() {
-        this.setState({ isOddEven: !this.state.isOddEven });
-    }
-
+export class Scoreboard extends Component<ScoreboardComponentProps> {
     renderBigRoad(): ReactNode {
         const { roundHistory, isShowBlink } = this.props;
         const settlements = [...roundHistory].map((round) => round.settlementResult);
@@ -38,11 +26,10 @@ export class Scoreboard extends Component<ScoreboardComponentProps, ScoreboardSt
                     type="switch"
                     scoreboards={[
                         {
-                            element: createBigRoadElement(this.state.isOddEven),
-                            arrange: BigRoadElement.arrange(NextBallBigRoadConverter.getInstance(this.state.isOddEven)),
+                            element: createBigRoadElement(this.props.isOddEven),
+                            arrange: BigRoadElement.arrange(NextBallBigRoadConverter.getInstance(this.props.isOddEven)),
                             column: 18,
                             row: 6,
-                            onClick: this.onSwitchBoard.bind(this),
                         },
                     ]}
                 />
@@ -61,11 +48,10 @@ export class Scoreboard extends Component<ScoreboardComponentProps, ScoreboardSt
                     type="switch"
                     scoreboards={[
                         {
-                            element: createBeadRoadElement(this.state.isOddEven),
+                            element: createBeadRoadElement(this.props.isOddEven),
                             arrange: BeadRoadElement.arrange,
                             column: 18,
                             row: 6,
-                            onClick: this.onSwitchBoard.bind(this),
                         },
                     ]}
                 />

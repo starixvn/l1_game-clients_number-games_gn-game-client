@@ -51,9 +51,12 @@
     align-items: center;
     gap: 0.5rem;
     background: black;
-    border: 1px solid #1c7bdf;
     border-radius: 5rem;
     padding: 0.5rem;
+
+    &.selected {
+        border: 1px solid #1c7bdf;
+    }
 }
 
 .statistic-choice-icon {

@@ -10,4 +10,6 @@ export type PercentageStatisticProps = {
     statisticRuleEntries: [string, (countResult: object, total: number) => number][];
     activeScoreboardTab?: number;
     group?: number;
+    selectedGroup?: number;
+    onSelectGroup?: Function;
 };

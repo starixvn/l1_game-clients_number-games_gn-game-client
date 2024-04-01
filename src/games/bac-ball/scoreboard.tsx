@@ -1,6 +1,3 @@
-import "swiper/css";
-import "swiper/css/pagination";
-
 import { Component, ReactNode, memo } from "react";
 import { Round } from "../../components/game-base/type";
 import { ScoreboardProps, SlidableScoreboard, SwitchableScoreboard } from "../../components/game-components/round-history/scoreboard";

@@ -11,6 +11,7 @@ import { useTranslator } from "../../_shared/react-hooks";
 import GameBase from "../../components/game-base/";
 import { GameMessageHandler, TurnIdHandler } from "../../components/game-base/handlers";
 import { GameBaseProps, Round } from "../../components/game-base/type";
+import PercentageStatistic from "../../components/game-components/statistic";
 import { TurnGameStateHandler } from "../../components/turn-base/turn-game-state-handler";
 import { TurnStateHandler } from "../../components/turn-base/turn-state-handler";
 import { DrawIdBlock } from "../bac-ball/draw-id-block";
@@ -22,7 +23,13 @@ import NextBallResultBlock from "./next-ball-result-block";
 import Scoreboard from "./scoreboard";
 import { NextBallResult, NextBallSettlementResult } from "./types";
 
+export type NextBallState = {
+    statisticGroup?: number;
+};
+
 class NextBall extends GameBase<GameBaseProps> {
+    state: NextBallState = { statisticGroup: 0 };
+
     private turnIdHandler?: TurnIdHandler;
 
     constructor(props: GameBaseProps) {
@@ -79,6 +86,7 @@ class NextBall extends GameBase<GameBaseProps> {
 
     renderStatistic() {
         const { roundHistory } = this.props.gameStateContextModel;
+        const { statisticGroup } = this.state;
         const calculators = {
             [NextBallBetOptions.OVER]: (countResult: object, total: number) =>
                 Math.round((countResult[NextBallBetOptions.OVER] * 100) / total),
@@ -90,13 +98,28 @@ class NextBall extends GameBase<GameBaseProps> {
                 100 - Math.round((countResult[NextBallBetOptions.ODD] * 100) / total),
         };
 
-        return <PercentageStatistic roundHistory={roundHistory} statisticRuleEntries={Object.entries(calculators)} group={2} />;
+        return (
+            <PercentageStatistic
+                roundHistory={roundHistory}
+                statisticRuleEntries={Object.entries(calculators)}
+                group={2}
+                selectedGroup={statisticGroup}
+                onSelectGroup={(index: number) => this.setState({ statisticGroup: index })}
+            />
+        );
     }
 
     renderScoreboards() {
         const { roundHistory, isShowBlink } = this.props.gameStateContextModel;
+        const { statisticGroup } = this.state;
 
-        return <Scoreboard isShowBlink={isShowBlink} roundHistory={roundHistory as Round<NextBallResult, NextBallSettlementResult>[]} />;
+        return (
+            <Scoreboard
+                isShowBlink={isShowBlink}
+                roundHistory={roundHistory as Round<NextBallResult, NextBallSettlementResult>[]}
+                isOddEven={statisticGroup === 0}
+            />
+        );
     }
 
     renderRoundIdSection(): JSX.Element {
