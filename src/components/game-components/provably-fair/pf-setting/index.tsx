@@ -142,7 +142,7 @@ const PFSetting: FC = () => {
     useEffect(() => {
         if (isManualMode) {
             if (!isFirstLoad) {
-                manualSeed.current.focus();
+                manualSeed.current?.focus();
             }
             setIsFirstLoad(false);
         } else {
@@ -160,6 +160,7 @@ const PFSetting: FC = () => {
                 payload: {
                     pfClientSeedSetting: {
                         useManualClientSeed: true,
+                        manualClientSeed: randomSeed.current.value,
                     },
                 },
             });
@@ -174,6 +175,17 @@ const PFSetting: FC = () => {
                 },
             });
         }
+    };
+
+    const handleOnChangeManualClientSeed = (event: any) => {
+        dispatch({
+            type: GameEventActionType.UPDATE_PF_CLIENT_SEED_SETTING,
+            payload: {
+                pfClientSeedSetting: {
+                    manualClientSeed: event.target.value,
+                },
+            },
+        });
     };
 
     return (
@@ -243,6 +255,7 @@ const PFSetting: FC = () => {
                                 onKeyDown={handleOnKeyPress}
                                 onPaste={handlePaste}
                                 onBlur={handleOnBlur}
+                                onChange={handleOnChangeManualClientSeed}
                                 disabled={!isManualMode}
                                 defaultValue={manualClientSeed || ""}
                             />
