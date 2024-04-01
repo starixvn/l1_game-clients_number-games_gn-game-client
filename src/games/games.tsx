@@ -32,19 +32,22 @@ export const Games: React.FC<Props> = ({
     const [stopScroll, setStopScroll] = useState(false);
 
     const swipeableHandler = (isSwipedUp: boolean) => {
-        const { consequencesGames } = getAppSettings();
-        const lastedGameIdIndex = consequencesGames.length - 1;
-        const currentGameIdIndex = consequencesGames.findIndex(number => number === openGameId);
+        if (getAppSettings()?.sequenceGames) {
+            const { sequenceGames } = getAppSettings();
+            const lastedGameIdIndex = sequenceGames.length - 1;
+            const currentGameIdIndex = sequenceGames.findIndex(number => number === openGameId);
 
-        if (currentGameIdIndex === -1) {
-            return;
+            if (currentGameIdIndex === -1) {
+                return;
+            }
+
+            let nextOpenedGameIdIndex = isSwipedUp ?
+                (currentGameIdIndex === 0 ? lastedGameIdIndex : currentGameIdIndex - 1) :
+                (currentGameIdIndex === lastedGameIdIndex ? 0 : currentGameIdIndex + 1);
+
+            openGame(sequenceGames[nextOpenedGameIdIndex]);
+            setStopScroll(true);
         }
-
-        let nextOpenedGameIdIndex = isSwipedUp ? (currentGameIdIndex === 0 ? lastedGameIdIndex : currentGameIdIndex - 1) :
-            (currentGameIdIndex === lastedGameIdIndex ? 0 : currentGameIdIndex + 1);
-
-        openGame(consequencesGames[nextOpenedGameIdIndex]);
-        setStopScroll(true);
     }
 
     const handlers = useSwipeable({

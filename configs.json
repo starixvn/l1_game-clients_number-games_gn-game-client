@@ -20,7 +20,7 @@
     "useTolgeeStatic": false,
     "enableDebugLogs": true,
     "socketGatewayPath": "gateway",
-    "consequencesGames ": [
+    "sequenceGames ": [
         1001,
         1002,
         1003,
