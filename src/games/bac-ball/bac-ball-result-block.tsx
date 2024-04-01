@@ -73,4 +73,4 @@ export const BacBallResultBlock: FC<BacBallResultBlockProps> = (props: BacBallRe
     );
 };
 
-export default memo(BacBallResultBlock);
+export default BacBallResultBlock;
