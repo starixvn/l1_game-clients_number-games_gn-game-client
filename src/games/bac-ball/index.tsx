@@ -1,6 +1,7 @@
 import { withRouter } from "next/router";
 import { JSX } from "react";
 
+import dynamic from "next/dynamic";
 import { useSystemContext, useSystemDispatch } from "../../_shared/react-contexts";
 import {
     GameStateProvider,
@@ -14,7 +15,6 @@ import { GameBaseProps, Round } from "../../components/game-base/type";
 import PercentageStatistic from "../../components/game-components/statistic";
 import { TurnGameStateHandler } from "../../components/turn-base/turn-game-state-handler";
 import { TurnStateHandler } from "../../components/turn-base/turn-state-handler";
-import { BacBallBettingBlock } from "./bac-ball-betting-block";
 import { BacBallGameRoundDatatHandler } from "./bac-ball-game-round-data-handler";
 import BacBallResultBlock from "./bac-ball-result-block";
 import { BacBallBetOptions, StatisticRuleEntries } from "./constants";
@@ -23,7 +23,7 @@ import { BacBallBetHistoryModal } from "./history";
 import Scoreboard from "./scoreboard";
 import { BacBallResult, BacBallSettlementResult } from "./types";
 
-const totalBalls = 30;
+const BacBallBettingBlock = dynamic(() => import("./bac-ball-betting-block"));
 
 class BacBall extends GameBase<GameBaseProps> {
     private turnIdHandler?: TurnIdHandler;

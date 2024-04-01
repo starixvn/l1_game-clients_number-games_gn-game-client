@@ -10,7 +10,7 @@ import { BacBallWinningAnimation } from "./bac-ball-winning-animation";
 import Style from "./bac-ball.module.scss";
 import { BacBallBetOptions, BacBallBetOptionsPercentageColor } from "./constants";
 
-export const BacBallBetOptionsComponent = () => {
+const BacBallBetOptionsComponent = () => {
     const rippleButtons = useRef([]);
     const [ripplePosX, setRipplePosX] = useState(0);
     const [ripplePosY, setRipplePosY] = useState(0);
@@ -206,3 +206,5 @@ export const BacBallBetOptionsComponent = () => {
         </>
     );
 };
+
+export default BacBallBetOptionsComponent;

@@ -1,10 +1,12 @@
+import dynamic from "next/dynamic";
 import { FC } from "react";
-import { BettingBlock } from "../../components/game-components/bet-option/betting-block";
-import WinningResultEffect from "../../components/game-components/winning-result-effect";
-import { BacBallBetOptionsComponent } from "./bac-ball-options";
 import Style from "./bac-ball.module.scss";
 
-export const BacBallBettingBlock: FC = () => {
+const BettingBlock = dynamic(() => import("../../components/game-components/bet-option/betting-block"));
+const BacBallBetOptionsComponent = dynamic(() => import("./bac-ball-options"));
+const WinningResultEffect = dynamic(() => import("../../components/game-components/winning-result-effect"));
+
+const BacBallBettingBlock: FC = () => {
     return (
         <BettingBlock>
             <div className={`${Style["betting-zone"]}`}>
@@ -14,3 +16,5 @@ export const BacBallBettingBlock: FC = () => {
         </BettingBlock>
     );
 };
+
+export default BacBallBettingBlock;

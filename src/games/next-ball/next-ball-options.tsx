@@ -1,15 +1,15 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useGameActionContext, useGameContext, useSystemContext } from "../../_shared/react-contexts";
 import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
+import { isShowHighlightPrevResult } from "../../_shared/react-hooks/use-high-light";
 import { RoundState } from "../../components/game-base/type";
 import { BetChoice, BetPercentage, Odds, OwnBet, PlayerBetCount, TotalBet } from "../../components/game-components/bet-option";
 import { setRipplePosition } from "../../components/game-components/bet-option/ripple-effect";
-import Style from "./next-ball.module.scss";
 import { NextBallBetOptions, NextBallBetOptionsPercentageColor } from "./next-ball-constants";
 import { NextBallWinningAnimation } from "./next-ball-winning-animation";
-import { isShowHighlightPrevResult } from "../../_shared/react-hooks/use-high-light";
+import Style from "./next-ball.module.scss";
 
-export const NextBallBetOptionsComponent = () => {
+const NextBallBetOptionsComponent = () => {
     const rippleButtons = useRef([]);
     const [ripplePosX, setRipplePosX] = useState(0);
     const [ripplePosY, setRipplePosY] = useState(0);
@@ -28,13 +28,7 @@ export const NextBallBetOptionsComponent = () => {
     const isShowDisabledLayer = roundState === RoundState.LockingBet;
 
     const renderTotalBet = (choice: string) => {
-        return (
-            <TotalBet
-                choice={choice}
-                className={""}
-                tolgeeNamespace={tolgeeNamespace}
-            />
-        );
+        return <TotalBet choice={choice} className={""} tolgeeNamespace={tolgeeNamespace} />;
     };
 
     const renderBetPercentage = (choice: string) => {
@@ -48,14 +42,7 @@ export const NextBallBetOptionsComponent = () => {
         );
     };
     const renderPlayerBetCount = (choice: string) => {
-
-        return (
-            <PlayerBetCount
-                choice={choice}
-                className={`flex items-center players gap-1 `}
-                tolgeeNamespace={tolgeeNamespace}
-            />
-        );
+        return <PlayerBetCount choice={choice} className={`flex items-center players gap-1 `} tolgeeNamespace={tolgeeNamespace} />;
     };
     const renderBetChoice = (choice: string) => {
         return <BetChoice choice={choice} className={`${Style[`bet-name-${choice}`]}`} tolgeeNamespace={tolgeeNamespace} />;
@@ -96,9 +83,16 @@ export const NextBallBetOptionsComponent = () => {
 
     const renderMainOption = (choice: string) => {
         const winningResult = (
-            <NextBallWinningAnimation showResultInfo={showResultInfo}
+            <NextBallWinningAnimation
+                showResultInfo={showResultInfo}
                 roundState={roundState}
-                settlementResult={settlementResult} choice={choice} resourceName={NextBallBetOptions.OVER} width={210} height={210} position={[90, 95]} />
+                settlementResult={settlementResult}
+                choice={choice}
+                resourceName={NextBallBetOptions.OVER}
+                width={210}
+                height={210}
+                position={[90, 95]}
+            />
         );
         const winningPrev = renderHighlightWinningPrevResult(choice);
         const totalBetComponent = renderTotalBet(choice);
@@ -161,3 +155,5 @@ export const NextBallBetOptionsComponent = () => {
         </>
     );
 };
+
+export default NextBallBetOptionsComponent;

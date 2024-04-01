@@ -1,6 +1,7 @@
 import { withRouter } from "next/router";
 import { JSX } from "react";
 
+import dynamic from "next/dynamic";
 import { useSystemContext, useSystemDispatch } from "../../_shared/react-contexts";
 import {
     GameStateProvider,
@@ -16,12 +17,13 @@ import { TurnGameStateHandler } from "../../components/turn-base/turn-game-state
 import { TurnStateHandler } from "../../components/turn-base/turn-state-handler";
 import { DrawIdBlock } from "../bac-ball/draw-id-block";
 import { NextBallBetHistoryModal } from "./history";
-import { NextBallBettingBlock } from "./next-ball-betting-block";
 import { NextBallBetOptions } from "./next-ball-constants";
 import { NextGameRoundDatatHandler } from "./next-ball-game-round-data-handler";
 import NextBallResultBlock from "./next-ball-result-block";
 import Scoreboard from "./scoreboard";
 import { NextBallResult, NextBallSettlementResult } from "./types";
+
+const NextBallBettingBlock = dynamic(() => import("./next-ball-betting-block"));
 
 export type NextBallState = {
     statisticGroup?: number;
