@@ -5,11 +5,13 @@ $show-number-delay-time: 1s;
 
 $loading-duration: 2s;
 
+$ball-size: 3.2rem;
+
 .ball {
     position: relative;
     z-index: 1;
-    width: 3rem;
-    height: 3rem;
+    width: $ball-size;
+    height: $ball-size;
     border-radius: 50%;
     border: 1px solid #9c9c9c;
 
@@ -45,25 +47,22 @@ $loading-duration: 2s;
 }
 
 .red {
-    --bg: url("/static/images/ball/ball-red.png?v=2") no-repeat;
+    --bg: url("/static/images/ball/ball-red.png?v=3") no-repeat;
 }
 
 .blue {
-    --bg: url("/static/images/ball/ball-blue.png?v=2") no-repeat;
+    --bg: url("/static/images/ball/ball-blue.png?v=3") no-repeat;
 }
 
 .ball-bg {
     position: relative;
-    top: -0.1rem;
-    left: -0.1rem;
     z-index: 2;
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 3rem;
-    height: 3rem;
+    width: 100%;
+    height: 100%;
     border-radius: 50%;
-    background-size: 3rem 3rem;
     transform-origin: center center;
     opacity: 0;
     animation: fade-in $show-number-duration $show-number-delay-time ease-in-out forwards;
@@ -77,12 +76,14 @@ $loading-duration: 2s;
         content: "";
         display: block;
         position: absolute;
-        top: -0.1rem;
-        left: -0.1rem;
-        width: 3.2rem;
-        height: 3.2rem;
+        left: -0.2rem;
+        top: -0.2rem;
+        bottom: -0.2rem;
+        right: -0.2rem;
         background: var(--bg);
         background-size: contain;
+        border-radius: 50%;
+        border: 0.1rem solid #000;
     }
 }
 
