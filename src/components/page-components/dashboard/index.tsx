@@ -351,6 +351,7 @@ class Dashboard extends React.PureComponent<Props, State> {
                 openGameId={urlContext.gameId}
                 openGameName={openGameName}
                 openGame={this.openGame}
+                directMode={this.props.directMode}
             />
         );
     }

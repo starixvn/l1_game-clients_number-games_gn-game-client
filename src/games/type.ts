@@ -8,4 +8,5 @@ export type Props = {
     openGameName: string;
     userOfferGames: number[];
     openGame: Function;
+    directMode: boolean;
 };

@@ -42,7 +42,6 @@ import { GameSoundHandler } from "./handlers/game-sound-handler";
 import { IGameStateHandler } from "./handlers/game-state-handler";
 import { GameBaseProps, PFClientSeedSetting, PFSeverSeed, RoundState } from "./type";
 import { GameRoundDatatHandler } from "./handlers/game-round-data-handler";
-import { getAppSettings } from "../../_shared/app-settings";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
     protected socket: Socket;
@@ -63,7 +62,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     private gameSoundHandler?: GameSoundHandler;
     private gameRoundDatatHandler?: GameRoundDatatHandler;
 
-    private lastScrollPosition: number;
     constructor(
         props: P,
         roundStateHandler: IRoundStateHandler,
@@ -155,9 +153,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.placeBet = this.placeBet.bind(this);
         this.updateUserBalance = this.updateUserBalance.bind(this);
         this.setActiveScoreboardTab = this.setActiveScoreboardTab.bind(this);
-
-        this.lastScrollPosition = 0;
-        this.onScroll = this.onScroll.bind(this);
     }
 
     getGameStateContext = () => {
@@ -170,22 +165,14 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
     componentDidMount() {
         document.addEventListener("visibilitychange", this.onVisibilityChange);
-        // document.addEventListener("scroll", this.onScroll);
         this.onStart();
     }
 
     componentWillUnmount() {
         this.onDestroy();
         document.removeEventListener("visibilitychange", this.onVisibilityChange);
-        // document.removeEventListener("scroll", this.onScroll);
     }
 
-    componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<{}>, snapshot?: any): void {
-        if (prevProps.id !== this.props.id) {
-            console.log(`id changed from ${prevProps.id} to ${this.props.id}`);
-            document.documentElement.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-    }
     getPlayerBalance = () => {
         return (this.context as PlayerContextModel).authorizeInfo.user.red;
     };
@@ -257,48 +244,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         document.visibilityState === "hidden" ? this.onDestroy() : this.onStart();
     };
 
-    onScroll = () => {
-        const currentScrollPosition = document.documentElement.scrollTop;
-
-        if (currentScrollPosition > this.lastScrollPosition) {
-            console.log('Scrolling DOWN');
-            this.onScrollDown();
-        } else {
-            console.log('Scrolling UP');
-            this.onScrollUp();
-        }
-
-        this.lastScrollPosition = currentScrollPosition;
-    };
-
-
-    onScrollDown = () => {
-        if (getAppSettings()?.consequencesGames) {
-            const { consequencesGames } = getAppSettings();
-            // const numberOfGames = consequencesGames.length;
-            const currentGameIdIndex = consequencesGames.findIndex(number => number === this.props.id);
-
-            if (currentGameIdIndex === 0) {
-                return;
-            }
-
-            this.props.openGame(getAppSettings()?.consequencesGames[currentGameIdIndex === -1 ? 0 : currentGameIdIndex - 1]);
-        }
-    }
-
-    onScrollUp = () => {
-        if (getAppSettings()?.consequencesGames) {
-            const { consequencesGames } = getAppSettings();
-            // const numberOfGames = consequencesGames.length;
-            const currentGameIdIndex = consequencesGames.findIndex(number => number === this.props.id);
-
-            if (currentGameIdIndex === consequencesGames.length - 1) {
-                return;
-            }
-
-            this.props.openGame(getAppSettings()?.consequencesGames[currentGameIdIndex === -1 ? 0 : currentGameIdIndex + 1]);
-        }
-    }
     onConnectFailed() {
         this.onDestroy();
         this.props.dispatch({

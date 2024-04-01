@@ -25,7 +25,8 @@ export const Games: React.FC<Props> = ({
     updateUserStakeLevel,
     openGameId,
     userOfferGames,
-    openGame }) => {
+    openGame,
+    directMode }) => {
     const { theme } = useTheme();
     const locale = tolgee.getLanguage();
     const [stopScroll, setStopScroll] = useState(false);
@@ -49,6 +50,9 @@ export const Games: React.FC<Props> = ({
     const handlers = useSwipeable({
         onSwipedUp: () => swipeableHandler(true),
         onSwipedDown: () => swipeableHandler(false),
+        swipeDuration: 500,
+        preventScrollOnSwipe: true,
+        trackMouse: true
     });
 
     const gameSound = {
@@ -69,8 +73,7 @@ export const Games: React.FC<Props> = ({
             setApiErrorMessage: setApiErrorMessage,
             theme,
             userStakeLevel,
-            updateUserStakeLevel,
-            openGame
+            updateUserStakeLevel
         };
 
         if (!isGameOffered) {
@@ -91,8 +94,10 @@ export const Games: React.FC<Props> = ({
         }
     };
 
+    const extraProps = directMode ? {} : handlers;
+
     return (
-        <div className={`game-container game-wrapper ${styles["open-chips"]}`} {...handlers} style={{ touchAction: stopScroll ? 'none' : 'auto' }}>
+        <div className={`game-container game-wrapper ${styles["open-chips"]}`} {...extraProps} style={{ touchAction: stopScroll ? 'none' : 'auto' }}>
             <SystemContextProvider>
                 <div className={`${styles["game-list"]} ${isMobileOnly ? styles[isIOS ? "ios-device" : "android-device"] : ""}`}>
                     <BackgroundGalaxy />
