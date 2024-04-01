@@ -58,22 +58,6 @@ const defaultProps: SpritesheetProps = {
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
     backgroundPosition: "",
-    getInstance: () => {},
-    onClick: () => {},
-    onDoubleClick: () => {},
-    onMouseMove: () => {},
-    onMouseEnter: () => {},
-    onMouseLeave: () => {},
-    onMouseOver: () => {},
-    onMouseOut: () => {},
-    onMouseDown: () => {},
-    onMouseUp: () => {},
-    onInit: () => {},
-    onResize: () => {},
-    onPlay: () => {},
-    onPause: () => {},
-    onLoopComplete: () => {},
-    onEachFrame: () => {},
     writeDebugLog: false,
 };
 
@@ -102,7 +86,7 @@ export class Spritesheet extends Component<SpritesheetProps> {
     constructor(props: SpritesheetProps) {
         super(props);
 
-        const { isResponsive, startAt, endAt, fps, steps, direction } = Object.assign(defaultProps, this.props);
+        const { isResponsive, startAt, endAt, fps, steps, direction } = Object.assign({}, defaultProps, this.props);
 
         this.id = `react-responsive-spritesheet-${parseInt(String(Math.random() * 1000000))}`;
         this.isResponsive = isResponsive || true;
@@ -288,26 +272,15 @@ export class Spritesheet extends Component<SpritesheetProps> {
 
     moveImage = (play: boolean = true) => {
         const { onEnterFrame, onEachFrame, loop, onLoopComplete } = this.props;
+        let currentRow = 0;
+        let currentCol = 0;
 
         if (this.spriteElMove) {
-            let currentRow = parseInt(String(Math.floor(this.frame / (this.cols || 1))));
-            let currentCol = parseInt(String(this.frame - (this.cols || 1) * currentRow));
+            currentRow = parseInt(String(Math.floor(this.frame / (this.cols || 1))));
+            currentCol = parseInt(String(this.frame - (this.cols || 1) * currentRow));
             this.spriteElMove.style.backgroundPosition = `-${this.props.widthFrame * currentCol}px -${
                 this.props.heightFrame * currentRow
             }px`;
-
-            if (this.props.writeDebugLog) {
-                console.log(
-                    JSON.stringify({
-                        id: this.id,
-                        cols: this.cols,
-                        rows: this.rows,
-                        row: currentRow,
-                        col: currentCol,
-                        pos: this.spriteElMove.style.backgroundPosition,
-                    })
-                );
-            }
         }
 
         if (onEnterFrame) {
@@ -325,6 +298,18 @@ export class Spritesheet extends Component<SpritesheetProps> {
                 this.frame += 1;
             }
             if (onEachFrame) onEachFrame(this.setInstance());
+            this.props.writeDebugLog &&
+                console.log(
+                    JSON.stringify({
+                        id: this.id,
+                        cols: this.cols,
+                        currentCol,
+                        rows: this.rows,
+                        currentRow,
+                        frame: this.frame,
+                        pos: this.spriteElMove.style.backgroundPosition,
+                    })
+                );
         }
 
         if (this.isPlaying) {

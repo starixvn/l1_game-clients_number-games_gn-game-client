@@ -27,7 +27,7 @@ const BallLoops: React.FC<{ roundState: RoundState }> = ({ roundState }) => {
                 )}
             </div>
         );
-    }, [roundState]);
+    }, [isSwitchRound]);
 };
 
 export default BallLoops;
