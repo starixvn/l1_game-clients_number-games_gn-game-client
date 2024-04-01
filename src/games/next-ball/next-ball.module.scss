@@ -21,11 +21,24 @@
 }
 
 %main-option {
+    position: relative;
     overflow: hidden;
     width: 17.7rem;
     height: 9.4rem;
     background-size: 17.7rem 9.4rem;
     border: none;
+
+    &::before {
+        content: "";
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--bgBetChoice);
+        z-index: 0;
+    }
 
     .btn-ripple {
         z-index: 1;
@@ -33,48 +46,33 @@
 
     .disable-layer {
         position: absolute;
-        left: -0.2rem;
         top: 0;
-        background: url("/static/images/bac-number/player-disabled-layer.png") no-repeat;
-        width: 18.2rem;
-        height: 19rem;
+        background: #000;
+        width: 18rem;
+        height: 9.4rem;
         opacity: 0;
+        border-top-left-radius: 3.5rem;
+        border-top-right-radius: 1.3rem;
+        border-bottom-left-radius: 1.3rem;
+        border-bottom-right-radius: 1.3rem;
         animation: show-disabled-layer 0.3s ease-in forwards;
     }
 }
 
-.bet-option-row {
-}
-
 .over {
-    --color: #98cdff;
-
     @extend %main-option;
-    background: url("/static/images/next-ball/bg-blue.svg") no-repeat;
-
-    .own-bet {
-        left: -4rem;
-    }
-
-    .winning-effect {
-        left: 0;
-    }
+    --color: #98cdff;
+    --bgBetChoice: url("/static/images/next-ball/bg-blue.svg") no-repeat;
+    --borderTopLeft: 3.3rem;
+    --borderTopRight: 1rem;
+    --borderBottomLeft: 1rem;
+    --borderBottomRight: 1rem;
 }
 
 .under {
-    --color: #f9bcb9;
-
     @extend %main-option;
-    background: url("/static/images/next-ball/bg-red.svg") no-repeat;
-
-    .own-bet {
-        left: 4rem;
-    }
-
-    .winning-effect {
-        right: 0;
-        transform: scaleX(-1);
-    }
+    --color: #f9bcb9;
+    --bgBetChoice: url("/static/images/next-ball/bg-red.svg") no-repeat;
 
     .disable-layer {
         transform: scaleX(-1);
@@ -82,55 +80,42 @@
 }
 
 .odd {
-    --color: #98cdff;
-
     @extend %main-option;
-    // background: url("/static/images/bac-number/bg-player.svg") no-repeat;
-    background: rgb(37, 37, 218);
-    border-bottom-left-radius: 2rem;
-    border-top-left-radius: 2rem;
-    border-bottom-right-radius: 2rem;
-    border-top-right-radius: 2rem;
-    padding-left: 1.2rem;
-    padding-right: 0.6rem;
-    margin: 0.3rem;
+    --color: #98cdff;
+    --bgBetChoice: url("/static/images/next-ball/bg-blue.svg") no-repeat;
 
-    .own-bet {
-        left: -4rem;
+    &::before {
+        transform: scaleY(-1);
     }
 
-    .winning-effect {
-        left: 0;
+    .disable-layer {
+        transform: scaleY(-1);
     }
 }
 
 .even {
-    --color: #f9bcb9;
-
     @extend %main-option;
-    // background: url("/static/images/bac-number/bg-banker.svg") no-repeat;
 
-    background: rgb(218, 52, 52);
-    border-bottom-left-radius: 2rem;
-    border-top-left-radius: 2rem;
-    border-bottom-right-radius: 2rem;
-    border-top-right-radius: 2rem;
-    padding-right: 1.2rem;
-    padding-left: 0.6rem;
-    margin: 0.3rem;
+    --color: #f9bcb9;
+    --bgBetChoice: url("/static/images/next-ball/bg-red.svg") no-repeat;
 
-    .own-bet {
-        left: 4rem;
-    }
-
-    .winning-effect {
-        right: 0;
-        transform: scaleX(-1);
+    &::before {
+        transform: scaleY(-1);
     }
 
     .disable-layer {
-        transform: scaleX(-1);
+        transform: scale(-1);
     }
+}
+
+.bet-option-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.percent {
+    position: relative;
 }
 
 .winning-effect {
@@ -218,39 +203,24 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-top: 1.6rem;
+    padding-top: 0.6rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    height: 3.8rem;
 
-    &.choice-banker {
+    &.choice-over,
+    &.choice-odd {
         flex-flow: row-reverse;
     }
 }
 
 .choice-odds-area {
-    position: absolute;
+    position: relative;
+    margin-top: -0.5rem;
+}
 
-    // &.over-choice {
-    //     top: 8rem;
-    //     right: 5rem;
-    //     left: 0;
-    // }
-
-    // &.under-choice {
-    //     top: 8rem;
-    //     left: 5rem;
-    //     right: 0;
-    // }
-
-    // &.odd-choice {
-    //     top: 8rem;
-    //     right: 5rem;
-    //     left: 0;
-    // }
-
-    // &.even-choice {
-    //     top: 8rem;
-    //     left: 5rem;
-    //     right: 0;
-    // }
+.own-bet {
+    bottom: 0.4rem;
 }
 
 @keyframes show-disabled-layer {

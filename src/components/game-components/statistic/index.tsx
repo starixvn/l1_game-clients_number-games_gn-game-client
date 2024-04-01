@@ -65,7 +65,7 @@ export const PercentageStatistic: React.FC<PercentageStatisticProps> = (props: P
         }
 
         return (
-            <div className={`${Styles["statistic-container"]} flex`} id="bar-statistic">
+            <div className={`${Styles["statistic-container"]} flex ${Styles["statistic-tab-container"]}`} id="bar-statistic">
                 {groups.map((choices, index) => (
                     <div
                         key={index}

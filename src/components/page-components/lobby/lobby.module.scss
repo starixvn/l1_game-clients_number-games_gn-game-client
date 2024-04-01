@@ -80,8 +80,8 @@
     position: relative;
     width: 13rem;
     height: 13.8rem;
-    $color: var(--bgHex);
-    $opacity: 0.5;
+    border-radius: 2rem;
+    overflow: hidden;
 
     &::before {
         content: "";

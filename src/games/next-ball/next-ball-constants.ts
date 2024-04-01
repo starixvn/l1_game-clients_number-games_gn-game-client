@@ -10,8 +10,8 @@ export enum NextBallBetOptions {
 export const NextBallBetOptionsPercentageColor = {
     over: "#98CDFF",
     under: "#F9BCB9",
-    odd: "#2FC856",
-    even: "#2FC856",
+    odd: "#98CDFF",
+    even: "#F9BCB9",
 };
 
 export const defaultRoundData = [

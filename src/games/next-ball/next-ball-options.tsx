@@ -35,7 +35,7 @@ const NextBallBetOptionsComponent = () => {
     const isShowDisabledLayer = roundState === RoundState.LockingBet;
 
     const renderTotalBet = (choice: string) => {
-        return <TotalBet choice={choice} className={""} tolgeeNamespace={tolgeeNamespace} />;
+        return <TotalBet choice={choice} className="relative" tolgeeNamespace={tolgeeNamespace} />;
     };
 
     const renderBetPercentage = (choice: string) => {
@@ -50,7 +50,7 @@ const NextBallBetOptionsComponent = () => {
     };
 
     const renderPlayerBetCount = (choice: string) => {
-        return <PlayerBetCount choice={choice} className={`flex items-center players gap-1 `} tolgeeNamespace={tolgeeNamespace} />;
+        return <PlayerBetCount choice={choice} className={`flex items-center players gap-1 relative`} tolgeeNamespace={tolgeeNamespace} />;
     };
 
     const renderBetChoice = (choice: string) => {
@@ -62,7 +62,7 @@ const NextBallBetOptionsComponent = () => {
     };
 
     const renderOwnBet = (choice: string) => {
-        return <OwnBet choice={choice} tolgeeNamespace={tolgeeNamespace} />;
+        return <OwnBet choice={choice} tolgeeNamespace={tolgeeNamespace} className={Style["own-bet"]} />;
     };
 
     useEffect(() => {

@@ -18,7 +18,14 @@ export const GameIcon: React.FC<Props> = ({ gameSettings, transmitter }) => {
         <div className={`${Styles["icon-game"]} ${Styles[gameName.toLowerCase()]}`}>
             {/* <img src={`/static/images/lobby/game-board-detail/icon-${gameName.toLowerCase()}.png`} alt="icon-game" /> */}
             <div className={Styles["video-wrapper"]} id="video-wrapper">
-                <video className={Styles["video"]} playsInline autoPlay muted loop poster="cake.jpg">
+                <video
+                    className={Styles["video"]}
+                    playsInline
+                    autoPlay
+                    muted
+                    loop
+                    poster="/static/images/lobby/game-board-detail/icon-bacball1.png"
+                >
                     <source src="/static/images/lobby/game-board-detail/icon-gif.mp4" type="video/mp4" />
                     Your browser does not support the video tag.
                 </video>
