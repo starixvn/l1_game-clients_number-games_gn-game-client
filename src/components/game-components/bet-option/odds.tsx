@@ -10,9 +10,10 @@ import { BaseProps } from "./types";
 type Props = {
     animationClass?: string;
     animationDuration?: number;
+    turnCounter: number;
 } & BaseProps;
 
-export const Odds: React.FC<Props> = ({ tolgeeNamespace, choice, className, animationDuration }) => {
+export const Odds: React.FC<Props> = ({ tolgeeNamespace, choice, className, animationDuration, turnCounter }) => {
     const [showOddsIcon, setShowOddsIcon] = useState(false);
     const [isOddUp, setIsOddUp] = useState(false);
     const [oddsValue, setOddsValue] = useState(0);
@@ -23,8 +24,11 @@ export const Odds: React.FC<Props> = ({ tolgeeNamespace, choice, className, anim
         const odds = gameConfigs?.odds?.[choice] ?? 0;
         oddsValue === 0 && setOddsValue(odds);
         if (roundState === RoundState.InRound) {
-            oddsValue > 0 && oddsValue !== +odds && setShowOddsIcon(true);
-            setIsOddUp(odds > oddsValue);
+            if (turnCounter !== 1) {
+                oddsValue > 0 && oddsValue !== +odds && setShowOddsIcon(true);
+                setIsOddUp(odds > oddsValue);
+            }
+
             setOddsValue(odds);
         }
     }, [gameConfigs?.odds?.[choice] ?? 0, roundState]);

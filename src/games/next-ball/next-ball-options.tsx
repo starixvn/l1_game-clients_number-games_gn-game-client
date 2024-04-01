@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useRef, useState } from "react";
+
 import { useGameActionContext, useGameContext, useSystemContext } from "../../_shared/react-contexts";
 import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
 import { isShowHighlightPrevResult } from "../../_shared/react-hooks/use-high-light";
@@ -29,7 +30,7 @@ const NextBallBetOptionsComponent = () => {
         [gameActionContext, systemContext.selectedChip]
     );
 
-    const { roundState, settlementResult, showResultInfo, roundHistory } = useGameStateContext();
+    const { roundState, settlementResult, showResultInfo, roundHistory, turnCounter } = useGameStateContext();
     const { tolgeeNamespace } = useGameContext();
 
     const isShowDisabledLayer = roundState === RoundState.LockingBet;
@@ -58,7 +59,7 @@ const NextBallBetOptionsComponent = () => {
     };
 
     const renderOdds = (choice: string) => {
-        return <Odds choice={choice} tolgeeNamespace={tolgeeNamespace} animationDuration={6} />;
+        return <Odds turnCounter={turnCounter} choice={choice} tolgeeNamespace={tolgeeNamespace} animationDuration={6} />;
     };
 
     const renderOwnBet = (choice: string) => {

@@ -23,7 +23,7 @@ const BacBallBetOptionsComponent = () => {
         [gameActionContext, systemContext.selectedChip]
     );
 
-    const { roundState, settlementResult, showResultInfo, roundHistory } = useGameStateContext();
+    const { roundState, settlementResult, showResultInfo, roundHistory, turnCounter } = useGameStateContext();
     const { tolgeeNamespace } = useGameContext();
 
     const isShowDisabledLayer = roundState === RoundState.LockingBet;
@@ -64,7 +64,7 @@ const BacBallBetOptionsComponent = () => {
     };
 
     const renderOdds = (choice: string) => {
-        return <Odds choice={choice} tolgeeNamespace={tolgeeNamespace} animationDuration={6} />;
+        return <Odds turnCounter={turnCounter} choice={choice} tolgeeNamespace={tolgeeNamespace} animationDuration={6} />;
     };
 
     const renderOwnBet = (choice: string) => {
