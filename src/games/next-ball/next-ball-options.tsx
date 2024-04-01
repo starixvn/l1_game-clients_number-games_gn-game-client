@@ -77,14 +77,14 @@ const NextBallBetOptionsComponent = () => {
                 className = `${Style["highlight-prev-result-over"]} fade-in`;
                 break;
             case NextBallBetOptions.UNDER:
-                className = `${Style["highlight-prev-result-over"]} ${Style["reverse"]} fade-in`;
+                className = `${Style["highlight-prev-result-under"]} fade-in`;
                 break;
 
             case NextBallBetOptions.ODD:
                 className = `${Style["highlight-prev-result-odd"]} fade-in`;
                 break;
             case NextBallBetOptions.EVEN:
-                className = `${Style["highlight-prev-result-odd"]} ${Style["reverse"]} fade-in`;
+                className = `${Style["highlight-prev-result-even"]} fade-in`;
                 break;
             default:
         }
