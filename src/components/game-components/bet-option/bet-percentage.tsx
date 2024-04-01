@@ -11,3 +11,5 @@ export const BetPercentage: React.FC<BaseProps> = ({ tolgeeNamespace, choice, cl
         </div>
     );
 };
+
+export default BetPercentage;

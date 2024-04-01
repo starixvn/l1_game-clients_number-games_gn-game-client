@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-
 import { isHighLightWinningResult } from "../../_shared/react-hooks/use-high-light";
 import { RoundState } from "../../components/game-base/type";
 import { Spritesheet } from "../../components/game-components/sprites-sheet";
@@ -17,7 +15,7 @@ type Props = {
     showResultInfo: any;
 };
 
-export const NextBallWinningAnimation: React.FC<Props> = ({ choice, resourceName, roundState, settlementResult, showResultInfo }) => {
+const NextBallWinningAnimation: React.FC<Props> = ({ choice, resourceName, roundState, settlementResult, showResultInfo }) => {
     const winningHighLightResult = isHighLightWinningResult;
 
     return (
@@ -40,3 +38,5 @@ export const NextBallWinningAnimation: React.FC<Props> = ({ choice, resourceName
         )
     );
 };
+
+export default NextBallWinningAnimation;

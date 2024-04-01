@@ -19,3 +19,5 @@ export const PlayerBetCount: React.FC<BaseProps> = ({ tolgeeNamespace, choice, c
         </div>
     );
 };
+
+export default PlayerBetCount;

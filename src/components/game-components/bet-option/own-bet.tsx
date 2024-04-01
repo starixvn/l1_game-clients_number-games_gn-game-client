@@ -60,3 +60,5 @@ export const OwnBet: React.FC<BaseProps> = ({ tolgeeNamespace, choice, className
         </>
     );
 };
+
+export default OwnBet;

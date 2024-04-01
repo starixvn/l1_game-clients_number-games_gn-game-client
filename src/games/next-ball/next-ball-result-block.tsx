@@ -1,16 +1,16 @@
-import { FC, memo, useEffect, useState } from "react";
+import { FC, memo } from "react";
 
 import { GameStateContextModel } from "../../_shared/react-contexts/game-state-context/game-state-context-model";
 import { isHighLightWinningResult } from "../../_shared/react-hooks/use-high-light";
 import { RoundState } from "../../components/game-base/type";
 import Cage, { CageColor, CagePosition } from "../../components/game-components/cage";
 import { ResultSlotContainer } from "../../components/game-components/result-container/result-container";
-import { defaultRoundData, NextBallBetOptions } from "./next-ball-constants";
+import { NextBallBetOptions, defaultRoundData } from "./next-ball-constants";
 import Style from "./next-ball.module.scss";
 
 export type NextBallResultBlockProps = Partial<GameStateContextModel>;
 
-export const NextBallResultBlock: FC<NextBallResultBlockProps> = (props: NextBallResultBlockProps) => {
+const NextBallResultBlock: FC<NextBallResultBlockProps> = (props: NextBallResultBlockProps) => {
     const { result, roundState, roundHistory, playResultAnimation, settlementResult, showResultInfo, roundData } = props;
 
     let currentResult = null;

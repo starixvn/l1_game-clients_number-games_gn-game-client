@@ -40,3 +40,4 @@ export const TotalBet: React.FC<BaseProps> = ({ tolgeeNamespace, choice, classNa
         </div>
     );
 };
+export default TotalBet;

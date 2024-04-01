@@ -12,18 +12,18 @@ import { useTranslator } from "../../_shared/react-hooks";
 import GameBase from "../../components/game-base/";
 import { GameMessageHandler, TurnIdHandler } from "../../components/game-base/handlers";
 import { GameBaseProps, Round } from "../../components/game-base/type";
-import PercentageStatistic from "../../components/game-components/statistic";
 import { TurnGameStateHandler } from "../../components/turn-base/turn-game-state-handler";
 import { TurnStateHandler } from "../../components/turn-base/turn-state-handler";
-import { DrawIdBlock } from "../bac-ball/draw-id-block";
-import { NextBallBetHistoryModal } from "./history";
 import { NextBallBetOptions } from "./next-ball-constants";
 import { NextGameRoundDatatHandler } from "./next-ball-game-round-data-handler";
-import NextBallResultBlock from "./next-ball-result-block";
-import Scoreboard from "./scoreboard";
 import { NextBallResult, NextBallSettlementResult } from "./types";
 
+const DrawIdBlock = dynamic(() => import("../../components/game-components/draw-id"));
 const NextBallBettingBlock = dynamic(() => import("./next-ball-betting-block"));
+const NextBallResultBlock = dynamic(() => import("./next-ball-result-block"));
+const PercentageStatistic = dynamic(() => import("../../components/game-components/statistic"));
+const Scoreboard = dynamic(() => import("./scoreboard"));
+const NextBallBetHistoryModal = dynamic(() => import("./history"));
 
 export type NextBallState = {
     statisticGroup?: number;

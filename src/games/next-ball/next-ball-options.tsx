@@ -1,13 +1,20 @@
+import dynamic from "next/dynamic";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useGameActionContext, useGameContext, useSystemContext } from "../../_shared/react-contexts";
 import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
 import { isShowHighlightPrevResult } from "../../_shared/react-hooks/use-high-light";
 import { RoundState } from "../../components/game-base/type";
-import { BetChoice, BetPercentage, Odds, OwnBet, PlayerBetCount, TotalBet } from "../../components/game-components/bet-option";
 import { setRipplePosition } from "../../components/game-components/bet-option/ripple-effect";
 import { NextBallBetOptions, NextBallBetOptionsPercentageColor } from "./next-ball-constants";
-import { NextBallWinningAnimation } from "./next-ball-winning-animation";
 import Style from "./next-ball.module.scss";
+
+const NextBallWinningAnimation = dynamic(() => import("./next-ball-winning-animation"));
+const BetChoice = dynamic(() => import("../../components/game-components/bet-option/bet-choice"));
+const BetPercentage = dynamic(() => import("../../components/game-components/bet-option/bet-percentage"));
+const Odds = dynamic(() => import("../../components/game-components/bet-option/odds"));
+const OwnBet = dynamic(() => import("../../components/game-components/bet-option/own-bet"));
+const PlayerBetCount = dynamic(() => import("../../components/game-components/bet-option/player-bet-count"));
+const TotalBet = dynamic(() => import("../../components/game-components/bet-option/total-bet"));
 
 const NextBallBetOptionsComponent = () => {
     const rippleButtons = useRef([]);
@@ -41,9 +48,11 @@ const NextBallBetOptionsComponent = () => {
             />
         );
     };
+
     const renderPlayerBetCount = (choice: string) => {
         return <PlayerBetCount choice={choice} className={`flex items-center players gap-1 `} tolgeeNamespace={tolgeeNamespace} />;
     };
+
     const renderBetChoice = (choice: string) => {
         return <BetChoice choice={choice} className={`${Style[`bet-name-${choice}`]}`} tolgeeNamespace={tolgeeNamespace} />;
     };
@@ -94,28 +103,22 @@ const NextBallBetOptionsComponent = () => {
                 position={[90, 95]}
             />
         );
-        const winningPrev = renderHighlightWinningPrevResult(choice);
-        const totalBetComponent = renderTotalBet(choice);
-        const playerBetCount = renderPlayerBetCount(choice);
-        const betPercentage = renderBetPercentage(choice);
-        const betChoice = renderBetChoice(choice);
-        const odds = renderOdds(choice);
-        const ownBet = renderOwnBet(choice);
+
         return (
             <div className={`${Style[choice]} text-white relative`}>
                 <div className={`${Style["choice-info"]} ${Style[`choice-${choice}`]}`}>
                     <div className={Style.stake}>
-                        {totalBetComponent}
-                        {playerBetCount}
+                        {renderTotalBet(choice)}
+                        {renderPlayerBetCount(choice)}
                     </div>
-                    {betPercentage}
+                    {renderBetPercentage(choice)}
                 </div>
                 <div className={`${Style["choice-odds-area"]} ${Style[`${choice}-choice`]}`}>
-                    {betChoice}
-                    {odds}
+                    {renderBetChoice(choice)}
+                    {renderOdds(choice)}
                 </div>
 
-                {ownBet}
+                {renderOwnBet(choice)}
                 {<div className={Style["winning-effect"]}>{winningResult}</div>}
                 <button
                     ref={(el) => (rippleButtons.current[choice === "player" ? 0 : 1] = el)}
@@ -128,7 +131,7 @@ const NextBallBetOptionsComponent = () => {
                     <span className="ripple-effect"></span>
                 </button>
                 {isShowDisabledLayer && <div className={Style["disable-layer"]}></div>}
-                {isShowHighlightPrevResult({ betChoice: choice, roundState, roundHistory }) && winningPrev}
+                {isShowHighlightPrevResult({ betChoice: choice, roundState, roundHistory }) && renderHighlightWinningPrevResult(choice)}
             </div>
         );
     };

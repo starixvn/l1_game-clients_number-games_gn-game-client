@@ -3,9 +3,9 @@ import { useEffect, useMemo, useState } from "react";
 import { formatOdds } from "../../../_shared/helpers";
 import { usePlayerContext } from "../../../_shared/react-contexts";
 import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
+import { RoundState } from "../../game-base/type";
 import Styles from "./bet-option.module.scss";
 import { BaseProps } from "./types";
-import { RoundState } from "../../game-base/type";
 
 type Props = {
     animationClass?: string;
@@ -58,3 +58,5 @@ export const Odds: React.FC<Props> = ({ tolgeeNamespace, choice, className, anim
         );
     }, [odds, showOddsIcon]);
 };
+
+export default Odds;

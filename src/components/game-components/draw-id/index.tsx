@@ -1,6 +1,4 @@
-import React from "react";
-
-import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
+import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 
 export const DrawIdBlock = () => {
     const { drawId } = useGameStateContext();
@@ -15,3 +13,5 @@ export const DrawIdBlock = () => {
         </div>
     );
 };
+
+export default DrawIdBlock;

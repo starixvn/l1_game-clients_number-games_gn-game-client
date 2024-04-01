@@ -12,3 +12,5 @@ export const BetChoice: React.FC<BaseProps> = ({ tolgeeNamespace, choice, classN
         </div>
     );
 };
+
+export default BetChoice;
