@@ -32,7 +32,7 @@ export type CageProps = {
 const Cage: React.FC<CageProps> = (cageProps) => {
     const { position, isSmall, result, delayShowResultTime, color, playResultAnimation, roundState, highlight } = cageProps;
 
-    const ballColor = `ball-${useBallColor({ number: result })}-${position === CagePosition.LEFT ? "1" : "2"}`;
+    const ballColor = `ball-${useBallColor({ number: result })}-${position === CagePosition.RIGHT ? "2" : "1"}`;
 
     const [isDelayShowResult, setIsDelayShowResult] = useState<boolean>(false);
 

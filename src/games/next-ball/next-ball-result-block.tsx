@@ -5,7 +5,7 @@ import { isHighLightWinningResult } from "../../_shared/react-hooks/use-high-lig
 import { RoundState } from "../../components/game-base/type";
 import Cage, { CageColor, CagePosition } from "../../components/game-components/cage";
 import { ResultSlotContainer } from "../../components/game-components/result-container/result-container";
-import { NextBallBetOptions, defaultRoundData } from "./next-ball-constants";
+import { defaultRoundData, NextBallBetOptions } from "./next-ball-constants";
 import Style from "./next-ball.module.scss";
 
 export type NextBallResultBlockProps = Partial<GameStateContextModel>;
@@ -24,7 +24,7 @@ const NextBallResultBlock: FC<NextBallResultBlockProps> = (props: NextBallResult
         <div className={Style["result-container"]}>
             <div className={Style["result"]}>
                 <Cage
-                    color={CageColor.BLUE}
+                    color={CageColor.PURPLE}
                     position={CagePosition.CENTER}
                     isSmall={true}
                     result={currentResult?.ball}
