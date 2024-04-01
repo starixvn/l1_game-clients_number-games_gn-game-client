@@ -57,7 +57,7 @@ export const ConfirmDialog: React.FC<Props & SubmitDialogProps> = ({
                         className={`btn-green`}
                         onClick={() => {
                             clickSound();
-                            onSubmit();
+                            onSubmit?.();
                         }}
                         type="button"
                         data-testid="btn-yes-summit-dialog"
