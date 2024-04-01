@@ -12,6 +12,7 @@ export interface SpritesheetProps {
     widthFrame: number;
     heightFrame: number;
     isResponsive?: boolean;
+    writeDebugLog?: boolean;
     steps: number;
     fps: number;
     direction?: "forward" | "rewind";
@@ -43,7 +44,7 @@ export interface SpritesheetProps {
     onEnterFrame?: FrameAction[] | false;
 }
 
-const defaultProps = {
+const defaultProps: SpritesheetProps = {
     className: "",
     style: {},
     isResponsive: true,
@@ -68,11 +69,12 @@ const defaultProps = {
     onMouseDown: () => {},
     onMouseUp: () => {},
     onInit: () => {},
-    onResize: false,
+    onResize: () => {},
     onPlay: () => {},
     onPause: () => {},
-    onLoopComplete: false,
-    onEachFrame: false,
+    onLoopComplete: () => {},
+    onEachFrame: () => {},
+    writeDebugLog: false,
 };
 
 export class Spritesheet extends Component<SpritesheetProps> {
@@ -94,6 +96,8 @@ export class Spritesheet extends Component<SpritesheetProps> {
     isPlaying: boolean = false;
     spriteScale: number = 1;
     direction: "forward" | "rewind";
+    playTimeout: NodeJS.Timeout;
+    resizeTimeout: NodeJS.Timeout;
 
     constructor(props: SpritesheetProps) {
         super(props);
@@ -120,6 +124,9 @@ export class Spritesheet extends Component<SpritesheetProps> {
 
     componentWillUnmount() {
         window.removeEventListener("resize", this.resize as any);
+        clearInterval(this.intervalSprite);
+        clearTimeout(this.playTimeout);
+        clearTimeout(this.resizeTimeout);
     }
 
     renderElements = () => {
@@ -151,11 +158,14 @@ export class Spritesheet extends Component<SpritesheetProps> {
             height: `${heightFrame}px`,
             transform: `scale(${this.spriteScale})`,
             transformOrigin: "0 0",
-            backgroundImage: `url(${background})`,
             backgroundSize: backgroundSize,
             backgroundRepeat: backgroundRepeat,
             backgroundPosition: backgroundPosition,
         };
+
+        if (background) {
+            containerStyles.backgroundImage = `url(${background})`;
+        }
 
         let moveStyles: CSSProperties = {
             overflow: "hidden",
@@ -220,8 +230,9 @@ export class Spritesheet extends Component<SpritesheetProps> {
                 this.resize(false);
                 window.addEventListener("resize", this.resize as any);
                 this.moveImage(false);
-                setTimeout(() => {
-                    this.resize(false);
+                clearTimeout(this.resizeTimeout);
+                this.resizeTimeout = setTimeout(() => {
+                    this?.resize(false);
                 }, 10);
 
                 if (autoplay !== false) this.play(true);
@@ -234,7 +245,7 @@ export class Spritesheet extends Component<SpritesheetProps> {
         };
 
         imgLoadSprite.onerror = () => {
-            throw new Error(`Failed to load image ${imgLoadSprite.src}`);
+            console.error(`Failed to load image ${imgLoadSprite.src}`);
         };
     };
 
@@ -253,11 +264,14 @@ export class Spritesheet extends Component<SpritesheetProps> {
         const { onPlay, timeout } = this.props;
 
         if (!this.isPlaying) {
-            setTimeout(
+            clearTimeout(this.playTimeout);
+            this.playTimeout = setTimeout(
                 () => {
-                    if (onPlay) onPlay(this.setInstance());
-                    this.setIntervalPlayFunctions();
-                    this.isPlaying = true;
+                    if (this) {
+                        if (onPlay) onPlay(this.setInstance());
+                        this.setIntervalPlayFunctions();
+                        this.isPlaying = true;
+                    }
                 },
                 withTimeout ? timeout || 0 : 0
             );
@@ -266,8 +280,9 @@ export class Spritesheet extends Component<SpritesheetProps> {
 
     setIntervalPlayFunctions = () => {
         if (this.intervalSprite) clearInterval(this.intervalSprite);
+
         this.intervalSprite = setInterval(() => {
-            if (this.isPlaying) this.moveImage();
+            if (this && this.isPlaying) this.moveImage();
         }, 1000 / this.fps);
     };
 
@@ -280,6 +295,19 @@ export class Spritesheet extends Component<SpritesheetProps> {
             this.spriteElMove.style.backgroundPosition = `-${this.props.widthFrame * currentCol}px -${
                 this.props.heightFrame * currentRow
             }px`;
+
+            if (this.props.writeDebugLog) {
+                console.log(
+                    JSON.stringify({
+                        id: this.id,
+                        cols: this.cols,
+                        rows: this.rows,
+                        row: currentRow,
+                        col: currentCol,
+                        pos: this.spriteElMove.style.backgroundPosition,
+                    })
+                );
+            }
         }
 
         if (onEnterFrame) {
@@ -307,7 +335,7 @@ export class Spritesheet extends Component<SpritesheetProps> {
                 if (loop) {
                     if (onLoopComplete) onLoopComplete(this.setInstance());
                     this.completeLoopCicles += 1;
-                    this.frame = this.startAt ? this.startAt : this.direction === "rewind" ? this.steps - 1 : 0;
+                    this.frame = this.startAt ?? (this.direction === "rewind" ? this.steps - 1 : 0);
                 } else {
                     this.pause();
                 }
