@@ -1,239 +1,95 @@
-{"frames": {
+/*
+-------------------------------------------------------------------
+Created with TexturePacker https://www.codeandweb.com/texturepacker
+-------------------------------------------------------------------
+Inline:     <i class="yourspritesname"></i>
+Responsive: <div class="yourspritesname"></div>
+*/
 
-"highlight-winning-tie-00.png":
-{
-	"frame": {"x":99,"y":497,"w":57,"h":12},
-	"rotated": false,
-	"trimmed": true,
-	"spriteSourceSize": {"x":72,"y":15,"w":57,"h":12},
-	"sourceSize": {"w":200,"h":210}
-},
-"highlight-winning-tie-01.png":
-{
-	"frame": {"x":115,"y":3,"w":96,"h":17},
-	"rotated": false,
-	"trimmed": true,
-	"spriteSourceSize": {"x":52,"y":15,"w":96,"h":17},
-	"sourceSize": {"w":200,"h":210}
-},
-"highlight-winning-tie-02.png":
-{
-	"frame": {"x":409,"y":63,"w":98,"h":26},
-	"rotated": false,
-	"trimmed": true,
-	"spriteSourceSize": {"x":51,"y":14,"w":98,"h":26},
-	"sourceSize": {"w":200,"h":210}
-},
-"highlight-winning-tie-03.png":
-{
-	"frame": {"x":400,"y":363,"w":106,"h":45},
-	"rotated": false,
-	"trimmed": true,
-	"spriteSourceSize": {"x":47,"y":14,"w":106,"h":45},
-	"sourceSize": {"w":200,"h":210}
-},
-"highlight-winning-tie-04.png":
-{
-	"frame": {"x":400,"y":306,"w":108,"h":55},
-	"rotated": false,
-	"trimmed": true,
-	"spriteSourceSize": {"x":46,"y":13,"w":108,"h":55},
-	"sourceSize": {"w":200,"h":210}
-},
-"highlight-winning-tie-05.png":
-{
-	"frame": {"x":189,"y":431,"w":108,"h":63},
-	"rotated": false,
-	"trimmed": true,
-	"spriteSourceSize": {"x":46,"y":13,"w":108,"h":63},
-	"sourceSize": {"w":200,"h":210}
-},
-"highlight-winning-tie-06.png":
-{
-	"frame": {"x":400,"y":225,"w":108,"h":79},
-	"rotated": false,
-	"trimmed": true,
-	"spriteSourceSize": {"x":46,"y":13,"w":108,"h":79},
-	"sourceSize": {"w":200,"h":210}
-},
-"highlight-winning-tie-07.png":
-{
-	"frame": {"x":327,"y":115,"w":108,"h":106},
-	"rotated": true,
-	"trimmed": true,
-	"spriteSourceSize": {"x":46,"y":15,"w":108,"h":106},
-	"sourceSize": {"w":200,"h":210}
-},
-"highlight-winning-tie-08.png":
-{
-	"frame": {"x":206,"y":115,"w":108,"h":119},
-	"rotated": true,
-	"trimmed": true,
-	"spriteSourceSize": {"x":46,"y":18,"w":108,"h":119},
-	"sourceSize": {"w":200,"h":210}
-},
-"highlight-winning-tie-09.png":
-{
-	"frame": {"x":214,"y":3,"w":110,"h":138},
-	"rotated": true,
-	"trimmed": true,
-	"spriteSourceSize": {"x":45,"y":18,"w":110,"h":138},
-	"sourceSize": {"w":200,"h":210}
-},
-"highlight-winning-tie-10.png":
-{
-	"frame": {"x":3,"y":3,"w":110,"h":162},
-	"rotated": false,
-	"trimmed": true,
-	"spriteSourceSize": {"x":45,"y":30,"w":110,"h":162},
-	"sourceSize": {"w":200,"h":210}
-},
-"highlight-winning-tie-11.png":
-{
-	"frame": {"x":3,"y":167,"w":110,"h":154},
-	"rotated": false,
-	"trimmed": true,
-	"spriteSourceSize": {"x":45,"y":38,"w":110,"h":154},
-	"sourceSize": {"w":200,"h":210}
-},
-"highlight-winning-tie-12.png":
-{
-	"frame": {"x":3,"y":323,"w":112,"h":141},
-	"rotated": false,
-	"trimmed": true,
-	"spriteSourceSize": {"x":44,"y":57,"w":112,"h":141},
-	"sourceSize": {"w":200,"h":210}
-},
-"highlight-winning-tie-13.png":
-{
-	"frame": {"x":117,"y":317,"w":112,"h":108},
-	"rotated": true,
-	"trimmed": true,
-	"spriteSourceSize": {"x":44,"y":91,"w":112,"h":108},
-	"sourceSize": {"w":200,"h":210}
-},
-"highlight-winning-tie-14.png":
-{
-	"frame": {"x":115,"y":226,"w":112,"h":89},
-	"rotated": false,
-	"trimmed": true,
-	"spriteSourceSize": {"x":44,"y":110,"w":112,"h":89},
-	"sourceSize": {"w":200,"h":210}
-},
-"highlight-winning-tie-15.png":
-{
-	"frame": {"x":227,"y":317,"w":112,"h":88},
-	"rotated": true,
-	"trimmed": true,
-	"spriteSourceSize": {"x":44,"y":111,"w":112,"h":88},
-	"sourceSize": {"w":200,"h":210}
-},
-"highlight-winning-tie-16.png":
-{
-	"frame": {"x":229,"y":225,"w":112,"h":85},
-	"rotated": false,
-	"trimmed": true,
-	"spriteSourceSize": {"x":44,"y":114,"w":112,"h":85},
-	"sourceSize": {"w":200,"h":210}
-},
-"highlight-winning-tie-17.png":
-{
-	"frame": {"x":317,"y":312,"w":110,"h":81},
-	"rotated": true,
-	"trimmed": true,
-	"spriteSourceSize": {"x":45,"y":118,"w":110,"h":81},
-	"sourceSize": {"w":200,"h":210}
-},
-"highlight-winning-tie-18.png":
-{
-	"frame": {"x":299,"y":431,"w":108,"h":76},
-	"rotated": false,
-	"trimmed": true,
-	"spriteSourceSize": {"x":46,"y":123,"w":108,"h":76},
-	"sourceSize": {"w":200,"h":210}
-},
-"highlight-winning-tie-19.png":
-{
-	"frame": {"x":115,"y":22,"w":102,"h":71},
-	"rotated": true,
-	"trimmed": true,
-	"spriteSourceSize": {"x":49,"y":128,"w":102,"h":71},
-	"sourceSize": {"w":200,"h":210}
-},
-"highlight-winning-tie-20.png":
-{
-	"frame": {"x":117,"y":126,"w":98,"h":64},
-	"rotated": true,
-	"trimmed": true,
-	"spriteSourceSize": {"x":51,"y":135,"w":98,"h":64},
-	"sourceSize": {"w":200,"h":210}
-},
-"highlight-winning-tie-21.png":
-{
-	"frame": {"x":409,"y":3,"w":98,"h":58},
-	"rotated": false,
-	"trimmed": true,
-	"spriteSourceSize": {"x":51,"y":141,"w":98,"h":58},
-	"sourceSize": {"w":200,"h":210}
-},
-"highlight-winning-tie-22.png":
-{
-	"frame": {"x":354,"y":3,"w":98,"h":51},
-	"rotated": true,
-	"trimmed": true,
-	"spriteSourceSize": {"x":51,"y":148,"w":98,"h":51},
-	"sourceSize": {"w":200,"h":210}
-},
-"highlight-winning-tie-23.png":
-{
-	"frame": {"x":3,"y":466,"w":94,"h":36},
-	"rotated": false,
-	"trimmed": true,
-	"spriteSourceSize": {"x":53,"y":156,"w":94,"h":36},
-	"sourceSize": {"w":200,"h":210}
-},
-"highlight-winning-tie-24.png":
-{
-	"frame": {"x":99,"y":466,"w":88,"h":29},
-	"rotated": false,
-	"trimmed": true,
-	"spriteSourceSize": {"x":56,"y":163,"w":88,"h":29},
-	"sourceSize": {"w":200,"h":210}
-},
-"highlight-winning-tie-25.png":
-{
-	"frame": {"x":189,"y":22,"w":80,"h":22},
-	"rotated": true,
-	"trimmed": true,
-	"spriteSourceSize": {"x":60,"y":170,"w":80,"h":22},
-	"sourceSize": {"w":200,"h":210}
-},
-"highlight-winning-tie-26.png":
-{
-	"frame": {"x":189,"y":104,"w":68,"h":15},
-	"rotated": true,
-	"trimmed": true,
-	"spriteSourceSize": {"x":66,"y":177,"w":68,"h":15},
-	"sourceSize": {"w":200,"h":210}
-},
-"highlight-winning-tie-27.png":
-{
-	"frame": {"x":158,"y":497,"w":54,"h":10},
-	"rotated": false,
-	"trimmed": true,
-	"spriteSourceSize": {"x":73,"y":182,"w":54,"h":10},
-	"sourceSize": {"w":200,"h":210}
-}},
-"animations": {
-	"highlight-winning-tie": ["highlight-winning-tie-00.png","highlight-winning-tie-01.png","highlight-winning-tie-02.png","highlight-winning-tie-03.png","highlight-winning-tie-04.png","highlight-winning-tie-05.png","highlight-winning-tie-06.png","highlight-winning-tie-07.png","highlight-winning-tie-08.png","highlight-winning-tie-09.png","highlight-winning-tie-10.png","highlight-winning-tie-11.png","highlight-winning-tie-12.png","highlight-winning-tie-13.png","highlight-winning-tie-14.png","highlight-winning-tie-15.png","highlight-winning-tie-16.png","highlight-winning-tie-17.png","highlight-winning-tie-18.png","highlight-winning-tie-19.png","highlight-winning-tie-20.png","highlight-winning-tie-21.png","highlight-winning-tie-22.png","highlight-winning-tie-23.png","highlight-winning-tie-24.png","highlight-winning-tie-25.png","highlight-winning-tie-26.png","highlight-winning-tie-27.png"]
-},
-"meta": {
-	"app": "https://www.codeandweb.com/texturepacker",
-	"version": "1.0",
-	"image": "highlight-winning-tie.png",
-	"format": "RGBA8888",
-	"size": {"w":512,"h":512},
-	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:0edceeff15bf0ed8bb247baeb4c2ee1e:44233089670a0650bfea0f20ba4314a3:9a37c429aa8ccd597c8ee8906c85d4c7$"
-}
-}
+
+.highlight-winning-tie-00 {max-width:200px; max-height:210px; }
+.highlight-winning-tie-00::after {content: '\00a0';display: inline-block; width:200px; height:210px; background-position: 0% 0%;background-size: 700% 400%;background-image: url(highlight-winning-tie.png);padding: 0; }
+div.highlight-winning-tie-00::after {max-width:200px; width:100%;height:0;padding: 0 0 105% 0;}
+.highlight-winning-tie-01 {max-width:200px; max-height:210px; }
+.highlight-winning-tie-01::after {content: '\00a0';display: inline-block; width:200px; height:210px; background-position: 16.666666666666668% 0%;background-size: 700% 400%;background-image: url(highlight-winning-tie.png);padding: 0; }
+div.highlight-winning-tie-01::after {max-width:200px; width:100%;height:0;padding: 0 0 105% 0;}
+.highlight-winning-tie-02 {max-width:200px; max-height:210px; }
+.highlight-winning-tie-02::after {content: '\00a0';display: inline-block; width:200px; height:210px; background-position: 33.333333333333336% 0%;background-size: 700% 400%;background-image: url(highlight-winning-tie.png);padding: 0; }
+div.highlight-winning-tie-02::after {max-width:200px; width:100%;height:0;padding: 0 0 105% 0;}
+.highlight-winning-tie-03 {max-width:200px; max-height:210px; }
+.highlight-winning-tie-03::after {content: '\00a0';display: inline-block; width:200px; height:210px; background-position: 50% 0%;background-size: 700% 400%;background-image: url(highlight-winning-tie.png);padding: 0; }
+div.highlight-winning-tie-03::after {max-width:200px; width:100%;height:0;padding: 0 0 105% 0;}
+.highlight-winning-tie-04 {max-width:200px; max-height:210px; }
+.highlight-winning-tie-04::after {content: '\00a0';display: inline-block; width:200px; height:210px; background-position: 66.66666666666667% 0%;background-size: 700% 400%;background-image: url(highlight-winning-tie.png);padding: 0; }
+div.highlight-winning-tie-04::after {max-width:200px; width:100%;height:0;padding: 0 0 105% 0;}
+.highlight-winning-tie-05 {max-width:200px; max-height:210px; }
+.highlight-winning-tie-05::after {content: '\00a0';display: inline-block; width:200px; height:210px; background-position: 83.33333333333333% 0%;background-size: 700% 400%;background-image: url(highlight-winning-tie.png);padding: 0; }
+div.highlight-winning-tie-05::after {max-width:200px; width:100%;height:0;padding: 0 0 105% 0;}
+.highlight-winning-tie-06 {max-width:200px; max-height:210px; }
+.highlight-winning-tie-06::after {content: '\00a0';display: inline-block; width:200px; height:210px; background-position: 100% 0%;background-size: 700% 400%;background-image: url(highlight-winning-tie.png);padding: 0; }
+div.highlight-winning-tie-06::after {max-width:200px; width:100%;height:0;padding: 0 0 105% 0;}
+.highlight-winning-tie-07 {max-width:200px; max-height:210px; }
+.highlight-winning-tie-07::after {content: '\00a0';display: inline-block; width:200px; height:210px; background-position: 0% 33.333333333333336%;background-size: 700% 400%;background-image: url(highlight-winning-tie.png);padding: 0; }
+div.highlight-winning-tie-07::after {max-width:200px; width:100%;height:0;padding: 0 0 105% 0;}
+.highlight-winning-tie-08 {max-width:200px; max-height:210px; }
+.highlight-winning-tie-08::after {content: '\00a0';display: inline-block; width:200px; height:210px; background-position: 16.666666666666668% 33.333333333333336%;background-size: 700% 400%;background-image: url(highlight-winning-tie.png);padding: 0; }
+div.highlight-winning-tie-08::after {max-width:200px; width:100%;height:0;padding: 0 0 105% 0;}
+.highlight-winning-tie-09 {max-width:200px; max-height:210px; }
+.highlight-winning-tie-09::after {content: '\00a0';display: inline-block; width:200px; height:210px; background-position: 33.333333333333336% 33.333333333333336%;background-size: 700% 400%;background-image: url(highlight-winning-tie.png);padding: 0; }
+div.highlight-winning-tie-09::after {max-width:200px; width:100%;height:0;padding: 0 0 105% 0;}
+.highlight-winning-tie-10 {max-width:200px; max-height:210px; }
+.highlight-winning-tie-10::after {content: '\00a0';display: inline-block; width:200px; height:210px; background-position: 50% 33.333333333333336%;background-size: 700% 400%;background-image: url(highlight-winning-tie.png);padding: 0; }
+div.highlight-winning-tie-10::after {max-width:200px; width:100%;height:0;padding: 0 0 105% 0;}
+.highlight-winning-tie-11 {max-width:200px; max-height:210px; }
+.highlight-winning-tie-11::after {content: '\00a0';display: inline-block; width:200px; height:210px; background-position: 66.66666666666667% 33.333333333333336%;background-size: 700% 400%;background-image: url(highlight-winning-tie.png);padding: 0; }
+div.highlight-winning-tie-11::after {max-width:200px; width:100%;height:0;padding: 0 0 105% 0;}
+.highlight-winning-tie-12 {max-width:200px; max-height:210px; }
+.highlight-winning-tie-12::after {content: '\00a0';display: inline-block; width:200px; height:210px; background-position: 83.33333333333333% 33.333333333333336%;background-size: 700% 400%;background-image: url(highlight-winning-tie.png);padding: 0; }
+div.highlight-winning-tie-12::after {max-width:200px; width:100%;height:0;padding: 0 0 105% 0;}
+.highlight-winning-tie-13 {max-width:200px; max-height:210px; }
+.highlight-winning-tie-13::after {content: '\00a0';display: inline-block; width:200px; height:210px; background-position: 100% 33.333333333333336%;background-size: 700% 400%;background-image: url(highlight-winning-tie.png);padding: 0; }
+div.highlight-winning-tie-13::after {max-width:200px; width:100%;height:0;padding: 0 0 105% 0;}
+.highlight-winning-tie-14 {max-width:200px; max-height:210px; }
+.highlight-winning-tie-14::after {content: '\00a0';display: inline-block; width:200px; height:210px; background-position: 0% 66.66666666666667%;background-size: 700% 400%;background-image: url(highlight-winning-tie.png);padding: 0; }
+div.highlight-winning-tie-14::after {max-width:200px; width:100%;height:0;padding: 0 0 105% 0;}
+.highlight-winning-tie-15 {max-width:200px; max-height:210px; }
+.highlight-winning-tie-15::after {content: '\00a0';display: inline-block; width:200px; height:210px; background-position: 16.666666666666668% 66.66666666666667%;background-size: 700% 400%;background-image: url(highlight-winning-tie.png);padding: 0; }
+div.highlight-winning-tie-15::after {max-width:200px; width:100%;height:0;padding: 0 0 105% 0;}
+.highlight-winning-tie-16 {max-width:200px; max-height:210px; }
+.highlight-winning-tie-16::after {content: '\00a0';display: inline-block; width:200px; height:210px; background-position: 33.333333333333336% 66.66666666666667%;background-size: 700% 400%;background-image: url(highlight-winning-tie.png);padding: 0; }
+div.highlight-winning-tie-16::after {max-width:200px; width:100%;height:0;padding: 0 0 105% 0;}
+.highlight-winning-tie-17 {max-width:200px; max-height:210px; }
+.highlight-winning-tie-17::after {content: '\00a0';display: inline-block; width:200px; height:210px; background-position: 50% 66.66666666666667%;background-size: 700% 400%;background-image: url(highlight-winning-tie.png);padding: 0; }
+div.highlight-winning-tie-17::after {max-width:200px; width:100%;height:0;padding: 0 0 105% 0;}
+.highlight-winning-tie-18 {max-width:200px; max-height:210px; }
+.highlight-winning-tie-18::after {content: '\00a0';display: inline-block; width:200px; height:210px; background-position: 66.66666666666667% 66.66666666666667%;background-size: 700% 400%;background-image: url(highlight-winning-tie.png);padding: 0; }
+div.highlight-winning-tie-18::after {max-width:200px; width:100%;height:0;padding: 0 0 105% 0;}
+.highlight-winning-tie-19 {max-width:200px; max-height:210px; }
+.highlight-winning-tie-19::after {content: '\00a0';display: inline-block; width:200px; height:210px; background-position: 83.33333333333333% 66.66666666666667%;background-size: 700% 400%;background-image: url(highlight-winning-tie.png);padding: 0; }
+div.highlight-winning-tie-19::after {max-width:200px; width:100%;height:0;padding: 0 0 105% 0;}
+.highlight-winning-tie-20 {max-width:200px; max-height:210px; }
+.highlight-winning-tie-20::after {content: '\00a0';display: inline-block; width:200px; height:210px; background-position: 100% 66.66666666666667%;background-size: 700% 400%;background-image: url(highlight-winning-tie.png);padding: 0; }
+div.highlight-winning-tie-20::after {max-width:200px; width:100%;height:0;padding: 0 0 105% 0;}
+.highlight-winning-tie-21 {max-width:200px; max-height:210px; }
+.highlight-winning-tie-21::after {content: '\00a0';display: inline-block; width:200px; height:210px; background-position: 0% 100%;background-size: 700% 400%;background-image: url(highlight-winning-tie.png);padding: 0; }
+div.highlight-winning-tie-21::after {max-width:200px; width:100%;height:0;padding: 0 0 105% 0;}
+.highlight-winning-tie-22 {max-width:200px; max-height:210px; }
+.highlight-winning-tie-22::after {content: '\00a0';display: inline-block; width:200px; height:210px; background-position: 16.666666666666668% 100%;background-size: 700% 400%;background-image: url(highlight-winning-tie.png);padding: 0; }
+div.highlight-winning-tie-22::after {max-width:200px; width:100%;height:0;padding: 0 0 105% 0;}
+.highlight-winning-tie-23 {max-width:200px; max-height:210px; }
+.highlight-winning-tie-23::after {content: '\00a0';display: inline-block; width:200px; height:210px; background-position: 33.333333333333336% 100%;background-size: 700% 400%;background-image: url(highlight-winning-tie.png);padding: 0; }
+div.highlight-winning-tie-23::after {max-width:200px; width:100%;height:0;padding: 0 0 105% 0;}
+.highlight-winning-tie-24 {max-width:200px; max-height:210px; }
+.highlight-winning-tie-24::after {content: '\00a0';display: inline-block; width:200px; height:210px; background-position: 50% 100%;background-size: 700% 400%;background-image: url(highlight-winning-tie.png);padding: 0; }
+div.highlight-winning-tie-24::after {max-width:200px; width:100%;height:0;padding: 0 0 105% 0;}
+.highlight-winning-tie-25 {max-width:200px; max-height:210px; }
+.highlight-winning-tie-25::after {content: '\00a0';display: inline-block; width:200px; height:210px; background-position: 66.66666666666667% 100%;background-size: 700% 400%;background-image: url(highlight-winning-tie.png);padding: 0; }
+div.highlight-winning-tie-25::after {max-width:200px; width:100%;height:0;padding: 0 0 105% 0;}
+.highlight-winning-tie-26 {max-width:200px; max-height:210px; }
+.highlight-winning-tie-26::after {content: '\00a0';display: inline-block; width:200px; height:210px; background-position: 83.33333333333333% 100%;background-size: 700% 400%;background-image: url(highlight-winning-tie.png);padding: 0; }
+div.highlight-winning-tie-26::after {max-width:200px; width:100%;height:0;padding: 0 0 105% 0;}
+.highlight-winning-tie-27 {max-width:200px; max-height:210px; }
+.highlight-winning-tie-27::after {content: '\00a0';display: inline-block; width:200px; height:210px; background-position: 100% 100%;background-size: 700% 400%;background-image: url(highlight-winning-tie.png);padding: 0; }
+div.highlight-winning-tie-27::after {max-width:200px; width:100%;height:0;padding: 0 0 105% 0;}
+
+/* $TexturePacker:SmartUpdate:0a643d716624e579a6f8fe5aeb9e4a5d:44233089670a0650bfea0f20ba4314a3:9a37c429aa8ccd597c8ee8906c85d4c7$ */
