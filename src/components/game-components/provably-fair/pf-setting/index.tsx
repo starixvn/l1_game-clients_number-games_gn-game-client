@@ -2,7 +2,7 @@ import { FC, useEffect, useRef, useState } from "react";
 import { useGameContext } from "../../../../_shared/react-contexts";
 import { GameEventActionType } from "../../../../_shared/react-contexts/game-state-context/game-event-action";
 import { useGameStateContext, useGameStatesDispatch } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
-import { useCommonTranslate, useSNTranslate, useTranslator } from "../../../../_shared/react-hooks";
+import { useCommonTranslate, useSNTranslate } from "../../../../_shared/react-hooks";
 import ModalContainer from "../../modal-container";
 import { ButtonPFGuide } from "../pf-guide";
 import Styles from "../provably-fair.module.scss";

@@ -1,6 +1,5 @@
 import { FC, useEffect, useMemo, useState } from "react";
-import { useGameContext } from "../../../_shared/react-contexts";
-import { useClickSound, useCommonTranslate, useSNTranslate, useTranslator } from "../../../_shared/react-hooks";
+import { useClickSound, useCommonTranslate, useSNTranslate } from "../../../_shared/react-hooks";
 import { useBallColor } from "../../../_shared/helpers";
 import { createHash } from "crypto";
 import CopyableTextInput from "../../../components/game-components/provably-fair/copyable-text-input";
@@ -10,13 +9,11 @@ import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/rea
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 
 const PFVerification: FC = () => {
-    const { tolgeeNamespace } = useGameContext();
     const { pfVerifyModalData: pfResult } = useGameStateContext();
     const [mergeClientSeed, setMergeClientSeed] = useState(pfResult?.editedMergeClientSeed || pfResult?.mergeClientSeed || "");
     const dispatch = useGameStatesDispatch();
     const { t: translateCommon } = useCommonTranslate();
     const { t: translateSNGames } = useSNTranslate();
-    const { t: translateInGame } = useTranslator([tolgeeNamespace]);
     const [combinedHash, setCombinedHash] = useState(pfResult.finalHash);
     const clickSound = useClickSound();
     const ballColor = useBallColor;
@@ -117,27 +114,26 @@ const PFVerification: FC = () => {
                 <h3 className={`${Styles["section-title"]} mt-2`}>{translateCommon("pf_header_combined_sha512_hash")}</h3>
                 <p className="text-wrap">{combinedHash}</p>
 
-                <h3 className={`${Styles["section-title"]}`}>{translateInGame("pf_verification_para_3")}</h3>
+                <h3 className={`${Styles["section-title"]}`}>{translateSNGames("pf_verification_para_3")}</h3>
                 <p className="font-weight-medium">
                     {verifyInfo.rawTwoFirstDigits} {"=>"} {verifyInfo.valueTwoFirstDigits}
                 </p>
                 <p>
-                    <span className={Styles["text-highlight"]}>{translateInGame("pf_verification_para_4")}</span>
+                    <span className={Styles["text-highlight"]}>{translateSNGames("pf_verification_para_4")}</span>
                     <span>
                         {" "}
-                        = (({translateInGame("pf_algorithm_random_number")} + X) mod {translateInGame("pf_verification_para_5")}) + 1
+                        = (({translateSNGames("pf_algorithm_random_number")} + X) mod {translateSNGames("pf_verification_para_5")}) + 1
                     </span>
                 </p>
                 <p>
                     <span className={Styles["text-highlight"]}>
-                        {translateInGame("pf_verification_para_6")} (1,..., {verifyInfo.numberRemainBalls})
+                        {translateSNGames("pf_index")} (1,..., {verifyInfo.numberRemainBalls})
                     </span>{" "}
                     = (({verifyInfo.randomNumber} + {verifyInfo.valueTwoFirstDigits}) mod {verifyInfo.numberRemainBalls}) + 1 ={" "}
                     <span className={Styles["text-highlight"]}>{verifyInfo.index}</span>
                 </p>
 
-                <h3 className={`${Styles["section-title"]}`}>{translateInGame("pf_verification_para_8")}</h3>
-                <h3 className={`${Styles["section-title"]}`}>{translateInGame("pf_verification_para_9")}</h3>
+                <h3 className={`${Styles["section-title"]}`}>{translateSNGames("pf_verification_para_8")}</h3>
                 <p className={Styles["result-numbers"]}>
                     {verifyInfo.remainBalls.map((item, index) => {
                         return index + 1 == verifyInfo.index ? (
