@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useBallColor } from "../../../_shared/helpers/ball-color-helper";
 import { GameStateContextModel } from "../../../_shared/react-contexts/game-state-context/game-state-context-model";
 import { RoundState } from "../../game-base/type";
-import { Spritesheet } from "../sprites-sheet";
+import BallLoops from "./ball-loop";
 import Styles from "./cage.module.scss";
 import ResultBall from "./result-ball";
 import ResultNumber from "./result-number";
@@ -55,22 +55,7 @@ const Cage: React.FC<CageProps> = (cageProps) => {
         <div className={`${Styles["cage-area"]} ${isSmall ? Styles["small"] : ""} ${Styles[position]}`}>
             {highlight && <div className={`${Styles["cage-bg-highlight"]}`}></div>}
             <div id="cage-bg" className={Styles["cage-bg"]}></div>
-            <div id="cage-balls" className={Styles["cage-balls"]}>
-                {roundState === RoundState.SwitchRound && <div className={Styles["idle-balls"]}></div>}
-                {roundState !== RoundState.SwitchRound && (
-                    <Spritesheet
-                        className={Styles["balls-loop"]}
-                        image={`/static/images/cage/cage-loop-anim.png`}
-                        widthFrame={130}
-                        isResponsive
-                        heightFrame={130}
-                        steps={11}
-                        autoplay={true}
-                        loop={true}
-                        fps={40}
-                    />
-                )}
-            </div>
+            <BallLoops roundState={roundState} />
             <div id="cage-cover" className={Styles["cage-cover"]}></div>
             <div id="cage-border" className={`${Styles["cage-border"]} ${Styles[color]}`}>
                 {!isDelayShowResult && <div id="cage-lid" className={Styles["cage-lid"]} />}
