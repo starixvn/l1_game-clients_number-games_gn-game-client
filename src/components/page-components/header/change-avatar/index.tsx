@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { SettingEventActionType, usePlayerContext, useSettingContext, useSettingDispatch } from "../../../_shared/react-contexts";
-import { useClickSound } from "../../../_shared/react-hooks";
-import { updateUserAvatar } from "../../../services/user-setting-service";
-import { AvatarGallery } from "../dashboard/register/avatar-gallery";
+import { SettingEventActionType, usePlayerContext, useSettingContext, useSettingDispatch } from "../../../../_shared/react-contexts";
+import { useClickSound } from "../../../../_shared/react-hooks";
+import { updateUserAvatar } from "../../../../services/user-setting-service";
+import { AvatarGallery } from "../../dashboard/register/avatar-gallery";
 import Styles from "./index.module.scss";
 
 const ChangeAvatar: React.FC = () => {

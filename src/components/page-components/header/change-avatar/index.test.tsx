@@ -2,7 +2,7 @@ import { render } from "@testing-library/react";
 import React from "react";
 import ChangeAvatar from ".";
 
-jest.mock("../../../_shared/react-hooks", () => ({
+jest.mock("../../../../_shared/react-hooks", () => ({
     useSettingContext: jest.fn(),
     useClickSound: jest.fn(),
     usePlayerContext: jest.fn(),
@@ -10,12 +10,9 @@ jest.mock("../../../_shared/react-hooks", () => ({
 }));
 
 describe(ChangeAvatar.name, () => {
-    let mockSettingContext: any;
-    let mockSettingContextSpy: any;
-    let mockUseState;
-    let mockUseStateSpy;
+    let mockSettingContext, mockSettingContextSpy, mockUseState, mockUseStateSpy;
+
     beforeEach(() => {
-        // Before each test, mock the useState hook
         mockSettingContext = {
             isShowAvatarGallery: true,
             authorizeInfo: {

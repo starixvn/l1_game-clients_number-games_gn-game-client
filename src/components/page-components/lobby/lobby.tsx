@@ -1,7 +1,7 @@
 import { Socket } from "socket.io-client";
 import { BackgroundGalaxy } from "../background";
-import ChangeAvatar from "../change-avatar";
 import { ILobbyConfigs } from "../dashboard/type";
+import ChangeAvatar from "../header/change-avatar";
 import MusicPlayer from "../music-player";
 import Settings from "../settings";
 import { Banner } from "./games/components/banner";
