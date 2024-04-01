@@ -154,7 +154,7 @@ const PFSetting: FC<{ customClientSeedInfo?: string }> = ({ customClientSeedInfo
         setIsManualMode(!isManualMode);
         setIsFirstLoad(false);
         if (manualRadio.current.checked) {
-            manualSeed.current.value = randomSeed.current.value;
+            setManualClientSeed(randomClientSeed);
             dispatch({
                 type: GameEventActionType.UPDATE_PF_CLIENT_SEED_SETTING,
                 payload: {
@@ -178,6 +178,7 @@ const PFSetting: FC<{ customClientSeedInfo?: string }> = ({ customClientSeedInfo
     };
 
     const handleOnChangeManualClientSeed = (event: any) => {
+        setManualClientSeed(event.target.value);
         dispatch({
             type: GameEventActionType.UPDATE_PF_CLIENT_SEED_SETTING,
             payload: {
@@ -257,7 +258,7 @@ const PFSetting: FC<{ customClientSeedInfo?: string }> = ({ customClientSeedInfo
                                 onBlur={handleOnBlur}
                                 onChange={handleOnChangeManualClientSeed}
                                 disabled={!isManualMode}
-                                defaultValue={manualClientSeed || ""}
+                                value={manualClientSeed || ""}
                             />
                         </div>
                     </div>

@@ -27,7 +27,7 @@ const PFVerifyResultBlock: FC<{ pfResult: PFResult }> = ({ pfResult }) => {
     return (
         <>
             <div className="text-white font-weight-medium mb-2">
-                {translateSNGames("glossary_draw_id").capitalizeFirstLetter()}: #{drawResult?.drawID} ({drawResult?.order})
+                {translateSNGames("glossary_draw_id").capitalizeFirstLetter()}: {drawResult?.drawID} ({drawResult?.order})
             </div>
             <div className="flex justify-start">
                 <div className={Styles["balls-container"]}>
