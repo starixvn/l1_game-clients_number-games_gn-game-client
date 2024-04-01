@@ -97,12 +97,13 @@ class Dashboard extends React.PureComponent<Props, State> {
     }
 
     updateAuthorizeInfo(authorizeInfo: AuthorizeResponse) {
+        const clonedAuthorizeInfo = { ...authorizeInfo };
         if (authorizeInfo?.authorized) {
-            authorizeInfo.user.settings.quickBet = true;
+            clonedAuthorizeInfo.user.settings = { ...clonedAuthorizeInfo.user.settings, quickBet: true };
         }
 
-        this.checkOfferedGame(authorizeInfo);
-        this.setState({ authorizeInfo });
+        this.checkOfferedGame(clonedAuthorizeInfo);
+        this.setState({ authorizeInfo: clonedAuthorizeInfo });
     }
 
     updateUserBalance(balance: number) {
