@@ -8,11 +8,10 @@ const ResultBall: React.FC<{
     isDelayShowResult: boolean;
     roundState: RoundState;
     ballColor: string;
-    ballSpeed: number;
     isShowResultAnim: boolean;
-}> = ({ isDelayShowResult, roundState, ballColor, ballSpeed, isShowResultAnim }) => {
+}> = ({ isDelayShowResult, roundState, ballColor, isShowResultAnim }) => {
     const currentTime = Date.now();
-    console.log(`/static/images/cage/${ballColor}.png`);
+
     return useMemo(() => {
         if (isDelayShowResult && roundState === RoundState.DisplayResult) {
             return (

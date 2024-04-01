@@ -33,9 +33,9 @@ const Cage: React.FC<CageProps> = (cageProps) => {
     const { position, isSmall, result, delayShowResultTime, color, playResultAnimation, roundState, highlight } = cageProps;
 
     const ballColor = `ball-${useBallColor({ number: result })}-${position === CagePosition.LEFT ? "1" : "2"}`;
-    const ballSpeed = playResultAnimation ? 0.5 : 1;
 
     const [isDelayShowResult, setIsDelayShowResult] = useState<boolean>(false);
+    const currentTime = Date.now();
 
     useEffect(() => {
         let timeOut: NodeJS.Timeout;
@@ -60,6 +60,7 @@ const Cage: React.FC<CageProps> = (cageProps) => {
                 {roundState === RoundState.SwitchRound && <div className={Styles["idle-balls"]}></div>}
                 {roundState !== RoundState.SwitchRound && (
                     <Spritesheet
+                        key={currentTime}
                         className={Styles["balls-loop"]}
                         image={`/static/images/cage/cage-loop-anim.png`}
                         widthFrame={130}
@@ -81,7 +82,6 @@ const Cage: React.FC<CageProps> = (cageProps) => {
                         isDelayShowResult={isDelayShowResult}
                         roundState={roundState}
                         ballColor={ballColor}
-                        ballSpeed={ballSpeed}
                         isShowResultAnim={playResultAnimation}
                     />
                 )}
@@ -92,7 +92,6 @@ const Cage: React.FC<CageProps> = (cageProps) => {
                     isDelayShowResult={isDelayShowResult}
                     roundState={roundState}
                     number={result}
-                    ballSpeed={ballSpeed}
                     isShowResultAnim={playResultAnimation}
                 />
             )}

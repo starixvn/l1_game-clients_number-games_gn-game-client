@@ -7,12 +7,11 @@ import Styles from "./cage.module.scss";
 const ResultNumber: React.FC<{
     isDelayShowResult: boolean;
     roundState: RoundState;
-    ballSpeed: number;
     isShowResultAnim: boolean;
     number: string;
-}> = ({ isDelayShowResult, roundState, ballSpeed, number, isShowResultAnim }) => {
+}> = ({ isDelayShowResult, roundState, number, isShowResultAnim }) => {
     const currentTime = Date.now();
-    console.log(`/static/images/cage/new-number/${number}.png`);
+
     return useMemo(() => {
         if (isDelayShowResult && roundState === RoundState.DisplayResult) {
             return (

@@ -17,17 +17,7 @@ type Props = {
     showResultInfo: any;
 };
 
-export const NextBallWinningAnimation: React.FC<Props> = ({
-    choice,
-    resourceName,
-    width,
-    height,
-    position,
-    className,
-    roundState,
-    settlementResult,
-    showResultInfo,
-}) => {
+export const NextBallWinningAnimation: React.FC<Props> = ({ choice, resourceName, roundState, settlementResult, showResultInfo }) => {
     const winningHighLightResult = isHighLightWinningResult;
 
     return (
