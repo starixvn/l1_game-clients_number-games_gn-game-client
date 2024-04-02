@@ -7,13 +7,13 @@ import Styles from "./error-message.module.scss";
 import { ConnectFailedReasonKey } from "./type";
 import { URLContext, updateURLContext } from "../../../_shared/react-contexts";
 
-export const ConnectFailedMessage: React.FC<{ tolgeeNamespace: string; id: number; onReconnect: () => void; reason: string, enableBackdrop: boolean }> = ({
-    tolgeeNamespace,
-    id,
-    onReconnect,
-    reason,
-    enableBackdrop
-}) => {
+export const ConnectFailedMessage: React.FC<{
+    tolgeeNamespace: string;
+    id: number;
+    onReconnect: () => void;
+    reason: string;
+    enableBackdrop: boolean;
+}> = ({ tolgeeNamespace, id, onReconnect, reason, enableBackdrop }) => {
     const { t } = useTranslator([tolgeeNamespace]);
     const { backToRedirectUrl, redirectUrl, isDirectMode } = useContext(URLContext);
 
@@ -29,14 +29,14 @@ export const ConnectFailedMessage: React.FC<{ tolgeeNamespace: string; id: numbe
 
     const renderLostConnectionButtons = () => {
         return (
-            <>
+            <div className="d-flex">
                 <button onClick={handleBackToLobby} className={`btn-grey`}>
                     {t(`${ResourceTypes.COMMON}.back`)}
                 </button>
                 <button onClick={() => onReconnect()} className={`${Styles["btn-reconnect"]} btn-green`}>
                     {t(`${ResourceTypes.SABA_NUMBER}.button_reconnect`)}
                 </button>
-            </>
+            </div>
         );
     };
 
