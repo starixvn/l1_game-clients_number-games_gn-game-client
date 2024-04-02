@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { buildVersion } from "../../../_shared/constants";
 import { useSystemContext } from "../../../_shared/react-contexts";
 import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import { RoundState } from "../../game-base/type";
@@ -24,7 +25,7 @@ const RippleButton: React.FC<RippleButtonProps> = ({ choice, onClickBet, classNa
     const [ripplePosY, setRipplePosY] = useState(0);
 
     useEffect(() => {
-        setCursorImage(`${DEFAULT_CHIP_CURSOR_PATH}/cursor-chip-${systemContext.selectedChip}.svg`);
+        setCursorImage(`${DEFAULT_CHIP_CURSOR_PATH}/cursor-chip-${systemContext.selectedChip}.svg?v=${buildVersion}`);
     }, [systemContext.selectedChip]);
 
     useEffect(() => {
