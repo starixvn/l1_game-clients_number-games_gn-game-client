@@ -13,7 +13,7 @@ interface RippleButtonProps {
     indexRef: number;
 }
 
-const DEFAULT_CHIP_CURSOR_PATH = "/static/images/chips/cursor";
+export const DEFAULT_CHIP_CURSOR_PATH = "/static/images/chips/cursor";
 const RippleButton: React.FC<RippleButtonProps> = ({ choice, onClickBet, className, id, indexRef, ...props }) => {
     const systemContext = useSystemContext();
     const { roundState } = useGameStateContext();

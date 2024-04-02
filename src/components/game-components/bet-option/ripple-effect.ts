@@ -1,6 +1,10 @@
-export const setRipplePosition = (setRipplePosX, setRipplePosY, rippleElement) => {
-    let timerId;
-    const setPosition = (e, item) => {
+import { MutableRefObject } from "react";
+
+type RippleElementType = HTMLButtonElement | HTMLDivElement | null;
+
+export const setRipplePosition = (setRipplePosX: Function, setRipplePosY: Function, rippleElement: MutableRefObject<any[]>) => {
+    let timerId: NodeJS.Timeout;
+    const setPosition = (e, item: RippleElementType) => {
         const pos = item.getBoundingClientRect();
         const x = e.pageX - pos.left;
         const y = e.pageY - pos.top;
