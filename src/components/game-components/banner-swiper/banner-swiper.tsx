@@ -41,8 +41,7 @@ export const BannerSwiper: React.FC<{ banners: IBanner[]; openGame: Function }> 
                 disableOnInteraction: false,
                 pauseOnMouseEnter: true,
             }}
-            centeredSlides={true}
-            centeredSlidesBounds={true}
+            centeredSlides={false}
             longSwipes={false}
             threshold={10}
             ref={swiperRef}
