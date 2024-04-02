@@ -65,7 +65,9 @@
     .swiper-slide .banner-img {
         width:100%;
         height: 12.4rem;
-      
+        max-width: 35.9rem;
+        object-fit: cover;
+        display: block;
     }
 
     .swiper-pagination-bullet {
