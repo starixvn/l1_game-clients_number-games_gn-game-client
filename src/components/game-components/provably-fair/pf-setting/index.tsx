@@ -258,7 +258,7 @@ const PFSetting: FC<{ customClientSeedInfo?: string }> = ({ customClientSeedInfo
                                 onBlur={handleOnBlur}
                                 onChange={handleOnChangeManualClientSeed}
                                 disabled={!isManualMode}
-                                value={manualClientSeed || ""}
+                                value={isManualMode ? manualClientSeed || "" : ""}
                             />
                         </div>
                     </div>
