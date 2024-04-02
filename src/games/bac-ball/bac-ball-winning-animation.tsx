@@ -35,3 +35,5 @@ export const BacBallWinningAnimation: React.FC<Props> = ({ choice, resourceName,
         )
     );
 };
+
+export default BacBallWinningAnimation;

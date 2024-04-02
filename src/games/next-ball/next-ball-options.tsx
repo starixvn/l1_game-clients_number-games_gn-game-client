@@ -1,27 +1,23 @@
 import dynamic from "next/dynamic";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback } from "react";
 
 import { useGameActionContext, useGameContext, useSystemContext } from "../../_shared/react-contexts";
 import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
 import { isShowHighlightPrevResult } from "../../_shared/react-hooks/use-high-light";
 import { RoundState } from "../../components/game-base/type";
-import { setRipplePosition } from "../../components/game-components/bet-option/ripple-effect";
 import { NextBallBetOptions, NextBallBetOptionsPercentageColor } from "./next-ball-constants";
 import Style from "./next-ball.module.scss";
 
-const NextBallWinningAnimation = dynamic(() => import("./next-ball-winning-animation"));
 const BetChoice = dynamic(() => import("../../components/game-components/bet-option/bet-choice"));
+const RippleButton = dynamic(() => import("../../components/game-components/bet-option/ripple-button"));
 const BetPercentage = dynamic(() => import("../../components/game-components/bet-option/bet-percentage"));
 const Odds = dynamic(() => import("../../components/game-components/bet-option/odds"));
 const OwnBet = dynamic(() => import("../../components/game-components/bet-option/own-bet"));
 const PlayerBetCount = dynamic(() => import("../../components/game-components/bet-option/player-bet-count"));
 const TotalBet = dynamic(() => import("../../components/game-components/bet-option/total-bet"));
+const NextBallWinningAnimation = dynamic(() => import("./next-ball-winning-animation"));
 
 const NextBallBetOptionsComponent = () => {
-    const rippleButtons = useRef([]);
-    const [ripplePosX, setRipplePosX] = useState(0);
-    const [ripplePosY, setRipplePosY] = useState(0);
-
     const gameActionContext = useGameActionContext();
     const systemContext = useSystemContext();
 
@@ -66,10 +62,6 @@ const NextBallBetOptionsComponent = () => {
         return <OwnBet choice={choice} tolgeeNamespace={tolgeeNamespace} className={Style["own-bet"]} />;
     };
 
-    useEffect(() => {
-        return setRipplePosition(setRipplePosX, setRipplePosY, rippleButtons);
-    }, [rippleButtons]);
-
     const renderHighlightWinningPrevResult = (choice: string) => {
         let className = "";
         switch (choice) {
@@ -105,6 +97,9 @@ const NextBallBetOptionsComponent = () => {
             />
         );
 
+        const choiceKeys = Object.keys(NextBallBetOptions);
+        const choiceIndex = choiceKeys.findIndex((key) => NextBallBetOptions[key] === choice);
+
         return (
             <div className={`${Style[choice]} text-white relative`}>
                 <div className={`${Style["choice-info"]} ${Style[`choice-${choice}`]}`}>
@@ -121,16 +116,15 @@ const NextBallBetOptionsComponent = () => {
 
                 {renderOwnBet(choice)}
                 {<div className={Style["winning-effect"]}>{winningResult}</div>}
-                <button
-                    ref={(el) => (rippleButtons.current[choice === "player" ? 0 : 1] = el)}
-                    className={`btn-ripple ${Style["btn-ripple"]} ${isShowDisabledLayer}`}
+
+                <RippleButton
+                    indexRef={choiceIndex}
+                    className={`${Style["btn-ripple"]} ${isShowDisabledLayer}`}
                     id={`${tolgeeNamespace}-choice-${choice}`}
-                    onClick={() => {
-                        onClickBet(choice);
-                    }}
-                >
-                    <span className="ripple-effect"></span>
-                </button>
+                    onClickBet={onClickBet}
+                    choice={choice}
+                />
+
                 {isShowDisabledLayer && <div className={Style["disable-layer"]}></div>}
                 {isShowHighlightPrevResult({ betChoice: choice, roundState, roundHistory }) && renderHighlightWinningPrevResult(choice)}
             </div>
@@ -147,15 +141,6 @@ const NextBallBetOptionsComponent = () => {
                 {renderMainOption(NextBallBetOptions.UNDER)}
                 {renderMainOption(NextBallBetOptions.EVEN)}
             </div>
-
-            <style>
-                {`
-                 .ripple-effect {
-                    top: calc(1 / var(--zoom-game) * ${ripplePosY}px);
-                    left: calc(1 / var(--zoom-game) * ${ripplePosX}px);
-                   }
-                 `}
-            </style>
         </>
     );
 };

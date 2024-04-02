@@ -1,20 +1,23 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback } from "react";
 
+import dynamic from "next/dynamic";
 import { useGameActionContext, useGameContext, useSystemContext } from "../../_shared/react-contexts";
 import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
 import { isShowHighlightPrevResult } from "../../_shared/react-hooks/use-high-light";
 import { RoundState } from "../../components/game-base/type";
-import { BetChoice, BetPercentage, Odds, OwnBet, PlayerBetCount, TotalBet } from "../../components/game-components/bet-option";
-import { setRipplePosition } from "../../components/game-components/bet-option/ripple-effect";
-import { BacBallWinningAnimation } from "./bac-ball-winning-animation";
 import Style from "./bac-ball.module.scss";
 import { BacBallBetOptions, BacBallBetOptionsPercentageColor } from "./constants";
 
-const BacBallBetOptionsComponent = () => {
-    const rippleButtons = useRef([]);
-    const [ripplePosX, setRipplePosX] = useState(0);
-    const [ripplePosY, setRipplePosY] = useState(0);
+const BetChoice = dynamic(() => import("../../components/game-components/bet-option/bet-choice"));
+const RippleButton = dynamic(() => import("../../components/game-components/bet-option/ripple-button"));
+const BetPercentage = dynamic(() => import("../../components/game-components/bet-option/bet-percentage"));
+const Odds = dynamic(() => import("../../components/game-components/bet-option/odds"));
+const OwnBet = dynamic(() => import("../../components/game-components/bet-option/own-bet"));
+const PlayerBetCount = dynamic(() => import("../../components/game-components/bet-option/player-bet-count"));
+const TotalBet = dynamic(() => import("../../components/game-components/bet-option/total-bet"));
+const BacBallWinningAnimation = dynamic(() => import("./bac-ball-winning-animation"));
 
+const BacBallBetOptionsComponent = () => {
     const gameActionContext = useGameActionContext();
     const systemContext = useSystemContext();
 
@@ -71,10 +74,6 @@ const BacBallBetOptionsComponent = () => {
         return <OwnBet choice={choice} tolgeeNamespace={tolgeeNamespace} />;
     };
 
-    useEffect(() => {
-        return setRipplePosition(setRipplePosX, setRipplePosY, rippleButtons);
-    }, [rippleButtons]);
-
     const renderHighlightWinningPrevResult = (choice: string) => {
         let className = "";
         switch (choice) {
@@ -125,16 +124,14 @@ const BacBallBetOptionsComponent = () => {
 
                 {ownBet}
                 {<div className={Style["winning-effect"]}>{winningResult}</div>}
-                <button
-                    ref={(el) => (rippleButtons.current[choice === "player" ? 0 : 1] = el)}
-                    className={`btn-ripple ${Style["btn-ripple"]} ${isShowDisabledLayer}`}
+                <RippleButton
+                    indexRef={choice === "player" ? 0 : 1}
+                    className={`${Style["btn-ripple"]} ${isShowDisabledLayer}`}
                     id={`${tolgeeNamespace}-choice-${choice}`}
-                    onClick={() => {
-                        onClickBet(choice);
-                    }}
-                >
-                    <span className="ripple-effect"></span>
-                </button>
+                    onClickBet={onClickBet}
+                    choice={choice}
+                />
+
                 {isShowDisabledLayer && <div className={Style["disable-layer"]}></div>}
 
                 {isShowHighlightPrevResult({ betChoice: choice, roundState, roundHistory }) && winningPrev}
@@ -174,16 +171,14 @@ const BacBallBetOptionsComponent = () => {
                 </div>
                 {ownBet}
                 {<div className={Style["winning-effect"]}>{winningResult}</div>}
-                <button
-                    ref={(el) => (rippleButtons.current[2] = el)}
-                    className={`btn-ripple ${Style["btn-ripple"]} ${isShowDisabledLayer}`}
+                <RippleButton
+                    indexRef={2}
+                    className={`${Style["btn-ripple"]} ${isShowDisabledLayer}`}
                     id={`${tolgeeNamespace}-choice-tie`}
-                    onClick={() => {
-                        onClickBet(BacBallBetOptions.TIE);
-                    }}
-                >
-                    <span className="ripple-effect"></span>
-                </button>
+                    onClickBet={onClickBet}
+                    choice={BacBallBetOptions.TIE}
+                />
+
                 {isShowDisabledLayer && <div className={Style["disable-layer"]}></div>}
 
                 {isShowHighlightPrevResult({ betChoice: BacBallBetOptions.TIE, roundHistory, roundState }) && winningPrev}
@@ -195,14 +190,6 @@ const BacBallBetOptionsComponent = () => {
             {renderMainOption(BacBallBetOptions.PLAYER)}
             {renderMainOption(BacBallBetOptions.BANKER)}
             {renderBetOptionTie()}
-            <style>
-                {`
-                 .ripple-effect {
-                    top: calc(1 / var(--zoom-game) * ${ripplePosY}px);
-                    left: calc(1 / var(--zoom-game) * ${ripplePosX}px);
-                   }
-                 `}
-            </style>
         </>
     );
 };
