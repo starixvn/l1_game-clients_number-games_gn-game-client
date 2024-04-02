@@ -1,6 +1,7 @@
 import React from "react";
 
 import Styles from "./styles.module.scss";
+import { LoadingSpinner } from "./loading-spinner";
 
 const GameLoading: React.FC<{}> = () => {
     const classBorder = "border-radius-7";
@@ -18,6 +19,9 @@ const GameLoading: React.FC<{}> = () => {
                     <span className={`${Styles[classBorder]} ${Styles[classSkeletonItem]} ${Styles["home"]}`} />
                     <span className={`${Styles[classBorder]} ${Styles[classSkeletonItem]} ${Styles["menu"]}`} />
                 </div>
+            </div>
+            <div className={Styles["spinner-container"]}>
+                <LoadingSpinner />
             </div>
 
             <div className={Styles["result-container"]}>
