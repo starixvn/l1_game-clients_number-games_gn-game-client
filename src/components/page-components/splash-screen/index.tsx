@@ -1,7 +1,7 @@
 import * as Sentry from "@sentry/react";
 import { WithRouterProps } from "next/dist/client/with-router";
 import { useRouter } from "next/router";
-import { ReactNode, useContext } from "react";
+import { ReactNode, useContext, useEffect } from "react";
 import { getAppSettings } from "../../../_shared/app-settings";
 import { buildVersion, languageMapper, locales, systemName } from "../../../_shared/constants";
 import { StorageHelper, localStorageKeys } from "../../../_shared/helpers";
@@ -19,10 +19,7 @@ export type SplashScreenState = {
     underMaintenance: boolean;
 };
 
-export async function useCustomStartup(): Promise<void> {
-    const { token, language } = useContext(URLContext);
-    const router = useRouter();
-    const player = usePlayerContext();
+export async function customStartup(token, language, router, player): Promise<void> {
     const session = await (token ? sso(token, getAppSettings().appType) : verifySession());
     const locale = languageMapper[session?.language] || languageMapper[language];
     const isTimeout = !session || (!session?.isUM && !session?.isAuthenticated);
@@ -39,6 +36,7 @@ export async function useCustomStartup(): Promise<void> {
 
     if (session?.isUM) {
         StorageHelper.set(localStorageKeys.umInfo, session.umInfo);
+        player.session = session;
     }
 
     if (session?.isAuthenticated) {
@@ -58,7 +56,12 @@ export function onStartupError(error: Error): void {
 }
 
 export function SplashScreen(): ReactNode {
-    useCustomStartup().catch(onStartupError);
+    const { token, language } = useContext(URLContext);
+    const router = useRouter();
+    const player = usePlayerContext();
+    useEffect(() => {
+        customStartup(token, language, router, player).catch(onStartupError);
+    }, []);
 
     const { session, locale } = usePlayerContext();
 
