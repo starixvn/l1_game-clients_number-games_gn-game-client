@@ -14,6 +14,5 @@ window.envConfig = {
     system: "GN",
     appType: 1,
     enableDebugLogs: true,
-    socketGatewayPath: "gateway",
-    sequenceGames: [1001, 1002, 1003, 1004],
+    socketGatewayPath: "gateway"
 };

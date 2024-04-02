@@ -7,6 +7,6 @@ export type Props = {
     openGameId: number;
     openGameName: string;
     userOfferGames: number[];
-    openGame: Function;
     directMode: boolean;
+    swipeableHandler: Function;
 };

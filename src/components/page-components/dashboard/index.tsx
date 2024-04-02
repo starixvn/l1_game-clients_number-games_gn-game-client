@@ -13,6 +13,7 @@ import {
     getLobbyGameIds,
     GetLocalizedErrorMessage,
     getOfferGamesIds,
+    getSwipeableGameId,
     localStorageKeys,
     StorageHelper,
 } from "../../../_shared/helpers";
@@ -41,6 +42,7 @@ import Register from "./register";
 import { MAX_AVATAR_ID } from "./register/avatar-gallery";
 import NameGenerator from "./register/name-generator";
 import { ILobbyConfigs, Props, State } from "./type";
+import { isMobileOnly } from "react-device-detect";
 
 class Dashboard extends React.PureComponent<Props, State> {
     private notificationSocket: Socket = null;
@@ -64,7 +66,7 @@ class Dashboard extends React.PureComponent<Props, State> {
             openGameId: null,
             openGameName: "",
             isOnLobby: true,
-            lobbySocket: null,
+            lobbySocket: null
         };
         this.lobbyConnectionHandler = new LobbySocketConnection();
 
@@ -87,6 +89,7 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.removeGameTransmitter = this.removeGameTransmitter.bind(this);
         this.reconnectGameTransmitter = this.reconnectGameTransmitter.bind(this);
         this.updateAvatar = this.updateAvatar.bind(this);
+        this.swipeableHandler = this.swipeableHandler.bind(this)
 
         const buildId = process.env.buildVersion;
         const buildVersion = StorageHelper.get(localStorageKeys.buildVersion) ?? 0;
@@ -337,6 +340,7 @@ class Dashboard extends React.PureComponent<Props, State> {
         updateURLContext({ gameId });
     }
 
+
     async getAllLobbyConfigs() {
         const { session } = this.props;
         const lobby: LobbyResponse = await getLobbyConfigs(session);
@@ -346,6 +350,10 @@ class Dashboard extends React.PureComponent<Props, State> {
             console.error("Can not get Lobby configs");
         }
         return lobby?.lobbyConfigs;
+    }
+
+    swipeableHandler = (isPrevGame: boolean, currentGameId: number) => {
+        this.openGame(getSwipeableGameId(isPrevGame, currentGameId));
     }
 
     renderGames() {
@@ -361,8 +369,8 @@ class Dashboard extends React.PureComponent<Props, State> {
                 updateUserStakeLevel={this.handleUpdateUserStakeLevel}
                 openGameId={urlContext.gameId}
                 openGameName={openGameName}
-                openGame={this.openGame}
                 directMode={this.props.directMode}
+                swipeableHandler={this.swipeableHandler}
             />
         );
     }
@@ -400,7 +408,7 @@ class Dashboard extends React.PureComponent<Props, State> {
     }
 
     renderDashBoard() {
-        const { isShowErrorModal, authorizeInfo, isBlockUI } = this.state;
+        const { isShowErrorModal, authorizeInfo, isBlockUI, openGameId } = this.state;
         const authContextValue = {
             authorizeInfo: authorizeInfo,
             session: this.props.session,
@@ -412,6 +420,7 @@ class Dashboard extends React.PureComponent<Props, State> {
 
         const offerGames = getOfferGamesIds(authorizeInfo);
         const isRenderGames = this.shouldRenderGames(offerGames);
+        const allowSwipeGameOndDesktop = !this.props.directMode && !isMobileOnly && isRenderGames;
 
         console.log("renderDashBoard", { isRenderGames });
         const lobbyConnectionContextValue = {
@@ -425,8 +434,9 @@ class Dashboard extends React.PureComponent<Props, State> {
             <PlayerContextProvider value={authContextValue}>
                 <SettingContextProvider>
                     <LobbyConnectionContextProvider value={lobbyConnectionContextValue}>
+                        {allowSwipeGameOndDesktop && <div className={`${Styles["prev-button"]}`}><button onClick={() => this.swipeableHandler(true, openGameId)}> PREV</button></div>}
                         <div className={`${Styles["dashboard"]}`} id={"dashboard"}>
-                            <Header openingGameId={this.state.openGameId} isRenderGames={isRenderGames} />
+                            <Header openingGameId={openGameId} isRenderGames={isRenderGames} />
                             {isRenderGames ? this.renderGames() : this.renderLobby()}
 
                             <Footer />
@@ -451,9 +461,14 @@ class Dashboard extends React.PureComponent<Props, State> {
                                 </div>
                             )}
                         </div>
+                        {allowSwipeGameOndDesktop &&
+                            <div className={`${Styles["next-button"]}`}>
+                                <button onClick={() => this.swipeableHandler(false, openGameId)}>NEXT
+                                </button></div>
+                        }
                     </LobbyConnectionContextProvider>
                 </SettingContextProvider>
-            </PlayerContextProvider>
+            </PlayerContextProvider >
         );
     }
 

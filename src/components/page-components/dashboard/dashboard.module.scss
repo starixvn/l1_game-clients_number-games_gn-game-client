@@ -58,3 +58,15 @@
         z-index: calc(var(--global-api-error-index) + 1);
     }
 }
+
+.prev-button {
+    position: absolute;
+    top: 50%;
+    left: 30px;
+}
+
+.next-button {
+    position: absolute;
+    top: 50%;
+    right: 30px;
+}

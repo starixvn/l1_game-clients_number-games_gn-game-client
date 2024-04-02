@@ -1,5 +1,5 @@
 import { useTheme } from "next-themes";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { isIOS, isMobileOnly } from "react-device-detect";
 import { getAppSettings } from "../_shared/app-settings";
 import { GameIds } from "../_shared/constants";
@@ -25,34 +25,21 @@ export const Games: React.FC<Props> = ({
     updateUserStakeLevel,
     openGameId,
     userOfferGames,
-    openGame,
-    directMode }) => {
+    directMode,
+    swipeableHandler }) => {
     const { theme } = useTheme();
     const locale = tolgee.getLanguage();
     const [stopScroll, setStopScroll] = useState(false);
 
-    const swipeableHandler = (isSwipedUp: boolean) => {
-        if (getAppSettings()?.sequenceGames) {
-            const { sequenceGames } = getAppSettings();
-            const lastedGameIdIndex = sequenceGames.length - 1;
-            const currentGameIdIndex = sequenceGames.findIndex(number => number === openGameId);
-
-            if (currentGameIdIndex === -1) {
-                return;
-            }
-
-            let nextOpenedGameIdIndex = isSwipedUp ?
-                (currentGameIdIndex === 0 ? lastedGameIdIndex : currentGameIdIndex - 1) :
-                (currentGameIdIndex === lastedGameIdIndex ? 0 : currentGameIdIndex + 1);
-
-            openGame(sequenceGames[nextOpenedGameIdIndex]);
+    const mobileSwipeableHandlers = useSwipeable({
+        onSwipedUp: () => {
+            swipeableHandler(true, openGameId);
             setStopScroll(true);
-        }
-    }
-
-    const handlers = useSwipeable({
-        onSwipedUp: () => swipeableHandler(true),
-        onSwipedDown: () => swipeableHandler(false),
+        },
+        onSwipedDown: () => {
+            swipeableHandler(false, openGameId);
+            setStopScroll(true);
+        },
         swipeDuration: 500,
         preventScrollOnSwipe: true,
         trackMouse: true
@@ -97,16 +84,18 @@ export const Games: React.FC<Props> = ({
         }
     };
 
-    const extraProps = directMode ? {} : handlers;
+    const extraProps = isMobileOnly && !directMode ? mobileSwipeableHandlers : {};
 
     return (
-        <div className={`game-container game-wrapper ${styles["open-chips"]}`} {...extraProps} style={{ touchAction: stopScroll ? 'none' : 'auto' }}>
-            <SystemContextProvider>
-                <div className={`${styles["game-list"]} ${isMobileOnly ? styles[isIOS ? "ios-device" : "android-device"] : ""}`}>
-                    <BackgroundGalaxy />
-                    {getGameComponentById(openGameId)}
-                </div>
-            </SystemContextProvider>
+        <div>
+            <div className={`game-container game-wrapper ${styles["open-chips"]}`} {...extraProps} style={{ touchAction: stopScroll ? 'none' : 'auto' }}>
+                <SystemContextProvider>
+                    <div className={`${styles["game-list"]} ${isMobileOnly ? styles[isIOS ? "ios-device" : "android-device"] : ""}`}>
+                        <BackgroundGalaxy />
+                        {getGameComponentById(openGameId)}
+                    </div>
+                </SystemContextProvider>
+            </div>
         </div>
     );
 };

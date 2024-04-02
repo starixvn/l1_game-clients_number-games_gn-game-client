@@ -24,5 +24,4 @@ export default interface AppSettings {
     appType: number;
     useTolgeeStatic: boolean;
     enableDebugLogs: boolean;
-    sequenceGames: Array<number>;
 }
