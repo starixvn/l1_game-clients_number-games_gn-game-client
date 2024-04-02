@@ -43,11 +43,11 @@
     },
     "1003": {
         "id": 1003,
-        "gameName": "NextBall1",
+        "gameName": "LuckyNext1",
         "tolgeeNamespace": "NextBall",
         "socketInfo": {
-            "namespace": "nextball1",
-            "path": "nextball1"
+            "namespace": "luckynext1",
+            "path": "luckynext1"
         },
         "durations": {
             "wholeRound": 212,
@@ -64,11 +64,11 @@
     },
     "1004": {
         "id": 1004,
-        "gameName": "NextBall2",
+        "gameName": "LuckyNext2",
         "tolgeeNamespace": "NextBall",
         "socketInfo": {
-            "namespace": "nextball2",
-            "path": "nextball2"
+            "namespace": "luckynext2",
+            "path": "luckynext2"
         },
         "durations": {
             "wholeRound": 212,
