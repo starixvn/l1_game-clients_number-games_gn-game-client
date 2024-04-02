@@ -1,5 +1,5 @@
 import { FC, useEffect, useRef, useState } from "react";
-import { useGameContext } from "../../../../_shared/react-contexts";
+import { useGameContext, usePlayerContext } from "../../../../_shared/react-contexts";
 import { GameEventActionType } from "../../../../_shared/react-contexts/game-state-context/game-event-action";
 import { useGameStateContext, useGameStatesDispatch } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
 import { useCommonTranslate, useSNTranslate } from "../../../../_shared/react-hooks";
@@ -10,6 +10,7 @@ import { messageEventType } from "../../../game-base/handlers";
 import CopyableTextInput from "../copyable-text-input";
 import Loader from "../../loader";
 import { PFSeverSeed } from "../../../game-base/type";
+import * as Sentry from "@sentry/nextjs";
 
 const NUMBER_VALUES = "0123456789";
 const GetPFInfoMessage = "getPfInfo";
@@ -50,6 +51,12 @@ const PFSetting: FC<{ customClientSeedInfo?: string }> = ({ customClientSeedInfo
     const randomSeed = useRef<HTMLInputElement>();
     const manualRadio = useRef<HTMLInputElement>();
     const manualSeed = useRef<HTMLInputElement>();
+    const {
+        authorizeInfo: {
+            user: { name },
+        },
+    } = usePlayerContext();
+    const { id } = useGameContext();
     const { pfClientSeedSetting, ownBets, drawId, roundId } = useGameStateContext();
     const [isFirstLoad, setIsFirstLoad] = useState<boolean>(true);
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -61,6 +68,16 @@ const PFSetting: FC<{ customClientSeedInfo?: string }> = ({ customClientSeedInfo
     const { gameMessageHandler } = useGameContext();
     const { t: translateSNGames } = useSNTranslate();
     const dispatch = useGameStatesDispatch();
+
+    useEffect(() => {
+        const messageLog = `${id} - ${name} - ${drawId}\n- PF Setting - ${JSON.stringify({
+            manualClientSeed,
+            randomClientSeed,
+            isManualMode,
+        })}`;
+        console.log(messageLog);
+        Sentry.captureMessage(messageLog, Sentry.Severity.Debug);
+    }, [manualClientSeed, randomClientSeed, isManualMode]);
 
     useEffect(() => {
         setRandomClientSeed(pfClientSeedSetting?.randomClientSeed);
