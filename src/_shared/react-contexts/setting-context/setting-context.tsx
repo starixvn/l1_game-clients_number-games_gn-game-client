@@ -2,6 +2,7 @@ import { createContext, useContext, useReducer } from "react";
 
 import { SettingContextModel, initialSettingContextModel } from "./setting-context-model";
 import { SettingEventAction, SettingEventActionType } from "./setting-event-action";
+import { StorageHelper, localStorageKeys } from "../../helpers";
 
 export const SettingContext = createContext<Partial<SettingContextModel>>({});
 export const SettingDispatchContext = createContext(null);
@@ -10,6 +11,7 @@ SettingContext.displayName = "SettingContext";
 
 export const SettingContextProvider = ({ children }) => {
     const [settingContextModel, dispatch] = useReducer(settingReducer, initialSettingContextModel());
+    settingContextModel.enabledMusic = StorageHelper.get(localStorageKeys.enableMusic) ?? false;
     return (
         <SettingContext.Provider value={settingContextModel}>
             <SettingDispatchContext.Provider value={dispatch}>{children}</SettingDispatchContext.Provider>
