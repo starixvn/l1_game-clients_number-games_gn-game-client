@@ -97,9 +97,13 @@ class Dashboard extends React.PureComponent<Props, State> {
     }
 
     updateAuthorizeInfo(authorizeInfo: AuthorizeResponse) {
-        // authorizeInfo.user.settings.quickBet = true;
-        this.checkOfferedGame(authorizeInfo);
-        this.setState({ authorizeInfo });
+        const clonedAuthorizeInfo = { ...authorizeInfo };
+        if (authorizeInfo?.authorized) {
+            clonedAuthorizeInfo.user.settings = { ...clonedAuthorizeInfo.user.settings, quickBet: true };
+        }
+
+        this.checkOfferedGame(clonedAuthorizeInfo);
+        this.setState({ authorizeInfo: clonedAuthorizeInfo });
     }
 
     updateUserBalance(balance: number) {
@@ -206,6 +210,13 @@ class Dashboard extends React.PureComponent<Props, State> {
         const backToLobby = urlContextModel.backToLobby || false;
         const ssoRedirectGameId = urlContextModel.gameId || 0;
         return (offerGames.includes(this.state.openGameId) && !backToLobby) || ssoRedirectGameId > 0;
+    }
+
+    componentDidUpdate() {
+        const urlContext = loadURLContext();
+        if (urlContext?.gameId > 0) {
+            window.scrollTo(0, 0);
+        }
     }
 
     componentWillUnmount() {
