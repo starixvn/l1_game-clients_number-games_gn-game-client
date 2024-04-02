@@ -10,7 +10,7 @@ const ButtonReturnToURL: React.FC = () => {
         backToRedirectUrl(redirectUrl);
     };
 
-    return isDirectMode && redirectUrl ? (
+    return !isDirectMode || (isDirectMode && redirectUrl) ? (
         <button id="btn-back" onClick={() => handleBackToReturnURL()}>
             {t(`back`)}
         </button>

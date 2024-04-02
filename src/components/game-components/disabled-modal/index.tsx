@@ -18,11 +18,12 @@ const DisabledModal: React.FC<{ disableMessage: string }> = ({ disableMessage })
                 </div>
                 <div className={Styles.message}>{disableMessage || t({ key: "message_disabled_game" })}</div>
                 <div className={Styles["list-action"]}>
-                    {isDirectMode && redirectUrl && (
-                        <button onClick={() => backToRedirectUrl(redirectUrl)} className={`btn-yellow ${Styles["ok"]}`}>
-                            {t({ key: "ok" })}
-                        </button>
-                    )}
+                    {!isDirectMode ||
+                        (isDirectMode && redirectUrl && (
+                            <button onClick={() => backToRedirectUrl(redirectUrl)} className={`btn-yellow ${Styles["ok"]}`}>
+                                {t({ key: "ok" })}
+                            </button>
+                        ))}
                 </div>
             </div>
         </BaseDialog>
