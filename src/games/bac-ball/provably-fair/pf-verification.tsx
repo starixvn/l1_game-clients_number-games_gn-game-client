@@ -16,7 +16,7 @@ const PFVerification: FC = () => {
     const dispatch = useGameStatesDispatch();
     const { t: translateCommon } = useCommonTranslate();
     const { t: translateInGame } = useTranslator([tolgeeNamespace]);
-    const [combinedHash, setCombinedHash] = useState(pfResult.finalHash);
+    const [combinedHash, setCombinedHash] = useState(pfResult?.finalHash || "");
     const clickSound = useClickSound();
     const ballColor = useBallColor;
 
