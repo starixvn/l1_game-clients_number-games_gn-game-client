@@ -638,17 +638,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     private renderDisableGamePopup(roundState: RoundState, disabledMessage: string): React.ReactNode {
-        return (
-            roundState === RoundState.Disabled && (
-                <DisabledModal
-                    disableMessage={disabledMessage}
-                    onSubmit={
-                        //TODO: redirect to Saba play lobby
-                        () => window.location.reload()
-                    }
-                />
-            )
-        );
+        return roundState === RoundState.Disabled && <DisabledModal disableMessage={disabledMessage} />;
     }
 }
 

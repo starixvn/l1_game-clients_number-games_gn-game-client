@@ -5,11 +5,12 @@ import { useCommonTranslate } from "../../../_shared/react-hooks";
 const ButtonReturnToURL: React.FC = () => {
     const { t } = useCommonTranslate();
 
-    const { backToRedirectUrl, redirectUrl } = useContext(URLContext);
+    const { backToRedirectUrl, redirectUrl, isDirectMode } = useContext(URLContext);
     const handleBackToReturnURL = () => {
         backToRedirectUrl(redirectUrl);
     };
-    return redirectUrl !== "" ? (
+
+    return isDirectMode && redirectUrl ? (
         <button id="btn-back" onClick={() => handleBackToReturnURL()}>
             {t(`back`)}
         </button>
