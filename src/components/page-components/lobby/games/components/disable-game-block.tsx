@@ -50,6 +50,7 @@ export const DisabledGameBlock: React.FC<Props> = ({ socket, transmitter, gameSe
 
     const handleSignedIn = ({ signedIn }) => {
         signedIn && setIsDisconnectGame(false);
+        setErrorMessage(" ");
         transmitter.broadcast({ showData: isDisabledGameRef.current || true });
     };
 

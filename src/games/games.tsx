@@ -1,5 +1,5 @@
 import { useTheme } from "next-themes";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { isIOS, isMobileOnly } from "react-device-detect";
 import { getAppSettings } from "../_shared/app-settings";
 import { GameIds } from "../_shared/constants";
@@ -26,7 +26,8 @@ export const Games: React.FC<Props> = ({
     openGameId,
     userOfferGames,
     directMode,
-    swipeableHandler }) => {
+    swipeableHandler,
+}) => {
     const { theme } = useTheme();
     const locale = tolgee.getLanguage();
     const [stopScroll, setStopScroll] = useState(false);
@@ -42,7 +43,7 @@ export const Games: React.FC<Props> = ({
         },
         swipeDuration: 500,
         preventScrollOnSwipe: true,
-        trackMouse: true
+        trackMouse: true,
     });
 
     const gameSound = {
@@ -54,7 +55,6 @@ export const Games: React.FC<Props> = ({
     };
 
     const getGameComponentById = (gameId: number) => {
-        const isGameOffered = userOfferGames.includes(gameId);
         const { gameSettings } = getAppSettings();
 
         const gameProps = {
@@ -63,12 +63,8 @@ export const Games: React.FC<Props> = ({
             setApiErrorMessage: setApiErrorMessage,
             theme,
             userStakeLevel,
-            updateUserStakeLevel
+            updateUserStakeLevel,
         };
-
-        if (!isGameOffered) {
-            return <>Not Offer Game</>;
-        }
 
         switch (gameId) {
             case GameIds.BacBall1:
@@ -77,7 +73,7 @@ export const Games: React.FC<Props> = ({
 
             case GameIds.NextBall1:
             case GameIds.NextBall2:
-                return <NextBall key={`game-${gameId}`}  {...gameProps} />;
+                return <NextBall key={`game-${gameId}`} {...gameProps} />;
 
             default:
                 return null;
@@ -88,7 +84,11 @@ export const Games: React.FC<Props> = ({
 
     return (
         <div>
-            <div className={`game-container game-wrapper ${styles["open-chips"]}`} {...extraProps} style={{ touchAction: stopScroll ? 'none' : 'auto' }}>
+            <div
+                className={`game-container game-wrapper ${styles["open-chips"]}`}
+                {...extraProps}
+                style={{ touchAction: stopScroll ? "none" : "auto" }}
+            >
                 <SystemContextProvider>
                     <div className={`${styles["game-list"]} ${isMobileOnly ? styles[isIOS ? "ios-device" : "android-device"] : ""}`}>
                         <BackgroundGalaxy />
