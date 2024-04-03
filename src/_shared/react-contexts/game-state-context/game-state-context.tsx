@@ -3,7 +3,6 @@ import { createContext, useContext, useReducer } from "react";
 
 import { RoundState } from "../../../components/game-base/type";
 import { LanguageLocaleMapper } from "../../constants";
-import { randomNumberSeries } from "../../helpers";
 import { GetLocalizedErrorMessage } from "../../helpers/notice-helper";
 import { tolgee } from "../../tolgee";
 import { GameEventAction, GameEventActionType } from "./game-event-action";
@@ -320,12 +319,19 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
         }
 
         case GameEventActionType.SHOW_RESULT_INFO_TIME_OUT: {
-            return {
-                ...state,
+            const stateUpdate = {
                 showResultInfo,
                 isShowBlink,
                 roundHistory,
-                playResultAnimation,
+            };
+
+            if (playResultAnimation) {
+                stateUpdate["playResultAnimation"] = playResultAnimation;
+            }
+
+            return {
+                ...state,
+                ...stateUpdate,
             };
         }
 
