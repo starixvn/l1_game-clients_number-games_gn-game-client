@@ -9,7 +9,6 @@ $ball-size: 3.2rem;
 
 .ball {
     position: relative;
-    z-index: 1;
     width: $ball-size;
     height: $ball-size;
     border-radius: 50%;
@@ -57,7 +56,6 @@ $ball-size: 3.2rem;
 
 .ball-bg {
     position: relative;
-    z-index: 2;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -85,12 +83,6 @@ $ball-size: 3.2rem;
         background-size: contain;
         border-radius: 50%;
         border: 0.1rem solid #000;
-    }
-}
-
-@keyframes fade-out {
-    to {
-        opacity: 0;
     }
 }
 
