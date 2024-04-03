@@ -1,5 +1,5 @@
 import { FC, useEffect, useRef, useState } from "react";
-import { useGameContext, usePlayerContext } from "../../../../_shared/react-contexts";
+import { useGameContext } from "../../../../_shared/react-contexts";
 import { GameEventActionType } from "../../../../_shared/react-contexts/game-state-context/game-event-action";
 import { useGameStateContext, useGameStatesDispatch } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
 import { useCommonTranslate, useSNTranslate } from "../../../../_shared/react-hooks";
@@ -10,7 +10,6 @@ import { messageEventType } from "../../../game-base/handlers";
 import CopyableTextInput from "../copyable-text-input";
 import Loader from "../../loader";
 import { PFSeverSeed } from "../../../game-base/type";
-import * as Sentry from "@sentry/nextjs";
 
 const NUMBER_VALUES = "0123456789";
 const GetPFInfoMessage = "getPfInfo";
@@ -51,14 +50,9 @@ const PFSetting: FC<{ customClientSeedInfo?: string }> = ({ customClientSeedInfo
     const randomSeed = useRef<HTMLInputElement>();
     const manualRadio = useRef<HTMLInputElement>();
     const manualSeed = useRef<HTMLInputElement>();
-    const {
-        authorizeInfo: {
-            user: { name },
-        },
-    } = usePlayerContext();
-    const { id } = useGameContext();
     const { pfClientSeedSetting, ownBets, drawId, roundId } = useGameStateContext();
     const [isFirstLoad, setIsFirstLoad] = useState<boolean>(true);
+    const [isFirstFetch, setIsFirstFetch] = useState<boolean>(true);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isManualMode, setIsManualMode] = useState<boolean>(pfClientSeedSetting?.useManualClientSeed || false);
     const [serverSeedHash, setServerSeedHash] = useState<string>("");
@@ -70,23 +64,24 @@ const PFSetting: FC<{ customClientSeedInfo?: string }> = ({ customClientSeedInfo
     const dispatch = useGameStatesDispatch();
 
     useEffect(() => {
-        const messageLog = `${id} - ${name} - ${drawId}\n- PF Setting - ${JSON.stringify({
-            manualClientSeed,
-            randomClientSeed,
-            isManualMode,
-        })}`;
-        console.log(messageLog);
-        Sentry.captureMessage(messageLog, Sentry.Severity.Debug);
-    }, [manualClientSeed, randomClientSeed, isManualMode]);
-
-    useEffect(() => {
         setRandomClientSeed(pfClientSeedSetting?.randomClientSeed);
     }, [pfClientSeedSetting?.randomClientSeed]);
 
     useEffect(() => {
-        gameMessageHandler.broadcastGameEvent({
-            [messageEventType.SEND_SOCKET_MESSAGE]: { event: GetPFInfoMessage, data: { drawId, roundId } },
-        });
+        if (drawId >= 0 && roundId >= 0) {
+            setIsFirstFetch(false);
+        }
+    }, [drawId, roundId]);
+
+    useEffect(() => {
+        if (isFirstFetch) {
+            gameMessageHandler.broadcastGameEvent({
+                [messageEventType.SEND_SOCKET_MESSAGE]: { event: GetPFInfoMessage, data: { drawId, roundId } },
+            });
+        }
+    }, [isFirstFetch]);
+
+    useEffect(() => {
         setIsLoading(true);
 
         const handleServerSeed = (pfServerSeed: PFSeverSeed) => {
@@ -101,6 +96,7 @@ const PFSetting: FC<{ customClientSeedInfo?: string }> = ({ customClientSeedInfo
 
         const pfResultHandler = gameMessageHandler.register(PFResultMessage, ({ pfResult }) => {
             handleServerSeed(pfResult);
+            setIsLoading(false);
         });
 
         const clientSeedDetailHandler = gameMessageHandler.register(ClientSeedDetail, ({ clientSeedDetail }) => {
@@ -145,6 +141,7 @@ const PFSetting: FC<{ customClientSeedInfo?: string }> = ({ customClientSeedInfo
     const handleOnBlur = (event: any) => {
         if (event.target.value.length == 0) {
             event.target.value = randomSeed.current.value;
+            setManualClientSeed(randomSeed.current.value);
         }
         dispatch({
             type: GameEventActionType.UPDATE_PF_CLIENT_SEED_SETTING,
@@ -163,7 +160,7 @@ const PFSetting: FC<{ customClientSeedInfo?: string }> = ({ customClientSeedInfo
             }
             setIsFirstLoad(false);
         } else {
-            manualSeed.current.value = "";
+            setManualClientSeed("");
         }
     }, [isManualMode]);
 

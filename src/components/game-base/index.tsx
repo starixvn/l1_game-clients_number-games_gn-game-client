@@ -355,7 +355,13 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             this.props.dispatch({
                 type: GameEventActionType.UPDATE_PF_CLIENT_SEED_SETTING,
                 payload: {
-                    pfClientSeedSetting: pfClientSeedSetting,
+                    pfClientSeedSetting: {
+                        ...pfClientSeedSetting,
+                        manualClientSeed:
+                            pfClientSeedSetting?.manualClientSeed?.length <= 0 && pfClientSeedSetting?.useManualClientSeed
+                                ? pfClientSeedSetting?.randomClientSeed
+                                : pfClientSeedSetting?.manualClientSeed,
+                    },
                 },
             });
         }
