@@ -11,7 +11,7 @@ exports[`ChangeAvatar render With normal ChangeAvatar should match the snapshot 
       class="gallery-wrapper gallery-wrapper-customize"
     >
       <div
-        class="popup modal-center  "
+        class="popup modal-center   "
       >
         <h1
           class="gallery-title"

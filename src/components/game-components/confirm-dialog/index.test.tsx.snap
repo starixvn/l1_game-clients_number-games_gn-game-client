@@ -3,7 +3,7 @@
 exports[`ConfirmDialog render with normal case should match the snapshot 1`] = `
 <div>
   <div
-    class="popup modal-full  "
+    class="popup modal-full   "
   >
     <div
       class="modal-center yellow-color submit-dialog-container"
