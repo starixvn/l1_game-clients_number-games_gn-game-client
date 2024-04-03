@@ -65,7 +65,7 @@ export const OnlinePlayer: React.FC<Props> = ({ transmitter }) => {
         isShow &&
         onlinePlayers?.length > 0 && (
             <div className={Styles["user-playing"]}>
-                <span className="icon-user-lobby"></span>
+                <span className={`icon-user-lobby ${Styles["user-playing-icon"]}`}></span>
                 <span className={Styles["user-playing-value"]}>{onlinePlayers.length}</span>
             </div>
         )

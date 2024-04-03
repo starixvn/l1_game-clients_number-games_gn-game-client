@@ -84,7 +84,7 @@ const BetDetail: FC = () => {
             {result && (
                 <div className={Styles["draw-info"]}>
                     <div className={`${Styles["info-item"]} font-weight-500`}>
-                        {translateSNGames("glossary_draw_id").capitalizeFirstLetter()}: <span className="font-number">{drawId}</span>
+                        {translateSNGames("glossary_draw_id").capitalizeFirstLetter()}: <span>{drawId}</span>
                     </div>
                     <div className={Styles["info-item"]}>
                         <span className="font-weight-medium">{translateBacBall("glossary_player").toUpperCase()}</span>

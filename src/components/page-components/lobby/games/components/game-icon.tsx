@@ -15,9 +15,9 @@ export const GameIcon: React.FC<Props> = ({ gameSettings, transmitter }) => {
 
     return (
         <div className={`${Styles["icon-game"]} ${Styles[gameName.toLowerCase()]}`}>
-            {/* <img src={`/static/images/lobby/game-board-detail/icon-${gameName.toLowerCase()}.png`} alt="icon-game" /> */}
-            <img src={`/static/images/lobby/game-board-detail/icon-gif.gif`} alt="icon-game" />
-            <span className={`${Styles["game-name"]}`}>{t(`game_icon_name_${id}`)}</span>
+            <img src={`/static/images/lobby/game-board-detail/icon-${gameName.toLowerCase()}.png`} alt="icon-game" />
+
+            {/* <span className={`${Styles["game-name"]}`}>{t(`game_icon_name_${id}`)}</span> */}
             <OnlinePlayer transmitter={transmitter} />
         </div>
     );
