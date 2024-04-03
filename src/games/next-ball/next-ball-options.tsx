@@ -1,7 +1,6 @@
 import dynamic from "next/dynamic";
-import { useCallback } from "react";
 
-import { useGameActionContext, useGameContext, useSystemContext } from "../../_shared/react-contexts";
+import { useGameContext } from "../../_shared/react-contexts";
 import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
 import { isShowHighlightPrevResult } from "../../_shared/react-hooks/use-high-light";
 import { RoundState } from "../../components/game-base/type";
@@ -18,14 +17,6 @@ const TotalBet = dynamic(() => import("../../components/game-components/bet-opti
 const NextBallWinningAnimation = dynamic(() => import("./next-ball-winning-animation"));
 
 const NextBallBetOptionsComponent = () => {
-    const gameActionContext = useGameActionContext();
-    const systemContext = useSystemContext();
-
-    const onClickBet = useCallback(
-        (choice: string) => gameActionContext.placeBet(choice, systemContext.selectedChip),
-        [gameActionContext, systemContext.selectedChip]
-    );
-
     const { roundState, settlementResult, showResultInfo, roundHistory, turnCounter } = useGameStateContext();
     const { tolgeeNamespace } = useGameContext();
 
@@ -97,9 +88,6 @@ const NextBallBetOptionsComponent = () => {
             />
         );
 
-        const choiceKeys = Object.keys(NextBallBetOptions);
-        const choiceIndex = choiceKeys.findIndex((key) => NextBallBetOptions[key] === choice);
-
         return (
             <div className={`${Style[choice]} text-white relative`}>
                 <div className={`${Style["choice-info"]} ${Style[`choice-${choice}`]}`}>
@@ -117,13 +105,7 @@ const NextBallBetOptionsComponent = () => {
                 {renderOwnBet(choice)}
                 {<div className={Style["winning-effect"]}>{winningResult}</div>}
 
-                <RippleButton
-                    indexRef={choiceIndex}
-                    className={`${Style["btn-ripple"]} ${isShowDisabledLayer}`}
-                    id={`${tolgeeNamespace}-choice-${choice}`}
-                    onClickBet={onClickBet}
-                    choice={choice}
-                />
+                <RippleButton className={`${Style["btn-ripple"]}`} id={`${tolgeeNamespace}-choice-${choice}`} choice={choice} />
 
                 {isShowDisabledLayer && <div className={Style["disable-layer"]}></div>}
                 {isShowHighlightPrevResult({ betChoice: choice, roundState, roundHistory }) && renderHighlightWinningPrevResult(choice)}

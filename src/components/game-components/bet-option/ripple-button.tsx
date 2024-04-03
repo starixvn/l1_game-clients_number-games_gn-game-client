@@ -1,28 +1,33 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { buildVersion } from "../../../_shared/constants";
-import { useSystemContext } from "../../../_shared/react-contexts";
+import { useGameActionContext, useSystemContext } from "../../../_shared/react-contexts";
 import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import { RoundState } from "../../game-base/type";
-import { setRipplePosition } from "./ripple-effect";
 
 interface RippleButtonProps {
     choice: string;
-    onClickBet: (choice: string) => void;
     className: string;
     id: string;
-    indexRef: number;
 }
 
 export const DEFAULT_CHIP_CURSOR_PATH = "/static/images/chips/cursor";
-const RippleButton: React.FC<RippleButtonProps> = ({ choice, onClickBet, className, id, indexRef, ...props }) => {
+const RippleButton: React.FC<RippleButtonProps> = ({ choice, className, id }) => {
     const systemContext = useSystemContext();
     const { roundState } = useGameStateContext();
-    const rippleButtons = useRef([]);
+    const rippleButton = useRef<HTMLButtonElement>();
 
     const [customStyle, setCustomStyle] = useState<object>();
     const [cursorImage, setCursorImage] = useState<string>("");
-    const [ripplePosX, setRipplePosX] = useState(0);
-    const [ripplePosY, setRipplePosY] = useState(0);
+    const [ripplePosX, setRipplePosX] = useState<number>(0);
+    const [ripplePosY, setRipplePosY] = useState<number>(0);
+
+    const gameActionContext = useGameActionContext();
+    const isShowDisabledLayer = roundState === RoundState.LockingBet;
+
+    const onClickBet = useCallback(
+        (choice: string) => gameActionContext.placeBet(choice, systemContext.selectedChip),
+        [gameActionContext, systemContext.selectedChip]
+    );
 
     useEffect(() => {
         setCursorImage(`${DEFAULT_CHIP_CURSOR_PATH}/cursor-chip-${systemContext.selectedChip}.svg?v=${buildVersion}`);
@@ -37,32 +42,71 @@ const RippleButton: React.FC<RippleButtonProps> = ({ choice, onClickBet, classNa
     }, [cursorImage, roundState]);
 
     useEffect(() => {
-        return setRipplePosition(setRipplePosX, setRipplePosY, rippleButtons);
-    }, [rippleButtons]);
+        let timerId: NodeJS.Timeout | undefined;
+        const setPosition = (event) => {
+            const item = rippleButton.current as any;
+            if (item) {
+                const pos = item.getBoundingClientRect();
+                const x = event.pageX - pos.left;
+                const y = event.pageY - pos.top;
+                setRipplePosX(x);
+                setRipplePosY(y);
+                item?.firstChild?.classList.add("ripple-effect", "active");
+            }
+        };
 
-    return (
-        <>
+        const reset = (event) => {
+            if (event?.target?.firstChild) {
+                event.target.firstChild.className = "ripple-effect";
+            }
+
+            setRipplePosX(0);
+            setRipplePosY(0);
+        };
+
+        if (rippleButton?.current) {
+            const item = rippleButton?.current;
+            clearTimeout(timerId);
+            item?.addEventListener("mousedown", (event) => {
+                setPosition(event);
+            });
+
+            item?.addEventListener("mouseup", (event) => {
+                timerId = setTimeout(() => {
+                    reset(event);
+                }, 500);
+            });
+        }
+
+        return () => {
+            rippleButton?.current?.removeEventListener("mousedown", setPosition);
+            rippleButton?.current?.removeEventListener("mouseup", reset);
+        };
+    }, []);
+
+    return useMemo(() => {
+        return (
             <button
-                ref={(el) => (rippleButtons.current[indexRef] = el)}
-                className={`btn-ripple  ${className}`}
+                ref={rippleButton}
+                className={`btn-ripple ${className} ${isShowDisabledLayer}`}
                 id={id}
-                onClick={() => onClickBet(choice)}
-                {...props}
+                onClick={() => {
+                    onClickBet(choice);
+                }}
                 style={customStyle}
             >
-                {<span className="ripple-effect"></span>}
+                {
+                    <span
+                        className="ripple-effect"
+                        style={{
+                            top: `calc(1 / var(--zoom-game) * ${ripplePosY}px)`,
+                            left: `calc(1 / var(--zoom-game) * ${ripplePosX}px)`,
+                        }}
+                    ></span>
+                }
             </button>
-
-            <style>
-                {`
-                 .ripple-effect {
-                    top: calc(1 / var(--zoom-game) * ${ripplePosY}px);
-                    left: calc(1 / var(--zoom-game) * ${ripplePosX}px);
-                   }
-                 `}
-            </style>
-        </>
-    );
+        );
+    }, [choice, ripplePosX > 0, ripplePosY > 0]);
 };
 
 export default RippleButton;
