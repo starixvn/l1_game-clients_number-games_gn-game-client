@@ -6,14 +6,13 @@ import Styles from "./cage.module.scss";
 
 const ResultNumber: React.FC<{
     isDelayShowResult: boolean;
-    roundState: RoundState;
     isShowResultAnim: boolean;
     number: string;
-}> = ({ isDelayShowResult, roundState, number, isShowResultAnim }) => {
+}> = ({ isDelayShowResult, number, isShowResultAnim }) => {
     const currentTime = Date.now();
 
     return useMemo(() => {
-        if (isDelayShowResult && roundState === RoundState.DisplayResult) {
+        if (isDelayShowResult ) {
             return (
                 <div key={currentTime} id="result-text" className={Styles["number"]}>
                     <Spritesheet
@@ -33,7 +32,7 @@ const ResultNumber: React.FC<{
         } else {
             return <></>;
         }
-    }, [isDelayShowResult, roundState, isShowResultAnim]);
+    }, [isDelayShowResult, isShowResultAnim]);
 };
 
 export default ResultNumber;

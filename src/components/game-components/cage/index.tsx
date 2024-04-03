@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { useBallColor } from "../../../_shared/helpers/ball-color-helper";
 import { GameStateContextModel } from "../../../_shared/react-contexts/game-state-context/game-state-context-model";
@@ -29,11 +29,17 @@ export type CageProps = {
     highlight: boolean;
 } & Partial<GameStateContextModel>;
 
-const Cage: React.FC<CageProps> = (cageProps) => {
-    const { position, isSmall, result, delayShowResultTime, color, playResultAnimation, roundState, highlight } = cageProps;
-
+const Cage: React.FC<CageProps> = ({
+    position,
+    isSmall,
+    result,
+    delayShowResultTime,
+    color,
+    playResultAnimation,
+    roundState,
+    highlight,
+}) => {
     const ballColor = `ball-${useBallColor({ number: result })}-${position === CagePosition.RIGHT ? "2" : "1"}`;
-
     const [isDelayShowResult, setIsDelayShowResult] = useState<boolean>(false);
 
     useEffect(() => {
@@ -61,23 +67,11 @@ const Cage: React.FC<CageProps> = (cageProps) => {
                 {!isDelayShowResult && <div id="cage-lid" className={Styles["cage-lid"]} />}
 
                 {result && (
-                    <ResultBall
-                        isDelayShowResult={isDelayShowResult}
-                        roundState={roundState}
-                        ballColor={ballColor}
-                        isShowResultAnim={playResultAnimation}
-                    />
+                    <ResultBall isDelayShowResult={isDelayShowResult} ballColor={ballColor} isShowResultAnim={playResultAnimation} />
                 )}
             </div>
 
-            {result && (
-                <ResultNumber
-                    isDelayShowResult={isDelayShowResult}
-                    roundState={roundState}
-                    number={result}
-                    isShowResultAnim={playResultAnimation}
-                />
-            )}
+            {result && <ResultNumber isDelayShowResult={isDelayShowResult} number={result} isShowResultAnim={playResultAnimation} />}
         </div>
     );
 };

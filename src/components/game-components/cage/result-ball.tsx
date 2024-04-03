@@ -1,19 +1,17 @@
 import React, { useMemo } from "react";
 
-import { RoundState } from "../../game-base/type";
 import { Spritesheet } from "../sprites-sheet";
 import Styles from "./cage.module.scss";
 
 const ResultBall: React.FC<{
     isDelayShowResult: boolean;
-    roundState: RoundState;
     ballColor: string;
     isShowResultAnim: boolean;
-}> = ({ isDelayShowResult, roundState, ballColor, isShowResultAnim }) => {
+}> = ({ isDelayShowResult, ballColor, isShowResultAnim }) => {
     const currentTime = Date.now();
 
     return useMemo(() => {
-        if (isDelayShowResult && roundState === RoundState.DisplayResult) {
+        if (isDelayShowResult) {
             return (
                 <div key={currentTime} id="show-ball-anim" className={Styles["show-ball-anim"]}>
                     <Spritesheet
@@ -34,7 +32,7 @@ const ResultBall: React.FC<{
         } else {
             return <></>;
         }
-    }, [isDelayShowResult, roundState, ballColor, isShowResultAnim]);
+    }, [isDelayShowResult, ballColor, isShowResultAnim]);
 };
 
 export default ResultBall;
