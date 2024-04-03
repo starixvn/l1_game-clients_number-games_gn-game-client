@@ -1,4 +1,4 @@
-import { FC, memo, useEffect, useState } from "react";
+import { FC } from "react";
 
 import { GameStateContextModel } from "../../_shared/react-contexts/game-state-context/game-state-context-model";
 import { isHighLightWinningResult } from "../../_shared/react-hooks/use-high-light";

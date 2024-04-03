@@ -26,7 +26,7 @@ const ResultBall: React.FC<{
                         autoplay={true}
                         loop={false}
                         fps={30}
-                        startAt={isShowResultAnim ? 0 : 31}
+                        startAt={isShowResultAnim ? 0 : 30}
                         endAt={31}
                     />
                 </div>
@@ -34,7 +34,7 @@ const ResultBall: React.FC<{
         } else {
             return <></>;
         }
-    }, [isDelayShowResult, roundState, ballColor]);
+    }, [isDelayShowResult, roundState, ballColor, isShowResultAnim]);
 };
 
 export default ResultBall;

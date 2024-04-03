@@ -12,7 +12,7 @@ export type IResultSlotContainer = {
 } & Partial<GameStateContextModel>;
 
 export const BacBallResultSlotContainer: React.FC<IResultSlotContainer> = (props) => {
-    const { delayTime, betChoice, className, roundState, roundData, turnCounter } = props;
+    const { delayTime, betChoice, className, roundState, roundData, turnCounter, playResultAnimation } = props;
 
     const betChoiceBalls = `${betChoice}Balls`;
     const defaultRoundData = [
@@ -44,7 +44,7 @@ export const BacBallResultSlotContainer: React.FC<IResultSlotContainer> = (props
                 const number = roundData[betChoiceBalls][i];
                 if (number) {
                     clonedData[i].number = number;
-                    if (i === turnCounter - 1) {
+                    if (playResultAnimation && i === turnCounter - 1) {
                         clonedData[i].status = BallStatus.LOADING;
                         clonedData[i].delayTime = delayTime;
                     } else {

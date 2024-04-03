@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import Style from "./result-container.module.scss";
+
 import { GameStateContextModel } from "../../../_shared/react-contexts/game-state-context/game-state-context-model";
-import Ball, { BallStatus, IBall } from "../ball";
 import { RoundState } from "../../game-base/type";
+import Ball, { BallStatus, IBall } from "../ball";
+import Style from "./result-container.module.scss";
 
 export type IResultSlotContainer = {
     delayTime: number;
@@ -13,7 +14,8 @@ export type IResultSlotContainer = {
 } & Partial<GameStateContextModel>;
 
 export const ResultSlotContainer: React.FC<IResultSlotContainer> = (props) => {
-    const { delayTime, betChoice, className, roundState, roundData, turnCounter, defaultRoundData, betChoiceBalls } = props;
+    const { delayTime, betChoice, className, roundState, roundData, turnCounter, defaultRoundData, betChoiceBalls, playResultAnimation } =
+        props;
 
     const [ballsData, setBallsData] = useState<IBall[]>([]);
 
@@ -38,9 +40,9 @@ export const ResultSlotContainer: React.FC<IResultSlotContainer> = (props) => {
                     const number = roundData[betChoiceBalls][i];
                     if (number) {
                         clonedData[i].number = number;
-                        if (i === turnCounter - 1) {
+                        if (playResultAnimation && i === turnCounter - 1) {
                             clonedData[i].status = BallStatus.LOADING;
-                            clonedData[i].delayTime = delayTime;
+                            clonedData[i].delayTime = playResultAnimation ? delayTime : 0;
                         } else {
                             clonedData[i].status = BallStatus.SHOW;
                             clonedData[i].delayTime = 0;

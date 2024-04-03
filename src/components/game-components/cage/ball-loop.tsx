@@ -8,7 +8,6 @@ const BallLoops: React.FC<{ roundState: RoundState }> = ({ roundState }) => {
     const isSwitchRound = roundState === RoundState.SwitchRound;
 
     return useMemo(() => {
-        console.log("BallLoops");
         return (
             <div id="cage-balls" className={Styles["cage-balls"]}>
                 {isSwitchRound && <div className={Styles["idle-balls"]}></div>}
