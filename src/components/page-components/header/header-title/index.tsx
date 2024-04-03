@@ -23,7 +23,7 @@ const HeaderTitle: React.FC<Props> = (props) => {
     }`;
 
     return (
-        <div id="img-game-name" className={`${Styles["header-left"]} ${Styles[`${!props.isRenderGames ? "lobby-title" : ""}`]}`}>
+        <div id="img-game-name" className={Styles["header-left"]}>
             {headerTitle}
         </div>
     );
