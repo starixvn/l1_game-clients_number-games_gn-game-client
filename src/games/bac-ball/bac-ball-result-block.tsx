@@ -1,18 +1,18 @@
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 
 import { GameStateContextModel } from "../../_shared/react-contexts/game-state-context/game-state-context-model";
 import { isHighLightWinningResult } from "../../_shared/react-hooks/use-high-light";
-import { RoundState } from "../../components/game-base/type";
+import useResult from "../../_shared/react-hooks/use-result";
 import Cage, { CageColor, CagePosition } from "../../components/game-components/cage";
 import { BacBallResultSlotContainer } from "./bac-ball-result-slot-container";
 import Style from "./bac-ball.module.scss";
 import { BacBallBetOptions } from "./constants";
+import { BacBallResult } from "./types";
 
 export type BacBallResultBlockProps = Partial<GameStateContextModel>;
 
 export const BacBallResultBlock: FC<BacBallResultBlockProps> = (props: BacBallResultBlockProps) => {
     const { result, roundState, roundHistory, playResultAnimation, settlementResult, showResultInfo } = props;
-    const [currentResult, setCurrentResult] = useState<any>();
     const bankerDelayTime = 1000;
     const isPlayerBallHighlight = isHighLightWinningResult({
         betChoice: BacBallBetOptions.PLAYER,
@@ -28,17 +28,7 @@ export const BacBallResultBlock: FC<BacBallResultBlockProps> = (props: BacBallRe
         showResultInfo,
     });
 
-    useEffect(() => {
-        if (!result && roundState === RoundState.DisplayResult) {
-            setCurrentResult(roundHistory[0].result);
-        }
-    }, []);
-
-    useEffect(() => {
-        if (result) {
-            setCurrentResult(result);
-        }
-    }, [result]);
+    const currentResult = useResult<BacBallResult>({ result, roundState, roundHistory });
 
     return (
         <div className={Style["result-container"]}>

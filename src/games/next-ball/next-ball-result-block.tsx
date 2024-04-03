@@ -2,23 +2,18 @@ import { FC, memo } from "react";
 
 import { GameStateContextModel } from "../../_shared/react-contexts/game-state-context/game-state-context-model";
 import { isHighLightWinningResult } from "../../_shared/react-hooks/use-high-light";
-import { RoundState } from "../../components/game-base/type";
+import useResult from "../../_shared/react-hooks/use-result";
 import Cage, { CageColor, CagePosition } from "../../components/game-components/cage";
 import { ResultSlotContainer } from "../../components/game-components/result-container/result-container";
-import { defaultRoundData, NextBallBetOptions } from "./next-ball-constants";
+import { NextBallBetOptions, defaultRoundData } from "./next-ball-constants";
 import Style from "./next-ball.module.scss";
+import { NextBallResult } from "./types";
 
 export type NextBallResultBlockProps = Partial<GameStateContextModel>;
 
 const NextBallResultBlock: FC<NextBallResultBlockProps> = (props: NextBallResultBlockProps) => {
-    const { result, roundState, roundHistory, playResultAnimation, settlementResult, showResultInfo, roundData } = props;
-
-    let currentResult = null;
-    if (!result && roundState === RoundState.DisplayResult) {
-        currentResult = roundHistory[0].result;
-    } else if (result) {
-        currentResult = result;
-    }
+    const { result, roundState, roundHistory, playResultAnimation, settlementResult, showResultInfo } = props;
+    const currentResult = useResult<NextBallResult>({ result, roundState, roundHistory });
 
     return (
         <div className={Style["result-container"]}>
