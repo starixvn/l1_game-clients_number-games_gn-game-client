@@ -53,7 +53,9 @@ export const UserInfo: React.FC<{
                     {user.name}
                 </div>
                 <div key={user.red} className={`${Styles.balance}`} data-testid="balance">
-                    <span id="user-info_balance">{numberRoundDownWithCommas(user.red ? user.red : 0)}</span>
+                    <span id="user-info_balance" className="font-number">
+                        {numberRoundDownWithCommas(user.red ? user.red : 0)}
+                    </span>
 
                     <img src="/static/images/icon-coin.svg" className="img-fluid" alt="icon-coin" />
                 </div>

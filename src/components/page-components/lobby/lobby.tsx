@@ -7,6 +7,7 @@ import Settings from "../settings";
 import { Banner } from "./games/components/banner";
 import { LobbyLayout } from "./games/lobby-layout";
 import Styles from "./lobby.module.scss";
+import ToolbarGuide from "../hide-toolbar-guide";
 
 type Props = {
     openGame: Function;
@@ -23,6 +24,7 @@ export const Lobby: React.FC<Props> = ({ openGame, lobbyConfigs, socket, gameTra
             <LobbyLayout lobbyConfigs={lobbyConfigs} socket={socket} gameTransmitters={gameTransmitters} openGame={openGame} />
             <Settings />
             <ChangeAvatar />
+            {/* <ToolbarGuide isShowToolbar={true} /> */}
         </div>
     );
 };

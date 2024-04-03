@@ -24,7 +24,7 @@ html {
 
     --font-family: "Montserrat", arial, sans-serif;
     --font-money: "BebasNeue", Arial, sans-serif;
-    --font-number: "Montserrat", Arial, sans-serif;
+    --font-number: "ProximaNova", Arial, sans-serif;
 
     // buttons
     --btn-red-background: #ea1d40;
@@ -39,6 +39,9 @@ html {
 
     --btn-grey-background: #394d66;
     --btn-grey-background-hover: #2f4055;
+
+    --btn-orange-background: #fa5430;
+    --btn-orange-background-hover: #cf3c1b;
 
     // z-index
     --bet-setting-index: 300;
@@ -144,6 +147,7 @@ body {
     padding-left: 0.8rem;
     line-height: 3.2rem;
     font-size: 1.2rem;
+    font-family: var(--font-number);
     color: white;
     width: auto;
     overflow: hidden;

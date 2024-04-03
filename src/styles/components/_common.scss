@@ -4,6 +4,22 @@
     box-sizing: border-box;
 }
 
+%ball {
+    width: 2.6rem;
+    height: 2.6rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #2c2f3e;
+    text-align: center;
+    font-size: 1.2rem;
+    font-family: var(--font-number);
+    font-weight: 600;
+    background: var(--bg);
+    background-size: 2.6rem 2.6rem;
+    padding-top: 0.2rem;
+}
+
 .w-100 {
     width: 100% !important;
 }
@@ -39,8 +55,8 @@ p {
     display: grid !important;
 }
 
-.font-clock {
-    font-family: "BebasNeue";
+.font-number {
+    font-family: var(--font-number) !important;
 }
 
 img,
@@ -77,12 +93,8 @@ img {
     font-weight: 600;
 }
 
-.font-weight-bold {
+.font-number .font-weight-bold {
     font-weight: 700 !important;
-}
-
-.font-number {
-    font-family: var(--font-number);
 }
 
 .text-center {

@@ -1,3 +1,5 @@
+@import "../../../styles/components/ballSmall";
+
 .history {
     --more-info-height: 0rem;
 }
@@ -10,17 +12,7 @@
 }
 
 .ball {
-    width: 2.6rem;
-    height: 2.6rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #2c2f3e;
-    text-align: center;
-    font-size: 1.2rem;
-    font-weight: 600;
-    background: var(--bg);
-    background-size: 2.6rem 2.6rem;
+    @extend %ballSmall;
 }
 
 .red {

@@ -235,7 +235,7 @@ const PFSetting: FC<{ customClientSeedInfo?: string }> = ({ customClientSeedInfo
                             </div>
 
                             <input
-                                className={"form-control" + (isManualMode ? "" : " checked")}
+                                className={"form-control font-number" + (isManualMode ? "" : " checked")}
                                 ref={randomSeed}
                                 type="text"
                                 id="random-client-seed"
@@ -257,7 +257,8 @@ const PFSetting: FC<{ customClientSeedInfo?: string }> = ({ customClientSeedInfo
                                 />
                                 <label className={`form-check-label ${Styles["form-check-label"]}`} htmlFor="manual-seed">
                                     <div className={Styles["form-check-label-note"]}>
-                                        {`${translateCommon("pf_client_seed_para_3")}`} <br /> (0 - 9999)
+                                        {`${translateCommon("pf_client_seed_para_3")}`} <br />{" "}
+                                        <span className="font-number">(0 - 9999)</span>
                                     </div>
                                 </label>
                             </div>

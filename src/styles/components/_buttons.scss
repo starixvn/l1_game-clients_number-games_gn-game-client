@@ -86,6 +86,19 @@
     }
 }
 
+.btn-orange {
+    @extend %btn;
+    background: var(--btn-orange-background);
+
+    &:hover:enabled {
+        background: var(--btn-orange-background-hover);
+    }
+
+    &:active {
+        background-color: var(--btn-orange-background-hover);
+    }
+}
+
 /* Button with ripple effect */
 .btn-ripple {
     position: absolute;

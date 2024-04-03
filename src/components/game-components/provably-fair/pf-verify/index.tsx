@@ -108,7 +108,7 @@ const PFVerify: FC<{ renderResultBlock: Function }> = ({ renderResultBlock }) =>
                     </span>
                 </div>
                 <div className="input-group width-full">
-                    <CopyableTextInput value={pfResult?.mergeClientSeed} id="merge-client-seed" />
+                    <CopyableTextInput className="font-number" value={pfResult?.mergeClientSeed} id="merge-client-seed" />
                 </div>
             </div>
             <div className={Styles["client-seed-form"]}>

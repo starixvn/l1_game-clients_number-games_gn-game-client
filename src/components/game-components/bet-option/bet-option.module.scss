@@ -14,6 +14,8 @@
     position: relative;
     line-height: 1;
     font-size: 1.8rem;
+    font-family: var(--font-number);
+    font-variant-numeric: tabular-nums;
 
     &:after {
         display: inline-block;
@@ -100,7 +102,7 @@
 .player-count-value {
     height: 1.8rem;
     line-height: 1.7;
-    font-family: "ProximaNova", sans-serif;
+    font-family: var(--font-number);
     font-variant-numeric: tabular-nums;
 }
 
