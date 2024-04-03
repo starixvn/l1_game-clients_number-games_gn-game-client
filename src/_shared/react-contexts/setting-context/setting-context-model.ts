@@ -9,7 +9,7 @@ export interface SettingContextModel {
 export const initialSettingContextModel = (): SettingContextModel => {
     return {
         isShowedSetting: false,
-        enabledMusic: StorageHelper.get(localStorageKeys.enableMusic) ?? false,
+        enabledMusic: StorageHelper.get(localStorageKeys.enableMusic) ?? true,
         isShowAvatarGallery: false,
     };
 };

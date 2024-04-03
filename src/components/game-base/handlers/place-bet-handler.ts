@@ -81,7 +81,7 @@ export class PlaceBetHandler {
 
     handleEndBet = ({ endBet, ownBets, notice, kickedOut, apiError }, signOut: () => void, gameStateContext: GameStateContextModel) => {
         const { playPlaceBetSound, dispatch, gameMessageHandler } = this.props;
-        const enableSound = StorageHelper.get(localStorageKeys.enableSound) ?? false;
+        const enableSound = StorageHelper.get(localStorageKeys.enableSound) ?? true;
         dispatch({ type: GameEventActionType.END_BET_PROCESSING, payload: {} });
         this.clearRetryInterval();
         dispatch({
@@ -240,7 +240,7 @@ export class PlaceBetHandler {
                 return;
             }
 
-            const enableSound = StorageHelper.get(localStorageKeys.enableSound) ?? false;
+            const enableSound = StorageHelper.get(localStorageKeys.enableSound) ?? true;
             enableSound && this.props.playPlaceBetSound();
 
             this.showConfirmBet(gameStateContext);

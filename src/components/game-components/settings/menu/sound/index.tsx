@@ -5,7 +5,7 @@ import Styles from "./../menu.module.scss";
 const dropdownItemClassName = "dropdown-item";
 
 export const Sound: React.FC = () => {
-    const [enabledSound, setEnabledSound] = useState(StorageHelper.get(localStorageKeys.enableSound) ?? false);
+    const [enabledSound, setEnabledSound] = useState(StorageHelper.get(localStorageKeys.enableSound) ?? true);
 
     const onToggleSound = () => {
         StorageHelper.set(localStorageKeys.enableSound, !enabledSound);

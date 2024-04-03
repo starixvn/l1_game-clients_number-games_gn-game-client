@@ -5,7 +5,7 @@ import { useClickSound } from "../../../../_shared/react-hooks";
 import Styles from "../settings.module.scss";
 
 const SoundSetting = ({}) => {
-    const [enabledSound, setEnabledSound] = useState(StorageHelper.get(localStorageKeys.enableSound) ?? false);
+    const [enabledSound, setEnabledSound] = useState(StorageHelper.get(localStorageKeys.enableSound) ?? true);
     const clickSound = useClickSound();
 
     const toggle = () => {

@@ -11,7 +11,7 @@ SettingContext.displayName = "SettingContext";
 
 export const SettingContextProvider = ({ children }) => {
     const [settingContextModel, dispatch] = useReducer(settingReducer, initialSettingContextModel());
-    settingContextModel.enabledMusic = StorageHelper.get(localStorageKeys.enableMusic) ?? false;
+    settingContextModel.enabledMusic = StorageHelper.get(localStorageKeys.enableMusic) ?? true;
     return (
         <SettingContext.Provider value={settingContextModel}>
             <SettingDispatchContext.Provider value={dispatch}>{children}</SettingDispatchContext.Provider>

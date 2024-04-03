@@ -9,7 +9,7 @@ export class GameSoundHandler {
     constructor(private props: GameSoundHandlerProps) {}
 
     handleSound = (roundState: RoundState) => {
-        const enableSound = StorageHelper.get(localStorageKeys.enableSound) ?? false;
+        const enableSound = StorageHelper.get(localStorageKeys.enableSound) ?? true;
         enableSound && this.playSound(roundState);
     };
 

@@ -8,7 +8,7 @@ import Styles from "./../menu.module.scss";
 const dropdownItemClassName = "dropdown-item";
 
 export const Music: React.FC = () => {
-    const [enabledMusic, setEnabledMusic] = useState(StorageHelper.get(localStorageKeys.enableMusic) ?? false);
+    const [enabledMusic, setEnabledMusic] = useState(StorageHelper.get(localStorageKeys.enableMusic) ?? true);
     const systemContext = useSystemContext();
 
     const [song, setSong] = useState(getRandomSong(""));
