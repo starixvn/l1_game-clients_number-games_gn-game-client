@@ -3,10 +3,10 @@ import { GameEventActionType } from "../../../_shared/react-contexts/game-state-
 import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import { URLContext, updateURLContext } from "../../../_shared/react-contexts/url-context";
 import { useClickSound } from "../../../_shared/react-hooks";
+import { RoundState } from "../../game-base/type";
 import { getLogoName } from "../../page-components/header";
 import { Menu } from "./menu";
 import styles from "./settings.module.scss";
-import { RoundState } from "../../game-base/type";
 
 const ButtonSettingClassName = "setting-button";
 
@@ -31,6 +31,7 @@ export function Settings() {
     };
 
     const handleBackToLobbyOnclick = () => {
+        clickSound();
         updateURLContext({ gameId: 0 });
         backToRedirectUrl(redirectUrl);
     };
