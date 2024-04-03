@@ -15,4 +15,5 @@ window.envConfig = {
     appType: 1,
     enableDebugLogs: true,
     socketGatewayPath: "gateway",
+    useTolgeeStatic: true,
 };
