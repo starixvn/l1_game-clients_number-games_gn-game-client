@@ -20,21 +20,25 @@ export const LobbyLayout: React.FC<Props> = ({ socket, lobbyConfigs, openGame, g
         if (lobbyConfigs && offerGamesIds) {
             const { gameSettings: allGamesSettings } = getAppSettings();
             const lobbyGameIds = getLobbyGameIds(lobbyConfigs)?.filter((gameId) => offerGamesIds.includes(gameId));
-            return lobbyGameIds.map((gameId) => allGamesSettings[gameId]).filter((settings) => settings);
+            return lobbyGameIds?.map((gameId) => allGamesSettings[gameId]).filter((settings) => settings);
         }
         return [];
     }, [lobbyConfigs, authorizeInfo]);
 
     return (
         socket &&
-        gamesSettings?.map((gameSettings) => (
-            <GameBoard
-                key={`game-board-${gameSettings.gameName}`}
-                gameSettings={gameSettings}
-                socket={socket}
-                openGame={openGame}
-                gameTransmitter={gameTransmitters[gameSettings.id]}
-            />
-        ))
+        gamesSettings && (
+            <>
+                {gamesSettings.map((gameSettings) => (
+                    <GameBoard
+                        key={`game-board-${gameSettings.gameName}`}
+                        gameSettings={gameSettings}
+                        socket={socket}
+                        openGame={openGame}
+                        gameTransmitter={gameTransmitters[gameSettings.id]}
+                    />
+                ))}
+            </>
+        )
     );
 };
