@@ -35,3 +35,35 @@
         box-shadow: 0 0 9px #333;
     }
 }
+
+.highlight-winning-bg-anim {
+    position: absolute;
+    opacity: 0;
+    animation: winning-bg 1.6s infinite linear;
+}
+
+@keyframes winning-bg {
+    0% {
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 0.5;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    60% {
+        opacity: 0.6;
+    }
+
+    70% {
+        opacity: 0.2;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}

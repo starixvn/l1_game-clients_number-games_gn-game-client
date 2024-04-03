@@ -123,46 +123,41 @@
     top: 0;
 }
 
-%winning-effect {
-    position: absolute;
-    opacity: 0;
-    animation: winning-bg 1.6s 3 linear;
+.winning-light-anim {
+    position: relative;
+    top: -0.5rem;
+    left: -0.6rem;
+
+    &.anim-under {
+        transform: scaleX(-1);
+    }
+
+    &.anim-even {
+        transform: scaleX(-1);
+    }
 }
 
-.winning-over,
-.winning-under,
-.winning-odd,
-.winning-even {
-    @extend %winning-effect;
+.highlight-winning-bg-over,
+.highlight-winning-bg-under,
+.highlight-winning-bg-odd,
+.highlight-winning-bg-even {
     width: 17.8rem;
-    height: 18.8rem;
-    // background: url("/static/images/bac-number/highlight-winning-bg-player.png");
+    height: 9.4rem;
+    background: url("/static/images/next-ball/highlight-winning-bg.png") no-repeat;
 }
 
-@keyframes winning-bg {
-    0% {
-        opacity: 0;
-    }
+.highlight-winning-bg-under {
+    transform: scaleX(-1);
+    left: -0.1rem;
+}
 
-    20% {
-        opacity: 0.5;
-    }
+.highlight-winning-bg-odd {
+    transform: scaleY(-1);
+}
 
-    50% {
-        opacity: 1;
-    }
-
-    60% {
-        opacity: 0.6;
-    }
-
-    70% {
-        opacity: 0.2;
-    }
-
-    100% {
-        opacity: 0;
-    }
+.highlight-winning-bg-even {
+    transform: scale(-1);
+    left: -0.1rem;
 }
 
 .ball-svg {
@@ -175,12 +170,12 @@
 .highlight-prev-result-under,
 .highlight-prev-result-odd,
 .highlight-prev-result-even {
-    background: url("/static/images/next-ball/winning-previous.svg") no-repeat center center;
     height: 9.4rem;
-    width: 17.7rem;
+    width: 17.6rem;
     position: absolute;
     left: 0;
     top: 0.1rem;
+    background: url("/static/images/next-ball/winning-previous.svg") no-repeat center center;
 }
 
 .highlight-prev-result-under {
@@ -189,9 +184,11 @@
 
 .highlight-prev-result-odd {
     transform: scaleY(-1);
+    top: 0;
 }
 .highlight-prev-result-even {
     transform: scale(-1);
+    top: 0;
 }
 
 .choice-info {

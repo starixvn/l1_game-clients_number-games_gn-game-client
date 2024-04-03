@@ -22,18 +22,20 @@ const NextBallWinningAnimation: React.FC<Props> = ({ choice, resourceName, round
         winningHighLightResult({ betChoice: choice, roundState, settlementResult, showResultInfo }) && (
             <div className="d-grid">
                 <Spritesheet
-                    className={Styles[`winning-light-anim-${choice}`]}
-                    image={`/static/images/bac-number/highlight-winning-${resourceName}.png`}
-                    widthFrame={200}
+                    className={`${Styles[`winning-light-anim`]} ${Styles[`anim-${choice}`]}`}
+                    image={`/static/images/next-ball/highlight-winning-${resourceName}.png?v=2`}
+                    widthFrame={190}
                     isResponsive
-                    heightFrame={210}
-                    steps={9}
+                    heightFrame={106}
+                    steps={10}
                     autoplay={true}
                     loop={true}
-                    fps={5}
+                    fps={10}
+                    startAt={0}
+                    endAt={29}
                 />
 
-                <div className={Styles[`winning-${choice}`]}></div>
+                <div className={`highlight-winning-bg-anim ${Styles[`highlight-winning-bg-${choice}`]}`}></div>
             </div>
         )
     );

@@ -250,53 +250,19 @@
     top: 0;
 }
 
-%winning-effect {
-    position: absolute;
-    opacity: 0;
-    animation: winning-bg 1.6s infinite linear;
-}
-
-.winning-player,
-.winning-banker {
-    @extend %winning-effect;
+.highlight-winning-player,
+.highlight-winning-banker {
     width: 17.8rem;
     height: 18.8rem;
     background: url("/static/images/bac-number/highlight-winning-bg-player.png");
 }
 
-.winning-tie {
-    @extend %winning-effect;
+.highlight-winning-tie {
     left: 5.7rem;
     top: 0.4rem;
     width: 9.5rem;
     height: 17.2rem;
     background: url("/static/images/bac-number/highlight-winning-bg-tie.png");
-}
-
-@keyframes winning-bg {
-    0% {
-        opacity: 0;
-    }
-
-    20% {
-        opacity: 0.5;
-    }
-
-    50% {
-        opacity: 1;
-    }
-
-    60% {
-        opacity: 0.6;
-    }
-
-    70% {
-        opacity: 0.2;
-    }
-
-    100% {
-        opacity: 0;
-    }
 }
 
 .ball-svg {

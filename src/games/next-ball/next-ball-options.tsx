@@ -75,13 +75,27 @@ const NextBallBetOptionsComponent = () => {
     };
 
     const renderMainOption = (choice: string) => {
+        let resourceName = "";
+
+        switch (choice) {
+            case NextBallBetOptions.OVER:
+            case NextBallBetOptions.UNDER:
+                resourceName = NextBallBetOptions.OVER;
+                break;
+
+            case NextBallBetOptions.ODD:
+            case NextBallBetOptions.EVEN:
+                resourceName = NextBallBetOptions.ODD;
+                break;
+        }
+
         const winningResult = (
             <NextBallWinningAnimation
                 showResultInfo={showResultInfo}
                 roundState={roundState}
                 settlementResult={settlementResult}
                 choice={choice}
-                resourceName={NextBallBetOptions.OVER}
+                resourceName={resourceName}
                 width={210}
                 height={210}
                 position={[90, 95]}
