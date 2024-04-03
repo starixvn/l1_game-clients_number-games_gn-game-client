@@ -48,7 +48,7 @@
         position: absolute;
         top: 0;
         background: url("/static/images/next-ball/lockbet.svg") no-repeat;
-        width: 17.8rem;
+        width: 17.7rem;
         height: 9.6rem;
         opacity: 0;
         animation: show-disabled-layer 0.3s ease-in forwards;
@@ -63,6 +63,10 @@
     --borderTopRight: 1rem;
     --borderBottomLeft: 1rem;
     --borderBottomRight: 1rem;
+
+    .btn-ripple {
+        border-radius: 3rem 1.2rem 1.2rem 1.2rem;
+    }
 }
 
 .under {
@@ -72,6 +76,10 @@
 
     .disable-layer {
         transform: scaleX(-1);
+    }
+
+    .btn-ripple {
+        border-radius: 1.2rem 3rem 1.2rem 1.2rem;
     }
 }
 
@@ -87,6 +95,10 @@
     .disable-layer {
         transform: scaleY(-1);
     }
+
+    .btn-ripple {
+        border-radius: 1.2rem 1.2rem 1.2rem 3rem;
+    }
 }
 
 .even {
@@ -101,6 +113,10 @@
 
     .disable-layer {
         transform: scale(-1);
+    }
+
+    .btn-ripple {
+        border-radius: 1.2rem 1.2rem 3rem 1.2rem;
     }
 }
 
@@ -171,7 +187,7 @@
 .highlight-prev-result-odd,
 .highlight-prev-result-even {
     height: 9.4rem;
-    width: 17.6rem;
+    width: 17.7rem;
     position: absolute;
     left: 0;
     top: 0.1rem;
