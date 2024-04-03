@@ -15,7 +15,6 @@
     justify-content: flex-start;
     background-color: transparent;
     align-content: flex-start;
-    padding-top: 4rem;
 }
 
 .container {
@@ -29,4 +28,9 @@
     background: var(--game-category-background);
     overflow-x: auto;
     z-index: calc(var(--header-index) - 1);
+}
+
+.game-wrapper {
+    position: absolute;
+    top: 4rem;
 }

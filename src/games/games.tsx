@@ -1,6 +1,8 @@
 import { useTheme } from "next-themes";
 import React, { useState } from "react";
 import { isIOS, isMobileOnly } from "react-device-detect";
+import { useSwipeable } from "react-swipeable";
+
 import { getAppSettings } from "../_shared/app-settings";
 import { GameIds } from "../_shared/constants";
 import { SystemContextProvider } from "../_shared/react-contexts";
@@ -12,12 +14,11 @@ import {
     useStopBettingSound,
 } from "../_shared/react-hooks";
 import { tolgee } from "../_shared/tolgee";
+import { BackgroundGalaxy } from "../components/page-components/background";
 import BacBall from "./bac-ball";
 import styles from "./games.module.scss";
 import NextBall from "./next-ball/page";
 import { Props } from "./type";
-import { BackgroundGalaxy } from "../components/page-components/background";
-import { useSwipeable } from "react-swipeable";
 
 export const Games: React.FC<Props> = ({
     setApiErrorMessage,
@@ -83,19 +84,17 @@ export const Games: React.FC<Props> = ({
     const extraProps = isMobileOnly && !directMode ? mobileSwipeableHandlers : {};
 
     return (
-        <div>
-            <div
-                className={`game-container game-wrapper ${styles["open-chips"]}`}
-                {...extraProps}
-                style={{ touchAction: stopScroll ? "none" : "auto" }}
-            >
-                <SystemContextProvider>
-                    <div className={`${styles["game-list"]} ${isMobileOnly ? styles[isIOS ? "ios-device" : "android-device"] : ""}`}>
-                        <BackgroundGalaxy />
-                        {getGameComponentById(openGameId)}
-                    </div>
-                </SystemContextProvider>
-            </div>
+        <div
+            className={`game-container ${styles["game-wrapper"]} ${styles["open-chips"]}`}
+            {...extraProps}
+            style={{ touchAction: stopScroll ? "none" : "auto" }}
+        >
+            <SystemContextProvider>
+                <div className={`${styles["game-list"]} ${isMobileOnly ? styles[isIOS ? "ios-device" : "android-device"] : ""}`}>
+                    <BackgroundGalaxy />
+                    {getGameComponentById(openGameId)}
+                </div>
+            </SystemContextProvider>
         </div>
     );
 };
