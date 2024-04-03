@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 
 import { SettingEventActionType, useSettingContext, useSettingDispatch } from "../../../_shared/react-contexts";
-import { useClickSound } from "../../../_shared/react-hooks";
+import { useClickSound, useTranslator } from "../../../_shared/react-hooks";
 import BaseDialog from "../../game-components/base-dialog";
 import { ModalType } from "../../game-components/base-dialog/type";
 import MusicSetting from "./music-setting";
@@ -12,6 +12,7 @@ const Settings = ({}) => {
     const settingContext = useSettingContext();
     const settingDispatch = useSettingDispatch();
     const clickSound = useClickSound();
+    const { t } = useTranslator();
 
     const closePopup = () => {
         clickSound();
@@ -30,7 +31,7 @@ const Settings = ({}) => {
                 <BaseDialog type={ModalType.Center} isOpen={settingContext.isShowedSetting} onCloseModal={closePopup}>
                     <div className={`modal-center yellow-color ${Styles["settings-popup"]} `}>
                         <div className={`${Styles["settings-header"]}`}>
-                            <div className={`${Styles["setting-title"]}`}>Setting</div>
+                            <div className={`${Styles["setting-title"]}`}>{t("lobby_setting")}</div>
                             <span className={`icon-close ${Styles["icon-close"]}`} onClick={() => closePopup()}></span>
                         </div>
                         <div className={`${Styles["settings-content"]} `}>
