@@ -9,6 +9,7 @@ import { BacBallBetOptions } from "../constants";
 import { randomBytes } from "crypto";
 import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
+import { v4 as uuidv4 } from "uuid";
 
 interface DrawInfoBacBall extends DrawInfo {
     drawId: number;
@@ -169,7 +170,9 @@ const BetDetailRow: FC<BacBallBetLogDetailRowProps> = ({ rawTime, amount, choice
             size: 2,
         },
         ...[
-            translateBacBall(getGlossaryTranslate(tolgeeNamespace, choice)),
+            <span key={uuidv4()} className="font-text">
+                {translateBacBall(getGlossaryTranslate(tolgeeNamespace, choice))}
+            </span>,
             numberWithCommas(fractionalOddsFormat ? odds - 1 : odds),
             numberWithCommas(amount) ?? 0,
         ].map((item) => {

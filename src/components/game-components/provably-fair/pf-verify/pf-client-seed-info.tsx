@@ -136,14 +136,14 @@ const PFClientSeedInfo: FC<{ fileNameExport: (data?: any) => string }> = ({ file
                                         <td>{index + 1}</td>
                                         {name === clientSeed.name ? (
                                             <>
-                                                <td className={Styles["table-highlight"]}>{clientSeed.name}</td>
+                                                <td className={`${Styles["table-highlight"]} font-text`}>{clientSeed.name}</td>
                                                 <td className={name === clientSeed.name ? Styles["table-highlight"] : ""}>
                                                     {clientSeed.clientSeed}
                                                 </td>
                                             </>
                                         ) : (
                                             <>
-                                                <td>{encryptName(clientSeed.name)}</td>
+                                                <td className="font-text">{encryptName(clientSeed.name)}</td>
                                                 <td>{clientSeed.clientSeed}</td>
                                             </>
                                         )}
