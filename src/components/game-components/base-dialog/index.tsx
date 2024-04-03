@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import { isIOS, isMobileOnly } from "react-device-detect";
 
 import { useClickSound } from "../../../_shared/react-hooks";
@@ -52,6 +52,7 @@ const BaseDialog: React.FC<Props> = ({
     const wrapperRef = useRef<HTMLDivElement>(null);
     const classModal = `modal-${ModalType[type].toLocaleLowerCase()}`;
     const clickSound = useClickSound();
+    const isIpad = useMemo(() => /iPad/i.test(navigator.userAgent), []);
 
     useEffect(() => {
         if (enableBackdrop) {
@@ -87,7 +88,9 @@ const BaseDialog: React.FC<Props> = ({
             <div
                 style={getCustomStyle({ betContainerPosition })}
                 ref={wrapperRef}
-                className={`${Styles.popup} ${Styles[classModal]} ${isMobileOnly ? Styles["isMobile"] : ""} ${getClassFollowDevice()}`}
+                className={`${Styles.popup} ${Styles[classModal]} ${isMobileOnly ? Styles["isMobile"] : ""} ${getClassFollowDevice()} ${
+                    isIpad ? Styles["ipad"] : ""
+                }`}
             >
                 {children}
             </div>
