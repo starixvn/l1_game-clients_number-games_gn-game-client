@@ -43,6 +43,7 @@ import { MAX_AVATAR_ID } from "./register/avatar-gallery";
 import NameGenerator from "./register/name-generator";
 import { ILobbyConfigs, Props, State } from "./type";
 import { isMobileOnly } from "react-device-detect";
+import MusicPlayer from "../music-player";
 
 class Dashboard extends React.PureComponent<Props, State> {
     private notificationSocket: Socket = null;
@@ -66,7 +67,7 @@ class Dashboard extends React.PureComponent<Props, State> {
             openGameId: null,
             openGameName: "",
             isOnLobby: true,
-            lobbySocket: null
+            lobbySocket: null,
         };
         this.lobbyConnectionHandler = new LobbySocketConnection();
 
@@ -89,7 +90,7 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.removeGameTransmitter = this.removeGameTransmitter.bind(this);
         this.reconnectGameTransmitter = this.reconnectGameTransmitter.bind(this);
         this.updateAvatar = this.updateAvatar.bind(this);
-        this.swipeableHandler = this.swipeableHandler.bind(this)
+        this.swipeableHandler = this.swipeableHandler.bind(this);
 
         const buildId = process.env.buildVersion;
         const buildVersion = StorageHelper.get(localStorageKeys.buildVersion) ?? 0;
@@ -340,7 +341,6 @@ class Dashboard extends React.PureComponent<Props, State> {
         updateURLContext({ gameId });
     }
 
-
     async getAllLobbyConfigs() {
         const { session } = this.props;
         const lobby: LobbyResponse = await getLobbyConfigs(session);
@@ -354,7 +354,7 @@ class Dashboard extends React.PureComponent<Props, State> {
 
     swipeableHandler = (isPrevGame: boolean, currentGameId: number) => {
         this.openGame(getSwipeableGameId(isPrevGame, currentGameId));
-    }
+    };
 
     renderGames() {
         const { userStakeLevel, openGameName, authorizeInfo } = this.state;
@@ -434,12 +434,17 @@ class Dashboard extends React.PureComponent<Props, State> {
             <PlayerContextProvider value={authContextValue}>
                 <SettingContextProvider>
                     <LobbyConnectionContextProvider value={lobbyConnectionContextValue}>
-                        {allowSwipeGameOndDesktop && <div className={`${Styles["prev-button"]}`}><button onClick={() => this.swipeableHandler(true, openGameId)}> PREV</button></div>}
+                        {allowSwipeGameOndDesktop && (
+                            <div className={`${Styles["prev-button"]}`}>
+                                <button onClick={() => this.swipeableHandler(true, openGameId)}> PREV</button>
+                            </div>
+                        )}
                         <div className={`${Styles["dashboard"]}`} id={"dashboard"}>
                             <Header openingGameId={openGameId} isRenderGames={isRenderGames} />
                             {isRenderGames ? this.renderGames() : this.renderLobby()}
 
                             <Footer />
+                            <MusicPlayer />
 
                             {isShowErrorModal && (
                                 <div className={Styles["container-modal"]}>
@@ -461,14 +466,14 @@ class Dashboard extends React.PureComponent<Props, State> {
                                 </div>
                             )}
                         </div>
-                        {allowSwipeGameOndDesktop &&
+                        {allowSwipeGameOndDesktop && (
                             <div className={`${Styles["next-button"]}`}>
-                                <button onClick={() => this.swipeableHandler(false, openGameId)}>NEXT
-                                </button></div>
-                        }
+                                <button onClick={() => this.swipeableHandler(false, openGameId)}>NEXT</button>
+                            </div>
+                        )}
                     </LobbyConnectionContextProvider>
                 </SettingContextProvider>
-            </PlayerContextProvider >
+            </PlayerContextProvider>
         );
     }
 

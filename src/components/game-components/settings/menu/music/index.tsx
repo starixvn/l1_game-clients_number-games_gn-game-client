@@ -1,44 +1,23 @@
-import React, { useEffect, useState } from "react";
-import useSound from "use-sound";
+import React, { useState } from "react";
 import { StorageHelper, localStorageKeys } from "../../../../../_shared/helpers";
-import { useSystemContext } from "../../../../../_shared/react-contexts";
-import { getRandomSong } from "../../../../../_shared/react-hooks";
+import { SettingEventActionType, useSettingDispatch } from "../../../../../_shared/react-contexts";
 import Styles from "./../menu.module.scss";
 
 const dropdownItemClassName = "dropdown-item";
 
 export const Music: React.FC = () => {
     const [enabledMusic, setEnabledMusic] = useState(StorageHelper.get(localStorageKeys.enableMusic) ?? true);
-    const systemContext = useSystemContext();
-
-    const [song, setSong] = useState(getRandomSong(""));
-    const [play, { stop }] = useSound(song, {
-        onend: () => {
-            setSong(getRandomSong(song));
-        },
-    });
-
-    useEffect(() => {
-        if (systemContext.isUserGesture) {
-            enabledMusic && play();
-        }
-        return () => {
-            stop();
-        };
-    }, [play]);
-
-    useEffect(() => {
-        if (enabledMusic) {
-            play();
-        } else {
-            stop();
-            setSong(getRandomSong(song));
-        }
-    }, [enabledMusic]);
+    const settingDispatch = useSettingDispatch();
 
     const onToggleMusic = () => {
         StorageHelper.set(localStorageKeys.enableMusic, !enabledMusic);
         setEnabledMusic(!enabledMusic);
+        settingDispatch({
+            type: SettingEventActionType.TOGGLE_MUSIC,
+            payload: {
+                enabledMusic: !enabledMusic,
+            },
+        });
     };
 
     return (

@@ -22,7 +22,6 @@ export const Lobby: React.FC<Props> = ({ openGame, lobbyConfigs, socket, gameTra
             <Banner openGame={openGame} lobbyConfigs={lobbyConfigs} />
             <LobbyLayout lobbyConfigs={lobbyConfigs} socket={socket} gameTransmitters={gameTransmitters} openGame={openGame} />
             <Settings />
-            <MusicPlayer />
             <ChangeAvatar />
         </div>
     );
