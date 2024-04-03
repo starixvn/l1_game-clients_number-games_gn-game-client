@@ -106,7 +106,7 @@ const RippleButton: React.FC<RippleButtonProps> = ({ choice, className, id }) =>
                 }
             </button>
         );
-    }, [choice, ripplePosX > 0, ripplePosY > 0]);
+    }, [choice, ripplePosX > 0, ripplePosY > 0, customStyle]);
 };
 
 export default RippleButton;

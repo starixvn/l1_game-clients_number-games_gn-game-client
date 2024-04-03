@@ -23,20 +23,19 @@ jest.mock("../../../_shared/constants", () => ({
 }));
 
 describe("RippleButton", () => {
-    const onClickBetMock = jest.fn();
+    const mockPlaceBet = jest.fn();
+    const mockSelectedChip = 1;
     const defaultProps = {
         choice: "player",
-        onClickBet: onClickBetMock,
         className: "btn-class",
         id: "btn-id",
-        indexRef: 0,
     };
 
     beforeEach(() => {
-        onClickBetMock.mockClear();
+        mockPlaceBet.mockClear();
         mockUseGameStateContext.mockReturnValue({ roundState: RoundState.InRound });
-        mockUseSystemContext.mockReturnValue({ selectedChip: 1 });
-        mockUseGameActionContext.mockReturnValue({ placeBet: jest.fn() });
+        mockUseSystemContext.mockReturnValue({ selectedChip: mockSelectedChip });
+        mockUseGameActionContext.mockReturnValue({ placeBet: mockPlaceBet });
     });
 
     test("renders button with correct props", () => {
@@ -57,8 +56,8 @@ describe("RippleButton", () => {
         fireEvent.click(button);
 
         // Assert
-        expect(onClickBetMock).toHaveBeenCalledTimes(1);
-        expect(onClickBetMock).toHaveBeenCalledWith("player");
+        expect(mockPlaceBet).toHaveBeenCalledTimes(1);
+        expect(mockPlaceBet).toHaveBeenCalledWith("player", mockSelectedChip);
     });
 
     test("updates cursor style based on round state = InRound", () => {
