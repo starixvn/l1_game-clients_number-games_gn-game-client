@@ -206,3 +206,16 @@ body {
         background-image: url("/static/images/cage/cage-red-blur.png");
     }
 }
+.landscape {
+    width: 100vh;
+    height: 100vw;
+    transform-origin: 0 0;
+
+    &.rotation-90 {
+        transform: rotate(90deg) translateY(-100%);
+    }
+
+    &.rotation90 {
+        transform: rotate(-90deg) translateX(-100%);
+    }
+}
