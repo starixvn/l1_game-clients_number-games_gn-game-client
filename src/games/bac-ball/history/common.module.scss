@@ -1,31 +1,7 @@
+@import "./../../../styles/components/pages/history";
+
 .history {
     --more-info-height: 0rem;
-}
-
-.result-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.6rem;
-}
-
-/* Bet detail */
-.draw-info {
-    display: flex;
-    justify-content: flex-start;
-    gap: 2.4rem;
-    padding: 0 0.8rem;
-    font-size: 1.2rem;
-    color: #fff;
-
-    .info-item {
-        display: flex;
-        align-items: center;
-        gap: 0.6rem;
-        &:not(:first) {
-            font-weight: bold;
-        }
-    }
 }
 
 .provably-fair {
