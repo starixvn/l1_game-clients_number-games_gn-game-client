@@ -3116,14 +3116,12 @@ axe-core@=4.7.0:
   resolved "http://npm.lumigame.com/axe-core/-/axe-core-4.7.0.tgz#34ba5a48a8b564f67e103f0aa5768d76e15bbbbf"
   integrity sha512-M0JtH+hlOL5pLQwHOLNYZaXuhqmvS8oExsqB1SBYgA4Dk7u/xx+YdGHXaK5pyUfed5mYXdlYiphWq3G8cRi5JQ==
 
-axios@^1.6.8:
-  version "1.6.8"
-  resolved "http://npm.lumigame.com/axios/-/axios-1.6.8.tgz#66d294951f5d988a00e87a0ffb955316a619ea66"
-  integrity sha512-v/ZHtJDU39mDpyBoFVkETcd/uNdxrWRrg3bKpOKzXFA6Bvqopts6ALSMU3y6ijYxbw2B+wPrIv46egTzJXCLGQ==
+axios@^0.21.1:
+  version "0.21.4"
+  resolved "http://npm.lumigame.com/axios/-/axios-0.21.4.tgz#c67b90dc0568e5c1cf2b0b858c43ba28e2eda575"
+  integrity sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==
   dependencies:
-    follow-redirects "^1.15.6"
-    form-data "^4.0.0"
-    proxy-from-env "^1.1.0"
+    follow-redirects "^1.14.0"
 
 axobject-query@^3.2.1:
   version "3.2.1"
@@ -5532,7 +5530,7 @@ flatted@^3.2.7, flatted@^3.2.9:
   resolved "http://npm.lumigame.com/flatted/-/flatted-3.3.1.tgz#21db470729a6734d4997002f439cb308987f567a"
   integrity sha512-X8cqMLLie7KsNUDSdzeN8FYK9rEt4Dt67OsG/DNGnYTSDBG4uFAJFBnUeiV+zCVAvwFy56IjM9sH51jVaEhNxw==
 
-follow-redirects@^1.15.6:
+follow-redirects@^1.14.0:
   version "1.15.6"
   resolved "http://npm.lumigame.com/follow-redirects/-/follow-redirects-1.15.6.tgz#7f815c0cda4249c74ff09e95ef97c23b5fd0399b"
   integrity sha512-wWN62YITEaOpSK584EZXJafH1AGpO8RVgElfkuXbTOrPX4fIfOyEpW/CsiNd8JdYrAoOvafRTOEnvsO++qCqFA==
@@ -9326,12 +9324,12 @@ sc-scoreboards@1.0.6:
   resolved "http://npm.lumigame.com/sc-scoreboards/-/sc-scoreboards-1.0.6.tgz#16ca7911e023d8048c9d6dc759fded675184d264"
   integrity sha512-T7PmqNI03oK4RHm1y9xi59f79NAoSYOOYRfaCNfSJv6f6aPB9v8SG5xtG05fxLCwosyhhDrBtjvZW44EkTY40Q==
 
-sc-user-service-client@1.6.1-beta.2:
-  version "1.6.1-beta.2"
-  resolved "http://npm.lumigame.com/sc-user-service-client/-/sc-user-service-client-1.6.1-beta.2.tgz#14bdaca1ac1428c9103c0e7a003a3601ade07e73"
-  integrity sha512-q1vW+CAjL5QsICSbrjRZsCm3pJMBBHoGhoDlqbFvrwxK1sNVR13wxTn6X7336Tk8NaWc0bHoxfGWFfU52xvi6A==
+sc-user-service-client@1.6.1-beta.6:
+  version "1.6.1-beta.6"
+  resolved "http://npm.lumigame.com/sc-user-service-client/-/sc-user-service-client-1.6.1-beta.6.tgz#0dc3bb26d2381b2d985312fdccac4e68376f304b"
+  integrity sha512-OkPZIdu8F+EQ5gvTXYpW5smk5wZOz9a4BBzBGblufQSzN8Sm2mzkhcSbkJBjiLD/C8h8/uieZPfGgFps5UGCKQ==
   dependencies:
-    axios "^1.6.8"
+    axios "^0.21.1"
 
 scheduler@^0.23.0:
   version "0.23.0"
