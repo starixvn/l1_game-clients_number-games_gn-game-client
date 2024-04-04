@@ -1,6 +1,5 @@
 import React, { useMemo } from "react";
 
-import { RoundState } from "../../game-base/type";
 import { Spritesheet } from "../sprites-sheet";
 import Styles from "./cage.module.scss";
 
@@ -12,7 +11,7 @@ const ResultNumber: React.FC<{
     const currentTime = Date.now();
 
     return useMemo(() => {
-        if (isDelayShowResult ) {
+        if (isDelayShowResult) {
             return (
                 <div key={currentTime} id="result-text" className={Styles["number"]}>
                     <Spritesheet

@@ -15,13 +15,13 @@ const useResult = <R,>(props: UseResultProps<R>) => {
 
     useEffect(() => {
         if (isEmpty(result) && roundState === RoundState.DisplayResult && isJoinGame) {
-            setCurrentResult(roundHistory[0]?.result);
             setIsJoinGame(false);
+            setCurrentResult(roundHistory[0]?.result);
         }
 
         if (!isEmpty(result)) {
-            setCurrentResult(result);
             setIsJoinGame(false);
+            setCurrentResult(result);
         }
     }, [roundState, roundHistory, result]);
 
