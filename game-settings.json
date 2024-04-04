@@ -50,11 +50,11 @@
             "path": "luckynext1"
         },
         "durations": {
-            "wholeRound": 212,
-            "wholeTurn": 26,
+            "wholeRound": 208,
+            "wholeTurn": 25,
             "placingBets": 20,
             "lockingBet": 3,
-            "showResult": 6,
+            "showResult": 5,
             "resultAnimation": 2,
             "beforePlaceBet": 0,
             "switchRoundAnimation": 4
@@ -71,11 +71,11 @@
             "path": "luckynext2"
         },
         "durations": {
-            "wholeRound": 212,
-            "wholeTurn": 26,
+            "wholeRound": 208,
+            "wholeTurn": 25,
             "placingBets": 20,
             "lockingBet": 3,
-            "showResult": 6,
+            "showResult": 5,
             "resultAnimation": 2,
             "beforePlaceBet": 0,
             "switchRoundAnimation": 4
