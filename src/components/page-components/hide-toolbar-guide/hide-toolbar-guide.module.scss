@@ -120,11 +120,11 @@
             background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 100%);
         }
     }
-    .icon-pointer {
-        position: absolute;
-        left: 1.8rem;
-        top: -0.7rem;
-    }
+}
+.icon-pointer {
+    position: absolute;
+    left: 2.5rem;
+    bottom: 2.7rem;
 }
 
 .hide-toolbar {
@@ -139,7 +139,7 @@
     height: 3.1rem;
     padding: 0 0.8rem;
     color: #f2f2f2;
-    background: #505154;
+    background: #171717;
 
     .icon-fullscreen {
         position: absolute;
@@ -164,22 +164,22 @@
 }
 
 .has-anim {
-    color: red;
-
     .icon-pointer {
         animation: pointerMoving 3s forwards;
     }
 
     .icon-aa::before {
-        animation: hide 0.5s 1s forwards;
+        animation: hideCircle 0.5s 1s forwards;
     }
 
     .hide-toolbar {
-        animation: moveUp 0.5s 3s forwards;
+        animation: moveDown 0.5s 1s forwards, changeBackground 1.5s 2.5s forwards, hideContextMenu 0.5s 3s forwards;
+    }
+
+    .toolbar-container {
+        animation: hideToolbar 0.5s 3s forwards;
     }
 }
-
-// timeline: 1s + 0.5s
 
 @keyframes pointerMoving {
     0% {
@@ -193,7 +193,17 @@
     }
 }
 
-@keyframes hide {
+@keyframes pointerMovingReverse {
+    0% {
+        transform: translateY(-3rem);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+}
+
+@keyframes hideCircle {
     0% {
         opacity: 1;
     }
@@ -202,18 +212,49 @@
     }
 }
 
-@keyframes moveUp {
+@keyframes moveDown {
     0% {
         bottom: 2.4rem;
     }
 
-    50% {
+    100% {
         bottom: 6.4rem;
-        background: red;
+    }
+}
+
+@keyframes moveUp {
+    0% {
+        bottom: 6.4rem;
     }
 
     100% {
-        bottom: 6.4rem;
+        bottom: 2.4rem;
+    }
+}
+
+@keyframes changeBackground {
+    0% {
+        background: #171717;
+    }
+    100% {
         background: #505154;
+    }
+}
+
+@keyframes hideToolbar {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(7rem);
+    }
+}
+
+@keyframes hideContextMenu {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
     }
 }

@@ -8,6 +8,9 @@ import { Banner } from "./games/components/banner";
 import { LobbyLayout } from "./games/lobby-layout";
 import Styles from "./lobby.module.scss";
 import ToolbarGuide from "../hide-toolbar-guide";
+import { useState } from "react";
+import { StorageHelper, localStorageKeys } from "../../../_shared/helpers";
+import { isMobileOnly, isSafari } from "react-device-detect";
 
 type Props = {
     openGame: Function;
@@ -17,6 +20,12 @@ type Props = {
 };
 
 export const Lobby: React.FC<Props> = ({ openGame, lobbyConfigs, socket, gameTransmitters }) => {
+    const [enabledToolbarGuide, setEnabledToolbarGuide] = useState(StorageHelper.get(localStorageKeys.hideToolbarGuide) ?? true);
+
+    const closeToolbarGuide = () => {
+        setEnabledToolbarGuide(false);
+    };
+
     return (
         <div className={Styles["lobby-container"]}>
             <BackgroundGalaxy />
@@ -24,7 +33,7 @@ export const Lobby: React.FC<Props> = ({ openGame, lobbyConfigs, socket, gameTra
             <LobbyLayout lobbyConfigs={lobbyConfigs} socket={socket} gameTransmitters={gameTransmitters} openGame={openGame} />
             <Settings />
             <ChangeAvatar />
-            {/* <ToolbarGuide isShowToolbar={true} /> */}
+            {isMobileOnly && isSafari && <ToolbarGuide isShowToolbarGuide={enabledToolbarGuide} onCloseGuide={closeToolbarGuide} />}
         </div>
     );
 };

@@ -57,6 +57,7 @@
             td {
                 padding: 0.2rem;
                 font-family: var(--font-number);
+                font-variant-numeric: tabular-nums;
             }
 
             tr {
@@ -82,4 +83,5 @@
     font-family: inherit;
     border: none;
     background: none;
+    font-size: 1.1rem;
 }

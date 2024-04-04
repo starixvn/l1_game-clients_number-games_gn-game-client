@@ -32,7 +32,10 @@ const Circle: React.FC<{ pct: number; color: string }> = ({ pct, color }) => {
 const Text: React.FC<{ percentage: number }> = ({ percentage }) => {
     return (
         <text x="50%" y="50%" dominantBaseline="central" textAnchor="middle" fontSize={"10px"} className="text-percentage">
-            {percentage.toFixed(0)}%
+            {percentage.toFixed(0)}
+            <tspan className="text-percentage" fontSize={"9px"}>
+                %
+            </tspan>
         </text>
     );
 };

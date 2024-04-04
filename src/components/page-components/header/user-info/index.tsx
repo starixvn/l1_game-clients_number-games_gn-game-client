@@ -53,7 +53,7 @@ export const UserInfo: React.FC<{
                     {user.name}
                 </div>
                 <div key={user.red} className={`${Styles.balance}`} data-testid="balance">
-                    <span id="user-info_balance" className="font-number">
+                    <span id="user-info_balance" className={Styles["balance-text"]}>
                         {numberRoundDownWithCommas(user.red ? user.red : 0)}
                     </span>
 

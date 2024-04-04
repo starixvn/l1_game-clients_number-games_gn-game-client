@@ -3,13 +3,15 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useTranslator } from "../../../_shared/react-hooks/use-translator";
 import { ResourceTypes } from "../../../_shared/resources";
 import Styles from "./hide-toolbar-guide.module.scss";
+import { StorageHelper, localStorageKeys } from "../../../_shared/helpers";
 
 const ToolbarGuide: React.FC<{
-    isShowToolbar: boolean;
-}> = ({ isShowToolbar }) => {
+    isShowToolbarGuide: boolean;
+    onCloseGuide: Function;
+}> = ({ isShowToolbarGuide, onCloseGuide }) => {
     const { t } = useTranslator();
     const [isAnimClass, setIsAnimClass] = useState(true);
-    const animIntervalTime = 7;
+    const animIntervalTime = 5;
     const iconAA = <img src="./static/images/hide-toolbar-guide/iconAA.svg" alt="icon-toolbar-guide" />;
     const iconFullScreen = <img src="./static/images/hide-toolbar-guide/icon-fullscreen.svg" alt="icon-toolbar-guide" />;
     const iconPointer = <img src="./static/images/hide-toolbar-guide/pointer.svg" alt="icon-toolbar-guide" />;
@@ -24,11 +26,20 @@ const ToolbarGuide: React.FC<{
         };
     }, [isAnimClass]);
 
+    const handleTurnOffGuide = () => {
+        onCloseGuide();
+        StorageHelper.set(localStorageKeys.hideToolbarGuide, false);
+    };
+
+    const closeGuide = () => {
+        onCloseGuide();
+    };
+
     const animClass = isAnimClass ? "has-anim" : "";
 
     return useMemo(() => {
         return (
-            isShowToolbar && (
+            isShowToolbarGuide && (
                 <div className={`${Styles["toolbar-guide-container"]} ${Styles[animClass]}`}>
                     <div className={Styles["toolbar-guide-content"]}>
                         <div className={Styles["toolbar-guide-title"]}>{t(`${ResourceTypes.SABA_NUMBER}.lobby_fullscreen`)}</div>
@@ -55,26 +66,16 @@ const ToolbarGuide: React.FC<{
                             <div className={Styles["toolbar-container"]}>
                                 <div className={Styles["toolbar"]}>
                                     <span className={Styles["icon-aa"]}>{iconAA}</span>
-                                    <span className={Styles["icon-pointer"]}>{iconPointer}</span>
                                 </div>
                                 <div className={Styles["bottom-gestures"]}></div>
                             </div>
+                            <span className={Styles["icon-pointer"]}>{iconPointer}</span>
                         </div>
                         <div className={Styles["button-group"]}>
-                            <button
-                                className="btn-grey"
-                                onClick={() => {
-                                    window.location.reload();
-                                }}
-                            >
+                            <button className="btn-grey" onClick={closeGuide}>
                                 {t(`${ResourceTypes.SABA_NUMBER}.button_close`)}
                             </button>
-                            <button
-                                className="btn-orange"
-                                onClick={() => {
-                                    window.location.reload();
-                                }}
-                            >
+                            <button className="btn-orange" onClick={handleTurnOffGuide}>
                                 {t(`${ResourceTypes.SABA_NUMBER}.button_donot_show`)}
                             </button>
                         </div>
@@ -82,7 +83,7 @@ const ToolbarGuide: React.FC<{
                 </div>
             )
         );
-    }, [isShowToolbar, isAnimClass]);
+    }, [isShowToolbarGuide, isAnimClass]);
 };
 
 export default ToolbarGuide;
