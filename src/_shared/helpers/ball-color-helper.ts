@@ -3,7 +3,7 @@ enum BallColor {
     RED = "red",
 }
 
-export const getBallColor = (number) => {
+export const getBallColor = (index: number) => {
     let balls = {};
 
     let isRedColor = true;
@@ -18,5 +18,5 @@ export const getBallColor = (number) => {
         countTemp++;
     }
 
-    return balls[number];
+    return balls[index];
 };

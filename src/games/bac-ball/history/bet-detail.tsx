@@ -43,7 +43,6 @@ const BetDetail: FC = () => {
     const { t: translateSNGames } = useSNTranslate();
     const { tolgeeNamespace } = useGameContext();
     const { t: translateBacBall } = useTranslator([tolgeeNamespace]);
-    const ballColor = getBallColor;
     const clickSound = useClickSound();
 
     const handleClickProvablyFair = () => {
@@ -90,11 +89,11 @@ const BetDetail: FC = () => {
                     </div>
                     <div className={Styles["info-item"]}>
                         <span className="font-weight-medium">{translateBacBall("glossary_player").toUpperCase()}</span>
-                        <span className={`${Styles["ball"]} ${Styles[ballColor(result.player)]}`}>{result.player}</span>
+                        <span className={`${Styles["ball"]} ${Styles[getBallColor(result.player)]}`}>{result.player}</span>
                     </div>
                     <div className={Styles["info-item"]}>
                         <span className="font-weight-medium">{translateBacBall("glossary_banker").toUpperCase()}</span>
-                        <span className={`${Styles["ball"]} ${Styles[ballColor(result.banker)]}`}>{result.banker}</span>
+                        <span className={`${Styles["ball"]} ${Styles[getBallColor(result.banker)]}`}>{result.banker}</span>
                     </div>
                 </div>
             )}

@@ -11,7 +11,6 @@ const PFVerifyResultBlock: FC<{ pfResult: PFResult }> = ({ pfResult }) => {
     const { tolgeeNamespace } = useGameContext();
     const { t: translateSNGames } = useSNTranslate();
     const { t: translateInGame } = useTranslator([tolgeeNamespace]);
-    const ballColor = getBallColor;
     const drawResult = useMemo(() => {
         const beforeDrawResult = [];
         for (const item of pfResult?.roundResult || []) {
@@ -42,7 +41,7 @@ const PFVerifyResultBlock: FC<{ pfResult: PFResult }> = ({ pfResult }) => {
                                 </div>
                                 <div className={Styles["balls-container"]}>
                                     {drawResult.result.map((child, index) => (
-                                        <span key={uuidv4()} className={`${Styles["ball"]} ${Styles[ballColor(child[item])]}`}>
+                                        <span key={uuidv4()} className={`${Styles["ball"]} ${Styles[getBallColor(child[item])]}`}>
                                             {child[item]}
                                         </span>
                                     ))}

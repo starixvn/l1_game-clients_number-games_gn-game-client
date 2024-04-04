@@ -4,40 +4,29 @@ import { messageEventType } from "../../game-base/handlers";
 
 const BettingBlock: FC<PropsWithChildren> = ({ children }: PropsWithChildren) => {
     const { gameMessageHandler } = useGameContext();
-    const defaultBettingZoneState: GameBettingZoneContextProps = {
-        totalBets: { player: 0, banker: 0, tie: 0 },
-        betPercentage: { banker: 0, player: 0, tie: 0 },
-        playerBetCount: { banker: 0, player: 0, tie: 0 },
-    };
-    const [bettingZoneState, setBettingZoneState] = useState(defaultBettingZoneState);
+
+    const [bettingZoneState, setBettingZoneState] = useState<GameBettingZoneContextProps>({
+        totalBets: {},
+        betPercentage: {},
+        playerBetCount: {},
+    });
 
     useEffect(() => {
-        const totalBetHandler = gameMessageHandler.register(messageEventType.TOTAL_BETS, ({ totalBets }) => {
-            setBettingZoneState((bettingZoneState) => {
-                return {
-                    ...bettingZoneState,
-                    totalBets,
-                };
-            });
-        });
+        const handleTotalBets = ({ totalBets }) => {
+            setBettingZoneState((prevState) => ({ ...prevState, totalBets }));
+        };
 
-        const betPercentageHandler = gameMessageHandler.register(messageEventType.BET_PERCENTAGE, ({ betPercentage }) => {
-            setBettingZoneState((bettingZoneState) => {
-                return {
-                    ...bettingZoneState,
-                    betPercentage,
-                };
-            });
-        });
+        const handleBetPercentage = ({ betPercentage }) => {
+            setBettingZoneState((prevState) => ({ ...prevState, betPercentage }));
+        };
 
-        const playerBetCountHandler = gameMessageHandler.register(messageEventType.PLAYER_BET_COUNT, ({ playerBetCount }) => {
-            setBettingZoneState((bettingZoneState) => {
-                return {
-                    ...bettingZoneState,
-                    playerBetCount,
-                };
-            });
-        });
+        const handlePlayerBetCount = ({ playerBetCount }) => {
+            setBettingZoneState((prevState) => ({ ...prevState, playerBetCount }));
+        };
+
+        const totalBetHandler = gameMessageHandler.register(messageEventType.TOTAL_BETS, handleTotalBets);
+        const betPercentageHandler = gameMessageHandler.register(messageEventType.BET_PERCENTAGE, handleBetPercentage);
+        const playerBetCountHandler = gameMessageHandler.register(messageEventType.PLAYER_BET_COUNT, handlePlayerBetCount);
 
         return () => {
             gameMessageHandler.removeHandler(totalBetHandler);
@@ -46,7 +35,7 @@ const BettingBlock: FC<PropsWithChildren> = ({ children }: PropsWithChildren) =>
         };
     }, [gameMessageHandler, bettingZoneState]);
 
-    const bettingZoneContext = <GameBettingZoneContext.Provider value={bettingZoneState}>{children} </GameBettingZoneContext.Provider>;
+    const bettingZoneContext = <GameBettingZoneContext.Provider value={bettingZoneState}>{children}</GameBettingZoneContext.Provider>;
 
     return bettingZoneContext;
 };

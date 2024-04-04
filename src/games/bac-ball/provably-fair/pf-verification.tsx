@@ -19,7 +19,6 @@ const PFVerification: FC = () => {
     const { t: translateInGame } = useTranslator([tolgeeNamespace]);
     const [combinedHash, setCombinedHash] = useState(pfResult?.finalHash || "");
     const clickSound = useClickSound();
-    const ballColor = getBallColor;
 
     const verifyInfo = useMemo(() => {
         const rawTwoFirstDigits = combinedHash.substring(0, 2);
@@ -124,13 +123,13 @@ const PFVerification: FC = () => {
                     <div className="flex gap-4 items-center">
                         <div className="flex items-center gap-1">
                             <span className="text-uppercase font-weight-medium text-white">{translateInGame("glossary_player")}</span>
-                            <div className={`${Styles["ball"]} ${Styles[ballColor(verifyInfo.player.value)]}`}>
+                            <div className={`${Styles["ball"]} ${Styles[getBallColor(verifyInfo.player.value)]}`}>
                                 {verifyInfo.player.value}
                             </div>
                         </div>
                         <div className="flex items-center gap-1">
                             <span className="text-uppercase font-weight-medium text-white">{translateInGame("glossary_banker")}</span>
-                            <div className={`${Styles["ball"]} ${Styles[ballColor(verifyInfo.banker.value)]}`}>
+                            <div className={`${Styles["ball"]} ${Styles[getBallColor(verifyInfo.banker.value)]}`}>
                                 {verifyInfo.banker.value}
                             </div>
                         </div>

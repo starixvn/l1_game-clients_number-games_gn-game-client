@@ -19,6 +19,7 @@ export const Odds: React.FC<Props> = ({ tolgeeNamespace, choice, className, anim
     const [oddsValue, setOddsValue] = useState(0);
     const { gameConfigs, roundState } = useGameStateContext();
     const { fractionalOddsFormat } = usePlayerContext();
+    const odds = formatOdds(oddsValue, fractionalOddsFormat);
 
     useEffect(() => {
         const odds = gameConfigs?.odds?.[choice] ?? 0;
@@ -46,9 +47,9 @@ export const Odds: React.FC<Props> = ({ tolgeeNamespace, choice, className, anim
             clearTimeout(timeOut);
         };
     }, [showOddsIcon, animationDuration]);
-    const odds = formatOdds(oddsValue, fractionalOddsFormat);
+
     return useMemo(() => {
-        return oddsValue != 0 ? (
+        return oddsValue > 0 ? (
             <div
                 id={`${tolgeeNamespace}-${choice}-odds`}
                 className={`text-center ${Styles["bet-odds"]} ${className} ${isOddUp ? Styles["up"] : Styles["down"]} ${

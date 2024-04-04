@@ -17,7 +17,6 @@ const PFVerification: FC = () => {
     const { t: translateSNGames } = useSNTranslate();
     const [combinedHash, setCombinedHash] = useState(pfResult.finalHash);
     const clickSound = useClickSound();
-    const ballColor = getBallColor;
 
     const verifyInfo = useMemo(() => {
         const rawTwoFirstDigits = combinedHash.substring(0, 2);
@@ -109,7 +108,7 @@ const PFVerification: FC = () => {
                         {translateCommon("pf_verification_para_1")}
                     </h3>
                     <div className="flex gap-4 items-center">
-                        <div className={`${Styles["ball"]} ${Styles[ballColor(verifyInfo.result)]}`}>{verifyInfo.result}</div>
+                        <div className={`${Styles["ball"]} ${Styles[getBallColor(verifyInfo.result)]}`}>{verifyInfo.result}</div>
                     </div>
                 </div>
                 <h3 className={`${Styles["section-title"]} mt-2`}>{translateCommon("pf_header_combined_sha512_hash")}</h3>

@@ -1,12 +1,12 @@
+import { isEmpty } from "lodash";
 import { useGameBettingZoneContext } from "../../../_shared/react-contexts";
 import Styles from "./bet-option.module.scss";
 import { BaseProps } from "./types";
 
 export const PlayerBetCount: React.FC<BaseProps> = ({ tolgeeNamespace, choice, className }) => {
     const { playerBetCount } = useGameBettingZoneContext();
-    const playerCount = playerBetCount?.[choice] ?? 0;
 
-    if (playerCount == 0) {
+    if (isEmpty(playerBetCount)) {
         return <div className={className}></div>;
     }
 

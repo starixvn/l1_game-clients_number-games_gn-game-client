@@ -111,7 +111,7 @@ const BetLog: FC<BetLogProps> = ({ betLogs, handleScroll, isLoadMore }) => {
 
 const BetHistoryRow: FC<{ betHistory: BetHistory; handleClickDrawId: Function }> = ({ betHistory, handleClickDrawId }) => {
     const { drawId, result, totalAmount, betwin } = betHistory;
-    const ballColor = getBallColor;
+
     const { date, time } = separateDateTime(betHistory.time);
 
     const { player, banker } = result;
@@ -137,8 +137,8 @@ const BetHistoryRow: FC<{ betHistory: BetHistory; handleClickDrawId: Function }>
         {
             node: (
                 <div className={Styles["result-container"]}>
-                    <div className={`${Styles["ball"]} ${Styles[ballColor(player)]}`}>{player}</div>
-                    <div className={`${Styles["ball"]} ${Styles[ballColor(banker)]}`}>{banker}</div>
+                    <div className={`${Styles["ball"]} ${Styles[getBallColor(player)]}`}>{player}</div>
+                    <div className={`${Styles["ball"]} ${Styles[getBallColor(banker)]}`}>{banker}</div>
                 </div>
             ),
             size: 4,

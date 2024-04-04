@@ -28,7 +28,6 @@ export interface DrawInfoNextBall extends DrawInfo {
 
 export const BetDetailResultBlock: FC<{ drawInfo: DrawInfoNextBall }> = ({ drawInfo }) => {
     const { t: translateSNGames } = useSNTranslate();
-    const ballColor = getBallColor;
     const { drawId, result } = drawInfo;
 
     return (
@@ -37,7 +36,7 @@ export const BetDetailResultBlock: FC<{ drawInfo: DrawInfoNextBall }> = ({ drawI
                 {translateSNGames("glossary_draw_id").capitalizeFirstLetter()}: <span>{drawId}</span>
             </div>
             <div className={Styles["info-item"]}>
-                <span className={`${Styles["ball"]} ${Styles[ballColor(result.ball)]}`}>{result.ball}</span>
+                <span className={`${Styles["ball"]} ${Styles[getBallColor(result.ball)]}`}>{result.ball}</span>
             </div>
         </div>
     );
