@@ -33,4 +33,6 @@
 .game-wrapper {
     position: absolute;
     top: 4rem;
+    overflow: auto;
+    height: 100%;
 }

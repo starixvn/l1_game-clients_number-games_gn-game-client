@@ -1,5 +1,5 @@
 import { useTheme } from "next-themes";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { isIOS, isMobileOnly } from "react-device-detect";
 import { useSwipeable } from "react-swipeable";
 
@@ -32,13 +32,28 @@ export const Games: React.FC<Props> = ({
     const { theme } = useTheme();
     const locale = tolgee.getLanguage();
     const [stopScroll, setStopScroll] = useState(false);
+    const contentRef = useRef(null);
+
+    const isShowScroll = () => {
+        if (contentRef.current) {
+            return contentRef.current.offsetHeight > window.innerHeight;
+        }
+
+        return false;
+    }
 
     const mobileSwipeableHandlers = useSwipeable({
         onSwipedUp: () => {
+            if (isShowScroll()) {
+                return;
+            }
             swipeableHandler(true, openGameId);
             setStopScroll(true);
         },
         onSwipedDown: () => {
+            if (isShowScroll()) {
+                return;
+            }
             swipeableHandler(false, openGameId);
             setStopScroll(true);
         },
@@ -90,7 +105,7 @@ export const Games: React.FC<Props> = ({
             style={{ touchAction: stopScroll ? "none" : "auto" }}
         >
             <SystemContextProvider>
-                <div className={`${styles["game-list"]} ${isMobileOnly ? styles[isIOS ? "ios-device" : "android-device"] : ""}`}>
+                <div ref={contentRef} className={`${styles["game-list"]} ${isMobileOnly ? styles[isIOS ? "ios-device" : "android-device"] : ""}`}>
                     <BackgroundGalaxy />
                     {getGameComponentById(openGameId)}
                 </div>
