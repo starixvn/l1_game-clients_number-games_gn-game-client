@@ -1,15 +1,17 @@
-import { FC, useState } from "react";
-import Styles from "./common.module.scss";
-import { DrawInfo, PFResult } from "../../../components/game-base/type";
-import { useClickSound, useCommonTranslate, useSNTranslate, useTranslator } from "../../../_shared/react-hooks";
-import { useGameContext, usePlayerContext } from "../../../_shared/react-contexts";
-import { getGlossaryTranslate, numberWithCommas, separateDateTime, sortedCollectionByTime, useBallColor } from "../../../_shared/helpers";
-import TableRow from "./row-table";
-import { BacBallBetOptions } from "../constants";
 import { randomBytes } from "crypto";
-import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
-import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
+import { FC, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+
+import { getGlossaryTranslate, numberWithCommas, separateDateTime, sortedCollectionByTime } from "../../../_shared/helpers";
+import { getBallColor } from "../../../_shared/helpers/ball-color-helper";
+import { useGameContext, usePlayerContext } from "../../../_shared/react-contexts";
+import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
+import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
+import { useClickSound, useCommonTranslate, useSNTranslate, useTranslator } from "../../../_shared/react-hooks";
+import { DrawInfo, PFResult } from "../../../components/game-base/type";
+import { BacBallBetOptions } from "../constants";
+import Styles from "./common.module.scss";
+import TableRow from "./row-table";
 
 interface DrawInfoBacBall extends DrawInfo {
     drawId: number;
@@ -41,7 +43,7 @@ const BetDetail: FC = () => {
     const { t: translateSNGames } = useSNTranslate();
     const { tolgeeNamespace } = useGameContext();
     const { t: translateBacBall } = useTranslator([tolgeeNamespace]);
-    const ballColor = useBallColor;
+    const ballColor = getBallColor;
     const clickSound = useClickSound();
 
     const handleClickProvablyFair = () => {
@@ -88,11 +90,11 @@ const BetDetail: FC = () => {
                     </div>
                     <div className={Styles["info-item"]}>
                         <span className="font-weight-medium">{translateBacBall("glossary_player").toUpperCase()}</span>
-                        <span className={`${Styles["ball"]} ${Styles[ballColor({ number: result.player })]}`}>{result.player}</span>
+                        <span className={`${Styles["ball"]} ${Styles[ballColor(result.player)]}`}>{result.player}</span>
                     </div>
                     <div className={Styles["info-item"]}>
                         <span className="font-weight-medium">{translateBacBall("glossary_banker").toUpperCase()}</span>
-                        <span className={`${Styles["ball"]} ${Styles[ballColor({ number: result.banker })]}`}>{result.banker}</span>
+                        <span className={`${Styles["ball"]} ${Styles[ballColor(result.banker)]}`}>{result.banker}</span>
                     </div>
                 </div>
             )}

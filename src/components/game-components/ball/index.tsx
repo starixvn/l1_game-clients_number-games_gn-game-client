@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from "react";
 
-import { useBallColor } from "../../../_shared/helpers/ball-color-helper";
+import { getBallColor } from "../../../_shared/helpers/ball-color-helper";
 import Styles from "./ball.module.scss";
 
 export enum BallStatus {
@@ -18,7 +18,7 @@ export interface IBall {
 const Ball: FC<IBall> = (props) => {
     const { number, delayTime, status, index } = props;
 
-    const color = useBallColor({ number });
+    const color = getBallColor(number);
     const ballStyleName = `${Styles["ball-bg"]} ${Styles[color]} ${status === BallStatus.SHOW ? Styles["display-right-now"] : ""}`;
 
     const delayStyle = delayTime > 0 ? Styles["delay"] : "";

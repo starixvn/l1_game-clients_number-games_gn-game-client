@@ -31,7 +31,7 @@ const ResultNumber: React.FC<{
         } else {
             return <></>;
         }
-    }, [isDelayShowResult, isShowResultAnim]);
+    }, [isDelayShowResult, isShowResultAnim, number]);
 };
 
 export default ResultNumber;

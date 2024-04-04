@@ -1,12 +1,13 @@
-import { FC, useEffect, useMemo, useState } from "react";
-import { useClickSound, useCommonTranslate, useSNTranslate } from "../../../_shared/react-hooks";
-import { useBallColor } from "../../../_shared/helpers";
 import { createHash } from "crypto";
-import CopyableTextInput from "../../../components/game-components/provably-fair/copyable-text-input";
-import { DefaultPFStyles as Styles } from "../../../components/game-components/provably-fair";
+import { FC, useEffect, useMemo, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
+
+import { getBallColor } from "../../../_shared/helpers";
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
+import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
+import { useClickSound, useCommonTranslate, useSNTranslate } from "../../../_shared/react-hooks";
+import { DefaultPFStyles as Styles } from "../../../components/game-components/provably-fair";
+import CopyableTextInput from "../../../components/game-components/provably-fair/copyable-text-input";
 
 const PFVerification: FC = () => {
     const { pfVerifyModalData: pfResult } = useGameStateContext();
@@ -16,7 +17,7 @@ const PFVerification: FC = () => {
     const { t: translateSNGames } = useSNTranslate();
     const [combinedHash, setCombinedHash] = useState(pfResult.finalHash);
     const clickSound = useClickSound();
-    const ballColor = useBallColor;
+    const ballColor = getBallColor;
 
     const verifyInfo = useMemo(() => {
         const rawTwoFirstDigits = combinedHash.substring(0, 2);
@@ -108,7 +109,7 @@ const PFVerification: FC = () => {
                         {translateCommon("pf_verification_para_1")}
                     </h3>
                     <div className="flex gap-4 items-center">
-                        <div className={`${Styles["ball"]} ${Styles[ballColor({ number: verifyInfo.result })]}`}>{verifyInfo.result}</div>
+                        <div className={`${Styles["ball"]} ${Styles[ballColor(verifyInfo.result)]}`}>{verifyInfo.result}</div>
                     </div>
                 </div>
                 <h3 className={`${Styles["section-title"]} mt-2`}>{translateCommon("pf_header_combined_sha512_hash")}</h3>

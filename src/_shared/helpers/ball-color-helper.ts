@@ -1,13 +1,9 @@
-export function useBallColor({ number }) {
-    return buildBallList()[number];
-}
-
 enum BallColor {
     BLUE = "blue",
     RED = "red",
 }
 
-const buildBallList = () => {
+export const getBallColor = (number) => {
     let balls = {};
 
     let isRedColor = true;
@@ -22,5 +18,5 @@ const buildBallList = () => {
         countTemp++;
     }
 
-    return balls;
+    return balls[number];
 };

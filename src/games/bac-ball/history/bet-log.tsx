@@ -1,15 +1,15 @@
 import { FC } from "react";
 
 import { numberWithCommas, separateDateTime, sortedCollectionByTime } from "../../../_shared/helpers";
-import { useBallColor } from "../../../_shared/helpers/ball-color-helper";
+import { getBallColor } from "../../../_shared/helpers/ball-color-helper";
+import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
+import { useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import { useClickSound } from "../../../_shared/react-hooks";
 import { useCommonTranslate, useSNTranslate } from "../../../_shared/react-hooks/use-translator";
 import { PFResult } from "../../../components/game-base/type";
 import { BetLogProps } from "../../../components/game-components/bet-history";
 import Styles from "./common.module.scss";
 import TableRow from "./row-table";
-import { useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
-import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 
 export interface BetHistory {
     time: Date;
@@ -111,7 +111,7 @@ const BetLog: FC<BetLogProps> = ({ betLogs, handleScroll, isLoadMore }) => {
 
 const BetHistoryRow: FC<{ betHistory: BetHistory; handleClickDrawId: Function }> = ({ betHistory, handleClickDrawId }) => {
     const { drawId, result, totalAmount, betwin } = betHistory;
-    const ballColor = useBallColor;
+    const ballColor = getBallColor;
     const { date, time } = separateDateTime(betHistory.time);
 
     const { player, banker } = result;
@@ -137,8 +137,8 @@ const BetHistoryRow: FC<{ betHistory: BetHistory; handleClickDrawId: Function }>
         {
             node: (
                 <div className={Styles["result-container"]}>
-                    <div className={`${Styles["ball"]} ${Styles[ballColor({ number: player })]}`}>{player}</div>
-                    <div className={`${Styles["ball"]} ${Styles[ballColor({ number: banker })]}`}>{banker}</div>
+                    <div className={`${Styles["ball"]} ${Styles[ballColor(player)]}`}>{player}</div>
+                    <div className={`${Styles["ball"]} ${Styles[ballColor(banker)]}`}>{banker}</div>
                 </div>
             ),
             size: 4,

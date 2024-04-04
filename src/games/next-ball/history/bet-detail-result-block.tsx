@@ -1,8 +1,9 @@
 import { FC } from "react";
-import { DrawInfo, PFResult } from "../../../components/game-base/type";
-import { useSNTranslate, useTranslator } from "../../../_shared/react-hooks";
+
+import { getBallColor } from "../../../_shared/helpers/ball-color-helper";
 import { useGameContext } from "../../../_shared/react-contexts";
-import { useBallColor } from "../../../_shared/helpers";
+import { useSNTranslate, useTranslator } from "../../../_shared/react-hooks";
+import { DrawInfo, PFResult } from "../../../components/game-base/type";
 import Styles from "./history.module.scss";
 
 export interface DrawInfoNextBall extends DrawInfo {
@@ -27,7 +28,7 @@ export interface DrawInfoNextBall extends DrawInfo {
 
 export const BetDetailResultBlock: FC<{ drawInfo: DrawInfoNextBall }> = ({ drawInfo }) => {
     const { t: translateSNGames } = useSNTranslate();
-    const ballColor = useBallColor;
+    const ballColor = getBallColor;
     const { drawId, result } = drawInfo;
 
     return (
@@ -36,7 +37,7 @@ export const BetDetailResultBlock: FC<{ drawInfo: DrawInfoNextBall }> = ({ drawI
                 {translateSNGames("glossary_draw_id").capitalizeFirstLetter()}: <span>{drawId}</span>
             </div>
             <div className={Styles["info-item"]}>
-                <span className={`${Styles["ball"]} ${Styles[ballColor({ number: result.ball })]}`}>{result.ball}</span>
+                <span className={`${Styles["ball"]} ${Styles[ballColor(result.ball)]}`}>{result.ball}</span>
             </div>
         </div>
     );

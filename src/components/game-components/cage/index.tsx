@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { useBallColor } from "../../../_shared/helpers/ball-color-helper";
+import { getBallColor } from "../../../_shared/helpers/ball-color-helper";
 import { GameStateContextModel } from "../../../_shared/react-contexts/game-state-context/game-state-context-model";
 import { RoundState } from "../../game-base/type";
 import BallLoops from "./ball-loop";
@@ -39,8 +39,8 @@ const Cage: React.FC<CageProps> = ({
     roundState,
     highlight,
 }) => {
-    const ballColor = `ball-${useBallColor({ number: result })}-${position === CagePosition.RIGHT ? "2" : "1"}`;
     const [isDelayShowResult, setIsDelayShowResult] = useState<boolean>(false);
+    const [ballColor, setBallColor] = useState<string>(null);
 
     useEffect(() => {
         let timeOut: NodeJS.Timeout;
@@ -57,6 +57,10 @@ const Cage: React.FC<CageProps> = ({
         };
     }, [delayShowResultTime, playResultAnimation, roundState]);
 
+    useEffect(() => {
+        !!result && setBallColor(`ball-${getBallColor(result)}-${position === CagePosition.RIGHT ? "2" : "1"}`);
+    }, [result]);
+
     return (
         <div className={`${Styles["cage-area"]} ${isSmall ? Styles["small"] : ""} ${Styles[position]}`}>
             {highlight && <div className={`${Styles["cage-bg-highlight"]}`}></div>}
@@ -66,12 +70,12 @@ const Cage: React.FC<CageProps> = ({
             <div id="cage-border" className={`${Styles["cage-border"]} ${Styles[color]}`}>
                 {!isDelayShowResult && <div id="cage-lid" className={Styles["cage-lid"]} />}
 
-                {result && (
+                {!!ballColor && (
                     <ResultBall isDelayShowResult={isDelayShowResult} ballColor={ballColor} isShowResultAnim={playResultAnimation} />
                 )}
             </div>
 
-            {result && <ResultNumber isDelayShowResult={isDelayShowResult} number={result} isShowResultAnim={playResultAnimation} />}
+            {!!result && <ResultNumber isDelayShowResult={isDelayShowResult} number={result} isShowResultAnim={playResultAnimation} />}
         </div>
     );
 };

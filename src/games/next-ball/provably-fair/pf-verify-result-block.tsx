@@ -1,13 +1,14 @@
 import { FC, useMemo } from "react";
-import { PFResult } from "../../../components/game-base/type";
-import { useSNTranslate } from "../../../_shared/react-hooks";
-import { useBallColor } from "../../../_shared/helpers";
 import { v4 as uuidv4 } from "uuid";
+
+import { getBallColor } from "../../../_shared/helpers";
+import { useSNTranslate } from "../../../_shared/react-hooks";
+import { PFResult } from "../../../components/game-base/type";
 import Styles from "./pf-next-ball.module.scss";
 
 const PFVerifyResultBlock: FC<{ pfResult: PFResult }> = ({ pfResult }) => {
     const { t: translateSNGames } = useSNTranslate();
-    const ballColor = useBallColor;
+    const ballColor = getBallColor;
     const drawResult = useMemo(() => {
         const beforeDrawResult = [];
         for (const item of pfResult?.roundResult || []) {
@@ -32,7 +33,7 @@ const PFVerifyResultBlock: FC<{ pfResult: PFResult }> = ({ pfResult }) => {
             <div className="flex justify-start">
                 <div className={Styles["balls-container"]}>
                     {drawResult?.result.map((item, _) => (
-                        <span key={uuidv4()} className={`${Styles["ball"]} ${Styles[ballColor({ number: item.ball })]}`}>
+                        <span key={uuidv4()} className={`${Styles["ball"]} ${Styles[ballColor(item.ball)]}`}>
                             {item.ball}
                         </span>
                     ))}
