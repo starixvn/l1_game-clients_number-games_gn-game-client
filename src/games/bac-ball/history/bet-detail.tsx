@@ -1,17 +1,16 @@
 import { randomBytes } from "crypto";
 import { FC, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
-
-import { getGlossaryTranslate, numberWithCommas, separateDateTime, sortedCollectionByTime } from "../../../_shared/helpers";
-import { getBallColor } from "../../../_shared/helpers/ball-color-helper";
 import { useGameContext, usePlayerContext } from "../../../_shared/react-contexts";
-import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
-import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
-import { useClickSound, useCommonTranslate, useSNTranslate, useTranslator } from "../../../_shared/react-hooks";
-import { DrawInfo, PFResult } from "../../../components/game-base/type";
-import { BacBallBetOptions } from "../constants";
-import Styles from "./common.module.scss";
+import { getGlossaryTranslate, numberWithCommas, separateDateTime, sortedCollectionByTime } from "../../../_shared/helpers";
 import TableRow from "./row-table";
+import { BacBallBetOptions } from "../constants";
+import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
+import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
+import { v4 as uuidv4 } from "uuid";
+import SmallBall from "../../../components/game-components/small-ball";
+import { DrawInfo, PFResult } from "../../../components/game-base/type";
+import { useClickSound, useCommonTranslate, useSNTranslate, useTranslator } from "../../../_shared/react-hooks";
+import Styles from "./common.module.scss";
 
 interface DrawInfoBacBall extends DrawInfo {
     drawId: number;
@@ -89,11 +88,11 @@ const BetDetail: FC = () => {
                     </div>
                     <div className={Styles["info-item"]}>
                         <span className="font-weight-medium">{translateBacBall("glossary_player").toUpperCase()}</span>
-                        <span className={`${Styles["ball"]} ${Styles[getBallColor(result.player)]}`}>{result.player}</span>
+                        <SmallBall number={result.player} />
                     </div>
                     <div className={Styles["info-item"]}>
                         <span className="font-weight-medium">{translateBacBall("glossary_banker").toUpperCase()}</span>
-                        <span className={`${Styles["ball"]} ${Styles[getBallColor(result.banker)]}`}>{result.banker}</span>
+                        <SmallBall number={result.banker} />
                     </div>
                 </div>
             )}

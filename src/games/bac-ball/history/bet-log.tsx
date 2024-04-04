@@ -1,15 +1,14 @@
 import { FC } from "react";
-
 import { numberWithCommas, separateDateTime, sortedCollectionByTime } from "../../../_shared/helpers";
-import { getBallColor } from "../../../_shared/helpers/ball-color-helper";
-import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
-import { useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import { useClickSound } from "../../../_shared/react-hooks";
 import { useCommonTranslate, useSNTranslate } from "../../../_shared/react-hooks/use-translator";
 import { PFResult } from "../../../components/game-base/type";
 import { BetLogProps } from "../../../components/game-components/bet-history";
 import Styles from "./common.module.scss";
 import TableRow from "./row-table";
+import { useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
+import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
+import SmallBall from "../../../components/game-components/small-ball";
 
 export interface BetHistory {
     time: Date;
@@ -111,7 +110,6 @@ const BetLog: FC<BetLogProps> = ({ betLogs, handleScroll, isLoadMore }) => {
 
 const BetHistoryRow: FC<{ betHistory: BetHistory; handleClickDrawId: Function }> = ({ betHistory, handleClickDrawId }) => {
     const { drawId, result, totalAmount, betwin } = betHistory;
-
     const { date, time } = separateDateTime(betHistory.time);
 
     const { player, banker } = result;
@@ -137,8 +135,8 @@ const BetHistoryRow: FC<{ betHistory: BetHistory; handleClickDrawId: Function }>
         {
             node: (
                 <div className={Styles["result-container"]}>
-                    <div className={`${Styles["ball"]} ${Styles[getBallColor(player)]}`}>{player}</div>
-                    <div className={`${Styles["ball"]} ${Styles[getBallColor(banker)]}`}>{banker}</div>
+                    <SmallBall number={player} />
+                    <SmallBall number={banker} />
                 </div>
             ),
             size: 4,

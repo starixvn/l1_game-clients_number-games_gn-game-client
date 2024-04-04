@@ -1,16 +1,3 @@
-@import "../../../styles/components/ballSmall";
-.ball {
-    @extend %ballSmall;
-}
-
-.red {
-    --bg: url("/static/images/ball/ball-red.png") no-repeat;
-}
-
-.blue {
-    --bg: url("/static/images/ball/ball-blue.png") no-repeat;
-}
-
 .result-container {
     display: flex;
     justify-content: center;

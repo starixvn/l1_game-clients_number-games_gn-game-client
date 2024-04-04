@@ -1,10 +1,9 @@
 import { FC, useMemo } from "react";
 import { v4 as uuidv4 } from "uuid";
-
-import { getBallColor } from "../../../_shared/helpers";
 import { useSNTranslate } from "../../../_shared/react-hooks";
 import { PFResult } from "../../../components/game-base/type";
 import Styles from "./pf-next-ball.module.scss";
+import SmallBall from "../../../components/game-components/small-ball";
 
 const PFVerifyResultBlock: FC<{ pfResult: PFResult }> = ({ pfResult }) => {
     const { t: translateSNGames } = useSNTranslate();
@@ -32,9 +31,7 @@ const PFVerifyResultBlock: FC<{ pfResult: PFResult }> = ({ pfResult }) => {
             <div className="flex justify-start">
                 <div className={Styles["balls-container"]}>
                     {drawResult?.result.map((item, _) => (
-                        <span key={uuidv4()} className={`${Styles["ball"]} ${Styles[getBallColor(item.ball)]}`}>
-                            {item.ball}
-                        </span>
+                        <SmallBall key={uuidv4()} number={item.ball} />
                     ))}
                 </div>
             </div>

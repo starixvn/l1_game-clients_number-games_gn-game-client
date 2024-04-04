@@ -1,11 +1,11 @@
 import { FC, useMemo } from "react";
 import { v4 as uuidv4 } from "uuid";
-
-import { getBallColor, getGlossaryTranslate } from "../../../_shared/helpers";
 import { useGameContext } from "../../../_shared/react-contexts";
 import { useSNTranslate, useTranslator } from "../../../_shared/react-hooks";
-import { PFResult } from "../../../components/game-base/type";
+import { getGlossaryTranslate } from "../../../_shared/helpers";
 import Styles from "./pf-bac-ball.module.scss";
+import SmallBall from "../../../components/game-components/small-ball";
+import { PFResult } from "../../../components/game-base/type";
 
 const PFVerifyResultBlock: FC<{ pfResult: PFResult }> = ({ pfResult }) => {
     const { tolgeeNamespace } = useGameContext();
@@ -40,10 +40,8 @@ const PFVerifyResultBlock: FC<{ pfResult: PFResult }> = ({ pfResult }) => {
                                     {translateInGame(getGlossaryTranslate(tolgeeNamespace, item))}
                                 </div>
                                 <div className={Styles["balls-container"]}>
-                                    {drawResult.result.map((child, index) => (
-                                        <span key={uuidv4()} className={`${Styles["ball"]} ${Styles[getBallColor(child[item])]}`}>
-                                            {child[item]}
-                                        </span>
+                                    {drawResult.result.map((child, _) => (
+                                        <SmallBall number={child[item]} key={uuidv4()} />
                                     ))}
                                 </div>
                             </div>

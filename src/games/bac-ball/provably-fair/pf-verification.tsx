@@ -1,14 +1,13 @@
 import { createHash } from "crypto";
 import { FC, useEffect, useMemo, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-
-import { getBallColor } from "../../../_shared/helpers/ball-color-helper";
 import { useGameContext } from "../../../_shared/react-contexts";
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import { useClickSound, useCommonTranslate, useTranslator } from "../../../_shared/react-hooks";
-import { DefaultPFStyles as Styles } from "../../../components/game-components/provably-fair";
 import CopyableTextInput from "../../../components/game-components/provably-fair/copyable-text-input";
+import { DefaultPFStyles as Styles } from "../../../components/game-components/provably-fair";
+import SmallBall from "../../../components/game-components/small-ball";
 
 const PFVerification: FC = () => {
     const { tolgeeNamespace } = useGameContext();
@@ -123,15 +122,11 @@ const PFVerification: FC = () => {
                     <div className="flex gap-4 items-center">
                         <div className="flex items-center gap-1">
                             <span className="text-uppercase font-weight-medium text-white">{translateInGame("glossary_player")}</span>
-                            <div className={`${Styles["ball"]} ${Styles[getBallColor(verifyInfo.player.value)]}`}>
-                                {verifyInfo.player.value}
-                            </div>
+                            <SmallBall number={verifyInfo.player.value} />
                         </div>
                         <div className="flex items-center gap-1">
                             <span className="text-uppercase font-weight-medium text-white">{translateInGame("glossary_banker")}</span>
-                            <div className={`${Styles["ball"]} ${Styles[getBallColor(verifyInfo.banker.value)]}`}>
-                                {verifyInfo.banker.value}
-                            </div>
+                            <SmallBall number={verifyInfo.banker.value} />
                         </div>
                     </div>
                 </div>

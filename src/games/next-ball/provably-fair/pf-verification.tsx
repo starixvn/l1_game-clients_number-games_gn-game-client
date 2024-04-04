@@ -1,13 +1,12 @@
 import { createHash } from "crypto";
 import { FC, useEffect, useMemo, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-
-import { getBallColor } from "../../../_shared/helpers";
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import { useClickSound, useCommonTranslate, useSNTranslate } from "../../../_shared/react-hooks";
-import { DefaultPFStyles as Styles } from "../../../components/game-components/provably-fair";
 import CopyableTextInput from "../../../components/game-components/provably-fair/copyable-text-input";
+import { DefaultPFStyles as Styles } from "../../../components/game-components/provably-fair";
+import SmallBall from "../../../components/game-components/small-ball";
 
 const PFVerification: FC = () => {
     const { pfVerifyModalData: pfResult } = useGameStateContext();
@@ -108,7 +107,7 @@ const PFVerification: FC = () => {
                         {translateCommon("pf_verification_para_1")}
                     </h3>
                     <div className="flex gap-4 items-center">
-                        <div className={`${Styles["ball"]} ${Styles[getBallColor(verifyInfo.result)]}`}>{verifyInfo.result}</div>
+                        <SmallBall number={verifyInfo.result} />
                     </div>
                 </div>
                 <h3 className={`${Styles["section-title"]} mt-2`}>{translateCommon("pf_header_combined_sha512_hash")}</h3>

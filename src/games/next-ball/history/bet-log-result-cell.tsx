@@ -1,12 +1,11 @@
 import { FC } from "react";
-
-import { getBallColor } from "../../../_shared/helpers";
 import Styles from "./history.module.scss";
+import SmallBall from "../../../components/game-components/small-ball";
 
 const BetLogResultCell: FC<{ result: { ball: number } }> = ({ result: { ball } }) => {
     return (
         <div className={Styles["result-container"]}>
-            <div className={`${Styles["ball"]} ${Styles[getBallColor(ball)]}`}>{ball}</div>
+            <SmallBall number={ball} />
         </div>
     );
 };

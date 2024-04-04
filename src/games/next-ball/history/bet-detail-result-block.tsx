@@ -1,10 +1,9 @@
 import { FC } from "react";
-
-import { getBallColor } from "../../../_shared/helpers/ball-color-helper";
 import { useGameContext } from "../../../_shared/react-contexts";
 import { useSNTranslate, useTranslator } from "../../../_shared/react-hooks";
-import { DrawInfo, PFResult } from "../../../components/game-base/type";
 import Styles from "./history.module.scss";
+import SmallBall from "../../../components/game-components/small-ball";
+import { DrawInfo, PFResult } from "../../../components/game-base/type";
 
 export interface DrawInfoNextBall extends DrawInfo {
     drawId: number;
@@ -36,7 +35,7 @@ export const BetDetailResultBlock: FC<{ drawInfo: DrawInfoNextBall }> = ({ drawI
                 {translateSNGames("glossary_draw_id").capitalizeFirstLetter()}: <span>{drawId}</span>
             </div>
             <div className={Styles["info-item"]}>
-                <span className={`${Styles["ball"]} ${Styles[getBallColor(result.ball)]}`}>{result.ball}</span>
+                <SmallBall number={result.ball} />
             </div>
         </div>
     );

@@ -1,29 +1,7 @@
-.red {
-    --bg: url("/static/images/ball/ball-red.png") no-repeat;
-}
-
-.blue {
-    --bg: url("/static/images/ball/ball-blue.png") no-repeat;
-}
-
 .balls-container {
     display: flex;
     gap: var(--spacing-size-2);
     margin-top: 0.4rem;
     margin-bottom: 1rem;
     justify-content: center;
-}
-
-.ball {
-    width: 2.6rem;
-    height: 2.6rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #2c2f3e;
-    text-align: center;
-    font-size: 1.2rem;
-    font-weight: 600;
-    background: var(--bg);
-    background-size: 2.6rem 2.6rem;
 }
