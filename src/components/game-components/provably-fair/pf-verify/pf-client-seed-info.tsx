@@ -91,18 +91,13 @@ const PFClientSeedInfo: FC<{ fileNameExport: (data?: any) => string }> = ({ file
                     <div className="flex items-center justify-between">
                         <h3 className={`${Styles["section-title"]} m-0`}>{translateCommon("pf_new_client_seed_para_1")}</h3>
                         <div className="input-group width-small">
-                            <CopyableTextInput
-                                className="font-number"
-                                value={clientSeedInfo.clientSeed}
-                                id="client-seed"
-                                position="bottom"
-                            />
+                            <CopyableTextInput value={clientSeedInfo.clientSeed} id="client-seed" position="bottom" />
                         </div>
                     </div>
                     <h3 className={`${Styles["section-title"]} mt-3`}>{translateCommon("pf_ header_merge_client_seed")}</h3>
 
                     <div className="input-group width-full">
-                        <CopyableTextInput className="font-number" value={clientSeedInfo.mergeClientSeed} id="merge-client-seed" />
+                        <CopyableTextInput value={clientSeedInfo.mergeClientSeed} id="merge-client-seed" />
                     </div>
                 </div>
                 <div className="form">

@@ -14,8 +14,6 @@
     position: relative;
     line-height: 1;
     font-size: 1.8rem;
-    font-family: var(--font-number);
-    font-variant-numeric: tabular-nums;
 
     &:after {
         display: inline-block;
@@ -70,7 +68,6 @@
     .bet-value {
         display: flex;
         font-size: 1.1rem;
-        font-family: var(--font-number);
         font-weight: 600;
         color: white;
         padding: 0 4px;
@@ -104,7 +101,7 @@
 .player-count-value {
     height: 1.8rem;
     line-height: 1.7;
-    font-family: var(--font-number);
+    font-size: 1.1rem;
     font-variant-numeric: tabular-nums;
 }
 

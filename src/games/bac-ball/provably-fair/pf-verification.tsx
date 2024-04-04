@@ -88,7 +88,7 @@ const PFVerification: FC = () => {
             <h3 className={`${Styles["section-title"]}`}>{translateCommon("pf_ header_merge_client_seed")}</h3>
             <div id="merge-client-seed-group-editable" className="input-group width-full mb-3">
                 <input
-                    className="form-control font-number"
+                    className="form-control"
                     type="text"
                     name="merge-client-seed-verification"
                     id="merge-client-seed-verification"
