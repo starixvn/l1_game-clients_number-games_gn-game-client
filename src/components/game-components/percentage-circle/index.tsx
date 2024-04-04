@@ -1,5 +1,5 @@
 import React from "react";
-
+import { isAndroid } from "react-device-detect";
 import Styles from "./percentage-circle.module.scss";
 
 const cleanPercentage = (percentage: number) => {
@@ -15,7 +15,7 @@ const Circle: React.FC<{ pct: number; color: string }> = ({ pct, color }) => {
     const strokePct = ((100 - pct) * circ) / 100;
     return (
         <circle
-            className={Styles["circle"]}
+            className={isAndroid ? "" : Styles["circle"]}
             r={r}
             cx={16}
             cy={16}

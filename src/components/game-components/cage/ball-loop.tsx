@@ -1,3 +1,4 @@
+import { isAndroid } from "react-device-detect";
 import { RoundState } from "../../game-base/type";
 import { Spritesheet } from "../sprites-sheet";
 import Styles from "./cage.module.scss";
@@ -13,7 +14,7 @@ const BallLoops: React.FC<{ roundState: RoundState }> = ({ roundState }) => {
             steps={11}
             autoplay
             loop
-            fps={40}
+            fps={isAndroid ? 30 : 40}
         />
     );
 
