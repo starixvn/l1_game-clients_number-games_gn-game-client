@@ -408,6 +408,8 @@ class Dashboard extends React.PureComponent<Props, State> {
     }
 
     renderDashBoard() {
+        window.history.pushState(null, null, "/");
+
         const { isShowErrorModal, authorizeInfo, isBlockUI, openGameId } = this.state;
         const authContextValue = {
             authorizeInfo: authorizeInfo,

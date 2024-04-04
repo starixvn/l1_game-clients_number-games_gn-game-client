@@ -42,6 +42,7 @@ import { GameSoundHandler } from "./handlers/game-sound-handler";
 import { IGameStateHandler } from "./handlers/game-state-handler";
 import { GameBaseProps, PFClientSeedSetting, PFSeverSeed, RoundState } from "./type";
 import { GameRoundDatatHandler } from "./handlers/game-round-data-handler";
+import { LoadingSpinner } from "../game-components/game-loading/loading-spinner";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
     protected socket: Socket;
@@ -621,6 +622,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         return (
             <GameContainer>
                 {signedIn ? this.renderGame() : <GameLoading />}
+                {roundState === RoundState.None && <LoadingSpinner />}
                 {this.renderDisableGamePopup(roundState, disabledMessage)}
                 {this.renderConnectFailed(roundState, disconnectReason)}
             </GameContainer>
