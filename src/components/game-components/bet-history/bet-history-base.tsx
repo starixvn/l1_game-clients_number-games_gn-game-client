@@ -1,10 +1,16 @@
-import { FC, ReactNode } from "react";
+import { FC, ReactNode, useEffect, useState } from "react";
 import { useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import { useClickSound, useCommonTranslate, useSNTranslate } from "../../../_shared/react-hooks";
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 import { numberWithCommas, separateDateTime, sortedCollectionByTime } from "../../../_shared/helpers";
 import { InfiniteTable } from "../infinite-table";
 import Styles from "./bet-history.module.scss";
+import { useGameContext } from "../../../_shared/react-contexts";
+import { messageEventType } from "../../game-base/handlers";
+import Loader from "../loader";
+
+const GET_HISTORY = "getHistory";
+const HISTORY_EVENT = "history";
 
 export interface BetLog {
     drawId: number;
@@ -16,18 +22,53 @@ export interface BetLog {
 }
 
 export interface BetHistoryProps {
-    betLogs: any[];
-    handleScroll: (event: any) => void;
-    isLoadMore: boolean;
     renderBetLogResult: (result: any) => ReactNode;
 }
 
-const BetHistoryBase: FC<BetHistoryProps> = ({ betLogs, handleScroll, isLoadMore, renderBetLogResult }) => {
-    const dispatch = useGameStatesDispatch();
+const BetHistoryBase: FC<BetHistoryProps> = ({ renderBetLogResult }) => {
     const { t: translateCommon } = useCommonTranslate();
     const { t: translateSNGames } = useSNTranslate();
 
+    const dispatch = useGameStatesDispatch();
+    const { gameMessageHandler } = useGameContext();
+
+    const [isFetching, setIsFetching] = useState<boolean>(true);
+    const [isHaveMoreData, setIsHaveMoreData] = useState<boolean>(true);
+    const [betLogs, setBetLogs] = useState([]);
+    const [page, setPage] = useState<number>(1);
+
     const clickSound = useClickSound();
+
+    const getHistory = (historyPage: number) => {
+        gameMessageHandler.broadcastGameEvent({
+            [messageEventType.SEND_SOCKET_MESSAGE]: { event: GET_HISTORY, data: { page: historyPage } },
+        });
+    };
+
+    useEffect(() => {
+        setIsFetching(true);
+
+        const historyHandler = gameMessageHandler.register(HISTORY_EVENT, ({ history }) => {
+            setIsFetching(false);
+            if (history?.betLogs?.length > 0) {
+                setBetLogs((x) => [...x, ...(history?.betLogs ?? [])]);
+            } else {
+                setIsHaveMoreData(false);
+            }
+        });
+
+        return () => {
+            gameMessageHandler.removeHandler(historyHandler);
+        };
+    }, []);
+
+    useEffect(() => {
+        getHistory(page);
+    }, [page]);
+
+    const addData = () => {
+        setPage((page) => page + 1);
+    };
 
     const handleClickDrawId = (betLogDetail: BetLog) => {
         clickSound();
@@ -99,13 +140,18 @@ const BetHistoryBase: FC<BetHistoryProps> = ({ betLogs, handleScroll, isLoadMore
 
         return content;
     });
-    return (
+
+    return isFetching ? (
+        <div className={Styles["history-loading"]}>
+            <Loader />
+        </div>
+    ) : (
         <InfiniteTable
             header={header}
             body={body}
             customTableContainerStyles={Styles["history"]}
-            addData={handleScroll}
-            isAddData={isLoadMore}
+            addData={addData}
+            isAddData={isHaveMoreData}
             noData={betLogs.length <= 0}
         />
     );

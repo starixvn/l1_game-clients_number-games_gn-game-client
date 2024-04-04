@@ -62,5 +62,5 @@ export const produceDataBetDetailRow = (item: any, drawInfo: DrawInfoNextBall) =
 export const BetChoice: FC<{ choice: string }> = ({ choice }) => {
     const { tolgeeNamespace } = useGameContext();
     const { t: translateNextBall } = useTranslator([tolgeeNamespace]);
-    return <>{translateNextBall(`glossary_${choice}`)}</>;
+    return <span className="font-text">{translateNextBall(`glossary_${choice}`)}</span>;
 };
