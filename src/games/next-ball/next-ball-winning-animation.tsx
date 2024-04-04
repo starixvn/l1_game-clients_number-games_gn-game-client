@@ -30,7 +30,7 @@ const NextBallWinningAnimation: React.FC<Props> = ({ choice, resourceName, round
                     steps={10}
                     autoplay={true}
                     loop={true}
-                    fps={10}
+                    fps={20}
                     startAt={0}
                     endAt={29}
                 />

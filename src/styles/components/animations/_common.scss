@@ -39,7 +39,7 @@
 .highlight-winning-bg-anim {
     position: absolute;
     opacity: 0;
-    animation: winning-bg 1.6s infinite linear;
+    animation: winning-bg 1.6s 3 linear;
 }
 
 @keyframes winning-bg {
