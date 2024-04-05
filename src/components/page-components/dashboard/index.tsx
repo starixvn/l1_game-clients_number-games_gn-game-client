@@ -234,8 +234,8 @@ class Dashboard extends React.PureComponent<Props, State> {
         return (offerGames.includes(this.state.openGameId) && !backToLobby) || ssoRedirectGameId > 0;
     }
 
-    handleScaleFromGame(data) {
-        this.setState({ scale: data });
+    handleScaleFromGame(scale: number) {
+        this.setState({ scale });
     }
 
     componentDidUpdate() {
@@ -380,8 +380,7 @@ class Dashboard extends React.PureComponent<Props, State> {
     };
 
     renderGames() {
-        const { userStakeLevel, openGameName, authorizeInfo } = this.state;
-        const offerGames = getOfferGamesIds(authorizeInfo);
+        const { userStakeLevel, openGameName } = this.state;
         const urlContext = loadURLContext();
         console.log("renderGames", urlContext.gameId);
         return (
@@ -434,7 +433,7 @@ class Dashboard extends React.PureComponent<Props, State> {
     renderDashBoard() {
         window.history.pushState(null, null, "/");
 
-        const { isShowErrorModal, authorizeInfo, isBlockUI, openGameId } = this.state;
+        const { isShowErrorModal, authorizeInfo, isBlockUI, openGameId, scale } = this.state;
         const authContextValue = {
             authorizeInfo: authorizeInfo,
             session: this.props.session,
@@ -461,7 +460,7 @@ class Dashboard extends React.PureComponent<Props, State> {
                 <SettingContextProvider>
                     <LobbyConnectionContextProvider value={lobbyConnectionContextValue}>
                         <div style={{
-                            transform: `scale(${this.state.scale})`,
+                            transform: `scale(${isRenderGames ? this.state.scale : 1})`,
                             transformOrigin: 'top center',
                             height: `100dvh`,
                         }} className={`${Styles["dashboard"]} ${!isRenderGames ? "no-scroll" : ""}`} id={"dashboard"}>
