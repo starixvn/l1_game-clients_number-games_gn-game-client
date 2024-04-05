@@ -1,13 +1,14 @@
 import { FC, ReactNode, useEffect, useState } from "react";
+
+import { numberWithCommas, separateDateTime, sortedCollectionByTime } from "../../../_shared/helpers";
+import { useGameContext } from "../../../_shared/react-contexts";
+import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 import { useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import { useClickSound, useCommonTranslate, useSNTranslate } from "../../../_shared/react-hooks";
-import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
-import { numberWithCommas, separateDateTime, sortedCollectionByTime } from "../../../_shared/helpers";
+import { messageEventType } from "../../game-base/handlers";
+import { LoadingSpinner } from "../game-loading/loading-spinner";
 import { InfiniteTable } from "../infinite-table";
 import Styles from "./bet-history.module.scss";
-import { useGameContext } from "../../../_shared/react-contexts";
-import { messageEventType } from "../../game-base/handlers";
-import Loader from "../loader";
 
 const GET_HISTORY = "getHistory";
 const HISTORY_EVENT = "history";
@@ -142,9 +143,7 @@ const BetHistoryBase: FC<BetHistoryProps> = ({ renderBetLogResult }) => {
     });
 
     return isFetching ? (
-        <div className={Styles["history-loading"]}>
-            <Loader />
-        </div>
+        <LoadingSpinner />
     ) : (
         <InfiniteTable
             header={header}

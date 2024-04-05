@@ -1,13 +1,15 @@
+import "../_shared/helpers/string-helper";
+import "../styles/errors.scss";
+import "../styles/main.scss";
+
 import { TolgeeProvider } from "@tolgee/react";
 import { ThemeProvider } from "next-themes";
 import App, { AppProps } from "next/app";
 import Head from "next/head";
+
 import { buildVersion, systemName, Themes } from "../_shared/constants";
-import "../_shared/helpers/string-helper";
 import { tolgee } from "../_shared/tolgee";
-import Loading from "../components/page-components/loading";
-import "../styles/errors.scss";
-import "../styles/main.scss";
+import { LoadingSpinner } from "../components/game-components/game-loading/loading-spinner";
 
 class SabaNumberApp extends App<AppProps> {
     render() {
@@ -15,7 +17,7 @@ class SabaNumberApp extends App<AppProps> {
 
         return (
             <ThemeProvider defaultTheme={Themes.light}>
-                <TolgeeProvider tolgee={tolgee} fallback={<Loading />}>
+                <TolgeeProvider tolgee={tolgee} fallback={<LoadingSpinner />}>
                     <AppTilte />
                     <Component {...pageProps} />
                 </TolgeeProvider>

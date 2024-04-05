@@ -1,12 +1,13 @@
 import { FC, memo, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { v4 as uuidv4 } from "uuid";
-import { Themes, buildVersion } from "../../../../_shared/constants";
+
+import { buildVersion, Themes } from "../../../../_shared/constants";
 import { buildGameGuideUrl } from "../../../../_shared/helpers";
 import { useGameStateContext } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
 import { useClickSound, useCommonTranslate } from "../../../../_shared/react-hooks";
 import { tolgee } from "../../../../_shared/tolgee";
-import Loader from "../../loader";
+import { LoadingSpinner } from "../../game-loading/loading-spinner";
 import ModalContainer from "../../modal-container";
 import Styles from "./pf-guide.module.scss";
 
@@ -27,11 +28,7 @@ const PFGuide: FC = () => {
     return useMemo(() => {
         return (
             <div className={Styles["container-guide"]} ref={wrapperRef}>
-                {isLoading && (
-                    <div className={Styles["guide-loading"]}>
-                        <Loader></Loader>
-                    </div>
-                )}
+                {isLoading && <LoadingSpinner />}
                 <iframe
                     style={{ display: isLoading ? "none" : "block" }}
                     ref={wrapperIframeRef}

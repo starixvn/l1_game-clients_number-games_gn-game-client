@@ -1,15 +1,16 @@
 import { FC, useEffect, useRef, useState } from "react";
+
 import { useGameContext } from "../../../../_shared/react-contexts";
 import { GameEventActionType } from "../../../../_shared/react-contexts/game-state-context/game-event-action";
 import { useGameStateContext, useGameStatesDispatch } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
 import { useCommonTranslate, useSNTranslate } from "../../../../_shared/react-hooks";
+import { messageEventType } from "../../../game-base/handlers";
+import { PFSeverSeed } from "../../../game-base/type";
+import { LoadingSpinner } from "../../game-loading/loading-spinner";
 import ModalContainer from "../../modal-container";
+import CopyableTextInput from "../copyable-text-input";
 import { ButtonPFGuide } from "../pf-guide";
 import Styles from "../provably-fair.module.scss";
-import { messageEventType } from "../../../game-base/handlers";
-import CopyableTextInput from "../copyable-text-input";
-import Loader from "../../loader";
-import { PFSeverSeed } from "../../../game-base/type";
 
 const NUMBER_VALUES = "0123456789";
 const GetPFInfoMessage = "getPfInfo";
@@ -215,7 +216,7 @@ const PFSetting: FC<{ customClientSeedInfo?: string }> = ({ customClientSeedInfo
             <div className={Styles["client-seed-form"]}>
                 {Object.keys(ownBets).length > 0 && <div className={Styles["form-overlay"]}></div>}
                 {isLoading ? (
-                    <Loader />
+                    <LoadingSpinner />
                 ) : (
                     <div className={Styles["client-seed-options"]}>
                         <div className={Styles["client-seed-option"]}>

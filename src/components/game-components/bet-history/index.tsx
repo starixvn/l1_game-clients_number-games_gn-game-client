@@ -6,7 +6,7 @@ import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/rea
 import { useCommonTranslate } from "../../../_shared/react-hooks/use-translator";
 import { GameMessageHandler, messageEventType } from "../../game-base/handlers";
 import { DrawInfo } from "../../game-base/type";
-import Loader from "../loader";
+import { LoadingSpinner } from "../game-loading/loading-spinner";
 import ModalContainer from "../modal-container";
 import Styles from "./bet-history.module.scss";
 
@@ -100,7 +100,7 @@ const BetHistoryModal: FC<BetHistoryProps> = ({ renderBetLog }) => {
                 if (isFirstLoad) {
                     return (
                         <div className={Styles["history-loading"]}>
-                            <Loader />
+                            <LoadingSpinner />
                         </div>
                     );
                 }
