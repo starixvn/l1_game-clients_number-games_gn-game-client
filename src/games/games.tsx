@@ -42,7 +42,7 @@ export const Games: React.FC<Props> = ({
     useEffect(() => {
         if (contentRef.current && height !== contentRef.current.offsetHeight && isMobileOnly) {
             setHeight(contentRef.current.offsetHeight);
-            setScale(window.innerHeight / expectedMobileHeight);
+            setScale((window.innerHeight - remToPx(3.2)) / expectedMobileHeight);
         }
     }, [contentRef.current?.getContext, openGameId]);
 
@@ -59,6 +59,13 @@ export const Games: React.FC<Props> = ({
         preventScrollOnSwipe: true,
         trackMouse: true,
     });
+    const remToPx = (rem) => {
+        // Get the font-size of the root element (<html>)
+        const rootFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize);
+
+        // Convert the rem value to px and return it
+        return rem * rootFontSize;
+    }
 
     const gameSound = {
         playPlaceBetSound: usePlaceBetSound(),
@@ -104,7 +111,7 @@ export const Games: React.FC<Props> = ({
                 touchAction: stopScroll ? "none" : "auto",
                 transform: `scale(${scale})`,
                 transformOrigin: 'top center',
-                height: `${window.innerHeight}px`,
+                height: `100dvh`,
             }}
         >
             <SystemContextProvider>

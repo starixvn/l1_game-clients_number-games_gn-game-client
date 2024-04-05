@@ -50,7 +50,7 @@
             "path": "luckynext1"
         },
         "durations": {
-            "wholeRound": 208,
+            "wholeRound": 204,
             "wholeTurn": 25,
             "placingBets": 20,
             "lockingBet": 3,
@@ -71,7 +71,7 @@
             "path": "luckynext2"
         },
         "durations": {
-            "wholeRound": 208,
+            "wholeRound": 204,
             "wholeTurn": 25,
             "placingBets": 20,
             "lockingBet": 3,
