@@ -122,7 +122,7 @@ export const Games: React.FC<Props> = ({
         <div ref={wrapperContentRef}
             className={`game-container ${styles["game-wrapper"]} ${styles["open-chips"]}`}
             {...extraProps}
-            style={{ transform: `scale(${scale})`, transformOrigin: 'top left' }}
+            style={{ transform: `scale(${scale})`, transformOrigin: 'top center' }}
         >
             <SystemContextProvider>
                 <div ref={contentRef} className={`${styles["game-list"]} ${isMobileOnly ? styles[isIOS ? "ios-device" : "android-device"] : ""}`}>
