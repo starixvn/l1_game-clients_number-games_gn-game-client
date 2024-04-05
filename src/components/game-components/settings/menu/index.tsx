@@ -7,6 +7,7 @@ import Styles from "./menu.module.scss";
 import { Music } from "./music";
 import { Sound } from "./sound";
 import { RoundState } from "../../../game-base/type";
+import { AnalyticsHelper, TrackingAction, TrackingFunction } from "../../../../_shared/helpers";
 
 const dropdownItemClassName = "dropdown-item";
 
@@ -31,6 +32,8 @@ export const Menu: React.FC = () => {
             },
         });
         setDropdownOpen(false);
+
+        AnalyticsHelper.trackFunction({ function: TrackingFunction.BetHistory, action: TrackingAction.Open });
     };
 
     const openGuide = () => {
@@ -46,6 +49,7 @@ export const Menu: React.FC = () => {
             },
         });
         setDropdownOpen(false);
+        AnalyticsHelper.trackFunction({ function: TrackingFunction.GameGuide, action: TrackingAction.Open });
     };
 
     const handleClickOutside = (event) => {

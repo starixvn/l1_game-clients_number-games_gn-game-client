@@ -1,5 +1,12 @@
 import { FC } from "react";
-import { numberWithCommas, separateDateTime, sortedCollectionByTime } from "../../../_shared/helpers";
+import {
+    AnalyticsHelper,
+    TrackingAction,
+    TrackingFunction,
+    numberWithCommas,
+    separateDateTime,
+    sortedCollectionByTime,
+} from "../../../_shared/helpers";
 import { useClickSound } from "../../../_shared/react-hooks";
 import { useCommonTranslate, useSNTranslate } from "../../../_shared/react-hooks/use-translator";
 import { PFResult } from "../../../components/game-base/type";
@@ -72,6 +79,7 @@ const BetLog: FC<BetLogProps> = ({ betLogs, handleScroll, isLoadMore }) => {
                 isShowBetDetail: true,
             },
         });
+        AnalyticsHelper.trackFunction({ function: TrackingFunction.BetDetails, action: TrackingAction.Open });
     };
 
     const renderbody = () => {

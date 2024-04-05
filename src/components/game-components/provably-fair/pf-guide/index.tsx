@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { v4 as uuidv4 } from "uuid";
 
 import { buildVersion, Themes } from "../../../../_shared/constants";
-import { buildGameGuideUrl } from "../../../../_shared/helpers";
+import { AnalyticsHelper, TrackingAction, TrackingFunction, buildGameGuideUrl } from "../../../../_shared/helpers";
 import { useGameStateContext } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
 import { useClickSound, useCommonTranslate } from "../../../../_shared/react-hooks";
 import { tolgee } from "../../../../_shared/tolgee";
@@ -84,6 +84,7 @@ const ButtonPFGuide: FC = () => {
                 onClick={() => {
                     clickSound();
                     setIsShowPFGuide(true);
+                    AnalyticsHelper.trackFunction({ function: TrackingFunction.PFGuide, action: TrackingAction.Open });
                 }}
             >
                 <span className="icon-guide" />

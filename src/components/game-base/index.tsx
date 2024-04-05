@@ -43,6 +43,7 @@ import { IGameStateHandler } from "./handlers/game-state-handler";
 import { GameBaseProps, PFClientSeedSetting, PFSeverSeed, RoundState } from "./type";
 import { GameRoundDatatHandler } from "./handlers/game-round-data-handler";
 import { LoadingSpinner } from "../game-components/game-loading/loading-spinner";
+import { AnalyticsHelper, TrackingEvent } from "../../_shared/helpers/analytic-helper";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
     protected socket: Socket;
@@ -154,6 +155,8 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.placeBet = this.placeBet.bind(this);
         this.updateUserBalance = this.updateUserBalance.bind(this);
         this.setActiveScoreboardTab = this.setActiveScoreboardTab.bind(this);
+
+        AnalyticsHelper.trackPage({ page_title: this.props.gameName });
     }
 
     getGameStateContext = () => {

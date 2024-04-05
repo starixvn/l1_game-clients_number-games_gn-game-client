@@ -1,0 +1,111 @@
+import { SSOResponse } from "sc-user-service-client/dist/auth";
+import { getAppSettings } from "../app-settings";
+import { URLContextModel } from "../react-contexts";
+
+export enum TrackingEvent {
+    Function = "function_event",
+}
+
+export enum TrackingAction {
+    ToggleOn = "ToggleOn",
+    ToggleOff = "ToggleOff",
+    Click = "Click",
+    Show = "Show",
+    Select = "Select",
+    Open = "Open",
+    Close = "Close",
+}
+
+export enum TrackingFunction {
+    Music = "Music",
+    Sound = "Sound",
+    PFSetting = "PFSetting",
+    PFGuide = "PFGuide",
+    BetHistory = "BetHistory",
+    BetDetails = "BetDetails",
+    GameGuide = "GameGuide",
+    PFBetHistory = "PFBetHistory",
+    PFClientSeeds = "PFClientSeeds",
+    PFVerify = "PFVerify",
+    PFExportClientSeeds = "PFExportClientSeeds",
+    SelectChip = "SelectChip",
+}
+
+export interface TrackingParameter {
+    function: string;
+    action?: string;
+    page?: string;
+}
+
+const eventNames = { page_view: "page_view", login: "login_type" };
+const commandNames = { event: "event", config: "config" };
+
+type PlayerContext = {
+    playerName: string;
+    page: string;
+    language: string;
+};
+
+export class AnalyticsHelper {
+    private static playerContext: PlayerContext = { playerName: "", page: "", language: "" };
+
+    static setPlayerSession(playerSession: SSOResponse) {
+        AnalyticsHelper.playerContext.playerName = playerSession?.username;
+    }
+
+    static injectPlayerInfo(analyticParams: any, propertyName) {
+        if (AnalyticsHelper.playerContext?.playerName) {
+            analyticParams[propertyName] = AnalyticsHelper.playerContext?.playerName;
+        }
+    }
+
+    static trackEvent(event: string, params: TrackingParameter) {
+        AnalyticsHelper.send(commandNames.event, event, params);
+    }
+
+    static login(urlContext: URLContextModel) {
+        let method = "SSO_To_Lobby";
+        if (urlContext.isDirectMode) {
+            method = `SSO_Direct_Mode_To_${urlContext.gameId}`;
+        } else if (urlContext.gameId) {
+            method = `SSO_To_${urlContext.gameId}`;
+        }
+
+        AnalyticsHelper.send(commandNames.event, eventNames.login, { method });
+    }
+
+    static trackFunction(params: TrackingParameter) {
+        try {
+            if (AnalyticsHelper.playerContext) {
+                params.page = AnalyticsHelper.playerContext.page;
+            }
+
+            AnalyticsHelper.send(commandNames.event, TrackingEvent.Function, params);
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    static trackPage(params: { page_title: string; language?: string }) {
+        AnalyticsHelper.injectPlayerInfo(params, "client_id");
+        if (AnalyticsHelper.playerContext) {
+            AnalyticsHelper.playerContext.page = params?.page_title;
+            AnalyticsHelper.playerContext.language = params?.language;
+        }
+        params?.page_title && AnalyticsHelper.send(commandNames.event, eventNames.page_view, params);
+    }
+
+    static setUser(playerId: string, tagId?: string) {
+        if (!tagId) {
+            tagId = getAppSettings().googleAnalyticId;
+        }
+
+        AnalyticsHelper.send(commandNames.config, tagId, {
+            user_id: playerId,
+        });
+    }
+
+    static send(command: string, event: string, params: any) {
+        globalThis.gtag && globalThis.gtag(command, event, params);
+    }
+}

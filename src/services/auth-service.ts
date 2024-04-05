@@ -1,6 +1,6 @@
 import { SSOResponse } from "sc-user-service-client/dist/auth";
 
-import { localStorageKeys, StorageHelper } from "../_shared/helpers";
+import { AnalyticsHelper, localStorageKeys, StorageHelper } from "../_shared/helpers";
 import { UserClientCommunication } from "./user-client-communication";
 
 const authService = UserClientCommunication?.getUserClientInstance()?.auth;
@@ -29,7 +29,10 @@ export const verifySession = async (): Promise<SSOResponse> => {
         userSession.isUM = verifySessionResponse.isUM;
         userSession.umInfo = verifySessionResponse.umInfo;
 
-        verifySessionResponse.isSuccessful && StorageHelper.set(localStorageKeys.session, userSession);
+        if (verifySessionResponse.isSuccessful) {
+            StorageHelper.set(localStorageKeys.session, userSession);
+            AnalyticsHelper.setPlayerSession(userSession);
+        }
     }
 
     return verifySessionResponse.isSuccessful || userSession.isUM ? userSession : null;

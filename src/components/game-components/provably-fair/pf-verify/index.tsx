@@ -8,6 +8,7 @@ import Styles from "../provably-fair.module.scss";
 import CopyableTextInput from "../copyable-text-input";
 import { useGameStateContext, useGameStatesDispatch } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
 import { GameEventActionType } from "../../../../_shared/react-contexts/game-state-context/game-event-action";
+import { AnalyticsHelper, TrackingAction, TrackingFunction } from "../../../../_shared/helpers";
 
 const PFVerifyModal: FC<{
     renderResultBlock: Function;
@@ -70,11 +71,16 @@ const PFVerify: FC<{ renderResultBlock: Function }> = ({ renderResultBlock }) =>
     const handleOnClickClientSeedInfo = () => {
         clickSound();
         dispatch({ type: GameEventActionType.TOGGLE_PF_CLIENT_SEED_INFO, payload: { isShowPFClientSeedInfo: true } });
+        AnalyticsHelper.trackFunction({ function: TrackingFunction.PFClientSeeds, action: TrackingAction.Open });
     };
 
     const handleOnClickVerification = () => {
         clickSound();
         dispatch({ type: GameEventActionType.TOGGLE_PF_VERIFICATION, payload: { isShowPFVerification: true } });
+        AnalyticsHelper.trackFunction({
+            function: TrackingFunction.PFVerify,
+            action: TrackingAction.Click,
+        });
     };
 
     return (

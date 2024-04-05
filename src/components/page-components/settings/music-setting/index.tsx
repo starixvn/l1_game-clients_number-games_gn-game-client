@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { localStorageKeys, StorageHelper } from "../../../../_shared/helpers";
+import { AnalyticsHelper, localStorageKeys, StorageHelper, TrackingAction, TrackingFunction } from "../../../../_shared/helpers";
 import { SettingEventActionType, useSettingDispatch } from "../../../../_shared/react-contexts";
 import { useClickSound, useTranslator } from "../../../../_shared/react-hooks";
 import Styles from "../settings.module.scss";
@@ -12,14 +12,19 @@ const MusicSetting = ({}) => {
     const { t } = useTranslator();
 
     const toggle = () => {
+        const updateMusicSetting = !enabledMusic;
         clickSound();
-        setEnabledMusic(!enabledMusic);
-        StorageHelper.set(localStorageKeys.enableMusic, !enabledMusic);
+        setEnabledMusic(updateMusicSetting);
+        StorageHelper.set(localStorageKeys.enableMusic, updateMusicSetting);
         settingDispatch({
             type: SettingEventActionType.TOGGLE_MUSIC,
             payload: {
-                enabledMusic: !enabledMusic,
+                enabledMusic: updateMusicSetting,
             },
+        });
+        AnalyticsHelper.trackFunction({
+            function: TrackingFunction.Music,
+            action: updateMusicSetting ? TrackingAction.ToggleOn : TrackingAction.ToggleOff,
         });
     };
 

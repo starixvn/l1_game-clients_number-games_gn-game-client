@@ -9,6 +9,7 @@ import Styles from "./lobby.module.scss";
 const Settings = dynamic(() => import("../settings"));
 const ChangeAvatar = dynamic(() => import("../header/change-avatar"));
 const ToolbarGuide = dynamic(() => import("../hide-toolbar-guide"));
+import { AnalyticsHelper } from "../../../_shared/helpers/analytic-helper";
 
 type Props = {
     openGame: Function;
@@ -18,6 +19,8 @@ type Props = {
 };
 
 export const Lobby: React.FC<Props> = ({ openGame, lobbyConfigs, socket, gameTransmitters }) => {
+
+    AnalyticsHelper.trackPage({ page_title: "Lobby" });
     return (
         <div className={Styles["lobby-container"]}>
             <BackgroundGalaxy />

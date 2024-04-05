@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { ReactNode, useContext, useEffect } from "react";
 import { getAppSettings } from "../../../_shared/app-settings";
 import { buildVersion, languageMapper, locales, systemName } from "../../../_shared/constants";
-import { StorageHelper, localStorageKeys } from "../../../_shared/helpers";
+import { AnalyticsHelper, StorageHelper, localStorageKeys } from "../../../_shared/helpers";
 import { URLContext, usePlayerContext } from "../../../_shared/react-contexts";
 import { setSentryUser } from "../../../_shared/sentry";
 import { tolgee } from "../../../_shared/tolgee";
@@ -42,6 +42,7 @@ export async function customStartup(token, language, router, player): Promise<vo
     if (session?.isAuthenticated) {
         setSentryUser(session);
         player.session = session;
+        AnalyticsHelper.setUser(session.username);
     }
 
     router.push("");

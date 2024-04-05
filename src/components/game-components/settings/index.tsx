@@ -7,6 +7,7 @@ import { RoundState } from "../../game-base/type";
 import { getLogoName } from "../../page-components/header";
 import { Menu } from "./menu";
 import styles from "./settings.module.scss";
+import { AnalyticsHelper, TrackingAction, TrackingFunction } from "../../../_shared/helpers";
 
 const ButtonSettingClassName = "setting-button";
 
@@ -27,6 +28,11 @@ export function Settings() {
             payload: {
                 isShowPFSetting: true,
             },
+        });
+
+        AnalyticsHelper.trackFunction({
+            function: TrackingFunction.PFSetting,
+            action: TrackingAction.Open,
         });
     };
 

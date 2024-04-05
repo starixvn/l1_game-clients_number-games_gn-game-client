@@ -1,7 +1,15 @@
 import { randomBytes } from "crypto";
 import { FC, useState } from "react";
 import { useGameContext, usePlayerContext } from "../../../_shared/react-contexts";
-import { getGlossaryTranslate, numberWithCommas, separateDateTime, sortedCollectionByTime } from "../../../_shared/helpers";
+import {
+    AnalyticsHelper,
+    TrackingAction,
+    TrackingFunction,
+    getGlossaryTranslate,
+    numberWithCommas,
+    separateDateTime,
+    sortedCollectionByTime,
+} from "../../../_shared/helpers";
 import TableRow from "./row-table";
 import { BacBallBetOptions } from "../constants";
 import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
@@ -61,6 +69,8 @@ const BetDetail: FC = () => {
                 isShowPFVerify: true,
             },
         });
+
+        AnalyticsHelper.trackFunction({ function: TrackingFunction.PFBetHistory, action: TrackingAction.Open });
     };
 
     const handleScroll = (event: any) => {

@@ -9,3 +9,4 @@ export * from "./socket-connection";
 export * from "./storage-helper";
 export * from "./time-helper";
 export * from "./url-helper";
+export * from "./analytic-helper";

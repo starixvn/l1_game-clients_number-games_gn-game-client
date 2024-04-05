@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { localStorageKeys, StorageHelper } from "../../../../_shared/helpers";
+import { AnalyticsHelper, localStorageKeys, StorageHelper, TrackingAction, TrackingFunction } from "../../../../_shared/helpers";
 import { useClickSound, useTranslator } from "../../../../_shared/react-hooks";
 import Styles from "../settings.module.scss";
 
@@ -10,9 +10,14 @@ const SoundSetting = ({}) => {
     const { t } = useTranslator();
 
     const toggle = () => {
+        const updateSoundSetting = !enabledSound;
         clickSound();
-        setEnabledSound(!enabledSound);
-        StorageHelper.set(localStorageKeys.enableSound, !enabledSound);
+        setEnabledSound(updateSoundSetting);
+        StorageHelper.set(localStorageKeys.enableSound, updateSoundSetting);
+        AnalyticsHelper.trackFunction({
+            function: TrackingFunction.Sound,
+            action: updateSoundSetting ? TrackingAction.ToggleOn : TrackingAction.ToggleOff,
+        });
     };
 
     return (

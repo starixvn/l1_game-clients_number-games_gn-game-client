@@ -546,45 +546,14 @@ class Dashboard extends React.PureComponent<Props, State> {
         return <Register session={this.props.session} handleStateLogin={this.handleRegister} />;
     };
 
-    renderGoogleAnalytic() {
-        if (getAppSettings().googleAnalyticId == null) {
-            return <></>;
-        }
-
-        return (
-            <>
-                <script async src={`https://www.googletagmanager.com/gtag/js?id=${getAppSettings().googleAnalyticId}`}></script>
-                <script
-                    dangerouslySetInnerHTML={{
-                        __html: `
-                            globalThis.dataLayer = globalThis.dataLayer || [];
-                            function gtag(){dataLayer.push(arguments);}
-                            gtag('js', new Date());
-                            gtag('config', '${getAppSettings().googleAnalyticId}', {
-                            page_path: globalThis.location.pathname,
-                            });
-                        `,
-                    }}
-                />
-            </>
-        );
-    }
-
     render() {
         const { authorizeInfo, isLandscapeMode } = this.state;
-
+        
         if (isLandscapeMode && isMobileOnly) {
             return <LandscapeMode />;
         }
 
-        return authorizeInfo ? (
-            <>
-                <Head>{this.renderGoogleAnalytic()}</Head>
-                {this.renderComponents(authorizeInfo)}
-            </>
-        ) : (
-            <></>
-        );
+        return authorizeInfo ? <>{this.renderComponents(authorizeInfo)}</> : <></>;
     }
 }
 

@@ -12,6 +12,7 @@ import { useClickSound } from "../../../_shared/react-hooks";
 import { Chip } from "./chip";
 import Styles from "./chip-slider.module.scss";
 import { GameConfigs, UserStakeLevel } from "../../game-base/type";
+import { AnalyticsHelper, TrackingAction, TrackingFunction } from "../../../_shared/helpers";
 
 const SlidingTimeInMillisecond = 100;
 const slidesToShow = 5;
@@ -67,6 +68,10 @@ export const ChipSlider: React.FC<{ gameConfigs: GameConfigs; userStakeLevel: Us
                 },
             });
             playClick();
+            AnalyticsHelper.trackFunction({
+                function: TrackingFunction.SelectChip,
+                action: `${TrackingAction.Select}_chip_${chipValue}`,
+            });
         }
     };
 

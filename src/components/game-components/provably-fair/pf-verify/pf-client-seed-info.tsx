@@ -9,6 +9,7 @@ import CopyableTextInput from "../copyable-text-input";
 import Styles from "../provably-fair.module.scss";
 import { useGameStateContext, useGameStatesDispatch } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
 import { GameEventActionType } from "../../../../_shared/react-contexts/game-state-context/game-event-action";
+import { AnalyticsHelper, TrackingAction, TrackingFunction } from "../../../../_shared/helpers";
 
 const PFClientSeedInfoModal: FC<{
     fileNameExport: (data?: any) => string;
@@ -82,6 +83,10 @@ const PFClientSeedInfo: FC<{ fileNameExport: (data?: any) => string }> = ({ file
         link.href = `data:text/csv;charset=utf-8,${encodeURIComponent(data)}`;
         link.download = `${fileNameExport(clientSeedInfo.drawId)}`;
         link.click();
+        AnalyticsHelper.trackFunction({
+            function: TrackingFunction.PFExportClientSeeds,
+            action: TrackingAction.Click,
+        });
     };
 
     return useMemo(

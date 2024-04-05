@@ -1,7 +1,7 @@
 import { isEmpty } from "lodash";
 import Router from "next/router";
 import { createContext, useContext } from "react";
-import { StorageHelper, localStorageKeys } from "../helpers";
+import { AnalyticsHelper, StorageHelper, localStorageKeys } from "../helpers";
 import { GameUtils } from "../helpers/base-64-helper";
 
 export type URLContextModel = {
@@ -38,6 +38,7 @@ export function loadURLContext(): URLContextModel {
 
         globalThis.history.pushState(null, "", globalThis.location?.href.split("?")[0]);
         StorageHelper.set(localStorageKeys.url, contextString);
+        AnalyticsHelper.login(contextFromURL);
     }
 
     return contextFromURL || contextFromLocalStorage;
