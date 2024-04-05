@@ -8,6 +8,11 @@ import { ResourceTypes } from "../../../_shared/resources";
 import Styles from "./hide-toolbar-guide.module.scss";
 
 const HIDE_TOOLBAR_GUIDE_PATH = "./static/images/hide-toolbar-guide";
+
+const ToolbarIcon = ({ name }) => {
+    return <img src={`${HIDE_TOOLBAR_GUIDE_PATH}/${name}.svg`} alt={name} />;
+};
+
 const ToolbarGuide: React.FC = () => {
     const { t } = useTranslator();
     const { session } = usePlayerContext();
@@ -16,9 +21,9 @@ const ToolbarGuide: React.FC = () => {
     const [isEnabledToolbarGuide, setIsEnabledToolbarGuide] = useState(false);
 
     const animIntervalTime = 4;
-    const iconAA = <img src={`${HIDE_TOOLBAR_GUIDE_PATH}/iconAA.svg`} alt="icon-toolbar-guide" />;
-    const iconFullScreen = <img src={`${HIDE_TOOLBAR_GUIDE_PATH}/icon-fullscreen.svg`} alt="icon-toolbar-guide" />;
-    const iconPointer = <img src={`${HIDE_TOOLBAR_GUIDE_PATH}/pointer.svg`} alt="icon-toolbar-guide" />;
+    const iconAA = <ToolbarIcon name="iconAA" />;
+    const iconFullScreen = <ToolbarIcon name="icon-fullscreen" />;
+    const iconPointer = <ToolbarIcon name="pointer" />;
     const animClass = isAnimClass ? "has-anim" : "";
 
     useEffect(() => {
