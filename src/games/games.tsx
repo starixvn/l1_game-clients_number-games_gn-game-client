@@ -20,6 +20,8 @@ import styles from "./games.module.scss";
 import NextBall from "./next-ball/page";
 import { Props } from "./type";
 
+const expectedMobileHeight = 670;
+
 export const Games: React.FC<Props> = ({
     setApiErrorMessage,
     userStakeLevel,
@@ -35,17 +37,25 @@ export const Games: React.FC<Props> = ({
     const contentRef = useRef(null);
     const wrapperContentRef = useRef(null);
     const [dynamicStyles, setDynamicStyles] = useState({});
+    const [scale, setScale] = useState(1);
+
+    // useEffect(() => {
+    //     if (contentRef.current && height !== contentRef.current.offsetHeight && isMobileOnly) {
+    //         setHeight(contentRef.current.offsetHeight);
+    //         setScale(contentRef.current.offsetHeight / expectedMobileHeight);
+    //         setDynamicStyles(shouldShowScroll() ?
+    //             {
+    //                 "overflow-y": 'auto',
+    //                 "overflow-x": 'hidden',
+    //             } : {
+    //                 overflow: 'hidden'
+    //             });
+    //     }
+    // }, [contentRef.current?.getContext]);
 
     useEffect(() => {
-        if (contentRef.current && height !== contentRef.current.offsetHeight && isMobileOnly) {
-            setHeight(contentRef.current.offsetHeight);
-            setDynamicStyles(shouldShowScroll() ?
-                {
-                    "overflow-y": 'auto',
-                    "overflow-x": 'hidden',
-                } : {
-                    overflow: 'hidden'
-                });
+        if (isMobileOnly && shouldShowScroll()) {
+            setScale(window.innerHeight / expectedMobileHeight);
         }
     }, [contentRef.current?.getContext]);
 
@@ -112,7 +122,7 @@ export const Games: React.FC<Props> = ({
         <div ref={wrapperContentRef}
             className={`game-container ${styles["game-wrapper"]} ${styles["open-chips"]}`}
             {...extraProps}
-            style={dynamicStyles}
+            style={{ transform: `scale(${scale})`, transformOrigin: 'top left' }}
         >
             <SystemContextProvider>
                 <div ref={contentRef} className={`${styles["game-list"]} ${isMobileOnly ? styles[isIOS ? "ios-device" : "android-device"] : ""}`}>
