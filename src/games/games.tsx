@@ -49,13 +49,15 @@ export const Games: React.FC<Props> = ({
     useEffect(() => {
         if (contentRef.current && height !== contentRef.current.offsetHeight && isMobileOnly) {
             setHeight(contentRef.current.offsetHeight);
-            onScaleReceive((window.innerHeight - headerRef.current?.offsetHeight) / gamesConstant.standardMobileHeight);
+            if (contentRef.current.offsetHeight > window.innerHeight) {
+                onScaleReceive((window.innerHeight - headerRef.current?.offsetHeight) / gamesConstant.standardMobileHeight);
+            }
         }
     }, [contentRef.current?.getContext, openGameId]);
 
     useEffect(() => {
         setExtraProps(isMobileOnly && !directMode ? mobileSwipeableHandlers : {});
-        onScaleReceive(1);
+        // onScaleReceive(1);
     }, []);
 
     const mobileSwipeableHandlers = useSwipeable({
