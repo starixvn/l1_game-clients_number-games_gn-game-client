@@ -19,7 +19,7 @@ const HeaderTitle: React.FC<Props> = (props) => {
     const headerTitle = `${
         props.isRenderGames
             ? `${t(`${tolgeeNamespace}.game_name_${props.openingGameId}`).toUpperCase()}`
-            : `${t(`${ResourceTypes.SABA_NUMBER}.product_name`)}`.toLocaleUpperCase()
+            : `${t(`${ResourceTypes.SABA_NUMBER}.product_name`)}`
     }`;
 
     return (
