@@ -20,8 +20,11 @@ import styles from "./games.module.scss";
 import NextBall from "./next-ball/page";
 import { Props } from "./type";
 
-const expectedMobileHeight = 670;
-const swipeDuration = 1500;
+const gamesConstant = {
+    standardMobileHeight: 670,
+    swipeDuration: 1500
+}
+
 export const Games: React.FC<Props> = ({
     setApiErrorMessage,
     userStakeLevel,
@@ -37,14 +40,19 @@ export const Games: React.FC<Props> = ({
     const [height, setHeight] = useState(0);
     const contentRef = useRef(null);
     const [stopScroll, setStopScroll] = useState(false);
+    const [extraProps, setExtraProps] = useState({});
 
     useEffect(() => {
         if (contentRef.current && height !== contentRef.current.offsetHeight && isMobileOnly) {
             setHeight(contentRef.current.offsetHeight);
-            onScaleReceive((window.innerHeight - headerRef.current?.offsetHeight) / expectedMobileHeight)
-
+            onScaleReceive((window.innerHeight - headerRef.current?.offsetHeight) / gamesConstant.standardMobileHeight)
         }
     }, [contentRef.current?.getContext, openGameId]);
+
+
+    useEffect(() => {
+        setExtraProps(isMobileOnly && !directMode ? mobileSwipeableHandlers : {});
+    }, []);
 
     const mobileSwipeableHandlers = useSwipeable({
         onSwipedUp: () => {
@@ -55,11 +63,10 @@ export const Games: React.FC<Props> = ({
             swipeableHandler(false, openGameId);
             setStopScroll(true);
         },
-        swipeDuration,
+        swipeDuration: gamesConstant.swipeDuration,
         preventScrollOnSwipe: true,
         trackMouse: true,
     });
-
 
     const gameSound = {
         playPlaceBetSound: usePlaceBetSound(),
@@ -94,8 +101,6 @@ export const Games: React.FC<Props> = ({
                 return null;
         }
     };
-
-    const extraProps = isMobileOnly && !directMode ? mobileSwipeableHandlers : {};
 
     return (
         <div className={`game-container ${styles["game-wrapper"]} ${styles["open-chips"]}`}
