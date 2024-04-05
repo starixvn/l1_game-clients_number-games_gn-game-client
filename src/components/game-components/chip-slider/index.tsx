@@ -32,21 +32,19 @@ export const ChipSlider: React.FC<{ gameConfigs: GameConfigs; userStakeLevel: Us
     }, [gameConfigs?.maxBet, gameConfigs?.minBet, gameConfigs?.chips, userStakeLevel]);
 
     const onClickChip = (chipValue: number) => {
-        if (!isMobileOnly) {
-            const chipIndex = chipValues.indexOf(chipValue);
-            const currentSlide = sliderRef.innerSlider.state.currentSlide;
+        const chipIndex = chipValues.indexOf(chipValue);
+        const currentSlide = sliderRef.innerSlider.state.currentSlide;
 
-            if (chipIndex + 1 - slidesToShow >= currentSlide) {
-                disableSelectChipWhenSliding();
-                isSwipe = false;
-                sliderRef.slickGoTo(chipIndex + 2 - slidesToShow);
-            }
+        if (chipIndex + 1 - slidesToShow >= currentSlide) {
+            disableSelectChipWhenSliding();
+            isSwipe = false;
+            sliderRef.slickGoTo(chipIndex + 2 - slidesToShow);
+        }
 
-            if (chipIndex - 1 <= currentSlide) {
-                disableSelectChipWhenSliding();
-                isSwipe = false;
-                sliderRef.slickGoTo(chipIndex - 1);
-            }
+        if (chipIndex - 1 <= currentSlide) {
+            disableSelectChipWhenSliding();
+            isSwipe = false;
+            sliderRef.slickGoTo(chipIndex - 1);
         }
 
         handleSelectChip(chipValue);
