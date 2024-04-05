@@ -7,7 +7,7 @@ import { useGameContext } from "../react-contexts";
 interface UseResultProps<R> {
     result: R;
     roundState: RoundState;
-    roundHistory: Round<R, object>[];
+    roundHistory: Round<R | object, object>[];
 }
 
 const useResult = <R,>(props: UseResultProps<R>) => {
@@ -15,7 +15,7 @@ const useResult = <R,>(props: UseResultProps<R>) => {
     const { durations } = useGameContext();
     const { gameMessageHandler } = useGameContext();
     const [clientRemainingTime, setClientRemainingTime] = useState(0);
-    const [currentResult, setCurrentResult] = useState<R>();
+    const [currentResult, setCurrentResult] = useState<R | object>(null);
     const [isFirstJoinGame, setIsFirstJoinGame] = useState<boolean>(true);
 
     useEffect(() => {
@@ -40,7 +40,7 @@ const useResult = <R,>(props: UseResultProps<R>) => {
         }
     }, [roundState, roundHistory, result, clientRemainingTime]);
 
-    return currentResult;
+    return currentResult as R;
 };
 
 export default useResult;

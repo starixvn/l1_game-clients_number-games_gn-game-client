@@ -7,11 +7,9 @@ export type NextBallSettlementResult = {
 };
 
 export type NextBallResult = {
-    over?: number;
-    under?: number;
-    odd?: number;
-    even?: number;
-    drawId?: number;
+    ball: number;
+    drawId: number;
+    time: string;
 };
 
 export type Odd = {};
