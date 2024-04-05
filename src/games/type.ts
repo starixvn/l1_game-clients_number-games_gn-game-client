@@ -6,7 +6,8 @@ export type Props = {
     updateUserStakeLevel: Function;
     openGameId: number;
     openGameName: string;
-    userOfferGames: number[];
     directMode: boolean;
     swipeableHandler: Function;
+    headerRef: React.RefObject<HTMLDivElement>;
+    onScaleReceive :Function
 };

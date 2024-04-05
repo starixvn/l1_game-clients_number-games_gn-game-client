@@ -32,6 +32,7 @@ export type State = {
     isOnLobby: boolean;
     lobbySocket: Socket;
     isLandscapeMode: boolean;
+    scale:number;
 };
 
 export type GameOffer = {

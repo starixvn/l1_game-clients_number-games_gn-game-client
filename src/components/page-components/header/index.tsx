@@ -7,6 +7,7 @@ import { UserInfo } from "./user-info";
 type Props = {
     openingGameId: number;
     isRenderGames: boolean;
+    headerRef: React.RefObject<HTMLDivElement>;
 };
 
 export const getLogoName = () => {
@@ -14,10 +15,10 @@ export const getLogoName = () => {
 };
 
 const Header: React.FC<Props> = (props) => {
-    const { isRenderGames, openingGameId } = props;
+    const { isRenderGames, openingGameId, headerRef } = props;
 
     return (
-        <header className={`${Styles.header}`} data-testid="header">
+        <header ref={headerRef} className={`${Styles.header}`} data-testid="header">
             <div className="game-container d-flex">
                 <div className={Styles["header-container"]}>
                     <HeaderTitle isRenderGames={isRenderGames} openingGameId={openingGameId} />

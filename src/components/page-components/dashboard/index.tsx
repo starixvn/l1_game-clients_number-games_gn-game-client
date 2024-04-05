@@ -51,7 +51,7 @@ class Dashboard extends React.PureComponent<Props, State> {
     private reCheckInInterval: NodeJS.Timeout;
     private isKickOut = false;
     private lobbyConnectionHandler: LobbySocketConnection;
-
+    private headerRef = React.createRef<HTMLDivElement>();
     constructor(props: Props) {
         super(props);
 
@@ -70,7 +70,9 @@ class Dashboard extends React.PureComponent<Props, State> {
             isOnLobby: true,
             lobbySocket: null,
             isLandscapeMode: false,
+            scale: 1
         };
+
         this.lobbyConnectionHandler = new LobbySocketConnection();
 
         this.handleRegister = this.handleRegister.bind(this);
@@ -94,6 +96,7 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.updateAvatar = this.updateAvatar.bind(this);
         this.swipeableHandler = this.swipeableHandler.bind(this);
         this.changeOrientation = this.changeOrientation.bind(this);
+        this.handleScaleFromGame = this.handleScaleFromGame.bind(this);
 
         const buildId = process.env.buildVersion;
         const buildVersion = StorageHelper.get(localStorageKeys.buildVersion) ?? 0;
@@ -229,6 +232,10 @@ class Dashboard extends React.PureComponent<Props, State> {
         const backToLobby = urlContextModel.backToLobby || false;
         const ssoRedirectGameId = urlContextModel.gameId || 0;
         return (offerGames.includes(this.state.openGameId) && !backToLobby) || ssoRedirectGameId > 0;
+    }
+
+    handleScaleFromGame(data) {
+        this.setState({ scale: data });
     }
 
     componentDidUpdate() {
@@ -380,13 +387,14 @@ class Dashboard extends React.PureComponent<Props, State> {
         return (
             <Games
                 setApiErrorMessage={this.handleShowApiErrorMessage}
-                userOfferGames={offerGames}
                 userStakeLevel={userStakeLevel}
                 updateUserStakeLevel={this.handleUpdateUserStakeLevel}
                 openGameId={urlContext.gameId}
                 openGameName={openGameName}
                 directMode={this.props.directMode}
                 swipeableHandler={this.swipeableHandler}
+                headerRef={this.headerRef}
+                onScaleReceive={this.handleScaleFromGame}
             />
         );
     }
@@ -452,13 +460,18 @@ class Dashboard extends React.PureComponent<Props, State> {
             <PlayerContextProvider value={authContextValue}>
                 <SettingContextProvider>
                     <LobbyConnectionContextProvider value={lobbyConnectionContextValue}>
-                        <div className={`${Styles["dashboard"]} ${!isRenderGames ? "no-scroll" : ""}`} id={"dashboard"}>
+                        <div style={{
+                            transform: `scale(${this.state.scale})`,
+                            transformOrigin: 'top center',
+                            height: `100dvh`,
+                        }} className={`${Styles["dashboard"]} ${!isRenderGames ? "no-scroll" : ""}`} id={"dashboard"}>
                             {allowSwipeGameOndDesktop && (
                                 <button className={`${Styles["prev-button"]}`} onClick={() => this.swipeableHandler(true, openGameId)}>
                                     <span className={`icon-back ${Styles["icon"]}`}></span>
                                 </button>
                             )}
-                            <Header openingGameId={openGameId} isRenderGames={isRenderGames} />
+                            <div > <Header headerRef={this.headerRef} openingGameId={openGameId} isRenderGames={isRenderGames} /></div>
+
                             {isRenderGames ? this.renderGames() : this.renderLobby()}
                             {allowSwipeGameOndDesktop && (
                                 <button className={`${Styles["next-button"]}`} onClick={() => this.swipeableHandler(false, openGameId)}>

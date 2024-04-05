@@ -27,22 +27,23 @@ export const Games: React.FC<Props> = ({
     userStakeLevel,
     updateUserStakeLevel,
     openGameId,
-    userOfferGames,
     directMode,
     swipeableHandler,
+    headerRef,
+    onScaleReceive
 }) => {
     const { theme } = useTheme();
     const locale = tolgee.getLanguage();
     const [height, setHeight] = useState(0);
     const contentRef = useRef(null);
     const wrapperContentRef = useRef(null);
-    const [scale, setScale] = useState(1);
     const [stopScroll, setStopScroll] = useState(false);
 
     useEffect(() => {
         if (contentRef.current && height !== contentRef.current.offsetHeight && isMobileOnly) {
             setHeight(contentRef.current.offsetHeight);
-            setScale((window.innerHeight - remToPx(3.2)) / expectedMobileHeight);
+            onScaleReceive((window.innerHeight - headerRef.current?.offsetHeight) / expectedMobileHeight)
+
         }
     }, [contentRef.current?.getContext, openGameId]);
 
@@ -59,13 +60,7 @@ export const Games: React.FC<Props> = ({
         preventScrollOnSwipe: true,
         trackMouse: true,
     });
-    const remToPx = (rem) => {
-        // Get the font-size of the root element (<html>)
-        const rootFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize);
 
-        // Convert the rem value to px and return it
-        return rem * rootFontSize;
-    }
 
     const gameSound = {
         playPlaceBetSound: usePlaceBetSound(),
@@ -109,9 +104,9 @@ export const Games: React.FC<Props> = ({
             {...extraProps}
             style={{
                 touchAction: stopScroll ? "none" : "auto",
-                transform: `scale(${scale})`,
-                transformOrigin: 'top center',
-                height: `100dvh`,
+                // transform: `scale(${scale})`,
+                // transformOrigin: 'top center',
+                // height: `100dvh`,
             }}
         >
             <SystemContextProvider>
