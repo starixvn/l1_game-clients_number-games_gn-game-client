@@ -70,8 +70,7 @@ class Dashboard extends React.PureComponent<Props, State> {
             isOnLobby: true,
             lobbySocket: null,
             isLandscapeMode: false,
-            scale: 1,
-            dynamicStyle: {}
+            dynamicStyle: {},
         };
 
         this.lobbyConnectionHandler = new LobbySocketConnection();
