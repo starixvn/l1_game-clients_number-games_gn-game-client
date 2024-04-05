@@ -70,7 +70,8 @@ class Dashboard extends React.PureComponent<Props, State> {
             isOnLobby: true,
             lobbySocket: null,
             isLandscapeMode: false,
-            scale: 1
+            scale: 1,
+            dynamicStyle: {}
         };
 
         this.lobbyConnectionHandler = new LobbySocketConnection();
@@ -235,7 +236,13 @@ class Dashboard extends React.PureComponent<Props, State> {
     }
 
     handleScaleFromGame(scale: number) {
-        this.setState({ scale });
+        const dynamicStyle = isMobileOnly ? {
+            transform: `scale(${scale})`,
+            transformOrigin: 'top center',
+            height: `100dvh`,
+        } : {};
+
+        this.setState({ dynamicStyle });
     }
 
     componentDidUpdate() {
@@ -433,7 +440,7 @@ class Dashboard extends React.PureComponent<Props, State> {
     renderDashBoard() {
         window.history.pushState(null, null, "/");
 
-        const { isShowErrorModal, authorizeInfo, isBlockUI, openGameId, scale } = this.state;
+        const { isShowErrorModal, authorizeInfo, isBlockUI, openGameId, dynamicStyle } = this.state;
         const authContextValue = {
             authorizeInfo: authorizeInfo,
             session: this.props.session,
@@ -455,15 +462,13 @@ class Dashboard extends React.PureComponent<Props, State> {
             reconnectGameTransmitter: this.reconnectGameTransmitter,
         };
 
+        const scaleExtraProps = isRenderGames ? dynamicStyle : {};
+
         return (
             <PlayerContextProvider value={authContextValue}>
                 <SettingContextProvider>
                     <LobbyConnectionContextProvider value={lobbyConnectionContextValue}>
-                        <div style={{
-                            transform: `scale(${isRenderGames ? this.state.scale : 1})`,
-                            transformOrigin: 'top center',
-                            height: `100dvh`,
-                        }} className={`${Styles["dashboard"]} ${!isRenderGames ? "no-scroll" : ""}`} id={"dashboard"}>
+                        <div style={{ ...scaleExtraProps }} className={`${Styles["dashboard"]} ${!isRenderGames ? "no-scroll" : ""}`} id={"dashboard"}>
                             {allowSwipeGameOndDesktop && (
                                 <button className={`${Styles["prev-button"]}`} onClick={() => this.swipeableHandler(true, openGameId)}>
                                     <span className={`icon-back ${Styles["icon"]}`}></span>

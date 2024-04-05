@@ -33,6 +33,7 @@ export type State = {
     lobbySocket: Socket;
     isLandscapeMode: boolean;
     scale:number;
+    dynamicStyle:object;
 };
 
 export type GameOffer = {
