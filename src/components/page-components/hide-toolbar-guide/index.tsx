@@ -1,20 +1,38 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { isMobileOnly, isSafari } from "react-device-detect";
 
+import { StorageHelper, localStorageKeys } from "../../../_shared/helpers";
+import { usePlayerContext } from "../../../_shared/react-contexts";
 import { useTranslator } from "../../../_shared/react-hooks/use-translator";
 import { ResourceTypes } from "../../../_shared/resources";
 import Styles from "./hide-toolbar-guide.module.scss";
-import { StorageHelper, localStorageKeys } from "../../../_shared/helpers";
 
-const ToolbarGuide: React.FC<{
-    isShowToolbarGuide: boolean;
-    onCloseGuide: Function;
-}> = ({ isShowToolbarGuide, onCloseGuide }) => {
+const HIDE_TOOLBAR_GUIDE_PATH = "./static/images/hide-toolbar-guide";
+const ToolbarGuide: React.FC = () => {
     const { t } = useTranslator();
+    const { session } = usePlayerContext();
+
     const [isAnimClass, setIsAnimClass] = useState(true);
+    const [isEnabledToolbarGuide, setIsEnabledToolbarGuide] = useState(false);
+
     const animIntervalTime = 4;
-    const iconAA = <img src="./static/images/hide-toolbar-guide/iconAA.svg" alt="icon-toolbar-guide" />;
-    const iconFullScreen = <img src="./static/images/hide-toolbar-guide/icon-fullscreen.svg" alt="icon-toolbar-guide" />;
-    const iconPointer = <img src="./static/images/hide-toolbar-guide/pointer.svg" alt="icon-toolbar-guide" />;
+    const iconAA = <img src={`${HIDE_TOOLBAR_GUIDE_PATH}/iconAA.svg`} alt="icon-toolbar-guide" />;
+    const iconFullScreen = <img src={`${HIDE_TOOLBAR_GUIDE_PATH}/icon-fullscreen.svg`} alt="icon-toolbar-guide" />;
+    const iconPointer = <img src={`${HIDE_TOOLBAR_GUIDE_PATH}/pointer.svg`} alt="icon-toolbar-guide" />;
+    const animClass = isAnimClass ? "has-anim" : "";
+
+    useEffect(() => {
+        const isStorageHideGuide = StorageHelper.get(localStorageKeys.hideToolbarGuide) ?? false;
+        const currentSessionHideToolbarGuide = StorageHelper.get(localStorageKeys.currentSessionHideToolbarGuide) ?? false;
+
+        if (isStorageHideGuide) {
+            return;
+        }
+
+        if (currentSessionHideToolbarGuide !== session?.ss) {
+            setIsEnabledToolbarGuide(true);
+        }
+    }, []);
 
     useEffect(() => {
         const playAnimInterval = setInterval(() => {
@@ -26,20 +44,23 @@ const ToolbarGuide: React.FC<{
         };
     }, [isAnimClass]);
 
-    const handleTurnOffGuide = () => {
-        onCloseGuide();
-        StorageHelper.set(localStorageKeys.hideToolbarGuide, false);
+    const handleDoNotShowAgain = () => {
+        handleClose();
+        StorageHelper.set(localStorageKeys.hideToolbarGuide, true);
     };
 
-    const closeGuide = () => {
-        onCloseGuide();
+    const handleClose = () => {
+        setIsEnabledToolbarGuide(false);
+        StorageHelper.set(localStorageKeys.currentSessionHideToolbarGuide, session?.ss);
     };
-
-    const animClass = isAnimClass ? "has-anim" : "";
 
     return useMemo(() => {
+        if (!isMobileOnly && !isSafari) {
+            return <></>;
+        }
+
         return (
-            isShowToolbarGuide && (
+            isEnabledToolbarGuide && (
                 <div className={`${Styles["toolbar-guide-container"]} ${Styles[animClass]}`}>
                     <div className={Styles["toolbar-guide-content"]}>
                         <div className={Styles["toolbar-guide-title"]}>{t(`${ResourceTypes.SABA_NUMBER}.lobby_fullscreen`)}</div>
@@ -74,10 +95,10 @@ const ToolbarGuide: React.FC<{
                             <span className={Styles["icon-pointer"]}>{iconPointer}</span>
                         </div>
                         <div className={Styles["button-group"]}>
-                            <button className="btn-grey" onClick={closeGuide}>
+                            <button className="btn-grey" onClick={handleClose}>
                                 {t(`${ResourceTypes.SABA_NUMBER}.button_close`)}
                             </button>
-                            <button className="btn-orange" onClick={handleTurnOffGuide}>
+                            <button className="btn-orange" onClick={handleDoNotShowAgain}>
                                 {t(`${ResourceTypes.SABA_NUMBER}.button_donot_show`)}
                             </button>
                         </div>
@@ -85,7 +106,7 @@ const ToolbarGuide: React.FC<{
                 </div>
             )
         );
-    }, [isShowToolbarGuide, isAnimClass]);
+    }, [isEnabledToolbarGuide, isAnimClass]);
 };
 
 export default ToolbarGuide;

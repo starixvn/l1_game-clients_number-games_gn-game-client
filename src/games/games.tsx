@@ -1,11 +1,12 @@
 import { useTheme } from "next-themes";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { isIOS, isMobileOnly } from "react-device-detect";
 import { useSwipeable } from "react-swipeable";
 
+import dynamic from "next/dynamic";
 import { getAppSettings } from "../_shared/app-settings";
 import { GameIds } from "../_shared/constants";
-import { SystemContextProvider } from "../_shared/react-contexts";
+import { SystemContextProvider, URLContext } from "../_shared/react-contexts";
 import {
     usePlaceBetSound,
     useReceiveFinishSound,
@@ -20,10 +21,12 @@ import styles from "./games.module.scss";
 import NextBall from "./next-ball/page";
 import { Props } from "./type";
 
+const ToolbarGuide = dynamic(() => import("../components/page-components/hide-toolbar-guide"));
+
 const gamesConstant = {
     standardMobileHeight: 670,
-    swipeDuration: 1500
-}
+    swipeDuration: 1500,
+};
 
 export const Games: React.FC<Props> = ({
     setApiErrorMessage,
@@ -33,8 +36,9 @@ export const Games: React.FC<Props> = ({
     directMode,
     swipeableHandler,
     headerRef,
-    onScaleReceive
+    onScaleReceive,
 }) => {
+    const { isDirectMode } = useContext(URLContext);
     const { theme } = useTheme();
     const locale = tolgee.getLanguage();
     const [height, setHeight] = useState(0);
@@ -45,10 +49,9 @@ export const Games: React.FC<Props> = ({
     useEffect(() => {
         if (contentRef.current && height !== contentRef.current.offsetHeight && isMobileOnly) {
             setHeight(contentRef.current.offsetHeight);
-            onScaleReceive((window.innerHeight - headerRef.current?.offsetHeight) / gamesConstant.standardMobileHeight)
+            onScaleReceive((window.innerHeight - headerRef.current?.offsetHeight) / gamesConstant.standardMobileHeight);
         }
     }, [contentRef.current?.getContext, openGameId]);
-
 
     useEffect(() => {
         setExtraProps(isMobileOnly && !directMode ? mobileSwipeableHandlers : {});
@@ -104,13 +107,19 @@ export const Games: React.FC<Props> = ({
     };
 
     return (
-        <div className={`game-container ${styles["game-wrapper"]} ${styles["open-chips"]}`}
+        <div
+            className={`game-container ${styles["game-wrapper"]} ${styles["open-chips"]}`}
             {...extraProps}
             style={{ touchAction: stopScroll ? "none" : "auto" }}
         >
             <SystemContextProvider>
-                <div ref={contentRef} className={`${styles["game-list"]} ${isMobileOnly ? styles[isIOS ? "ios-device" : "android-device"] : ""}`}>
+                <div
+                    ref={contentRef}
+                    className={`${styles["game-list"]} ${isMobileOnly ? styles[isIOS ? "ios-device" : "android-device"] : ""}`}
+                >
                     <BackgroundGalaxy />
+                    {isDirectMode && <ToolbarGuide />}
+
                     {getGameComponentById(openGameId)}
                 </div>
             </SystemContextProvider>

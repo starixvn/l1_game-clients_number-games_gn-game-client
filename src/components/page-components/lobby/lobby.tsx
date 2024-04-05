@@ -1,16 +1,14 @@
+import dynamic from "next/dynamic";
 import { Socket } from "socket.io-client";
 import { BackgroundGalaxy } from "../background";
 import { ILobbyConfigs } from "../dashboard/type";
-import ChangeAvatar from "../header/change-avatar";
-import MusicPlayer from "../music-player";
-import Settings from "../settings";
 import { Banner } from "./games/components/banner";
 import { LobbyLayout } from "./games/lobby-layout";
 import Styles from "./lobby.module.scss";
-import ToolbarGuide from "../hide-toolbar-guide";
-import { useState } from "react";
-import { StorageHelper, localStorageKeys } from "../../../_shared/helpers";
-import { isMobileOnly, isSafari } from "react-device-detect";
+
+const Settings = dynamic(() => import("../settings"));
+const ChangeAvatar = dynamic(() => import("../header/change-avatar"));
+const ToolbarGuide = dynamic(() => import("../hide-toolbar-guide"));
 
 type Props = {
     openGame: Function;
@@ -20,12 +18,6 @@ type Props = {
 };
 
 export const Lobby: React.FC<Props> = ({ openGame, lobbyConfigs, socket, gameTransmitters }) => {
-    const [enabledToolbarGuide, setEnabledToolbarGuide] = useState(StorageHelper.get(localStorageKeys.hideToolbarGuide) ?? true);
-
-    const closeToolbarGuide = () => {
-        setEnabledToolbarGuide(false);
-    };
-
     return (
         <div className={Styles["lobby-container"]}>
             <BackgroundGalaxy />
@@ -33,7 +25,7 @@ export const Lobby: React.FC<Props> = ({ openGame, lobbyConfigs, socket, gameTra
             <LobbyLayout lobbyConfigs={lobbyConfigs} socket={socket} gameTransmitters={gameTransmitters} openGame={openGame} />
             <Settings />
             <ChangeAvatar />
-            {isMobileOnly && isSafari && <ToolbarGuide isShowToolbarGuide={enabledToolbarGuide} onCloseGuide={closeToolbarGuide} />}
+            <ToolbarGuide />
         </div>
     );
 };
