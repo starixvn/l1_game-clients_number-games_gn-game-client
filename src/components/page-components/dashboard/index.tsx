@@ -216,6 +216,7 @@ class Dashboard extends React.PureComponent<Props, State> {
         }, 60 * 1000);
 
         if (isMobile) {
+            this.changeOrientation();
             window.addEventListener("resize", this.changeOrientation);
         }
 
