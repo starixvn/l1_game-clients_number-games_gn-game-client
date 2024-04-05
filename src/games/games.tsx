@@ -124,6 +124,7 @@ export const Games: React.FC<Props> = ({
                     {getGameComponentById(openGameId)}
                 </div>
             </SystemContextProvider>
+            <Footer />
         </div>
     );
 };

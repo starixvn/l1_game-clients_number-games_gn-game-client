@@ -482,7 +482,7 @@ class Dashboard extends React.PureComponent<Props, State> {
                                     <span className={`icon-back ${Styles["icon"]}`}></span>
                                 </button>
                             )}
-                            <Footer />
+                            {!isRenderGames && <Footer />}
                             <MusicPlayer />
 
                             {isShowErrorModal && (
