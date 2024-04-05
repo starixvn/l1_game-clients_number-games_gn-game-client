@@ -102,7 +102,7 @@ const PFVerification: FC = () => {
             )}
 
             <div className={Styles["client-seed-form"]}>
-                <div className="flex justify-between items-center">
+                <div className="flex items-center gap-4">
                     <h3 className={`${Styles["section-title"]} m-0 ${Styles["title-fix-width"]}`}>
                         {translateCommon("pf_verification_para_1")}
                     </h3>

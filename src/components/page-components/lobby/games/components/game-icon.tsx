@@ -3,6 +3,7 @@ import { OnlinePlayer } from "./online-player";
 import { useTranslator } from "../../../../../_shared/react-hooks";
 import { GameSettings } from "../../../../game-base/type";
 import { LobbyGameTransmitter } from "../../lobby-socket-connection";
+import { buildVersion } from "../../../../../_shared/constants";
 
 type Props = {
     gameSettings: GameSettings;
@@ -10,14 +11,11 @@ type Props = {
 };
 
 export const GameIcon: React.FC<Props> = ({ gameSettings, transmitter }) => {
-    const { tolgeeNamespace, gameName, id } = gameSettings;
-    const { t } = useTranslator([tolgeeNamespace]);
+    const { gameName } = gameSettings;
 
     return (
         <div className={`${Styles["icon-game"]} ${Styles[gameName.toLowerCase()]}`}>
-            <img src={`/static/images/lobby/game-board-detail/icon-${gameName.toLowerCase()}.png`} alt="icon-game" />
-
-            {/* <span className={`${Styles["game-name"]}`}>{t(`game_icon_name_${id}`)}</span> */}
+            <img src={`/static/images/lobby/game-board-detail/icon-${gameName.toLowerCase()}.png?v=${buildVersion}`} alt="icon-game" />
             <OnlinePlayer transmitter={transmitter} />
         </div>
     );
