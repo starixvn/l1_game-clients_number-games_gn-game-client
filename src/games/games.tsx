@@ -41,7 +41,13 @@ export const Games: React.FC<Props> = ({
         if (contentRef.current && height !== contentRef.current.offsetHeight && isMobileOnly) {
             setHeight(contentRef.current.offsetHeight);
             setStopScroll(shouldShowScroll());
-            setDynamicStyles({ "overflow-y": shouldShowScroll() ? 'auto' : 'hidden' });
+            setDynamicStyles(shouldShowScroll() ?
+                {
+                    "overflow-y": 'auto',
+                    "overflow-x": 'hidden',
+                } : {
+                    overflow: 'hidden'
+                });
         }
     }, [contentRef.current?.getContext]);
 
