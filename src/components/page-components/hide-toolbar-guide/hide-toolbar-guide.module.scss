@@ -121,6 +121,11 @@
         }
     }
 }
+
+.text-icon-aa > img {
+    margin-top: -0.5rem;
+}
+
 .icon-pointer {
     position: absolute;
     left: 2.5rem;
@@ -165,15 +170,19 @@
 
 .has-anim {
     .icon-pointer {
-        animation: pointerMoving 3s forwards;
+        animation: pointerMoving 2s forwards;
     }
 
-    .icon-aa::before {
-        animation: hideCircle 0.5s 1s forwards;
+    .icon-aa {
+        animation: pulseText 0.5s 0.5s forwards;
+
+        &::before {
+            animation: hideCircle 0.5s 1s forwards;
+        }
     }
 
     .hide-toolbar {
-        animation: moveDown 0.5s 1s forwards, changeBackground 1.5s 2.5s forwards, hideContextMenu 0.5s 3s forwards;
+        animation: moveDown 0.5s 1s forwards, changeBackground 1.5s 2s forwards, hideContextMenu 0.5s 3s forwards;
     }
 
     .toolbar-container {
@@ -185,7 +194,8 @@
     0% {
         transform: translateY(0);
     }
-    50% {
+    30%,
+    80% {
         transform: translateY(1rem);
     }
     100% {
@@ -254,7 +264,20 @@
     0% {
         opacity: 1;
     }
+
     100% {
         opacity: 0;
+    }
+}
+
+@keyframes pulseText {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
     }
 }

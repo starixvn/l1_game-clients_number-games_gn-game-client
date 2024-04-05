@@ -11,7 +11,7 @@ const ToolbarGuide: React.FC<{
 }> = ({ isShowToolbarGuide, onCloseGuide }) => {
     const { t } = useTranslator();
     const [isAnimClass, setIsAnimClass] = useState(true);
-    const animIntervalTime = 5;
+    const animIntervalTime = 4;
     const iconAA = <img src="./static/images/hide-toolbar-guide/iconAA.svg" alt="icon-toolbar-guide" />;
     const iconFullScreen = <img src="./static/images/hide-toolbar-guide/icon-fullscreen.svg" alt="icon-toolbar-guide" />;
     const iconPointer = <img src="./static/images/hide-toolbar-guide/pointer.svg" alt="icon-toolbar-guide" />;
@@ -54,7 +54,9 @@ const ToolbarGuide: React.FC<{
                             <div className={`flex ${Styles["iphone-step"]}`}>
                                 <span className={Styles["step-number"]}>1</span>
                                 <p className={Styles["step-text"]}>
-                                    {t(`${ResourceTypes.SABA_NUMBER}.fullscreen_guide_1`, { icon: iconAA })}
+                                    <span className={Styles["text-icon-aa"]}>
+                                        {t(`${ResourceTypes.SABA_NUMBER}.fullscreen_guide_1`, { icon: iconAA })}
+                                    </span>
                                 </p>
                                 <span className={Styles["step-number"]}>2</span>
                                 <p className={Styles["step-text"]}>{t(`${ResourceTypes.SABA_NUMBER}.fullscreen_guide_2`)}</p>
