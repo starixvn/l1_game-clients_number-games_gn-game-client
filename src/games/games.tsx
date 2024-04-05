@@ -57,7 +57,6 @@ export const Games: React.FC<Props> = ({
 
     useEffect(() => {
         setExtraProps(isMobileOnly && !directMode ? mobileSwipeableHandlers : {});
-        // onScaleReceive(1);
     }, []);
 
     const mobileSwipeableHandlers = useSwipeable({
