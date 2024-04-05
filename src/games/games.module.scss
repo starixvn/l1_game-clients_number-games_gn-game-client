@@ -26,7 +26,7 @@
 .game-container {
     border-bottom: 0.1rem solid var(--game-category-border);
     background: var(--game-category-background);
-    overflow-x: auto;
+    // overflow-x: auto;
     z-index: calc(var(--header-index) - 1);
 }
 
