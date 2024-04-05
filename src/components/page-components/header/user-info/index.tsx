@@ -54,7 +54,7 @@ export const UserInfo: React.FC<{
                 </div>
                 <div key={user.red} className={`${Styles.balance}`} data-testid="balance">
                     <span id="user-info_balance" className={Styles["balance-text"]}>
-                        {numberRoundDownWithCommas(user.red ? user.red : 0)}
+                        {`${numberRoundDownWithCommas(user.red ? user.red : 0)} ${user.isDisplayPlayerCurrency ? user.currency : ""}`}
                     </span>
 
                     <img src="/static/images/icon-coin.svg" className="img-fluid" alt="icon-coin" />
