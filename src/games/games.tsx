@@ -1,5 +1,5 @@
 import { useTheme } from "next-themes";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { isIOS, isMobileOnly } from "react-device-detect";
 import { useSwipeable } from "react-swipeable";
 
@@ -31,10 +31,26 @@ export const Games: React.FC<Props> = ({
 }) => {
     const { theme } = useTheme();
     const locale = tolgee.getLanguage();
-    const [stopScroll, setStopScroll] = useState(false);
+    const [height, setHeight] = useState(0);
     const contentRef = useRef(null);
+    const wrapperContentRef = useRef(null);
+    const [dynamicStyles, setDynamicStyles] = useState({});
 
-    const isShowScroll = () => {
+    useEffect(() => {
+        if (contentRef.current && height !== contentRef.current.offsetHeight && isMobileOnly) {
+            setHeight(contentRef.current.offsetHeight);
+            setDynamicStyles(shouldShowScroll() ?
+                {
+                    overflow: 'auto',
+                    height: '100%',
+                } : {
+                    overflow: 'hidden',
+                    height: 'auto',
+                });
+        }
+    }, [contentRef.current?.getContext]);
+
+    const shouldShowScroll = () => {
         if (contentRef.current) {
             return contentRef.current.offsetHeight > window.innerHeight;
         }
@@ -42,21 +58,16 @@ export const Games: React.FC<Props> = ({
         return false;
     }
 
+    const swipeableHandlerWithCheckScroll = (isUp: boolean) => {
+        if (shouldShowScroll()) {
+            return;
+        }
+        swipeableHandler(isUp, openGameId);
+    }
+
     const mobileSwipeableHandlers = useSwipeable({
-        onSwipedUp: () => {
-            if (isShowScroll()) {
-                return;
-            }
-            swipeableHandler(true, openGameId);
-            setStopScroll(true);
-        },
-        onSwipedDown: () => {
-            if (isShowScroll()) {
-                return;
-            }
-            swipeableHandler(false, openGameId);
-            setStopScroll(true);
-        },
+        onSwipedUp: () => swipeableHandlerWithCheckScroll(true),
+        onSwipedDown: () => swipeableHandlerWithCheckScroll(false),
         swipeDuration: 500,
         preventScrollOnSwipe: true,
         trackMouse: true,
@@ -99,10 +110,10 @@ export const Games: React.FC<Props> = ({
     const extraProps = isMobileOnly && !directMode ? mobileSwipeableHandlers : {};
 
     return (
-        <div
+        <div ref={wrapperContentRef}
             className={`game-container ${styles["game-wrapper"]} ${styles["open-chips"]}`}
             {...extraProps}
-            style={{ touchAction: stopScroll ? "none" : "auto" }}
+            style={dynamicStyles}
         >
             <SystemContextProvider>
                 <div ref={contentRef} className={`${styles["game-list"]} ${isMobileOnly ? styles[isIOS ? "ios-device" : "android-device"] : ""}`}>
