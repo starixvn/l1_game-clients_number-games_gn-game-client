@@ -35,12 +35,10 @@ export const Games: React.FC<Props> = ({
     const contentRef = useRef(null);
     const wrapperContentRef = useRef(null);
     const [dynamicStyles, setDynamicStyles] = useState({});
-    const [stopScroll, setStopScroll] = useState(false);
 
     useEffect(() => {
         if (contentRef.current && height !== contentRef.current.offsetHeight && isMobileOnly) {
             setHeight(contentRef.current.offsetHeight);
-            setStopScroll(shouldShowScroll());
             setDynamicStyles(shouldShowScroll() ?
                 {
                     "overflow-y": 'auto',
