@@ -46,7 +46,6 @@ import { MAX_AVATAR_ID } from "./register/avatar-gallery";
 import NameGenerator from "./register/name-generator";
 import { ILobbyConfigs, Props, State } from "./type";
 
-const LandscapeModes = ["landscape-primary", "landscape-secondary"];
 class Dashboard extends React.PureComponent<Props, State> {
     private notificationSocket: Socket = null;
     private reCheckInInterval: NodeJS.Timeout;
@@ -179,7 +178,7 @@ class Dashboard extends React.PureComponent<Props, State> {
 
     changeOrientation() {
         setTimeout(() => {
-            const isLandscapeMode = LandscapeModes.includes(screen.orientation.type);
+            const isLandscapeMode = window.innerHeight < window.innerWidth;
             this.setState({ isLandscapeMode });
         }, 100);
     }
@@ -217,7 +216,7 @@ class Dashboard extends React.PureComponent<Props, State> {
         }, 60 * 1000);
 
         if (isMobile) {
-            screen.orientation.addEventListener("change", this.changeOrientation);
+            window.addEventListener("resize", this.changeOrientation);
         }
 
         this.connectNotificationSocket();
