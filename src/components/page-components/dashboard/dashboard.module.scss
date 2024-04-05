@@ -68,12 +68,17 @@
     outline: none;
     border: none;
     cursor: pointer;
+    transition: background 0.2s ease-in-out;
 
     .icon {
         position: relative;
         top: 0.1rem;
         left: -0.1rem;
         font-size: 1.4rem;
+    }
+
+    &:hover {
+        background: rgba(3, 19, 27, 0.5);
     }
 }
 
