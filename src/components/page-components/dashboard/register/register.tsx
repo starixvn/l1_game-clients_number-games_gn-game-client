@@ -102,24 +102,23 @@ export class Register extends Component<RegisterProps, RegisterState> {
 
                 <ProfilePicture avatarId={avatar} isEditable={true} onClick={this.toggleAvatarGallery.bind(this)} />
 
-                {!isValidUsername && (
-                    <div className={styles.hint}>
-                        <BaseDialog type={ModalType.Center} isOpen={isGalleryOpened}>
-                            <div
-                                className={`icon-close ${styles["icon-close-hint"]}`}
-                                onClick={this.toggleUsernameValidation.bind(this)}
-                            ></div>
-                            <div className={styles["hint-content"]}>
-                                <ul className={styles["note"]}>
-                                    <li>{t("Common.message_nickname_distance")}</li>
-                                    <li>{t("Common.message_nickname_character")}</li>
-                                </ul>
-                            </div>
-                        </BaseDialog>
-                    </div>
-                )}
-
                 <form className={styles.form} onSubmit={this.submit.bind(this)}>
+                    {!isValidUsername && (
+                        <div className={styles.hint}>
+                            <BaseDialog type={ModalType.Center} isOpen={isGalleryOpened}>
+                                <div
+                                    className={`icon-close ${styles["icon-close-hint"]}`}
+                                    onClick={this.toggleUsernameValidation.bind(this)}
+                                ></div>
+                                <div className={styles["hint-content"]}>
+                                    <ul className={styles["note"]}>
+                                        <li>{t("Common.message_nickname_distance")}</li>
+                                        <li>{t("Common.message_nickname_character")}</li>
+                                    </ul>
+                                </div>
+                            </BaseDialog>
+                        </div>
+                    )}
                     <label className={styles.title}>{t("SabaNumber.lobby_create_nickname")}</label>
 
                     <div className={styles.username}>

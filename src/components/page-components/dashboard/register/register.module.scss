@@ -114,15 +114,12 @@
 
 .hint {
     position: absolute;
-    left: 50%;
-    top: 11.3rem;
     width: 100%;
-    min-height: 11.6rem;
     padding: 1.2rem 4rem 1.2rem 1.2rem;
     border-radius: 1.6rem;
     border: 0.1rem solid #6574ae;
     box-shadow: 0 0 3.6rem rgb(0 0 0 / 25%);
-    transform: translate(-50%, 0);
+    transform: translateY(-85%);
     background-color: #283a7e;
     z-index: 2;
 
