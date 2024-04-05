@@ -21,7 +21,7 @@ import NextBall from "./next-ball/page";
 import { Props } from "./type";
 
 const expectedMobileHeight = 670;
-
+const swipeDuration = 1500;
 export const Games: React.FC<Props> = ({
     setApiErrorMessage,
     userStakeLevel,
@@ -36,7 +36,6 @@ export const Games: React.FC<Props> = ({
     const locale = tolgee.getLanguage();
     const [height, setHeight] = useState(0);
     const contentRef = useRef(null);
-    const wrapperContentRef = useRef(null);
     const [stopScroll, setStopScroll] = useState(false);
 
     useEffect(() => {
@@ -56,7 +55,7 @@ export const Games: React.FC<Props> = ({
             swipeableHandler(false, openGameId);
             setStopScroll(true);
         },
-        swipeDuration: 500,
+        swipeDuration,
         preventScrollOnSwipe: true,
         trackMouse: true,
     });
@@ -99,15 +98,9 @@ export const Games: React.FC<Props> = ({
     const extraProps = isMobileOnly && !directMode ? mobileSwipeableHandlers : {};
 
     return (
-        <div ref={wrapperContentRef}
-            className={`game-container ${styles["game-wrapper"]} ${styles["open-chips"]}`}
+        <div className={`game-container ${styles["game-wrapper"]} ${styles["open-chips"]}`}
             {...extraProps}
-            style={{
-                touchAction: stopScroll ? "none" : "auto",
-                // transform: `scale(${scale})`,
-                // transformOrigin: 'top center',
-                // height: `100dvh`,
-            }}
+            style={{ touchAction: stopScroll ? "none" : "auto" }}
         >
             <SystemContextProvider>
                 <div ref={contentRef} className={`${styles["game-list"]} ${isMobileOnly ? styles[isIOS ? "ios-device" : "android-device"] : ""}`}>
