@@ -6,6 +6,7 @@ import { useClickSound } from "../../../_shared/react-hooks";
 import { Chip } from "./chip";
 import Styles from "./chip-slider.module.scss";
 import { GameConfigs, UserStakeLevel } from "../../game-base/type";
+import { getChipSettings } from "../../../services/user-setting-service";
 
 const SlidingTimeInMillisecond = 100;
 const slidesToShow = 5;
@@ -18,6 +19,8 @@ export const ChipSlider: React.FC<{ gameConfigs: GameConfigs; userStakeLevel: Us
     const { selectedChip } = systemContext;
     const [enabledPrevBtn, setEnabledPrevBtn] = useState(false);
     const [enabledNextBtn, setEnabledNextBtn] = useState(true);
+    const { session } = usePlayerContext();
+    const [chipSettings, setChipSettings] = useState([]);
 
     const [isSliding, setIsSliding] = useState(false);
     let sliderRef = null;
@@ -117,6 +120,17 @@ export const ChipSlider: React.FC<{ gameConfigs: GameConfigs; userStakeLevel: Us
         }
     }, []);
 
+    useEffect(() => {
+        (async () => {
+            const chipSettings = await getChipSettings(session);
+            setChipSettings(chipSettings?.chips);
+        })();
+    }, []);
+
+    const findChipSetting = (value) => {
+        return chipSettings?.find((c) => c.value === value);
+    };
+
     const SliderSetting = {
         speed: SlidingTimeInMillisecond,
         infinite: false,
@@ -134,6 +148,7 @@ export const ChipSlider: React.FC<{ gameConfigs: GameConfigs; userStakeLevel: Us
             }
         },
     };
+
     return (
         <>
             <span
@@ -149,7 +164,13 @@ export const ChipSlider: React.FC<{ gameConfigs: GameConfigs; userStakeLevel: Us
                     {...SliderSetting}
                 >
                     {chipValues.map((value) => (
-                        <Chip key={+value} value={+value} onClickChip={onClickChip} />
+                        <Chip
+                            key={+value}
+                            value={+value}
+                            text={findChipSetting(value)?.text}
+                            image={findChipSetting(value)?.color}
+                            onClickChip={onClickChip}
+                        />
                     ))}
                 </Slider>
             )}

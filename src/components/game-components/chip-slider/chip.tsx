@@ -1,11 +1,16 @@
 import React from "react";
-import { ChipLabelMapper, ChipMapper, systemName } from "../../../_shared/constants";
+import { ChipMapper, systemName } from "../../../_shared/constants";
 import { usePlayerContext, useSystemContext } from "../../../_shared/react-contexts";
 import Styles from "./chip-slider.module.scss";
 
-const defaultChip = "chip";
+const defaultChipImage = "#b1b1b1";
 
-export const Chip: React.FC<{ value: number; onClickChip: Function }> = ({ value, onClickChip }) => {
+export const Chip: React.FC<{ value: number; onClickChip: Function; text: string; image: string }> = ({
+    value,
+    onClickChip,
+    text,
+    image,
+}) => {
     const systemContext = useSystemContext();
 
     const enabledQuickBet = usePlayerContext().authorizeInfo?.user?.settings?.quickBet;
@@ -13,27 +18,24 @@ export const Chip: React.FC<{ value: number; onClickChip: Function }> = ({ value
     const { selectedChip } = systemContext;
 
     const getChipClassName = () => {
-        let className = `${Styles["chip-container"]} ${Styles[ChipMapper[systemName][value] || defaultChip]} ${Styles[systemName]}`;
+        let className = `${Styles["chip-container"]} ${Styles[ChipMapper[systemName][value] || defaultChipImage]} ${Styles[systemName]}`;
         selectedChip === value && (className += ` ${Styles["selected"]}`);
         enabledQuickBet && (className += ` ${Styles["enabled-quick-bet"]}`);
         return className;
     };
 
-    const getChipValueString = () => {
-        if (ChipLabelMapper[systemName][value]) {
-            return ChipLabelMapper[systemName][value];
-        }
+    const getDefaultChipText = () => {
         return value < 1000 ? value.toString() : `${value / 1000}K`;
     };
 
     return (
         <div id={`chip-${value}`} key={value} className={getChipClassName()} onClick={() => onClickChip(value)}>
             <img
-                src={`/static/images/chips/${systemName}/${ChipMapper[systemName][value] || defaultChip}.svg`}
+                src={`/static/images/chips/${systemName}/${(image || defaultChipImage).replace("#", "")}.svg`}
                 className={`img-fluid ${Styles["chip"]}`}
                 alt="Chip"
             />
-            <span className={Styles["value"]}>{getChipValueString()}</span>
+            <span className={Styles["value"]}>{text || getDefaultChipText()}</span>
         </div>
     );
 };
