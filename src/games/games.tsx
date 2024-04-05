@@ -15,6 +15,7 @@ import {
     useStopBettingSound,
 } from "../_shared/react-hooks";
 import { tolgee } from "../_shared/tolgee";
+import Footer from "../components/game-components/footer";
 import { BackgroundGalaxy } from "../components/page-components/background";
 import BacBall from "./bac-ball";
 import styles from "./games.module.scss";
