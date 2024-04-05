@@ -1,4 +1,3 @@
-"use-client";
 import { TolgeeProvider } from "@tolgee/react";
 import { ThemeProvider } from "next-themes";
 import App, { AppProps } from "next/app";
@@ -9,43 +8,8 @@ import { tolgee } from "../_shared/tolgee";
 import Loading from "../components/page-components/loading";
 import "../styles/errors.scss";
 import "../styles/main.scss";
-import { isMobile } from "react-device-detect";
 
 class SabaNumberApp extends App<AppProps> {
-    private timeoutResize: NodeJS.Timeout;
-    componentDidMount(): void {
-        window.addEventListener("resize", this.deviceOrientation.bind(this));
-        this.deviceOrientation();
-    }
-    componentWillUnmount(): void {
-        this.timeoutResize && clearTimeout(this.timeoutResize);
-        window.removeEventListener("resize", this.deviceOrientation.bind(this));
-    }
-
-    deviceOrientation() {
-        if (!isMobile) {
-            return;
-        }
-        this.timeoutResize && clearTimeout(this.timeoutResize);
-        this.timeoutResize = setTimeout(() => {
-            const body = document.body;
-            switch (screen.orientation.type) {
-                case "landscape-primary":
-                    body.className = "";
-                    body.classList.add("landscape");
-                    body.classList.add("rotation90");
-                    break;
-                case "landscape-secondary":
-                    body.className = "";
-                    body.classList.add("landscape");
-                    body.classList.add("rotation-90");
-                    break;
-                default:
-                    body.className = "";
-                    break;
-            }
-        }, 100);
-    }
     render() {
         const { Component, pageProps } = this.props;
 

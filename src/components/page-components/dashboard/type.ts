@@ -31,6 +31,7 @@ export type State = {
     openGameName: string;
     isOnLobby: boolean;
     lobbySocket: Socket;
+    isLandscapeMode: boolean;
 };
 
 export type GameOffer = {

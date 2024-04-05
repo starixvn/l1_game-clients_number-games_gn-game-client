@@ -61,7 +61,7 @@ html {
     --spacing-size-5: 2rem;
     --spacing-size-6: 2.4rem;
 
-    --zoom-game: 1;
+    --zoom-game: 1.25;
 
     // footer
     --color-copyright: rgba(161, 161, 161, 0.6);
@@ -204,18 +204,5 @@ body {
 
     &.red {
         background-image: url("/static/images/cage/cage-red-blur.png");
-    }
-}
-.landscape {
-    width: 100vh;
-    height: 100vw;
-    transform-origin: 0 0;
-
-    &.rotation-90 {
-        transform: rotate(90deg) translateY(-100%);
-    }
-
-    &.rotation90 {
-        transform: rotate(-90deg) translateX(-100%);
     }
 }

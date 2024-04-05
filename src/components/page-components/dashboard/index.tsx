@@ -42,9 +42,11 @@ import Register from "./register";
 import { MAX_AVATAR_ID } from "./register/avatar-gallery";
 import NameGenerator from "./register/name-generator";
 import { ILobbyConfigs, Props, State } from "./type";
-import { isMobileOnly } from "react-device-detect";
+import { isMobile, isMobileOnly } from "react-device-detect";
 import MusicPlayer from "../music-player";
+import { LandscapeMode } from "./landscape-mode/landscape-mode";
 
+const LandscapeModes = ["landscape-primary", "landscape-secondary"];
 class Dashboard extends React.PureComponent<Props, State> {
     private notificationSocket: Socket = null;
     private reCheckInInterval: NodeJS.Timeout;
@@ -68,6 +70,7 @@ class Dashboard extends React.PureComponent<Props, State> {
             openGameName: "",
             isOnLobby: true,
             lobbySocket: null,
+            isLandscapeMode: false,
         };
         this.lobbyConnectionHandler = new LobbySocketConnection();
 
@@ -91,6 +94,7 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.reconnectGameTransmitter = this.reconnectGameTransmitter.bind(this);
         this.updateAvatar = this.updateAvatar.bind(this);
         this.swipeableHandler = this.swipeableHandler.bind(this);
+        this.changeOrientation = this.changeOrientation.bind(this);
 
         const buildId = process.env.buildVersion;
         const buildVersion = StorageHelper.get(localStorageKeys.buildVersion) ?? 0;
@@ -173,6 +177,13 @@ class Dashboard extends React.PureComponent<Props, State> {
         }
     }
 
+    changeOrientation() {
+        setTimeout(() => {
+            const isLandscapeMode = LandscapeModes.includes(screen.orientation.type);
+            this.setState({ isLandscapeMode });
+        }, 100);
+    }
+
     async componentDidMount() {
         if (typeof window === "undefined") {
             return;
@@ -204,6 +215,10 @@ class Dashboard extends React.PureComponent<Props, State> {
             const reCheckInResponse = await reCheckIn(this.props.session);
             this.handleRecheckInResponse(reCheckInResponse);
         }, 60 * 1000);
+
+        if (isMobile) {
+            screen.orientation.addEventListener("change", this.changeOrientation);
+        }
 
         this.connectNotificationSocket();
         queryGame && this.openGame(queryGame);
@@ -529,7 +544,12 @@ class Dashboard extends React.PureComponent<Props, State> {
     }
 
     render() {
-        const { authorizeInfo } = this.state;
+        const { authorizeInfo, isLandscapeMode } = this.state;
+
+        if (isLandscapeMode && isMobileOnly) {
+            return <LandscapeMode />;
+        }
+
         return authorizeInfo ? (
             <>
                 <Head>{this.renderGoogleAnalytic()}</Head>
