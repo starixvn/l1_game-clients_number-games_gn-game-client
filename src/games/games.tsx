@@ -23,7 +23,7 @@ import { Props } from "./type";
 
 const ToolbarGuide = dynamic(() => import("../components/page-components/hide-toolbar-guide"));
 
-const gamesConstant = {
+const gamesConstants = {
     standardMobileHeight: 670,
     swipeDuration: 1500,
 };
@@ -50,7 +50,7 @@ export const Games: React.FC<Props> = ({
         if (contentRef.current && height !== contentRef.current.offsetHeight && isMobileOnly) {
             setHeight(contentRef.current.offsetHeight);
             if (contentRef.current.offsetHeight > window.innerHeight) {
-                onScaleReceive((window.innerHeight - headerRef.current?.offsetHeight) / gamesConstant.standardMobileHeight);
+                onScaleReceive((window.innerHeight - headerRef.current?.offsetHeight) / gamesConstants.standardMobileHeight);
             }
         }
     }, [contentRef.current?.getContext, openGameId]);
@@ -68,7 +68,7 @@ export const Games: React.FC<Props> = ({
             swipeableHandler(false, openGameId);
             setStopScroll(true);
         },
-        swipeDuration: gamesConstant.swipeDuration,
+        swipeDuration: gamesConstants.swipeDuration,
         preventScrollOnSwipe: true,
         trackMouse: true,
     });
