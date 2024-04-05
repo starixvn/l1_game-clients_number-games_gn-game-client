@@ -1,3 +1,4 @@
+import { GameBaseProps } from "./../../components/game-base/type";
 import { AuthorizeResponse } from "sc-user-service-client/dist/auth";
 import { IBanner, ILobbyConfigs } from "../../components/page-components/dashboard/type";
 import { getAppSettings } from "../app-settings";
@@ -20,19 +21,25 @@ export const getBannerIds = (lobbyConfigs: ILobbyConfigs) => {
     return banners?.map((banner) => banner.gameId) ?? [];
 };
 
-export const getSwipeableGameId = (isPrevGame: boolean, currentGameId: number) => {
-    if (getAppSettings()?.gameSettings) {
-        const gameSettingValues = Object.values(getAppSettings().gameSettings);
+export const getSwipeableGameId = (isPrevGame: boolean, currentGameId: number, offerGameIds: number[]) => {
+    const gameSettings = getAppSettings()?.gameSettings;
+    const gameSettingValues = Object.values(gameSettings).filter((setting: GameBaseProps) => offerGameIds.includes(setting.id));
+
+    if (gameSettingValues.length > 0) {
         const lastedGameIdIndex = gameSettingValues.length - 1;
-        const currentGameIdIndex = gameSettingValues.findIndex(gameSetting => gameSetting.id === currentGameId);
+        const currentGameIdIndex = gameSettingValues.findIndex((gameSetting) => gameSetting.id === currentGameId);
 
         if (currentGameIdIndex === -1) {
-            return 0;
+            return gameSettingValues[0].id;
         }
 
-        const nextOpenedGameIdIndex = isPrevGame ?
-            (currentGameIdIndex === 0 ? lastedGameIdIndex : currentGameIdIndex - 1) :
-            (currentGameIdIndex === lastedGameIdIndex ? 0 : currentGameIdIndex + 1);
+        const nextOpenedGameIdIndex = isPrevGame
+            ? currentGameIdIndex === 0
+                ? lastedGameIdIndex
+                : currentGameIdIndex - 1
+            : currentGameIdIndex === lastedGameIdIndex
+            ? 0
+            : currentGameIdIndex + 1;
 
         return gameSettingValues[nextOpenedGameIdIndex].id;
     }

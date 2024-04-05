@@ -368,7 +368,8 @@ class Dashboard extends React.PureComponent<Props, State> {
     }
 
     swipeableHandler = (isPrevGame: boolean, currentGameId: number) => {
-        this.openGame(getSwipeableGameId(isPrevGame, currentGameId));
+        const offerGameIds = getOfferGamesIds(this.state.authorizeInfo);
+        this.openGame(getSwipeableGameId(isPrevGame, currentGameId, offerGameIds));
     };
 
     renderGames() {
