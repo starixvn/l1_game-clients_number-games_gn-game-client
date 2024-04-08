@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { buildVersion } from "../../../_shared/constants";
-import { useGameActionContext, useSystemContext } from "../../../_shared/react-contexts";
+import { useGameActionContext, useSystemContext, useSettingContext } from "../../../_shared/react-contexts";
 import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import { RoundState } from "../../game-base/type";
 import RippleButton, { DEFAULT_CHIP_CURSOR_PATH } from "./ripple-button";
@@ -8,6 +8,7 @@ import RippleButton, { DEFAULT_CHIP_CURSOR_PATH } from "./ripple-button";
 const mockUseGameStateContext = useGameStateContext as jest.Mock;
 const mockUseSystemContext = useSystemContext as jest.Mock;
 const mockUseGameActionContext = useGameActionContext as jest.Mock;
+const mockUseSettingContext = useSettingContext as jest.Mock;
 jest.mock("../../../_shared/react-contexts/game-state-context/game-state-context", () => ({
     useGameStateContext: jest.fn(),
     useGameStatesDispatch: jest.fn(),
@@ -16,6 +17,7 @@ jest.mock("../../../_shared/react-contexts/game-state-context/game-state-context
 jest.mock("../../../_shared/react-contexts", () => ({
     useSystemContext: jest.fn(),
     useGameActionContext: jest.fn(),
+    useSettingContext: jest.fn(),
 }));
 
 jest.mock("../../../_shared/constants", () => ({
@@ -30,12 +32,19 @@ describe("RippleButton", () => {
         className: "btn-class",
         id: "btn-id",
     };
+    const chipSettings = [
+        {
+            value: 1,
+            color: "#b1b1b1",
+        },
+    ];
 
     beforeEach(() => {
         mockPlaceBet.mockClear();
         mockUseGameStateContext.mockReturnValue({ roundState: RoundState.InRound });
         mockUseSystemContext.mockReturnValue({ selectedChip: mockSelectedChip });
         mockUseGameActionContext.mockReturnValue({ placeBet: mockPlaceBet });
+        mockUseSettingContext.mockReturnValue({ chipSettings: chipSettings });
     });
 
     test("renders button with correct props", () => {
@@ -62,13 +71,13 @@ describe("RippleButton", () => {
 
     test("updates cursor style based on round state = InRound", () => {
         // Arrange
-        const selectedChip = 10;
+        const selectedChip = 1;
         mockUseSystemContext.mockReturnValue({ selectedChip });
 
         // Act
         render(<RippleButton {...defaultProps} />);
         const button = screen.getByRole("button");
-        const expectedPath = `${DEFAULT_CHIP_CURSOR_PATH}/cursor-chip-${selectedChip}.svg?v=${buildVersion}`;
+        const expectedPath = `${DEFAULT_CHIP_CURSOR_PATH}/b1b1b1.svg?v=${buildVersion}`;
 
         // Assert
         expect(button).toHaveStyle({ cursor: `url(${expectedPath}), auto` });
