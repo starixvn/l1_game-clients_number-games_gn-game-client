@@ -6,7 +6,7 @@ import { BaseProps } from "./types";
 const convertStakeToString = (amount: number, rate: number) => {
     if (amount) {
         const total = amount / rate;
-        const options = { maximumFractionDigits: 2, roundingMode: "floor" };
+        const options = { maximumFractionDigits: 2 };
         const locale = "en-US";
         if (total >= 10_000_000) {
             return (total / 1_000_000).toLocaleString(locale, options) + "M";
