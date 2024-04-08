@@ -1,9 +1,10 @@
+import { render } from "@testing-library/react";
 import React from "react";
-import { render, screen } from "@testing-library/react";
+
 import { useGameStateContext } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
+import { GameStateContextModel } from "../../../../_shared/react-contexts/game-state-context/game-state-context-model";
 import { RoundState } from "../../../game-base/type";
 import CountdownTimer, { GameStatus, SimpleTimer } from "../countdown-timer";
-import { GameStateContextModel } from "../../../../_shared/react-contexts/game-state-context/game-state-context-model";
 
 const mockUseGameStateContext = useGameStateContext as jest.Mock;
 
@@ -17,7 +18,7 @@ jest.mock("../../../../_shared/react-hooks/use-translator", () => ({
 
 jest.mock("react", () => ({
     ...jest.requireActual("react"),
-    useState: (initialValue) => [initialValue, jest.fn()]
+    useState: (initialValue) => [initialValue, jest.fn()],
 }));
 
 describe("CountdownTimer File", () => {
@@ -95,7 +96,6 @@ describe("CountdownTimer File", () => {
     });
 
     describe("SimpleTimer Component", () => {
-
         test("renders nothing when remainingTime is 0 or less", () => {
             mockUseGameStateContext.mockReturnValue({ roundState: RoundState.BeforePlaceBet } as GameStateContextModel);
 
@@ -149,8 +149,10 @@ describe("CountdownTimer File", () => {
         });
 
         test("renders children content", () => {
+            mockUseGameStateContext.mockReturnValue({ turnCounter: 1 } as GameStateContextModel);
+
             const childContent = "Test Child Content";
-            render(<GameStatus>{childContent}</GameStatus>);
+            const screen = render(<GameStatus>{childContent}</GameStatus>);
             expect(screen.getByText(childContent)).toBeInTheDocument();
         });
     });
