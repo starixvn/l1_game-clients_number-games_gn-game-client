@@ -111,13 +111,14 @@
 
 .loader {
     width: 5rem;
+    height: 5rem;
     aspect-ratio: 1;
     border-radius: 50%;
     border: 0.5rem solid #fff;
-    animation: l20-1 0.6s infinite linear alternate, l20-2 1.2s infinite linear;
+    animation: spin-1 0.6s infinite linear alternate, spin-2 1.2s infinite linear;
 }
 
-@keyframes l20-1 {
+@keyframes spin-1 {
     0% {
         clip-path: polygon(50% 50%, 0 0, 50% 0%, 50% 0%, 50% 0%, 50% 0%, 50% 0%);
     }
@@ -140,7 +141,7 @@
         clip-path: polygon(50% 50%, 50% 100%, 50% 100%, 50% 100%, 50% 100%, 50% 100%, 0% 100%);
     }
 }
-@keyframes l20-2 {
+@keyframes spin-2 {
     0% {
         transform: scaleY(1) rotate(0deg);
     }
