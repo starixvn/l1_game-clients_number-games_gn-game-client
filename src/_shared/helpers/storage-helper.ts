@@ -121,7 +121,9 @@ export const localStorageKeys = {
     debug: buildLocalStorageKey("debug"),
     url: buildLocalStorageKey("url"),
     hideToolbarGuide: buildLocalStorageKey("hideToolbarGuide"),
-    currentSessionHideToolbarGuide: buildLocalStorageKey("currentSSHideToolbarGuide"),
+    currentSessionHideToolbarGuide: buildLocalStorageKey("currentSessionHideToolbarGuide"),
+    hideSwitchGameGuide: buildLocalStorageKey("hideSwitchGameGuide"),
+    currentSessionSwitchGameGuide: buildLocalStorageKey("currentSessionSwitchGameGuide"),
 };
 
 export function buildLocalStorageKey(key: string) {

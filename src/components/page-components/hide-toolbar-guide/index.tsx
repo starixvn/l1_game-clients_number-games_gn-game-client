@@ -65,7 +65,8 @@ const ToolbarGuide: React.FC = () => {
         }
 
         return (
-            isEnabledToolbarGuide && (
+            isEnabledToolbarGuide &&
+            isSafari && (
                 <div className={`${Styles["toolbar-guide-container"]} ${Styles[animClass]}`}>
                     <div className={Styles["toolbar-guide-content"]}>
                         <div className={Styles["toolbar-guide-title"]}>{t(`${ResourceTypes.SABA_NUMBER}.lobby_fullscreen`)}</div>

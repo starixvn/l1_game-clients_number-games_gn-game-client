@@ -45,6 +45,7 @@ import Register from "./register";
 import { MAX_AVATAR_ID } from "./register/avatar-gallery";
 import NameGenerator from "./register/name-generator";
 import { ILobbyConfigs, Props, State } from "./type";
+import SwitchGamesGuide from "../switch-games-guide";
 
 class Dashboard extends React.PureComponent<Props, State> {
     private notificationSocket: Socket = null;
@@ -494,6 +495,8 @@ class Dashboard extends React.PureComponent<Props, State> {
                             )}
                             {!isRenderGames && <Footer />}
                             <MusicPlayer />
+
+                            {isRenderGames && !this.props.directMode && <SwitchGamesGuide />}
 
                             {isShowErrorModal && (
                                 <div className={Styles["container-modal"]}>
