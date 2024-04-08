@@ -21,9 +21,9 @@ export const getBannerIds = (lobbyConfigs: ILobbyConfigs) => {
     return banners?.map((banner) => banner.gameId) ?? [];
 };
 
-export const getSwipeableGameId = (isPrevGame: boolean, currentGameId: number, offerGameIds: number[]) => {
-    const gameSettings = getAppSettings()?.gameSettings;
-    const gameSettingValues = Object.values(gameSettings).filter((setting: GameBaseProps) => offerGameIds.includes(setting.id));
+export const getSwipeableGameId = (isPrevGame: boolean, currentGameId: number, gameIds: number[]) => {
+    const gameSettings = getAppSettings().gameSettings;
+    const gameSettingValues = gameIds.map((gameId) => gameSettings[gameId]).filter((setting) => setting);
 
     if (gameSettingValues.length > 0) {
         const lastedGameIdIndex = gameSettingValues.length - 1;

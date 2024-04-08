@@ -235,11 +235,13 @@ class Dashboard extends React.PureComponent<Props, State> {
     }
 
     handleScaleFromGame(scale: number) {
-        const dynamicStyle = isMobileOnly ? {
-            transform: `scale(${scale})`,
-            transformOrigin: 'top center',
-            height: `100dvh`,
-        } : {};
+        const dynamicStyle = isMobileOnly
+            ? {
+                  transform: `scale(${scale})`,
+                  transformOrigin: "top center",
+                  height: `100dvh`,
+              }
+            : {};
 
         this.setState({ dynamicStyle });
     }
@@ -381,8 +383,11 @@ class Dashboard extends React.PureComponent<Props, State> {
     }
 
     swipeableHandler = (isPrevGame: boolean, currentGameId: number) => {
-        const offerGameIds = getOfferGamesIds(this.state.authorizeInfo);
-        this.openGame(getSwipeableGameId(isPrevGame, currentGameId, offerGameIds));
+        const { lobbyConfigs, authorizeInfo } = this.state;
+        const offerGamesIds = getOfferGamesIds(authorizeInfo);
+        const lobbyGamesIds = getLobbyGameIds(lobbyConfigs)?.filter((gameId) => offerGamesIds.includes(gameId));
+
+        this.openGame(getSwipeableGameId(isPrevGame, currentGameId, lobbyGamesIds));
     };
 
     renderGames() {
@@ -467,13 +472,19 @@ class Dashboard extends React.PureComponent<Props, State> {
             <PlayerContextProvider value={authContextValue}>
                 <SettingContextProvider>
                     <LobbyConnectionContextProvider value={lobbyConnectionContextValue}>
-                        <div style={{ ...scaleExtraProps }} className={`${Styles["dashboard"]} ${!isRenderGames ? "no-scroll" : ""}`} id={"dashboard"}>
+                        <div
+                            style={{ ...scaleExtraProps }}
+                            className={`${Styles["dashboard"]} ${!isRenderGames ? "no-scroll" : ""}`}
+                            id={"dashboard"}
+                        >
                             {allowSwipeGameOndDesktop && (
                                 <button className={`${Styles["prev-button"]}`} onClick={() => this.swipeableHandler(true, openGameId)}>
                                     <span className={`icon-back ${Styles["icon"]}`}></span>
                                 </button>
                             )}
-                            <div > <Header headerRef={this.headerRef} openingGameId={openGameId} isRenderGames={isRenderGames} /></div>
+                            <div>
+                                <Header headerRef={this.headerRef} openingGameId={openGameId} isRenderGames={isRenderGames} />
+                            </div>
 
                             {isRenderGames ? this.renderGames() : this.renderLobby()}
                             {allowSwipeGameOndDesktop && (
