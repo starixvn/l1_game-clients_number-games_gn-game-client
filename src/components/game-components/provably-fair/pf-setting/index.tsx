@@ -51,7 +51,7 @@ const PFSetting: FC<{ customClientSeedInfo?: string }> = ({ customClientSeedInfo
     const randomSeed = useRef<HTMLInputElement>();
     const manualRadio = useRef<HTMLInputElement>();
     const manualSeed = useRef<HTMLInputElement>();
-    const { pfClientSeedSetting, ownBets, drawId, roundId } = useGameStateContext();
+    const { pfClientSeedSetting, ownBets, drawId } = useGameStateContext();
     const [isFirstLoad, setIsFirstLoad] = useState<boolean>(true);
     const [isFirstFetch, setIsFirstFetch] = useState<boolean>(true);
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -69,15 +69,15 @@ const PFSetting: FC<{ customClientSeedInfo?: string }> = ({ customClientSeedInfo
     }, [pfClientSeedSetting?.randomClientSeed]);
 
     useEffect(() => {
-        if (drawId >= 0 && roundId >= 0) {
+        if (drawId >= 0) {
             setIsFirstFetch(false);
         }
-    }, [drawId, roundId]);
+    }, [drawId]);
 
     useEffect(() => {
         if (isFirstFetch) {
             gameMessageHandler.broadcastGameEvent({
-                [messageEventType.SEND_SOCKET_MESSAGE]: { event: GetPFInfoMessage, data: { drawId, roundId } },
+                [messageEventType.SEND_SOCKET_MESSAGE]: { event: GetPFInfoMessage, data: { drawId } },
             });
         }
     }, [isFirstFetch]);
