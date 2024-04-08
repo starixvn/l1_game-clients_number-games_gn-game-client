@@ -1,10 +1,11 @@
+import { useEffect, useState } from "react";
+
+import { useGameContext } from "../../../_shared/react-contexts";
 import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
+import { useSNTranslate } from "../../../_shared/react-hooks/use-translator";
+import { messageEventType } from "../../game-base/handlers";
 import { RoundState } from "../../game-base/type";
 import styles from "./countdown-timer.module.scss";
-import { useSNTranslate } from "../../../_shared/react-hooks/use-translator";
-import { useEffect, useState } from "react";
-import { useGameContext } from "../../../_shared/react-contexts";
-import { messageEventType } from "../../game-base/handlers";
 
 export type Rotation = "clockwise" | "counterclockwise";
 export const CountdownTimer = ({ SimpleTimerProp = SimpleTimer, GameStatusProp = GameStatus }) => {
@@ -22,7 +23,6 @@ export const CountdownTimer = ({ SimpleTimerProp = SimpleTimer, GameStatusProp =
             gameMessageHandler?.removeHandler(handlerId);
         };
     }, []);
-
 
     switch (roundState) {
         case RoundState.InRound:
@@ -87,9 +87,13 @@ export const GameStatus = ({ children }) => {
     const { turnCounter } = useGameStateContext();
     const { t } = useSNTranslate();
 
+    if (turnCounter <= 0) {
+        return <></>;
+    }
+
     return (
         <div className={`${styles["game-status"]}`}>
-            <span>{turnCounter > 0 ? t(`draw_${turnCounter}`) : ""}</span>
+            <span>{t(`draw_${turnCounter}`)}</span>
             {children}
         </div>
     );

@@ -90,6 +90,9 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
             return {
                 ...state,
                 isConnect: true,
+                roundData: {},
+                turnCounter: 0,
+                drawId: 0,
             };
         }
 
