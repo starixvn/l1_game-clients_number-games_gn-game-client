@@ -1,6 +1,5 @@
 import Styles from "../../lobby.module.scss";
 import { OnlinePlayer } from "./online-player";
-import { useTranslator } from "../../../../../_shared/react-hooks";
 import { GameSettings } from "../../../../game-base/type";
 import { LobbyGameTransmitter } from "../../lobby-socket-connection";
 import { buildVersion } from "../../../../../_shared/constants";

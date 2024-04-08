@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GameIcon should render match with snapshot 1`] = `
+<div>
+  <div
+    class="icon-game gamea"
+  >
+    <img
+      alt="icon-game"
+      src="/static/images/lobby/game-board-detail/icon-gamea.png?v=1"
+    />
+    OnlinePlayer
+  </div>
+</div>
+`;

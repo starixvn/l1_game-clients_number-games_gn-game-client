@@ -3,7 +3,7 @@ import { useTranslator } from "../../../../../_shared/react-hooks";
 import { ResourceTypes } from "../../../../../_shared/resources";
 import Styles from "../../lobby.module.scss";
 import { Socket } from "socket.io-client";
-import { useLobbyConnectionContext, usePlayerContext } from "../../../../../_shared/react-contexts";
+import { useLobbyConnectionContext } from "../../../../../_shared/react-contexts";
 import { useTolgee } from "@tolgee/react";
 import { GameSettings } from "../../../../game-base/type";
 import { LobbyGameTransmitter, getLobbyData } from "../../lobby-socket-connection";
@@ -32,7 +32,6 @@ export const DisabledGameBlock: React.FC<Props> = ({ socket, transmitter, gameSe
     };
     const [errorMessage, setErrorMessage] = useState("");
     const { removeGameTransmitter, reconnectGameTransmitter } = useLobbyConnectionContext();
-    const { session } = usePlayerContext();
     const language = useTolgee().getLanguage();
 
     useEffect(() => {
