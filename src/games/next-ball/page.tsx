@@ -91,13 +91,13 @@ class NextBall extends GameBase<GameBaseProps> {
         const { statisticGroup } = this.state;
         const calculators = {
             [NextBallBetOptions.OVER]: (countResult: object, total: number) =>
-                Math.round((countResult[NextBallBetOptions.OVER] * 100) / total),
+                Math.round((countResult[NextBallBetOptions.OVER] * 100) / total) || 0,
             [NextBallBetOptions.UNDER]: (countResult: object, total: number) =>
-                100 - Math.round((countResult[NextBallBetOptions.OVER] * 100) / total),
+                100 - Math.round((countResult[NextBallBetOptions.OVER] * 100) / total) || 0,
             [NextBallBetOptions.ODD]: (countResult: object, total: number) =>
-                Math.round((countResult[NextBallBetOptions.ODD] * 100) / total),
+                Math.round((countResult[NextBallBetOptions.ODD] * 100) / total) || 0,
             [NextBallBetOptions.EVEN]: (countResult: object, total: number) =>
-                100 - Math.round((countResult[NextBallBetOptions.ODD] * 100) / total),
+                100 - Math.round((countResult[NextBallBetOptions.ODD] * 100) / total) || 0,
         };
 
         return (
