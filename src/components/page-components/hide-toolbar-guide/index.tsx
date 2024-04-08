@@ -28,7 +28,7 @@ const ToolbarGuide: React.FC = () => {
 
     useEffect(() => {
         const isStorageHideGuide = StorageHelper.get(localStorageKeys.hideToolbarGuide) ?? false;
-        const currentSessionHideToolbarGuide = StorageHelper.get(localStorageKeys.currentSessionHideToolbarGuide) ?? false;
+        const currentSessionHideToolbarGuide = StorageHelper.get(localStorageKeys.currentSessionHideToolbarGuide) ?? "";
 
         if (isStorageHideGuide) {
             return;
