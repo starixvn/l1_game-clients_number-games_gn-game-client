@@ -8,19 +8,22 @@ interface UseResultProps<R> {
     result: R;
     roundState: RoundState;
     roundHistory: Round<R | object, object>[];
+    wholeRound?: number;
 }
 
 const useResult = <R,>(props: UseResultProps<R>) => {
-    const { result, roundState, roundHistory } = props;
+    const { result, roundState, roundHistory, wholeRound } = props;
     const { durations } = useGameContext();
     const { gameMessageHandler } = useGameContext();
-    const [clientRemainingTime, setClientRemainingTime] = useState(0);
     const [currentResult, setCurrentResult] = useState<R | object>(null);
     const [isFirstJoinGame, setIsFirstJoinGame] = useState<boolean>(true);
+    const [isFirstStartDisplayResultJoinGame, setIsFirstStartDisplayResultJoinGame] = useState<boolean>(true);
 
     useEffect(() => {
         const handlerId = gameMessageHandler?.register(messageEventType.CLIENT_REMAINING_TIME, ({ clientRemainingTime }) => {
-            setClientRemainingTime(clientRemainingTime);
+            if (clientRemainingTime > 0 && clientRemainingTime !== (durations?.wholeTurn || wholeRound)) {
+                setIsFirstStartDisplayResultJoinGame(false);
+            }
         });
 
         return () => {
@@ -29,7 +32,7 @@ const useResult = <R,>(props: UseResultProps<R>) => {
     }, []);
 
     useEffect(() => {
-        if (isEmpty(result) && roundState === RoundState.DisplayResult && isFirstJoinGame && clientRemainingTime !== durations.wholeTurn) {
+        if (isEmpty(result) && roundState === RoundState.DisplayResult && isFirstJoinGame && !isFirstStartDisplayResultJoinGame) {
             setIsFirstJoinGame(false);
             setCurrentResult(roundHistory[0]?.result);
         }
@@ -38,7 +41,7 @@ const useResult = <R,>(props: UseResultProps<R>) => {
             setIsFirstJoinGame(false);
             setCurrentResult(result);
         }
-    }, [roundState, roundHistory, result, clientRemainingTime]);
+    }, [roundState, roundHistory, result, isFirstStartDisplayResultJoinGame]);
 
     return currentResult as R;
 };

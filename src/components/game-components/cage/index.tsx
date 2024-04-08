@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 
 import { getBallColor } from "../../../_shared/helpers/ball-color-helper";
 import { GameStateContextModel } from "../../../_shared/react-contexts/game-state-context/game-state-context-model";
@@ -80,4 +80,4 @@ const Cage: React.FC<CageProps> = ({
     );
 };
 
-export default Cage;
+export default memo(Cage);

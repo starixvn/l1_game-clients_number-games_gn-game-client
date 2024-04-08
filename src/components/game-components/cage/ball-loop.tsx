@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { isAndroid } from "react-device-detect";
 import { RoundState } from "../../game-base/type";
 import { Spritesheet } from "../sprites-sheet";
@@ -25,4 +26,4 @@ const BallLoops: React.FC<{ roundState: RoundState }> = ({ roundState }) => {
     );
 };
 
-export default BallLoops;
+export default memo(BallLoops);
