@@ -1,9 +1,7 @@
 import React from "react";
-import { ChipMapper, systemName } from "../../../_shared/constants";
+import { systemName } from "../../../_shared/constants";
 import { usePlayerContext, useSystemContext } from "../../../_shared/react-contexts";
 import Styles from "./chip-slider.module.scss";
-
-const defaultChipImage = "#b1b1b1";
 
 export const Chip: React.FC<{ value: number; onClickChip: Function; text: string; image: string }> = ({
     value,
@@ -18,7 +16,7 @@ export const Chip: React.FC<{ value: number; onClickChip: Function; text: string
     const { selectedChip } = systemContext;
 
     const getChipClassName = () => {
-        let className = `${Styles["chip-container"]} ${Styles[ChipMapper[systemName][value] || defaultChipImage]} ${Styles[systemName]}`;
+        let className = `${Styles["chip-container"]} ${Styles[systemName]}`;
         selectedChip === value && (className += ` ${Styles["selected"]}`);
         enabledQuickBet && (className += ` ${Styles["enabled-quick-bet"]}`);
         return className;
@@ -30,11 +28,13 @@ export const Chip: React.FC<{ value: number; onClickChip: Function; text: string
 
     return (
         <div id={`chip-${value}`} key={value} className={getChipClassName()} onClick={() => onClickChip(value)}>
-            <img
-                src={`/static/images/chips/${systemName}/${(image || defaultChipImage).replace("#", "")}.svg`}
-                className={`img-fluid ${Styles["chip"]}`}
-                alt="Chip"
-            />
+            {image && (
+                <img
+                    src={`/static/images/chips/${systemName}/${image.replace("#", "")}.svg`}
+                    className={`img-fluid ${Styles["chip"]}`}
+                    alt="Chip"
+                />
+            )}
             <span className={Styles["value"]}>{text || getDefaultChipText()}</span>
         </div>
     );

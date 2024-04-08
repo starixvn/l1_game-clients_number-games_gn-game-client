@@ -1,12 +1,17 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { isMobileOnly } from "react-device-detect";
 import Slider from "react-slick";
-import { SystemEventActionType, usePlayerContext, useSystemContext, useSystemDispatch } from "../../../_shared/react-contexts";
+import {
+    SystemEventActionType,
+    usePlayerContext,
+    useSettingContext,
+    useSystemContext,
+    useSystemDispatch,
+} from "../../../_shared/react-contexts";
 import { useClickSound } from "../../../_shared/react-hooks";
 import { Chip } from "./chip";
 import Styles from "./chip-slider.module.scss";
 import { GameConfigs, UserStakeLevel } from "../../game-base/type";
-import { getChipSettings } from "../../../services/user-setting-service";
 
 const SlidingTimeInMillisecond = 100;
 const slidesToShow = 5;
@@ -19,8 +24,8 @@ export const ChipSlider: React.FC<{ gameConfigs: GameConfigs; userStakeLevel: Us
     const { selectedChip } = systemContext;
     const [enabledPrevBtn, setEnabledPrevBtn] = useState(false);
     const [enabledNextBtn, setEnabledNextBtn] = useState(true);
-    const { session } = usePlayerContext();
-    const [chipSettings, setChipSettings] = useState([]);
+    const settingContext = useSettingContext();
+    const chipSettings = settingContext.chipSettings;
 
     const [isSliding, setIsSliding] = useState(false);
     let sliderRef = null;
@@ -118,13 +123,6 @@ export const ChipSlider: React.FC<{ gameConfigs: GameConfigs; userStakeLevel: Us
             sliderRef.slickGoTo(chipIndex);
             updateArrowsByChipValue(selectedChip);
         }
-    }, []);
-
-    useEffect(() => {
-        (async () => {
-            const chipSettings = await getChipSettings(session);
-            setChipSettings(chipSettings?.chips);
-        })();
     }, []);
 
     const findChipSetting = (value) => {

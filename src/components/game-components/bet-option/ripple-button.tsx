@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { buildVersion } from "../../../_shared/constants";
-import { useGameActionContext, useSystemContext } from "../../../_shared/react-contexts";
+import { useGameActionContext, useSettingContext, useSystemContext } from "../../../_shared/react-contexts";
 import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import { RoundState } from "../../game-base/type";
 
@@ -24,13 +24,22 @@ const RippleButton: React.FC<RippleButtonProps> = ({ choice, className, id }) =>
     const gameActionContext = useGameActionContext();
     const isShowDisabledLayer = roundState === RoundState.LockingBet;
 
+    const settingContext = useSettingContext();
+    const chipSettings = settingContext.chipSettings;
+
     const onClickBet = useCallback(
         (choice: string) => gameActionContext.placeBet(choice, systemContext.selectedChip),
         [gameActionContext, systemContext.selectedChip]
     );
 
+    const findChipSetting = (value) => {
+        return chipSettings?.find((c) => c.value === value);
+    };
+
     useEffect(() => {
-        setCursorImage(`${DEFAULT_CHIP_CURSOR_PATH}/cursor-chip-${systemContext.selectedChip}.svg?v=${buildVersion}`);
+        setCursorImage(
+            `${DEFAULT_CHIP_CURSOR_PATH}/${findChipSetting(systemContext.selectedChip)?.color?.replace("#", "")}.svg?v=${buildVersion}`
+        );
     }, [systemContext.selectedChip]);
 
     useEffect(() => {

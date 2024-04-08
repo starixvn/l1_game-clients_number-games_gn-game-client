@@ -6,7 +6,7 @@ import { useSwipeable } from "react-swipeable";
 import dynamic from "next/dynamic";
 import { getAppSettings } from "../_shared/app-settings";
 import { GameIds } from "../_shared/constants";
-import { SystemContextProvider, URLContext } from "../_shared/react-contexts";
+import { SystemContextProvider, URLContext, SettingEventActionType, usePlayerContext, useSettingDispatch } from "../_shared/react-contexts";
 import {
     usePlaceBetSound,
     useReceiveFinishSound,
@@ -21,6 +21,7 @@ import BacBall from "./bac-ball";
 import styles from "./games.module.scss";
 import NextBall from "./next-ball/page";
 import { Props } from "./type";
+import { getChipSettings } from "../services/user-setting-service";
 
 const ToolbarGuide = dynamic(() => import("../components/page-components/hide-toolbar-guide"));
 
@@ -46,6 +47,8 @@ export const Games: React.FC<Props> = ({
     const contentRef = useRef(null);
     const [stopScroll, setStopScroll] = useState(false);
     const [extraProps, setExtraProps] = useState({});
+    const { session } = usePlayerContext();
+    const settingDispatch = useSettingDispatch();
 
     useEffect(() => {
         if (contentRef.current && height !== contentRef.current.offsetHeight && isMobileOnly) {
@@ -58,6 +61,18 @@ export const Games: React.FC<Props> = ({
 
     useEffect(() => {
         setExtraProps(isMobileOnly && !directMode ? mobileSwipeableHandlers : {});
+    }, []);
+
+    useEffect(() => {
+        (async () => {
+            const chipSettings = await getChipSettings(session);
+            settingDispatch({
+                type: SettingEventActionType.UPDATE_CHIPS,
+                payload: {
+                    chipSettings: chipSettings?.chips,
+                },
+            });
+        })();
     }, []);
 
     const mobileSwipeableHandlers = useSwipeable({

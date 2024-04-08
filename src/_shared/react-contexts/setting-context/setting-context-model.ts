@@ -1,9 +1,11 @@
+import { ChipInfo } from "sc-user-service-client/dist/setting";
 import { StorageHelper, localStorageKeys } from "../../helpers";
 
 export interface SettingContextModel {
     isShowedSetting: boolean;
     enabledMusic: boolean;
     isShowAvatarGallery: boolean;
+    chipSettings: ChipInfo[];
 }
 
 export const initialSettingContextModel = (): SettingContextModel => {
@@ -11,5 +13,6 @@ export const initialSettingContextModel = (): SettingContextModel => {
         isShowedSetting: false,
         enabledMusic: StorageHelper.get(localStorageKeys.enableMusic) ?? true,
         isShowAvatarGallery: false,
+        chipSettings: [],
     };
 };

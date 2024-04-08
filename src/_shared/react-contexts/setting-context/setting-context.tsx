@@ -24,7 +24,7 @@ export const useSettingDispatch = () => useContext(SettingDispatchContext);
 
 const settingReducer = (state: any, action: SettingEventAction) => {
     const { type, payload } = action;
-    const { isShowedSetting, enabledMusic, isShowAvatarGallery } = payload;
+    const { isShowedSetting, enabledMusic, isShowAvatarGallery, chipSettings } = payload;
 
     switch (type) {
         case SettingEventActionType.TOGGLE_SETTING: {
@@ -45,6 +45,13 @@ const settingReducer = (state: any, action: SettingEventAction) => {
             return {
                 ...state,
                 isShowAvatarGallery,
+            };
+        }
+
+        case SettingEventActionType.UPDATE_CHIPS: {
+            return {
+                ...state,
+                chipSettings,
             };
         }
 
