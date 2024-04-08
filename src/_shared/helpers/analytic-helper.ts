@@ -35,27 +35,28 @@ export interface TrackingParameter {
     function: string;
     action?: string;
     page?: string;
+    playerId?: string;
 }
 
 const eventNames = { page_view: "page_view", login: "login_type" };
 const commandNames = { event: "event", config: "config" };
 
 type PlayerContext = {
-    playerName: string;
+    playerId: string;
     page: string;
     language: string;
 };
 
 export class AnalyticsHelper {
-    private static playerContext: PlayerContext = { playerName: "", page: "", language: "" };
+    private static playerContext: PlayerContext = { playerId: "", page: "", language: "" };
 
     static setPlayerSession(playerSession: SSOResponse) {
-        AnalyticsHelper.playerContext.playerName = playerSession?.username;
+        AnalyticsHelper.playerContext.playerId = playerSession?.username;
     }
 
     static injectPlayerInfo(analyticParams: any, propertyName) {
-        if (AnalyticsHelper.playerContext?.playerName) {
-            analyticParams[propertyName] = AnalyticsHelper.playerContext?.playerName;
+        if (AnalyticsHelper.playerContext?.playerId) {
+            analyticParams[propertyName] = AnalyticsHelper.playerContext?.playerId;
         }
     }
 
@@ -78,6 +79,7 @@ export class AnalyticsHelper {
         try {
             if (AnalyticsHelper.playerContext) {
                 params.page = AnalyticsHelper.playerContext.page;
+                params.playerId = AnalyticsHelper.playerContext.playerId;
             }
 
             AnalyticsHelper.send(commandNames.event, TrackingEvent.Function, params);
