@@ -52,6 +52,6 @@ export class GameErrorHandler {
     };
 
     isKickOutError = (errorCode: string) => {
-        return errorCode === "1001" || errorCode === "1002";
+        return errorCode === "1001" || errorCode === "1002" || errorCode === "7001";
     };
 }

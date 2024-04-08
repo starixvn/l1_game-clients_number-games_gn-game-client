@@ -32,6 +32,7 @@ const ErrorCodeDictionary = {
     "4012": "Common.message_user_not_found",
     "5002": "Common.message_network_error",
     "5003": "Common.message_sys_maintenance",
+    "7001": "Common.message_session_timeout",
     SB0001: "Common.message_error_occurred",
     SB0002: "Common.message_session_timeout",
     SB0003: "Common.message_play_on_otherdevice",
