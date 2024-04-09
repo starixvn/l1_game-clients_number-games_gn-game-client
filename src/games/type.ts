@@ -9,5 +9,5 @@ export type Props = {
     directMode: boolean;
     swipeableHandler: Function;
     headerRef: React.RefObject<HTMLDivElement>;
-    onScaleReceive :Function
+    onDisableSwipeReceive :Function
 };

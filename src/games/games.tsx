@@ -38,7 +38,7 @@ export const Games: React.FC<Props> = ({
     directMode,
     swipeableHandler,
     headerRef,
-    onScaleReceive,
+    onDisableSwipeReceive,
 }) => {
     const { isDirectMode } = useContext(URLContext);
     const { theme } = useTheme();
@@ -49,19 +49,36 @@ export const Games: React.FC<Props> = ({
     const [extraProps, setExtraProps] = useState({});
     const { session } = usePlayerContext();
     const settingDispatch = useSettingDispatch();
+    const [allowSwipeable, setAllowSwipeable] = useState(true);
 
     useEffect(() => {
-        if (contentRef.current && height !== contentRef.current.offsetHeight && isMobileOnly) {
+        if (contentRef.current
+            && height !== contentRef.current.offsetHeight
+            && isMobileOnly
+            && openGameId > 0) {
+
             setHeight(contentRef.current.offsetHeight);
-            if (contentRef.current.offsetHeight > window.innerHeight) {
-                onScaleReceive((window.innerHeight - headerRef.current?.offsetHeight) / gamesConstants.standardMobileHeight);
+
+            if (checkAllowSwipeable()) {
+                if (allowSwipeable) {
+                    setExtraProps(isMobileOnly && !directMode ? mobileSwipeableHandlers : {});
+                }
             }
+            else {
+                setAllowSwipeable(false);
+                setExtraProps({});
+                onDisableSwipeReceive();
+            }
+        }
+
+        return () => {
+            setExtraProps({});
         }
     }, [contentRef.current?.getContext, openGameId]);
 
-    useEffect(() => {
-        setExtraProps(isMobileOnly && !directMode ? mobileSwipeableHandlers : {});
-    }, []);
+    const checkAllowSwipeable = () => {
+        return contentRef.current.offsetHeight <= window.innerHeight;
+    }
 
     useEffect(() => {
         (async () => {
@@ -75,19 +92,21 @@ export const Games: React.FC<Props> = ({
         })();
     }, []);
 
+    const onSwipeHandler = (isUp: boolean) => {
+        if (!checkAllowSwipeable()) {
+            return;
+        }
+        swipeableHandler(isUp, openGameId);
+        setStopScroll(true);
+    }
+
     const mobileSwipeableHandlers = useSwipeable({
-        onSwipedUp: () => {
-            swipeableHandler(true, openGameId);
-            setStopScroll(true);
-        },
-        onSwipedDown: () => {
-            swipeableHandler(false, openGameId);
-            setStopScroll(true);
-        },
+        onSwipedUp: () => onSwipeHandler(true),
+        onSwipedDown: () => onSwipeHandler(false),
         swipeDuration: gamesConstants.swipeDuration,
-        preventScrollOnSwipe: true,
-        trackMouse: true,
+        trackMouse: true
     });
+
 
     const gameSound = {
         playPlaceBetSound: usePlaceBetSound(),

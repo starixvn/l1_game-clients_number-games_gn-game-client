@@ -97,7 +97,7 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.updateAvatar = this.updateAvatar.bind(this);
         this.swipeableHandler = this.swipeableHandler.bind(this);
         this.changeOrientation = this.changeOrientation.bind(this);
-        this.handleScaleFromGame = this.handleScaleFromGame.bind(this);
+        this.onDisableSwipeReceive = this.onDisableSwipeReceive.bind(this);
 
         const buildId = process.env.buildVersion;
         const buildVersion = StorageHelper.get(localStorageKeys.buildVersion) ?? 0;
@@ -235,14 +235,8 @@ class Dashboard extends React.PureComponent<Props, State> {
         return (offerGames.includes(this.state.openGameId) && !backToLobby) || ssoRedirectGameId > 0;
     }
 
-    handleScaleFromGame(scale: number) {
-        const dynamicStyle = isMobileOnly
-            ? {
-                  transform: `scale(${scale})`,
-                  transformOrigin: "top center",
-                  height: `100dvh`,
-              }
-            : {};
+    onDisableSwipeReceive(scale: number) {
+        const dynamicStyle = isMobileOnly ? { "overflow-y": 'auto', scroll: 'hidden' } : {};
 
         this.setState({ dynamicStyle });
     }
@@ -405,7 +399,7 @@ class Dashboard extends React.PureComponent<Props, State> {
                 directMode={this.props.directMode}
                 swipeableHandler={this.swipeableHandler}
                 headerRef={this.headerRef}
-                onScaleReceive={this.handleScaleFromGame}
+                onDisableSwipeReceive={this.onDisableSwipeReceive}
             />
         );
     }
@@ -551,7 +545,7 @@ class Dashboard extends React.PureComponent<Props, State> {
 
     render() {
         const { authorizeInfo, isLandscapeMode } = this.state;
-        
+
         if (isLandscapeMode && isMobileOnly) {
             return <LandscapeMode />;
         }
