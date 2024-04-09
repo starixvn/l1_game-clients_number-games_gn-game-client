@@ -1,10 +1,12 @@
 import { memo } from "react";
-import { isAndroid } from "react-device-detect";
+import { useLowPerformanceDevice } from "../../../_shared/react-hooks";
 import { RoundState } from "../../game-base/type";
 import { Spritesheet } from "../sprites-sheet";
 import Styles from "./cage.module.scss";
 
 const BallLoops: React.FC<{ roundState: RoundState }> = ({ roundState }) => {
+    const isLowPerformanceDevice= useLowPerformanceDevice();
+
     const renderBalls = () => (
         <Spritesheet
             className={`fade-in ${Styles["balls-loop"]}`}
@@ -15,7 +17,7 @@ const BallLoops: React.FC<{ roundState: RoundState }> = ({ roundState }) => {
             steps={11}
             autoplay
             loop
-            fps={isAndroid ? 30 : 40}
+            fps={isLowPerformanceDevice ? 30 : 40}
         />
     );
 
