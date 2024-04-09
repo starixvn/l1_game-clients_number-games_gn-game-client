@@ -1,4 +1,3 @@
-import Head from "next/head";
 import { withRouter } from "next/router";
 import React from "react";
 import { isMobile, isMobileOnly } from "react-device-detect";
@@ -45,7 +44,6 @@ import Register from "./register";
 import { MAX_AVATAR_ID } from "./register/avatar-gallery";
 import NameGenerator from "./register/name-generator";
 import { ILobbyConfigs, Props, State } from "./type";
-import SwitchGamesGuide from "../switch-games-guide";
 
 class Dashboard extends React.PureComponent<Props, State> {
     private notificationSocket: Socket = null;
@@ -449,26 +447,22 @@ class Dashboard extends React.PureComponent<Props, State> {
             <PlayerContextProvider value={authContextValue}>
                 <SettingContextProvider>
                     <LobbyConnectionContextProvider value={lobbyConnectionContextValue}>
+                        {allowSwipeGameOndDesktop && (
+                            <button className={`${Styles["prev-button"]}`} onClick={() => this.swipeableHandler(true, openGameId)}>
+                                <span className={`icon-back ${Styles["icon"]}`}></span>
+                            </button>
+                        )}
                         <div
                             style={{ ...scaleExtraProps }}
                             className={`${Styles["dashboard"]} ${!isRenderGames ? "no-scroll" : ""}`}
                             id={"dashboard"}
                         >
-                            {allowSwipeGameOndDesktop && (
-                                <button className={`${Styles["prev-button"]}`} onClick={() => this.swipeableHandler(true, openGameId)}>
-                                    <span className={`icon-back ${Styles["icon"]}`}></span>
-                                </button>
-                            )}
                             <div>
                                 <Header headerRef={this.headerRef} openingGameId={openGameId} isRenderGames={isRenderGames} />
                             </div>
 
                             {isRenderGames ? this.renderGames() : this.renderLobby()}
-                            {allowSwipeGameOndDesktop && (
-                                <button className={`${Styles["next-button"]}`} onClick={() => this.swipeableHandler(false, openGameId)}>
-                                    <span className={`icon-back ${Styles["icon"]}`}></span>
-                                </button>
-                            )}
+
                             {!isRenderGames && <Footer />}
                             <MusicPlayer />
 
@@ -492,6 +486,11 @@ class Dashboard extends React.PureComponent<Props, State> {
                                 </div>
                             )}
                         </div>
+                        {allowSwipeGameOndDesktop && (
+                            <button className={`${Styles["next-button"]}`} onClick={() => this.swipeableHandler(false, openGameId)}>
+                                <span className={`icon-back ${Styles["icon"]}`}></span>
+                            </button>
+                        )}
                     </LobbyConnectionContextProvider>
                 </SettingContextProvider>
             </PlayerContextProvider>

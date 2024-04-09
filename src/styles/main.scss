@@ -155,6 +155,8 @@ body {
 }
 
 .copyright {
+    position: relative;
+    z-index: 3;
     font-size: 0.9rem;
     font-weight: 500;
     color: var(--color-copyright);

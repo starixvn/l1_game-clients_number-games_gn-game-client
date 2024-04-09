@@ -6,13 +6,11 @@ $delay3: $duration + $delay2 - 1;
 
 .background-galaxy {
     position: absolute;
-    z-index: 1;
     top: 3.2rem;
-    bottom: 0;
+    height: 100%;
     left: 0;
     width: 100%;
     opacity: 1;
-    overflow: hidden;
 
     .galaxy-1,
     .galaxy-2 {
@@ -28,7 +26,6 @@ $delay3: $duration + $delay2 - 1;
 .star-field {
     --starLayerDuration: 15s;
     position: absolute;
-    z-index: 1;
     top: 0;
     left: 0;
     width: 100%;

@@ -5,9 +5,9 @@ const Footer = () => {
     const { t } = useTranslator();
 
     return (
-        <div className="text-center copyright">
+        <h3 className="text-center copyright">
             {t(`${ResourceTypes.SABA_NUMBER}.copyright`, { year: new Date().getFullYear() }).replaceTolgeeFormat()}
-        </div>
+        </h3>
     );
 };
 
