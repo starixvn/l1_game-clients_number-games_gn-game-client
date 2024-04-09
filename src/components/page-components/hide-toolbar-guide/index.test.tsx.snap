@@ -22,7 +22,7 @@ exports[`ToolbarGuide component Not mobile + safari should match the snapshot 1`
           <img
             alt="iphone"
             class="iphone-background"
-            src="/static/images/hide-toolbar-guide/mockup-phone.svg"
+            src="/static/images/hide-toolbar-guide/mockup-phone.svg?undefined"
           />
         </div>
         <div
@@ -137,7 +137,7 @@ exports[`ToolbarGuide component mobile + safari should match the snapshot 1`] = 
           <img
             alt="iphone"
             class="iphone-background"
-            src="/static/images/hide-toolbar-guide/mockup-phone.svg"
+            src="/static/images/hide-toolbar-guide/mockup-phone.svg?undefined"
           />
         </div>
         <div
