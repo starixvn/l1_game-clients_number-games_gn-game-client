@@ -74,7 +74,7 @@ export const Games: React.FC<Props> = ({
     }, [contentRef.current?.getContext, openGameId]);
 
     const checkAllowSwipeable = () => {
-        return contentRef.current.offsetHeight <= window.innerHeight;
+        return contentRef.current.offsetHeight + headerRef.current.offsetHeight <= window.innerHeight;
     };
 
     useEffect(() => {
@@ -156,9 +156,9 @@ export const Games: React.FC<Props> = ({
                 >
                     <BackgroundGalaxy />
                     {isDirectMode && <ToolbarGuide />}
-                    {!isDirectMode && <SwitchGamesGuide allowSwipeable={allowSwipeable} />}
-
                     {getGameComponentById(openGameId)}
+
+                    {!isDirectMode && allowSwipeable && <SwitchGamesGuide />}
                 </div>
             </SystemContextProvider>
             <Footer />
