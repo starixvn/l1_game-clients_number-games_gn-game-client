@@ -17,6 +17,12 @@ jest.mock("../../../../_shared/helpers/number-helper", () => ({
     randomInteger: jest.fn().mockReturnValue(1),
 }));
 
+jest.mock("../../../../_shared/helpers", () => ({
+    AnalyticsHelper: { trackFunction: jest.fn() },
+    TrackingFunction: jest.fn(),
+    TrackingAction: jest.fn(),
+}));
+
 describe(Register.name, () => {
     let component: Register;
 
