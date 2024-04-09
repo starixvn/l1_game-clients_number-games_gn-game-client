@@ -3,6 +3,7 @@ import { useGameStatesDispatch } from "../../../../_shared/react-contexts/game-s
 import BetHistoryBase from "../bet-history-base";
 import { numberWithCommas, separateDateTime, sortedCollectionByTime } from "../../../../_shared/helpers";
 import { useGameContext } from "../../../../_shared/react-contexts";
+import { randomBytes } from "crypto";
 
 const mockDispatch = useGameStatesDispatch as jest.Mock;
 const mockSortedCollectionByTime = sortedCollectionByTime as jest.Mock;
@@ -13,6 +14,23 @@ const mockGameContext = useGameContext as jest.Mock;
 String.prototype.capitalizeFirstLetter = function () {
     return this;
 };
+
+jest.mock("../../infinite-table", () => {
+    const InfiniteTable = ({ addData, body }) => (
+        <>
+            <div data-testid="infinite-table">InfiniteTable</div>
+            <button onClick={addData} data-testid="add-data"></button>
+            {body.map((row) => (
+                <div key={randomBytes(16).toString("hex")}>
+                    {row.map((item) => (
+                        <td key={randomBytes(10).toString()}>{item.node}</td>
+                    ))}
+                </div>
+            ))}
+        </>
+    );
+    return { InfiniteTable };
+});
 
 jest.mock("../../../../_shared/react-contexts", () => ({
     useGameContext: jest.fn(),
@@ -96,6 +114,35 @@ describe(BetHistoryBase.name, () => {
                 expect(mockRenderBetLogResult).toHaveBeenCalled();
             });
         });
+        describe("when got data empty", () => {
+            it("should not render bet log result", () => {
+                mockDispatch.mockReturnValue(jest.fn());
+                let mockCallback = jest.fn();
+                const gameMessageHandler = {
+                    broadcastGameEvent: jest.fn(),
+                    register: (_, callback) => {
+                        mockCallback = callback;
+                    },
+                    removeHandler: jest.fn(),
+                };
+                mockGameContext.mockReturnValue({ gameMessageHandler });
+                const mockRenderBetLogResult = jest.fn();
+                mockRenderBetLogResult.mockReturnValue(<div></div>);
+
+                const betHistoryBase = <BetHistoryBase renderBetLogResult={mockRenderBetLogResult} />;
+                const renderResult = render(betHistoryBase);
+                act(() => {
+                    mockCallback({
+                        history: {
+                            betLogs: [],
+                        },
+                    });
+                });
+                renderResult.rerender(betHistoryBase);
+
+                expect(mockRenderBetLogResult).toHaveBeenCalledTimes(0);
+            });
+        });
     });
 
     describe("click draw id", () => {
@@ -136,6 +183,47 @@ describe(BetHistoryBase.name, () => {
             screen.getByText("1234").click();
 
             expect(mockDispatch).toHaveBeenCalled();
+        });
+    });
+
+    describe("when add data", () => {
+        it("should broadcast message", () => {
+            mockDispatch.mockReturnValue(jest.fn());
+            let mockCallback = jest.fn();
+            const gameMessageHandler = {
+                broadcastGameEvent: jest.fn(),
+                register: (_, callback) => {
+                    mockCallback = callback;
+                },
+                removeHandler: jest.fn(),
+            };
+            mockGameContext.mockReturnValue({ gameMessageHandler });
+            const mockRenderBetLogResult = jest.fn();
+            mockRenderBetLogResult.mockReturnValue(<div></div>);
+            mockDispatch.mockReturnValue(jest.fn());
+
+            const betHistoryBase = <BetHistoryBase renderBetLogResult={mockRenderBetLogResult} />;
+            const renderResult = render(betHistoryBase);
+            act(() => {
+                mockCallback({
+                    history: {
+                        betLogs: [
+                            {
+                                drawId: 1234,
+                                result: {
+                                    time: new Date(),
+                                },
+                                totalAmount: 1,
+                                betwin: 1,
+                            },
+                        ],
+                    },
+                });
+            });
+            renderResult.rerender(betHistoryBase);
+            screen.getByTestId("add-data").click();
+
+            expect(gameMessageHandler.broadcastGameEvent).toHaveBeenCalled();
         });
     });
 });
