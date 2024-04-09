@@ -20,7 +20,6 @@ jest.mock("../../../_shared/react-hooks/use-translator", () => ({
 }));
 
 describe("SwitchGamesGuide component", () => {
-    const allowSwipeable = true;
     describe("mobile", () => {
         beforeEach(() => {
             Object.defineProperty(reactDeviceDetect, "isMobileOnly", { get: () => true });
@@ -32,7 +31,7 @@ describe("SwitchGamesGuide component", () => {
 
         test("renders correctly when enabled and on mobile", () => {
             // Act
-            const { getByText } = render(<SwitchGamesGuide allowSwipeable />);
+            const { getByText } = render(<SwitchGamesGuide />);
             const closeButton = getByText(`${ResourceTypes.SABA_NUMBER}.button_close`);
             const doNotShowAgainButton = getByText(`${ResourceTypes.SABA_NUMBER}.button_donot_show`);
 
@@ -43,7 +42,7 @@ describe("SwitchGamesGuide component", () => {
 
         test("closes toolbar guide when close button is clicked", () => {
             // Act
-            const { getByText, queryByText } = render(<SwitchGamesGuide allowSwipeable />);
+            const { getByText, queryByText } = render(<SwitchGamesGuide />);
             const closeButton = getByText(`${ResourceTypes.SABA_NUMBER}.button_close`);
             fireEvent.click(closeButton);
 
@@ -53,7 +52,7 @@ describe("SwitchGamesGuide component", () => {
 
         test('hides toolbar guide when "Do Not Show Again" button is clicked', () => {
             // Act
-            const { getByText, queryByText } = render(<SwitchGamesGuide allowSwipeable />);
+            const { getByText, queryByText } = render(<SwitchGamesGuide />);
             const doNotShowAgainButton = getByText(`${ResourceTypes.SABA_NUMBER}.button_donot_show`);
             fireEvent.click(doNotShowAgainButton);
             // Assert
@@ -62,7 +61,7 @@ describe("SwitchGamesGuide component", () => {
 
         test("should match the snapshot", () => {
             // Act
-            const { container } = render(<SwitchGamesGuide allowSwipeable />);
+            const { container } = render(<SwitchGamesGuide />);
 
             // Assert
             expect(container).toMatchSnapshot();
@@ -76,7 +75,7 @@ describe("SwitchGamesGuide component", () => {
 
         test("should match the snapshot", () => {
             // Act
-            const { container } = render(<SwitchGamesGuide allowSwipeable />);
+            const { container } = render(<SwitchGamesGuide />);
 
             // Assert
             expect(container).toMatchSnapshot();
