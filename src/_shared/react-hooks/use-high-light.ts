@@ -1,7 +1,7 @@
 import { RoundState } from "../../components/game-base/type";
 
 export function isHighLightWinningResult({ betChoice, roundState, settlementResult, showResultInfo }) {
-    return roundState === RoundState.DisplayResult && showResultInfo && settlementResult && settlementResult[betChoice];
+    return roundState === RoundState.DisplayResult && showResultInfo && settlementResult?.[betChoice];
 }
 
 export function isShowHighlightPrevResult({ betChoice, roundState, roundHistory }) {

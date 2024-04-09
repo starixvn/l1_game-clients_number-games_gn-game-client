@@ -79,12 +79,6 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
         isShowPFVerification,
     } = payload;
 
-    // console.log("payload: ", JSON.stringify(payload));
-
-    // if (type !== GameEventActionType.TOTAL_BET && type !== GameEventActionType.SET_NEW_GAME_STATE) {
-    //     console.log(`\x1B[31mGameEventActionType: ${type}`);
-    // }
-
     switch (type) {
         case GameEventActionType.CONNECT: {
             return {
@@ -114,6 +108,7 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
             return {
                 ...state,
                 signedIn: false,
+                showResultInfo: false,
             };
         }
 
@@ -127,7 +122,6 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
         }
 
         case GameEventActionType.GAME_CONFIGS: {
-            // console.log(`\x1B[31m SocketEventActionTypes : ${type}`);
             return {
                 ...state,
                 gameConfigs: gameConfigs,

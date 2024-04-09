@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { useGameBettingZoneContext } from "../../../_shared/react-contexts";
 import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import { RoundState } from "../../game-base/type";
@@ -27,18 +28,19 @@ export const TotalBet: React.FC<BaseProps> = ({ tolgeeNamespace, choice, classNa
     const { totalBets } = useGameBettingZoneContext();
     const { rate, roundState } = useGameStateContext();
     const totalBet = totalBets?.[choice] ?? 0;
+    return useMemo(() => {
+        if (totalBet <= 0 || rate == 0 || roundState === RoundState.SwitchRound) {
+            return <div className={className}></div>;
+        }
 
-    if (totalBet <= 0 || rate == 0 || roundState === RoundState.SwitchRound) {
-        return <div className={className}></div>;
-    }
-
-    return (
-        <div className={`flex items-center gap-1 ${Styles["total-stakes"]} ${className}`}>
-            <span className={`icon-coin ${Styles["icon-coin"]}`}></span>
-            <span id={`${tolgeeNamespace}-${choice}-total-stakes`} className={Styles["stakes-value"]}>
-                {convertStakeToString(totalBet, rate)}
-            </span>
-        </div>
-    );
+        return (
+            <div className={`flex items-center gap-1 ${Styles["total-stakes"]} ${className}`}>
+                <span className={`icon-coin ${Styles["icon-coin"]}`}></span>
+                <span id={`${tolgeeNamespace}-${choice}-total-stakes`} className={Styles["stakes-value"]}>
+                    {convertStakeToString(totalBet, rate)}
+                </span>
+            </div>
+        );
+    }, [totalBet, rate]);
 };
 export default TotalBet;

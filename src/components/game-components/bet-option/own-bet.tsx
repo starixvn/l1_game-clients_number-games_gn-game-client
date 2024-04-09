@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 
 import { numberWithCommas } from "../../../_shared/helpers";
 import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
@@ -61,4 +61,4 @@ export const OwnBet: React.FC<BaseProps> = ({ tolgeeNamespace, choice, className
     );
 };
 
-export default OwnBet;
+export default memo(OwnBet);

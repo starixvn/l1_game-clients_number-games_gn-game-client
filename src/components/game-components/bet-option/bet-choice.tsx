@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { getGlossaryTranslate } from "../../../_shared/helpers";
 import { useTranslator } from "../../../_shared/react-hooks/use-translator";
 import Styles from "./bet-option.module.scss";
@@ -13,4 +14,4 @@ export const BetChoice: React.FC<BaseProps> = ({ tolgeeNamespace, choice, classN
     );
 };
 
-export default BetChoice;
+export default memo(BetChoice);
