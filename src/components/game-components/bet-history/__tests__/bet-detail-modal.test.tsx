@@ -1,4 +1,4 @@
-import { act, render, screen } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import { useGameStateContext, useGameStatesDispatch } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
 import BetDetailModal from "../bet-detail-modal";
 

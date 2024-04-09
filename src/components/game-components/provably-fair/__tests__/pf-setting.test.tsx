@@ -1,0 +1,473 @@
+import { act, render, queryByAttribute, screen, fireEvent, createEvent } from "@testing-library/react";
+import { useGameStateContext, useGameStatesDispatch } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
+import { useClickSound, useSNTranslate } from "../../../../_shared/react-hooks";
+import ModalContainer from "../../modal-container";
+import PFSettingModal from "../pf-setting";
+import { useGameContext } from "../../../../_shared/react-contexts";
+import { ReactNode } from "react";
+import { GameEventActionType } from "../../../../_shared/react-contexts/game-state-context/game-event-action";
+import { LoadingSpinner } from "../../game-loading/loading-spinner";
+
+const mockGameState = useGameStateContext as jest.Mock;
+const mockGameContext = useGameContext as jest.Mock;
+const mockGameStateDispatch = useGameStatesDispatch as jest.Mock;
+
+jest.mock("../../game-loading/loading-spinner", () => {
+    const LoadingSpinner = () => <div data-testid="loading-spinner">LoadingSpinner</div>;
+    return { LoadingSpinner };
+});
+
+jest.mock("../../../../_shared/react-contexts/game-state-context/game-state-context", () => ({
+    useGameStateContext: jest.fn(),
+    useGameStatesDispatch: jest.fn(),
+}));
+
+jest.mock("../../../../_shared/react-contexts", () => ({
+    useGameContext: jest.fn(),
+}));
+
+jest.mock("../../../../_shared/react-hooks", () => ({
+    useSNTranslate: jest.fn().mockReturnValue({ t: jest.fn() }),
+    useCommonTranslate: jest.fn().mockReturnValue({ t: jest.fn() }),
+    useClickSound: jest.fn().mockReturnValue(jest.fn()),
+}));
+
+const PFResultMessage = "pfResult";
+const PFPublishMessage = "pf";
+const ClientSeedDetail = "clientSeedDetail";
+
+jest.mock("../../modal-container", () => {
+    const ModalContainer = ({ children, onCloseModal }) => {
+        return (
+            <>
+                {children}
+                <div data-testid="modal-container"></div>
+                <button data-testid="close-modal" onClick={onCloseModal}></button>
+            </>
+        );
+    };
+
+    return ModalContainer;
+});
+
+const defineMock = (state?: Object, gameMessageHandler?: Object) => {
+    const defaultState = {
+        isShowPFSetting: true,
+        pfClientSeedSetting: {},
+        ownBets: {},
+        drawId: 1,
+    };
+    const defaultGameMessageHandler = {
+        broadcastGameEvent: jest.fn(),
+        register: jest.fn(),
+        removeHandler: jest.fn(),
+    };
+
+    mockGameState.mockReturnValue({ ...defaultState, ...state });
+    mockGameContext.mockReturnValue({
+        gameMessageHandler: { ...defaultGameMessageHandler, ...gameMessageHandler },
+    });
+};
+
+const defineMockWithDispatch = (state?: Object, gameMessageHandler?: Object) => {
+    defineMock(state, gameMessageHandler);
+    const mockDispatch = jest.fn();
+    mockGameStateDispatch.mockReturnValue(mockDispatch);
+
+    return mockDispatch;
+};
+
+const renderModal = (content?: ReactNode) => {
+    const root = <div id="dashboard"></div>;
+    const renderResult = render(root);
+    const newNode = (
+        <>
+            {root}
+            {content}
+        </>
+    );
+    renderResult.rerender(newNode);
+
+    return { renderResult, newNode };
+};
+
+describe(PFSettingModal.name, () => {
+    describe("render", () => {
+        test.each([
+            [true, true],
+            [false, false],
+        ])("when show modal state is %s then show modal %s", (isShow, expected) => {
+            defineMock({ isShowPFSetting: isShow });
+
+            const { renderResult } = renderModal(<PFSettingModal />);
+
+            expect(renderResult.queryAllByTestId("modal-container").length > 0).toBe(expected);
+        });
+        test.each([
+            [false, true],
+            [true, false],
+        ])("when receive message socket is %s then show loader is %s", (isReceive, expected) => {
+            let clientSeedHandler = jest.fn();
+            const gameMessageHandler = {
+                register: (id, callback) => {
+                    if (id === ClientSeedDetail) {
+                        clientSeedHandler = callback;
+                    }
+                },
+            };
+            defineMock({ isShowPFSetting: true }, gameMessageHandler);
+
+            const { renderResult } = renderModal(<PFSettingModal />);
+
+            if (isReceive) {
+                act(() => {
+                    clientSeedHandler({ clientSeedDetail: {} });
+                });
+            }
+
+            expect(renderResult.queryAllByTestId("loading-spinner").length > 0).toBe(expected);
+        });
+        describe("when receive", () => {
+            describe("client seed detail message", () => {
+                it("should render client seed detail", () => {
+                    let clientSeedHandler = jest.fn();
+                    const gameMessageHandler = {
+                        register: (id, callback) => {
+                            if (id === ClientSeedDetail) {
+                                clientSeedHandler = callback;
+                            }
+                        },
+                    };
+                    const mockDispatch = defineMockWithDispatch({ isShowPFSetting: true }, gameMessageHandler);
+
+                    const { renderResult } = renderModal(<PFSettingModal />);
+
+                    act(() => {
+                        clientSeedHandler({
+                            clientSeedDetail: {
+                                drawId: 2,
+                                useManualClientSeed: true,
+                                manualClientSeed: "12",
+                                randomClientSeed: "123",
+                            },
+                        });
+                    });
+
+                    expect(renderResult.getByDisplayValue("12")).toHaveValue("12");
+                    expect(mockDispatch).toHaveBeenCalledTimes(1);
+                });
+            });
+            describe("pf result message", () => {
+                it("should render pf result", () => {
+                    let pfResultHandler = jest.fn();
+                    const gameMessageHandler = {
+                        register: (id, callback) => {
+                            if (id === PFResultMessage) {
+                                pfResultHandler = callback;
+                            }
+                        },
+                    };
+
+                    defineMockWithDispatch({ isShowPFSetting: true }, gameMessageHandler);
+
+                    const { renderResult } = renderModal(<PFSettingModal />);
+
+                    act(() => {
+                        pfResultHandler({
+                            pfResult: {
+                                drawId: 2,
+                                serverSeedHash: "abcdef",
+                            },
+                        });
+                    });
+
+                    expect(renderResult.getByDisplayValue("abcdef")).toHaveValue("abcdef");
+                });
+            });
+            describe("pf server seed hash message", () => {
+                it("should render pf result", () => {
+                    let pfResultHandler = jest.fn();
+                    const gameMessageHandler = {
+                        register: (id, callback) => {
+                            if (id === PFPublishMessage) {
+                                pfResultHandler = callback;
+                            }
+                        },
+                    };
+
+                    defineMockWithDispatch({ isShowPFSetting: true }, gameMessageHandler);
+
+                    const { renderResult } = renderModal(<PFSettingModal />);
+
+                    act(() => {
+                        pfResultHandler({
+                            pf: {
+                                drawId: 2,
+                                serverSeedHash: "abcdef",
+                            },
+                        });
+                    });
+
+                    expect(renderResult.getByDisplayValue("abcdef")).toHaveValue("abcdef");
+                });
+            });
+        });
+        test.each([
+            [false, ""],
+            [true, "123"],
+        ])("when use manual client seed is %s then manual client seed should be %s", (useManualClientSeed, manualClientSeed) => {
+            let pfResultHandler = jest.fn();
+            const gameMessageHandler = {
+                register: (id, callback) => {
+                    if (id === PFResultMessage) {
+                        pfResultHandler = callback;
+                    }
+                },
+            };
+            defineMock(
+                {
+                    pfClientSeedSetting: {
+                        useManualClientSeed,
+                        manualClientSeed: "123",
+                        randomClientSeed: "456",
+                    },
+                },
+                gameMessageHandler
+            );
+
+            const { renderResult } = renderModal(<PFSettingModal />);
+
+            act(() => {
+                pfResultHandler({
+                    pfResult: {
+                        drawId: 2,
+                        serverSeedHash: "abcdef",
+                    },
+                });
+            });
+
+            expect(renderResult.container.querySelector("#manual-client-seed")).toHaveValue(manualClientSeed);
+        });
+    });
+    describe("click close button", () => {
+        it("should call dispatch", () => {
+            const mockDispatch = defineMockWithDispatch({ isShowPFSetting: true });
+
+            const { renderResult } = renderModal(<PFSettingModal />);
+
+            renderResult.queryByTestId("close-modal").click();
+
+            expect(mockDispatch).toHaveBeenCalledWith({ type: GameEventActionType.TOGGLE_PF_SETTING, payload: { isShowPFSetting: false } });
+        });
+    });
+    describe("input manual client seed", () => {
+        test.each([
+            ["a", false, 97],
+            ["1", true, 49],
+        ])("if input is %s then call default is %s", (key, expected, keyCode) => {
+            let pfResultHandler = jest.fn();
+            const gameMessageHandler = {
+                register: (id, callback) => {
+                    if (id === PFResultMessage) {
+                        pfResultHandler = callback;
+                    }
+                },
+            };
+            defineMock({}, gameMessageHandler);
+
+            const { renderResult } = renderModal(<PFSettingModal />);
+
+            act(() => {
+                pfResultHandler({
+                    pfResult: {
+                        drawId: 2,
+                        serverSeedHash: "abcdef",
+                    },
+                });
+            });
+
+            const event = {
+                key: key,
+                which: keyCode,
+            };
+            const isDefaultCall = fireEvent.keyDown(renderResult.container.querySelector("#manual-client-seed"), event);
+            expect(isDefaultCall).toBe(expected);
+        });
+
+        test.each([
+            ["123", true],
+            ["12a", false],
+            ["12345", false],
+        ])("if paste value is %s then call default is %s", (key, expected) => {
+            let pfResultHandler = jest.fn();
+            const gameMessageHandler = {
+                register: (id, callback) => {
+                    if (id === PFResultMessage) {
+                        pfResultHandler = callback;
+                    }
+                },
+            };
+            defineMock({}, gameMessageHandler);
+
+            const { renderResult } = renderModal(<PFSettingModal />);
+
+            act(() => {
+                pfResultHandler({
+                    pfResult: {
+                        drawId: 2,
+                        serverSeedHash: "abcdef",
+                    },
+                });
+            });
+
+            const event = {
+                target: {
+                    value: key,
+                },
+            };
+            const isDefaultCall = fireEvent.paste(renderResult.container.querySelector("#manual-client-seed"), event);
+            expect(isDefaultCall).toBe(expected);
+        });
+
+        test.each([
+            ["123", false],
+            ["", true],
+        ])("if blur value is %s then manual client equal random client seed is %s", (manualClientSeed, expected) => {
+            let pfResultHandler = jest.fn();
+            const gameMessageHandler = {
+                register: (id, callback) => {
+                    if (id === PFResultMessage) {
+                        pfResultHandler = callback;
+                    }
+                },
+            };
+            defineMockWithDispatch(
+                {
+                    pfClientSeedSetting: {
+                        useManualClientSeed: true,
+                        manualClientSeed: manualClientSeed,
+                        randomClientSeed: "456",
+                    },
+                },
+                gameMessageHandler
+            );
+
+            const { renderResult } = renderModal(<PFSettingModal />);
+
+            act(() => {
+                pfResultHandler({
+                    pfResult: {
+                        drawId: 2,
+                        serverSeedHash: "abcdef",
+                    },
+                });
+            });
+
+            const event = {
+                target: {
+                    value: manualClientSeed,
+                },
+            };
+            act(() => {
+                fireEvent.blur(renderResult.container.querySelector("#manual-client-seed"), event);
+            });
+
+            expect(renderResult.container.querySelector("#manual-client-seed")["value"] == "456").toBe(expected);
+        });
+
+        test.each([
+            ["random-seed", true],
+            ["manual-seed", false],
+        ])("if click radio %s dipatch data with use manual client seed is %s and manual client seed is %s", (mode, useManualClientSeed) => {
+            let pfResultHandler = jest.fn();
+            const gameMessageHandler = {
+                register: (id, callback) => {
+                    if (id === PFResultMessage) {
+                        pfResultHandler = callback;
+                    }
+                },
+            };
+            const dispatch = defineMockWithDispatch(
+                {
+                    pfClientSeedSetting: {
+                        useManualClientSeed: useManualClientSeed,
+                        manualClientSeed: "",
+                        randomClientSeed: "456",
+                    },
+                },
+                gameMessageHandler
+            );
+
+            const { renderResult } = renderModal(<PFSettingModal />);
+
+            act(() => {
+                pfResultHandler({
+                    pfResult: {
+                        drawId: 2,
+                        serverSeedHash: "abcdef",
+                    },
+                });
+            });
+
+            act(() => {
+                fireEvent.click(renderResult.container.querySelector(`#${mode}`));
+            });
+
+            expect(dispatch).toHaveBeenCalledWith({
+                type: GameEventActionType.UPDATE_PF_CLIENT_SEED_SETTING,
+                payload: {
+                    pfClientSeedSetting: {
+                        useManualClientSeed: !useManualClientSeed,
+                        manualClientSeed: useManualClientSeed ? undefined : "456",
+                    },
+                },
+            });
+        });
+
+        describe("change manual seed", () => {
+            it("should change manual client seed ui and call dispatch", () => {
+                let pfResultHandler = jest.fn();
+                const gameMessageHandler = {
+                    register: (id, callback) => {
+                        if (id === PFResultMessage) {
+                            pfResultHandler = callback;
+                        }
+                    },
+                };
+                const dispatch = defineMockWithDispatch(
+                    {
+                        pfClientSeedSetting: {
+                            useManualClientSeed: true,
+                            manualClientSeed: "0",
+                            randomClientSeed: "456",
+                        },
+                    },
+                    gameMessageHandler
+                );
+
+                const { renderResult } = renderModal(<PFSettingModal />);
+
+                act(() => {
+                    pfResultHandler({
+                        pfResult: {
+                            drawId: 2,
+                            serverSeedHash: "abcdef",
+                        },
+                    });
+                });
+
+                const event = {
+                    target: {
+                        value: "456",
+                    },
+                };
+                act(() => {
+                    fireEvent.change(renderResult.container.querySelector("#manual-client-seed"), event);
+                });
+
+                expect(dispatch).toHaveBeenCalled();
+                expect(renderResult.container.querySelector("#manual-client-seed")["value"]).toBe("456");
+            });
+        });
+    });
+});

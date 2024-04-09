@@ -20,13 +20,17 @@ jest.mock("../../infinite-table", () => {
         <>
             <div data-testid="infinite-table">InfiniteTable</div>
             <button onClick={addData} data-testid="add-data"></button>
-            {body.map((row) => (
-                <div key={randomBytes(16).toString("hex")}>
-                    {row.map((item) => (
-                        <td key={randomBytes(10).toString()}>{item.node}</td>
-                    ))}
-                </div>
-            ))}
+            <table>
+                {body.map((row) => (
+                    <tbody key={randomBytes(16).toString("hex")}>
+                        {row.map((item) => (
+                            <tr key={randomBytes(10).toString()}>
+                                <td>{item.node}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                ))}
+            </table>
         </>
     );
     return { InfiniteTable };
@@ -221,7 +225,9 @@ describe(BetHistoryBase.name, () => {
                 });
             });
             renderResult.rerender(betHistoryBase);
-            screen.getByTestId("add-data").click();
+            act(() => {
+                screen.getByTestId("add-data").click();
+            });
 
             expect(gameMessageHandler.broadcastGameEvent).toHaveBeenCalled();
         });
