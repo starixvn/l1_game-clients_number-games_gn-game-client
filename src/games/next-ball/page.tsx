@@ -119,7 +119,7 @@ class NextBall extends GameBase<GameBaseProps> {
             <Scoreboard
                 isShowBlink={isShowBlink}
                 roundHistory={roundHistory as Round<NextBallResult, NextBallSettlementResult>[]}
-                isOddEven={statisticGroup === 0}
+                isOddEven={statisticGroup === 1}
             />
         );
     }
