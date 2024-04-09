@@ -23,6 +23,7 @@ import NextBall from "./next-ball/page";
 import { Props } from "./type";
 import { getChipSettings } from "../services/user-setting-service";
 import { AnalyticsHelper, TrackingAction, TrackingFunction } from "../_shared/helpers";
+import SwitchGamesGuide from "../components/page-components/switch-games-guide";
 
 const ToolbarGuide = dynamic(() => import("../components/page-components/hide-toolbar-guide"));
 
@@ -155,6 +156,7 @@ export const Games: React.FC<Props> = ({
                 >
                     <BackgroundGalaxy />
                     {isDirectMode && <ToolbarGuide />}
+                    {!isDirectMode && <SwitchGamesGuide allowSwipeable={allowSwipeable} />}
 
                     {getGameComponentById(openGameId)}
                 </div>

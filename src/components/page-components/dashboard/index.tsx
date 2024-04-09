@@ -231,9 +231,8 @@ class Dashboard extends React.PureComponent<Props, State> {
         return (offerGames.includes(this.state.openGameId) && !backToLobby) || ssoRedirectGameId > 0;
     }
 
-    onDisableSwipeReceive(scale: number) {
+    onDisableSwipeReceive() {
         const dynamicStyle = isMobileOnly ? { "overflow-y": "auto", scroll: "hidden" } : {};
-
         this.setState({ dynamicStyle });
     }
 
@@ -472,8 +471,6 @@ class Dashboard extends React.PureComponent<Props, State> {
                             )}
                             {!isRenderGames && <Footer />}
                             <MusicPlayer />
-
-                            {isRenderGames && !this.props.directMode && <SwitchGamesGuide />}
 
                             {isShowErrorModal && (
                                 <div className={Styles["container-modal"]}>

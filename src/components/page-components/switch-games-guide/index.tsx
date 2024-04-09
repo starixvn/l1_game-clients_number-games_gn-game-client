@@ -13,7 +13,7 @@ const GuideImages = ({ name }) => {
     return <img src={`${SWITCH_GAMES_GUIDE_PATH}/${name}.svg`} alt={name} />;
 };
 
-const SwitchGamesGuide: React.FC = () => {
+const SwitchGamesGuide: React.FC<{ allowSwipeable: boolean }> = (allowSwipeable) => {
     const { t } = useTranslator();
     const { session } = usePlayerContext();
     const [isEnabledSwitchGamesGuide, setIsEnabledSwitchGamesGuide] = useState(false);
@@ -49,7 +49,8 @@ const SwitchGamesGuide: React.FC = () => {
         }
 
         return (
-            isEnabledSwitchGamesGuide && (
+            isEnabledSwitchGamesGuide &&
+            allowSwipeable && (
                 <div className={`${Styles["guide-container"]}`}>
                     <div className={Styles["guide-content"]}>
                         <div className={Styles["guide-images"]}>{imgGuide}</div>
