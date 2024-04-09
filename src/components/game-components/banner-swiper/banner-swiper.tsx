@@ -4,6 +4,7 @@ import "swiper/css/pagination";
 import { Autoplay, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { IBanner } from "../../page-components/dashboard/type";
+import { AnalyticsHelper, TrackingAction, TrackingFunction } from "../../../_shared/helpers";
 
 const DEFAULT_DELAY_SLIDER = 5000;
 export const BannerSwiper: React.FC<{ banners: IBanner[]; openGame: Function }> = ({ banners, openGame }) => {
@@ -55,7 +56,13 @@ export const BannerSwiper: React.FC<{ banners: IBanner[]; openGame: Function }> 
                 }
 
                 return (
-                    <SwiperSlide key={banner.gameId} onClick={() => openGame(banner.gameId)}>
+                    <SwiperSlide
+                        key={banner.gameId}
+                        onClick={() => {
+                            openGame(banner.gameId);
+                            AnalyticsHelper.trackFunction({ function: TrackingFunction.Banner, action: TrackingAction.Open });
+                        }}
+                    >
                         <img className="banner-img" src={banner.path} alt={banner.gameId.toString()} />
                     </SwiperSlide>
                 );

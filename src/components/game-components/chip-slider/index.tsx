@@ -68,10 +68,6 @@ export const ChipSlider: React.FC<{ gameConfigs: GameConfigs; userStakeLevel: Us
                 },
             });
             playClick();
-            AnalyticsHelper.trackFunction({
-                function: TrackingFunction.SelectChip,
-                action: `${TrackingAction.Select}_chip_${chipValue}`,
-            });
         }
     };
 
