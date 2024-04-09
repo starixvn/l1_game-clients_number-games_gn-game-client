@@ -12,6 +12,12 @@ jest.mock("swiper/react", () => ({
     SwiperSlide: ({ children }) => <div data-testid="swiper-slide-testid">{children}</div>,
 }));
 
+jest.mock("../../../_shared/helpers", () => ({
+    AnalyticsHelper: { trackFunction: jest.fn() },
+    TrackingFunction: jest.fn(),
+    TrackingAction: jest.fn(),
+}));
+
 describe(BannerSwiper.name, () => {
     let banners: IBanner[];
 
