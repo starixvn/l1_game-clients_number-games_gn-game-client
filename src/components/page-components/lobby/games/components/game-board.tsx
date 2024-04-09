@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Socket } from "socket.io-client";
 import { GameSettings } from "../../../../game-base/type";
 import Styles from "../../lobby.module.scss";
 import { CountdownTimer } from "./countdown-timer";
@@ -16,15 +15,25 @@ const messageEventTypes = {
 
 type Props = {
     gameSettings: GameSettings;
-    socket: Socket;
     openGame: Function;
     gameTransmitter: LobbyGameTransmitter;
 };
 
-export const GameBoard: React.FC<Props> = ({ gameSettings, socket, openGame, gameTransmitter }) => {
+export const GameBoard: React.FC<Props> = ({ gameSettings, openGame, gameTransmitter }) => {
     const [isShow, setIsShow] = useState<boolean>(true);
     const [transmitter, setTransmitter] = useState<LobbyGameTransmitter>(null);
-    const { reconnectGameTransmitter } = useLobbyConnectionContext();
+    const { reconnectGameTransmitter, socket } = useLobbyConnectionContext();
+
+    useEffect(() => {
+        document.addEventListener("visibilitychange", onVisibilityChange);
+        return () => {
+            document.removeEventListener("visibilitychange", onVisibilityChange);
+        };
+    }, []);
+
+    const onVisibilityChange = () => {
+        !document["hidden"] && getLobbyData(socket, gameSettings.id);
+    };
 
     useEffect(() => {
         if (gameTransmitter) {
@@ -62,7 +71,7 @@ export const GameBoard: React.FC<Props> = ({ gameSettings, socket, openGame, gam
             onClick={() => isShow && openGame(gameSettings.id)}
         >
             <GameIcon gameSettings={gameSettings} transmitter={transmitter} />
-            <DisabledGameBlock socket={socket} transmitter={transmitter} gameSettings={gameSettings} />
+            <DisabledGameBlock transmitter={transmitter} gameSettings={gameSettings} />
             {isShow && (
                 <div className={Styles["detail"]}>
                     <CountdownTimer transmitter={transmitter} gameSettings={gameSettings} />

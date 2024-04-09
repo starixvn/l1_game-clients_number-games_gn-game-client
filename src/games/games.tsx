@@ -52,19 +52,14 @@ export const Games: React.FC<Props> = ({
     const [allowSwipeable, setAllowSwipeable] = useState(true);
 
     useEffect(() => {
-        if (contentRef.current
-            && height !== contentRef.current.offsetHeight
-            && isMobileOnly
-            && openGameId > 0) {
-
+        if (contentRef.current && height !== contentRef.current.offsetHeight && isMobileOnly && openGameId > 0) {
             setHeight(contentRef.current.offsetHeight);
 
             if (checkAllowSwipeable()) {
                 if (allowSwipeable) {
                     setExtraProps(isMobileOnly && !directMode ? mobileSwipeableHandlers : {});
                 }
-            }
-            else {
+            } else {
                 setAllowSwipeable(false);
                 setExtraProps({});
                 onDisableSwipeReceive();
@@ -73,12 +68,12 @@ export const Games: React.FC<Props> = ({
 
         return () => {
             setExtraProps({});
-        }
+        };
     }, [contentRef.current?.getContext, openGameId]);
 
     const checkAllowSwipeable = () => {
         return contentRef.current.offsetHeight <= window.innerHeight;
-    }
+    };
 
     useEffect(() => {
         (async () => {
@@ -96,17 +91,16 @@ export const Games: React.FC<Props> = ({
         if (!checkAllowSwipeable()) {
             return;
         }
-        swipeableHandler(isUp, openGameId);
+        swipeableHandler(!isUp, openGameId);
         setStopScroll(true);
-    }
+    };
 
     const mobileSwipeableHandlers = useSwipeable({
         onSwipedUp: () => onSwipeHandler(true),
         onSwipedDown: () => onSwipeHandler(false),
         swipeDuration: gamesConstants.swipeDuration,
-        trackMouse: true
+        trackMouse: true,
     });
-
 
     const gameSound = {
         playPlaceBetSound: usePlaceBetSound(),

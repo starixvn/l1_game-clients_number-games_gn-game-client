@@ -1,5 +1,4 @@
 import dynamic from "next/dynamic";
-import { Socket } from "socket.io-client";
 import { BackgroundGalaxy } from "../background";
 import { ILobbyConfigs } from "../dashboard/type";
 import { Banner } from "./games/components/banner";
@@ -13,19 +12,16 @@ import { AnalyticsHelper } from "../../../_shared/helpers/analytic-helper";
 
 type Props = {
     openGame: Function;
-    socket: Socket;
     lobbyConfigs: ILobbyConfigs;
-    gameTransmitters: any;
 };
 
-export const Lobby: React.FC<Props> = ({ openGame, lobbyConfigs, socket, gameTransmitters }) => {
-
+export const Lobby: React.FC<Props> = ({ openGame, lobbyConfigs }) => {
     AnalyticsHelper.trackPage({ page_title: "Lobby" });
     return (
         <div className={Styles["lobby-container"]}>
             <BackgroundGalaxy />
             <Banner openGame={openGame} lobbyConfigs={lobbyConfigs} />
-            <LobbyLayout lobbyConfigs={lobbyConfigs} socket={socket} gameTransmitters={gameTransmitters} openGame={openGame} />
+            <LobbyLayout lobbyConfigs={lobbyConfigs} openGame={openGame} />
             <Settings />
             <ChangeAvatar />
             <ToolbarGuide />

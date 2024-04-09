@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { useTranslator } from "../../../../../_shared/react-hooks";
 import { ResourceTypes } from "../../../../../_shared/resources";
 import Styles from "../../lobby.module.scss";
-import { Socket } from "socket.io-client";
 import { useLobbyConnectionContext } from "../../../../../_shared/react-contexts";
 import { useTolgee } from "@tolgee/react";
 import { GameSettings } from "../../../../game-base/type";
@@ -16,12 +15,11 @@ const messageEventTypes = {
 };
 
 type Props = {
-    socket: Socket;
     transmitter: LobbyGameTransmitter;
     gameSettings: GameSettings;
 };
 
-export const DisabledGameBlock: React.FC<Props> = ({ socket, transmitter, gameSettings }) => {
+export const DisabledGameBlock: React.FC<Props> = ({ transmitter, gameSettings }) => {
     const { t } = useTranslator();
     const [isDisabledGame, setIsDisabledGame] = useState(false);
     const [isDisconnectGame, setIsDisconnectGame] = useState(false);
@@ -31,7 +29,7 @@ export const DisabledGameBlock: React.FC<Props> = ({ socket, transmitter, gameSe
         setIsDisabledGame(isDisabled);
     };
     const [errorMessage, setErrorMessage] = useState("");
-    const { removeGameTransmitter, reconnectGameTransmitter } = useLobbyConnectionContext();
+    const { removeGameTransmitter, reconnectGameTransmitter, socket } = useLobbyConnectionContext();
     const language = useTolgee().getLanguage();
 
     useEffect(() => {

@@ -69,7 +69,6 @@ class Dashboard extends React.PureComponent<Props, State> {
             openGameId: null,
             openGameName: "",
             isOnLobby: true,
-            lobbySocket: null,
             isLandscapeMode: false,
             dynamicStyle: {},
         };
@@ -174,9 +173,6 @@ class Dashboard extends React.PureComponent<Props, State> {
         if (!document["hidden"]) {
             const reCheckInResponse = await reCheckIn(this.props.session);
             this.handleRecheckInResponse(reCheckInResponse);
-            await this.connectLobbySocket(this.state.authorizeInfo, this.state.lobbyConfigs);
-        } else {
-            this.closeLobbySocket();
         }
     }
 
@@ -236,7 +232,7 @@ class Dashboard extends React.PureComponent<Props, State> {
     }
 
     onDisableSwipeReceive(scale: number) {
-        const dynamicStyle = isMobileOnly ? { "overflow-y": 'auto', scroll: 'hidden' } : {};
+        const dynamicStyle = isMobileOnly ? { "overflow-y": "auto", scroll: "hidden" } : {};
 
         this.setState({ dynamicStyle });
     }
@@ -288,13 +284,7 @@ class Dashboard extends React.PureComponent<Props, State> {
         if (!authorizeInfo?.authorized || lobbyGamesIds?.length === 0) {
             return;
         }
-        const lobbySocket = await this.lobbyConnectionHandler.initLobbySocket(this.props.session, lobbyGamesIds);
-        this.setState({ lobbySocket: lobbySocket });
-    };
-
-    closeLobbySocket = () => {
-        this.setState({ lobbySocket: null });
-        this.lobbyConnectionHandler.closeSocket();
+        await this.lobbyConnectionHandler.initLobbySocket(this.props.session, lobbyGamesIds);
     };
 
     registerMainSocketEvent(mainSocket: Socket) {
@@ -415,16 +405,9 @@ class Dashboard extends React.PureComponent<Props, State> {
     }
 
     renderLobby() {
-        const { lobbyConfigs, lobbySocket } = this.state;
+        const { lobbyConfigs } = this.state;
         updateURLContext({ backToLobby: true });
-        return (
-            <Lobby
-                openGame={(gameId) => this.openGameFromLobby(gameId)}
-                lobbyConfigs={lobbyConfigs}
-                socket={lobbySocket}
-                gameTransmitters={this.lobbyConnectionHandler.getTransmitters()}
-            />
-        );
+        return <Lobby openGame={(gameId) => this.openGameFromLobby(gameId)} lobbyConfigs={lobbyConfigs} />;
     }
 
     removeGameTransmitter(gameId: number) {

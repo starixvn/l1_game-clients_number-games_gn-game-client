@@ -2,6 +2,7 @@ import { render } from "@testing-library/react";
 import { LobbyLayout } from "../../games/lobby-layout";
 import { GameBoard } from "../../games/components/game-board";
 import { getAppSettings } from "../../../../../_shared/app-settings";
+import { useLobbyConnectionContext } from "../../../../../_shared/react-contexts";
 
 jest.mock("../../../../../_shared/app-settings", () => ({
     getAppSettings: jest.fn(),
@@ -12,6 +13,7 @@ jest.mock("../../../../../_shared/helpers", () => ({
 }));
 jest.mock("../../../../../_shared/react-contexts", () => ({
     usePlayerContext: jest.fn().mockReturnValue({}),
+    useLobbyConnectionContext: jest.fn(),
 }));
 jest.mock("../../games/components/game-board", () => ({
     GameBoard: jest.fn().mockReturnValue("GameBoard"),
@@ -32,13 +34,11 @@ describe(LobbyLayout.name, () => {
         });
         it("should render game board correctly", () => {
             // Arrange
-            const socket = {} as any;
-            const gameTransmitter = { 1001: { register: jest.fn() }, 1002: {} };
+            const gameTransmitters = { 1001: { register: jest.fn() }, 1002: {} } as any;
+            (useLobbyConnectionContext as jest.Mock).mockReturnValueOnce({ gameTransmitters });
 
             // Act
-            const { container } = render(
-                <LobbyLayout gameTransmitters={gameTransmitter} lobbyConfigs={[] as any} openGame={null} socket={socket} />
-            );
+            const { container } = render(<LobbyLayout lobbyConfigs={[] as any} openGame={null} />);
 
             // Assert
             expect(container).toMatchSnapshot();
@@ -46,32 +46,27 @@ describe(LobbyLayout.name, () => {
             expect(GameBoard).toHaveBeenCalledWith(
                 {
                     gameSettings: gameSettings[1001],
-                    socket,
                     openGame: null,
-                    gameTransmitter: gameTransmitter[1001],
+                    gameTransmitter: gameTransmitters[1001],
                 },
                 {}
             );
             expect(GameBoard).toHaveBeenCalledWith(
                 {
                     gameSettings: gameSettings[1002],
-                    socket,
                     openGame: null,
-                    gameTransmitter: gameTransmitter[1002],
+                    gameTransmitter: gameTransmitters[1002],
                 },
                 {}
             );
         });
 
-        it("should return empty when not exist socket", () => {
+        it("should return empty when not exist gameTransmitters", () => {
             // Arrange
-            const socket = null;
-            const gameTransmitter = { 1001: { register: jest.fn() }, 1002: {} };
+            (useLobbyConnectionContext as jest.Mock).mockReturnValueOnce({ gameTransmitters: null });
 
             // Act
-            const { container } = render(
-                <LobbyLayout gameTransmitters={[gameTransmitter]} lobbyConfigs={[] as any} openGame={null} socket={socket} />
-            );
+            const { container } = render(<LobbyLayout lobbyConfigs={[] as any} openGame={null} />);
 
             // Assert
             expect(container.innerHTML).toEqual("");

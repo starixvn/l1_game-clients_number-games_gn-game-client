@@ -10,13 +10,13 @@ jest.mock("../../../../../../_shared/react-contexts", () => ({
     useLobbyConnectionContext: jest.fn().mockReturnValue({
         removeGameTransmitter: jest.fn(),
         reconnectGameTransmitter: jest.fn(),
+        socket: { socketId: 123 },
     }),
 }));
 jest.mock("../../../../../../_shared/react-hooks", () => ({ useTranslator: jest.fn().mockReturnValue({ t: jest.fn((key) => key) }) }));
 jest.mock("../../../lobby-socket-connection", () => ({ getLobbyData: jest.fn() }));
 describe(DisabledGameBlock.name, () => {
     const transmitter = MessageTransmitter();
-    const socket = {} as any;
     const gameSettings = { id: 1 } as any;
     afterEach(() => {
         jest.clearAllMocks();
@@ -24,7 +24,7 @@ describe(DisabledGameBlock.name, () => {
 
     it("should not render anything when enabled game", () => {
         // act
-        const { container } = render(<DisabledGameBlock gameSettings={gameSettings} socket={socket} transmitter={transmitter} />);
+        const { container } = render(<DisabledGameBlock gameSettings={gameSettings} transmitter={transmitter} />);
 
         // assert
         expect(container.innerHTML).toBe("");
@@ -34,7 +34,7 @@ describe(DisabledGameBlock.name, () => {
         const payload = { um: true, um_message: { en: "disabled game" } };
         it("should render match the snapshot ", () => {
             // arrange
-            const { container } = render(<DisabledGameBlock gameSettings={gameSettings} socket={socket} transmitter={transmitter} />);
+            const { container } = render(<DisabledGameBlock gameSettings={gameSettings} transmitter={transmitter} />);
 
             // act
             act(() => {
@@ -48,7 +48,7 @@ describe(DisabledGameBlock.name, () => {
         it("should not render when game is enabled again", () => {
             // arrange
             const enabledPayload = { snr: true };
-            const { container } = render(<DisabledGameBlock gameSettings={gameSettings} socket={socket} transmitter={transmitter} />);
+            const { container } = render(<DisabledGameBlock gameSettings={gameSettings} transmitter={transmitter} />);
 
             // act
             act(() => {
@@ -58,7 +58,7 @@ describe(DisabledGameBlock.name, () => {
 
             // assert
             expect(container.innerHTML).toBe("");
-            expect(getLobbyData).toHaveBeenCalledWith(socket, gameSettings.id);
+            expect(getLobbyData).toHaveBeenCalledWith({ socketId: 123 }, gameSettings.id);
         });
     });
 
@@ -66,7 +66,7 @@ describe(DisabledGameBlock.name, () => {
         const payload = { errorCode: "SB0010" };
         it("should render match the snapshot", () => {
             // arrange
-            const { container } = render(<DisabledGameBlock gameSettings={gameSettings} socket={socket} transmitter={transmitter} />);
+            const { container } = render(<DisabledGameBlock gameSettings={gameSettings} transmitter={transmitter} />);
 
             // act
             act(() => {
@@ -80,9 +80,7 @@ describe(DisabledGameBlock.name, () => {
 
         it("should not render anything after reconnect successfully", () => {
             // arrange
-            const { container, getByRole } = render(
-                <DisabledGameBlock gameSettings={gameSettings} socket={socket} transmitter={transmitter} />
-            );
+            const { container, getByRole } = render(<DisabledGameBlock gameSettings={gameSettings} transmitter={transmitter} />);
             (useLobbyConnectionContext().reconnectGameTransmitter as jest.Mock).mockImplementation(() => {
                 act(actionReconnect);
             });

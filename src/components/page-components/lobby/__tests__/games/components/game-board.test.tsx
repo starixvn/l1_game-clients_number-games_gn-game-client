@@ -13,13 +13,12 @@ jest.mock("../../../games/components/disable-game-block", () => ({ DisabledGameB
 jest.mock("../../../games/components/game-icon", () => ({ GameIcon: jest.fn().mockReturnValue("GameIcon") }));
 jest.mock("../../../games/components/scoreboard", () => ({ LobbyScoreboard: jest.fn().mockReturnValue("LobbyScoreboard") }));
 jest.mock("../../../../../../_shared/react-contexts", () => ({
-    useLobbyConnectionContext: jest.fn().mockReturnValue({ reconnectGameTransmitter: jest.fn() }),
+    useLobbyConnectionContext: jest.fn().mockReturnValue({ reconnectGameTransmitter: jest.fn(), socket: {} }),
 }));
 jest.mock("../../../lobby-socket-connection", () => ({ getLobbyData: jest.fn() }));
 
 describe(GameBoard.name, () => {
     const transmitter = MessageTransmitter();
-    const socket = {} as any;
     const gameSettings = { id: 1, gameName: "gameA" } as any;
     const openGame = jest.fn();
     afterEach(() => {
@@ -27,23 +26,19 @@ describe(GameBoard.name, () => {
     });
     it("should render match the snapshot", () => {
         // act
-        const { container } = render(
-            <GameBoard gameSettings={gameSettings} gameTransmitter={transmitter} socket={socket} openGame={openGame} />
-        );
+        const { container } = render(<GameBoard gameSettings={gameSettings} gameTransmitter={transmitter} openGame={openGame} />);
 
         // assert
         expect(container).toMatchSnapshot();
         expect(GameIcon).toHaveBeenCalledWith({ gameSettings, transmitter }, {});
-        expect(DisabledGameBlock).toHaveBeenCalledWith({ socket, transmitter, gameSettings }, {});
+        expect(DisabledGameBlock).toHaveBeenCalledWith({ transmitter, gameSettings }, {});
         expect(CountdownTimer).toHaveBeenCalledWith({ transmitter, gameSettings }, {});
         expect(LobbyScoreboard).toHaveBeenCalledWith({ gameSettings, transmitter }, {});
     });
 
     it("should not render countdown timer & scoreboard when showData = false", () => {
         // arrange
-        const { container } = render(
-            <GameBoard gameSettings={gameSettings} gameTransmitter={transmitter} socket={socket} openGame={openGame} />
-        );
+        const { container } = render(<GameBoard gameSettings={gameSettings} gameTransmitter={transmitter} openGame={openGame} />);
 
         // act
         act(() => {
@@ -56,7 +51,7 @@ describe(GameBoard.name, () => {
 
     it("should call getLobbyData when sign in successfully", () => {
         // arrange
-        render(<GameBoard gameSettings={gameSettings} gameTransmitter={transmitter} socket={socket} openGame={openGame} />);
+        render(<GameBoard gameSettings={gameSettings} gameTransmitter={transmitter} openGame={openGame} />);
 
         // act
         act(() => {
