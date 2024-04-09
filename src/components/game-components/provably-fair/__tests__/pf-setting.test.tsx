@@ -1,12 +1,9 @@
-import { act, render, queryByAttribute, screen, fireEvent, createEvent } from "@testing-library/react";
+import { act, render, fireEvent } from "@testing-library/react";
 import { useGameStateContext, useGameStatesDispatch } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
-import { useClickSound, useSNTranslate } from "../../../../_shared/react-hooks";
-import ModalContainer from "../../modal-container";
 import PFSettingModal from "../pf-setting";
 import { useGameContext } from "../../../../_shared/react-contexts";
 import { ReactNode } from "react";
 import { GameEventActionType } from "../../../../_shared/react-contexts/game-state-context/game-event-action";
-import { LoadingSpinner } from "../../game-loading/loading-spinner";
 
 const mockGameState = useGameStateContext as jest.Mock;
 const mockGameContext = useGameContext as jest.Mock;
