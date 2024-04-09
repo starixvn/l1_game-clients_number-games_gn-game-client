@@ -5,6 +5,7 @@
 
 .game-container {
     position: relative;
+    z-index: 1;
     flex: 1 1 100%;
     max-width: 100%;
     height: auto;
