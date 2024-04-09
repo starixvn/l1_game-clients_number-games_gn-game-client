@@ -35,9 +35,9 @@ class UserStakeLevel {
 export class PlayerHandler {
     constructor(private props: PlayerHandlerProps) {}
 
-    registerEvents = (setBalance: Function) => {
+    registerEvents = () => {
         this.props.gameMessageHandler.register(messageEventType.USER, ({ user, gameConfigs }) => {
-            this.handleUserData({ user, gameConfigs }, setBalance);
+            this.handleUserData({ user, gameConfigs });
         });
 
         this.props.gameMessageHandler.register(messageEventType.USER_STAKE_LEVEL, this.handleUserStakeLevel.bind(this));
@@ -76,9 +76,7 @@ export class PlayerHandler {
             });
     }
 
-    handleUserData({ user, gameConfigs }: { user: Player; gameConfigs: any }, setBalance: Function) {
-        setBalance(user.red);
-
+    handleUserData({ user, gameConfigs }: { user: Player; gameConfigs: any }) {
         this.props.dispatch({
             type: GameEventActionType.USER,
             payload: { userData: { user, gameConfigs } },

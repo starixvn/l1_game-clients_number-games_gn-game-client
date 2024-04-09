@@ -2,7 +2,9 @@ import React from "react";
 import { createPortal } from "react-dom";
 import Auth from "sc-user-service-client/dist/auth";
 import { Socket } from "socket.io-client";
-import { InitSocketIO, StorageHelper, localStorageKeys, writeDebugLog } from "../../_shared/helpers";
+
+import { InitSocketIO, localStorageKeys, StorageHelper, writeDebugLog } from "../../_shared/helpers";
+import { AnalyticsHelper } from "../../_shared/helpers/analytic-helper";
 import {
     GameActionsContextProvider,
     GameContextProvider,
@@ -22,6 +24,7 @@ import { ConnectFailedReasonKey } from "../game-components/error-message/type";
 import GameContainer from "../game-components/game-container";
 import GameGuideModal from "../game-components/game-guide";
 import GameLoading from "../game-components/game-loading";
+import { LoadingSpinner } from "../game-components/game-loading/loading-spinner";
 import NewRoundTransition from "../game-components/new-round-transition";
 import { Notice } from "../game-components/notice";
 import { PFSettingModal } from "../game-components/provably-fair";
@@ -34,16 +37,14 @@ import {
     GameFinishHandler,
     GameMessageHandler,
     GameRoundHistoryHandler,
+    messageEventType,
     PlaceBetHandler,
     PlayerHandler,
-    messageEventType,
 } from "./handlers";
+import { GameRoundDatatHandler } from "./handlers/game-round-data-handler";
 import { GameSoundHandler } from "./handlers/game-sound-handler";
 import { IGameStateHandler } from "./handlers/game-state-handler";
-import { GameBaseProps, PFClientSeedSetting, PFSeverSeed, RoundState } from "./type";
-import { GameRoundDatatHandler } from "./handlers/game-round-data-handler";
-import { LoadingSpinner } from "../game-components/game-loading/loading-spinner";
-import { AnalyticsHelper, TrackingEvent } from "../../_shared/helpers/analytic-helper";
+import { GameBaseProps, PFClientSeedSetting, RoundState } from "./type";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
     protected socket: Socket;
@@ -283,7 +284,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
     registerHandlers() {
         const signOut = (this.context as PlayerContextModel)?.signOut;
-        const setBalance = (this.context as PlayerContextModel)?.setBalance;
 
         this.gameMessageHandler.register(messageEventType.SOCKET_CONNECTED, this.onGameServiceConnected.bind(this));
         this.gameMessageHandler.register(messageEventType.SOCKET_CONNECT_ERROR, this.onConnectFailed.bind(this));
@@ -300,7 +300,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             messageEventType.SEND_SOCKET_MESSAGE_WITH_CLIENT_SEED,
             this.sendSocketMessageWithClientSeed.bind(this)
         );
-        this.playerHandler.registerEvents(setBalance);
+        this.playerHandler.registerEvents();
         this.gameErrorHandler.registerEvents(signOut);
         this.gameMessageHandler.register(messageEventType.ROUND_HISTORY, this.handleRoundHistory.bind(this));
     }
