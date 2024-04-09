@@ -6,6 +6,7 @@ import { usePlayerContext } from "../../../_shared/react-contexts";
 import { useTranslator } from "../../../_shared/react-hooks/use-translator";
 import { ResourceTypes } from "../../../_shared/resources";
 import Styles from "./hide-toolbar-guide.module.scss";
+import { buildVersion } from "../../../_shared/constants";
 
 const HIDE_TOOLBAR_GUIDE_PATH = "./static/images/hide-toolbar-guide";
 
@@ -75,7 +76,7 @@ const ToolbarGuide: React.FC = () => {
                                 <img
                                     className={Styles["iphone-background"]}
                                     alt="iphone"
-                                    src={`/static/images/hide-toolbar-guide/mockup-phone.svg`}
+                                    src={`/static/images/hide-toolbar-guide/mockup-phone.svg?${buildVersion}`}
                                 />
                             </div>
                             <div className={`flex ${Styles["iphone-step"]}`}>

@@ -22,11 +22,10 @@
 .toolbar-guide-title {
     position: relative;
     font-size: 2rem;
-    font-weight: 700;
+    font-weight: 600;
     color: rgba(254, 107, 21, 1);
     text-transform: uppercase;
     text-align: center;
-    width: 27.6rem;
     margin: 0.5rem auto;
     margin-bottom: 2.6rem;
     height: 3rem;
@@ -36,7 +35,7 @@
 
 .anim-container {
     position: relative;
-    width: 17.6rem;
+    width: 19.5rem;
     margin: 0 auto;
     overflow: hidden;
     border-radius: 1.8rem;
@@ -97,7 +96,7 @@
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    width: 16rem;
+    width: 17rem;
     height: 2.6rem;
     background: #272727;
     border-radius: 0.5rem;
@@ -140,11 +139,12 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 17.2rem;
+    width: 19.2rem;
     height: 3.1rem;
-    padding: 0 0.8rem;
+    padding: 0 0.4rem;
     color: #f2f2f2;
     background: #171717;
+    font-size: 1.2rem;
 
     .icon-fullscreen {
         position: absolute;
