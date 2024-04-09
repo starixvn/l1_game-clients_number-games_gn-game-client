@@ -22,6 +22,7 @@ import styles from "./games.module.scss";
 import NextBall from "./next-ball/page";
 import { Props } from "./type";
 import { getChipSettings } from "../services/user-setting-service";
+import { AnalyticsHelper, TrackingAction, TrackingFunction } from "../_shared/helpers";
 
 const ToolbarGuide = dynamic(() => import("../components/page-components/hide-toolbar-guide"));
 
@@ -93,6 +94,11 @@ export const Games: React.FC<Props> = ({
         }
         swipeableHandler(!isUp, openGameId);
         setStopScroll(true);
+
+        AnalyticsHelper.trackFunction({
+            function: TrackingFunction.SwitchGame,
+            action: isUp ? TrackingAction.SwipeUp : TrackingAction.SwipeDown,
+        });
     };
 
     const mobileSwipeableHandlers = useSwipeable({

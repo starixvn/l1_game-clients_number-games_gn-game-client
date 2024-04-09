@@ -4,6 +4,7 @@ import { useClickSound } from "../../../../_shared/react-hooks";
 import { updateUserAvatar } from "../../../../services/user-setting-service";
 import { AvatarGallery } from "../../dashboard/register/avatar-gallery";
 import Styles from "./index.module.scss";
+import { AnalyticsHelper, TrackingAction, TrackingFunction } from "../../../../_shared/helpers";
 
 const ChangeAvatar: React.FC = () => {
     const settingContext = useSettingContext();
@@ -33,6 +34,7 @@ const ChangeAvatar: React.FC = () => {
         setAvatarId(avatarId);
         await updateUserAvatar(session, avatarId);
         updateAvatar(avatarId);
+        AnalyticsHelper.trackFunction({ function: TrackingFunction.Avatar, action: TrackingAction.Change });
     };
 
     return (

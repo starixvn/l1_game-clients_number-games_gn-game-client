@@ -14,6 +14,7 @@ import { TranslatorProps, withTranslator } from "../../translator";
 import { AvatarGallery, MAX_AVATAR_ID } from "./avatar-gallery";
 import NameGenerator from "./name-generator";
 import styles from "./register.module.scss";
+import { AnalyticsHelper, TrackingAction, TrackingFunction } from "../../../../_shared/helpers";
 
 export type RegisterProps = {
     session: SSOResponse;
@@ -52,6 +53,10 @@ export class Register extends Component<RegisterProps, RegisterState> {
             this.setState({ name, isValidUsername: true });
         } else {
             this.setState({ name: NameGenerator.generateName(), isValidUsername: true });
+            AnalyticsHelper.trackFunction({
+                function: TrackingFunction.Nickname,
+                action: TrackingAction.GenerateRandom,
+            });
         }
     }
 
@@ -87,6 +92,8 @@ export class Register extends Component<RegisterProps, RegisterState> {
                 isValidUsername: false,
             });
         }
+
+        AnalyticsHelper.trackFunction({ function: TrackingFunction.Avatar, action: TrackingAction.Create });
     }
 
     render(): ReactNode {

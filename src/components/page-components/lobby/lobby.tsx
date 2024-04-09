@@ -16,7 +16,7 @@ type Props = {
 };
 
 export const Lobby: React.FC<Props> = ({ openGame, lobbyConfigs }) => {
-    AnalyticsHelper.trackPage({ page_title: "Lobby" });
+    AnalyticsHelper.trackLobby();
     return (
         <div className={Styles["lobby-container"]}>
             <BackgroundGalaxy />
