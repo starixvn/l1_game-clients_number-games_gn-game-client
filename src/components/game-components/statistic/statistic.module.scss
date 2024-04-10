@@ -50,6 +50,10 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
+
+    .number {
+        font-variant-numeric: tabular-nums;
+    }
 }
 
 .statistic-choices {
@@ -70,6 +74,13 @@
     width: 1.6rem;
     height: 1.6rem;
     line-height: 1.6rem;
+
+    &.over,
+    &.under,
+    &.odd,
+    &.even {
+        padding-left: 0;
+    }
 }
 
 .red {
@@ -145,4 +156,14 @@ $green_choices: tie;
     .#{$choice} {
         @extend .green;
     }
+}
+
+.over,
+.under,
+.even,
+.odd {
+    display: flex;
+    padding-top: 0.1rem;
+    padding-left: 0.1rem;
+    font-size: 1.1rem;
 }
