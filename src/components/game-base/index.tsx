@@ -156,6 +156,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.placeBet = this.placeBet.bind(this);
         this.updateUserBalance = this.updateUserBalance.bind(this);
         this.setActiveScoreboardTab = this.setActiveScoreboardTab.bind(this);
+        this.syncPFSetting = this.syncPFSetting.bind(this);
 
         AnalyticsHelper.trackPage({ page_title: this.props.gameName });
     }
@@ -188,7 +189,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             payload: { roundState: RoundState.None },
         });
         this.socket?.disconnect();
-        this.savePFSetting();
 
         this.clearGameTimeoutAndInterval();
         this.clearDisconnectTimeout();
@@ -296,6 +296,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.playerHandler.registerEvents();
         this.gameErrorHandler.registerEvents(signOut);
         this.gameMessageHandler.register(messageEventType.ROUND_HISTORY, this.handleRoundHistory.bind(this));
+        this.gameMessageHandler.register(messageEventType.SAVE_PF_SETTING, this.handleSavePFSetting.bind(this));
     }
 
     emitSocketEvent = ({ key, data }) => {
@@ -364,14 +365,18 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         }
     }
 
-    savePFSetting() {
+    handleSavePFSetting(message) {
+        const { pfClientSeedSetting } = message[messageEventType.SAVE_PF_SETTING];
+        this.syncPFSetting(pfClientSeedSetting);
+        this.props.dispatch({ type: GameEventActionType.UPDATE_PF_CLIENT_SEED_SETTING, payload: { pfClientSeedSetting } });
+    }
+
+    syncPFSetting(pfClientSeedSetting) {
         const uid = (this.context as PlayerContextModel).authorizeInfo?.user?.UID;
-        const { pfClientSeedSetting } = this.props.gameStateContextModel;
+        const { pfClientSeedSetting: oldPFClientSeedSetting } = this.props.gameStateContextModel;
         const dataPFSettingSave = {
-            drawId: pfClientSeedSetting?.drawId,
-            randomClientSeed: pfClientSeedSetting?.randomClientSeed,
-            manualClientSeed: pfClientSeedSetting?.manualClientSeed,
-            useManualClientSeed: pfClientSeedSetting?.useManualClientSeed,
+            ...oldPFClientSeedSetting,
+            ...pfClientSeedSetting,
         };
         StorageHelper.set(`${localStorageKeys.pfSetting}-${uid}`, dataPFSettingSave);
     }

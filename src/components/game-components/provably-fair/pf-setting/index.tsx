@@ -53,7 +53,7 @@ const PFSetting: FC<{ customClientSeedInfo?: string }> = ({ customClientSeedInfo
     const manualSeed = useRef<HTMLInputElement>();
     const { pfClientSeedSetting, ownBets, drawId } = useGameStateContext();
     const [isFirstLoad, setIsFirstLoad] = useState<boolean>(true);
-    const [isFirstFetch, setIsFirstFetch] = useState<boolean>(true);
+    const [isFirstFetch, setIsFirstFetch] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isManualMode, setIsManualMode] = useState<boolean>(pfClientSeedSetting?.useManualClientSeed || false);
     const [serverSeedHash, setServerSeedHash] = useState<string>("");
@@ -62,15 +62,24 @@ const PFSetting: FC<{ customClientSeedInfo?: string }> = ({ customClientSeedInfo
     const { t: translateCommon } = useCommonTranslate();
     const { gameMessageHandler } = useGameContext();
     const { t: translateSNGames } = useSNTranslate();
-    const dispatch = useGameStatesDispatch();
+
+    const updatePFSetting = (pfSetting: Object) => {
+        gameMessageHandler.broadcastGameEvent({
+            [messageEventType.SAVE_PF_SETTING]: {
+                pfClientSeedSetting: pfSetting,
+            },
+        });
+    };
 
     useEffect(() => {
         setRandomClientSeed(pfClientSeedSetting?.randomClientSeed);
     }, [pfClientSeedSetting?.randomClientSeed]);
 
     useEffect(() => {
-        if (drawId >= 0) {
+        if (drawId <= 0) {
             setIsFirstFetch(false);
+        } else {
+            setIsFirstFetch(true);
         }
     }, [drawId]);
 
@@ -105,13 +114,9 @@ const PFSetting: FC<{ customClientSeedInfo?: string }> = ({ customClientSeedInfo
                 setRandomClientSeed(clientSeedDetail.randomClientSeed);
                 setManualClientSeed(clientSeedDetail.manualClientSeed);
                 setIsManualMode(clientSeedDetail.useManualClientSeed);
-                dispatch({
-                    type: GameEventActionType.UPDATE_PF_CLIENT_SEED_SETTING,
-                    payload: {
-                        pfClientSeedSetting: {
-                            ...clientSeedDetail,
-                        },
-                    },
+
+                updatePFSetting({
+                    ...clientSeedDetail,
                 });
             }
             setIsLoading(false);
@@ -144,13 +149,8 @@ const PFSetting: FC<{ customClientSeedInfo?: string }> = ({ customClientSeedInfo
             event.target.value = randomSeed.current.value;
             setManualClientSeed(randomSeed.current.value);
         }
-        dispatch({
-            type: GameEventActionType.UPDATE_PF_CLIENT_SEED_SETTING,
-            payload: {
-                pfClientSeedSetting: {
-                    manualClientSeed: event.target.value,
-                },
-            },
+        updatePFSetting({
+            manualClientSeed: event.target.value,
         });
     };
 
@@ -170,37 +170,22 @@ const PFSetting: FC<{ customClientSeedInfo?: string }> = ({ customClientSeedInfo
         setIsFirstLoad(false);
         if (manualRadio.current.checked) {
             setManualClientSeed(randomClientSeed);
-            dispatch({
-                type: GameEventActionType.UPDATE_PF_CLIENT_SEED_SETTING,
-                payload: {
-                    pfClientSeedSetting: {
-                        useManualClientSeed: true,
-                        manualClientSeed: randomSeed.current.value,
-                    },
-                },
+            updatePFSetting({
+                useManualClientSeed: true,
+                manualClientSeed: randomSeed.current.value,
             });
         } else {
-            dispatch({
-                type: GameEventActionType.UPDATE_PF_CLIENT_SEED_SETTING,
-                payload: {
-                    pfClientSeedSetting: {
-                        useManualClientSeed: false,
-                        manualClientSeed: undefined,
-                    },
-                },
+            updatePFSetting({
+                useManualClientSeed: false,
+                manualClientSeed: undefined,
             });
         }
     };
 
     const handleOnChangeManualClientSeed = (event: any) => {
         setManualClientSeed(event.target.value);
-        dispatch({
-            type: GameEventActionType.UPDATE_PF_CLIENT_SEED_SETTING,
-            payload: {
-                pfClientSeedSetting: {
-                    manualClientSeed: event.target.value,
-                },
-            },
+        updatePFSetting({
+            manualClientSeed: event.target.value,
         });
     };
 

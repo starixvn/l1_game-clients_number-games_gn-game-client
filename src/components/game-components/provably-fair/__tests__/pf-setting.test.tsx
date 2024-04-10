@@ -91,6 +91,17 @@ const renderModal = (content?: ReactNode) => {
 describe(PFSettingModal.name, () => {
     describe("render", () => {
         test.each([
+            [0, 0],
+            [123, 1],
+        ])("if draw id is %s then broadcast game event is %s", (drawId, expected) => {
+            const broadcastGameEvent = jest.fn();
+            defineMock({ isShowPFSetting: true, drawId }, { broadcastGameEvent });
+
+            renderModal(<PFSettingModal />);
+
+            expect(broadcastGameEvent).toHaveBeenCalledTimes(expected);
+        });
+        test.each([
             [true, true],
             [false, false],
         ])("when show modal state is %s then show modal %s", (isShow, expected) => {
@@ -135,7 +146,7 @@ describe(PFSettingModal.name, () => {
                             }
                         },
                     };
-                    const mockDispatch = defineMockWithDispatch({ isShowPFSetting: true }, gameMessageHandler);
+                    defineMockWithDispatch({ isShowPFSetting: true }, gameMessageHandler);
 
                     const { renderResult } = renderModal(<PFSettingModal />);
 
@@ -151,7 +162,6 @@ describe(PFSettingModal.name, () => {
                     });
 
                     expect(renderResult.getByDisplayValue("12")).toHaveValue("12");
-                    expect(mockDispatch).toHaveBeenCalledTimes(1);
                 });
             });
             describe("pf result message", () => {
@@ -377,14 +387,16 @@ describe(PFSettingModal.name, () => {
             ["manual-seed", false],
         ])("if click radio %s dipatch data with use manual client seed is %s and manual client seed is %s", (mode, useManualClientSeed) => {
             let pfResultHandler = jest.fn();
+            const broadcastGameEvent = jest.fn();
             const gameMessageHandler = {
+                broadcastGameEvent,
                 register: (id, callback) => {
                     if (id === PFResultMessage) {
                         pfResultHandler = callback;
                     }
                 },
             };
-            const dispatch = defineMockWithDispatch(
+            defineMockWithDispatch(
                 {
                     pfClientSeedSetting: {
                         useManualClientSeed: useManualClientSeed,
@@ -410,9 +422,8 @@ describe(PFSettingModal.name, () => {
                 fireEvent.click(renderResult.container.querySelector(`#${mode}`));
             });
 
-            expect(dispatch).toHaveBeenCalledWith({
-                type: GameEventActionType.UPDATE_PF_CLIENT_SEED_SETTING,
-                payload: {
+            expect(broadcastGameEvent).toHaveBeenCalledWith({
+                ["savePFSetting"]: {
                     pfClientSeedSetting: {
                         useManualClientSeed: !useManualClientSeed,
                         manualClientSeed: useManualClientSeed ? undefined : "456",
@@ -422,8 +433,9 @@ describe(PFSettingModal.name, () => {
         });
 
         describe("change manual seed", () => {
-            it("should change manual client seed ui and call dispatch", () => {
+            it("should change manual client seed ui", () => {
                 let pfResultHandler = jest.fn();
+
                 const gameMessageHandler = {
                     register: (id, callback) => {
                         if (id === PFResultMessage) {
@@ -431,7 +443,7 @@ describe(PFSettingModal.name, () => {
                         }
                     },
                 };
-                const dispatch = defineMockWithDispatch(
+                defineMockWithDispatch(
                     {
                         pfClientSeedSetting: {
                             useManualClientSeed: true,
@@ -462,7 +474,6 @@ describe(PFSettingModal.name, () => {
                     fireEvent.change(renderResult.container.querySelector("#manual-client-seed"), event);
                 });
 
-                expect(dispatch).toHaveBeenCalled();
                 expect(renderResult.container.querySelector("#manual-client-seed")["value"]).toBe("456");
             });
         });

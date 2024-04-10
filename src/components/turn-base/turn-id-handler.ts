@@ -116,9 +116,8 @@ export class TurnIdHandler {
         const { pfClientSeedSetting } = this.props.gameStateContextModel();
         const oldDrawId = pfClientSeedSetting?.drawId;
         if (oldDrawId !== drawId) {
-            this.props.dispatch({
-                type: GameEventActionType.UPDATE_PF_CLIENT_SEED_SETTING,
-                payload: {
+            this.props.gameMessageHandler.broadcastGameEvent({
+                [messageEventType.SAVE_PF_SETTING]: {
                     pfClientSeedSetting: {
                         drawId: drawId,
                         randomClientSeed: randomNumberSeries(4),

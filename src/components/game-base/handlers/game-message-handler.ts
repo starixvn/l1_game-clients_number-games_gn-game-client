@@ -37,6 +37,7 @@ export const messageEventType = {
     SEND_SOCKET_MESSAGE_WITH_CLIENT_SEED: "sendSocketMessageWithClientSeed",
     ROUND_ID: "roundId",
     CLIENT_SEED_DETAIL: "clientSeedDetail",
+    SAVE_PF_SETTING: "savePFSetting",
 };
 
 export class GameMessageHandler {
@@ -121,9 +122,8 @@ export class GameMessageHandler {
     };
 
     handleClientSeedDetail = ({ clientSeedDetail }) => {
-        this.dispatch({
-            type: GameEventActionType.UPDATE_PF_CLIENT_SEED_SETTING,
-            payload: {
+        this.broadcastGameEvent({
+            [messageEventType.SAVE_PF_SETTING]: {
                 pfClientSeedSetting: {
                     ...clientSeedDetail,
                 },
