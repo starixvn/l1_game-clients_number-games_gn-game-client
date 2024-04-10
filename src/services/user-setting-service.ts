@@ -18,5 +18,5 @@ export const updateUserAvatar = async (userSession: SSOResponse, avatarId: numbe
 };
 
 export const getChipSettings = async (userSession: SSOResponse) => {
-    return chipSettings.getSettings(userSession.ss, userSession.username);
+    return chipSettings?.getSettings(userSession.ss, userSession.username);
 };
