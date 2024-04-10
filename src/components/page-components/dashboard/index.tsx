@@ -51,6 +51,8 @@ class Dashboard extends React.PureComponent<Props, State> {
     private isKickOut = false;
     private lobbyConnectionHandler: LobbySocketConnection;
     private headerRef = React.createRef<HTMLDivElement>();
+    private gameStyleInterval: NodeJS.Timeout;
+
     constructor(props: Props) {
         super(props);
 
@@ -70,6 +72,8 @@ class Dashboard extends React.PureComponent<Props, State> {
             isLandscapeMode: false,
             isUserGesture: true,
             dynamicStyle: {},
+            isChangedGame: false,
+            isChangePrevGame: false,
         };
 
         this.lobbyConnectionHandler = new LobbySocketConnection();
@@ -238,10 +242,19 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.setState({ dynamicStyle });
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps, prevState) {
         const urlContext = loadURLContext();
         if (urlContext?.gameId > 0) {
             window.scrollTo(0, 0);
+        }
+
+        if (prevState.openGameId !== this.state.openGameId) {
+            console.log("openGameId");
+            this.setState({ isChangedGame: true });
+            this.gameStyleInterval && clearInterval(this.gameStyleInterval);
+            this.gameStyleInterval = setInterval(() => {
+                this.setState({ isChangedGame: false });
+            }, 300);
         }
     }
 
@@ -251,6 +264,7 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.notificationSocket?.close();
         this.lobbyConnectionHandler.closeSocket();
         clearInterval(this.reCheckInInterval);
+        clearInterval(this.gameStyleInterval);
     }
 
     sendMessage(data: any) {
@@ -375,6 +389,7 @@ class Dashboard extends React.PureComponent<Props, State> {
         const lobbyGamesIds = getLobbyGameIds(lobbyConfigs)?.filter((gameId) => offerGamesIds.includes(gameId));
 
         this.openGame(getSwipeableGameId(isPrevGame, currentGameId, lobbyGamesIds));
+        this.setState({ isChangePrevGame: isPrevGame });
     };
 
     renderGames() {
@@ -424,7 +439,7 @@ class Dashboard extends React.PureComponent<Props, State> {
     renderDashBoard() {
         window.history.pushState(null, null, "/");
 
-        const { isShowErrorModal, authorizeInfo, isBlockUI, openGameId, dynamicStyle } = this.state;
+        const { isShowErrorModal, authorizeInfo, isBlockUI, openGameId, dynamicStyle, isChangedGame, isChangePrevGame } = this.state;
         const authContextValue = {
             authorizeInfo: authorizeInfo,
             session: this.props.session,
@@ -447,6 +462,8 @@ class Dashboard extends React.PureComponent<Props, State> {
         };
 
         const scaleExtraProps = isRenderGames ? dynamicStyle : {};
+        const changeGameStyle =
+            isChangedGame && allowSwipeGameOndDesktop ? (isChangePrevGame ? Styles["slide-left"] : Styles["slide-right"]) : "";
 
         return (
             <PlayerContextProvider value={authContextValue}>
@@ -459,7 +476,7 @@ class Dashboard extends React.PureComponent<Props, State> {
                         )}
                         <div
                             style={{ ...scaleExtraProps }}
-                            className={`${Styles["dashboard"]} ${!isRenderGames ? "no-scroll" : ""}`}
+                            className={`${Styles["dashboard"]} ${changeGameStyle} ${!isRenderGames ? "no-scroll" : ""}`}
                             id={"dashboard"}
                         >
                             <div>

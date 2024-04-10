@@ -1,6 +1,7 @@
 import { TolgeeInstance } from "@tolgee/react";
 import { WithRouterProps } from "next/dist/client/with-router";
 import { AuthorizeResponse, SSOResponse } from "sc-user-service-client/dist/auth";
+
 import { UserStakeLevel } from "../../game-base/type";
 
 export type Props = {
@@ -32,6 +33,8 @@ export type State = {
     isLandscapeMode: boolean;
     isUserGesture: boolean;
     dynamicStyle: object;
+    isChangedGame: boolean;
+    isChangePrevGame: boolean;
 };
 
 export type GameOffer = {
