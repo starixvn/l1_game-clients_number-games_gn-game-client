@@ -1,7 +1,6 @@
 import { FC } from "react";
 import { createPortal } from "react-dom";
-import { useGameContext } from "../../../../_shared/react-contexts";
-import { useClickSound, useCommonTranslate, useSNTranslate, useTranslator } from "../../../../_shared/react-hooks";
+import { useClickSound, useCommonTranslate, useSNTranslate } from "../../../../_shared/react-hooks";
 import ModalContainer from "../../modal-container";
 import { ButtonPFGuide } from "../pf-guide";
 import Styles from "../provably-fair.module.scss";
@@ -48,10 +47,8 @@ const PFVerifyModal: FC<{
 
 const PFVerify: FC<{ renderResultBlock: Function }> = ({ renderResultBlock }) => {
     const { pfVerifyModalData: pfResult } = useGameStateContext();
-    const { tolgeeNamespace } = useGameContext();
     const { t: translateCommon } = useCommonTranslate();
     const { t: translateSNGames } = useSNTranslate();
-    const { t: translateInGame } = useTranslator([tolgeeNamespace]);
     const clickSound = useClickSound();
     const dispatch = useGameStatesDispatch();
 
