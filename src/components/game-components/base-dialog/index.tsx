@@ -56,6 +56,7 @@ const BaseDialog: React.FC<Props> = ({
 
     useEffect(() => {
         if (enableBackdrop) {
+            document.getElementById("dashboard")?.classList.add("no-scroll");
             document.body.classList.add("no-scroll");
             isMobileOnly && document.documentElement.classList.add("no-scroll-html");
         }
@@ -63,6 +64,7 @@ const BaseDialog: React.FC<Props> = ({
         return () => {
             if (enableBackdrop && !isOverlap) {
                 document.body.classList.remove("no-scroll");
+                document.getElementById("dashboard")?.classList.remove("no-scroll");
                 isMobileOnly && document.documentElement.classList.remove("no-scroll-html");
             }
         };
