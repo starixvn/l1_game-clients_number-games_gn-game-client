@@ -1,5 +1,5 @@
 import { Base64 } from "base64-string";
-import { isNull } from "lodash";
+import isNull from "lodash/isNull";
 
 export class GameUtils {
     static base64: Base64;

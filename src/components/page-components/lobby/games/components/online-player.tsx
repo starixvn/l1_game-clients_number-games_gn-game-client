@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import Styles from "../../lobby.module.scss";
 import { LobbyGameTransmitter } from "../../lobby-socket-connection";
+import Styles from "../../lobby.module.scss";
 
 type Props = {
     transmitter: LobbyGameTransmitter;
@@ -71,3 +71,5 @@ export const OnlinePlayer: React.FC<Props> = ({ transmitter }) => {
         )
     );
 };
+
+export default OnlinePlayer;

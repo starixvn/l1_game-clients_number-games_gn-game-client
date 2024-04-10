@@ -56,7 +56,7 @@ export function onStartupError(error: Error): void {
     globalThis.location.pathname = "timeout";
 }
 
-export function SplashScreen(): ReactNode {
+export default function SplashScreen(): ReactNode {
     const { token, language } = useContext(URLContext);
     const router = useRouter();
     const player = usePlayerContext();

@@ -1,11 +1,11 @@
+import { useTolgee } from "@tolgee/react";
 import { useEffect, useRef, useState } from "react";
+import { useLobbyConnectionContext } from "../../../../../_shared/react-contexts";
 import { useTranslator } from "../../../../../_shared/react-hooks";
 import { ResourceTypes } from "../../../../../_shared/resources";
-import Styles from "../../lobby.module.scss";
-import { useLobbyConnectionContext } from "../../../../../_shared/react-contexts";
-import { useTolgee } from "@tolgee/react";
 import { GameSettings } from "../../../../game-base/type";
 import { LobbyGameTransmitter, getLobbyData } from "../../lobby-socket-connection";
+import Styles from "../../lobby.module.scss";
 
 const messageEventTypes = {
     SIGNED_IN: "signedIn",
@@ -96,3 +96,5 @@ export const DisabledGameBlock: React.FC<Props> = ({ transmitter, gameSettings }
         )
     );
 };
+
+export default DisabledGameBlock;

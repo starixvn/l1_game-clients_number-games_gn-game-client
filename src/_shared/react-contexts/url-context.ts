@@ -1,4 +1,4 @@
-import { isEmpty } from "lodash";
+import isEmpty from "lodash/isEmpty";
 import Router from "next/router";
 import { createContext, useContext } from "react";
 import { AnalyticsHelper, StorageHelper, localStorageKeys } from "../helpers";

@@ -1,4 +1,4 @@
-import { isEmpty } from "lodash";
+import isEmpty from "lodash/isEmpty";
 import { useEffect, useState } from "react";
 import { messageEventType } from "../../components/game-base/handlers";
 import { Round, RoundState } from "../../components/game-base/type";

@@ -35,7 +35,7 @@ export function getBigRoadElement(gameId: number) {
     return bigRoadElementContainer[gameId] || ({} as { ctor: any; converter: any });
 }
 
-export class LobbyScoreboard extends Component<LobbyScoreboardProps, LobbyScoreboardState> {
+export default class LobbyScoreboard extends Component<LobbyScoreboardProps, LobbyScoreboardState> {
     static defaultState: LobbyScoreboardState = {
         roundHistory: [],
         blinkNodeFlag: false,
@@ -50,7 +50,7 @@ export class LobbyScoreboard extends Component<LobbyScoreboardProps, LobbyScoreb
         this.listenerIds = [];
     }
 
-    componentDidMount(): void {
+    async componentDidMount() {
         const { transmitter } = this.props;
 
         if (transmitter) {

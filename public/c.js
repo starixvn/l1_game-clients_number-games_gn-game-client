@@ -1,7 +1,7 @@
 window.envConfig = {
     serverDomainMapper: {
         localhost: "lumigame.com",
-        "10.5.10.17": "lumigame.com",
+        "10.5.10.12": "lumigame.com",
     },
     proxy: {
         ssl: true,

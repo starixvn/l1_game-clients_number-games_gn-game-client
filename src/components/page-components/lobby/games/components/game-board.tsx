@@ -1,12 +1,15 @@
+import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
-import { GameSettings } from "../../../../game-base/type";
-import Styles from "../../lobby.module.scss";
-import { CountdownTimer } from "./countdown-timer";
-import { DisabledGameBlock } from "./disable-game-block";
-import { GameIcon } from "./game-icon";
-import { LobbyScoreboard } from "./scoreboard";
-import { LobbyGameTransmitter, getLobbyData } from "../../lobby-socket-connection";
 import { useLobbyConnectionContext } from "../../../../../_shared/react-contexts";
+import { GameSettings } from "../../../../game-base/type";
+import { LobbyGameTransmitter, getLobbyData } from "../../lobby-socket-connection";
+import Styles from "../../lobby.module.scss";
+import { GameIcon } from "./game-icon";
+// import LobbyScoreboard from "./scoreboard";
+
+const DisabledGameBlock = dynamic(() => import("./disable-game-block"));
+const CountdownTimer = dynamic(() => import("./countdown-timer"));
+const LobbyScoreboard = dynamic(() => import("./scoreboard"));
 
 const messageEventTypes = {
     SIGNED_IN: "signedIn",

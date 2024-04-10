@@ -1,7 +1,5 @@
-import React from "react";
-
-import Styles from "./landscape-mode.module.scss";
 import { useCommonTranslate } from "../../../../_shared/react-hooks";
+import Styles from "./landscape-mode.module.scss";
 
 export const LandscapeMode = () => {
     const { t } = useCommonTranslate();
@@ -12,3 +10,5 @@ export const LandscapeMode = () => {
         </div>
     );
 };
+
+export default LandscapeMode;

@@ -1,8 +1,10 @@
-import Styles from "../../lobby.module.scss";
-import { OnlinePlayer } from "./online-player";
+import dynamic from "next/dynamic";
+import { buildVersion } from "../../../../../_shared/constants";
 import { GameSettings } from "../../../../game-base/type";
 import { LobbyGameTransmitter } from "../../lobby-socket-connection";
-import { buildVersion } from "../../../../../_shared/constants";
+import Styles from "../../lobby.module.scss";
+
+const OnlinePlayer = dynamic(() => import("./online-player"));
 
 type Props = {
     gameSettings: GameSettings;
@@ -19,3 +21,5 @@ export const GameIcon: React.FC<Props> = ({ gameSettings, transmitter }) => {
         </div>
     );
 };
+
+export default GameIcon;

@@ -5,7 +5,8 @@ import { isIOS, isMobileOnly } from "react-device-detect";
 import { useSwipeable } from "react-swipeable";
 import { getAppSettings } from "../_shared/app-settings";
 import { GameIds } from "../_shared/constants";
-import { SystemContextProvider, URLContext, SettingEventActionType, usePlayerContext, useSettingDispatch } from "../_shared/react-contexts";
+import { AnalyticsHelper, TrackingAction, TrackingFunction } from "../_shared/helpers";
+import { SettingEventActionType, SystemContextProvider, URLContext, usePlayerContext, useSettingDispatch } from "../_shared/react-contexts";
 import {
     usePlaceBetSound,
     useReceiveFinishSound,
@@ -16,15 +17,14 @@ import {
 import { tolgee } from "../_shared/tolgee";
 import Footer from "../components/game-components/footer";
 import { BackgroundGalaxy } from "../components/page-components/background";
-import BacBall from "./bac-ball";
-import styles from "./games.module.scss";
-import NextBall from "./next-ball/page";
-import { Props } from "./type";
 import { getChipSettings } from "../services/user-setting-service";
-import { AnalyticsHelper, TrackingAction, TrackingFunction } from "../_shared/helpers";
-import SwitchGamesGuide from "../components/page-components/switch-games-guide";
+import styles from "./games.module.scss";
+import { Props } from "./type";
 
+const BacBall = dynamic(() => import("./bac-ball"));
+const NextBall = dynamic(() => import("./next-ball/page"));
 const ToolbarGuide = dynamic(() => import("../components/page-components/hide-toolbar-guide"));
+const SwitchGamesGuide = dynamic(() => import("../components/page-components/switch-games-guide"));
 
 const swipeDuration = 250;
 

@@ -1,10 +1,12 @@
+import dynamic from "next/dynamic";
 import { useContext, useState } from "react";
 import { URLContext, usePlayerContext } from "../_shared/react-contexts";
 import { usePWAWoker } from "../_shared/react-hooks/use-pwa-worker";
 import { tolgee } from "../_shared/tolgee";
 import Dashboard from "../components/page-components/dashboard";
-import { SplashScreen } from "../components/page-components/splash-screen";
-import UMPage from "../components/page-components/um-page";
+import SplashScreen from "../components/page-components/splash-screen";
+
+const UMPage = dynamic(() => import("../components/page-components/um-page"));
 
 export function Home() {
     usePWAWoker();

@@ -1,4 +1,3 @@
-import React from "react";
 
 export const BackgroundGalaxy = () => {
     return (
@@ -17,3 +16,5 @@ export const BackgroundGalaxy = () => {
         </>
     );
 };
+
+export default BackgroundGalaxy

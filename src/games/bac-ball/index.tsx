@@ -13,17 +13,17 @@ import GameBase from "../../components/game-base/";
 import { GameMessageHandler, TurnIdHandler } from "../../components/game-base/handlers";
 import { GameBaseProps, Round } from "../../components/game-base/type";
 import { DrawIdBlock } from "../../components/game-components/draw-id";
-import PercentageStatistic from "../../components/game-components/statistic";
 import { TurnGameStateHandler } from "../../components/turn-base/turn-game-state-handler";
 import { TurnStateHandler } from "../../components/turn-base/turn-state-handler";
 import { BacBallGameRoundDatatHandler } from "./bac-ball-game-round-data-handler";
-import BacBallResultBlock from "./bac-ball-result-block";
 import { BacBallBetOptions, StatisticRuleEntries } from "./constants";
-import { BacBallBetHistoryModal } from "./history";
 import Scoreboard from "./scoreboard";
 import { BacBallResult, BacBallSettlementResult } from "./types";
 
+const BacBallResultBlock = dynamic(() => import("./bac-ball-result-block"));
+const PercentageStatistic = dynamic(() => import("../../components/game-components/statistic"));
 const BacBallBettingBlock = dynamic(() => import("./bac-ball-betting-block"));
+const BacBallBetHistoryModal = dynamic(() => import("./history"));
 
 class BacBall extends GameBase<GameBaseProps> {
     private turnIdHandler?: TurnIdHandler;

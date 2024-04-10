@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import Styles from "../../lobby.module.scss";
-import { GameSettings, RoundState } from "../../../../game-base/type";
 import { useTranslator } from "../../../../../_shared/react-hooks";
+import { GameSettings, RoundState } from "../../../../game-base/type";
 import { LobbyGameTransmitter } from "../../lobby-socket-connection";
+import Styles from "../../lobby.module.scss";
 
 type Props = {
     transmitter: LobbyGameTransmitter;
@@ -109,3 +109,5 @@ export const CountdownTimer: React.FC<Props> = ({ transmitter, gameSettings }) =
             return <div className={className}></div>;
     }
 };
+
+export default CountdownTimer;

@@ -18,7 +18,8 @@
             "switchRoundAnimation": 4
         },
         "totalTurns": 4,
-        "numberOfRoundHistory": 100
+        "numberOfRoundHistory": 100,
+        "gamePath": "bac-ball"
     },
     "1002": {
         "id": 1002,
@@ -39,7 +40,8 @@
             "switchRoundAnimation": 4
         },
         "totalTurns": 4,
-        "numberOfRoundHistory": 100
+        "numberOfRoundHistory": 100,
+        "gamePath": "bac-ball"
     },
     "1003": {
         "id": 1003,
@@ -60,7 +62,8 @@
             "switchRoundAnimation": 4
         },
         "totalTurns": 8,
-        "numberOfRoundHistory": 100
+        "numberOfRoundHistory": 100,
+        "gamePath": "next-ball"
     },
     "1004": {
         "id": 1004,
@@ -81,6 +84,7 @@
             "switchRoundAnimation": 4
         },
         "totalTurns": 8,
-        "numberOfRoundHistory": 100
+        "numberOfRoundHistory": 100,
+        "gamePath": "next-ball"
     }
 }

@@ -26,3 +26,9 @@ export const getGameSettings = (gameId?: number) => {
 
     return gameSettings[gameId];
 };
+
+export const getGamesPath = () => {
+    const { gameSettings } = getAppSettings();
+
+    return Array.from(new Set(Object.values(gameSettings).map((item) => item.gamePath)));
+};

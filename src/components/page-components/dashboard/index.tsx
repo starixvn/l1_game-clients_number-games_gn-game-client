@@ -6,6 +6,7 @@ import { LobbyResponse } from "sc-user-service-client/dist/lobby";
 import { io, Socket } from "socket.io-client";
 import MsgpackParser from "socket.io-msgpack-parser";
 
+import dynamic from "next/dynamic";
 import { getAppSettings } from "../../../_shared/app-settings";
 import { Themes } from "../../../_shared/constants";
 import {
@@ -26,24 +27,27 @@ import {
     updateURLContext,
     URLContextModel,
 } from "../../../_shared/react-contexts";
-import Games from "../../../games/games";
+
+import "../../../games/scoreboards";
 import { authorize, createNickname, getLobbyConfigs, reCheckIn } from "../../../services/auth-service";
 import { updateSignInSMStatus } from "../../../services/user-setting-service";
 import { UserStakeLevel } from "../../game-base/type";
-import BaseDialog from "../../game-components/base-dialog";
 import { ModalType } from "../../game-components/base-dialog/type";
 import { ErrorApiText } from "../../game-components/error-api-text";
 import Footer from "../../game-components/footer";
 import Header from "../header";
-import { Lobby } from "../lobby/lobby";
+import Lobby from "../lobby/lobby";
 import { LobbySocketConnection } from "../lobby/lobby-socket-connection";
-import MusicPlayer from "../music-player";
 import Styles from "./dashboard.module.scss";
-import { LandscapeMode } from "./landscape-mode/landscape-mode";
 import Register from "./register";
 import { MAX_AVATAR_ID } from "./register/avatar-gallery";
 import NameGenerator from "./register/name-generator";
 import { ILobbyConfigs, Props, State } from "./type";
+
+const Games = dynamic(() => import("../../../games/games"));
+const BaseDialog = dynamic(() => import("../../game-components/base-dialog"));
+const MusicPlayer = dynamic(() => import("../music-player"));
+const LandscapeMode = dynamic(() => import("./landscape-mode/landscape-mode"));
 
 class Dashboard extends React.PureComponent<Props, State> {
     private notificationSocket: Socket = null;
