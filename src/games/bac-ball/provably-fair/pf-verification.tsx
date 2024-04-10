@@ -4,9 +4,8 @@ import { v4 as uuidv4 } from "uuid";
 import { useGameContext } from "../../../_shared/react-contexts";
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
-import { useClickSound, useCommonTranslate, useTranslator } from "../../../_shared/react-hooks";
-import CopyableTextInput from "../../../components/game-components/provably-fair/copyable-text-input";
-import { DefaultPFStyles as Styles } from "../../../components/game-components/provably-fair";
+import { useCommonTranslate, useTranslator } from "../../../_shared/react-hooks";
+import { CopyableTextInput, EditableTextInput, DefaultPFStyles as Styles } from "../../../components/game-components/provably-fair";
 import SmallBall from "../../../components/game-components/small-ball";
 
 const PFVerification: FC = () => {
@@ -17,7 +16,6 @@ const PFVerification: FC = () => {
     const { t: translateCommon } = useCommonTranslate();
     const { t: translateInGame } = useTranslator([tolgeeNamespace]);
     const [combinedHash, setCombinedHash] = useState(pfResult?.finalHash || "");
-    const clickSound = useClickSound();
 
     const verifyInfo = useMemo(() => {
         const rawTwoFirstDigits = combinedHash.substring(0, 2);
@@ -50,17 +48,6 @@ const PFVerification: FC = () => {
         };
     }, [combinedHash]);
 
-    const handleClickEdit = () => {
-        clickSound();
-        const input = document.getElementById("merge-client-seed-verification") as HTMLInputElement;
-        const inputGroupEditable = document.getElementById("merge-client-seed-group-editable") as HTMLInputElement;
-        inputGroupEditable.className = `input-group ${Styles["input-group-editable"]} width-full mb-3`;
-        input.readOnly = false;
-        input.className = `form-control ${Styles["form-control-editable"]}`;
-        input.focus();
-        input.select();
-    };
-
     const handleChangeMergeClientSeed = (event: React.ChangeEvent<HTMLInputElement>) => {
         const input = event.target as HTMLInputElement;
         setMergeClientSeed(input.value);
@@ -86,20 +73,7 @@ const PFVerification: FC = () => {
     return (
         <div className={Styles["pf-setting-container"]}>
             <h3 className={`${Styles["section-title"]}`}>{translateCommon("pf_ header_merge_client_seed")}</h3>
-            <div id="merge-client-seed-group-editable" className="input-group width-full mb-3">
-                <input
-                    className="form-control"
-                    type="text"
-                    name="merge-client-seed-verification"
-                    id="merge-client-seed-verification"
-                    value={mergeClientSeed}
-                    readOnly
-                    onChange={handleChangeMergeClientSeed}
-                />
-                <button className={Styles["copy-btn"]} onClick={handleClickEdit}>
-                    <span className="icon-edit" />
-                </button>
-            </div>
+            <EditableTextInput handleOnChangeValue={handleChangeMergeClientSeed} value={mergeClientSeed} />
 
             <h3 className={`${Styles["section-title"]}`}>{translateCommon("pf_header_server_seed")}</h3>
             <div className="input-group width-full mb-3">
