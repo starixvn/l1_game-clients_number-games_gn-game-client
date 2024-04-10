@@ -173,8 +173,8 @@ class Dashboard extends React.PureComponent<Props, State> {
             const reCheckInResponse = await reCheckIn(this.props.session);
             this.handleRecheckInResponse(reCheckInResponse);
             this.setState({ isUserGesture: true });
-        } else {
-            this.handleScreenIsNotDisplay();
+        }else{
+            this.setState({ isUserGesture: false });
         }
     }
 
@@ -247,10 +247,6 @@ class Dashboard extends React.PureComponent<Props, State> {
 
     componentWillUnmount() {
         document.removeEventListener("visibilitychange", this.onVisibilityChange);
-        this.handleScreenIsNotDisplay();
-    }
-
-    private handleScreenIsNotDisplay(){
         this.setState({ isUserGesture: false });
         this.notificationSocket?.close();
         this.lobbyConnectionHandler.closeSocket();
