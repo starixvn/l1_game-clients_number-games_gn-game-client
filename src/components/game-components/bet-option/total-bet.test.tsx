@@ -1,18 +1,18 @@
 import { render } from "@testing-library/react";
-import { useGameBettingZoneContext } from "../../../../_shared/react-contexts";
-import { useGameStateContext } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
-import { RoundState } from "../../../game-base/type";
-import TotalBet from "../total-bet";
+import { useGameBettingZoneContext } from "../../../_shared/react-contexts";
+import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
+import { RoundState } from "../../game-base/type";
+import TotalBet from "./total-bet";
 
-jest.mock("../../../../_shared/react-contexts", () => ({ useGameBettingZoneContext: jest.fn() }));
-jest.mock("../../../../_shared/react-contexts/game-state-context/game-state-context", () => ({ useGameStateContext: jest.fn() }));
+jest.mock("../../../_shared/react-contexts", () => ({ useGameBettingZoneContext: jest.fn() }));
+jest.mock("../../../_shared/react-contexts/game-state-context/game-state-context", () => ({ useGameStateContext: jest.fn() }));
 
 describe(TotalBet.name, () => {
     const className = "custom-total-bet";
     const choice = "choice1";
     const tolgeeNamespace = "gameA";
     describe("when invalid data", () => {
-        const expected = `<div class="custom-total-bet"></div>`;
+        const expected = "";
         it("should render empty when totalBet = 0", () => {
             // arrange
             (useGameBettingZoneContext as jest.Mock).mockReturnValue({ totalBets: {} });

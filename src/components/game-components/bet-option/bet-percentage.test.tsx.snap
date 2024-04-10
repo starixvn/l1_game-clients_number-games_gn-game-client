@@ -1,54 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`BetPercentage should match the snapshot 1`] = `
+exports[`BetPercentage should render match the snapshot when there is bet percentage 1`] = `
 <div>
   <div
-    class="class"
-    id="test-tie-percent"
+    class="bet-percentage"
+    id="undefined-choice1-percent"
   >
-    <svg
-      height="32"
-      width="32"
-    >
-      <g
-        transform="rotate(-90 16 16)"
-      >
-        <circle
-          cx="16"
-          cy="16"
-          fill="#00000080"
-          r="15"
-        />
-        <circle
-          class="circle"
-          cx="16"
-          cy="16"
-          fill="transparent"
-          r="15"
-          stroke="#ffffff"
-          stroke-dasharray="94.24777960769379"
-          stroke-dashoffset="47.12388980384689"
-          stroke-linecap="round"
-          stroke-width="2px"
-        />
-      </g>
-      <text
-        class="text-percentage"
-        dominant-baseline="central"
-        font-size="10px"
-        text-anchor="middle"
-        x="50%"
-        y="50%"
-      >
-        50
-        <tspan
-          class="text-percentage"
-          font-size="9px"
-        >
-          %
-        </tspan>
-      </text>
-    </svg>
+    PercentageCircle
   </div>
 </div>
 `;

@@ -1,34 +1,54 @@
 import { render } from "@testing-library/react";
 import { useGameBettingZoneContext } from "../../../_shared/react-contexts";
+import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
+import { RoundState } from "../../game-base/type";
+import PercentageCircle from "../percentage-circle";
 import BetPercentage from "./bet-percentage";
 
-const mockUseGameBettingZoneContext = useGameBettingZoneContext as jest.Mock;
+jest.mock("../percentage-circle", () => jest.fn().mockReturnValue("PercentageCircle"));
+jest.mock("../../../_shared/react-contexts/game-state-context/game-state-context", () => ({ useGameStateContext: jest.fn() }));
+jest.mock("../../../_shared/react-contexts", () => ({ useGameBettingZoneContext: jest.fn() }));
 
-jest.mock("../../../_shared/react-contexts", () => ({
-    useGameBettingZoneContext: jest.fn(),
-}));
+describe(BetPercentage.name, () => {
+    it("should render match the snapshot when there is bet percentage", () => {
+        // arrange
+        const betPercentage = { choice1: 100 };
+        (useGameBettingZoneContext as jest.Mock).mockReturnValueOnce({ betPercentage });
+        const roundState = RoundState.InRound;
+        (useGameStateContext as jest.Mock).mockReturnValueOnce({ roundState });
 
-describe("BetPercentage", () => {
-    let choice;
-    const mockPercentage = {
-        tie: 50,
-    };
-    beforeEach(() => {
-        choice = "tie";
-        mockUseGameBettingZoneContext.mockReturnValue({
-            betPercentage: mockPercentage,
-        });
-    });
-    test("should match the snapshot", () => {
-        // Act
-        const { container, getByText } = render(
-            <BetPercentage tolgeeNamespace="test" choice={choice} className="class" percentageColor="#ffffff" />
-        );
+        // act
+        const { container } = render(<BetPercentage choice="choice1" percentageColor="black" className="bet-percentage" />);
 
-        const classPer = getByText(mockPercentage.tie);
-
-        // Assert
+        // assert
         expect(container).toMatchSnapshot();
-        expect(classPer).toBeInTheDocument();
+        expect(PercentageCircle).toHaveBeenCalledWith({ percentage: betPercentage.choice1, color: "black" }, {});
+    });
+
+    it("should render empty when betPercentage is empty", () => {
+        // arrange
+        (useGameBettingZoneContext as jest.Mock).mockReturnValueOnce({ betPercentage: {} });
+        const roundState = RoundState.InRound;
+        (useGameStateContext as jest.Mock).mockReturnValueOnce({ roundState });
+
+        // act
+        const { container } = render(<BetPercentage choice="choice1" percentageColor="black" className="bet-percentage" />);
+
+        // assert
+        expect(container.innerHTML).toBe("");
+    });
+
+    it("should render empty when switch round", () => {
+        // arrange
+        const betPercentage = { choice1: 100 };
+        (useGameBettingZoneContext as jest.Mock).mockReturnValueOnce({ betPercentage });
+        const roundState = RoundState.SwitchRound;
+        (useGameStateContext as jest.Mock).mockReturnValueOnce({ roundState });
+
+        // act
+        const { container } = render(<BetPercentage choice="choice1" percentageColor="black" className="bet-percentage" />);
+
+        // assert
+        expect(container.innerHTML).toBe("");
     });
 });

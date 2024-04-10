@@ -1,64 +1,68 @@
-import { render } from "@testing-library/react";
-import React, { useState as useStateMock } from "react";
-import { formatOdds } from "../../../_shared/helpers";
-import { usePlayerContext } from "../../../_shared/react-contexts";
+import { render, waitFor } from "@testing-library/react";
+import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
+import { RoundState } from "../../game-base/type";
 import Odds from "./odds";
 
-const mockUsePlayerContext = usePlayerContext as jest.Mock;
+jest.mock("../../../_shared/helpers", () => ({ formatOdds: jest.fn((value, format) => `${value}`) }));
+jest.mock("../../../_shared/react-contexts", () => ({ usePlayerContext: jest.fn().mockReturnValue({ fractionalOddsFormat: false }) }));
+jest.mock("../../../_shared/react-contexts/game-state-context/game-state-context", () => ({ useGameStateContext: jest.fn() }));
 
-jest.mock("../../../_shared/react-contexts", () => ({
-    useGameStateContext: jest.fn(),
-    usePlayerContext: jest.fn(),
-}));
+describe(Odds.name, () => {
+    const choice = "choice1";
+    it("should render match the snapshot when round state = in round", () => {
+        // arrange
+        (useGameStateContext as jest.Mock).mockReturnValue({
+            gameConfigs: { odds: { [choice]: 1.96 } },
+            roundState: RoundState.InRound,
+        });
 
-jest.mock("../../../_shared/helpers", () => ({
-    formatOdds: jest.fn(),
-}));
+        // act
+        const { container } = render(
+            <Odds choice={choice} className="custom-class" turnCounter={4} animationDuration={1} tolgeeNamespace="gameA" />
+        );
 
-jest.mock("react", () => ({
-    ...jest.requireActual("react"),
-    useState: jest.fn(),
-}));
-
-describe("Odds Component", () => {
-    const setState = jest.fn();
-    const props = {
-        tolgeeNamespace: "namespace",
-        choice: "choice",
-        className: "custom-class",
-        animationDuration: 2,
-        turnCounter: 1,
-    };
-    const mockOdd = "1";
-    beforeEach(() => {
-        (useStateMock as any).mockImplementation((init) => [init, setState]);
-        mockUsePlayerContext.mockReturnValue({ fractionalOddsFormat: {} });
-
-        jest.spyOn(React, "useState")
-            .mockImplementationOnce(() => [true, setState])
-            .mockImplementationOnce(() => [true, setState])
-            .mockImplementationOnce(() => [10, setState]);
-
-        (formatOdds as jest.MockedFunction<typeof formatOdds>).mockReturnValue(mockOdd);
-    });
-
-    afterEach(() => {
-        jest.clearAllMocks();
-    });
-
-    test("renders with initial props", () => {
-        // Act
-        const { getByText } = render(<Odds {...props} />);
-
-        // Assert
-        expect(getByText(mockOdd)).toBeInTheDocument();
-    });
-
-    test("should match the snapshot", () => {
-        // Act
-        const { container } = render(<Odds {...props} />);
-
-        // Assert
+        // assert
         expect(container).toMatchSnapshot();
+        expect(container.textContent).toBe("1.96");
+    });
+
+    it("should render empty when exist odds", () => {
+        // arrange
+        (useGameStateContext as jest.Mock).mockReturnValue({
+            gameConfigs: {},
+            roundState: RoundState.InRound,
+        });
+
+        // act
+        const { container } = render(
+            <Odds choice={choice} className="custom-class" turnCounter={4} animationDuration={1} tolgeeNamespace="gameA" />
+        );
+
+        // assert
+        expect(container.innerHTML).toBe("");
+    });
+
+    it("should render icon when odds change", () => {
+        // arrange
+        const gameState = {
+            gameConfigs: { odds: { [choice]: 1.96 } },
+            roundState: RoundState.DisplayResult,
+        };
+        (useGameStateContext as jest.Mock).mockImplementation(() => {
+            return gameState;
+        });
+        const { container } = render(
+            <Odds choice={choice} className="custom-class" turnCounter={4} animationDuration={1} tolgeeNamespace="gameA" />
+        );
+
+        // act
+        gameState.gameConfigs.odds[choice] = 2.01;
+        gameState.roundState = RoundState.InRound;
+
+        // assert
+        waitFor(() => {
+            expect(container.children[0].className).toBe("text-center bet-odds custom-class up show-odds-icon");
+            expect(container.innerHTML).toBe("2.01");
+        });
     });
 });
