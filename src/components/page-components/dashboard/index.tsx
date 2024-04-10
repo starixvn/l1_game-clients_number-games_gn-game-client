@@ -248,14 +248,6 @@ class Dashboard extends React.PureComponent<Props, State> {
         if (urlContext?.gameId > 0) {
             window.scrollTo(0, 0);
         }
-
-        if (!!prevState.openGameId && prevState.openGameId !== this.state.openGameId) {
-            this.setState({ isChangedGame: true });
-            this.gameStyleInterval && clearInterval(this.gameStyleInterval);
-            this.gameStyleInterval = setInterval(() => {
-                this.setState({ isChangedGame: false });
-            }, 300);
-        }
     }
 
     componentWillUnmount() {
@@ -389,6 +381,15 @@ class Dashboard extends React.PureComponent<Props, State> {
         const lobbyGamesIds = getLobbyGameIds(lobbyConfigs)?.filter((gameId) => offerGamesIds.includes(gameId));
 
         this.openGame(getSwipeableGameId(isPrevGame, currentGameId, lobbyGamesIds));
+
+        this.setState({ isChangedGame: true });
+
+        this.gameStyleInterval && clearInterval(this.gameStyleInterval);
+
+        this.gameStyleInterval = setInterval(() => {
+            this.setState({ isChangedGame: false });
+        }, 700);
+
         this.setState({ isChangePrevGame: isPrevGame });
     };
 
