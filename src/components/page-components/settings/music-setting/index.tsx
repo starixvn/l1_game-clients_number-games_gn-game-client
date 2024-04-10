@@ -5,7 +5,7 @@ import { SettingEventActionType, useSettingDispatch } from "../../../../_shared/
 import { useClickSound, useTranslator } from "../../../../_shared/react-hooks";
 import Styles from "../settings.module.scss";
 
-const MusicSetting = ({}) => {
+const MusicSetting = () => {
     const settingDispatch = useSettingDispatch();
     const clickSound = useClickSound();
     const [enabledMusic, setEnabledMusic] = useState(StorageHelper.get(localStorageKeys.enableMusic) ?? true);

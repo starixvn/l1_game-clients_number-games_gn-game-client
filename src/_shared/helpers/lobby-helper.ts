@@ -1,4 +1,3 @@
-import { GameBaseProps } from "./../../components/game-base/type";
 import { AuthorizeResponse } from "sc-user-service-client/dist/auth";
 import { IBanner, ILobbyConfigs } from "../../components/page-components/dashboard/type";
 import { getAppSettings } from "../app-settings";

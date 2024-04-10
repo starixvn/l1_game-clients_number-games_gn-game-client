@@ -10,7 +10,7 @@ export const PlayerBetCount: React.FC<BaseProps> = ({ tolgeeNamespace, choice, c
     const { roundState } = useGameStateContext();
 
     if (isEmpty(playerBetCount) || roundState === RoundState.SwitchRound) {
-        return <div className={className}></div>;
+        return <></>;
     }
 
     return (

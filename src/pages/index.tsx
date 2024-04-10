@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { URLContext, usePlayerContext } from "../_shared/react-contexts";
 import { usePWAWoker } from "../_shared/react-hooks/use-pwa-worker";
 import { tolgee } from "../_shared/tolgee";

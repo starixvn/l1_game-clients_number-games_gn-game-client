@@ -35,9 +35,7 @@ const TimeOut = () => {
             <div className="um-spaceman">
                 <img src="/static/images/error-page/spaceman-timeout.png" alt="spaceman" />
             </div>
-            <p className="errorOccurred-info mt-2">
-                <p className="break">{t("message_session_timeout_break")} </p>
-            </p>
+            <p className="errorOccurred-info mt-2 break">{t("message_session_timeout_break")}</p>
             <ButtonReturnToURL />
         </div>
     );

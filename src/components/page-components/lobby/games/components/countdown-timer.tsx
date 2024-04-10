@@ -67,7 +67,7 @@ export const CountdownTimer: React.FC<Props> = ({ transmitter, gameSettings }) =
 
     useEffect(() => {
         if (timeCounter === null) {
-            return;
+            return null;
         }
         const { durations } = gameSettings;
         if (timeCounter > durations.placingBets || timeCounter <= 0) {
@@ -87,24 +87,25 @@ export const CountdownTimer: React.FC<Props> = ({ transmitter, gameSettings }) =
         return;
     }
 
+    const className = Styles["countdown-timer"];
     switch (roundState) {
         case RoundState.InRound:
             return (
-                <div className={Styles["countdown-timer"]}>
+                <div className={className}>
                     <span className="icon-clock" />
                     <span className={Styles["countdown-timer-value"]}>{timeCounter.toString().padStart(2, "0")}</span>
                 </div>
             );
         case RoundState.LockingBet:
             return (
-                <div className={`${Styles["countdown-timer"]} ${Styles["block-bet"]}`}>
+                <div className={`${className} ${Styles["block-bet"]}`}>
                     <span className="icon-clock" />
                     <span className={Styles["countdown-timer-value"]}>{timeCounter.toString().padStart(2, "0")}</span>
                 </div>
             );
         case RoundState.DisplayResult:
-            return <div className={`${Styles["countdown-timer"]} ${Styles["show-result"]}`}>{t("status_result")}</div>;
+            return <div className={`${className} ${Styles["show-result"]}`}>{t("status_result")}</div>;
         default:
-            return <div className={Styles["countdown-timer"]}></div>;
+            return <div className={className}></div>;
     }
 };

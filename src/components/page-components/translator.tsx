@@ -4,7 +4,7 @@ import { parseTranslationKey } from "../../_shared/react-hooks";
 
 export type TranslatorProps = {
     t?: (key: string) => string;
-} & {};
+};
 
 export function withTranslator(component: ComponentClass<any>) {
     const { Consumer } = getProviderInstance();
