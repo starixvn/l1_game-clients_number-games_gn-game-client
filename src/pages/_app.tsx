@@ -31,7 +31,7 @@ class SabaNumberApp extends App<AppProps> {
 export const AppTilte = () => {
     return (
         <Head>
-            <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+            <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
             <title>SABA xD</title>
             <link rel="shortcut icon" href={`/favicon-${systemName}.ico?v=${buildVersion}`} />
         </Head>

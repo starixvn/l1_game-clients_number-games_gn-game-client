@@ -222,10 +222,18 @@ class Dashboard extends React.PureComponent<Props, State> {
         if (isMobile) {
             this.changeOrientation();
             window.addEventListener("resize", this.changeOrientation);
+            window.addEventListener("touchmove", this.preventZoomBehavior, { passive: false });
         }
 
         this.connectNotificationSocket();
         queryGame && this.openGame(queryGame);
+    }
+
+    private preventZoomBehavior(event: TouchEvent) {
+        if (event.touches.length > 1) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+        }
     }
 
     shouldRenderGames(offerGames) {
