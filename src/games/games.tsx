@@ -73,8 +73,10 @@ export const Games: React.FC<Props> = ({
     });
 
     const swipeableRefPassthrough = (el: HTMLDivElement) => {
-        mobileSwipeableHandlers.ref(el);
-        swipeableRef.current = el;
+        if (isMobileOnly && !directMode) {
+            mobileSwipeableHandlers.ref(el);
+            swipeableRef.current = el;
+        }
     }
 
     const gameSound = {
@@ -95,7 +97,7 @@ export const Games: React.FC<Props> = ({
             theme,
             userStakeLevel,
             updateUserStakeLevel,
-            swipeableRef: isMobileOnly && !directMode ? swipeableRefPassthrough : {}
+            swipeableRef: swipeableRefPassthrough
         };
 
         switch (gameId) {
