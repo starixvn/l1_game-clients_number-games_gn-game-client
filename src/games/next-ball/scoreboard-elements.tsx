@@ -48,7 +48,7 @@ export function createBeadRoadElement(isOddEven: boolean = ODD_EVEN_AS_DEFAULT_S
 
 export class NextBallBigRoadConverter extends Converter<NextBallSettlementResult> {
     static addBlinkNode(rounds: NextBallSettlementResult[]) {
-        const lastRound = rounds.find((round) => round.odd || round.over);
+        const lastRound = rounds.at(0) ?? ({ over: false, odd: false } as NextBallSettlementResult);
         const blinkRound = {
             over: lastRound?.over,
             odd: lastRound?.odd,
