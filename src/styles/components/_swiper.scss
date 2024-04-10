@@ -21,6 +21,8 @@
 // style for scoreboard
 
 .swiper-scoreboard {
+    --width: calc(100vw - 34rem);
+
     .swiper-slide-next,
     .swiper-slide-prev {
         position: relative;
@@ -29,7 +31,7 @@
             content: "";
             position: absolute;
             top: 0;
-            width: 100%;
+            width: var(--width);
             height: 100%;
             border-radius: 0.3rem;
             z-index: 10;
@@ -37,12 +39,57 @@
     }
     .swiper-slide-next::after {
         left: 0;
-        background: linear-gradient(90deg, rgba(31, 135, 226, 0.65) 0%, rgba(2, 21, 32, 0) 6%);
+        background: linear-gradient(90deg, rgba(31, 135, 226, 0.65) 0%, rgba(2, 21, 32, 0) 80%);
     }
 
     .swiper-slide-prev::after {
         right: 0;
-        background: linear-gradient(-90deg, rgba(31, 135, 226, 0.65) 0%, rgba(2, 21, 32, 0) 6%);
+        background: linear-gradient(-90deg, rgba(31, 135, 226, 0.65) 0%, rgba(2, 21, 32, 0) 80%);
+    }
+}
+
+@media screen and (min-width: 500px) {
+    .swiper-scoreboard {
+        --width: calc(37.5rem - 34rem);
+    }
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+    position: absolute;
+    height: 100%;
+    width: calc(100% - 33.7rem);
+    top: 0;
+    z-index: 10;
+    cursor: pointer;
+
+    &.swiper-button-disabled {
+        background: transparent;
+    }
+}
+
+.swiper-button-prev {
+    left: 0;
+}
+
+.swiper-button-next {
+    right: 0;
+}
+
+//For IOS (IPhone and IPAD) - and Mozilla on Android:
+
+@media only screen and (hover: none) and (pointer: coarse) {
+    .swiper-button-prev,
+    .swiper-button-next {
+        z-index: 0;
+    }
+}
+
+//for Chromium on Android:
+@media only screen and (hover: hover) and (pointer: coarse) {
+    .swiper-button-prev,
+    .swiper-button-next {
+        z-index: 0;
     }
 }
 
@@ -62,7 +109,7 @@
     padding-top: 0.4rem;
 
     .swiper-slide .banner-img {
-        width:100%;
+        width: 100%;
         height: 12.4rem;
         max-width: 35.9rem;
         object-fit: cover;
