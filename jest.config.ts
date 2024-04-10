@@ -19,7 +19,7 @@ const configs = {
     testMatch: ["**/*.(test|spec).(ts|tsx)"],
     testEnvironment: "jsdom",
     coveragePathIgnorePatterns: ["node_modules", ".d.ts", ".next", "coverage", "public", ".config.ts", ".config.js"],
-    setupFilesAfterEnv: ["jest-extended", "./__mocks__/global.ts"],
+    setupFilesAfterEnv: ["jest-extended", "./__mocks__/global.tsx"],
     coverageReporters: ["json", "lcov", "text", "text-summary"],
     transformIgnorePatterns: ["/node_modules/", "^.+\\.module\\.(css|sass|scss)$"],
     testResultsProcessor: "jest-sonar-reporter",
