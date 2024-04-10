@@ -67,7 +67,7 @@ type SSOContext = {
 };
 
 export class AnalyticsHelper {
-    private static playerContext: PlayerContext = { playerId: "", page: "", language: "" };
+    private static readonly playerContext: PlayerContext = { playerId: "", page: "", language: "" };
     private static ssoContext: SSOContext;
 
     static setPlayerSession(playerSession: SSOResponse) {
@@ -109,10 +109,8 @@ export class AnalyticsHelper {
 
     static trackFunction(params: TrackingParameter) {
         try {
-            if (AnalyticsHelper.playerContext) {
-                params.page = AnalyticsHelper.playerContext.page;
-                params.playerId = AnalyticsHelper.playerContext.playerId;
-            }
+            params.page = AnalyticsHelper.playerContext.page;
+            params.playerId = AnalyticsHelper.playerContext.playerId;
 
             AnalyticsHelper.send(commandNames.event, TrackingEvent.Function, params);
         } catch (e) {
@@ -122,13 +120,11 @@ export class AnalyticsHelper {
 
     static trackPage(params: { page_title: string; language?: string }) {
         AnalyticsHelper.injectPlayerInfo(params, "client_id");
-        if (AnalyticsHelper.playerContext) {
-            AnalyticsHelper.playerContext.page = params?.page_title;
-            AnalyticsHelper.playerContext.language = params?.language;
-        }
+        AnalyticsHelper.playerContext.page = params?.page_title;
+        AnalyticsHelper.playerContext.language = params?.language;
         params?.page_title && AnalyticsHelper.send(commandNames.event, eventNames.page_view, params);
 
-        if (params.page_title != TrackingFunction.Lobby) {
+        if (params.page_title !== TrackingFunction.Lobby) {
             AnalyticsHelper.trackFunction({ function: TrackingFunction.JoinGame, action: TrackingAction.Show });
         }
     }
