@@ -74,7 +74,7 @@ const BetDetail: FC = () => {
     };
 
     const handleScroll = (event: any) => {
-        const bottom = event.target.scrollHeight - event.target.scrollTop === event.target.clientHeight;
+        const bottom = Math.round(event.target.scrollHeight - event.target.scrollTop) === Math.round(event.target.clientHeight);
         if (bottom) {
             setIsHaveMoreData(false);
         }
