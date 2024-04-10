@@ -12,6 +12,8 @@
     max-width: 100%;
     background-size: cover;
 
+
+
     @media screen and (min-width: 500px) {
         max-width: 37.5rem;
         background-size: 37.5rem;
@@ -30,6 +32,16 @@
     @media screen and (min-width: 500px) and (orientation: portrait) {
         transform: scale(var(--zoom-game));
         transform-origin: top;
+    }
+}
+
+.hidden-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    overflow-y: scroll;
+
+    &::-webkit-scrollbar {
+        display: 'none'
     }
 }
 
@@ -96,7 +108,9 @@
     transform: translateY(-50%) scaleX(-1);
 }
 
+
 @media only screen and (min-width: 700px) {
+
     .prev-button,
     .next-button {
         display: block;

@@ -1,9 +1,8 @@
 import { useTheme } from "next-themes";
+import dynamic from "next/dynamic";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { isIOS, isMobileOnly } from "react-device-detect";
 import { useSwipeable } from "react-swipeable";
-
-import dynamic from "next/dynamic";
 import { getAppSettings } from "../_shared/app-settings";
 import { GameIds } from "../_shared/constants";
 import { SystemContextProvider, URLContext, SettingEventActionType, usePlayerContext, useSettingDispatch } from "../_shared/react-contexts";
@@ -27,55 +26,22 @@ import SwitchGamesGuide from "../components/page-components/switch-games-guide";
 
 const ToolbarGuide = dynamic(() => import("../components/page-components/hide-toolbar-guide"));
 
-const gamesConstants = {
-    standardMobileHeight: 670,
-    swipeDuration: 1500,
-};
+const swipeDuration = 250;
 
 export const Games: React.FC<Props> = ({
     setApiErrorMessage,
     userStakeLevel,
     updateUserStakeLevel,
     openGameId,
-    directMode,
     swipeableHandler,
-    headerRef,
-    onDisableSwipeReceive,
+    directMode
 }) => {
     const { isDirectMode } = useContext(URLContext);
     const { theme } = useTheme();
     const locale = tolgee.getLanguage();
-    const [height, setHeight] = useState(0);
-    const contentRef = useRef(null);
-    const [stopScroll, setStopScroll] = useState(false);
-    const [extraProps, setExtraProps] = useState({});
     const { session } = usePlayerContext();
     const settingDispatch = useSettingDispatch();
-    const [allowSwipeable, setAllowSwipeable] = useState(true);
-
-    useEffect(() => {
-        if (contentRef.current && height !== contentRef.current.offsetHeight && isMobileOnly && openGameId > 0) {
-            setHeight(contentRef.current.offsetHeight);
-
-            if (checkAllowSwipeable()) {
-                if (allowSwipeable) {
-                    setExtraProps(isMobileOnly && !directMode ? mobileSwipeableHandlers : {});
-                }
-            } else {
-                setAllowSwipeable(false);
-                setExtraProps({});
-                onDisableSwipeReceive();
-            }
-        }
-
-        return () => {
-            setExtraProps({});
-        };
-    }, [contentRef.current?.getContext, openGameId]);
-
-    const checkAllowSwipeable = () => {
-        return contentRef.current.offsetHeight + headerRef.current.offsetHeight <= window.innerHeight;
-    };
+    const swipeableRef = React.useRef(null);
 
     useEffect(() => {
         (async () => {
@@ -89,25 +55,27 @@ export const Games: React.FC<Props> = ({
         })();
     }, []);
 
-    const onSwipeHandler = (isUp: boolean) => {
-        if (!checkAllowSwipeable()) {
-            return;
-        }
-        swipeableHandler(!isUp, openGameId);
-        setStopScroll(true);
+    const onSwipeHandler = (isRightSwipeable: boolean) => {
+        swipeableHandler(!isRightSwipeable, openGameId);
 
         AnalyticsHelper.trackFunction({
             function: TrackingFunction.SwitchGame,
-            action: isUp ? TrackingAction.SwipeUp : TrackingAction.SwipeDown,
+            action: isRightSwipeable ? TrackingAction.SwipeRight : TrackingAction.SwipeLeft,
         });
     };
 
     const mobileSwipeableHandlers = useSwipeable({
-        onSwipedUp: () => onSwipeHandler(true),
-        onSwipedDown: () => onSwipeHandler(false),
-        swipeDuration: gamesConstants.swipeDuration,
+        onSwipedRight: () => onSwipeHandler(true),
+        onSwipedLeft: () => onSwipeHandler(false),
+        swipeDuration: swipeDuration,
         trackMouse: true,
+        preventScrollOnSwipe: true
     });
+
+    const swipeableRefPassthrough = (el: HTMLDivElement) => {
+        mobileSwipeableHandlers.ref(el);
+        swipeableRef.current = el;
+    }
 
     const gameSound = {
         playPlaceBetSound: usePlaceBetSound(),
@@ -127,6 +95,7 @@ export const Games: React.FC<Props> = ({
             theme,
             userStakeLevel,
             updateUserStakeLevel,
+            swipeableRef: isMobileOnly && !directMode ? swipeableRefPassthrough : {}
         };
 
         switch (gameId) {
@@ -144,21 +113,15 @@ export const Games: React.FC<Props> = ({
     };
 
     return (
-        <div
-            className={`game-container ${styles["game-wrapper"]} ${styles["open-chips"]}`}
-            {...extraProps}
-            style={{ touchAction: stopScroll ? "none" : "auto" }}
-        >
+        <div className={`game-container ${styles["game-wrapper"]} ${styles["open-chips"]}`}>
             <SystemContextProvider>
-                <div
-                    ref={contentRef}
-                    className={`${styles["game-list"]} ${isMobileOnly ? styles[isIOS ? "ios-device" : "android-device"] : ""}`}
-                >
+                <div className={`${styles["game-list"]} ${isMobileOnly ? styles[isIOS ? "ios-device" : "android-device"] : ""}`}>
                     <BackgroundGalaxy />
                     {isDirectMode && <ToolbarGuide />}
+
                     {getGameComponentById(openGameId)}
 
-                    {!isDirectMode && allowSwipeable && <SwitchGamesGuide />}
+                    {!isDirectMode && <SwitchGamesGuide />}
                 </div>
             </SystemContextProvider>
             <Footer />

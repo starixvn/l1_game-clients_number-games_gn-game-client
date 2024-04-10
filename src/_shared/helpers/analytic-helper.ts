@@ -16,8 +16,8 @@ export enum TrackingAction {
     Open = "Open",
     Close = "Close",
     Change = "Change",
-    SwipeUp = "SwipeUp",
-    SwipeDown = "SwipeDown",
+    SwipeRight = "SwipeRight",
+    SwipeLeft = "SwipeLeft",
     Create = "Create",
     GenerateRandom = "GenerateRandom",
 }

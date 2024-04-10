@@ -58,6 +58,7 @@ export type GamePropsContext = {
     hedgeBetGroups?: [string[]];
     gameMessageHandler?: GameMessageHandler;
     gameSound?: GameSound;
+    swipeableRef:React.RefObject<HTMLDivElement>;
 };
 
 export type GameSound = {

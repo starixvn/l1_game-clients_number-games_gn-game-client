@@ -587,10 +587,12 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 {this.renderMenuButtons()}
                 {this.renderPFSettingModal()}
                 {this.renderBetHistoryModal()}
-                {this.renderResultBlock()}
+                <div ref={this.props.swipeableRef}>
+                    {this.renderResultBlock()}
+                    {this.renderBettingBlock()}
+                </div>
                 {this.renderNewRoundTransition()}
                 {this.renderNotice()}
-                {this.renderBettingBlock()}
                 {this.renderSlidingChips()}
                 {this.renderConfirmDialog()}
                 {this.renderConfirmBet()}

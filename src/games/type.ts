@@ -6,8 +6,6 @@ export type Props = {
     updateUserStakeLevel: Function;
     openGameId: number;
     openGameName: string;
-    directMode: boolean;
     swipeableHandler: Function;
-    headerRef: React.RefObject<HTMLDivElement>;
-    onDisableSwipeReceive :Function
+    directMode:boolean
 };
