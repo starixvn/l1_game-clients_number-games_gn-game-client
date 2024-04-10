@@ -241,8 +241,7 @@ class Dashboard extends React.PureComponent<Props, State> {
             window.scrollTo(0, 0);
         }
 
-        if (prevState.openGameId !== this.state.openGameId) {
-            console.log("openGameId");
+        if (!!prevState.openGameId && prevState.openGameId !== this.state.openGameId) {
             this.setState({ isChangedGame: true });
             this.gameStyleInterval && clearInterval(this.gameStyleInterval);
             this.gameStyleInterval = setInterval(() => {
@@ -459,15 +458,15 @@ class Dashboard extends React.PureComponent<Props, State> {
             <PlayerContextProvider value={authContextValue}>
                 <SettingContextProvider>
                     <LobbyConnectionContextProvider value={lobbyConnectionContextValue}>
-                        {
-                            allowSwipeGameOndDesktop && (
-                                <button className={`${Styles["prev-button"]}`} onClick={() => this.swipeableHandler(true, openGameId)}>
-                                    <span className={`icon-back ${Styles["icon"]}`}></span>
-                                </button>
-                            )
-                        }
+                        {allowSwipeGameOndDesktop && (
+                            <button className={`${Styles["prev-button"]}`} onClick={() => this.swipeableHandler(true, openGameId)}>
+                                <span className={`icon-back ${Styles["icon"]}`}></span>
+                            </button>
+                        )}
                         <div
-                            className={`${Styles["dashboard"]} ${changeGameStyle} ${!isRenderGames ? "no-scroll" : ""} ${isMobileOnly ? Styles["hidden-scrollbar"] : {}}`}
+                            className={`${Styles["dashboard"]} ${changeGameStyle} ${!isRenderGames ? "no-scroll" : ""} ${
+                                isMobileOnly ? Styles["hidden-scrollbar"] : {}
+                            }`}
                             id={"dashboard"}
                         >
                             <div>
@@ -499,13 +498,11 @@ class Dashboard extends React.PureComponent<Props, State> {
                                 </div>
                             )}
                         </div>
-                        {
-                            allowSwipeGameOndDesktop && (
-                                <button className={`${Styles["next-button"]}`} onClick={() => this.swipeableHandler(false, openGameId)}>
-                                    <span className={`icon-back ${Styles["icon"]}`}></span>
-                                </button>
-                            )
-                        }
+                        {allowSwipeGameOndDesktop && (
+                            <button className={`${Styles["next-button"]}`} onClick={() => this.swipeableHandler(false, openGameId)}>
+                                <span className={`icon-back ${Styles["icon"]}`}></span>
+                            </button>
+                        )}
                     </LobbyConnectionContextProvider>
                 </SettingContextProvider>
             </PlayerContextProvider>
