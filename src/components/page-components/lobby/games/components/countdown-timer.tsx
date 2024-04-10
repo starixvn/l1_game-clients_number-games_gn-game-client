@@ -67,7 +67,7 @@ export const CountdownTimer: React.FC<Props> = ({ transmitter, gameSettings }) =
 
     useEffect(() => {
         if (timeCounter === null) {
-            return null;
+            return;
         }
         const { durations } = gameSettings;
         if (timeCounter > durations.placingBets || timeCounter <= 0) {
@@ -84,7 +84,7 @@ export const CountdownTimer: React.FC<Props> = ({ transmitter, gameSettings }) =
     }, [timeCounter]);
 
     if (timeCounter === null) {
-        return;
+        return null;
     }
 
     const className = Styles["countdown-timer"];
