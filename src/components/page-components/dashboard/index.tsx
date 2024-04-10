@@ -68,6 +68,7 @@ class Dashboard extends React.PureComponent<Props, State> {
             openGameName: "",
             isOnLobby: true,
             isLandscapeMode: false,
+            isUserGesture: true,
             dynamicStyle: {},
         };
 
@@ -171,6 +172,9 @@ class Dashboard extends React.PureComponent<Props, State> {
         if (!document["hidden"]) {
             const reCheckInResponse = await reCheckIn(this.props.session);
             this.handleRecheckInResponse(reCheckInResponse);
+            this.setState({ isUserGesture: true });
+        } else {
+            this.handleScreenIsNotDisplay();
         }
     }
 
@@ -243,6 +247,11 @@ class Dashboard extends React.PureComponent<Props, State> {
 
     componentWillUnmount() {
         document.removeEventListener("visibilitychange", this.onVisibilityChange);
+        this.handleScreenIsNotDisplay();
+    }
+
+    private handleScreenIsNotDisplay(){
+        this.setState({ isUserGesture: false });
         this.notificationSocket?.close();
         this.lobbyConnectionHandler.closeSocket();
         clearInterval(this.reCheckInInterval);
@@ -464,7 +473,7 @@ class Dashboard extends React.PureComponent<Props, State> {
                             {isRenderGames ? this.renderGames() : this.renderLobby()}
 
                             {!isRenderGames && <Footer />}
-                            <MusicPlayer />
+                            <MusicPlayer isUserGesture={this.state.isUserGesture} />
 
                             {isShowErrorModal && (
                                 <div className={Styles["container-modal"]}>

@@ -210,13 +210,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.registerHandlers();
         this.loadAuthorizeUserSetting();
         this.connectToGameService();
-        !this.props.systemContextModel.isUserGesture &&
-            this.props.systemDispatch({
-                type: SystemEventActionType.SET_USER_GESTURE,
-                payload: {
-                    isUserGesture: true,
-                },
-            });
         this.gameStateHandler.setReturnToGameState(this.props.dispatch);
         this.cancelConfirmBetAndResetBets();
     }
