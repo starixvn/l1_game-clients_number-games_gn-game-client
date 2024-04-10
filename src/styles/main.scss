@@ -105,7 +105,7 @@ body {
 
 body {
     padding: 0;
-    touch-action: none;
+    touch-action: pan-x pan-y;
     margin: 0;
     background: var(--page-background-color) var(--background-image) no-repeat top center fixed;
     font: 1.4rem/1.5 var(--font-family);
