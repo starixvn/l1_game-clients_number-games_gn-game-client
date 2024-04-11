@@ -1,5 +1,17 @@
 import "@testing-library/jest-dom";
-
+jest.mock("next/dynamic", () => ({
+    __esModule: true,
+    default: (loader: any) => {
+        const dynamicModule = jest.requireActual("next/dynamic");
+        const dynamicActualComp = dynamicModule.default;
+        const RequiredComponent = dynamicActualComp(() => loader().then((mod: any) => mod.default || mod));
+        if (RequiredComponent?.render?.displayName) {
+            RequiredComponent.render.displayName = loader.toString();
+        }
+        RequiredComponent.preload ? RequiredComponent.preload() : RequiredComponent.render.preload();
+        return RequiredComponent;
+    },
+}));
 jest.mock("next/config", () => () => ({
     publicRuntimeConfig: {
         proxy: {

@@ -1,10 +1,9 @@
 import { render } from "@testing-library/react";
 import { GameIcon } from "../../../games/components/game-icon";
-import { OnlinePlayer } from "../../../games/components/online-player";
+import OnlinePlayer from "../../../games/components/online-player";
 
-jest.mock("../../../games/components/online-player", () => ({ OnlinePlayer: jest.fn().mockReturnValue("OnlinePlayer") }));
+jest.mock("../../../games/components/online-player", () => jest.fn().mockReturnValue("OnlinePlayer"));
 jest.mock("../../../../../../_shared/constants", () => ({ buildVersion: 1 }));
-
 describe(GameIcon.name, () => {
     const gameSettings = { gameName: "gameA" } as any;
     const transmitter = {} as any;
