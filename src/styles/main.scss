@@ -68,8 +68,8 @@ html {
 }
 
 [data-theme="light"] {
-    --page-background-color: #000000;
-    --game-background-image: url("/static/images/bg-galaxy.jpg");
+    --page-background-color: #000;
+    --game-background-image: url("/static/images/bg-galaxy.jpg?v=1");
     --background-image: url("/static/images/bg.jpg");
     --text-color: #2c2f3e;
 
@@ -94,7 +94,7 @@ html {
 // To dock the footer
 html,
 body {
-    height: 100%;
+    height: 100vh;
     scrollbar-width: none;
 }
 
@@ -106,7 +106,9 @@ body {
 body {
     padding: 0;
     margin: 0;
-    background: var(--page-background-color) var(--background-image) no-repeat top center fixed;
+    background: var(--page-background-color) var(--background-image) no-repeat;
+    background-size: top center;
+    background-attachment: fixed;
     font: 1.4rem/1.5 var(--font-family);
     color: var(--text-color);
     overscroll-behavior: contain;
