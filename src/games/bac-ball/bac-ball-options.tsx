@@ -53,7 +53,7 @@ const BacBallBetOptionsComponent = () => {
         );
     };
     const renderBetChoice = (choice: string) => {
-        return <BetChoice choice={choice} className={`${Style[`bet-name-${choice}`]}`} tolgeeNamespace={tolgeeNamespace} />;
+        return <BetChoice choice={choice} className={Style[`bet-name-${choice}`]} tolgeeNamespace={tolgeeNamespace} />;
     };
 
     const renderOdds = (choice: string) => {

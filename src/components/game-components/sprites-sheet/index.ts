@@ -75,10 +75,10 @@ export class Spritesheet extends Component<SpritesheetProps> {
     endAt: number | false;
     fps: number;
     steps: number;
-    allRowsSteps: number = 0;
-    completeLoopCicles: number = 0;
-    isPlaying: boolean = false;
-    spriteScale: number = 1;
+    allRowsSteps = 0;
+    completeLoopCicles = 0;
+    isPlaying = false;
+    spriteScale = 1;
     direction: "forward" | "rewind";
     playTimeout: NodeJS.Timeout;
     resizeTimeout: NodeJS.Timeout;
@@ -135,7 +135,7 @@ export class Spritesheet extends Component<SpritesheetProps> {
             onMouseUp,
         } = this.props;
 
-        let containerStyles: CSSProperties = {
+        const containerStyles: CSSProperties = {
             position: "relative",
             overflow: "hidden",
             width: `${widthFrame}px`,
@@ -151,7 +151,7 @@ export class Spritesheet extends Component<SpritesheetProps> {
             containerStyles.backgroundImage = `url(${background})`;
         }
 
-        let moveStyles: CSSProperties = {
+        const moveStyles: CSSProperties = {
             overflow: "hidden",
             backgroundRepeat: "no-repeat",
             display: "table-cell",
@@ -161,12 +161,12 @@ export class Spritesheet extends Component<SpritesheetProps> {
             transformOrigin: "0 50%",
         };
 
-        let elMove = React.createElement("div", {
+        const elMove = React.createElement("div", {
             className: "react-responsive-spritesheet-container__move",
             style: moveStyles,
         });
 
-        let elContainer = React.createElement(
+        const elContainer = React.createElement(
             "div",
             {
                 className: "react-responsive-spritesheet-container",
@@ -175,7 +175,7 @@ export class Spritesheet extends Component<SpritesheetProps> {
             elMove
         );
 
-        let elSprite = React.createElement(
+        const elSprite = React.createElement(
             "div",
             {
                 className: `react-responsive-spritesheet ${this.id} ${className || ""}`,
@@ -199,7 +199,7 @@ export class Spritesheet extends Component<SpritesheetProps> {
     init = () => {
         const { image, widthFrame, heightFrame, autoplay, getInstance, onInit } = this.props;
 
-        let imgLoadSprite = new Image();
+        const imgLoadSprite = new Image();
         imgLoadSprite.src = image;
         imgLoadSprite.onload = () => {
             if (document && document.querySelector(`.${this.id}`)) {
@@ -219,12 +219,12 @@ export class Spritesheet extends Component<SpritesheetProps> {
                     this?.resize(false);
                 }, 10);
 
-                if (autoplay !== false) this.play(true);
+                autoplay !== false && this.play(true);
 
                 const instance = this.setInstance();
 
-                if (getInstance) getInstance(instance);
-                if (onInit) onInit(instance);
+                getInstance && getInstance(instance);
+                onInit && onInit(instance);
             }
         };
 
@@ -233,18 +233,18 @@ export class Spritesheet extends Component<SpritesheetProps> {
         };
     };
 
-    resize = (callback: boolean = true) => {
+    resize = (callback = true) => {
         const { widthFrame, onResize } = this.props;
 
         if (this.isResponsive && this.spriteEl) {
             this.spriteScale = this.spriteEl.offsetWidth / widthFrame;
-            if (this.spriteElContainer) this.spriteElContainer.style.transform = `scale(${this.spriteScale})`;
-            if (this.spriteEl) this.spriteEl.style.height = `${this.getInfo("height")}px`;
-            if (callback && onResize) onResize(this.setInstance());
+            this.spriteElContainer && (this.spriteElContainer.style.transform = `scale(${this.spriteScale})`);
+            this.spriteEl && (this.spriteEl.style.height = `${this.getInfo("height")}px`);
+            callback && onResize && onResize(this.setInstance());
         }
     };
 
-    play = (withTimeout: boolean = false) => {
+    play = (withTimeout = false) => {
         const { onPlay, timeout } = this.props;
 
         if (!this.isPlaying) {
@@ -252,7 +252,7 @@ export class Spritesheet extends Component<SpritesheetProps> {
             this.playTimeout = setTimeout(
                 () => {
                     if (this) {
-                        if (onPlay) onPlay(this.setInstance());
+                        onPlay && onPlay(this.setInstance());
                         this.setIntervalPlayFunctions();
                         this.isPlaying = true;
                     }
@@ -263,14 +263,14 @@ export class Spritesheet extends Component<SpritesheetProps> {
     };
 
     setIntervalPlayFunctions = () => {
-        if (this.intervalSprite) clearInterval(this.intervalSprite);
+        this.intervalSprite && clearInterval(this.intervalSprite);
 
         this.intervalSprite = setInterval(() => {
-            if (this && this.isPlaying) this.moveImage();
+            this?.isPlaying && this.moveImage();
         }, 1000 / this.fps);
     };
 
-    moveImage = (play: boolean = true) => {
+    moveImage = (play = true) => {
         const { onEnterFrame, onEachFrame, loop, onLoopComplete } = this.props;
         let currentRow = 0;
         let currentCol = 0;
@@ -400,7 +400,7 @@ export class Spritesheet extends Component<SpritesheetProps> {
 
     setInstance = () => this;
 
-    frame: number = 0;
+    frame = 0;
 
     render() {
         return this.renderElements();

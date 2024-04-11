@@ -1,16 +1,16 @@
 import { uniqueNamesGenerator } from "unique-names-generator";
-import { new_202010 } from "./name-dictionaries/202010_new";
-import { animals } from "./name-dictionaries/animals";
-import { colors } from "./name-dictionaries/colors";
-import { cools } from "./name-dictionaries/cools";
-import { fruits } from "./name-dictionaries/fruits";
-import { marvels } from "./name-dictionaries/marvels";
+import { New_202010 } from "./name-dictionaries/202010_new";
+import { Animals } from "./name-dictionaries/animals";
+import { Colors } from "./name-dictionaries/colors";
+import { Cools } from "./name-dictionaries/cools";
+import { Fruits } from "./name-dictionaries/fruits";
+import { Marvels } from "./name-dictionaries/marvels";
 
 export default class NameGenerator {
     public static PATTERN = "^[a-zA-Z0-9]{3,14}$";
 
     public static generateName(): string {
-        const dictionaries = [colors, animals, marvels, fruits, cools, new_202010];
+        const dictionaries = [Colors, Animals, Marvels, Fruits, Cools, New_202010];
 
         const randomDictionaryIndex = Math.floor(Math.random() * dictionaries.length);
         const pickedDictionary = dictionaries[randomDictionaryIndex];

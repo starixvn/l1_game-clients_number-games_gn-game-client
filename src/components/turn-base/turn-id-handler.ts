@@ -1,4 +1,3 @@
-import { TurnStateHandler } from "./turn-state-handler";
 import { GameEventActionType } from "../../_shared/react-contexts/game-state-context/game-event-action";
 import { GameStateContextModel } from "../../_shared/react-contexts/game-state-context/game-state-context-model";
 import { GameDurations, RoundState } from "../game-base/type";
@@ -21,9 +20,9 @@ export class TurnIdHandler {
     private roundRemainingTime = 0;
     private drawId = 0;
     private roundId = 0;
-    private turnTimelineCounter: TurnTimelineCounter;
+    private readonly turnTimelineCounter: TurnTimelineCounter;
 
-    constructor(private props: TurnIdHandlerProps, turnTimelineCounter?: TurnTimelineCounter) {
+    constructor(private readonly props: TurnIdHandlerProps, turnTimelineCounter?: TurnTimelineCounter) {
         this.turnTimelineCounter = turnTimelineCounter ?? new TurnTimelineCounter(props.durations);
     }
 
@@ -82,7 +81,7 @@ export class TurnIdHandler {
     };
 
     handleRoundState = ({ roundState }) => {
-        if (roundState == RoundState.InRound && this.isInDisplayResultState()) {
+        if (roundState === RoundState.InRound && this.isInDisplayResultState()) {
             this.dispatchClientSeed(this.drawId);
             this.dispatchTurnCounter(false, this.turnCounter);
             this.dispatchDrawId(this.drawId);

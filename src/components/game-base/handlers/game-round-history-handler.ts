@@ -8,7 +8,7 @@ export type GameRoundHistorydHandlerProps = {
 };
 
 export class GameRoundHistoryHandler {
-    constructor(private props: GameRoundHistorydHandlerProps) {}
+    constructor(private readonly props: GameRoundHistorydHandlerProps) {}
 
     handleRoundHistory({ roundHistory, roundId }) {
         const { roundState, isUMInFirstLoad } = this.props.gameStateContextModel();

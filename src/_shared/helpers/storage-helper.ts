@@ -10,7 +10,7 @@ interface IActionStorage {
 declare global {
     interface globalThis {
         localMemory: object;
-    }
+    } // NOSONAR
 }
 
 export class LocalStorage implements IActionStorage {

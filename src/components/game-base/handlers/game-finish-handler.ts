@@ -22,11 +22,11 @@ export class GameFinishHandler {
     protected showResultInfoTimeout: NodeJS.Timeout;
     protected showWinningAnimationTimeout: NodeJS.Timeout;
 
-    private _betWin: number = 0;
+    private _betWin = 0;
     private _roundHistory: Round<object, object>[];
     private _finish: Round<object, object>;
 
-    constructor(private props: GameFinishHandlerProps) {}
+    constructor(private readonly props: GameFinishHandlerProps) {}
 
     set betWin(betWin: number) {
         this._betWin = betWin;

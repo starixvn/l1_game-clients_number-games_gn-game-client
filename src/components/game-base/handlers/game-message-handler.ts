@@ -41,7 +41,7 @@ export const messageEventType = {
 };
 
 export class GameMessageHandler {
-    constructor(private dispatch: Function, private messageTransmitter?: MessageTransmitterType) {
+    constructor(private readonly dispatch: Function, private readonly messageTransmitter?: MessageTransmitterType) {
         this.messageTransmitter = messageTransmitter ?? MessageTransmitter();
     }
 

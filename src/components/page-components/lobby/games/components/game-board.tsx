@@ -5,7 +5,6 @@ import { GameSettings } from "../../../../game-base/type";
 import { LobbyGameTransmitter, getLobbyData } from "../../lobby-socket-connection";
 import Styles from "../../lobby.module.scss";
 import { GameIcon } from "./game-icon";
-// import LobbyScoreboard from "./scoreboard";
 
 const DisabledGameBlock = dynamic(() => import("./disable-game-block"));
 const CountdownTimer = dynamic(() => import("./countdown-timer"));

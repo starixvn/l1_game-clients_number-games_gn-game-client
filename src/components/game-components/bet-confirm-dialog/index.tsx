@@ -84,9 +84,7 @@ const BetConfirmDialog = () => {
             return `<strong class="amount-color">${numberRoundDownWithCommas(outstandingBalance)}</strong>`;
         };
 
-        const content = t("message_bet_available", { amount: formatValue() });
-
-        return content;
+        return t("message_bet_available", { amount: formatValue() });
     };
 
     const getTitle = () => {

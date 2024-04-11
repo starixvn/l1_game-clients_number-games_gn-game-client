@@ -19,7 +19,7 @@ export interface ApiError {
 }
 
 export class GameErrorHandler {
-    constructor(private props: GameErrorHandlerProps) {}
+    constructor(private readonly props: GameErrorHandlerProps) {}
 
     registerEvents = (signOut: Function) => {
         this.props.gameMessageHandler.register(messageEventType.API_ERROR, ({ apiError }) => {

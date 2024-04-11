@@ -1,4 +1,4 @@
-export const cools = [
+export const Cools = [
     "ABC",
     "Boomer",
     "Boomerang",
@@ -56,5 +56,5 @@ export const cools = [
     "Lion",
     "Dolphin",
     "Coffee",
-    "Honey"
+    "Honey",
 ];

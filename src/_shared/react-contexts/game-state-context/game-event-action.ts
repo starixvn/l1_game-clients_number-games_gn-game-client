@@ -102,7 +102,7 @@ export interface GameEventPayload {
     disconnectReason?: string;
     showWinningAnimation?: boolean;
     selectedBetChoice?: string;
-    activeScoreboardTab?: Number;
+    activeScoreboardTab?: number;
     playResultAnimation?: boolean;
     newGameState?: any;
     showResultInfo?: boolean;

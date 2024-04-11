@@ -53,17 +53,17 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     protected timeCounter: number;
     protected authService: Auth;
     private disconnectTimeout: NodeJS.Timeout;
-    private gameMessageHandler: GameMessageHandler;
-    private roundStateHandler: IRoundStateHandler;
-    private gameStateHandler: IGameStateHandler;
-    private gameErrorHandler: GameErrorHandler;
-    private playerHandler: PlayerHandler;
-    private placeBetHandler: PlaceBetHandler;
-    private gameFinishHandler?: GameFinishHandler;
-    private gameDisabledHandler?: GameDisableHandler;
-    private gameRoundHistoryHandler?: GameRoundHistoryHandler;
-    private gameSoundHandler?: GameSoundHandler;
-    private gameRoundDatatHandler?: GameRoundDatatHandler;
+    private readonly gameMessageHandler: GameMessageHandler;
+    private readonly roundStateHandler: IRoundStateHandler;
+    private readonly gameStateHandler: IGameStateHandler;
+    private readonly gameErrorHandler: GameErrorHandler;
+    private readonly playerHandler: PlayerHandler;
+    private readonly placeBetHandler: PlaceBetHandler;
+    private readonly gameFinishHandler?: GameFinishHandler;
+    private readonly gameDisabledHandler?: GameDisableHandler;
+    private readonly gameRoundHistoryHandler?: GameRoundHistoryHandler;
+    private readonly gameSoundHandler?: GameSoundHandler;
+    private readonly gameRoundDatatHandler?: GameRoundDatatHandler;
 
     constructor(
         props: P,

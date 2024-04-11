@@ -35,9 +35,7 @@ const BettingBlock: FC<PropsWithChildren> = ({ children }: PropsWithChildren) =>
         };
     }, [gameMessageHandler, bettingZoneState]);
 
-    const bettingZoneContext = <GameBettingZoneContext.Provider value={bettingZoneState}>{children}</GameBettingZoneContext.Provider>;
-
-    return bettingZoneContext;
+    return <GameBettingZoneContext.Provider value={bettingZoneState}>{children}</GameBettingZoneContext.Provider>;
 };
 
 export default BettingBlock;

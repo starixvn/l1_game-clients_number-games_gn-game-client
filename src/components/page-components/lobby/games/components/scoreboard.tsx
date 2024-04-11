@@ -41,7 +41,7 @@ export default class LobbyScoreboard extends Component<LobbyScoreboardProps, Lob
         blinkNodeFlag: false,
         isShow: false,
     };
-    private listenerIds: string[] = [];
+    private readonly listenerIds: string[] = [];
 
     constructor(props: LobbyScoreboardProps) {
         super(props);

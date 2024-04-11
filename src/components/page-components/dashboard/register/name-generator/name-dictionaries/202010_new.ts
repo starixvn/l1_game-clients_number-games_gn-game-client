@@ -1,4 +1,4 @@
-export const new_202010 = [
+export const New_202010 = [
     "Coolman",
     "Sun",
     "Phoenix",
@@ -269,5 +269,5 @@ export const new_202010 = [
     "Djokovic",
     "Nadal",
     "Federer",
-    "Tsonga"
+    "Tsonga",
 ];

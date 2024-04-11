@@ -35,7 +35,7 @@ export type PlaceBetHandlerProps = {
 export class PlaceBetHandler {
     private retryInterval: NodeJS.Timeout;
 
-    constructor(private props: PlaceBetHandlerProps) {}
+    constructor(private readonly props: PlaceBetHandlerProps) {}
 
     registerEvents = (signOut: () => void, gameStateContext: GameStateContextModel) => {
         this.props.gameMessageHandler.register(messageEventType.END_BET, (gameMessage) => {

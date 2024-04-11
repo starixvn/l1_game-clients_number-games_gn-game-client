@@ -17,13 +17,8 @@ export const UserInfo: React.FC<{
     const { authorizeInfo } = usePlayerContext();
     const user = authorizeInfo.user;
     let deviceClass = "";
-    let currencyUser = "";
     if (isMobileOnly) {
         deviceClass = isIOS ? Styles["ios-device"] : Styles["android-device"];
-    }
-
-    if (user.isDisplayPlayerCurrency) {
-        currencyUser = user.currency;
     }
 
     const handleClickAvatar = () => {

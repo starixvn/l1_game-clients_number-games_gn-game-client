@@ -14,7 +14,7 @@ export type GameDisabledHandlerProps = {
 };
 
 export class GameDisableHandler {
-    constructor(private props: GameDisabledHandlerProps) {}
+    constructor(private readonly props: GameDisabledHandlerProps) {}
 
     handleUM({ um, um_message, remainingTime }, timeCounter: number) {
         const { durations, gameStateContextModel } = this.props;

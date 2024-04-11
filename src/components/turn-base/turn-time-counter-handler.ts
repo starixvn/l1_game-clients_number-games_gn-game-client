@@ -38,7 +38,7 @@ export class TurnTimelineCounter {
     /**
      *
      */
-    constructor(private durations: GameDurations) {
+    constructor(private readonly durations: GameDurations) {
         this.calculateTurnTimeline();
     }
 
@@ -69,7 +69,7 @@ export class TurnTimelineCounter {
     };
 
     calculateTurn = (roundRemainingTime: number, roundId?: number, turnId?: number) => {
-        let turn: Turn = {
+        const turn: Turn = {
             id: 0,
             index: 0,
         };
@@ -94,7 +94,7 @@ export class TurnTimelineCounter {
             const actualRoundId = this.isLastTurn(roundRemainingTime, turnTimeline) ? roundId - 1 : roundId;
             turn.id = (actualRoundId - 1) * this.totalTurn + turn.index;
 
-            if (turnId > 0 && turnId != turn.id) {
+            if (turnId > 0 && turnId !== turn.id) {
                 console.log(turn, roundId, actualRoundId, roundRemainingTime, turnId);
             }
         }

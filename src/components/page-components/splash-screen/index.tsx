@@ -1,4 +1,4 @@
-import * as Sentry from "@sentry/react";
+import * as Sentry from "@sentry/nextjs";
 import { WithRouterProps } from "next/dist/client/with-router";
 import { useRouter } from "next/router";
 import { ReactNode, useContext, useEffect } from "react";

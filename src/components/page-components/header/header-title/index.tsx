@@ -16,11 +16,9 @@ const HeaderTitle: React.FC<Props> = (props) => {
 
     const { t } = useTranslator([tolgeeNamespace]);
 
-    const headerTitle = `${
-        props.isRenderGames
-            ? `${t(`${tolgeeNamespace}.game_name_${props.openingGameId}`).toUpperCase()}`
-            : `${t(`${ResourceTypes.SABA_NUMBER}.product_name`)}`
-    }`;
+    const headerTitle = props.isRenderGames
+        ? t(`${tolgeeNamespace}.game_name_${props.openingGameId}`).toUpperCase()
+        : t(`${ResourceTypes.SABA_NUMBER}.product_name`);
 
     return (
         <div id="img-game-name" className={Styles["header-left"]}>

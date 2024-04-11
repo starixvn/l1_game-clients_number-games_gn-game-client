@@ -1,9 +1,5 @@
 import { getAppSettings } from "../app-settings";
 
-interface chip {
-    [key: number]: string;
-}
-
 export interface BetOptionData {
     betChoice: string;
     odds: number;

@@ -53,7 +53,7 @@ class Dashboard extends React.PureComponent<Props, State> {
     private notificationSocket: Socket = null;
     private reCheckInInterval: NodeJS.Timeout;
     private isKickOut = false;
-    private lobbyConnectionHandler: LobbySocketConnection;
+    private readonly lobbyConnectionHandler: LobbySocketConnection;
     private headerRef = React.createRef<HTMLDivElement>();
     private gameStyleInterval: NodeJS.Timeout;
 
@@ -210,7 +210,7 @@ class Dashboard extends React.PureComponent<Props, State> {
 
         const { authorized } = authorizeInfo;
         if (authorized === false && directMode) {
-            return await this.autoCreateNickname();
+            return this.autoCreateNickname();
         }
 
         const lobbyConfigs = await this.getAllLobbyConfigs();
@@ -289,7 +289,7 @@ class Dashboard extends React.PureComponent<Props, State> {
 
     connectLobbySocket = async (authorizeInfo: AuthorizeResponse, lobbyConfigs: ILobbyConfigs) => {
         const { gameId } = loadURLContext();
-        const offerGamesIds = getOfferGamesIds(authorizeInfo)?.filter((id) => id != gameId);
+        const offerGamesIds = getOfferGamesIds(authorizeInfo)?.filter((id) => id !== gameId);
         const { gameSettings } = getAppSettings();
         const lobbyGamesIds = getLobbyGameIds(lobbyConfigs)?.filter((gameId) => offerGamesIds.includes(gameId) && gameSettings[gameId]);
 
@@ -416,7 +416,7 @@ class Dashboard extends React.PureComponent<Props, State> {
 
     openGameFromLobby(gameId: number) {
         updateURLContext({ backToLobby: true, gameId: gameId });
-        if (this.state.openGameId != gameId) {
+        if (this.state.openGameId !== gameId) {
             this.removeGameTransmitter(gameId);
             this.setState({ openGameId: gameId });
         } else {

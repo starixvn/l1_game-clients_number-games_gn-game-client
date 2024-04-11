@@ -33,7 +33,7 @@ class UserStakeLevel {
 }
 
 export class PlayerHandler {
-    constructor(private props: PlayerHandlerProps) {}
+    constructor(private readonly props: PlayerHandlerProps) {}
 
     registerEvents = () => {
         this.props.gameMessageHandler.register(messageEventType.USER, ({ user, gameConfigs }) => {
