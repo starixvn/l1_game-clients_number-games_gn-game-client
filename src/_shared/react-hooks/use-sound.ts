@@ -1,4 +1,5 @@
 import useSound from "use-sound";
+import { buildVersion } from "../constants";
 import { StorageHelper, localStorageKeys, objectMap } from "../helpers";
 export const path = "./static/sounds/";
 
@@ -9,7 +10,7 @@ const mp3File = {
     receiveFinish: `receive-finish`,
 };
 
-const resourceMp3 = objectMap(mp3File, (v) => `${path}${v}.mp3`);
+const resourceMp3 = objectMap(mp3File, (v) => `${path}${v}.mp3?v=${buildVersion}`);
 
 export const usePlaySound = (resource: string) => {
     const [playSound] = useSound(resource, {});

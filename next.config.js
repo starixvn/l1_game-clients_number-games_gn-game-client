@@ -48,7 +48,7 @@ module.exports = withSentryConfig({
     async headers() {
         return [
             {
-                source: "/:all*(js|png|json)",
+                source: "/:all*(js|png|json|mp3)",
                 locale: false,
                 headers: [
                     {

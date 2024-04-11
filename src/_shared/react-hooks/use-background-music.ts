@@ -1,3 +1,4 @@
+import { buildVersion } from "../constants";
 import { path as soundsPath } from "./use-sound";
 
 const path = `${soundsPath}bg-music/`;
@@ -10,8 +11,8 @@ const initSongs = (n): number[] => {
     return songs;
 };
 
-// export const songList = initSongs(1).map((x) => `${path}song${x}.mp3`);
-export const songList = ["./static/sounds/bg-music/song2.mp3"];
+//export const songList = initSongs(1).map((x) => `${path}song${x}.mp3?v=${buildVersion}`);
+export const songList = [`./static/sounds/bg-music/song2.mp3?v=${buildVersion}`];
 
 export const getRandomSong = (currentSong: string) => {
     const newSongList = songList.filter((s) => s !== currentSong);
