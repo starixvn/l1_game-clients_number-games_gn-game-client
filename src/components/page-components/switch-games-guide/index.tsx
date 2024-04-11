@@ -6,11 +6,12 @@ import { usePlayerContext } from "../../../_shared/react-contexts";
 import { useTranslator } from "../../../_shared/react-hooks/use-translator";
 import { ResourceTypes } from "../../../_shared/resources";
 import Styles from "./switch-games-guide.module.scss";
+import { buildVersion } from "../../../_shared/constants";
 
 const SWITCH_GAMES_GUIDE_PATH = "./static/images/switch-games-guide";
 
 const GuideImages = ({ name }) => {
-    return <img src={`${SWITCH_GAMES_GUIDE_PATH}/${name}.svg`} alt={name} />;
+    return <img className={Styles[name]} src={`${SWITCH_GAMES_GUIDE_PATH}/${name}.svg?${buildVersion}`} alt={name} />;
 };
 
 const SwitchGamesGuide: React.FC = () => {
@@ -18,7 +19,8 @@ const SwitchGamesGuide: React.FC = () => {
     const { session } = usePlayerContext();
     const [isEnabledSwitchGamesGuide, setIsEnabledSwitchGamesGuide] = useState(false);
 
-    const imgGuide = <GuideImages name="img-guide" />;
+    const arrowLeftRight = <GuideImages name="arrow-left-right" />;
+    const hand = <GuideImages name="hand" />;
 
     useEffect(() => {
         const isStorageHideGuide = StorageHelper.get(localStorageKeys.hideSwitchGameGuide) ?? false;
@@ -52,7 +54,10 @@ const SwitchGamesGuide: React.FC = () => {
             isEnabledSwitchGamesGuide && (
                 <div className={`${Styles["guide-container"]}`}>
                     <div className={Styles["guide-content"]}>
-                        <div className={Styles["guide-images"]}>{imgGuide}</div>
+                        <div className={Styles["guide-images"]}>
+                            {arrowLeftRight}
+                            {hand}
+                        </div>
 
                         <div className={Styles["guide-hint"]}>{t(`${ResourceTypes.SABA_NUMBER}.switch_game_hint`)}</div>
 
