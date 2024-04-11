@@ -9,6 +9,8 @@ const mockGameState = useGameStateContext as jest.Mock;
 const mockGameContext = useGameContext as jest.Mock;
 const mockGameStateDispatch = useGameStatesDispatch as jest.Mock;
 
+jest.useFakeTimers();
+
 jest.mock("../../game-loading/loading-spinner", () => {
     const LoadingSpinner = () => <div data-testid="loading-spinner">LoadingSpinner</div>;
     return { LoadingSpinner };
@@ -31,7 +33,6 @@ jest.mock("../../../../_shared/react-hooks", () => ({
 
 const PFResultMessage = "pfResult";
 const PFPublishMessage = "pf";
-const ClientSeedDetail = "clientSeedDetail";
 
 jest.mock("../../modal-container", () => {
     const ModalContainer = ({ children, onCloseModal }) => {
@@ -115,55 +116,32 @@ describe(PFSettingModal.name, () => {
             [false, true],
             [true, false],
         ])("when receive message socket is %s then show loader is %s", (isReceive, expected) => {
-            let clientSeedHandler = jest.fn();
+            let pfResultHandler = jest.fn();
             const gameMessageHandler = {
                 register: (id, callback) => {
-                    if (id === ClientSeedDetail) {
-                        clientSeedHandler = callback;
+                    if (id === PFResultMessage) {
+                        pfResultHandler = callback;
                     }
                 },
             };
-            defineMock({ isShowPFSetting: true }, gameMessageHandler);
+            defineMockWithDispatch({ isShowPFSetting: true }, gameMessageHandler);
 
             const { renderResult } = renderModal(<PFSettingModal />);
 
             if (isReceive) {
                 act(() => {
-                    clientSeedHandler({ clientSeedDetail: {} });
+                    pfResultHandler({
+                        pfResult: {
+                            drawId: 2,
+                            serverSeedHash: "abcdef",
+                        },
+                    });
                 });
             }
 
             expect(renderResult.queryAllByTestId("loading-spinner").length > 0).toBe(expected);
         });
         describe("when receive", () => {
-            describe("client seed detail message", () => {
-                it("should render client seed detail", () => {
-                    let clientSeedHandler = jest.fn();
-                    const gameMessageHandler = {
-                        register: (id, callback) => {
-                            if (id === ClientSeedDetail) {
-                                clientSeedHandler = callback;
-                            }
-                        },
-                    };
-                    defineMockWithDispatch({ isShowPFSetting: true }, gameMessageHandler);
-
-                    const { renderResult } = renderModal(<PFSettingModal />);
-
-                    act(() => {
-                        clientSeedHandler({
-                            clientSeedDetail: {
-                                drawId: 2,
-                                useManualClientSeed: true,
-                                manualClientSeed: "12",
-                                randomClientSeed: "123",
-                            },
-                        });
-                    });
-
-                    expect(renderResult.getByDisplayValue("12")).toHaveValue("12");
-                });
-            });
             describe("pf result message", () => {
                 it("should render pf result", () => {
                     let pfResultHandler = jest.fn();
@@ -254,6 +232,19 @@ describe(PFSettingModal.name, () => {
             });
 
             expect(renderResult.container.querySelector("#manual-client-seed")).toHaveValue(manualClientSeed);
+        });
+        describe("when time out", () => {
+            it("close loading", () => {
+                defineMock({ isShowPFSetting: true });
+
+                const { renderResult } = renderModal(<PFSettingModal />);
+
+                act(() => {
+                    jest.runAllTimers();
+                });
+
+                expect(renderResult.queryAllByTestId("loading-spinner").length > 0).toBe(false);
+            });
         });
     });
     describe("click close button", () => {

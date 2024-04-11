@@ -16,7 +16,7 @@ const NUMBER_VALUES = "0123456789";
 const GetPFInfoMessage = "getPfInfo";
 const PFResultMessage = "pfResult";
 const PFPublishMessage = "pf";
-const ClientSeedDetail = "clientSeedDetail";
+const TIME_OUT = 5000;
 
 const PFSettingModal: FC<{ customClientSeedInfo?: string }> = ({ customClientSeedInfo }) => {
     const { isShowPFSetting } = useGameStateContext();
@@ -72,8 +72,10 @@ const PFSetting: FC<{ customClientSeedInfo?: string }> = ({ customClientSeedInfo
     };
 
     useEffect(() => {
-        setRandomClientSeed(pfClientSeedSetting?.randomClientSeed);
-    }, [pfClientSeedSetting?.randomClientSeed]);
+        setRandomClientSeed(pfClientSeedSetting?.randomClientSeed || "");
+        setManualClientSeed(pfClientSeedSetting?.manualClientSeed || "");
+        setIsManualMode(pfClientSeedSetting?.useManualClientSeed || false);
+    }, [pfClientSeedSetting]);
 
     useEffect(() => {
         if (drawId <= 0) {
@@ -93,6 +95,9 @@ const PFSetting: FC<{ customClientSeedInfo?: string }> = ({ customClientSeedInfo
 
     useEffect(() => {
         setIsLoading(true);
+        setTimeout(() => {
+            setIsLoading(false);
+        }, TIME_OUT);
 
         const handleServerSeed = (pfServerSeed: PFSeverSeed) => {
             if (pfServerSeed.drawId >= drawId) {
@@ -109,22 +114,8 @@ const PFSetting: FC<{ customClientSeedInfo?: string }> = ({ customClientSeedInfo
             setIsLoading(false);
         });
 
-        const clientSeedDetailHandler = gameMessageHandler.register(ClientSeedDetail, ({ clientSeedDetail }) => {
-            if (Object.keys(clientSeedDetail).length > 0) {
-                setRandomClientSeed(clientSeedDetail.randomClientSeed);
-                setManualClientSeed(clientSeedDetail.manualClientSeed);
-                setIsManualMode(clientSeedDetail.useManualClientSeed);
-
-                updatePFSetting({
-                    ...clientSeedDetail,
-                });
-            }
-            setIsLoading(false);
-        });
-
         return () => {
             gameMessageHandler.removeHandler(pfResultHandler);
-            gameMessageHandler.removeHandler(clientSeedDetailHandler);
             gameMessageHandler.removeHandler(publishPFSeverSeedHandler);
         };
     }, []);
