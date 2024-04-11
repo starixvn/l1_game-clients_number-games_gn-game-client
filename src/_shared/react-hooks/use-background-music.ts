@@ -11,8 +11,7 @@ const initSongs = (n): number[] => {
     return songs;
 };
 
-//export const songList = initSongs(1).map((x) => `${path}song${x}.mp3?v=${buildVersion}`);
-export const songList = [`./static/sounds/bg-music/song2.mp3?v=${buildVersion}`];
+export const songList = initSongs(4).map((x) => `${path}song${x}.mp3?v=${buildVersion}`);
 
 export const getRandomSong = (currentSong: string) => {
     const newSongList = songList.filter((s) => s !== currentSong);
