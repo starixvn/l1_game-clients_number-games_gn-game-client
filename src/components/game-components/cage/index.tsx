@@ -27,6 +27,7 @@ export type CageProps = {
     delayShowResultTime?: number;
     position: string;
     highlight?: boolean;
+    ballFPS?: number;
 } & Partial<GameStateContextModel>;
 
 const Cage: React.FC<CageProps> = ({
@@ -38,6 +39,7 @@ const Cage: React.FC<CageProps> = ({
     playResultAnimation,
     roundState,
     highlight,
+    ballFPS,
 }) => {
     const [isDelayShowResult, setIsDelayShowResult] = useState<boolean>(false);
     const [ballColor, setBallColor] = useState<string>(null);
@@ -71,11 +73,18 @@ const Cage: React.FC<CageProps> = ({
                 {!isDelayShowResult && <div id="cage-lid" className={Styles["cage-lid"]} />}
 
                 {!!ballColor && (
-                    <ResultBall isDelayShowResult={isDelayShowResult} ballColor={ballColor} isShowResultAnim={playResultAnimation} />
+                    <ResultBall
+                        isDelayShowResult={isDelayShowResult}
+                        ballColor={ballColor}
+                        isShowResultAnim={playResultAnimation}
+                        fps={ballFPS}
+                    />
                 )}
             </div>
 
-            {!!result && <ResultNumber isDelayShowResult={isDelayShowResult} number={result} isShowResultAnim={playResultAnimation} />}
+            {!!result && (
+                <ResultNumber isDelayShowResult={isDelayShowResult} number={result} isShowResultAnim={playResultAnimation} fps={ballFPS} />
+            )}
         </div>
     );
 };

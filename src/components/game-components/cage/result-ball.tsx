@@ -7,7 +7,8 @@ const ResultBall: React.FC<{
     isDelayShowResult: boolean;
     ballColor: string;
     isShowResultAnim: boolean;
-}> = ({ isDelayShowResult, ballColor, isShowResultAnim }) => {
+    fps?: number;
+}> = ({ isDelayShowResult, ballColor, isShowResultAnim, fps }) => {
     const currentTime = Date.now();
 
     return useMemo(() => {
@@ -23,7 +24,7 @@ const ResultBall: React.FC<{
                         steps={8}
                         autoplay={true}
                         loop={false}
-                        fps={30}
+                        fps={fps ?? 30}
                         startAt={isShowResultAnim ? 0 : 30}
                         endAt={31}
                     />
