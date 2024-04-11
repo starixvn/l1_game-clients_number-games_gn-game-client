@@ -5,7 +5,7 @@ import { GameIcon } from "../../../games/components/game-icon";
 import LobbyScoreboard from "../../../games/components/scoreboard";
 import MessageTransmitter from "../../../../../../_shared/helpers/message-transmitter";
 import { render } from "@testing-library/react";
-import { getLobbyData } from "../../../lobby-socket-connection";
+import * as LobbyConnection from "../../../lobby-socket-connection";
 import { act } from "react-dom/test-utils";
 
 jest.mock("../../../games/components/countdown-timer", () => jest.fn().mockReturnValue("CountdownTimer"));
@@ -15,12 +15,15 @@ jest.mock("../../../games/components/scoreboard", () => jest.fn().mockReturnValu
 jest.mock("../../../../../../_shared/react-contexts", () => ({
     useLobbyConnectionContext: jest.fn().mockReturnValue({ reconnectGameTransmitter: jest.fn(), socket: {} }),
 }));
-jest.mock("../../../lobby-socket-connection", () => ({ getLobbyData: jest.fn() }));
 
 describe(GameBoard.name, () => {
     const transmitter = MessageTransmitter();
     const gameSettings = { id: 1, gameName: "gameA" } as any;
     const openGame = jest.fn();
+    beforeAll(() => {
+        // @ts-ignore
+        LobbyConnection.getLobbyData = jest.fn();
+    });
     afterEach(() => {
         jest.clearAllMocks();
     });
@@ -59,6 +62,6 @@ describe(GameBoard.name, () => {
         });
 
         // assert
-        expect(getLobbyData).toHaveBeenCalled();
+        expect(LobbyConnection.getLobbyData).toHaveBeenCalled();
     });
 });

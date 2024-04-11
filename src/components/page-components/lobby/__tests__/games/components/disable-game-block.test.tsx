@@ -3,7 +3,7 @@ import { DisabledGameBlock } from "../../../games/components/disable-game-block"
 import MessageTransmitter from "../../../../../../_shared/helpers/message-transmitter";
 import { render } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
-import { getLobbyData } from "../../../lobby-socket-connection";
+import * as LobbyConnection from "../../../lobby-socket-connection";
 
 jest.mock("@tolgee/react", () => ({ useTolgee: jest.fn().mockReturnValue({ getLanguage: jest.fn().mockReturnValue("en") }) }));
 jest.mock("../../../../../../_shared/react-contexts", () => ({
@@ -14,10 +14,13 @@ jest.mock("../../../../../../_shared/react-contexts", () => ({
     }),
 }));
 jest.mock("../../../../../../_shared/react-hooks", () => ({ useTranslator: jest.fn().mockReturnValue({ t: jest.fn((key) => key) }) }));
-jest.mock("../../../lobby-socket-connection", () => ({ getLobbyData: jest.fn() }));
 describe(DisabledGameBlock.name, () => {
     const transmitter = MessageTransmitter();
     const gameSettings = { id: 1 } as any;
+    beforeAll(() => {
+        // @ts-ignore
+        LobbyConnection.getLobbyData = jest.fn();
+    });
     afterEach(() => {
         jest.clearAllMocks();
     });
@@ -58,7 +61,7 @@ describe(DisabledGameBlock.name, () => {
 
             // assert
             expect(container.innerHTML).toBe("");
-            expect(getLobbyData).toHaveBeenCalledWith({ socketId: 123 }, gameSettings.id);
+            expect(LobbyConnection.getLobbyData).toHaveBeenCalledWith({ socketId: 123 }, gameSettings.id);
         });
     });
 

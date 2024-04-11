@@ -2,6 +2,10 @@ import { render, act } from "@testing-library/react";
 import MessageTransmitter from "../../../../../../_shared/helpers/message-transmitter";
 import { OnlinePlayer } from "../../../games/components/online-player";
 
+jest.mock("../../../lobby-socket-connection", () => ({
+    LobbyMessageEvents: { SHOW_DATA: "showData", PLAYERS: "players", PLAYER: "player", OUTGAME: "outgame" },
+}));
+
 describe(OnlinePlayer.name, () => {
     const transmitter = MessageTransmitter();
     const players = { p1: {}, p2: {}, p3: {}, p4: {}, p5: {}, p6: {} };

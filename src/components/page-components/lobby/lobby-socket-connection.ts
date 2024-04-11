@@ -1,6 +1,6 @@
 import { Socket, io } from "socket.io-client";
 import { getAppSettings } from "../../../_shared/app-settings";
-import { buildUrl } from "../../../_shared/helpers";
+import { buildUrl } from "../../../_shared/helpers/url-helper";
 import MsgpackParser from "socket.io-msgpack-parser";
 import { messageEventType } from "../../game-base/handlers";
 import { initLobbyGameTransmitter } from "./games/lobby-game-transmitter";

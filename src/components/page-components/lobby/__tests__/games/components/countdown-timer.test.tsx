@@ -6,7 +6,9 @@ import { act } from "react-dom/test-utils";
 jest.mock("../../../../../../_shared/react-hooks", () => ({ useTranslator: jest.fn().mockReturnValue({ t: jest.fn((key) => key) }) }));
 jest.useFakeTimers();
 jest.spyOn(global, "setInterval");
-
+jest.mock("../../../lobby-socket-connection", () => ({
+    LobbyMessageEvents: { REMAINING_TIME: "remainingTime", START_PLACE_BET: "spb", FINISH: "finish" },
+}));
 describe(CountdownTimer.name, () => {
     const transmitter = MessageTransmitter();
     const gameSettings = { totalTurns: 4, durations: { placingBets: 20, lockingBet: 3, wholeTurn: 30 } } as any;
