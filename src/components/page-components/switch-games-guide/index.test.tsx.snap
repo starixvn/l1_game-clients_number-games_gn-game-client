@@ -12,8 +12,14 @@ exports[`SwitchGamesGuide component Not mobile should match the snapshot 1`] = `
         class="guide-images"
       >
         <img
-          alt="img-guide"
-          src="./static/images/switch-games-guide/img-guide.svg"
+          alt="arrow-left-right"
+          class="arrow-left-right"
+          src="./static/images/switch-games-guide/arrow-left-right.svg?undefined"
+        />
+        <img
+          alt="hand"
+          class="hand"
+          src="./static/images/switch-games-guide/hand.svg?undefined"
         />
       </div>
       <div
@@ -52,8 +58,14 @@ exports[`SwitchGamesGuide component mobile should match the snapshot 1`] = `
         class="guide-images"
       >
         <img
-          alt="img-guide"
-          src="./static/images/switch-games-guide/img-guide.svg"
+          alt="arrow-left-right"
+          class="arrow-left-right"
+          src="./static/images/switch-games-guide/arrow-left-right.svg?undefined"
+        />
+        <img
+          alt="hand"
+          class="hand"
+          src="./static/images/switch-games-guide/hand.svg?undefined"
         />
       </div>
       <div
