@@ -80,6 +80,7 @@
     &.odd,
     &.even {
         padding-left: 0;
+        font-size: 1.1rem;
     }
 }
 
@@ -165,5 +166,5 @@ $green_choices: tie;
     display: flex;
     padding-top: 0.1rem;
     padding-left: 0.1rem;
-    font-size: 1.1rem;
+    font-size: 0.9rem;
 }
