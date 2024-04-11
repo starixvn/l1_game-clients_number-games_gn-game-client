@@ -1,16 +1,9 @@
 import { useEffect, useState } from "react";
-import { LobbyGameTransmitter } from "../../lobby-socket-connection";
+import { LobbyGameTransmitter, LobbyMessageEvents } from "../../lobby-socket-connection";
 import Styles from "../../lobby.module.scss";
 
 type Props = {
     transmitter: LobbyGameTransmitter;
-};
-
-const messagesEventTypes = {
-    SHOW_DATA: "showData",
-    PLAYERS: "players",
-    PLAYER: "player",
-    OUTGAME: "outgame",
 };
 
 export const OnlinePlayer: React.FC<Props> = ({ transmitter }) => {
@@ -20,10 +13,10 @@ export const OnlinePlayer: React.FC<Props> = ({ transmitter }) => {
     useEffect(() => {
         const listenerIds: string[] = [];
         if (transmitter) {
-            listenerIds.push(transmitter.register(messagesEventTypes.SHOW_DATA, handleShowData));
-            listenerIds.push(transmitter.register(messagesEventTypes.PLAYERS, handlePlayers));
-            listenerIds.push(transmitter.register(messagesEventTypes.PLAYER, handlePlayerJoinGame));
-            listenerIds.push(transmitter.register(messagesEventTypes.OUTGAME, handlePlayerOutGame));
+            listenerIds.push(transmitter.register(LobbyMessageEvents.SHOW_DATA, handleShowData));
+            listenerIds.push(transmitter.register(LobbyMessageEvents.PLAYERS, handlePlayers));
+            listenerIds.push(transmitter.register(LobbyMessageEvents.PLAYER, handlePlayerJoinGame));
+            listenerIds.push(transmitter.register(LobbyMessageEvents.OUTGAME, handlePlayerOutGame));
         }
         return () => {
             listenerIds.forEach((listenerId) => transmitter?.unsubscribe(listenerId));

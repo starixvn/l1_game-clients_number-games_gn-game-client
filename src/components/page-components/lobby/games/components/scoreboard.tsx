@@ -3,14 +3,8 @@ import { GameStateContextModel } from "../../../../../_shared/react-contexts/gam
 import { BacBallSettlementResult } from "../../../../../games/bac-ball/types";
 import { GameSettings, Round } from "../../../../game-base/type";
 import { SwitchableScoreboard } from "../../../../game-components/round-history/scoreboard";
-import { LobbyGameTransmitter } from "../../lobby-socket-connection";
+import { LobbyGameTransmitter, LobbyMessageEvents } from "../../lobby-socket-connection";
 import Styles from "../../lobby.module.scss";
-
-const messageEventTypes = {
-    ROUND_HISTORY: "roundHistory",
-    FINISH: "finish",
-    END_PLACE_BET: "epb",
-};
 
 export type LobbyScoreboardProps = {
     gameSettings: GameSettings;
@@ -54,9 +48,9 @@ export default class LobbyScoreboard extends Component<LobbyScoreboardProps, Lob
         const { transmitter } = this.props;
 
         if (transmitter) {
-            this.listenerIds.push(transmitter.register(messageEventTypes.ROUND_HISTORY, this.handleRoundHistory.bind(this)));
-            this.listenerIds.push(transmitter.register(messageEventTypes.FINISH, this.handleRoundHistory.bind(this)));
-            this.listenerIds.push(transmitter.register(messageEventTypes.END_PLACE_BET, this.handleRoundHistory.bind(this)));
+            this.listenerIds.push(transmitter.register(LobbyMessageEvents.ROUND_HISTORY, this.handleRoundHistory.bind(this)));
+            this.listenerIds.push(transmitter.register(LobbyMessageEvents.FINISH, this.handleRoundHistory.bind(this)));
+            this.listenerIds.push(transmitter.register(LobbyMessageEvents.END_PLACE_BET, this.handleRoundHistory.bind(this)));
         }
     }
 

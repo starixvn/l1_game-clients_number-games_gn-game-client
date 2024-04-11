@@ -14,6 +14,22 @@ export type LobbyGameTransmitter = {
     listenerIds?: string[];
 };
 
+export const LobbyMessageEvents = {
+    REMAINING_TIME: "remainingTime",
+    START_PLACE_BET: "spb",
+    FINISH: "finish",
+    SIGNED_IN: "signedIn",
+    UM: "um",
+    START_NEW_ROUND: "snr",
+    ERRORCODE: "errorCode",
+    SHOW_DATA: "showData",
+    PLAYERS: "players",
+    PLAYER: "player",
+    OUTGAME: "outgame",
+    ROUND_HISTORY: "roundHistory",
+    END_PLACE_BET: "epb",
+};
+
 export class LobbySocketConnection {
     socket: Socket;
     gameTransmitters: Record<number, LobbyGameTransmitter> = {};
@@ -65,12 +81,17 @@ export class LobbySocketConnection {
         if (!this.socket || !session) {
             return;
         }
-
+        const receivedEvents = Object.values(LobbyMessageEvents);
         const gameSetting = this.getGameSettings(gameId);
         if (gameSetting) {
             const serviceName = gameSetting.socketInfo?.serviceName;
             const appMini = 3;
-            this.socket.emit("signIn", { gameName: gameSetting.gameName, session: { ...session, system: appMini }, serviceName });
+            this.socket.emit("signIn", {
+                gameName: gameSetting.gameName,
+                session: { ...session, system: appMini },
+                serviceName,
+                receivedEvents,
+            });
         }
     }
 
@@ -81,9 +102,13 @@ export class LobbySocketConnection {
 
     private registerGameEvents(gameId: number) {
         const listenerIds = [];
-        listenerIds.push(this.gameTransmitters[gameId]?.register("signedIn", ({ signedIn }) => this.handleSignedIn(gameId, signedIn)));
         listenerIds.push(
-            this.gameTransmitters[gameId]?.register("errorCode", ({ errorCode }) => this.handleGameDisconnect(gameId, errorCode))
+            this.gameTransmitters[gameId]?.register(LobbyMessageEvents.SIGNED_IN, ({ signedIn }) => this.handleSignedIn(gameId, signedIn))
+        );
+        listenerIds.push(
+            this.gameTransmitters[gameId]?.register(LobbyMessageEvents.ERRORCODE, ({ errorCode }) =>
+                this.handleGameDisconnect(gameId, errorCode)
+            )
         );
         this.gameTransmitters[gameId].listenerIds = listenerIds;
     }

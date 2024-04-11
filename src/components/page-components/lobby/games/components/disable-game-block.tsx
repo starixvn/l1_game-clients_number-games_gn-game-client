@@ -4,15 +4,8 @@ import { useLobbyConnectionContext } from "../../../../../_shared/react-contexts
 import { useTranslator } from "../../../../../_shared/react-hooks";
 import { ResourceTypes } from "../../../../../_shared/resources";
 import { GameSettings } from "../../../../game-base/type";
-import { LobbyGameTransmitter, getLobbyData } from "../../lobby-socket-connection";
+import { LobbyGameTransmitter, LobbyMessageEvents, getLobbyData } from "../../lobby-socket-connection";
 import Styles from "../../lobby.module.scss";
-
-const messageEventTypes = {
-    SIGNED_IN: "signedIn",
-    UM: "um",
-    START_NEW_ROUND: "snr",
-    ERRORCODE: "errorCode",
-};
 
 type Props = {
     transmitter: LobbyGameTransmitter;
@@ -35,10 +28,10 @@ export const DisabledGameBlock: React.FC<Props> = ({ transmitter, gameSettings }
     useEffect(() => {
         const listenerIds: string[] = [];
         if (transmitter) {
-            listenerIds.push(transmitter.register(messageEventTypes.SIGNED_IN, handleSignedIn));
-            listenerIds.push(transmitter.register(messageEventTypes.UM, handleDisabledGame));
-            listenerIds.push(transmitter.register(messageEventTypes.START_NEW_ROUND, handleStartNewRound));
-            listenerIds.push(transmitter.register(messageEventTypes.ERRORCODE, handleDisconnect));
+            listenerIds.push(transmitter.register(LobbyMessageEvents.SIGNED_IN, handleSignedIn));
+            listenerIds.push(transmitter.register(LobbyMessageEvents.UM, handleDisabledGame));
+            listenerIds.push(transmitter.register(LobbyMessageEvents.START_NEW_ROUND, handleStartNewRound));
+            listenerIds.push(transmitter.register(LobbyMessageEvents.ERRORCODE, handleDisconnect));
         }
         return () => {
             listenerIds.forEach((listenerId) => transmitter?.unsubscribe(listenerId));

@@ -1,18 +1,12 @@
 import { useEffect, useState } from "react";
 import { useTranslator } from "../../../../../_shared/react-hooks";
 import { GameSettings, RoundState } from "../../../../game-base/type";
-import { LobbyGameTransmitter } from "../../lobby-socket-connection";
+import { LobbyGameTransmitter, LobbyMessageEvents } from "../../lobby-socket-connection";
 import Styles from "../../lobby.module.scss";
 
 type Props = {
     transmitter: LobbyGameTransmitter;
     gameSettings: GameSettings;
-};
-
-const messageEventTypes = {
-    REMAINING_TIME: "remainingTime",
-    START_PLACE_BET: "spb",
-    FINISH: "finish",
 };
 
 export const CountdownTimer: React.FC<Props> = ({ transmitter, gameSettings }) => {
@@ -23,9 +17,9 @@ export const CountdownTimer: React.FC<Props> = ({ transmitter, gameSettings }) =
     useEffect(() => {
         const listenerIds: string[] = [];
         if (transmitter) {
-            listenerIds.push(transmitter.register(messageEventTypes.REMAINING_TIME, handleRemainingTime));
-            listenerIds.push(transmitter.register(messageEventTypes.START_PLACE_BET, handleStartPlacingBet));
-            listenerIds.push(transmitter.register(messageEventTypes.FINISH, handleDisplayResult));
+            listenerIds.push(transmitter.register(LobbyMessageEvents.REMAINING_TIME, handleRemainingTime));
+            listenerIds.push(transmitter.register(LobbyMessageEvents.START_PLACE_BET, handleStartPlacingBet));
+            listenerIds.push(transmitter.register(LobbyMessageEvents.FINISH, handleDisplayResult));
         }
         return () => {
             listenerIds.forEach((listenerId) => transmitter?.unsubscribe(listenerId));
