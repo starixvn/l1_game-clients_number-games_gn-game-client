@@ -41,7 +41,7 @@ import {
     PlaceBetHandler,
     PlayerHandler,
 } from "./handlers";
-import { GameRoundDatatHandler } from "./handlers/game-round-data-handler";
+import { GameRoundDataHandler } from "./handlers/game-round-data-handler";
 import { GameSoundHandler } from "./handlers/game-sound-handler";
 import { IGameStateHandler } from "./handlers/game-state-handler";
 import { GameBaseProps, PFClientSeedSetting, RoundState } from "./type";
@@ -63,14 +63,14 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     private readonly gameDisabledHandler?: GameDisableHandler;
     private readonly gameRoundHistoryHandler?: GameRoundHistoryHandler;
     private readonly gameSoundHandler?: GameSoundHandler;
-    private readonly gameRoundDatatHandler?: GameRoundDatatHandler;
+    private readonly gameRoundDatatHandler?: GameRoundDataHandler;
 
     constructor(
         props: P,
         roundStateHandler: IRoundStateHandler,
         gameStateHandler: IGameStateHandler,
         gameMessageHandler: GameMessageHandler,
-        gameRoundDatatHandler: GameRoundDatatHandler,
+        gameRoundDatatHandler: GameRoundDataHandler,
         gameErrorHandler?: GameErrorHandler,
         playerHandler?: PlayerHandler,
         placeBetHandler?: PlaceBetHandler,
@@ -86,7 +86,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.roundStateHandler = roundStateHandler;
         this.gameStateHandler = gameStateHandler;
         this.gameMessageHandler = gameMessageHandler;
-        this.gameRoundDatatHandler = gameRoundDatatHandler ?? new GameRoundDatatHandler();
+        this.gameRoundDatatHandler = gameRoundDatatHandler ?? new GameRoundDataHandler();
         this.gameErrorHandler =
             gameErrorHandler ??
             new GameErrorHandler({

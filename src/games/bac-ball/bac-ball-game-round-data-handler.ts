@@ -1,6 +1,6 @@
-import { GameRoundDatatHandler } from "../../components/game-base/handlers/game-round-data-handler";
+import { GameRoundDataHandler } from "../../components/game-base/handlers/game-round-data-handler";
 
-export class BacBallGameRoundDatatHandler extends GameRoundDatatHandler {
+export class BacBallGameRoundDatatHandler extends GameRoundDataHandler {
     buildGameRoundDataAfterReceiveFinishEvent(previousRoundData: any, result: any, drawId: number) {
         const resultRoundData = {
             bankerBalls: [result.banker],

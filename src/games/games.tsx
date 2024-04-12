@@ -15,7 +15,6 @@ import {
     useStopBettingSound,
 } from "../_shared/react-hooks";
 import { tolgee } from "../_shared/tolgee";
-import Footer from "../components/game-components/footer";
 import { BackgroundGalaxy } from "../components/page-components/background";
 import { getChipSettings } from "../services/user-setting-service";
 import styles from "./games.module.scss";
@@ -23,6 +22,7 @@ import { Props } from "./type";
 
 const BacBall = dynamic(() => import("./bac-ball"));
 const NextBall = dynamic(() => import("./next-ball/page"));
+const Footer = dynamic(() => import("../components/game-components/footer"));
 const ToolbarGuide = dynamic(() => import("../components/page-components/hide-toolbar-guide"));
 const SwitchGamesGuide = dynamic(() => import("../components/page-components/switch-games-guide"));
 

@@ -15,7 +15,7 @@ import { GameBaseProps, Round } from "../../components/game-base/type";
 import { TurnGameStateHandler } from "../../components/turn-base/turn-game-state-handler";
 import { TurnStateHandler } from "../../components/turn-base/turn-state-handler";
 import { NextBallBetOptions } from "./next-ball-constants";
-import { NextGameRoundDatatHandler } from "./next-ball-game-round-data-handler";
+import { NextGameRoundDataHandler } from "./next-ball-game-round-data-handler";
 import Scoreboard from "./scoreboard";
 import { NextBallResult, NextBallSettlementResult } from "./types";
 
@@ -36,7 +36,7 @@ class NextBall extends GameBase<GameBaseProps> {
 
     constructor(props: GameBaseProps) {
         const gameMessageHandler = new GameMessageHandler(props.dispatch);
-        super(props, new TurnStateHandler(), new TurnGameStateHandler(), gameMessageHandler, new NextGameRoundDatatHandler());
+        super(props, new TurnStateHandler(), new TurnGameStateHandler(), gameMessageHandler, new NextGameRoundDataHandler());
 
         this.turnIdHandler = new TurnIdHandler({
             dispatch: props.dispatch,

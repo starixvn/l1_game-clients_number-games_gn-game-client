@@ -1,13 +1,13 @@
 import { stub } from "jest-auto-stub";
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
+import { GameStateContextModel } from "../../../_shared/react-contexts/game-state-context/game-state-context-model";
 import { BacBallResult } from "../../../games/bac-ball/types";
 import { IRoundStateHandler } from "../../round-base/round-state-handler";
 import { Round, RoundState } from "../type";
 import { GameFinishHandler, GameFinishHandlerProps } from "./game-finish-handler";
 import { GameMessageHandler, messageEventType } from "./game-message-handler";
+import { GameRoundDataHandler } from "./game-round-data-handler";
 import { PlaceBetHandler } from "./place-bet-handler";
-import { GameRoundDatatHandler } from "./game-round-data-handler";
-import { GameStateContextModel } from "../../../_shared/react-contexts/game-state-context/game-state-context-model";
 
 jest.useFakeTimers();
 jest.mock("../../../_shared/react-contexts/game-state-context/game-state-context", () => ({
@@ -21,14 +21,14 @@ describe("GameFinishHandler", () => {
     let placeBetHandler: PlaceBetHandler;
     let roundStateHandler: IRoundStateHandler;
     let gameFinishPros: GameFinishHandlerProps;
-    let gameRoundDatatHandler: GameRoundDatatHandler;
+    let gameRoundDatatHandler: GameRoundDataHandler;
     let buildGameRoundDataAfterReceiveFinishEvent: jest.Mock;
 
     beforeEach(() => {
         buildGameRoundDataAfterReceiveFinishEvent = jest.fn();
         gameFinishPros = stub<GameFinishHandlerProps>();
         gameMessageHandler = stub<GameMessageHandler>({ broadcastGameEvent: jest.fn(), register: jest.fn() });
-        gameRoundDatatHandler = stub<GameRoundDatatHandler>({ buildGameRoundDataAfterReceiveFinishEvent });
+        gameRoundDatatHandler = stub<GameRoundDataHandler>({ buildGameRoundDataAfterReceiveFinishEvent });
         placeBetHandler = stub<PlaceBetHandler>();
         roundStateHandler = stub<IRoundStateHandler>();
         gameFinishPros.dispatch = jest.fn();

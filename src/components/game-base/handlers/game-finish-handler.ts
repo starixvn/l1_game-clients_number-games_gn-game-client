@@ -3,8 +3,8 @@ import { GameEventActionType } from "../../../_shared/react-contexts/game-state-
 import { GameStateContextModel } from "../../../_shared/react-contexts/game-state-context/game-state-context-model";
 import { IRoundStateHandler } from "../../round-base/round-state-handler";
 import { GameDurations, Round } from "../type";
-import { GameMessageHandler, messageEventType, PlaceBetHandler } from "./";
-import { GameRoundDatatHandler } from "./game-round-data-handler";
+import { GameMessageHandler, PlaceBetHandler, messageEventType } from "./";
+import { GameRoundDataHandler } from "./game-round-data-handler";
 
 export type GameFinishHandlerProps = {
     dispatch: Function;
@@ -15,7 +15,7 @@ export type GameFinishHandlerProps = {
     runGame: Function;
     gameId: number;
     gameStateContextModel(): GameStateContextModel;
-    gameRoundDatatHandler: GameRoundDatatHandler;
+    gameRoundDatatHandler: GameRoundDataHandler;
 };
 
 export class GameFinishHandler {
