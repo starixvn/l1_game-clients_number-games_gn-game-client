@@ -74,7 +74,7 @@ class Dashboard extends React.PureComponent<Props, State> {
             openGameName: "",
             isOnLobby: true,
             isLandscapeMode: false,
-            isUserGesture: true,
+            isUserGesture: null,
             isChangedGame: false,
             isChangePrevGame: false,
         };
@@ -228,9 +228,33 @@ class Dashboard extends React.PureComponent<Props, State> {
             window.addEventListener("resize", this.changeOrientation);
             window.addEventListener("touchmove", this.preventZoomBehavior, { passive: false });
         }
-
+        this.handleAllowPlayMusic();
         this.connectNotificationSocket();
         queryGame && this.openGame(queryGame);
+    }
+
+    private handleAllowPlayMusic() {
+        const timeoutId = setTimeout(() => {
+            if (!this.state.isUserGesture) {
+                this.setState({ isUserGesture: true });
+            }
+        }, 10 * 1000);
+
+        if (isMobile) {
+            window.addEventListener("touchstart", () => {
+                if (!this.state.isUserGesture) {
+                    this.setState({ isUserGesture: true });
+                    if (timeoutId) clearTimeout(timeoutId);
+                }
+            });
+        } else {
+            window.addEventListener("click", () => {
+                if (!this.state.isUserGesture) {
+                    this.setState({ isUserGesture: true });
+                    if (timeoutId) clearTimeout(timeoutId);
+                }
+            });
+        }
     }
 
     private preventZoomBehavior(event: TouchEvent) {
@@ -487,7 +511,7 @@ class Dashboard extends React.PureComponent<Props, State> {
                             {isRenderGames ? this.renderGames() : this.renderLobby()}
 
                             {!isRenderGames && <Footer />}
-                            <MusicPlayer isUserGesture={this.state.isUserGesture} />
+                            {this.state.isUserGesture != null ? <MusicPlayer isUserGesture={this.state.isUserGesture} /> : <></>}
 
                             {isShowErrorModal && (
                                 <div className={Styles["container-modal"]}>

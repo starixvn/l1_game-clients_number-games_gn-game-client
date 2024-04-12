@@ -8,6 +8,7 @@ const MusicPlayer = ({ isUserGesture }) => {
 
     const [song, setSong] = useState(getRandomSong(""));
     const [play, { stop, pause }] = useSound(song, {
+        interrupt: false,
         onend: () => {
             setSong(getRandomSong(song));
         },
@@ -36,8 +37,6 @@ const MusicPlayer = ({ isUserGesture }) => {
             setSong(getRandomSong(song));
         }
     }, [settingContext.enabledMusic]);
-
-    return <div></div>;
+    return <></>;
 };
-
 export default MusicPlayer;
