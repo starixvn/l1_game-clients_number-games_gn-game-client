@@ -15,7 +15,7 @@ const PFVerifyResultBlock: FC<{ pfResult: PFResult }> = ({ pfResult }) => {
         const beforeDrawResult = [];
         for (const item of pfResult?.roundResult || []) {
             beforeDrawResult.push(item);
-            if (item?.drawId == pfResult?.drawId) {
+            if (Number(item?.drawId) === pfResult?.drawId) {
                 break;
             }
         }
