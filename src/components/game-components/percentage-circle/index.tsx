@@ -1,4 +1,5 @@
 import React from "react";
+
 import { useLowPerformanceDevice } from "../../../_shared/react-hooks";
 import Styles from "./percentage-circle.module.scss";
 
@@ -32,30 +33,21 @@ const Circle: React.FC<{ pct: number; color: string }> = ({ pct, color }) => {
     );
 };
 
-const Text: React.FC<{ percentage: number }> = ({ percentage }) => {
-    return (
-        <text x="50%" y="50%" dominantBaseline="central" textAnchor="middle" fontSize={"10px"} className="text-percentage">
-            {percentage.toFixed(0)}
-            <tspan className="text-percentage" fontSize={"9px"}>
-                %
-            </tspan>
-        </text>
-    );
-};
-
 export const PercentageCircle: React.FC<{
     percentage: number;
     color: string;
 }> = ({ percentage, color }) => {
     const pct = cleanPercentage(percentage);
     return (
-        <svg width={32} height={32}>
-            <g transform={`rotate(-90 ${"16 16"})`}>
-                <circle r={15} cx={16} cy={16} fill="#00000080"></circle>
-                <Circle pct={pct} color={color} />
-            </g>
-            <Text percentage={pct} />
-        </svg>
+        <div className={Styles["user-percentage"]}>
+            <svg width={32} height={32}>
+                <g transform={`rotate(-90 ${"16 16"})`}>
+                    <circle r={15} cx={16} cy={16} fill="#00000080"></circle>
+                    <Circle pct={pct} color={color} />
+                </g>
+            </svg>
+            <span className={Styles["text-percentage"]}>{`${pct.toFixed(0)}`}%</span>
+        </div>
     );
 };
 
