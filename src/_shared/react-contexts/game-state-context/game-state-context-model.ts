@@ -1,7 +1,6 @@
 import {
     DrawInfo,
     GameConfigs,
-    IBallColor,
     IUserStakeLevel,
     Notice,
     PFClientSeedSetting,
@@ -39,7 +38,6 @@ export interface GameStateContextModel {
     activeScoreboardTab?: number;
     rate?: number;
     disconnectReason?: string;
-    cageBallFrames: IBallColor;
     isUMInFirstLoad: boolean;
     betWin: number;
     kickedOut: any;

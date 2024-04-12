@@ -1,5 +1,4 @@
 import { WithRouterProps } from "next/dist/client/with-router";
-import { Resource, Texture } from "pixi.js";
 
 import { DefaultParamType, TFnType, TranslationKey } from "@tolgee/react";
 import { SystemContextModel, SystemEventAction } from "../../_shared/react-contexts";
@@ -58,7 +57,7 @@ export type GamePropsContext = {
     hedgeBetGroups?: [string[]];
     gameMessageHandler?: GameMessageHandler;
     gameSound?: GameSound;
-    swipeableRef?:React.RefObject<HTMLDivElement>;
+    swipeableRef?: React.RefObject<HTMLDivElement>;
 };
 
 export type GameSound = {
@@ -154,13 +153,6 @@ export interface Round<R, S> {
     settlementResult: S;
     drawId?: number;
     pf?: object;
-}
-
-export interface IBallColor {
-    blue: Texture<Resource>[];
-    red: Texture<Resource>[];
-    blue2: Texture<Resource>[];
-    red2: Texture<Resource>[];
 }
 
 export enum BallColor {

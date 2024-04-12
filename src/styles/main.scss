@@ -1,5 +1,3 @@
-@import "~slick-carousel/slick/slick-theme.scss";
-@import "~slick-carousel/slick/slick.scss";
 @import "./components/fonts";
 @import "./components/icons";
 @import "./components/common";
@@ -112,7 +110,6 @@ body {
     font: 1.4rem/1.5 var(--font-family);
     color: var(--text-color);
     overscroll-behavior: contain;
-    background-size: cover;
 }
 
 .no-scroll-html {
