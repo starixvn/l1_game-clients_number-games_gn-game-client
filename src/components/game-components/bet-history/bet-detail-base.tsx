@@ -63,7 +63,7 @@ const BetDetailBase: FC<{
     const body = preprocessedBetLogDetails.map((betLogDetail) => {
         const { rawTime, amount, choice, odds, win, hightlight } = produceDataBetDetailRow(betLogDetail, drawInfo);
         const { date, time } = separateDateTime(rawTime);
-        const content = [
+        return [
             {
                 node: (
                     <>
@@ -82,7 +82,6 @@ const BetDetailBase: FC<{
                 node: <div className={hightlight ? "highlight" : ""}>{numberWithCommas(win)}</div>,
             },
         ];
-        return content;
     });
 
     return (

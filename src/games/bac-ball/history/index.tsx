@@ -4,8 +4,8 @@ import { useGameStateContext } from "../../../_shared/react-contexts/game-state-
 import BetHistoryModal from "../../../components/game-components/bet-history";
 import BetDetailModal from "../../../components/game-components/bet-history/bet-detail-modal";
 import { PFVerifyModal } from "../../../components/game-components/provably-fair";
-import PFClientSeedInfoModal from "../../../components/game-components/provably-fair/pf-verify/pf-client-seed-info";
-import PFVerificationModal from "../../../components/game-components/provably-fair/pf-verify/pf-verification";
+import PFClientSeedInfoModal from "../../../components/game-components/provably-fair/pf-verify/pf-client-seed-info-modal";
+import PFVerificationModal from "../../../components/game-components/provably-fair/pf-verify/pf-verification-modal";
 import { PFVerification, makeFileNameExport, renderPFVerifyResultBlock } from "../provably-fair";
 import BetDetail from "./bet-detail";
 import renderBetLog from "./bet-log";

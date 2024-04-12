@@ -116,7 +116,7 @@ const BetHistoryBase: FC<BetHistoryProps> = ({ renderBetLogResult }) => {
         const { drawId, result, totalAmount, betwin } = item;
         const { date, time } = separateDateTime(item.time);
 
-        const content = [
+        return [
             {
                 node: (
                     <>
@@ -138,8 +138,6 @@ const BetHistoryBase: FC<BetHistoryProps> = ({ renderBetLogResult }) => {
             { node: numberWithCommas(totalAmount) },
             { node: <div className={betwin > 0 ? "highlight" : ""}>{numberWithCommas(betwin)}</div> },
         ];
-
-        return content;
     });
 
     return isFetching ? (

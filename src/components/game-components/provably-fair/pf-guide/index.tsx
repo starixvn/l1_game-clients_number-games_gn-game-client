@@ -22,7 +22,7 @@ const PFGuide: FC = () => {
     const srcPath = `${guideUrl}/${language}/?gId=${gameConfigs["gameId"]}&t=${theme}&dy=1&f=pf&v=${buildVersion}`;
     const hideSpinner = () => {
         setIsLoading(false);
-        wrapperIframeRef.current.contentWindow.postMessage(JSON.stringify(gameConfigs), "*");
+        wrapperIframeRef.current?.contentWindow.postMessage(JSON.stringify(gameConfigs), "*");
     };
 
     return useMemo(() => {

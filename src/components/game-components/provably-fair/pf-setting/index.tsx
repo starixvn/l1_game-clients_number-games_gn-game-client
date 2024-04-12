@@ -18,6 +18,13 @@ const PFResultMessage = "pfResult";
 const PFPublishMessage = "pf";
 const TIME_OUT = 5000;
 
+const handleOnKeyDown = (event: any) => {
+    const chr = event.key;
+    if ((NUMBER_VALUES.indexOf(chr) < 0 && event.which !== 8) || (event.target.value.length >= 4 && event.which !== 8)) {
+        event.preventDefault();
+    }
+};
+
 const PFSettingModal: FC<{ customClientSeedInfo?: string }> = ({ customClientSeedInfo }) => {
     const { isShowPFSetting } = useGameStateContext();
     const { t: translateSNGames } = useSNTranslate();
@@ -120,13 +127,6 @@ const PFSetting: FC<{ customClientSeedInfo?: string }> = ({ customClientSeedInfo
         };
     }, []);
 
-    const handleOnKeyPress = (event: any) => {
-        const chr = event.key;
-        if ((NUMBER_VALUES.indexOf(chr) < 0 && event.which !== 8) || (event.target.value.length >= 4 && event.which !== 8)) {
-            event.preventDefault();
-        }
-    };
-
     const handlePaste = (event: any) => {
         const value = event.target.value;
         const numberRegex = /^\d+$/;
@@ -136,7 +136,7 @@ const PFSetting: FC<{ customClientSeedInfo?: string }> = ({ customClientSeedInfo
     };
 
     const handleOnBlur = (event: any) => {
-        if (event.target.value.length == 0) {
+        if (event.target.value.length === 0) {
             event.target.value = randomSeed.current.value;
             setManualClientSeed(randomSeed.current.value);
         }
@@ -244,7 +244,7 @@ const PFSetting: FC<{ customClientSeedInfo?: string }> = ({ customClientSeedInfo
                                 ref={manualSeed}
                                 type="text"
                                 inputMode="numeric"
-                                onKeyDown={handleOnKeyPress}
+                                onKeyDown={handleOnKeyDown}
                                 onPaste={handlePaste}
                                 onBlur={handleOnBlur}
                                 onChange={handleOnChangeManualClientSeed}

@@ -4,8 +4,9 @@ import { v4 as uuidv4 } from "uuid";
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import { useCommonTranslate, useSNTranslate } from "../../../_shared/react-hooks";
-import { CopyableTextInput, EditableTextInput, DefaultPFStyles as Styles } from "../../../components/game-components/provably-fair";
+import { PFVerificationHeaderBlockBase, DefaultPFStyles as Styles } from "../../../components/game-components/provably-fair";
 import SmallBall from "../../../components/game-components/small-ball";
+import { Section } from "../../../components/game-components/provably-fair/pf-form-components";
 
 const PFVerification: FC = () => {
     const { pfVerifyModalData: pfResult } = useGameStateContext();
@@ -57,67 +58,63 @@ const PFVerification: FC = () => {
         };
     }, [mergeClientSeed]);
 
+    const hightlightStyle = Styles["text-highlight"];
+
     return (
         <div className={Styles["pf-setting-container"]}>
-            <h3 className={`${Styles["section-title"]}`}>{translateCommon("pf_ header_merge_client_seed")}</h3>
-            <EditableTextInput handleOnChangeValue={handleChangeMergeClientSeed} value={mergeClientSeed} />
-
-            <h3 className={`${Styles["section-title"]}`}>{translateCommon("pf_header_server_seed")}</h3>
-            <div className="input-group width-full mb-3">
-                <CopyableTextInput value={pfResult?.serverSeed} id="server-seed" />
-            </div>
-
-            <h3 className={`${Styles["section-title"]}`}>{translateCommon("pf_header_combined_sha512_hash")}</h3>
-            <p className="text-wrap">{pfResult?.finalHash}</p>
-            {combinedHash == pfResult?.finalHash ? (
-                <p className={Styles["text-successful"]}>{translateSNGames("pf_verification_msg_verify_successful")}</p>
-            ) : (
-                <p className={Styles["text-unsuccessful"]}>{translateSNGames("pf_verification_msg_verify_unsuccessful")}</p>
-            )}
+            <PFVerificationHeaderBlockBase
+                handleChangeMergeClientSeed={handleChangeMergeClientSeed}
+                mergeClientSeed={mergeClientSeed}
+                severSeed={pfResult?.serverSeed}
+                combinedHash={combinedHash}
+                finalHash={pfResult?.finalHash}
+            />
 
             <div className={Styles["client-seed-form"]}>
                 <div className="flex items-center gap-4">
-                    <h3 className={`${Styles["section-title"]} m-0 ${Styles["title-fix-width"]}`}>
-                        {translateCommon("pf_verification_para_1")}
-                    </h3>
-                    <div className="flex gap-4 items-center">
-                        <SmallBall number={verifyInfo.result} />
-                    </div>
+                    <Section title={translateCommon("pf_verification_para_1")} customTitleStyles={`m-0 ${Styles["title-fix-width"]}`}>
+                        <div className="flex gap-4 items-center">
+                            <SmallBall number={verifyInfo.result} />
+                        </div>
+                    </Section>
                 </div>
-                <h3 className={`${Styles["section-title"]} mt-2`}>{translateCommon("pf_header_combined_sha512_hash")}</h3>
-                <p className="text-wrap">{combinedHash}</p>
+                <Section title={translateCommon("pf_header_combined_sha512_hash")} customTitleStyles="mt-2">
+                    <p className="text-wrap">{combinedHash}</p>
+                </Section>
 
-                <h3 className={`${Styles["section-title"]}`}>{translateSNGames("pf_verification_para_3")}</h3>
-                <p className="font-weight-medium">
-                    {verifyInfo.rawTwoFirstDigits} {"=>"} {verifyInfo.valueTwoFirstDigits}
-                </p>
-                <p>
-                    <span className={Styles["text-highlight"]}>{translateSNGames("pf_verification_para_4")}</span>
-                    <span>
-                        {" "}
-                        = (({translateSNGames("pf_algorithm_random_number")} + X) mod {translateSNGames("pf_verification_para_5")}) + 1
-                    </span>
-                </p>
-                <p>
-                    <span className={Styles["text-highlight"]}>
-                        {translateSNGames("pf_index")} (1,..., {verifyInfo.numberRemainBalls})
-                    </span>{" "}
-                    = (({verifyInfo.randomNumber} + {verifyInfo.valueTwoFirstDigits}) mod {verifyInfo.numberRemainBalls}) + 1 ={" "}
-                    <span className={Styles["text-highlight"]}>{verifyInfo.index}</span>
-                </p>
+                <Section title={translateSNGames("pf_verification_para_3")}>
+                    <p className="font-weight-medium">
+                        {verifyInfo.rawTwoFirstDigits} {"=>"} {verifyInfo.valueTwoFirstDigits}
+                    </p>
+                    <p>
+                        <span className={hightlightStyle}>{translateSNGames("pf_verification_para_4")}</span>
+                        <span>
+                            {" "}
+                            = (({translateSNGames("pf_algorithm_random_number")} + X) mod {translateSNGames("pf_verification_para_5")}) + 1
+                        </span>
+                    </p>
+                    <p>
+                        <span className={hightlightStyle}>
+                            {translateSNGames("pf_index")} (1,..., {verifyInfo.numberRemainBalls})
+                        </span>{" "}
+                        = (({verifyInfo.randomNumber} + {verifyInfo.valueTwoFirstDigits}) mod {verifyInfo.numberRemainBalls}) + 1 ={" "}
+                        <span className={hightlightStyle}>{verifyInfo.index}</span>
+                    </p>
+                </Section>
 
-                <h3 className={`${Styles["section-title"]}`}>{translateSNGames("pf_verification_para_8")}</h3>
-                <p className={Styles["result-numbers"]}>
-                    {verifyInfo.remainBalls.map((item, index) => {
-                        return index + 1 == verifyInfo.index ? (
-                            <span key={uuidv4()} className={Styles["text-yellow"]}>
-                                {item}{" "}
-                            </span>
-                        ) : (
-                            `${item} `
-                        );
-                    })}
-                </p>
+                <Section title={translateSNGames("pf_verification_para_8")}>
+                    <p className={Styles["result-numbers"]}>
+                        {verifyInfo.remainBalls.map((item, index) => {
+                            return index + 1 === verifyInfo.index ? (
+                                <span key={uuidv4()} className={Styles["text-yellow"]}>
+                                    {item}{" "}
+                                </span>
+                            ) : (
+                                `${item} `
+                            );
+                        })}
+                    </p>
+                </Section>
             </div>
         </div>
     );

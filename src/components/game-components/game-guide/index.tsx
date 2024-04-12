@@ -43,7 +43,7 @@ const GameGuide: FC = () => {
 
     const hideSpinner = () => {
         setIsLoading(false);
-        wrapperIframeRef.current.contentWindow.postMessage(JSON.stringify(gameConfigs), "*");
+        wrapperIframeRef.current?.contentWindow.postMessage(JSON.stringify(gameConfigs), "*");
     };
 
     return useMemo(() => {

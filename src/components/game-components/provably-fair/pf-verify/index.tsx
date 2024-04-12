@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { useClickSound, useCommonTranslate, useSNTranslate } from "../../../../_shared/react-hooks";
 import ModalContainer from "../../modal-container";
@@ -8,6 +8,7 @@ import CopyableTextInput from "../copyable-text-input";
 import { useGameStateContext, useGameStatesDispatch } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
 import { GameEventActionType } from "../../../../_shared/react-contexts/game-state-context/game-event-action";
 import { AnalyticsHelper, TrackingAction, TrackingFunction } from "../../../../_shared/helpers";
+import { Section } from "../pf-form-components";
 
 const PFVerifyModal: FC<{
     renderResultBlock: Function;
@@ -83,57 +84,65 @@ const PFVerify: FC<{ renderResultBlock: Function }> = ({ renderResultBlock }) =>
     return (
         <div className={Styles["pf-setting-container"]}>
             <div className="result-block">{renderResultBlock(pfResult)}</div>
-
-            <div className={Styles["client-seed-form"]}>
-                <h3 className={Styles["section-title"]}>{translateCommon("pf_header_server_seed_sha256")}</h3>
-                <div className="input-group width-full">
-                    <CopyableTextInput value={pfResult?.serverSeedHash} id="server-seed-sha256" />
-                </div>
-
-                <h3 className={`${Styles["section-title"]} mt-3`}>{translateCommon("pf_header_server_seed")}</h3>
-                <div className="input-group width-full">
-                    <CopyableTextInput value={pfResult?.serverSeed} id="server-seed" />
-                </div>
-            </div>
-            <div className={Styles["client-seed-form"]}>
-                <h3 className={Styles["section-title"]}>{translateCommon("pf_header_client_seed")}</h3>
-                <div className={Styles["tooltip-container"]}>
-                    <button className={Styles["btn-pf-intro"]} onClick={handleClickTooltip} onBlur={handleBlurTooltip}>
-                        <span className="icon-info" />
-                    </button>
-                    <div className={`${Styles["hide"]} ${Styles["pf-tooltip"]} break`}>{translateSNGames("pf_client_seed_tooltip")}</div>
-                </div>
-
+            <ClientSeedForm>
+                <Section title={translateCommon("pf_header_server_seed_sha256")}>
+                    <div className="input-group width-full">
+                        <CopyableTextInput value={pfResult?.serverSeedHash} id="server-seed-sha256" />
+                    </div>
+                </Section>
+                <Section title={translateCommon("pf_header_server_seed")}>
+                    <div className="input-group width-full">
+                        <CopyableTextInput value={pfResult?.serverSeed} id="server-seed" />
+                    </div>
+                </Section>
+            </ClientSeedForm>
+            <ClientSeedForm>
+                <Section title={translateCommon("pf_header_client_seed")}>
+                    <div className={Styles["tooltip-container"]}>
+                        <button className={Styles["btn-pf-intro"]} onClick={handleClickTooltip} onBlur={handleBlurTooltip}>
+                            <span className="icon-info" />
+                        </button>
+                        <div className={`${Styles["hide"]} ${Styles["pf-tooltip"]} break`}>
+                            {translateSNGames("pf_client_seed_tooltip")}
+                        </div>
+                    </div>
+                </Section>
                 <div className="relative">
-                    <h3 className={Styles["section-title"]}>{translateCommon("pf_ header_merge_client_seed")}</h3>
-                    <span className={Styles["link-detail"]} onClick={handleOnClickClientSeedInfo}>
-                        {translateSNGames("pf_provably_fair_details")}
-                    </span>
+                    <Section title={translateCommon("pf_ header_merge_client_seed")}>
+                        <span className={Styles["link-detail"]} onClick={handleOnClickClientSeedInfo}>
+                            {translateSNGames("pf_provably_fair_details")}
+                        </span>
+                    </Section>
                 </div>
                 <div className="input-group width-full">
                     <CopyableTextInput value={pfResult?.mergeClientSeed} id="merge-client-seed" />
                 </div>
-            </div>
-            <div className={Styles["client-seed-form"]}>
-                <h3 className={Styles["section-title"]}>{translateCommon("pf_header_combined_sha512_hash")}</h3>
-                <div className={Styles["tooltip-container"]}>
-                    <button className={Styles["btn-pf-intro"]} onClick={handleClickTooltip} onBlur={handleBlurTooltip}>
-                        <span className="icon-info" />
-                    </button>
-                    <div className={`${Styles["hide"]} ${Styles["pf-tooltip"]}`}>{translateSNGames("pf_combined_sha512_hash_tooltip")}</div>
-                </div>
-
+            </ClientSeedForm>
+            <ClientSeedForm>
+                <Section title={translateCommon("pf_header_combined_sha512_hash")}>
+                    <div className={Styles["tooltip-container"]}>
+                        <button className={Styles["btn-pf-intro"]} onClick={handleClickTooltip} onBlur={handleBlurTooltip}>
+                            <span className="icon-info" />
+                        </button>
+                        <div className={`${Styles["hide"]} ${Styles["pf-tooltip"]}`}>
+                            {translateSNGames("pf_combined_sha512_hash_tooltip")}
+                        </div>
+                    </div>
+                </Section>
                 <div className="input-group width-full mt-4">
                     <CopyableTextInput value={pfResult?.finalHash} id="combined-sha512-hash" />
                 </div>
-            </div>
-
+            </ClientSeedForm>
             <button className={`btn-green ${Styles["btn-verify"]}`} onClick={handleOnClickVerification}>
                 {translateCommon("pf_button_verify")}
             </button>
             <p className="text-center mt-2">{translateCommon("pf_provably_fair_para_2")}</p>
         </div>
     );
+};
+
+const ClientSeedForm: FC<{ children: ReactNode }> = ({ children }) => {
+    return <div className={Styles["client-seed-form"]}>{children}</div>;
 };
 
 export default PFVerifyModal;

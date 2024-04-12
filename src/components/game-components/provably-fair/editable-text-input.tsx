@@ -14,6 +14,10 @@ const isCommand = (event: KeyboardEvent) => {
     );
 };
 
+const isControl = (event: KeyboardEvent) => {
+    return event.key === "ArrowLeft" || event.key === "ArrowRight";
+};
+
 const EditableTextInput: FC<{ handleOnChangeValue: (event: React.ChangeEvent<HTMLInputElement>) => void; value: string | number }> = ({
     handleOnChangeValue,
     value,
@@ -21,7 +25,7 @@ const EditableTextInput: FC<{ handleOnChangeValue: (event: React.ChangeEvent<HTM
     const clickSound = useClickSound();
     const handleOnKeyDown = (event: any) => {
         const chr = event.key;
-        if (NUMBER_VALUES.indexOf(chr) < 0 && event.which !== 8 && !isCommand(event)) {
+        if (NUMBER_VALUES.indexOf(chr) < 0 && event.which !== 8 && !isCommand(event) && !isControl(event)) {
             event.preventDefault();
         }
     };

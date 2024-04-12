@@ -5,8 +5,9 @@ import { useGameContext } from "../../../_shared/react-contexts";
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import { useCommonTranslate, useTranslator } from "../../../_shared/react-hooks";
-import { CopyableTextInput, EditableTextInput, DefaultPFStyles as Styles } from "../../../components/game-components/provably-fair";
+import { PFVerificationHeaderBlockBase, DefaultPFStyles as Styles } from "../../../components/game-components/provably-fair";
 import SmallBall from "../../../components/game-components/small-ball";
+import { Section } from "../../../components/game-components/provably-fair/pf-form-components";
 
 const PFVerification: FC = () => {
     const { tolgeeNamespace } = useGameContext();
@@ -70,95 +71,93 @@ const PFVerification: FC = () => {
         };
     }, [mergeClientSeed]);
 
+    const hightlightStyle = Styles["text-highlight"];
+
     return (
         <div className={Styles["pf-setting-container"]}>
-            <h3 className={`${Styles["section-title"]}`}>{translateCommon("pf_ header_merge_client_seed")}</h3>
-            <EditableTextInput handleOnChangeValue={handleChangeMergeClientSeed} value={mergeClientSeed} />
-
-            <h3 className={`${Styles["section-title"]}`}>{translateCommon("pf_header_server_seed")}</h3>
-            <div className="input-group width-full mb-3">
-                <CopyableTextInput value={pfResult?.serverSeed} id="server-seed" />
-            </div>
-
-            <h3 className={`${Styles["section-title"]}`}>{translateCommon("pf_header_combined_sha512_hash")}</h3>
-            <p className="text-wrap">{pfResult?.finalHash}</p>
-            {combinedHash == pfResult?.finalHash ? (
-                <p className={Styles["text-successful"]}>{translateInGame("pf_verification_msg_verify_successful")}</p>
-            ) : (
-                <p className={Styles["text-unsuccessful"]}>{translateInGame("pf_verification_msg_verify_unsuccessful")}</p>
-            )}
+            <PFVerificationHeaderBlockBase
+                handleChangeMergeClientSeed={handleChangeMergeClientSeed}
+                mergeClientSeed={mergeClientSeed}
+                severSeed={pfResult?.serverSeed}
+                combinedHash={combinedHash}
+                finalHash={pfResult?.finalHash}
+            />
 
             <div className={Styles["client-seed-form"]}>
                 <div className="flex justify-between items-center">
-                    <h3 className={`${Styles["section-title"]} m-0 ${Styles["title-fix-width"]}`}>
-                        {translateInGame("pf_bacball_final result")}
-                    </h3>
-                    <div className="flex gap-4 items-center">
-                        <div className="flex items-center gap-1">
-                            <span className="text-uppercase font-weight-medium text-white">{translateInGame("glossary_player")}</span>
-                            <SmallBall number={verifyInfo.player.value} />
+                    <Section title={translateInGame("pf_bacball_final result")} customTitleStyles={`m-0 ${Styles["title-fix-width"]}`}>
+                        <div className="flex gap-4 items-center">
+                            <div className="flex items-center gap-1">
+                                <span className="text-uppercase font-weight-medium text-white">{translateInGame("glossary_player")}</span>
+                                <SmallBall number={verifyInfo.player.value} />
+                            </div>
+                            <div className="flex items-center gap-1">
+                                <span className="text-uppercase font-weight-medium text-white">{translateInGame("glossary_banker")}</span>
+                                <SmallBall number={verifyInfo.banker.value} />
+                            </div>
                         </div>
-                        <div className="flex items-center gap-1">
-                            <span className="text-uppercase font-weight-medium text-white">{translateInGame("glossary_banker")}</span>
-                            <SmallBall number={verifyInfo.banker.value} />
-                        </div>
-                    </div>
+                    </Section>
                 </div>
-                <h3 className={`${Styles["section-title"]} mt-2`}>{translateCommon("pf_header_combined_sha512_hash")}</h3>
-                <p className="text-wrap">{combinedHash}</p>
+                <Section title={translateCommon("pf_header_combined_sha512_hash")} customTitleStyles="mt-2">
+                    <p className="text-wrap">{combinedHash}</p>
+                </Section>
 
-                <h3 className={`${Styles["section-title"]}`}>{translateInGame("pf_verification_para_3")}</h3>
-                <p className="font-weight-medium">
-                    {verifyInfo.rawTwoFirstDigits} {"=>"} {verifyInfo.valueTwoFirstDigits}
-                </p>
-                <p>
-                    <span className={Styles["text-highlight"]}>{translateInGame("pf_verification_para_4")}</span>
-                    <span>
-                        {" "}
-                        = (({translateInGame("pf_algorithm_random_number")} + X) mod {translateInGame("pf_verification_para_5")}) + 1
-                    </span>
-                </p>
-                <p>
-                    <span className={Styles["text-highlight"]}>
-                        {translateInGame("pf_verification_para_6")} (1,..., {verifyInfo.numberRemainBalls})
-                    </span>{" "}
-                    = (({verifyInfo.player.random} + {verifyInfo.valueTwoFirstDigits}) mod {verifyInfo.numberRemainBalls}) + 1 ={" "}
-                    <span className={Styles["text-highlight"]}>{verifyInfo.player.result}</span>
-                </p>
-                <p>
-                    <span className={Styles["text-highlight"]}>
-                        {translateInGame("pf_verification_para_7")} (1,..., {verifyInfo.numberRemainBalls})
-                    </span>{" "}
-                    = (({verifyInfo.banker.random} + {verifyInfo.valueTwoFirstDigits}) mod {verifyInfo.numberRemainBalls}) + 1 ={" "}
-                    <span className={Styles["text-highlight"]}>{verifyInfo.banker.result}</span>
-                </p>
+                <Section title={translateInGame("pf_verification_para_3")}>
+                    <p className="font-weight-medium">
+                        {verifyInfo.rawTwoFirstDigits} {"=>"} {verifyInfo.valueTwoFirstDigits}
+                    </p>
+                    <p>
+                        <span className={hightlightStyle}>{translateInGame("pf_verification_para_4")}</span>
+                        <span>
+                            {" "}
+                            = (({translateInGame("pf_algorithm_random_number")} + X) mod {translateInGame("pf_verification_para_5")}) + 1
+                        </span>
+                    </p>
+                    <p>
+                        <span className={hightlightStyle}>
+                            {translateInGame("pf_verification_para_6")} (1,..., {verifyInfo.numberRemainBalls})
+                        </span>{" "}
+                        = (({verifyInfo.player.random} + {verifyInfo.valueTwoFirstDigits}) mod {verifyInfo.numberRemainBalls}) + 1 ={" "}
+                        <span className={hightlightStyle}>{verifyInfo.player.result}</span>
+                    </p>
+                    <p>
+                        <span className={hightlightStyle}>
+                            {translateInGame("pf_verification_para_7")} (1,..., {verifyInfo.numberRemainBalls})
+                        </span>{" "}
+                        = (({verifyInfo.banker.random} + {verifyInfo.valueTwoFirstDigits}) mod {verifyInfo.numberRemainBalls}) + 1 ={" "}
+                        <span className={hightlightStyle}>{verifyInfo.banker.result}</span>
+                    </p>
+                </Section>
 
-                <h3 className={`${Styles["section-title"]}`}>{translateInGame("pf_verification_para_8")}</h3>
-                <h3 className={`${Styles["section-title"]}`}>{translateInGame("pf_verification_para_9")}</h3>
-                <p className={Styles["result-numbers"]}>
-                    {verifyInfo.player.balls.map((item, index) => {
-                        return index + 1 == verifyInfo.player.result ? (
-                            <span key={uuidv4()} className={Styles["text-yellow"]}>
-                                {item}{" "}
-                            </span>
-                        ) : (
-                            `${item} `
-                        );
-                    })}
-                </p>
+                <Section title={translateInGame("pf_verification_para_8")}>
+                    <Section title={translateInGame("pf_verification_para_9")}>
+                        <p className={Styles["result-numbers"]}>
+                            {verifyInfo.player.balls.map((item, index) => {
+                                return index + 1 === verifyInfo.player.result ? (
+                                    <span key={uuidv4()} className={Styles["text-yellow"]}>
+                                        {item}{" "}
+                                    </span>
+                                ) : (
+                                    `${item} `
+                                );
+                            })}
+                        </p>
+                    </Section>
 
-                <h3 className={`${Styles["section-title"]}`}>{translateInGame("pf_verification_para_10")}</h3>
-                <p className={Styles["result-numbers"]}>
-                    {verifyInfo.banker.balls.map((item, index) => {
-                        return index + 1 == verifyInfo.banker.result ? (
-                            <span key={uuidv4()} className={Styles["text-yellow"]}>
-                                {item}{" "}
-                            </span>
-                        ) : (
-                            `${item} `
-                        );
-                    })}
-                </p>
+                    <Section title={translateInGame("pf_verification_para_10")}>
+                        <p className={Styles["result-numbers"]}>
+                            {verifyInfo.banker.balls.map((item, index) => {
+                                return index + 1 === verifyInfo.banker.result ? (
+                                    <span key={uuidv4()} className={Styles["text-yellow"]}>
+                                        {item}{" "}
+                                    </span>
+                                ) : (
+                                    `${item} `
+                                );
+                            })}
+                        </p>
+                    </Section>
+                </Section>
             </div>
         </div>
     );
