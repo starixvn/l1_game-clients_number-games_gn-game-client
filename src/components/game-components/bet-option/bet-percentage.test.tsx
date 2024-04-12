@@ -1,5 +1,6 @@
-import React from "react";
 import { render } from "@testing-library/react";
+import React from "react";
+
 import { useGameBettingZoneContext } from "../../../_shared/react-contexts";
 import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import { RoundState } from "../../game-base/type";
@@ -28,15 +29,18 @@ describe(BetPercentage.name, () => {
 
     it("should render empty when betPercentage is empty", () => {
         // arrange
-        (useGameBettingZoneContext as jest.Mock).mockReturnValueOnce({ betPercentage: {} });
+        const betPercentage = {};
+        const choice = "choice1";
+        (useGameBettingZoneContext as jest.Mock).mockReturnValueOnce({ betPercentage: betPercentage });
         const roundState = RoundState.InRound;
         (useGameStateContext as jest.Mock).mockReturnValueOnce({ roundState });
 
         // act
-        const { container } = render(<BetPercentage choice="choice1" percentageColor="black" className="bet-percentage" />);
+        const { container } = render(<BetPercentage choice={choice} percentageColor="black" className="bet-percentage" />);
 
         // assert
-        expect(container.innerHTML).toBe("");
+        expect(container).toMatchSnapshot();
+        expect(PercentageCircle).toHaveBeenCalledWith({ percentage: betPercentage[choice], color: "black" }, {});
     });
 
     it("should render empty when switch round", () => {
