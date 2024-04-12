@@ -348,7 +348,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
     loadPFSetting() {
         const uid = (this.context as PlayerContextModel).authorizeInfo?.user?.UID;
-        const pfClientSeedSetting = StorageHelper.get<PFClientSeedSetting>(`${localStorageKeys.pfSetting}-${uid}`);
+        const pfClientSeedSetting = StorageHelper.get<PFClientSeedSetting>(`${localStorageKeys.pfSetting}-${uid}-${this.props.id}`);
         if (pfClientSeedSetting) {
             this.props.dispatch({
                 type: GameEventActionType.UPDATE_PF_CLIENT_SEED_SETTING,
@@ -378,7 +378,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             ...oldPFClientSeedSetting,
             ...pfClientSeedSetting,
         };
-        StorageHelper.set(`${localStorageKeys.pfSetting}-${uid}`, dataPFSettingSave);
+        StorageHelper.set(`${localStorageKeys.pfSetting}-${uid}-${this.props.id}`, dataPFSettingSave);
     }
 
     handleUM(gameMessage) {
