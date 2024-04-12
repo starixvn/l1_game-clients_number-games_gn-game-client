@@ -1,4 +1,5 @@
 import isEmpty from "lodash/isEmpty";
+
 import { useGameBettingZoneContext } from "../../../_shared/react-contexts";
 import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import { RoundState } from "../../game-base/type";
@@ -9,7 +10,7 @@ export const PlayerBetCount: React.FC<BaseProps> = ({ tolgeeNamespace, choice, c
     const { playerBetCount } = useGameBettingZoneContext();
     const { roundState } = useGameStateContext();
 
-    if (isEmpty(playerBetCount) || roundState === RoundState.SwitchRound) {
+    if (isEmpty(playerBetCount) || !playerBetCount[choice] || roundState === RoundState.SwitchRound) {
         return <></>;
     }
 
