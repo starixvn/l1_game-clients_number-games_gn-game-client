@@ -1,6 +1,5 @@
 import dynamic from "next/dynamic";
 import { AnalyticsHelper } from "../../../_shared/helpers/analytic-helper";
-import { BackgroundGalaxy } from "../background";
 import { ILobbyConfigs } from "../dashboard/type";
 import { Banner } from "./games/components/banner";
 import { LobbyLayout } from "./games/lobby-layout";
@@ -19,7 +18,6 @@ export const Lobby: React.FC<Props> = ({ openGame, lobbyConfigs }) => {
     AnalyticsHelper.trackLobby();
     return (
         <div className={Styles["lobby-container"]}>
-            <BackgroundGalaxy />
             <Banner openGame={openGame} lobbyConfigs={lobbyConfigs} />
             <LobbyLayout lobbyConfigs={lobbyConfigs} openGame={openGame} />
             <Settings />

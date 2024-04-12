@@ -34,7 +34,7 @@ export const Games: React.FC<Props> = ({
     updateUserStakeLevel,
     openGameId,
     swipeableHandler,
-    directMode
+    directMode,
 }) => {
     const { isDirectMode } = useContext(URLContext);
     const { theme } = useTheme();
@@ -42,6 +42,7 @@ export const Games: React.FC<Props> = ({
     const { session } = usePlayerContext();
     const settingDispatch = useSettingDispatch();
     const swipeableRef = React.useRef(null);
+    console.log("openGameId", openGameId);
 
     useEffect(() => {
         (async () => {
@@ -69,7 +70,7 @@ export const Games: React.FC<Props> = ({
         onSwipedLeft: () => onSwipeHandler(false),
         swipeDuration: swipeDuration,
         trackMouse: true,
-        preventScrollOnSwipe: true
+        preventScrollOnSwipe: true,
     });
 
     const swipeableRefPassthrough = (el: HTMLDivElement) => {
@@ -77,7 +78,7 @@ export const Games: React.FC<Props> = ({
             mobileSwipeableHandlers.ref(el);
             swipeableRef.current = el;
         }
-    }
+    };
 
     const gameSound = {
         playPlaceBetSound: usePlaceBetSound(),
@@ -97,7 +98,7 @@ export const Games: React.FC<Props> = ({
             theme,
             userStakeLevel,
             updateUserStakeLevel,
-            swipeableRef: swipeableRefPassthrough
+            swipeableRef: swipeableRefPassthrough,
         };
 
         switch (gameId) {
@@ -118,7 +119,7 @@ export const Games: React.FC<Props> = ({
         <div className={`game-container ${styles["game-wrapper"]} ${styles["open-chips"]}`}>
             <SystemContextProvider>
                 <div className={`${styles["game-list"]} ${isMobileOnly ? styles[isIOS ? "ios-device" : "android-device"] : ""}`}>
-                    <BackgroundGalaxy />
+                    <BackgroundGalaxy gameId={openGameId} />
                     {isDirectMode && <ToolbarGuide />}
 
                     {getGameComponentById(openGameId)}

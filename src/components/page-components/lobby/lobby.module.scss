@@ -6,6 +6,8 @@
 .lobby-container {
     position: relative;
     padding-top: 4rem;
+    background: var(--game-background-image);
+    background-size: contain;
 }
 
 .game-board-detail {
