@@ -57,7 +57,7 @@ export const Games: React.FC<Props> = ({
     }, []);
 
     const onSwipeHandler = (isRightSwipeable: boolean) => {
-        swipeableHandler(!isRightSwipeable, openGameId);
+        swipeableHandler(isRightSwipeable, openGameId);
 
         AnalyticsHelper.trackFunction({
             function: TrackingFunction.SwitchGame,
