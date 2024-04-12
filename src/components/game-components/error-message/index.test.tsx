@@ -1,10 +1,10 @@
+import { render } from "@testing-library/react";
 import React from "react";
 import { ConnectFailedMessage } from ".";
-import BaseDialog from "../base-dialog";
-import { ConnectFailedReasonKey } from "./type";
-import { render } from "@testing-library/react";
 import "../../../_shared/helpers/string-helper";
 import { updateURLContext } from "../../../_shared/react-contexts";
+import BaseDialog from "../base-dialog";
+import { ConnectFailedReasonKey } from "./type";
 
 jest.mock("../base-dialog", () => jest.fn());
 jest.mock("../../../_shared/react-hooks/use-translator", () => ({
@@ -23,6 +23,9 @@ afterEach(() => {
 const BaseDialogMock = ({ children }) => {
     return <div>{children}</div>;
 };
+
+const reconnectMess = "SabaNumber.button_reconnect";
+const callReconnectMess = "should call reconnect when click reconnect";
 describe(ConnectFailedMessage.name, () => {
     beforeAll(() => {
         (BaseDialog as jest.Mock).mockImplementation(BaseDialogMock);
@@ -141,7 +144,7 @@ describe(ConnectFailedMessage.name, () => {
                 expect(container).toMatchSnapshot();
                 expect(buttons.length).toBe(2);
                 expect(buttons[0].textContent).toBe("Common.back");
-                expect(buttons[1].textContent).toBe("SabaNumber.button_reconnect");
+                expect(buttons[1].textContent).toBe(reconnectMess);
             });
 
             it("should back to lobby when click back", () => {
@@ -159,7 +162,7 @@ describe(ConnectFailedMessage.name, () => {
                 expect(backToRedirectUrl).toHaveBeenCalledWith(undefined);
             });
 
-            it("should call reconnect when click reconnect", () => {
+            it(callReconnectMess, () => {
                 // arrange
                 useContextMock.mockReturnValue({ isDirectMode: false });
                 const onReconnect = jest.fn();
@@ -195,7 +198,7 @@ describe(ConnectFailedMessage.name, () => {
                 expect(container).toMatchSnapshot();
                 expect(buttons.length).toBe(2);
                 expect(buttons[0].textContent).toBe("Common.back");
-                expect(buttons[1].textContent).toBe("SabaNumber.button_reconnect");
+                expect(buttons[1].textContent).toBe(reconnectMess);
             });
             it("should back to lobby when click back", () => {
                 // arrange
@@ -212,7 +215,7 @@ describe(ConnectFailedMessage.name, () => {
                 expect(backToRedirectUrl).toHaveBeenCalledWith("returnUrl");
             });
 
-            it("should call reconnect when click reconnect", () => {
+            it(callReconnectMess, () => {
                 // arrange
                 useContextMock.mockReturnValue({ isDirectMode: true, redirectUrl: "returnUrl" });
                 const onReconnect = jest.fn();
@@ -247,9 +250,9 @@ describe(ConnectFailedMessage.name, () => {
                 // assert
                 expect(container).toMatchSnapshot();
                 expect(buttons.length).toBe(1);
-                expect(buttons[0].textContent).toBe("SabaNumber.button_reconnect");
+                expect(buttons[0].textContent).toBe(reconnectMess);
             });
-            it("should call reconnect when click reconnect", () => {
+            it(callReconnectMess, () => {
                 // arrange
                 useContextMock.mockReturnValue({ isDirectMode: true });
                 const onReconnect = jest.fn();

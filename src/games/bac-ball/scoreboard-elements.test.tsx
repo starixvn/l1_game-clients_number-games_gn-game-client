@@ -14,11 +14,13 @@ jest.mock("../../components/page-components/translator", () => ({
     withTranslator: jest.fn(),
 }));
 
+const matchSnapShot = "should match the snapshot";
+
 describe(BacBallBeadRoadCharacterElement.name, () => {
     describe("render", () => {
         ["tie", "banker", "player", null].forEach((result) => {
             describe(`when the round result is ${result}`, () => {
-                it("should match the snapshot", () => {
+                it(matchSnapShot, () => {
                     // Arrange
                     const round: any = result
                         ? {
@@ -46,7 +48,7 @@ describe(BacBallBeadRoadCharacterElement.name, () => {
         });
 
         describe(`when the round result is blink node`, () => {
-            it("should match the snapshot", () => {
+            it(matchSnapShot, () => {
                 // Act
                 const { container } = render(<BacBallBeadRoadCharacterElement round={{} as any} />);
 
@@ -61,7 +63,7 @@ describe(BacBallBeadRoadValueElement.name, () => {
     describe("render", () => {
         ["tie", "banker", "player", null].forEach((result) => {
             describe(`when the round result is ${result}`, () => {
-                it("should match the snapshot", () => {
+                it(matchSnapShot, () => {
                     // Arrange
                     const round: any = result
                         ? {
@@ -88,7 +90,7 @@ describe(BacBallBeadRoadValueElement.name, () => {
         });
 
         describe(`when the round result is blink node`, () => {
-            it("should match the snapshot", () => {
+            it(matchSnapShot, () => {
                 // Act
                 const { container } = render(<BacBallBeadRoadCharacterElement round={{} as any} />);
 
@@ -207,7 +209,7 @@ describe(BacBallBigRoadElement.name, () => {
             },
         ].forEach(({ name, round }) => {
             describe(`when the round result is ${name}`, () => {
-                it("should match the snapshot", () => {
+                it(matchSnapShot, () => {
                     // Act
                     const { container } = render(<BacBallBigRoadElement round={round} />);
 
@@ -221,7 +223,7 @@ describe(BacBallBigRoadElement.name, () => {
 
 describe(BacBallBigEyeElement.name, () => {
     describe("render", () => {
-        test.each([[{ status: true }], [{ status: false }]])("should match the snapshot", (round: any) => {
+        test.each([[{ status: true }], [{ status: false }]])(matchSnapShot, (round: any) => {
             // Act
             const { container } = render(<BacBallBigEyeElement round={round} />);
 
@@ -233,7 +235,7 @@ describe(BacBallBigEyeElement.name, () => {
 
 describe(BacBallSmallRoadElement.name, () => {
     describe("render", () => {
-        test.each([[{ status: true }], [{ status: false }]])("should match the snapshot", (round: any) => {
+        test.each([[{ status: true }], [{ status: false }]])(matchSnapShot, (round: any) => {
             // Act
             const { container } = render(<BacBallSmallRoadElement round={round} />);
 
@@ -245,7 +247,7 @@ describe(BacBallSmallRoadElement.name, () => {
 
 describe(BacBallCockroachPigElement.name, () => {
     describe("render", () => {
-        test.each([[{ status: true }], [{ status: false }]])("should match the snapshot", (round: any) => {
+        test.each([[{ status: true }], [{ status: false }]])(matchSnapShot, (round: any) => {
             // Act
             const { container } = render(<BacBallCockroachPigElement round={round} />);
 

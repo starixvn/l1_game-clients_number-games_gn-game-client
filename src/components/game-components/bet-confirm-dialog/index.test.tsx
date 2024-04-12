@@ -31,6 +31,8 @@ jest.mock("react", () => ({
     useContext: jest.fn(),
 }));
 
+const messageSnapShot = "should match the snapshot";
+
 describe(BetConfirmDialog.name, () => {
     let mockGameStateContext;
     beforeEach(() => {
@@ -57,7 +59,7 @@ describe(BetConfirmDialog.name, () => {
     });
     describe("render", () => {
         describe("with insufficient fund", () => {
-            it("should match the snapshot", () => {
+            it(messageSnapShot, () => {
                 // Arrange
                 mockUseGameStateContext.mockReturnValue(mockGameStateContext);
 
@@ -70,7 +72,7 @@ describe(BetConfirmDialog.name, () => {
         });
 
         describe("with reach max-bet", () => {
-            it("should match the snapshot", () => {
+            it(messageSnapShot, () => {
                 // Arrange
                 mockGameStateContext.suggestBet.isInsufficientFunds = false;
                 mockUseGameStateContext.mockReturnValue(mockGameStateContext);
@@ -84,7 +86,7 @@ describe(BetConfirmDialog.name, () => {
         });
 
         describe("empty", () => {
-            it("should match the snapshot", () => {
+            it(messageSnapShot, () => {
                 // Arrange
                 mockGameStateContext.showConfirmDialog = false;
                 mockUseGameStateContext.mockReturnValue(mockGameStateContext);
