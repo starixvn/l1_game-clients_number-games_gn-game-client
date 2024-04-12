@@ -482,9 +482,7 @@ class Dashboard extends React.PureComponent<Props, State> {
                             }`}
                             id={"dashboard"}
                         >
-                            <div>
-                                <Header headerRef={this.headerRef} openingGameId={openGameId} isRenderGames={isRenderGames} />
-                            </div>
+                            <Header headerRef={this.headerRef} openingGameId={openGameId} isRenderGames={isRenderGames} />
 
                             {isRenderGames ? this.renderGames() : this.renderLobby()}
 

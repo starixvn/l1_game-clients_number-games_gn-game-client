@@ -4,6 +4,7 @@ import { ILobbyConfigs } from "../dashboard/type";
 import { Banner } from "./games/components/banner";
 import { LobbyLayout } from "./games/lobby-layout";
 import Styles from "./lobby.module.scss";
+import { isMobileOnly, isSafari } from "react-device-detect";
 
 const Settings = dynamic(() => import("../settings"));
 const ChangeAvatar = dynamic(() => import("../header/change-avatar"));
@@ -22,7 +23,7 @@ export const Lobby: React.FC<Props> = ({ openGame, lobbyConfigs }) => {
             <LobbyLayout lobbyConfigs={lobbyConfigs} openGame={openGame} />
             <Settings />
             <ChangeAvatar />
-            <ToolbarGuide />
+            {isMobileOnly && isSafari && <ToolbarGuide />}
         </div>
     );
 };

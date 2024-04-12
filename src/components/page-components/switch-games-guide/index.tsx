@@ -35,6 +35,20 @@ const SwitchGamesGuide: React.FC = () => {
         }
     }, []);
 
+    useEffect(() => {
+        if (isEnabledSwitchGamesGuide) {
+            document.body.classList.add("no-scroll");
+            isMobileOnly && document.documentElement.classList.add("no-scroll-html");
+        }
+
+        return () => {
+            if (isEnabledSwitchGamesGuide) {
+                document.body.classList.remove("no-scroll");
+                isMobileOnly && document.documentElement.classList.remove("no-scroll-html");
+            }
+        };
+    }, [isEnabledSwitchGamesGuide]);
+
     const handleDoNotShowAgain = () => {
         handleClose();
         StorageHelper.set(localStorageKeys.hideSwitchGameGuide, true);

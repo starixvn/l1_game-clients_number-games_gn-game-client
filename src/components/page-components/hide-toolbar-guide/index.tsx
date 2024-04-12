@@ -50,6 +50,20 @@ const ToolbarGuide: React.FC = () => {
         };
     }, [isAnimClass]);
 
+    useEffect(() => {
+        if (isEnabledToolbarGuide) {
+            document.body.classList.add("no-scroll");
+            isMobileOnly && document.documentElement.classList.add("no-scroll-html");
+        }
+
+        return () => {
+            if (isEnabledToolbarGuide && isSafari) {
+                document.body.classList.remove("no-scroll");
+                isMobileOnly && document.documentElement.classList.remove("no-scroll-html");
+            }
+        };
+    }, [isEnabledToolbarGuide]);
+
     const handleDoNotShowAgain = () => {
         handleClose();
         StorageHelper.set(localStorageKeys.hideToolbarGuide, true);
@@ -61,13 +75,8 @@ const ToolbarGuide: React.FC = () => {
     };
 
     return useMemo(() => {
-        if (!isMobileOnly && !isSafari) {
-            return <></>;
-        }
-
         return (
-            isEnabledToolbarGuide &&
-            isSafari && (
+            isEnabledToolbarGuide && (
                 <div className={`${Styles["toolbar-guide-container"]} ${Styles[animClass]}`}>
                     <div className={Styles["toolbar-guide-content"]}>
                         <div className={Styles["toolbar-guide-title"]}>{t(`${ResourceTypes.SABA_NUMBER}.lobby_fullscreen`)}</div>
