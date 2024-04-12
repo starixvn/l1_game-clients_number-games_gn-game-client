@@ -114,27 +114,16 @@
 }
 
 .slide-right {
-    animation: fade-out 0.2s linear, slide-right 0.5s 0.2s ease-in-out;
+    animation: slide-right 0.5s ease-in-out;
 }
 
 .slide-left {
-    animation: fade-out 0.2s linear, slide-left 0.5s 0.2s ease-in-out;
-}
-
-@keyframes fade-out {
-    0% {
-        opacity: 1;
-        backdrop-filter: blur(0);
-    }
-    100% {
-        opacity: 0.2;
-        backdrop-filter: blur(3rem);
-    }
+    animation: slide-left 0.5s ease-in-out;
 }
 
 @keyframes slide-right {
     0% {
-        transform: translateX(-10rem) scale(var(--zoom-game));
+        transform: translateX(-1rem) scale(var(--zoom-game));
     }
 
     100% {
@@ -144,7 +133,7 @@
 
 @keyframes slide-left {
     0% {
-        transform: translateX(10rem) scale(var(--zoom-game));
+        transform: translateX(1rem) scale(var(--zoom-game));
     }
 
     100% {
