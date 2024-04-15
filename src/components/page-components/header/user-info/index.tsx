@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { isIOS, isMobileOnly } from "react-device-detect";
 
 import { numberRoundDownWithCommas } from "../../../../_shared/helpers/number-helper";
@@ -44,30 +44,67 @@ export const UserInfo: React.FC<{
     return (
         <div className={`${Styles["user"]} ${customizeClass ? Styles[customizeClass] : ""} ${deviceClass}`}>
             <div className={Styles["info"]}>
-                <div id="user-info_user-name" className={Styles["user-name"]} data-testid="user-name">
-                    {user.name}
-                </div>
+                <UserName name={user?.name || ""} />
                 <div key={user.red} className={`${Styles.balance}`} data-testid="balance">
                     <span id="user-info_balance" className={Styles["balance-text"]}>
-                        {`${numberRoundDownWithCommas(user.red ? user.red : 0)} ${user.isDisplayPlayerCurrency ? user.currency : ""}`}
+                        <UserAmount amount={user?.red || 0} />
+                        <UserCurrency currency={user?.currency || ""} isDisplayPlayerCurrency={user?.isDisplayPlayerCurrency || false} />
                     </span>
-
                     <img src="/static/images/icon-coin.svg" className="img-fluid" alt="icon-coin" />
                 </div>
             </div>
-            <div className={`${Styles["avatar"]} ${Styles[classCursor]}`} onClick={handleClickAvatar}>
-                {user.avatarId > 0 && user.avatarId <= MAX_AVATAR_ID ? (
-                    <img
-                        src={`/static/images/avatar/${user.avatarId}.jpg`}
-                        className="img-fluid circle"
-                        height="40"
-                        width="40"
-                        alt="Avatar"
-                    />
+            <UserAvatar avatarId={user?.avatarId} classCursor={classCursor} handleClickAvatar={handleClickAvatar} />
+        </div>
+    );
+};
+
+const UserName: React.FC<{ name: string }> = ({ name }) => {
+    return useMemo(() => {
+        return (
+            <div id="user-info_user-name" className={Styles["user-name"]} data-testid="user-name">
+                {name}
+            </div>
+        );
+    }, [name]);
+};
+
+const UserAmount: React.FC<{ amount: number }> = ({ amount }) => {
+    return useMemo(() => {
+        return (
+            <>
+                <span data-testid="amount">${numberRoundDownWithCommas(amount)}</span>
+                <span>{` `}</span>
+            </>
+        );
+    }, [amount]);
+};
+
+const UserCurrency: React.FC<{ currency: string; isDisplayPlayerCurrency: boolean }> = ({ currency, isDisplayPlayerCurrency }) => {
+    return useMemo(() => {
+        if (!isDisplayPlayerCurrency) {
+            return <></>;
+        }
+
+        return <span data-testid="currency">{currency}</span>;
+    }, [currency, isDisplayPlayerCurrency]);
+};
+
+const UserAvatar: React.FC<{ avatarId: number; classCursor: string; handleClickAvatar: Function }> = ({
+    avatarId,
+    classCursor,
+    handleClickAvatar,
+}) => {
+    return useMemo(() => {
+        return (
+            <div data-testid="avatar" className={`${Styles["avatar"]} ${Styles[classCursor]}`} onClick={() => handleClickAvatar?.()}>
+                {avatarId > 0 && avatarId <= MAX_AVATAR_ID ? (
+                    <img src={`/static/images/avatar/${avatarId}.jpg`} className="img-fluid circle" height="40" width="40" alt="Avatar" />
                 ) : (
                     <span className={`icon-user ${Styles["icon-user"]}`} data-testid="icon-user"></span>
                 )}
             </div>
-        </div>
-    );
+        );
+    }, [avatarId]);
 };
+
+export default UserInfo;
