@@ -3,6 +3,7 @@ import dynamic from "next/dynamic";
 import React, { useContext, useEffect } from "react";
 import { isIOS, isMobileOnly } from "react-device-detect";
 import { useSwipeable } from "react-swipeable";
+
 import { getAppSettings } from "../_shared/app-settings";
 import { GameIds } from "../_shared/constants";
 import { AnalyticsHelper, TrackingAction, TrackingFunction } from "../_shared/helpers";

@@ -1,5 +1,7 @@
+import Image from "next/image";
 import React, { useEffect, useMemo, useState } from "react";
 import { isIOS, isMobileOnly } from "react-device-detect";
+
 import { numberRoundDownWithCommas } from "../../../../_shared/helpers/number-helper";
 import { SettingEventActionType, usePlayerContext, useSettingDispatch } from "../../../../_shared/react-contexts";
 import { useClickSound } from "../../../../_shared/react-hooks";
@@ -49,7 +51,7 @@ export const UserInfo: React.FC<{
                         <UserAmount amount={user?.red || 0} />
                         <UserCurrency currency={user.currency} isDisplayPlayerCurrency={user.isDisplayPlayerCurrency} />
                     </span>
-                    <img src="/static/images/icon-coin.svg" className="img-fluid" alt="icon-coin" />
+                    <Image className="img-fluid" src={`/static/images/icon-coin.svg`} width={10} height={11} alt={`icon-coin`} />
                 </div>
             </div>
             <UserAvatar avatarId={user?.avatarId} classCursor={classCursor} handleClickAvatar={handleClickAvatar} />

@@ -1,10 +1,12 @@
 import dynamic from "next/dynamic";
+import Image from "next/image";
+import { isMobileOnly, isSafari } from "react-device-detect";
+
 import { AnalyticsHelper } from "../../../_shared/helpers/analytic-helper";
 import { ILobbyConfigs } from "../dashboard/type";
 import { Banner } from "./games/components/banner";
 import { LobbyLayout } from "./games/lobby-layout";
 import Styles from "./lobby.module.scss";
-import { isMobileOnly, isSafari } from "react-device-detect";
 
 const Settings = dynamic(() => import("../settings"));
 const ChangeAvatar = dynamic(() => import("../header/change-avatar"));
@@ -19,6 +21,15 @@ export const Lobby: React.FC<Props> = ({ openGame, lobbyConfigs }) => {
     AnalyticsHelper.trackLobby();
     return (
         <div className={Styles["lobby-container"]}>
+            <Image
+                className={Styles["background"]}
+                src={`/static/images/bg-galaxy-small.webp`}
+                width={375}
+                height={756}
+                alt={`galaxy background`}
+                priority={true}
+            />
+
             <Banner openGame={openGame} lobbyConfigs={lobbyConfigs} />
             <LobbyLayout lobbyConfigs={lobbyConfigs} openGame={openGame} />
             <Settings />
