@@ -20,7 +20,6 @@
         "obfuscator-config-file": "node ./configs/config-obfuscator.js"
     },
     "dependencies": {
-        "@next/bundle-analyzer": "^14.2.0",
         "@sentry/nextjs": "6.19.6",
         "@tolgee/format-icu": "^5.23.3",
         "@tolgee/react": "^5.23.3",
