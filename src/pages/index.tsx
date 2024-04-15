@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic";
 import { useContext, useState } from "react";
+import PreloadResources from "../_shared/helpers/preload-resources";
 import { URLContext, usePlayerContext } from "../_shared/react-contexts";
 import { usePWAWoker } from "../_shared/react-hooks/use-pwa-worker";
 import { tolgee } from "../_shared/tolgee";
@@ -15,16 +16,22 @@ export function Home() {
     const shouldRenderDashboard = session?.isAuthenticated && !session?.isUM;
     const [isUm, setIsUm] = useState(session?.isUM);
     const toUMPage = (value) => setIsUm(value);
+    const [isDonePreloadResource, setIsDonePreloadResource] = useState(false);
 
     if (isUm) {
         return <UMPage />;
     }
 
-    if (shouldRenderDashboard) {
+    if (shouldRenderDashboard && isDonePreloadResource) {
         return <Dashboard session={session} queryGame={gameId} setIsUm={toUMPage} directMode={isDirectMode} tolgee={tolgee} />;
     }
 
-    return <SplashScreen />;
+    return (
+        <>
+            <PreloadResources setIsDonePreloadResource={setIsDonePreloadResource} />
+            <SplashScreen />
+        </>
+    );
 }
 
 export default Home;

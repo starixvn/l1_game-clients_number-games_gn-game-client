@@ -6,7 +6,6 @@ import { useSwipeable } from "react-swipeable";
 import { getAppSettings } from "../_shared/app-settings";
 import { GameIds } from "../_shared/constants";
 import { AnalyticsHelper, TrackingAction, TrackingFunction } from "../_shared/helpers";
-import PreloadImages from "../_shared/helpers/preload-images";
 import { SettingEventActionType, SystemContextProvider, URLContext, usePlayerContext, useSettingDispatch } from "../_shared/react-contexts";
 import {
     usePlaceBetSound,
@@ -118,7 +117,7 @@ export const Games: React.FC<Props> = ({
 
     return (
         <div className={`game-container ${styles["game-wrapper"]} ${styles["open-chips"]}`}>
-            <PreloadImages />
+            {/* <PreloadImages /> */}
             <SystemContextProvider>
                 <div className={`${styles["game-list"]} ${isMobileOnly ? styles[isIOS ? "ios-device" : "android-device"] : ""}`}>
                     <BackgroundGalaxy gameId={openGameId} />
