@@ -124,7 +124,7 @@ export const Games: React.FC<Props> = ({
 
                     {getGameComponentById(openGameId)}
 
-                    {!isDirectMode && <SwitchGamesGuide />}
+                    {!isDirectMode && isMobileOnly && <SwitchGamesGuide />}
                 </div>
             </SystemContextProvider>
             <Footer />

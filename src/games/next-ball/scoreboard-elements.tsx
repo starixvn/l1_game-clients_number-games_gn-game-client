@@ -8,7 +8,7 @@ import { NextBallBetOptions } from "./constants";
 import styles from "./scoreboard-elements.module.scss";
 import { NextBallResult, NextBallSettlementResult } from "./types";
 
-export const ODD_EVEN_AS_DEFAULT_SCOREBOARD = true;
+export const ODD_EVEN_AS_DEFAULT_SCOREBOARD = false;
 
 export function createBeadRoadElement(isOddEven: boolean = ODD_EVEN_AS_DEFAULT_SCOREBOARD) {
     class Element extends BeadRoadElement<Round<NextBallResult, NextBallSettlementResult>> {
