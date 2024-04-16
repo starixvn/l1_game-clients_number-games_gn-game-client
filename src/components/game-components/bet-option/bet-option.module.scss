@@ -4,7 +4,7 @@
 
 .bet-name,
 .bet-odds {
-    font-size: 1.4rem;
+    font-size: var(--font-bet-name, 1.4rem);
     font-weight: 500;
     color: white;
     text-transform: uppercase;
@@ -13,7 +13,7 @@
 .bet-odds {
     position: relative;
     line-height: 1;
-    font-size: 1.8rem;
+    font-size: var(--font-bet-odd, 1.8rem);
 
     &:after {
         display: inline-block;

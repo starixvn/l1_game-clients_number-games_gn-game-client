@@ -20,6 +20,7 @@
         border: 0.1rem solid transparent;
         background: linear-gradient(var(--colorBackground), var(--colorBackground)) padding-box,
             linear-gradient(to bottom, var(--colorBorderTop), var(--colorBorderBottom)) border-box;
+        cursor: pointer;
     }
 
     .info {
