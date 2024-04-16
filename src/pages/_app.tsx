@@ -31,7 +31,6 @@ export const AppTilte = () => {
             <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
             <title>SABA xD</title>
             <link rel="shortcut icon" href={`/favicon-${systemName}.ico?v=${buildVersion}`} />
-            <link rel="preload" fetchPriority="high" as="image" href="/static/images/bg-galaxy-small.webp" />
         </Head>
     );
 };

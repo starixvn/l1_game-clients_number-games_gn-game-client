@@ -17,6 +17,7 @@ import {
 } from "../_shared/react-hooks";
 import { tolgee } from "../_shared/tolgee";
 import { BackgroundGalaxy } from "../components/page-components/background";
+import PreloadImages from "../components/page-components/preload-images";
 import { getChipSettings } from "../services/user-setting-service";
 import styles from "./games.module.scss";
 import { Props } from "./type";
@@ -119,6 +120,7 @@ export const Games: React.FC<Props> = ({
     return (
         <div className={`game-container ${styles["game-wrapper"]} ${styles["open-chips"]}`}>
             <SystemContextProvider>
+                <PreloadImages />
                 <div className={`${styles["game-list"]} ${isMobileOnly ? styles[isIOS ? "ios-device" : "android-device"] : ""}`}>
                     <BackgroundGalaxy gameId={openGameId} />
                     {isDirectMode && <ToolbarGuide />}

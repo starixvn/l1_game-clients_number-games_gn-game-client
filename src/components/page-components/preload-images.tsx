@@ -4,7 +4,7 @@ const DEFAULT_PATH = "/static/images";
 
 const PreloadImages: React.FC<{ additionalImages?: string[] }> = ({ additionalImages = [] }) => {
     const preloadImages = () => {
-        const defaultImages = [`${DEFAULT_PATH}/bg-galaxy-small-1.jpg`];
+        const defaultImages = [`${DEFAULT_PATH}/bg-galaxy-small.webp`];
 
         const images = [...defaultImages, ...(Array.isArray(additionalImages) ? additionalImages : [])];
         const requests = images.map((url) => new Request(url, { mode: "no-cors" }));
