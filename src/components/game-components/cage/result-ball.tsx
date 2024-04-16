@@ -10,14 +10,19 @@ const ResultBall: React.FC<{
     fps?: number;
 }> = ({ isDelayShowResult, ballColor, isShowResultAnim, fps }) => {
     const currentTime = Date.now();
-
     return useMemo(() => {
-        if (isDelayShowResult) {
-            return (
-                <div key={currentTime} id="show-ball-anim" className={Styles["show-ball-anim"]}>
+        if (!isDelayShowResult) {
+            return null;
+        }
+
+        const ballImage = ballColor.includes("blue") ? "blue" : "red";
+
+        return (
+            <div key={currentTime} id="show-ball-anim" className={Styles["show-ball-anim"]}>
+                {isShowResultAnim ? (
                     <Spritesheet
                         className={"sss"}
-                        image={`/static/images/cage/${ballColor}.png`}
+                        image={`/static/images/preload-resources/${ballColor}.png`}
                         widthFrame={153}
                         isResponsive
                         heightFrame={153}
@@ -25,14 +30,14 @@ const ResultBall: React.FC<{
                         autoplay={true}
                         loop={false}
                         fps={fps ?? 30}
-                        startAt={isShowResultAnim ? 0 : 30}
+                        startAt={0}
                         endAt={31}
                     />
-                </div>
-            );
-        } else {
-            return <></>;
-        }
+                ) : (
+                    <img className={"sss"} src={`/static/images/preload-resources/${ballImage}.png`} alt="img-result" />
+                )}
+            </div>
+        );
     }, [isDelayShowResult, ballColor, isShowResultAnim]);
 };
 

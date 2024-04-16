@@ -117,7 +117,6 @@ export const Games: React.FC<Props> = ({
 
     return (
         <div className={`game-container ${styles["game-wrapper"]} ${styles["open-chips"]}`}>
-            {/* <PreloadImages /> */}
             <SystemContextProvider>
                 <div className={`${styles["game-list"]} ${isMobileOnly ? styles[isIOS ? "ios-device" : "android-device"] : ""}`}>
                     <BackgroundGalaxy gameId={openGameId} />

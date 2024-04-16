@@ -63,7 +63,7 @@
 
 .cage-bg {
     @extend %result;
-    background-image: url("/static/images/cage/cage.png");
+    background-image: url("/static/images/preload-resources/cage.png");
     background-size: var(--cage-width) var(--cage-height);
 }
 
@@ -83,20 +83,20 @@
 .idle-balls {
     width: var(--cage-width);
     height: var(--cage-width);
-    background: url("/static/images/cage/idle-balls.png") no-repeat;
+    background: url("/static/images/preload-resources/idle-balls.png") no-repeat;
     opacity: 0.8;
 }
 
 .cage-cover {
     @extend %result;
-    background-image: url("/static/images/cage/cage-cover.png");
+    background-image: url("/static/images/preload-resources/cage-cover.png");
 }
 
 .cage-lid {
     position: absolute;
     bottom: 1.2rem;
     right: 1rem;
-    background: url("/static/images/cage/cage-lid.png") center center no-repeat;
+    background: url("/static/images/preload-resources/cage-lid.png") center center no-repeat;
     width: 5rem;
     height: 5.7rem;
     transform: scale(0.5);
@@ -108,26 +108,26 @@
     background-size: var(--cage-width) var(--cage-height);
 
     &.purple {
-        background-image: url("/static/images/cage/cage-border-purple.png");
+        background-image: url("/static/images/preload-resources/cage-border-purple.png");
         background-image: image-set(
-            url("/static/images/cage/cage-border-purple.png") 1x,
-            url("/static/images/cage/cage-border-purple-2x.png") 2x
+            url("/static/images/preload-resources/cage-border-purple.png") 1x,
+            url("/static/images/preload-resources/cage-border-purple-2x.png") 2x
         );
     }
 
     &.blue {
-        background-image: url("/static/images/cage/cage-border-blue.png");
+        background-image: url("/static/images/preload-resources/cage-border-blue.png");
         background-image: image-set(
-            url("/static/images/cage/cage-border-blue.png") 1x,
-            url("/static/images/cage/cage-border-blue-2x.png") 2x
+            url("/static/images/preload-resources/cage-border-blue.png") 1x,
+            url("/static/images/preload-resources/cage-border-blue-2x.png") 2x
         );
     }
 
     &.red {
-        background-image: url("/static/images/cage/cage-border-red.png");
+        background-image: url("/static/images/preload-resources/cage-border-red.png");
         background-image: image-set(
-            url("/static/images/cage/cage-border-red.png") 1x,
-            url("/static/images/cage/cage-border-red-2x.png") 2x
+            url("/static/images/preload-resources/cage-border-red.png") 1x,
+            url("/static/images/preload-resources/cage-border-red-2x.png") 2x
         );
     }
 }

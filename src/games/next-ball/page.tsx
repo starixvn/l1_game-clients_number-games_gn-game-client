@@ -16,12 +16,12 @@ import { TurnGameStateHandler } from "../../components/turn-base/turn-game-state
 import { TurnStateHandler } from "../../components/turn-base/turn-state-handler";
 import { NextBallBetOptions } from "./next-ball-constants";
 import { NextGameRoundDataHandler } from "./next-ball-game-round-data-handler";
+import NextBallResultBlock from "./next-ball-result-block";
 import Scoreboard from "./scoreboard";
 import { NextBallResult, NextBallSettlementResult } from "./types";
 
 const DrawIdBlock = dynamic(() => import("../../components/game-components/draw-id"));
 const NextBallBettingBlock = dynamic(() => import("./next-ball-betting-block"));
-const NextBallResultBlock = dynamic(() => import("./next-ball-result-block"));
 const PercentageStatistic = dynamic(() => import("../../components/game-components/statistic"));
 const NextBallBetHistoryModal = dynamic(() => import("./history"));
 

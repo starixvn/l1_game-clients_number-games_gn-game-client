@@ -23,6 +23,7 @@ export function Home() {
     }
 
     if (shouldRenderDashboard && isDonePreloadResource) {
+        console.log("Done load resource");
         return <Dashboard session={session} queryGame={gameId} setIsUm={toUMPage} directMode={isDirectMode} tolgee={tolgee} />;
     }
 
