@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { isIOS, isMobileOnly } from "react-device-detect";
-
 import { numberRoundDownWithCommas } from "../../../../_shared/helpers/number-helper";
 import { SettingEventActionType, usePlayerContext, useSettingDispatch } from "../../../../_shared/react-contexts";
 import { useClickSound } from "../../../../_shared/react-hooks";
 import { MAX_AVATAR_ID } from "../../dashboard/register/avatar-gallery";
 import Styles from "./user-info.module.scss";
+const { v4: uuidv4 } = require("uuid");
 
 export const UserInfo: React.FC<{
     customizeClass?: string;
@@ -45,10 +45,10 @@ export const UserInfo: React.FC<{
         <div className={`${Styles["user"]} ${customizeClass ? Styles[customizeClass] : ""} ${deviceClass}`}>
             <div className={Styles["info"]}>
                 <UserName name={user?.name || ""} />
-                <div key={user.red} className={`${Styles.balance}`} data-testid="balance">
+                <div className={`${Styles.balance}`} data-testid="balance">
                     <span id="user-info_balance" className={Styles["balance-text"]}>
                         <UserAmount amount={user?.red || 0} />
-                        <UserCurrency currency={user?.currency || ""} isDisplayPlayerCurrency={user?.isDisplayPlayerCurrency || false} />
+                        <UserCurrency currency={user.currency} isDisplayPlayerCurrency={user.isDisplayPlayerCurrency} />
                     </span>
                     <img src="/static/images/icon-coin.svg" className="img-fluid" alt="icon-coin" />
                 </div>
@@ -72,7 +72,7 @@ const UserAmount: React.FC<{ amount: number }> = ({ amount }) => {
     return useMemo(() => {
         return (
             <>
-                <span data-testid="amount">${numberRoundDownWithCommas(amount)}</span>
+                <span data-testid="amount">{numberRoundDownWithCommas(amount)}</span>
                 <span>{` `}</span>
             </>
         );

@@ -6,7 +6,7 @@ import { useSwipeable } from "react-swipeable";
 import { getAppSettings } from "../_shared/app-settings";
 import { GameIds } from "../_shared/constants";
 import { AnalyticsHelper, TrackingAction, TrackingFunction } from "../_shared/helpers";
-import PreloadImages from "../_shared/helpers/preload-image";
+import PreloadImages from "../_shared/helpers/preload-images";
 import { SettingEventActionType, SystemContextProvider, URLContext, usePlayerContext, useSettingDispatch } from "../_shared/react-contexts";
 import {
     usePlaceBetSound,

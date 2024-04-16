@@ -24,61 +24,6 @@ exports[`UserInfo render With isLobby = false should match the snapshot 1`] = `
           <span
             data-testid="amount"
           >
-            $
-            1
-          </span>
-          <span>
-             
-          </span>
-        </span>
-        <img
-          alt="icon-coin"
-          class="img-fluid"
-          src="/static/images/icon-coin.svg"
-        />
-      </div>
-    </div>
-    <div
-      class="avatar undefined"
-      data-testid="avatar"
-    >
-      <img
-        alt="Avatar"
-        class="img-fluid circle"
-        height="40"
-        src="/static/images/avatar/1.jpg"
-        width="40"
-      />
-    </div>
-  </div>
-</div>
-`;
-
-exports[`UserInfo render With isLobby = true and login on Phone should match the snapshot 1`] = `
-<div>
-  <div
-    class="user  android-device"
-  >
-    <div
-      class="info"
-    >
-      <div
-        class="user-name"
-        data-testid="user-name"
-        id="user-info_user-name"
-      />
-      <div
-        class="balance"
-        data-testid="balance"
-      >
-        <span
-          class="balance-text"
-          id="user-info_balance"
-        >
-          <span
-            data-testid="amount"
-          >
-            $
             1
           </span>
           <span>
@@ -132,7 +77,6 @@ exports[`UserInfo render With isLobby = true and login on Phone should match the
           <span
             data-testid="amount"
           >
-            $
             1
           </span>
           <span>
@@ -186,7 +130,6 @@ exports[`UserInfo render With isLobby = true and login on Phone should match the
           <span
             data-testid="amount"
           >
-            $
             1
           </span>
           <span>
@@ -240,7 +183,6 @@ exports[`UserInfo render With isLobby = true should match the snapshot 1`] = `
           <span
             data-testid="amount"
           >
-            $
             1
           </span>
           <span>
