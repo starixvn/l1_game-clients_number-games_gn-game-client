@@ -1,10 +1,13 @@
-import { useEffect, useRef } from "react";
 import "swiper/css";
 import "swiper/css/pagination";
+
+import Image from "next/image";
+import { useEffect, useRef } from "react";
 import { Autoplay, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { IBanner } from "../../page-components/dashboard/type";
+
 import { AnalyticsHelper, TrackingAction, TrackingFunction } from "../../../_shared/helpers";
+import { IBanner } from "../../page-components/dashboard/type";
 
 const DEFAULT_DELAY_SLIDER = 5000;
 export const BannerSwiper: React.FC<{ banners: IBanner[]; openGame: Function }> = ({ banners, openGame }) => {
@@ -50,7 +53,7 @@ export const BannerSwiper: React.FC<{ banners: IBanner[]; openGame: Function }> 
             roundLengths={true}
             shortSwipes={true}
         >
-            {banners.map((banner) => {
+            {banners.map((banner, index) => {
                 if (!banner?.path) {
                     return <></>;
                 }
@@ -63,7 +66,14 @@ export const BannerSwiper: React.FC<{ banners: IBanner[]; openGame: Function }> 
                             AnalyticsHelper.trackFunction({ function: TrackingFunction.Banner, action: TrackingAction.Open });
                         }}
                     >
-                        <img className="banner-img" src={banner.path} alt={banner.gameId.toString()} />
+                        <Image
+                            className="banner-img"
+                            src={banner.path}
+                            alt={banner.gameId.toString()}
+                            width={375}
+                            height={200}
+                            priority={index !== 0 ? false : true}
+                        />
                     </SwiperSlide>
                 );
             })}

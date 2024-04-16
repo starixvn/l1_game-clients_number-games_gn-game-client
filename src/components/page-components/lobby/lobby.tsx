@@ -21,15 +21,6 @@ export const Lobby: React.FC<Props> = ({ openGame, lobbyConfigs }) => {
     AnalyticsHelper.trackLobby();
     return (
         <div className={Styles["lobby-container"]}>
-            <Image
-                className={Styles["background"]}
-                src={`/static/images/bg-galaxy-small.webp`}
-                width={375}
-                height={756}
-                alt={`galaxy background`}
-                priority={true}
-            />
-
             <Banner openGame={openGame} lobbyConfigs={lobbyConfigs} />
             <LobbyLayout lobbyConfigs={lobbyConfigs} openGame={openGame} />
             <Settings />

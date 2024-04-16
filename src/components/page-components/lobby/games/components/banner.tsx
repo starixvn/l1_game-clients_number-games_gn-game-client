@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from "react";
 import "swiper/css";
 import "swiper/css/pagination";
+
+import React, { useEffect, useState } from "react";
+
 import { getBannerIds, getBanners, getOfferGamesIds } from "../../../../../_shared/helpers";
 import { usePlayerContext } from "../../../../../_shared/react-contexts";
 import { tolgee } from "../../../../../_shared/tolgee";
@@ -64,8 +66,8 @@ export const Banner: React.FC<{ openGame: Function; lobbyConfigs: ILobbyConfigs 
 
     const getImageValidPath = async (banner: IBanner): Promise<string> => {
         const paths = [
-            `${DEFAULT_BANNER_PATH}/${banner.gameId}/${banner.gameId}_${locale}.png`,
-            `${DEFAULT_BANNER_PATH}/${banner.gameId}/${banner.gameId}_en.png`,
+            `${DEFAULT_BANNER_PATH}/${banner.gameId}/${banner.gameId}_${locale}.webp`,
+            `${DEFAULT_BANNER_PATH}/${banner.gameId}/${banner.gameId}_en.webp`,
         ];
         let validPath = "";
 
