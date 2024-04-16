@@ -7,17 +7,41 @@ const MusicPlayer = ({ isUserGesture }) => {
     const settingContext = useSettingContext();
 
     const [song, setSong] = useState(getRandomSong(""));
-    const [play, { stop, pause }] = useSound(song, {
+    const [play, { stop, pause, sound: ctx }] = useSound(song, {
         interrupt: false,
+
         onend: () => {
             setSong(getRandomSong(song));
         },
     });
     useEffect(() => {
+        if (!ctx) {
+            return;
+        }
+
+        //Work around handle iOS lost sound with Audio Context using use-sound lib
+        //https://github.com/joshwcomeau/use-sound/issues/15
+        //https://github.com/goldfire/howler.js/issues/1234
+        const audioContext: AudioContext = ctx._sounds[0]._node.context;
+
         if (isUserGesture) {
-            settingContext.enabledMusic && play();
+            audioContext
+                .resume()
+                .then(() => {
+                    settingContext.enabledMusic && play();
+                })
+                .catch(() => {
+                    settingContext.enabledMusic && play();
+                });
         } else {
-            pause();
+            audioContext
+                .suspend()
+                .then(() => {
+                    pause();
+                })
+                .catch(() => {
+                    pause();
+                });
         }
     }, [isUserGesture]);
 
