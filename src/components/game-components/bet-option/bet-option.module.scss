@@ -118,7 +118,7 @@
 
 @keyframes own-bet-move-up {
     0% {
-        transform: translateY(0);
+        transform: translateY(-3rem);
         opacity: 0.8;
     }
 
@@ -127,7 +127,7 @@
     }
 
     100% {
-        transform: translateY(-3rem);
+        transform: translateY(0);
         opacity: 0;
     }
 }
