@@ -228,12 +228,12 @@ class Dashboard extends React.PureComponent<Props, State> {
             window.addEventListener("resize", this.changeOrientation);
             window.addEventListener("touchmove", this.preventZoomBehavior, { passive: false });
         }
-        this.handleAllowPlayMusic();
+        this.handleUserGesture();
         this.connectNotificationSocket();
         queryGame && this.openGame(queryGame);
     }
 
-    private handleAllowPlayMusic() {
+    private handleUserGesture() {
         const timeoutId = setTimeout(() => {
             if (!this.state.isUserGesture) {
                 this.setState({ isUserGesture: true });
@@ -242,18 +242,21 @@ class Dashboard extends React.PureComponent<Props, State> {
 
         if (isMobile) {
             window.addEventListener("touchstart", () => {
-                if (!this.state.isUserGesture) {
-                    this.setState({ isUserGesture: true });
-                    if (timeoutId) clearTimeout(timeoutId);
-                }
+                this.enableUserGesture(timeoutId);
             });
         } else {
             window.addEventListener("click", () => {
-                if (!this.state.isUserGesture) {
-                    this.setState({ isUserGesture: true });
-                    if (timeoutId) clearTimeout(timeoutId);
-                }
+                this.enableUserGesture(timeoutId);
             });
+        }
+    }
+
+    private enableUserGesture(timeoutId: NodeJS.Timeout) {
+        if (!this.state.isUserGesture) {
+            this.setState({ isUserGesture: true });
+            if (timeoutId) {
+                clearTimeout(timeoutId);
+            }
         }
     }
 
