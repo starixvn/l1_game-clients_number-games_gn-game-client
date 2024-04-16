@@ -4,7 +4,6 @@ import path from "path";
 
 export default function handler(req: NextApiRequest, res: NextApiResponse<any[]>) {
     const imagesDir = path.join(process.cwd(), "public/static", "images", "preload-resources");
-    console.log("imagesDir----", imagesDir);
 
     fs.readdir(imagesDir, (err, files) => {
         if (err) {
@@ -17,6 +16,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any[]>
             return ext === ".jpg" || ext === ".png" || ext === ".gif" || ext === ".webp";
         });
 
-        res.status(200).json(imageFiles);
+        return res.status(200).json(imageFiles);
     });
 }

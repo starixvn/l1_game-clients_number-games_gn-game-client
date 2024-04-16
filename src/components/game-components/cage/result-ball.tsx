@@ -19,6 +19,7 @@ const ResultBall: React.FC<{
 
         return (
             <div key={currentTime} id="show-ball-anim" className={Styles["show-ball-anim"]}>
+                <img className={Styles["ball-blur"]} src={`/static/images/preload-resources/ball-blur.png`} alt="img-blur" />
                 {isShowResultAnim ? (
                     <Spritesheet
                         className={"sss"}

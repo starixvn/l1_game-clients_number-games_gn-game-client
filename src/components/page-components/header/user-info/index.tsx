@@ -5,7 +5,6 @@ import { SettingEventActionType, usePlayerContext, useSettingDispatch } from "..
 import { useClickSound } from "../../../../_shared/react-hooks";
 import { MAX_AVATAR_ID } from "../../dashboard/register/avatar-gallery";
 import Styles from "./user-info.module.scss";
-const { v4: uuidv4 } = require("uuid");
 
 export const UserInfo: React.FC<{
     customizeClass?: string;

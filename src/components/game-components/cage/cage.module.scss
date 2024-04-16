@@ -153,6 +153,13 @@
     animation: pulsate-bck 1.5s linear infinite forwards;
 }
 
+.ball-blur{
+    position: absolute;
+    opacity: 0.3;
+    top: 1rem;
+    left: 1rem;
+}
+
 @keyframes pulsate-bck {
     0% {
         -webkit-transform: scale(1);
