@@ -26,7 +26,7 @@ const Footer = dynamic(() => import("../components/game-components/footer"));
 const ToolbarGuide = dynamic(() => import("../components/page-components/hide-toolbar-guide"));
 const SwitchGamesGuide = dynamic(() => import("../components/page-components/switch-games-guide"));
 
-const swipeDuration = 250;
+const swipeDuration = 1500;
 
 export const Games: React.FC<Props> = ({
     setApiErrorMessage,
