@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react";
+
 import { IBanner } from "../../page-components/dashboard/type";
 import { BannerSwiper } from "./banner-swiper";
 
@@ -19,12 +20,12 @@ describe(BannerSwiper.name, () => {
                     {
                         gameId: 1001,
                         displayTime: 10,
-                        path: "/static/images/lobby/banners/1001/1001_en.png",
+                        path: "/static/images/lobby/banners/1001/1001_en.webp",
                     },
                     {
                         gameId: 1002,
                         displayTime: 5,
-                        path: "/static/images/lobby/banners/1002/1002_en.png",
+                        path: "/static/images/lobby/banners/1002/1002_en.webp",
                     },
                 ];
                 const { container } = render(<BannerSwiper openGame={jest.fn()} banners={banners} />);

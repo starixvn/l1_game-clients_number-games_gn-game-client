@@ -19,7 +19,14 @@ exports[`BannerSwiper render with normal banner should match the snapshot 1`] = 
       <img
         alt="1001"
         class="banner-img"
-        src="/static/images/lobby/banners/1001/1001_en.png"
+        data-nimg="1"
+        decoding="async"
+        fetchpriority="high"
+        height="200"
+        src="/_next/image?url=%2Fstatic%2Fimages%2Flobby%2Fbanners%2F1001%2F1001_en.webp&w=750&q=75"
+        srcset="/_next/image?url=%2Fstatic%2Fimages%2Flobby%2Fbanners%2F1001%2F1001_en.webp&w=384&q=75 1x, /_next/image?url=%2Fstatic%2Fimages%2Flobby%2Fbanners%2F1001%2F1001_en.webp&w=750&q=75 2x"
+        style="color: transparent;"
+        width="375"
       />
     </div>
     <div
@@ -28,7 +35,14 @@ exports[`BannerSwiper render with normal banner should match the snapshot 1`] = 
       <img
         alt="1002"
         class="banner-img"
-        src="/static/images/lobby/banners/1002/1002_en.png"
+        data-nimg="1"
+        decoding="async"
+        height="200"
+        loading="lazy"
+        src="/_next/image?url=%2Fstatic%2Fimages%2Flobby%2Fbanners%2F1002%2F1002_en.webp&w=750&q=75"
+        srcset="/_next/image?url=%2Fstatic%2Fimages%2Flobby%2Fbanners%2F1002%2F1002_en.webp&w=384&q=75 1x, /_next/image?url=%2Fstatic%2Fimages%2Flobby%2Fbanners%2F1002%2F1002_en.webp&w=750&q=75 2x"
+        style="color: transparent;"
+        width="375"
       />
     </div>
   </div>

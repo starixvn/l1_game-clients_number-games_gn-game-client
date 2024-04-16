@@ -6,8 +6,15 @@ exports[`GameIcon should render match with snapshot 1`] = `
     class="icon-game gamea"
   >
     <img
-      alt="icon-game"
-      src="/static/images/lobby/game-board-detail/icon-gamea.png?v=1"
+      alt="icon-gamea"
+      data-nimg="1"
+      decoding="async"
+      height="138"
+      loading="lazy"
+      src="/_next/image?url=%2Fstatic%2Fimages%2Flobby%2Fgame-board-detail%2Ficon-gamea.png&w=384&q=75"
+      srcset="/_next/image?url=%2Fstatic%2Fimages%2Flobby%2Fgame-board-detail%2Ficon-gamea.png&w=256&q=75 1x, /_next/image?url=%2Fstatic%2Fimages%2Flobby%2Fgame-board-detail%2Ficon-gamea.png&w=384&q=75 2x"
+      style="color: transparent;"
+      width="130"
     />
     OnlinePlayer
   </div>
