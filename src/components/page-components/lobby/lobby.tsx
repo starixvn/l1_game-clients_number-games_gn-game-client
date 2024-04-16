@@ -1,5 +1,4 @@
 import dynamic from "next/dynamic";
-import Image from "next/image";
 import { isMobileOnly, isSafari } from "react-device-detect";
 
 import { AnalyticsHelper } from "../../../_shared/helpers/analytic-helper";
@@ -21,10 +20,15 @@ export const Lobby: React.FC<Props> = ({ openGame, lobbyConfigs }) => {
     AnalyticsHelper.trackLobby();
     return (
         <div className={Styles["lobby-container"]}>
-            <Banner openGame={openGame} lobbyConfigs={lobbyConfigs} />
-            <LobbyLayout lobbyConfigs={lobbyConfigs} openGame={openGame} />
-            <Settings />
-            <ChangeAvatar />
+            <div>
+                <Banner openGame={openGame} lobbyConfigs={lobbyConfigs} />
+            </div>
+            <div>
+                <LobbyLayout lobbyConfigs={lobbyConfigs} openGame={openGame} />
+                <Settings />
+                <ChangeAvatar />
+            </div>
+
             {isMobileOnly && isSafari && <ToolbarGuide />}
         </div>
     );

@@ -10,6 +10,8 @@
     background-image: image-set(url("/static/images/bg-galaxy-small.webp") 1x, url("/static/images/bg-galaxy.webp") 2x);
     background-size: cover;
     background-repeat: no-repeat;
+    display: grid;
+    grid-template-rows: 14.8rem 1fr;
 }
 
 .game-board-detail {
