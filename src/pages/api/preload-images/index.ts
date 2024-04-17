@@ -14,15 +14,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any[]>
     }
 
     const imagesDir = path.join(process.cwd(), DEFAULT_STATIC_PATH);
-
     const imageFiles = [];
-
-    // for (const dirPath of parsedPaths) {
-    //     const imageFilesFromDir = dirPath.endsWith("/*") ? readFilesFromPath(dirPath.slice(0, -2), imagesDir) : [dirPath];
-
-    //     imageFiles.push(...imageFilesFromDir);
-    // }
-
     for (const dirPath of parsedPaths) {
         const dirToRead = path.join(imagesDir, dirPath);
 

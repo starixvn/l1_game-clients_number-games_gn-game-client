@@ -51,7 +51,7 @@ export const initialURLContextData = {
             globalThis.location.href = GameUtils.base64Decode(redirectUrl);
         } else {
             updateURLContext({ backToLobby: true });
-            Router.push({ pathname: "/" });
+            Router.push("/", null, { shallow: true });
         }
     },
 };
