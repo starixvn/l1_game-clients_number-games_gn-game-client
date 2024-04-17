@@ -9,7 +9,13 @@ exports[`Chip should render match the snapshot when chip < 1000 1`] = `
     <img
       alt="Chip"
       class="img-fluid chip"
+      data-nimg="1"
+      decoding="async"
+      height="66"
+      loading="lazy"
       src="/static/images/chips/gn/000123.svg"
+      style="color: transparent;"
+      width="65"
     />
     <span
       class="value"
@@ -29,7 +35,13 @@ exports[`Chip should render match the snapshot when chip > 1000 & text is empty 
     <img
       alt="Chip"
       class="img-fluid chip"
+      data-nimg="1"
+      decoding="async"
+      height="66"
+      loading="lazy"
       src="/static/images/chips/gn/000123.svg"
+      style="color: transparent;"
+      width="65"
     />
     <span
       class="value"
