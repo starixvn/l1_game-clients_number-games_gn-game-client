@@ -33,7 +33,13 @@ exports[`UserInfo render With isLobby = false should match the snapshot 1`] = `
         <img
           alt="icon-coin"
           class="img-fluid"
+          data-nimg="1"
+          decoding="async"
+          height="11"
+          loading="lazy"
           src="/static/images/icon-coin.svg"
+          style="color: transparent;"
+          width="10"
         />
       </div>
     </div>
@@ -86,7 +92,13 @@ exports[`UserInfo render With isLobby = true and login on Phone should match the
         <img
           alt="icon-coin"
           class="img-fluid"
+          data-nimg="1"
+          decoding="async"
+          height="11"
+          loading="lazy"
           src="/static/images/icon-coin.svg"
+          style="color: transparent;"
+          width="10"
         />
       </div>
     </div>
@@ -139,7 +151,13 @@ exports[`UserInfo render With isLobby = true and login on Phone should match the
         <img
           alt="icon-coin"
           class="img-fluid"
+          data-nimg="1"
+          decoding="async"
+          height="11"
+          loading="lazy"
           src="/static/images/icon-coin.svg"
+          style="color: transparent;"
+          width="10"
         />
       </div>
     </div>
@@ -192,7 +210,13 @@ exports[`UserInfo render With isLobby = true should match the snapshot 1`] = `
         <img
           alt="icon-coin"
           class="img-fluid"
+          data-nimg="1"
+          decoding="async"
+          height="11"
+          loading="lazy"
           src="/static/images/icon-coin.svg"
+          style="color: transparent;"
+          width="10"
         />
       </div>
     </div>
