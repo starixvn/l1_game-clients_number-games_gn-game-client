@@ -275,13 +275,6 @@ class Dashboard extends React.PureComponent<Props, State> {
         return (offerGames.includes(this.state.openGameId) && !backToLobby) || ssoRedirectGameId > 0;
     }
 
-    componentDidUpdate(prevProps, prevState) {
-        const urlContext = loadURLContext();
-        if (urlContext?.gameId > 0) {
-            window.scrollTo(0, 0);
-        }
-    }
-
     componentWillUnmount() {
         document.removeEventListener("visibilitychange", this.onVisibilityChange);
         this.setState({ isUserGesture: false });
@@ -421,7 +414,7 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.gameStyleInterval = setInterval(() => {
             this.setState({ isChangedGame: false });
         }, 700);
-
+        window.scrollTo(0, 0);
         this.setState({ isChangePrevGame: isPrevGame });
     };
 
@@ -444,6 +437,7 @@ class Dashboard extends React.PureComponent<Props, State> {
 
     openGameFromLobby(gameId: number) {
         updateURLContext({ backToLobby: true, gameId: gameId });
+        window.scrollTo(0, 0);
         if (this.state.openGameId !== gameId) {
             this.removeGameTransmitter(gameId);
             this.setState({ openGameId: gameId });
