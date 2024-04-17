@@ -137,7 +137,8 @@ class Dashboard extends React.PureComponent<Props, State> {
     }
 
     handleShowApiErrorMessage(errorCode: string, isDisableAccount = false) {
-        if (isDisableAccount || errorCode === "1001" || errorCode === "1002") {
+        const kickedOutErrorCodes = ["1001", "1002", "7001"];
+        if (isDisableAccount || kickedOutErrorCodes.includes(errorCode)) {
             this.isKickOut = true;
             setTimeout(() => {
                 this.signOut();

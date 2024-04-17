@@ -4,7 +4,6 @@ import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/rea
 import { URLContext, updateURLContext } from "../../../_shared/react-contexts/url-context";
 import { useClickSound } from "../../../_shared/react-hooks";
 import { RoundState } from "../../game-base/type";
-import { getLogoName } from "../../page-components/header";
 import { Menu } from "./menu";
 import styles from "./settings.module.scss";
 import { AnalyticsHelper, TrackingAction, TrackingFunction } from "../../../_shared/helpers";
@@ -44,7 +43,7 @@ export function Settings() {
 
     return (
         <div className={styles["settings-container"]}>
-            <div className={`${styles["setting-right"]} ${styles[getLogoName()]}`}>
+            <div className={styles["setting-right"]}>
                 {(!isDirectMode || redirectUrl) && (
                     <button className={styles[ButtonSettingClassName]} onClick={() => handleBackToLobbyOnclick()}>
                         <span id="icon-home" className="icon-home" />

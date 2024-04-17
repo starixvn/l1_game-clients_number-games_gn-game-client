@@ -21,7 +21,6 @@ export const UserInfo: React.FC<{
     if (isMobileOnly) {
         deviceClass = isIOS ? Styles["ios-device"] : Styles["android-device"];
     }
-
     const handleClickAvatar = () => {
         if (isLobby) {
             clickSound();
@@ -36,7 +35,7 @@ export const UserInfo: React.FC<{
 
     useEffect(() => {
         if (isLobby) {
-            setClassCursor("user-cursor");
+            setClassCursor(Styles["user-cursor"]);
         } else {
             setClassCursor("");
         }
@@ -95,17 +94,15 @@ const UserAvatar: React.FC<{ avatarId: number; classCursor: string; handleClickA
     classCursor,
     handleClickAvatar,
 }) => {
-    return useMemo(() => {
-        return (
-            <div data-testid="avatar" className={`${Styles["avatar"]} ${Styles[classCursor]}`} onClick={() => handleClickAvatar?.()}>
-                {avatarId > 0 && avatarId <= MAX_AVATAR_ID ? (
-                    <img src={`/static/images/avatar/${avatarId}.jpg`} className="img-fluid circle" height="40" width="40" alt="Avatar" />
-                ) : (
-                    <span className={`icon-user ${Styles["icon-user"]}`} data-testid="icon-user"></span>
-                )}
-            </div>
-        );
-    }, [avatarId]);
+    return (
+        <div data-testid="avatar" className={`${Styles["avatar"]} ${classCursor}`} onClick={() => handleClickAvatar?.()}>
+            {avatarId > 0 && avatarId <= MAX_AVATAR_ID ? (
+                <img src={`/static/images/avatar/${avatarId}.jpg`} className="img-fluid circle" height="40" width="40" alt="Avatar" />
+            ) : (
+                <span className={`icon-user ${Styles["icon-user"]}`} data-testid="icon-user"></span>
+            )}
+        </div>
+    );
 };
 
 export default UserInfo;

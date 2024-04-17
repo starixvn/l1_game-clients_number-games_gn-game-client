@@ -15,7 +15,7 @@ export const GameIcon: React.FC<Props> = ({ gameSettings, transmitter }) => {
     const { gameName } = gameSettings;
 
     return (
-        <div className={`${Styles["icon-game"]} ${Styles[gameName.toLowerCase()]}`}>
+        <div className={Styles["icon-game"]}>
             <Image
                 src={`/static/images/lobby/game-board-detail/icon-${gameName.toLowerCase()}.png`}
                 width={130}

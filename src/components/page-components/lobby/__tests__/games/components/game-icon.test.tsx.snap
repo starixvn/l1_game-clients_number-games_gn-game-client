@@ -3,7 +3,7 @@
 exports[`GameIcon should render match with snapshot 1`] = `
 <div>
   <div
-    class="icon-game gamea"
+    class="icon-game"
   >
     <img
       alt="icon-gamea"

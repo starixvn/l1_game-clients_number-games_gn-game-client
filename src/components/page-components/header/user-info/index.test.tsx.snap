@@ -44,7 +44,7 @@ exports[`UserInfo render With isLobby = false should match the snapshot 1`] = `
       </div>
     </div>
     <div
-      class="avatar undefined"
+      class="avatar "
       data-testid="avatar"
     >
       <img
@@ -103,7 +103,7 @@ exports[`UserInfo render With isLobby = true and login on Phone should match the
       </div>
     </div>
     <div
-      class="avatar undefined"
+      class="avatar user-cursor"
       data-testid="avatar"
     >
       <img
@@ -162,7 +162,7 @@ exports[`UserInfo render With isLobby = true and login on Phone should match the
       </div>
     </div>
     <div
-      class="avatar undefined"
+      class="avatar user-cursor"
       data-testid="avatar"
     >
       <img
@@ -221,7 +221,7 @@ exports[`UserInfo render With isLobby = true should match the snapshot 1`] = `
       </div>
     </div>
     <div
-      class="avatar undefined"
+      class="avatar user-cursor"
       data-testid="avatar"
     >
       <img

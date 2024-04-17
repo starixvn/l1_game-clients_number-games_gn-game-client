@@ -1,6 +1,6 @@
 import React from "react";
 import { systemName } from "../../../_shared/constants";
-import { usePlayerContext, useSystemContext } from "../../../_shared/react-contexts";
+import { useSystemContext } from "../../../_shared/react-contexts";
 import Styles from "./chip-slider.module.scss";
 
 export const Chip: React.FC<{ value: number; onClickChip: Function; text: string; image: string }> = ({
@@ -11,15 +11,10 @@ export const Chip: React.FC<{ value: number; onClickChip: Function; text: string
 }) => {
     const systemContext = useSystemContext();
 
-    const enabledQuickBet = usePlayerContext().authorizeInfo?.user?.settings?.quickBet;
-
     const { selectedChip } = systemContext;
 
     const getChipClassName = () => {
-        let className = `${Styles["chip-container"]} ${Styles[systemName]}`;
-        selectedChip === value && (className += ` ${Styles["selected"]}`);
-        enabledQuickBet && (className += ` ${Styles["enabled-quick-bet"]}`);
-        return className;
+        return `${Styles["chip-container"]} ${selectedChip === value ? Styles["selected"] : ""}`;
     };
 
     const getDefaultChipText = () => {

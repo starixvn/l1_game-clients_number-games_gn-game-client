@@ -75,7 +75,7 @@ export const Menu: React.FC = () => {
                     setDropdownOpen(!dropdownOpen);
                 }}
             >
-                <span className={`icon-menu ${Styles["icon-menu"]}`}></span>
+                <span className={`icon-menu ${Styles["menu-icon"]}`}></span>
             </div>
             <div className="dropdown">
                 <div className={`dropdown-menu right ${Styles["dropdown-menu"]} ${dropdownOpen ? "show" : ""}`}>
