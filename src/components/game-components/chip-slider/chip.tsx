@@ -1,4 +1,6 @@
+import Image from "next/image";
 import React from "react";
+
 import { systemName } from "../../../_shared/constants";
 import { useSystemContext } from "../../../_shared/react-contexts";
 import Styles from "./chip-slider.module.scss";
@@ -24,9 +26,11 @@ export const Chip: React.FC<{ value: number; onClickChip: Function; text: string
     return (
         <div id={`chip-${value}`} key={value} className={getChipClassName()} onClick={() => onClickChip(value)}>
             {image && (
-                <img
+                <Image
                     src={`/static/images/chips/${systemName}/${image.replace("#", "")}.svg`}
                     className={`img-fluid ${Styles["chip"]}`}
+                    width={65}
+                    height={66}
                     alt="Chip"
                 />
             )}

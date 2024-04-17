@@ -6,8 +6,8 @@
 .lobby-container {
     position: relative;
     padding-top: 4rem;
-    background-image: url("/static/images/bg-galaxy-small.webp");
-    background-image: image-set(url("/static/images/bg-galaxy-small.webp") 1x, url("/static/images/bg-galaxy.webp") 2x);
+    background-image: var(--game-background-image);
+    background-image: image-set(var(--game-small-background-image) 1x, var(--game-background-image) 2x);
     background-size: cover;
     background-repeat: no-repeat;
     display: grid;

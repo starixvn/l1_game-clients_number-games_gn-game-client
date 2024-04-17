@@ -1,4 +1,5 @@
 import { memo } from "react";
+
 import { useLowPerformanceDevice } from "../../../_shared/react-hooks";
 import { RoundState } from "../../game-base/type";
 import { Spritesheet } from "../sprites-sheet";
@@ -10,7 +11,7 @@ const BallLoops: React.FC<{ roundState: RoundState }> = ({ roundState }) => {
     const renderBalls = () => (
         <Spritesheet
             className={`fade-in ${Styles["balls-loop"]}`}
-            image="/static/images/cage/cage-loop-anim.png"
+            image="/static/images/cage/cage-loop-anim.webp"
             widthFrame={130}
             isResponsive
             heightFrame={130}

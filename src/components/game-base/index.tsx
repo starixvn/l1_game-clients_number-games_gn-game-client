@@ -21,6 +21,7 @@ import CountdownTimer from "../game-components/countdown-timer/countdown-timer";
 import DisabledModal from "../game-components/disabled-modal";
 import { ConnectFailedMessage } from "../game-components/error-message";
 import { ConnectFailedReasonKey } from "../game-components/error-message/type";
+import Footer from "../game-components/footer";
 import GameContainer from "../game-components/game-container";
 import GameGuideModal from "../game-components/game-guide";
 import GameLoading from "../game-components/game-loading";
@@ -518,15 +519,14 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
     renderHeaderBlock() {
         return (
-            <>
-                <div className="game-header">
-                    {this.renderRoundIdSection()}
-                    <div id="countdown-timer" className="countdown-timer">
-                        <CountdownTimer />
-                    </div>
+            <div className="game-header">
+                {this.renderRoundIdSection()}
+                <div id="countdown-timer" className="countdown-timer">
+                    <CountdownTimer />
                 </div>
+
                 <Settings />
-            </>
+            </div>
         );
     }
 
@@ -582,10 +582,14 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     getRenderTemplate() {
         return (
             <>
-                <div ref={this.props.swipeableRef}>
-                    {this.renderHeaderBlock()}
-                    {this.renderResultBlock()}
-                    {this.renderBettingBlock()}
+                <div className="game-area" ref={this.props.swipeableRef}>
+                    <div>{this.renderHeaderBlock()}</div>
+                    <div>{this.renderResultBlock()}</div>
+                    <div>{this.renderBettingBlock()}</div>
+                    <div>{this.renderSlidingChips()}</div>
+                    <div>{this.renderStatistic()}</div>
+                    {this.renderScoreboards()}
+                    <Footer />
                 </div>
                 {this.renderGameGuideModal()}
                 {this.renderMenuButtons()}
@@ -593,11 +597,8 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 {this.renderBetHistoryModal()}
                 {this.renderNewRoundTransition()}
                 {this.renderNotice()}
-                {this.renderSlidingChips()}
                 {this.renderConfirmDialog()}
                 {this.renderConfirmBet()}
-                {this.renderStatistic()}
-                {this.renderScoreboards()}
             </>
         );
     }

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React, { useMemo } from "react";
 
 import { Spritesheet } from "../sprites-sheet";
@@ -19,11 +20,12 @@ const ResultBall: React.FC<{
 
         return (
             <div key={currentTime} id="show-ball-anim" className={Styles["show-ball-anim"]}>
-                <img className={Styles["ball-blur"]} src={`/static/images/preload-resources/ball-blur.png`} alt="img-blur" />
+                <Image width={120} height={120} className={Styles["ball-blur"]} src={`/static/images/cage/ball-blur.webp`} alt="img-blur" />
+
                 {isShowResultAnim ? (
                     <Spritesheet
                         className={"sss"}
-                        image={`/static/images/preload-resources/${ballColor}.png`}
+                        image={`/static/images/cage/${ballColor}.webp`}
                         widthFrame={153}
                         isResponsive
                         heightFrame={153}
@@ -35,7 +37,7 @@ const ResultBall: React.FC<{
                         endAt={31}
                     />
                 ) : (
-                    <img className={"sss"} src={`/static/images/preload-resources/${ballImage}.png`} alt="img-result" />
+                    <img className={"sss"} src={`/static/images/cage/${ballImage}.webp`} alt="img-result" />
                 )}
             </div>
         );

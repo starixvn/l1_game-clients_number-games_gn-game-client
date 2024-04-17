@@ -97,7 +97,7 @@ const UserAvatar: React.FC<{ avatarId: number; classCursor: string; handleClickA
     return (
         <div data-testid="avatar" className={`${Styles["avatar"]} ${classCursor}`} onClick={() => handleClickAvatar?.()}>
             {avatarId > 0 && avatarId <= MAX_AVATAR_ID ? (
-                <img src={`/static/images/avatar/${avatarId}.jpg`} className="img-fluid circle" height="40" width="40" alt="Avatar" />
+                <Image src={`/static/images/avatar/${avatarId}.jpg`} className="img-fluid circle" height={30} width={30} alt="Avatar" />
             ) : (
                 <span className={`icon-user ${Styles["icon-user"]}`} data-testid="icon-user"></span>
             )}

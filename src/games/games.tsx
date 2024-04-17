@@ -130,7 +130,6 @@ export const Games: React.FC<Props> = ({
                     {!isDirectMode && isMobileOnly && <SwitchGamesGuide />}
                 </div>
             </SystemContextProvider>
-            <Footer />
         </div>
     );
 };
