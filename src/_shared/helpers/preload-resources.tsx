@@ -4,15 +4,24 @@ import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { getPathImageGameId, pathImageMapping } from "../constants/resource-image-mapping";
+import { usePlayerContext } from "../react-contexts";
 
 const PreloadResources: React.FC<{ setIsDonePreloadResource: Function; gameId: number; isDirectMode: boolean }> = ({
     setIsDonePreloadResource,
     gameId,
 }) => {
     const router = useRouter();
+    const { session } = usePlayerContext();
     const [loadedImages, setLoadedImages] = useState<any>(new Set());
     const [startTime, setStartTime] = useState(null);
     const [images, setImages] = useState<string[]>([]);
+
+    const handleRedirect = () => {
+        const isTimeout = !session || (!session?.isUM && !session?.isAuthenticated);
+        if (!isTimeout) {
+            router.push("/", undefined, { shallow: true });
+        }
+    };
 
     useEffect(() => {
         const getPathsImg = () => {
@@ -55,8 +64,8 @@ const PreloadResources: React.FC<{ setIsDonePreloadResource: Function; gameId: n
             const endTime = performance.now();
             const duration = endTime - startTime;
             console.log(`All images loaded in ${duration} milliseconds`);
-            setIsDonePreloadResource && setIsDonePreloadResource(true);
-            router.push("/", undefined, { shallow: true });
+            setIsDonePreloadResource?.(true);
+            handleRedirect();
         }
     }, [loadedImages]);
 
