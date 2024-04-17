@@ -1,23 +1,42 @@
 import axios from "axios";
 import Image from "next/image";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useMemo, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { buildVersion } from "../constants";
+import { getPathImageGameId, pathImageMapping } from "../constants/resource-image-mapping";
 
-const DEFAULT_PATH = "/static/images/preload-resources";
-const PreloadResources: React.FC<{ setIsDonePreloadResource: Function }> = ({ setIsDonePreloadResource }) => {
+const PreloadResources: React.FC<{ setIsDonePreloadResource: Function; gameId: number; isDirectMode: boolean }> = ({
+    setIsDonePreloadResource,
+    gameId,
+}) => {
+    const router = useRouter();
     const [loadedImages, setLoadedImages] = useState<any>(new Set());
     const [startTime, setStartTime] = useState(null);
     const [images, setImages] = useState<string[]>([]);
-    const observer = useRef<IntersectionObserver | null>(null);
 
     useEffect(() => {
+        const getPathsImg = () => {
+            if (+gameId === 0) {
+                return pathImageMapping.lobby;
+            }
+
+            if (+gameId > 0) {
+                return [...pathImageMapping.game, ...getPathImageGameId(+gameId)];
+            }
+
+            return [];
+        };
         const fetchImages = async () => {
+            const paths = getPathsImg();
             try {
-                const response = await axios.get("/api/preload-images");
-                const imageFiles = response?.data;
-                const formattedImages = imageFiles.map((file: string) => `${DEFAULT_PATH}/${file}?v=${buildVersion}`);
-                setImages(formattedImages);
+                const response = await axios.get("/api/preload-images", {
+                    params: {
+                        paths: JSON.stringify(paths),
+                    },
+                });
+
+                const imagesPath = response?.data || [];
+                setImages(imagesPath);
             } catch (error) {
                 console.error("Error fetching images:", error);
             }
@@ -25,14 +44,11 @@ const PreloadResources: React.FC<{ setIsDonePreloadResource: Function }> = ({ se
 
         setStartTime(performance.now());
         fetchImages();
-    }, []);
+    }, [router.isReady]);
 
-    const handleImageLoad = useCallback(
-        (index: number) => {
-            setLoadedImages((prevLoadedImages) => new Set([...prevLoadedImages, index]));
-        },
-        [setLoadedImages]
-    );
+    const handleOnLoadingComplete = (index: number) => {
+        setLoadedImages((prevLoadedImages) => new Set([...prevLoadedImages, index]));
+    };
 
     useEffect(() => {
         if (loadedImages.size === images.length) {
@@ -40,56 +56,33 @@ const PreloadResources: React.FC<{ setIsDonePreloadResource: Function }> = ({ se
             const duration = endTime - startTime;
             console.log(`All images loaded in ${duration} milliseconds`);
             setIsDonePreloadResource && setIsDonePreloadResource(true);
+            router.push("/", undefined, { shallow: true });
         }
     }, [loadedImages]);
 
-    useEffect(() => {
-        observer.current = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        const img = entry.target as HTMLImageElement;
-                        if (img.complete) {
-                            const index = images.indexOf(img.dataset.src || "");
-                            handleImageLoad(index);
-                        } else {
-                            img.onload = () => {
-                                const index = images.indexOf(img.dataset.src || "");
-                                handleImageLoad(index);
-                            };
-                        }
-                    }
-                });
-            },
-            { rootMargin: "0px 0px 0px 0px" }
-        );
-    }, [images, handleImageLoad]);
-
-    return (
-        <div>
-            <div id="load-img" style={{ opacity: 0 }}>
-                {images.length > 0 &&
-                    images.map((image, index) => (
-                        <Image
-                            priority={true}
-                            key={uuidv4()}
-                            src={image}
-                            width={1}
-                            height={1}
-                            alt={"preload-img"}
-                            data-src={image}
-                            unoptimized={true}
-                            quality={100}
-                            ref={(el) => {
-                                if (el && observer.current) {
-                                    observer.current.observe(el);
-                                }
-                            }}
-                        />
-                    ))}
+    return useMemo(() => {
+        return (
+            <div>
+                <div id="load-img" style={{ opacity: 0 }}>
+                    {images.length > 0 &&
+                        images.map((image, index) => (
+                            <Image
+                                priority={true}
+                                key={uuidv4()}
+                                src={image}
+                                width={1}
+                                height={1}
+                                alt={"preload-img"}
+                                data-src={image}
+                                unoptimized={true}
+                                quality={100}
+                                onLoad={() => handleOnLoadingComplete(index)}
+                            />
+                        ))}
+                </div>
             </div>
-        </div>
-    );
+        );
+    }, [images, gameId]);
 };
 
 export default PreloadResources;

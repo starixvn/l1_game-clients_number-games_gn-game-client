@@ -50,7 +50,7 @@ export const UserInfo: React.FC<{
                         <UserAmount amount={user?.red || 0} />
                         <UserCurrency currency={user.currency} isDisplayPlayerCurrency={user.isDisplayPlayerCurrency} />
                     </span>
-                    <Image className="img-fluid" src={`/static/images/icon-coin.svg`} width={10} height={11} alt={`icon-coin`} />
+                    <Image className="img-fluid" src={`/static/images/icons/icon-coin.svg`} width={10} height={11} alt={`icon-coin`} />
                 </div>
             </div>
             <UserAvatar avatarId={user?.avatarId} classCursor={classCursor} handleClickAvatar={handleClickAvatar} />

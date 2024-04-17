@@ -1,11 +1,11 @@
 import * as Sentry from "@sentry/nextjs";
 import { WithRouterProps } from "next/dist/client/with-router";
 import { useRouter } from "next/router";
-import { ReactNode, useContext, useEffect } from "react";
+import { useContext, useEffect } from "react";
 
 import { getAppSettings } from "../../../_shared/app-settings";
-import { languageMapper } from "../../../_shared/constants";
-import { AnalyticsHelper, localStorageKeys, StorageHelper } from "../../../_shared/helpers";
+import { buildVersion, languageMapper, systemName } from "../../../_shared/constants";
+import { AnalyticsHelper, StorageHelper, localStorageKeys } from "../../../_shared/helpers";
 import { URLContext, usePlayerContext } from "../../../_shared/react-contexts";
 import { useTranslator } from "../../../_shared/react-hooks/use-translator";
 import { setSentryUser } from "../../../_shared/sentry";
@@ -43,8 +43,6 @@ export async function customStartup(token, language, router, player): Promise<vo
         player.session = session;
         AnalyticsHelper.setUser(session.username);
     }
-
-    router.push("");
 }
 
 export function onStartupError(error: Error): void {
@@ -55,15 +53,15 @@ export function onStartupError(error: Error): void {
     globalThis.location.pathname = "timeout";
 }
 
-export default function SplashScreen(): ReactNode {
+const SplashScreen: React.FC = ({}) => {
     const { token, language } = useContext(URLContext);
     const router = useRouter();
     const player = usePlayerContext();
     const { t } = useTranslator();
 
     useEffect(() => {
-        customStartup(token, language, router, player).catch(onStartupError);
-    }, []);
+        router?.isReady && customStartup(token, language, router, player).catch(onStartupError);
+    }, [router]);
 
     const { session } = usePlayerContext();
 
@@ -86,4 +84,6 @@ export default function SplashScreen(): ReactNode {
             </div>
         );
     }
-}
+};
+
+export default SplashScreen;
