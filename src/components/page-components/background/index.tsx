@@ -22,10 +22,10 @@ export const BackgroundGalaxy: React.FC<Props> = ({ gameId }) => {
     return (
         <>
             <div className="background-galaxy">
-                <Image className="galaxy-2" width={580} height={1500} src={imageUrls} alt="galaxy" priority={true} />
+                <Image className="galaxy-2" width={580} height={800} src={imageUrls} alt="galaxy" priority={true} />
 
                 <div className="galaxy-1-container">
-                    <Image className="galaxy-1" width={580} height={1500} src={imageUrls} alt="galaxy" />
+                    <Image className="galaxy-1" width={580} height={800} src={imageUrls} alt="galaxy" />
                 </div>
             </div>
             <div className="star-field">
