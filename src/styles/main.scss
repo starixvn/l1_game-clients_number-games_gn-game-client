@@ -26,6 +26,9 @@ html {
     --font-money: "BebasNeue", Arial, sans-serif;
     --font-number: "Montserrat", Arial, sans-serif;
 
+    //background
+    --black-background: #000;
+
     // buttons
     --btn-red-background: #ea1d40;
     --btn-red-background-hover: #a90f29;
@@ -68,7 +71,7 @@ html {
 }
 
 [data-theme="light"] {
-    --page-background-color: #000;
+    --page-background-color: #162644;
     --game-background-image: url("/static/images/bg-galaxy.jpg?v=1");
     --background-image: url("/static/images/bg.webp");
     --text-color: #2c2f3e;
@@ -79,7 +82,7 @@ html {
     --opacity-background-grey: rgba(221, 221, 221, 0.6);
 
     // scrollbar
-    --scrollbar-background: #000;
+    --scrollbar-background: --black-background;
     --scrollbar-thumb-background: #3d4247;
 
     // popup
@@ -103,10 +106,15 @@ body {
 }
 // end
 
+
+.galaxy-bg{
+    background: var(--page-background-color) var(--background-image) no-repeat !important;
+}
+
 body {
     padding: 0;
     margin: 0;
-    background: var(--page-background-color) var(--background-image) no-repeat;
+    background: var(--page-background-color);
     background-position: top center;
     background-attachment: fixed;
     font: 1.4rem/1.5 var(--font-family);
