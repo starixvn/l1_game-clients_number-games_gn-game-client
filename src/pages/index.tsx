@@ -15,7 +15,6 @@ export function Home() {
     const shouldRenderDashboard = session?.isAuthenticated && !session?.isUM;
     const [isUm, setIsUm] = useState(session?.isUM);
     const toUMPage = (value) => setIsUm(value);
-    // const [isDonePreloadResource, setIsDonePreloadResource] = useState(false);
 
     if (isUm) {
         return <UMPage />;
