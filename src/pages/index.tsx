@@ -22,14 +22,15 @@ export function Home() {
         return <UMPage />;
     }
 
-    if (shouldRenderDashboard && isDonePreloadResource) {
+    if (shouldRenderDashboard) {
         console.log("Done load resource");
         return <Dashboard session={session} queryGame={gameId} setIsUm={toUMPage} directMode={isDirectMode} tolgee={tolgee} />;
     }
 
+    //Temp disable preload resource cause can not load dashboard android phone
     return (
         <>
-            <PreloadResources setIsDonePreloadResource={setIsDonePreloadResource} />
+            {/* <PreloadResources setIsDonePreloadResource={setIsDonePreloadResource} /> */}
             <SplashScreen />
         </>
     );
