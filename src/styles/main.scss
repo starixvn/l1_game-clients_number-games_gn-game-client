@@ -97,7 +97,7 @@ html {
 // To dock the footer
 html,
 body {
-    height: 100vh;
+    height: 100%;
     scrollbar-width: none;
 }
 
@@ -106,8 +106,7 @@ body {
 }
 // end
 
-
-.galaxy-bg{
+.galaxy-bg {
     background: var(--page-background-color) var(--background-image) no-repeat !important;
 }
 
