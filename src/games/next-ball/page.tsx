@@ -88,7 +88,6 @@ class NextBall extends GameBase<GameBaseProps> {
         const { statisticGroup } = this.state;
         const locale = tolgee.getLanguage() ?? "en";
         const classNameIndo = locale === "id" ? Styles["statistic-indo"] : "";
-        //console.log(classNameIndo);
 
         const calculators = {
             [NextBallBetOptions.OVER]: (countResult: object, total: number) =>

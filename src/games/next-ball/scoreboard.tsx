@@ -42,7 +42,7 @@ export class Scoreboard extends Component<ScoreboardComponentProps> {
         const { roundHistory, isShowBlink } = this.props;
         const rounds = isShowBlink ? [{}, ...roundHistory] : roundHistory;
         const locale = tolgee.getLanguage() ?? "en";
-        const classNameIndo = locale === "id" ? Styles["bead-road-indo"] : "";
+        const classNameIndo = locale === "id" && this.props.isOddEven ? Styles["bead-road-indo"] : "";
 
         return (
             <div className={Styles["scoreboard-full"]} id="bead-road">
