@@ -38,18 +38,20 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: var(--bgBetChoice);
+        background-image: var(--bgBetChoice);
+        background-image: image-set(var(--bgBetChoice) 1x, var(--bgBetChoice-2x) 2x);
         z-index: 0;
     }
 
     .btn-ripple {
+        border-radius: var(--border-radius);
         z-index: 1;
     }
 
     .disable-layer {
         position: absolute;
         top: 0;
-        background: url("/static/images/next-ball/lockbet.svg") no-repeat;
+        background: url("/static/images/next-ball/lockbet.png") no-repeat;
         width: 17.7rem;
         height: 9.6rem;
         opacity: 0;
@@ -57,38 +59,40 @@
     }
 }
 
-.over {
+.over,
+.odd {
     @extend %main-option;
     --color: #98cdff;
-    --bgBetChoice: url("/static/images/next-ball/bg-blue.svg") no-repeat;
-    --borderTopLeft: 3.3rem;
-    --borderTopRight: 1rem;
-    --borderBottomLeft: 1rem;
-    --borderBottomRight: 1rem;
+    --bgBetChoice: url("/static/images/next-ball/1x/bg-blue.png");
+    --bgBetChoice-2x: url("/static/images/next-ball/2x/bg-blue.png");
+}
 
-    .btn-ripple {
-        border-radius: 3rem 1.2rem 1.2rem 1.2rem;
-    }
+.under,
+.even {
+    @extend %main-option;
+    --color: #f9bcb9;
+    --bgBetChoice: url("/static/images/next-ball/1x/bg-red.png");
+    --bgBetChoice-2x: url("/static/images/next-ball/2x/bg-red.png");
+}
+
+.over {
+    --border-radius: 3rem 1.2rem 1.2rem 1.2rem;
+    --borderTopLeft: 3rem;
+    --borderTopRight: 1.2rem;
+    --borderBottomLeft: 1.2rem;
+    --borderBottomRight: 1.2rem;
 }
 
 .under {
-    @extend %main-option;
-    --color: #f9bcb9;
-    --bgBetChoice: url("/static/images/next-ball/bg-red.svg") no-repeat;
+    --border-radius: 1.2rem 3rem 1.2rem 1.2rem;
 
     .disable-layer {
         transform: scaleX(-1);
     }
-
-    .btn-ripple {
-        border-radius: 1.2rem 3rem 1.2rem 1.2rem;
-    }
 }
 
 .odd {
-    @extend %main-option;
-    --color: #98cdff;
-    --bgBetChoice: url("/static/images/next-ball/bg-blue.svg") no-repeat;
+    --border-radius: 1.2rem 1.2rem 1.2rem 3rem;
 
     &::before {
         transform: scaleY(-1);
@@ -97,17 +101,10 @@
     .disable-layer {
         transform: scaleY(-1);
     }
-
-    .btn-ripple {
-        border-radius: 1.2rem 1.2rem 1.2rem 3rem;
-    }
 }
 
 .even {
-    @extend %main-option;
-
-    --color: #f9bcb9;
-    --bgBetChoice: url("/static/images/next-ball/bg-red.svg") no-repeat;
+    --border-radius: 1.2rem 1.2rem 3rem 1.2rem;
 
     &::before {
         transform: scaleY(-1);
@@ -115,10 +112,6 @@
 
     .disable-layer {
         transform: scale(-1);
-    }
-
-    .btn-ripple {
-        border-radius: 1.2rem 1.2rem 3rem 1.2rem;
     }
 }
 
@@ -193,7 +186,11 @@
     position: absolute;
     left: 0;
     top: 0.1rem;
-    background: url("/static/images/next-ball/winning-previous.svg") no-repeat center center;
+    background-image: url("/static/images/next-ball/winning-previous.png");
+    background-image: image-set(
+        url("/static/images/next-ball/1x/winning-previous.png") 1x,
+        url("/static/images/next-ball/2x/winning-previous.png") 2x
+    );
 }
 
 .highlight-prev-result-under {
