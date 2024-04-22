@@ -66,8 +66,8 @@ export const Banner: React.FC<{ openGame: Function; lobbyConfigs: ILobbyConfigs 
 
     const getImageValidPath = async (banner: IBanner): Promise<string> => {
         const paths = [
-            `${DEFAULT_BANNER_PATH}/${banner.gameId}/${banner.gameId}_${locale}.webp`,
-            `${DEFAULT_BANNER_PATH}/${banner.gameId}/${banner.gameId}_en.webp`,
+            `${DEFAULT_BANNER_PATH}/${banner.gameId}/${banner.gameId}_${locale}.gif`,
+            `${DEFAULT_BANNER_PATH}/${banner.gameId}/${banner.gameId}_en.gif`,
         ];
         let validPath = "";
 
@@ -102,9 +102,5 @@ export const Banner: React.FC<{ openGame: Function; lobbyConfigs: ILobbyConfigs 
         return <></>;
     }
 
-    return (
-        <>
-            <BannerSwiper banners={banners} openGame={openGame} />
-        </>
-    );
+    return <BannerSwiper banners={banners} openGame={openGame} />;
 };
