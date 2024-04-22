@@ -34,7 +34,7 @@ export const calculatePercent = (
 
 const StatisticItem: React.FC<Props> = (props) => {
     return (
-        <div className={Styles["statistic-group"]}>
+        <div className={`${Styles["statistic-group"]} ${props.className}`}>
             {props.children}
             <span className={Styles["number"]}>{props.value}</span>
         </div>
@@ -47,6 +47,7 @@ export const PercentageStatistic: React.FC<PercentageStatisticProps> = (props: P
     const statisticResult = calculatePercent(statisticRuleEntries, counted, roundHistory.length);
     const { tolgeeNamespace } = useGameContext();
     const { t } = useTranslator([tolgeeNamespace]);
+    console.log(props);
 
     if (props.group) {
         const choices = Object.keys(statisticResult);
@@ -58,7 +59,9 @@ export const PercentageStatistic: React.FC<PercentageStatisticProps> = (props: P
             groups.push(
                 choicesInGroup.map((choice) => (
                     <StatisticItem key={choice} value={`${statisticResult[choice]}%`}>
-                        <span className={`${Styles[choice]} ${Styles["statistic-choice-icon"]}`}>{t(`beadboard_${choice}`)}</span>
+                        <span className={`${Styles[choice]} ${Styles["statistic-choice-icon"]} ${props.className}`}>
+                            {t(`beadboard_${choice}`)}
+                        </span>
                     </StatisticItem>
                 ))
             );
@@ -81,7 +84,7 @@ export const PercentageStatistic: React.FC<PercentageStatisticProps> = (props: P
         return (
             <div className={`${Styles["statistic-container"]} flex`} id="bar-statistic">
                 {Object.keys(statisticResult).map((choice) => (
-                    <StatisticItem key={choice} value={`${statisticResult[choice]}%`}>
+                    <StatisticItem key={choice} value={`${statisticResult[choice]}%`} className={props.className}>
                         <span className={`${Styles[choice]} ${Styles["statistic-choice-icon"]}`}>{t(`beadboard_${choice}`)}</span>
                     </StatisticItem>
                 ))}

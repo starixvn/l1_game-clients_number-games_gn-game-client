@@ -3,6 +3,7 @@ import { Round } from "../../game-base/type";
 export type Props = {
     children: React.ReactNode;
     value: string | number;
+    className?: string;
 };
 
 export type PercentageStatisticProps = {
@@ -12,4 +13,5 @@ export type PercentageStatisticProps = {
     group?: number;
     selectedGroup?: number;
     onSelectGroup?: Function;
+    className?: string;
 };

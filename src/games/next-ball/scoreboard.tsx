@@ -5,6 +5,7 @@ import { BeadRoadElement, BigRoadElement } from "../../components/game-component
 import { NextBallBigRoadConverter, createBeadRoadElement, createBigRoadElement } from "./scoreboard-elements";
 import Styles from "./scoreboard.module.scss";
 import { NextBallResult, NextBallSettlementResult } from "./types";
+import { tolgee } from "../../_shared/tolgee";
 
 export type ScoreboardComponentProps = {
     roundHistory: Round<NextBallResult, NextBallSettlementResult>[];
@@ -40,6 +41,8 @@ export class Scoreboard extends Component<ScoreboardComponentProps> {
     renderBeadRoad(): ReactNode {
         const { roundHistory, isShowBlink } = this.props;
         const rounds = isShowBlink ? [{}, ...roundHistory] : roundHistory;
+        const locale = tolgee.getLanguage() ?? "en";
+        const classNameIndo = locale === "id" ? Styles["bead-road-indo"] : "";
 
         return (
             <div className={Styles["scoreboard-full"]} id="bead-road">
@@ -52,6 +55,7 @@ export class Scoreboard extends Component<ScoreboardComponentProps> {
                             arrange: BeadRoadElement.arrange,
                             column: 18,
                             row: 6,
+                            elementClassName: classNameIndo,
                         },
                     ]}
                 />

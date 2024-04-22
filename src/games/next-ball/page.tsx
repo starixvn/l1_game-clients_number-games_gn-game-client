@@ -19,6 +19,8 @@ import { NextGameRoundDataHandler } from "./next-ball-game-round-data-handler";
 import NextBallResultBlock from "./next-ball-result-block";
 import Scoreboard from "./scoreboard";
 import { NextBallResult, NextBallSettlementResult } from "./types";
+import { tolgee } from "../../_shared/tolgee";
+import Styles from "./next-ball.module.scss";
 
 const DrawIdBlock = dynamic(() => import("../../components/game-components/draw-id"));
 const NextBallBettingBlock = dynamic(() => import("./next-ball-betting-block"));
@@ -84,6 +86,10 @@ class NextBall extends GameBase<GameBaseProps> {
     renderStatistic() {
         const { roundHistory } = this.props.gameStateContextModel;
         const { statisticGroup } = this.state;
+        const locale = tolgee.getLanguage() ?? "en";
+        const classNameIndo = locale === "id" ? Styles["statistic-indo"] : "";
+        //console.log(classNameIndo);
+
         const calculators = {
             [NextBallBetOptions.OVER]: (countResult: object, total: number) =>
                 Math.round((countResult[NextBallBetOptions.OVER] * 100) / total) || 0,
@@ -102,6 +108,7 @@ class NextBall extends GameBase<GameBaseProps> {
                 group={2}
                 selectedGroup={statisticGroup}
                 onSelectGroup={(index: number) => this.setState({ statisticGroup: index })}
+                className={classNameIndo}
             />
         );
     }
