@@ -58,7 +58,9 @@
     --color: #98cdff;
 
     @extend %main-option;
-    background: url("/static/images/bac-number/bg-player.svg") no-repeat;
+    background-image: url("/static/images/bac-number/1x/bg-player.png");
+    background-image: image-set(url("/static/images/bac-number/1x/bg-player.png") 1x, url("/static/images/bac-number/2x/bg-player.png") 2x);
+
     border-bottom-left-radius: 6.6rem;
     border-top-left-radius: 3.8rem;
     padding-left: 1.2rem;
@@ -115,7 +117,9 @@
     --color: #f9bcb9;
 
     @extend %main-option;
-    background: url("/static/images/bac-number/bg-banker.svg") no-repeat;
+    background-image: url("/static/images/bac-number/1x/bg-banker.png");
+    background-image: image-set(url("/static/images/bac-number/1x/bg-banker.png") 1x, url("/static/images/bac-number/2x/bg-banker.png") 2x);
+
     border-bottom-right-radius: 6.6rem;
     border-top-right-radius: 3.8rem;
     padding-right: 1.2rem;
@@ -176,7 +180,9 @@
 
 .tie {
     --color: #2fc856;
-    background: url("/static/images/bac-number/bg-tie.svg") no-repeat;
+
+    background-image: url("/static/images/bac-number/1x/bg-tie.png");
+    background-image: image-set(url("/static/images/bac-number/1x/bg-tie.png") 1x, url("/static/images/bac-number/2x/bg-tie.png") 2x);
     width: 9.5rem;
     height: 17.2rem;
     background-size: 9.5rem 17.2rem;
@@ -273,7 +279,11 @@
 }
 
 .highlight-prev-result-player {
-    background: url("/static/images/bac-number/winning-previous-player.svg") no-repeat center center;
+    background-image: url("/static/images/bac-number/1x/winning-previous-player.png");
+    background-image: image-set(
+        url("/static/images/bac-number/1x/winning-previous-player.png") 1x,
+        url("/static/images/bac-number/2x/winning-previous-player.png") 2x
+    );
     height: 18.6rem;
     width: 17.8rem;
     position: absolute;
@@ -286,7 +296,12 @@
 }
 
 .highlight-prev-result-tie {
-    background: url("/static/images/bac-number/winning-previous-tie.svg") no-repeat center center;
+    background-image: url("/static/images/bac-number/1x/winning-previous-tie.png");
+    background-image: image-set(
+        url("/static/images/bac-number/1x/winning-previous-tie.png") 1x,
+        url("/static/images/bac-number/2x/winning-previous-tie.png") 2x
+    );
+
     width: 9.7rem;
     height: 17.4rem;
     position: absolute;
