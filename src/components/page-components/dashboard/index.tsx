@@ -449,7 +449,17 @@ class Dashboard extends React.PureComponent<Props, State> {
     renderLobby() {
         const { lobbyConfigs } = this.state;
         updateURLContext({ backToLobby: true });
-        return <Lobby openGame={(gameId) => this.openGameFromLobby(gameId)} lobbyConfigs={lobbyConfigs} />;
+        const lobbyConnectionContextValue = {
+            socket: this.lobbyConnectionHandler.getSocket(),
+            gameTransmitters: this.lobbyConnectionHandler.getTransmitters(),
+            removeGameTransmitter: this.removeGameTransmitter,
+            reconnectGameTransmitter: this.reconnectGameTransmitter,
+        };
+        return (
+            <LobbyConnectionContextProvider value={lobbyConnectionContextValue}>
+                <Lobby openGame={(gameId) => this.openGameFromLobby(gameId)} lobbyConfigs={lobbyConfigs} />
+            </LobbyConnectionContextProvider>
+        );
     }
 
     removeGameTransmitter(gameId: number) {
@@ -479,12 +489,6 @@ class Dashboard extends React.PureComponent<Props, State> {
         const allowSwipeGameOndDesktop = !this.props.directMode && !isMobileOnly && isRenderGames;
 
         console.log("renderDashBoard", { isRenderGames });
-        const lobbyConnectionContextValue = {
-            socket: this.lobbyConnectionHandler.getSocket(),
-            gameTransmitters: this.lobbyConnectionHandler.getTransmitters(),
-            removeGameTransmitter: this.removeGameTransmitter,
-            reconnectGameTransmitter: this.reconnectGameTransmitter,
-        };
 
         const changeGameStyle =
             isChangedGame && allowSwipeGameOndDesktop ? (isChangePrevGame ? Styles["slide-left"] : Styles["slide-right"]) : "";
@@ -492,51 +496,49 @@ class Dashboard extends React.PureComponent<Props, State> {
         return (
             <PlayerContextProvider value={authContextValue}>
                 <SettingContextProvider>
-                    <LobbyConnectionContextProvider value={lobbyConnectionContextValue}>
-                        {allowSwipeGameOndDesktop && (
-                            <button className={`${Styles["prev-button"]}`} onClick={() => this.swipeableHandler(true, openGameId)}>
-                                <span className={`icon-back ${Styles["icon"]}`}></span>
-                            </button>
+                    {allowSwipeGameOndDesktop && (
+                        <button className={`${Styles["prev-button"]}`} onClick={() => this.swipeableHandler(true, openGameId)}>
+                            <span className={`icon-back ${Styles["icon"]}`}></span>
+                        </button>
+                    )}
+                    <div
+                        className={`${Styles["dashboard"]} ${changeGameStyle} ${!isRenderGames ? "no-scroll" : ""} ${
+                            isMobileOnly ? Styles["hidden-scrollbar"] : {}
+                        }`}
+                        id={"dashboard"}
+                    >
+                        <Header headerRef={this.headerRef} openingGameId={openGameId} isRenderGames={isRenderGames} />
+
+                        {isRenderGames ? this.renderGames() : this.renderLobby()}
+
+                        {!isRenderGames && <Footer />}
+                        {this.state.isUserGesture != null ? <MusicPlayer isUserGesture={this.state.isUserGesture} /> : <></>}
+
+                        {isShowErrorModal && (
+                            <div className={Styles["container-modal"]}>
+                                <div className={`${Styles["bg-opacity"]} ${isBlockUI ? Styles["block-ui-backdrop"] : ""}`}></div>
+                                <BaseDialog
+                                    type={ModalType.Center}
+                                    isOpen={isShowErrorModal}
+                                    onCloseModal={this.closeDialog}
+                                    isBlockUI={isBlockUI}
+                                >
+                                    <div className={`modal-center red-color ${isBlockUI ? Styles["block-ui-message"] : ""}`}>
+                                        {!isBlockUI && <div className={`icon-close modal-icon-close`} onClick={this.closeDialog}></div>}
+                                        <ErrorApiText
+                                            errorMessage={this.state.apiError?.message}
+                                            errorCode={this.state.apiError?.errorCode}
+                                        />
+                                    </div>
+                                </BaseDialog>
+                            </div>
                         )}
-                        <div
-                            className={`${Styles["dashboard"]} ${changeGameStyle} ${!isRenderGames ? "no-scroll" : ""} ${
-                                isMobileOnly ? Styles["hidden-scrollbar"] : {}
-                            }`}
-                            id={"dashboard"}
-                        >
-                            <Header headerRef={this.headerRef} openingGameId={openGameId} isRenderGames={isRenderGames} />
-
-                            {isRenderGames ? this.renderGames() : this.renderLobby()}
-
-                            {!isRenderGames && <Footer />}
-                            {this.state.isUserGesture != null ? <MusicPlayer isUserGesture={this.state.isUserGesture} /> : <></>}
-
-                            {isShowErrorModal && (
-                                <div className={Styles["container-modal"]}>
-                                    <div className={`${Styles["bg-opacity"]} ${isBlockUI ? Styles["block-ui-backdrop"] : ""}`}></div>
-                                    <BaseDialog
-                                        type={ModalType.Center}
-                                        isOpen={isShowErrorModal}
-                                        onCloseModal={this.closeDialog}
-                                        isBlockUI={isBlockUI}
-                                    >
-                                        <div className={`modal-center red-color ${isBlockUI ? Styles["block-ui-message"] : ""}`}>
-                                            {!isBlockUI && <div className={`icon-close modal-icon-close`} onClick={this.closeDialog}></div>}
-                                            <ErrorApiText
-                                                errorMessage={this.state.apiError?.message}
-                                                errorCode={this.state.apiError?.errorCode}
-                                            />
-                                        </div>
-                                    </BaseDialog>
-                                </div>
-                            )}
-                        </div>
-                        {allowSwipeGameOndDesktop && (
-                            <button className={`${Styles["next-button"]}`} onClick={() => this.swipeableHandler(false, openGameId)}>
-                                <span className={`icon-back ${Styles["icon"]}`}></span>
-                            </button>
-                        )}
-                    </LobbyConnectionContextProvider>
+                    </div>
+                    {allowSwipeGameOndDesktop && (
+                        <button className={`${Styles["next-button"]}`} onClick={() => this.swipeableHandler(false, openGameId)}>
+                            <span className={`icon-back ${Styles["icon"]}`}></span>
+                        </button>
+                    )}
                 </SettingContextProvider>
             </PlayerContextProvider>
         );

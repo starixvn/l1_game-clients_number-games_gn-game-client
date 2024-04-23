@@ -33,7 +33,9 @@ export const LobbyMessageEvents = {
 export class LobbySocketConnection {
     socket: Socket;
     gameTransmitters: Record<number, LobbyGameTransmitter> = {};
+    offerGameIds: number[] = [];
     initLobbySocket(session: any, offerGameIds: number[]) {
+        this.offerGameIds = offerGameIds;
         const { proxy, enableMsgpackParser, socketGatewayPath } = getAppSettings();
         const socketUri = buildUrl();
         const socketOption = {
@@ -47,7 +49,7 @@ export class LobbySocketConnection {
             const socket = io(socketUri, socketOption);
             if (socket) {
                 socket.on(messageEventType.SOCKET_CONNECTED, () => {
-                    offerGameIds?.forEach((gameId) => {
+                    this.offerGameIds?.forEach((gameId) => {
                         this.signInGame(session, gameId);
                         this.initGameTransmitter(gameId);
                     });
@@ -72,6 +74,7 @@ export class LobbySocketConnection {
         const gameSetting = gameSettings[gameId];
         if (gameSetting) {
             this.gameTransmitters[gameId] = initLobbyGameTransmitter(this.socket, gameSetting.gameName);
+            !this.offerGameIds.includes(gameId) && this.offerGameIds.push(gameId);
             this.registerGameEvents(gameId);
         }
         return this.gameTransmitters[gameId];
@@ -140,6 +143,7 @@ export class LobbySocketConnection {
         const transmitter = this.gameTransmitters[gameId];
         transmitter?.listenerIds?.forEach((id) => transmitter.unsubscribe(id));
         this.gameTransmitters[gameId] = null;
+        this.offerGameIds = this.offerGameIds.filter((id) => id !== gameId);
     }
 
     getSocket() {
