@@ -163,6 +163,8 @@ export const Games: React.FC<Props> = ({ setApiErrorMessage, userStakeLevel, upd
                 // width={250}
                 autoHeight={true}
                 initialSlide={gameIndex}
+                noSwiping={true}
+                noSwipingClass={'swiper-no-swiping'}
             >
                 {renderSwiperItems()}
             </Swiper>

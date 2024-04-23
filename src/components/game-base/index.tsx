@@ -582,9 +582,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     getRenderTemplate() {
         return (
             <>
-                {/* <div ref={this.props.swipeableRef}>
-                   
-                </div> */}
                 {this.renderHeaderBlock()}
                 {this.renderResultBlock()}
                 {this.renderBettingBlock()}
@@ -596,8 +593,10 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 {this.renderBetHistoryModal()}
                 {this.renderNewRoundTransition()}
                 {this.renderNotice()}
+                <div className="swiper-no-swiping"> {this.renderSlidingChips()}</div>
                 {this.renderConfirmDialog()}
                 {this.renderConfirmBet()}
+                <div className="swiper-no-swiping">  {this.renderScoreboards()}</div>
             </>
         );
     }
