@@ -116,3 +116,5 @@ export const GameIds = {
     LuckyThree: 1114,
     SicBalls: 1116,
 };
+
+export const SwiperNoSwiping ='swiper-no-swiping';

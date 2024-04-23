@@ -46,6 +46,7 @@ import { GameRoundDataHandler } from "./handlers/game-round-data-handler";
 import { GameSoundHandler } from "./handlers/game-sound-handler";
 import { IGameStateHandler } from "./handlers/game-state-handler";
 import { GameBaseProps, PFClientSeedSetting, RoundState } from "./type";
+import { SwiperNoSwiping } from "../../_shared/constants";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
     protected socket: Socket;
@@ -593,10 +594,10 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 {this.renderBetHistoryModal()}
                 {this.renderNewRoundTransition()}
                 {this.renderNotice()}
-                <div className="swiper-no-swiping"> {this.renderSlidingChips()}</div>
+                <div className={SwiperNoSwiping}> {this.renderSlidingChips()}</div>
                 {this.renderConfirmDialog()}
                 {this.renderConfirmBet()}
-                <div className="swiper-no-swiping">  {this.renderScoreboards()}</div>
+                <div className={SwiperNoSwiping}>  {this.renderScoreboards()}</div>
             </>
         );
     }

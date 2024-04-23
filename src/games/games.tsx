@@ -2,10 +2,9 @@ import { useTheme } from "next-themes";
 import dynamic from "next/dynamic";
 import React, { useContext, useEffect } from "react";
 import { isIOS, isMobileOnly } from "react-device-detect";
-import { useSwipeable } from "react-swipeable";
 
 import { getAppSettings } from "../_shared/app-settings";
-import { GameIds } from "../_shared/constants";
+import { GameIds, SwiperNoSwiping } from "../_shared/constants";
 import { AnalyticsHelper, TrackingAction, TrackingFunction } from "../_shared/helpers";
 import { SettingEventActionType, SystemContextProvider, URLContext, usePlayerContext, useSettingDispatch } from "../_shared/react-contexts";
 import {
@@ -164,7 +163,7 @@ export const Games: React.FC<Props> = ({ setApiErrorMessage, userStakeLevel, upd
                 autoHeight={true}
                 initialSlide={gameIndex}
                 noSwiping={true}
-                noSwipingClass={'swiper-no-swiping'}
+                noSwipingClass={SwiperNoSwiping}
             >
                 {renderSwiperItems()}
             </Swiper>
