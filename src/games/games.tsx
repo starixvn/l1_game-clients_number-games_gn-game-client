@@ -110,7 +110,7 @@ export const Games: React.FC<Props> = ({ setApiErrorMessage, userStakeLevel, upd
 
                     return (
                         <SwiperSlide
-                            style={{ height: "2000px" }}
+                            style={{ height: "auto" }}
                             key={swipeItemId}
                             id={swipeItemId}
                             onChange={() => {
@@ -133,10 +133,7 @@ export const Games: React.FC<Props> = ({ setApiErrorMessage, userStakeLevel, upd
                 spaceBetween={50}
                 slidesPerView={1}
                 loop={true}
-                // onSlideChange={(swiper) => console.log("slide change", swiper.realIndex)}
-                // onSwiper={(swiper) => console.log(swiper)}
                 className="mySwiper-test"
-                // width={250}
                 autoHeight={true}
                 initialSlide={gameIndex}
                 noSwiping={true}
