@@ -294,10 +294,14 @@ img {
 
 .fade-out {
     opacity: 1;
-    animation: fade-in 0.3s ease-in forwards;
+    animation: fade-out 0.3s ease-in forwards;
 }
 
 @keyframes fade-out {
+    from {
+        opacity: 1;
+    }
+
     to {
         opacity: 0;
     }

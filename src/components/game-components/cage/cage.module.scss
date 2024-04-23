@@ -80,13 +80,6 @@
     }
 }
 
-.idle-balls {
-    width: var(--cage-width);
-    height: var(--cage-width);
-    background: url("/static/images/cage/idle-balls.webp") no-repeat;
-    opacity: 0.8;
-}
-
 .cage-cover {
     @extend %result;
     background-image: url("/static/images/cage/cage-cover.webp");

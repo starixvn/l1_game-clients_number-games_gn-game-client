@@ -3,6 +3,7 @@ import { FC } from "react";
 import { GameStateContextModel } from "../../_shared/react-contexts/game-state-context/game-state-context-model";
 import { isHighLightWinningResult } from "../../_shared/react-hooks/use-high-light";
 import useResult from "../../_shared/react-hooks/use-result";
+import { RoundState } from "../../components/game-base/type";
 import Cage, { CageColor, CagePosition } from "../../components/game-components/cage";
 import { BacBallResultSlotContainer } from "./bac-ball-result-slot-container";
 import Style from "./bac-ball.module.scss";
@@ -29,6 +30,10 @@ export const BacBallResultBlock: FC<BacBallResultBlockProps> = (props: BacBallRe
     });
 
     const currentResult = useResult<BacBallResult>({ result, roundState, roundHistory });
+
+    if (roundState === RoundState.SwitchRound) {
+        return <></>;
+    }
 
     return (
         <div className={Style["result-container"]}>
