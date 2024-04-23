@@ -21,6 +21,7 @@ import PreloadImages from "../components/page-components/preload-images";
 import { getChipSettings } from "../services/user-setting-service";
 import styles from "./games.module.scss";
 import { Props } from "./type";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 const BacBall = dynamic(() => import("./bac-ball"));
 const NextBall = dynamic(() => import("./next-ball/page"));
@@ -30,20 +31,13 @@ const SwitchGamesGuide = dynamic(() => import("../components/page-components/swi
 
 const swipeDuration = 1500;
 
-export const Games: React.FC<Props> = ({
-    setApiErrorMessage,
-    userStakeLevel,
-    updateUserStakeLevel,
-    openGameId,
-    swipeableHandler,
-    directMode,
-}) => {
+export const Games: React.FC<Props> = ({ setApiErrorMessage, userStakeLevel, updateUserStakeLevel, openGameId, directMode }) => {
     const { isDirectMode } = useContext(URLContext);
     const { theme } = useTheme();
     const locale = tolgee.getLanguage();
     const { session } = usePlayerContext();
     const settingDispatch = useSettingDispatch();
-    const swipeableRef = React.useRef(null);
+    //const swipeableRef = React.useRef(null);
     console.log("openGameId", openGameId);
 
     useEffect(() => {
@@ -58,29 +52,29 @@ export const Games: React.FC<Props> = ({
         })();
     }, []);
 
-    const onSwipeHandler = (isRightSwipeable: boolean) => {
-        swipeableHandler(isRightSwipeable, openGameId);
+    // const onSwipeHandler = (isRightSwipeable: boolean) => {
+    //     swipeableHandler(isRightSwipeable, openGameId);
 
-        AnalyticsHelper.trackFunction({
-            function: TrackingFunction.SwitchGame,
-            action: isRightSwipeable ? TrackingAction.SwipeRight : TrackingAction.SwipeLeft,
-        });
-    };
+    //     AnalyticsHelper.trackFunction({
+    //         function: TrackingFunction.SwitchGame,
+    //         action: isRightSwipeable ? TrackingAction.SwipeRight : TrackingAction.SwipeLeft,
+    //     });
+    // };
 
-    const mobileSwipeableHandlers = useSwipeable({
-        onSwipedRight: () => onSwipeHandler(true),
-        onSwipedLeft: () => onSwipeHandler(false),
-        swipeDuration: swipeDuration,
-        trackMouse: true,
-        preventScrollOnSwipe: true,
-    });
+    // const mobileSwipeableHandlers = useSwipeable({
+    //     onSwipedRight: () => onSwipeHandler(true),
+    //     onSwipedLeft: () => onSwipeHandler(false),
+    //     swipeDuration: swipeDuration,
+    //     trackMouse: true,
+    //     preventScrollOnSwipe: true,
+    // });
 
-    const swipeableRefPassthrough = (el: HTMLDivElement) => {
-        if (isMobileOnly && !directMode) {
-            mobileSwipeableHandlers.ref(el);
-            swipeableRef.current = el;
-        }
-    };
+    // const swipeableRefPassthrough = (el: HTMLDivElement) => {
+    //     if (isMobileOnly && !directMode) {
+    //         mobileSwipeableHandlers.ref(el);
+    //         //swipeableRef.current = el;
+    //     }
+    // };
 
     const gameSound = {
         playPlaceBetSound: usePlaceBetSound(),
@@ -92,6 +86,7 @@ export const Games: React.FC<Props> = ({
 
     const getGameComponentById = (gameId: number) => {
         const { gameSettings } = getAppSettings();
+        console.log("render " + gameId);
 
         const gameProps = {
             ...gameSettings[gameId],
@@ -100,7 +95,6 @@ export const Games: React.FC<Props> = ({
             theme,
             userStakeLevel,
             updateUserStakeLevel,
-            swipeableRef: swipeableRefPassthrough,
         };
 
         switch (gameId) {
@@ -117,6 +111,63 @@ export const Games: React.FC<Props> = ({
         }
     };
 
+    const swiperSlideChild = ({ isActive, gameId }) => {
+        console.log({ isActive, gameId });
+
+        if (!isActive) {
+            return <div style={{ color: "white" }}>skeleton-game-{gameId}</div>;
+        }
+
+        return <>{getGameComponentById(parseInt(gameId))}</>;
+    };
+
+    const renderSwiperItems = () => {
+        const { gameSettings } = getAppSettings();
+        console.log(gameSettings);
+
+        return (
+            <div>
+                {Object.entries(gameSettings).map(([gameId, gameProps]) => {
+                    console.log(`render SwiperSlide-${gameId}`);
+                    const swipeItemId = `SwiperSlide-${gameId}`;
+
+                    return (
+                        <SwiperSlide
+                            style={{ height: "2000px" }}
+                            key={swipeItemId}
+                            id={swipeItemId}
+                            onChange={() => {
+                                console.log(`SwiperSlide ${swipeItemId} changed`);
+                            }}
+                        >
+                            {({ isActive }) => swiperSlideChild({ isActive, gameId })}
+                        </SwiperSlide>
+                    );
+                })}
+            </div>
+        );
+    };
+
+    const renderSwiper = (openGameId) => {
+        const gameIndex = (openGameId % 1000) - 1;
+        console.log(`init game ${gameIndex}`);
+        return (
+            <Swiper
+                spaceBetween={50}
+                slidesPerView={1}
+                loop={true}
+                // onSlideChange={(swiper) => console.log("slide change", swiper.realIndex)}
+                // onSwiper={(swiper) => console.log(swiper)}
+                className="mySwiper-test"
+                // width={250}
+                autoHeight={true}
+                initialSlide={gameIndex}
+            >
+                {renderSwiperItems()}
+            </Swiper>
+        );
+    };
+
     return (
         <div className={`game-container ${styles["game-wrapper"]} ${styles["open-chips"]}`}>
             <SystemContextProvider>
@@ -125,7 +176,8 @@ export const Games: React.FC<Props> = ({
                     <BackgroundGalaxy gameId={openGameId} />
                     {isDirectMode && <ToolbarGuide />}
 
-                    {getGameComponentById(openGameId)}
+                    {renderSwiper(openGameId)}
+                    {/* {getGameComponentById(openGameId)} */}
 
                     {!isDirectMode && isMobileOnly && <SwitchGamesGuide />}
                 </div>

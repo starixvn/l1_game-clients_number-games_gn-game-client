@@ -100,7 +100,7 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.removeGameTransmitter = this.removeGameTransmitter.bind(this);
         this.reconnectGameTransmitter = this.reconnectGameTransmitter.bind(this);
         this.updateAvatar = this.updateAvatar.bind(this);
-        this.swipeableHandler = this.swipeableHandler.bind(this);
+        // this.swipeableHandler = this.swipeableHandler.bind(this);
         this.changeOrientation = this.changeOrientation.bind(this);
 
         const buildId = process.env.buildVersion;
@@ -400,23 +400,23 @@ class Dashboard extends React.PureComponent<Props, State> {
         return lobby?.lobbyConfigs;
     }
 
-    swipeableHandler = (isPrevGame: boolean, currentGameId: number) => {
-        const { lobbyConfigs, authorizeInfo } = this.state;
-        const offerGamesIds = getOfferGamesIds(authorizeInfo);
-        const lobbyGamesIds = getLobbyGameIds(lobbyConfigs)?.filter((gameId) => offerGamesIds.includes(gameId));
+    // swipeableHandler = (isPrevGame: boolean, currentGameId: number) => {
+    //     const { lobbyConfigs, authorizeInfo } = this.state;
+    //     const offerGamesIds = getOfferGamesIds(authorizeInfo);
+    //     const lobbyGamesIds = getLobbyGameIds(lobbyConfigs)?.filter((gameId) => offerGamesIds.includes(gameId));
 
-        this.openGame(getSwipeableGameId(isPrevGame, currentGameId, lobbyGamesIds));
+    //     this.openGame(getSwipeableGameId(isPrevGame, currentGameId, lobbyGamesIds));
 
-        this.setState({ isChangedGame: true });
+    //     this.setState({ isChangedGame: true });
 
-        this.gameStyleInterval && clearInterval(this.gameStyleInterval);
+    //     this.gameStyleInterval && clearInterval(this.gameStyleInterval);
 
-        this.gameStyleInterval = setInterval(() => {
-            this.setState({ isChangedGame: false });
-        }, 700);
-        window.scrollTo(0, 0);
-        this.setState({ isChangePrevGame: isPrevGame });
-    };
+    //     this.gameStyleInterval = setInterval(() => {
+    //         this.setState({ isChangedGame: false });
+    //     }, 700);
+    //     window.scrollTo(0, 0);
+    //     this.setState({ isChangePrevGame: isPrevGame });
+    // };
 
     renderGames() {
         const { userStakeLevel, openGameName } = this.state;
@@ -429,7 +429,6 @@ class Dashboard extends React.PureComponent<Props, State> {
                 updateUserStakeLevel={this.handleUpdateUserStakeLevel}
                 openGameId={urlContext.gameId}
                 openGameName={openGameName}
-                swipeableHandler={this.swipeableHandler}
                 directMode={this.props.directMode}
             />
         );
@@ -497,7 +496,7 @@ class Dashboard extends React.PureComponent<Props, State> {
             <PlayerContextProvider value={authContextValue}>
                 <SettingContextProvider>
                     {allowSwipeGameOndDesktop && (
-                        <button className={`${Styles["prev-button"]}`} onClick={() => this.swipeableHandler(true, openGameId)}>
+                            <button className={`${Styles["prev-button"]}`}>
                             <span className={`icon-back ${Styles["icon"]}`}></span>
                         </button>
                     )}
@@ -535,7 +534,7 @@ class Dashboard extends React.PureComponent<Props, State> {
                         )}
                     </div>
                     {allowSwipeGameOndDesktop && (
-                        <button className={`${Styles["next-button"]}`} onClick={() => this.swipeableHandler(false, openGameId)}>
+                            <button className={`${Styles["next-button"]}`}>
                             <span className={`icon-back ${Styles["icon"]}`}></span>
                         </button>
                     )}

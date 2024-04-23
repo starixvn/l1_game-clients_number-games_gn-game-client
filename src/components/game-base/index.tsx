@@ -582,15 +582,14 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     getRenderTemplate() {
         return (
             <>
-                <div className="game-area" ref={this.props.swipeableRef}>
-                    <div>{this.renderHeaderBlock()}</div>
-                    <div>{this.renderResultBlock()}</div>
-                    <div>{this.renderBettingBlock()}</div>
-                    <div>{this.renderSlidingChips()}</div>
-                    <div>{this.renderStatistic()}</div>
+                {/* <div ref={this.props.swipeableRef}>
+                   
+                </div> */}
+                {this.renderHeaderBlock()}
+                {this.renderResultBlock()}
+                {this.renderBettingBlock()}
                     {this.renderScoreboards()}
                     <Footer />
-                </div>
                 {this.renderGameGuideModal()}
                 {this.renderMenuButtons()}
                 {this.renderPFSettingModal()}
