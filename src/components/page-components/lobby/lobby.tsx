@@ -6,6 +6,8 @@ import { ILobbyConfigs } from "../dashboard/type";
 import { Banner } from "./games/components/banner";
 import { LobbyLayout } from "./games/lobby-layout";
 import Styles from "./lobby.module.scss";
+import { GlobalMessageTransmitter } from "../../../_shared/helpers/message-transmitter/global-transmitter";
+import { useEffect } from "react";
 
 const Settings = dynamic(() => import("../settings"));
 const ChangeAvatar = dynamic(() => import("../header/change-avatar"));
@@ -18,6 +20,11 @@ type Props = {
 
 export const Lobby: React.FC<Props> = ({ openGame, lobbyConfigs }) => {
     AnalyticsHelper.trackLobby();
+
+    useEffect(() => {
+        GlobalMessageTransmitter.broadcast({ openingGameId: 0 });
+    }, []);
+
     return (
         <div className={Styles["lobby-container"]}>
             <div>

@@ -22,6 +22,8 @@ import { getChipSettings } from "../services/user-setting-service";
 import styles from "./games.module.scss";
 import { Props } from "./type";
 import { Swiper, SwiperSlide } from "swiper/react";
+import GameLoading from "../components/game-components/game-loading";
+import { GlobalMessageTransmitter } from "../_shared/helpers/message-transmitter/global-transmitter";
 
 const BacBall = dynamic(() => import("./bac-ball"));
 const NextBall = dynamic(() => import("./next-ball/page"));
@@ -29,9 +31,8 @@ const Footer = dynamic(() => import("../components/game-components/footer"));
 const ToolbarGuide = dynamic(() => import("../components/page-components/hide-toolbar-guide"));
 const SwitchGamesGuide = dynamic(() => import("../components/page-components/switch-games-guide"));
 
-const swipeDuration = 1500;
 
-export const Games: React.FC<Props> = ({ setApiErrorMessage, userStakeLevel, updateUserStakeLevel, openGameId, directMode }) => {
+export const Games: React.FC<Props> = ({ setApiErrorMessage, userStakeLevel, updateUserStakeLevel, openGameId, directMode, lobbyGamesIds }) => {
     const { isDirectMode } = useContext(URLContext);
     const { theme } = useTheme();
     const locale = tolgee.getLanguage();
@@ -76,6 +77,8 @@ export const Games: React.FC<Props> = ({ setApiErrorMessage, userStakeLevel, upd
     //     }
     // };
 
+
+
     const gameSound = {
         playPlaceBetSound: usePlaceBetSound(),
         startRoundSound: useStartRoundSound(),
@@ -112,22 +115,20 @@ export const Games: React.FC<Props> = ({ setApiErrorMessage, userStakeLevel, upd
     };
 
     const swiperSlideChild = ({ isActive, gameId }) => {
-        console.log({ isActive, gameId });
 
-        if (!isActive) {
-            return <div style={{ color: "white" }}>skeleton-game-{gameId}</div>;
+        if (isActive) {
+            console.log({ isActive, gameId });
+            GlobalMessageTransmitter.broadcast({ openingGameId: gameId });
+            return <>{getGameComponentById(parseInt(gameId))}</>;
         }
 
-        return <>{getGameComponentById(parseInt(gameId))}</>;
+        return <div className={styles["skeleton-game"]} ><GameLoading /></div>;
     };
 
     const renderSwiperItems = () => {
-        const { gameSettings } = getAppSettings();
-        console.log(gameSettings);
-
         return (
             <div>
-                {Object.entries(gameSettings).map(([gameId, gameProps]) => {
+                {lobbyGamesIds.map((gameId) => {
                     console.log(`render SwiperSlide-${gameId}`);
                     const swipeItemId = `SwiperSlide-${gameId}`;
 

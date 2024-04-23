@@ -8,4 +8,6 @@ export type Props = {
     openGameName: string;
     // swipeableHandler: Function;
     directMode: boolean;
+    lobbyGamesIds: Array<number>;
+    
 };

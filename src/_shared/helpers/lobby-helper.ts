@@ -19,29 +19,3 @@ export const getBannerIds = (lobbyConfigs: ILobbyConfigs) => {
 
     return banners?.map((banner) => banner.gameId) ?? [];
 };
-
-export const getSwipeableGameId = (isPrevGame: boolean, currentGameId: number, gameIds: number[]) => {
-    const gameSettings = getAppSettings().gameSettings;
-    const gameSettingValues = gameIds.map((gameId) => gameSettings[gameId]).filter((setting) => setting);
-
-    if (gameSettingValues.length > 0) {
-        const lastedGameIdIndex = gameSettingValues.length - 1;
-        const currentGameIdIndex = gameSettingValues.findIndex((gameSetting) => gameSetting.id === currentGameId);
-
-        if (currentGameIdIndex === -1) {
-            return gameSettingValues[0].id;
-        }
-
-        const nextOpenedGameIdIndex = isPrevGame
-            ? currentGameIdIndex === 0
-                ? lastedGameIdIndex
-                : currentGameIdIndex - 1
-            : currentGameIdIndex === lastedGameIdIndex
-            ? 0
-            : currentGameIdIndex + 1;
-
-        return gameSettingValues[nextOpenedGameIdIndex].id;
-    }
-
-    return 0;
-};

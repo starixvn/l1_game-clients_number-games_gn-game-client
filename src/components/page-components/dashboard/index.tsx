@@ -14,7 +14,6 @@ import {
     getLobbyGameIds,
     GetLocalizedErrorMessage,
     getOfferGamesIds,
-    getSwipeableGameId,
     localStorageKeys,
     StorageHelper,
 } from "../../../_shared/helpers";
@@ -100,7 +99,7 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.removeGameTransmitter = this.removeGameTransmitter.bind(this);
         this.reconnectGameTransmitter = this.reconnectGameTransmitter.bind(this);
         this.updateAvatar = this.updateAvatar.bind(this);
-        // this.swipeableHandler = this.swipeableHandler.bind(this);
+        this.getLobbyGamesIds = this.getLobbyGamesIds.bind(this);
         this.changeOrientation = this.changeOrientation.bind(this);
 
         const buildId = process.env.buildVersion;
@@ -400,23 +399,13 @@ class Dashboard extends React.PureComponent<Props, State> {
         return lobby?.lobbyConfigs;
     }
 
-    // swipeableHandler = (isPrevGame: boolean, currentGameId: number) => {
-    //     const { lobbyConfigs, authorizeInfo } = this.state;
-    //     const offerGamesIds = getOfferGamesIds(authorizeInfo);
-    //     const lobbyGamesIds = getLobbyGameIds(lobbyConfigs)?.filter((gameId) => offerGamesIds.includes(gameId));
+    getLobbyGamesIds = () => {
+        const { lobbyConfigs, authorizeInfo } = this.state;
+        const offerGamesIds = getOfferGamesIds(authorizeInfo);
+        const lobbyGamesIds = getLobbyGameIds(lobbyConfigs)?.filter((gameId) => offerGamesIds.includes(gameId));
 
-    //     this.openGame(getSwipeableGameId(isPrevGame, currentGameId, lobbyGamesIds));
-
-    //     this.setState({ isChangedGame: true });
-
-    //     this.gameStyleInterval && clearInterval(this.gameStyleInterval);
-
-    //     this.gameStyleInterval = setInterval(() => {
-    //         this.setState({ isChangedGame: false });
-    //     }, 700);
-    //     window.scrollTo(0, 0);
-    //     this.setState({ isChangePrevGame: isPrevGame });
-    // };
+        return lobbyGamesIds;
+    };
 
     renderGames() {
         const { userStakeLevel, openGameName } = this.state;
@@ -430,6 +419,7 @@ class Dashboard extends React.PureComponent<Props, State> {
                 openGameId={urlContext.gameId}
                 openGameName={openGameName}
                 directMode={this.props.directMode}
+                lobbyGamesIds={this.getLobbyGamesIds()}
             />
         );
     }
@@ -501,12 +491,11 @@ class Dashboard extends React.PureComponent<Props, State> {
                         </button>
                     )}
                     <div
-                        className={`${Styles["dashboard"]} ${changeGameStyle} ${!isRenderGames ? "no-scroll" : ""} ${
-                            isMobileOnly ? Styles["hidden-scrollbar"] : {}
-                        }`}
+                            className={`${Styles["dashboard"]} ${changeGameStyle} ${!isRenderGames ? "no-scroll" : ""} ${isMobileOnly ? Styles["hidden-scrollbar"] : {}
+                                }`}
                         id={"dashboard"}
                     >
-                        <Header headerRef={this.headerRef} openingGameId={openGameId} isRenderGames={isRenderGames} />
+                            <Header />
 
                         {isRenderGames ? this.renderGames() : this.renderLobby()}
 
