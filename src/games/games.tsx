@@ -37,7 +37,6 @@ export const Games: React.FC<Props> = ({ setApiErrorMessage, userStakeLevel, upd
     const locale = tolgee.getLanguage();
     const { session } = usePlayerContext();
     const settingDispatch = useSettingDispatch();
-    //const swipeableRef = React.useRef(null);
     console.log("openGameId", openGameId);
 
     useEffect(() => {
@@ -51,32 +50,6 @@ export const Games: React.FC<Props> = ({ setApiErrorMessage, userStakeLevel, upd
             });
         })();
     }, []);
-
-    // const onSwipeHandler = (isRightSwipeable: boolean) => {
-    //     swipeableHandler(isRightSwipeable, openGameId);
-
-    //     AnalyticsHelper.trackFunction({
-    //         function: TrackingFunction.SwitchGame,
-    //         action: isRightSwipeable ? TrackingAction.SwipeRight : TrackingAction.SwipeLeft,
-    //     });
-    // };
-
-    // const mobileSwipeableHandlers = useSwipeable({
-    //     onSwipedRight: () => onSwipeHandler(true),
-    //     onSwipedLeft: () => onSwipeHandler(false),
-    //     swipeDuration: swipeDuration,
-    //     trackMouse: true,
-    //     preventScrollOnSwipe: true,
-    // });
-
-    // const swipeableRefPassthrough = (el: HTMLDivElement) => {
-    //     if (isMobileOnly && !directMode) {
-    //         mobileSwipeableHandlers.ref(el);
-    //         //swipeableRef.current = el;
-    //     }
-    // };
-
-
 
     const gameSound = {
         playPlaceBetSound: usePlaceBetSound(),
@@ -114,10 +87,14 @@ export const Games: React.FC<Props> = ({ setApiErrorMessage, userStakeLevel, upd
     };
 
     const swiperSlideChild = ({ isActive, gameId }) => {
-
         if (isActive) {
             console.log({ isActive, gameId });
             GlobalMessageTransmitter.broadcast({ openingGameId: gameId });
+            AnalyticsHelper.trackFunction({
+                function: TrackingFunction.SwitchGame,
+                action: TrackingAction.Swipe
+            });
+
             return <>{getGameComponentById(parseInt(gameId))}</>;
         }
 
@@ -148,8 +125,8 @@ export const Games: React.FC<Props> = ({ setApiErrorMessage, userStakeLevel, upd
         );
     };
 
-    const renderSwiper = (openGameId) => {
-        const gameIndex = (openGameId % 1000) - 1;
+    const renderSwiper = (openGameId: number) => {
+        const gameIndex = lobbyGamesIds.indexOf(openGameId);
         console.log(`init game ${gameIndex}`);
         return (
             <Swiper
@@ -177,10 +154,7 @@ export const Games: React.FC<Props> = ({ setApiErrorMessage, userStakeLevel, upd
                 <div className={`${styles["game-list"]} ${isMobileOnly ? styles[isIOS ? "ios-device" : "android-device"] : ""}`}>
                     <BackgroundGalaxy gameId={openGameId} />
                     {isDirectMode && <ToolbarGuide />}
-
-                    {renderSwiper(openGameId)}
-                    {/* {getGameComponentById(openGameId)} */}
-
+                    {directMode ? getGameComponentById(openGameId) : renderSwiper(openGameId)}
                     {!isDirectMode && isMobileOnly && <SwitchGamesGuide />}
                 </div>
             </SystemContextProvider>
