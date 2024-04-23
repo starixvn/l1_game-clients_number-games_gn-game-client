@@ -60,7 +60,7 @@
     @extend %main-option;
     background-image: url("/static/images/bac-number/1x/bg-player.png");
     background-image: image-set(url("/static/images/bac-number/1x/bg-player.png") 1x, url("/static/images/bac-number/2x/bg-player.png") 2x);
-
+    background-size: 17.8rem 18.8rem;
     border-bottom-left-radius: 6.6rem;
     border-top-left-radius: 3.8rem;
     padding-left: 1.2rem;

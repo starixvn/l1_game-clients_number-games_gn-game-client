@@ -27,7 +27,6 @@
     overflow: hidden;
     width: 17.7rem;
     height: 9.4rem;
-    background-size: 17.7rem 9.4rem;
     border: none;
 
     &::before {
@@ -40,7 +39,7 @@
         height: 100%;
         background-image: var(--bgBetChoice);
         background-image: image-set(var(--bgBetChoice) 1x, var(--bgBetChoice-2x) 2x);
-        z-index: 0;
+        background-size: 17.7rem 9.4rem;
     }
 
     .btn-ripple {

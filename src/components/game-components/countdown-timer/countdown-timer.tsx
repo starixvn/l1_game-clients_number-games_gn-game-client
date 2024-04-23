@@ -77,7 +77,8 @@ export const SimpleTimer = ({ clientRemainingTime }) => {
     ) : (
         <div className={styles.timer}>
             <div className={`${styles["countdown-timer"]} ${roundState !== RoundState.InRound ? styles["lock-bet"] : ""}`}>
-                <span>{(timeLeft % 60).toString().padStart(2, "0")}</span>
+                <div className={styles["countdown-timer-background"]} />
+                <span className={styles["countdown-timer-number"]}>{(timeLeft % 60).toString().padStart(2, "0")}</span>
             </div>
         </div>
     );

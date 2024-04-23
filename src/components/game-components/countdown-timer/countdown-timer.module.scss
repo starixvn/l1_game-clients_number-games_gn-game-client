@@ -32,8 +32,8 @@
 .countdown-timer {
     position: relative;
     text-shadow: 0px 0px 15px #ffffff;
-    width: 4rem;
-    height: 4rem;
+    width: 3.8rem;
+    height: 3.8rem;
     font-size: 1.8rem;
     display: flex;
     justify-content: center;
@@ -41,35 +41,30 @@
     background-size: 4rem 4rem;
     color: #1ceefc;
 
-    > span {
+    .countdown-timer-number {
         display: block;
-        margin-left: -0.2rem;
         font-variant-numeric: tabular-nums;
     }
 
-    &:before {
-        content: "";
-        display: block;
+    .countdown-timer-background {
         position: absolute;
-        top: -0.1rem;
-        left: -0.1rem;
-        width: 4rem;
-        height: 4rem;
-        background: url("/static/images/countdown-timer/countdown-placebet.svg") no-repeat center center;
-        z-index: 0;
+        width: 3.8rem;
+        height: 3.8rem;
+        background: url("/static/images/countdown-timer/countdown-placebet.png") no-repeat center center;
+        background-size: 3.8rem 3.8rem;
         animation: spin 2s infinite linear;
     }
 
     &.lock-bet {
         color: #ff5555;
 
-        > span {
+        .countdown-timer-number {
             transform: scale(0);
             animation: scale 1s infinite cubic-bezier(0.18, 0.89, 0.32, 1.28);
         }
 
-        &:before {
-            background: url("/static/images/countdown-timer/countdown-blockbet.svg") no-repeat center center;
+        .countdown-timer-background {
+            background: url("/static/images/countdown-timer/countdown-blockbet.png") no-repeat center center;
         }
     }
 }
