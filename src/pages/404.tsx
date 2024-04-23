@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useCommonTranslate } from "../_shared/react-hooks/use-translator";
+import BackgroundComet from "../components/page-components/background-error";
 
 const Custom404 = () => {
     const { t } = useCommonTranslate();
@@ -16,19 +17,14 @@ const Custom404 = () => {
     }
 
     return (
-        <div className="error-page">
+        <div className="error-page page-404">
             <div className="um-background">
-                <img className="star-bg" src="/static/images/error-page/star-bg.png" alt="background" width={344} />
-                <img src="/static/images/error-page/planet-center.png" alt="background" width={432} />
-                <img className="number-4-left" src="/static/images/error-page/number-4.svg" alt="background" />
-                <img className="number-4-right" src="/static/images/error-page/number-4.svg" alt="background" />
+                <div className="star-bg" />
+                <div className="planet-center" />
+                <div className="number-4 number-4-left" />
+                <div className="number-4 number-4-right" />
             </div>
-            <div className="um-moving-comet">
-                <img className="moving-comet comet-1" src="/static/images/error-page/comet-1.svg" alt="spaceman" />
-                <img className="moving-comet comet-2" src="/static/images/error-page/comet-2.svg" alt="spaceman" />
-                <img className="moving-comet comet-3" src="/static/images/error-page/comet-3.svg" alt="spaceman" />
-                <img className="moving-comet comet-4" src="/static/images/error-page/comet-4.svg" alt="spaceman" />
-            </div>
+            <BackgroundComet />
             <p className="errorOccurred-info">{t("message_error_occurred", { errorCode: 404 }).replaceTolgeeFormat()}</p>
         </div>
     );

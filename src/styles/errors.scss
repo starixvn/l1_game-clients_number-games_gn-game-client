@@ -53,32 +53,36 @@
 
 .um-title {
     margin-bottom: 3rem;
+    margin-top: 3rem;
     font-weight: 500;
     line-height: 1.5;
     font-size: 1.6rem;
 }
 
+.timeout-spaceman {
+    position: absolute;
+    transform: translate(0, 0);
+    width: 34.8rem;
+    height: 20.6rem;
+    background-image: url("/static/images/error-page/1x/spaceman-timeout.png");
+    background-image: image-set(
+        url("/static/images/error-page/1x/spaceman-timeout.png") 1x,
+        url("/static/images/error-page/2x/spaceman-timeout.png") 2x
+    );
+    animation: spin 9s linear infinite;
+}
+
 .um-spaceman {
     position: absolute;
     transform: translate(0, 0);
+    width: 34.8rem;
+    height: 19.9rem;
+    background-image: url("/static/images/error-page/1x/spaceman-um.png");
+    background-image: image-set(
+        url("/static/images/error-page/1x/spaceman-um.png") 1x,
+        url("/static/images/error-page/2x/spaceman-um.png") 2x
+    );
     animation: spin 9s linear infinite;
-
-    .hourglass {
-        position: absolute;
-        right: 0;
-    }
-
-    .rock {
-        position: absolute;
-        bottom: -3rem;
-        left: -18rem;
-    }
-
-    .spaceman {
-        position: absolute;
-        bottom: -3rem;
-        left: -9rem;
-    }
 }
 
 .um-star-tail {
@@ -92,9 +96,23 @@
 
 .star-bg {
     position: absolute;
-    left: 4rem;
+    left: 0;
     top: -8rem;
+    width: 37.2rem;
+    height: 37.6rem;
     animation: star-bling 5s infinite;
+    background-image: url("/static/images/error-page/1x/star-bg.png");
+    background-image: image-set(url("/static/images/error-page/1x/star-bg.png") 1x, url("/static/images/error-page/2x/star-bg.png") 2x);
+}
+
+.planet-center {
+    width: 37.2rem;
+    height: 37.6rem;
+    background-image: url("/static/images/error-page/1x/planet-center.png");
+    background-image: image-set(
+        url("/static/images/error-page/1x/planet-center.png") 1x,
+        url("/static/images/error-page/2x/planet-center.png") 2x
+    );
 }
 
 .um-moving-comet {
@@ -112,12 +130,20 @@
     &.comet-1 {
         top: -2rem;
         right: 0;
+        width: 9.3rem;
+        height: 8.9rem;
+        background-image: url("/static/images/error-page/1x/comet-1.png");
+        background-image: image-set(url("/static/images/error-page/1x/comet-1.png") 1x, url("/static/images/error-page/2x/comet-1.png") 2x);
     }
 
     &.comet-2 {
         top: 0rem;
         right: 15rem;
         opacity: 0;
+        width: 6.5rem;
+        height: 5.7rem;
+        background-image: url("/static/images/error-page/1x/comet-2.png");
+        background-image: image-set(url("/static/images/error-page/1x/comet-2.png") 1x, url("/static/images/error-page/2x/comet-2.png") 2x);
         animation-delay: 1s;
     }
 
@@ -125,6 +151,10 @@
         top: 5rem;
         right: 0;
         opacity: 0;
+        width: 6.3rem;
+        height: 5.6rem;
+        background-image: url("/static/images/error-page/1x/comet-3.png");
+        background-image: image-set(url("/static/images/error-page/1x/comet-3.png") 1x, url("/static/images/error-page/2x/comet-3.png") 2x);
         animation-delay: 1.5s;
     }
 
@@ -132,42 +162,48 @@
         top: 13rem;
         right: 0rem;
         opacity: 0;
+        width: 5.2rem;
+        height: 4.8rem;
+        background-image: url("/static/images/error-page/1x/comet-4.png");
+        background-image: image-set(url("/static/images/error-page/1x/comet-4.png") 1x, url("/static/images/error-page/2x/comet-4.png") 2x);
         animation-delay: 2s;
     }
 }
 
-.moving-planet {
+.planet-small {
     position: absolute;
     z-index: 2;
-    //animation: top-to-bottom 4s linear infinite;
-
-    &.planet-1 {
-        left: 72px;
-        bottom: 15px;
-    }
-
-    &.planet-2 {
-        left: 50px;
-        top: 70px;
-    }
-
-    &.planet-3 {
-        right: 72px;
-        bottom: 15px;
-    }
+    top: 15rem;
+    left: 6rem;
+    width: 22.9rem;
+    height: 22.8rem;
+    background-image: url("/static/images/error-page/1x/planet.png");
+    background-image: image-set(url("/static/images/error-page/1x/planet.png") 1x, url("/static/images/error-page/2x/planet.png") 2x);
 }
 
 // 404 Page
-.number-4-left {
+.number-4 {
     position: absolute;
+    z-index: 3;
+    width: 9.2rem;
+    height: 12.6rem;
+    background-image: url("/static/images/error-page/1x/4.png");
+    background-image: image-set(url("/static/images/error-page/1x/4.png") 1x, url("/static/images/error-page/2x/4.png") 2x);
+}
+
+.number-4-left {
     top: 8rem;
-    left: 4rem;
+    left: 2rem;
 }
 
 .number-4-right {
     position: absolute;
     top: 8rem;
-    right: 4.2rem;
+    right: 3.4rem;
+}
+
+.page-404 .planet-small {
+    top: 22rem;
 }
 
 .errorOccurred-info {

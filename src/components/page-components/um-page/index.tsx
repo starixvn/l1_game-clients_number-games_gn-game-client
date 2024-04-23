@@ -7,6 +7,7 @@ import { convertToGMT8, formatDate } from "../../../_shared/helpers/time-helper"
 import { useTranslator } from "../../../_shared/react-hooks/use-translator";
 import { ResourceTypes } from "../../../_shared/resources";
 import ButtonReturnToURL from "../button-return-to-url";
+import BackgroundComet from "../background-error";
 
 const UMPage: React.FC = () => {
     const router = useRouter();
@@ -35,21 +36,11 @@ const UMPage: React.FC = () => {
     return (
         <div className="error-page">
             <div className="um-background">
-                <img className="star-bg" src="/static/images/error-page/star-bg.png" alt="background" width={344} />
-                <img src="/static/images/error-page/planet-center.png" alt="background" width={432} />
+                <div className="star-bg" />
+                <div className="planet-center" />
             </div>
-            <div className="um-moving-comet">
-                <img className="moving-comet comet-1" src="/static/images/error-page/comet-1.svg" alt="spaceman" />
-                <img className="moving-comet comet-2" src="/static/images/error-page/comet-2.svg" alt="spaceman" />
-                <img className="moving-comet comet-3" src="/static/images/error-page/comet-3.svg" alt="spaceman" />
-                <img className="moving-comet comet-4" src="/static/images/error-page/comet-4.svg" alt="spaceman" />
-                <img className="moving-planet planet-1" src="/static/images/error-page/planet-1.svg" alt="spaceman" />
-                <img className="moving-planet planet-2" src="/static/images/error-page/planet-2.svg" alt="spaceman" />
-                <img className="moving-planet planet-3" src="/static/images/error-page/planet-3.svg" alt="spaceman" />
-            </div>
-            <div className="um-spaceman">
-                <img src="/static/images/error-page/um-spaceman.png" alt="spaceman" />
-            </div>
+            <BackgroundComet />
+            <div className="um-spaceman" />
             <p className="um-title">
                 {t(`${ResourceTypes.COMMON}.message_sys_maintenance`)} <br /> {t(`${ResourceTypes.SABA_NUMBER}.message_um_title`)}
             </p>
