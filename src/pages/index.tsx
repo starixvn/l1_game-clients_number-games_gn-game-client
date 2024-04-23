@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic";
 import { useContext, useState } from "react";
+
 import { URLContext, usePlayerContext } from "../_shared/react-contexts";
 import { usePWAWoker } from "../_shared/react-hooks/use-pwa-worker";
 import { tolgee } from "../_shared/tolgee";
@@ -21,7 +22,6 @@ export function Home() {
     }
 
     if (shouldRenderDashboard) {
-        console.log("Done load resource");
         document.body.classList.add("galaxy-bg");
         return <Dashboard session={session} queryGame={gameId} setIsUm={toUMPage} directMode={isDirectMode} tolgee={tolgee} />;
     }
