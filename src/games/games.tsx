@@ -1,6 +1,6 @@
 import { useTheme } from "next-themes";
 import dynamic from "next/dynamic";
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { isIOS, isMobileOnly } from "react-device-detect";
 
 import { getAppSettings } from "../_shared/app-settings";
@@ -15,7 +15,6 @@ import {
     useStopBettingSound,
 } from "../_shared/react-hooks";
 import { tolgee } from "../_shared/tolgee";
-import { BackgroundGalaxy } from "../components/page-components/background";
 import PreloadImages from "../components/page-components/preload-images";
 import { getChipSettings } from "../services/user-setting-service";
 import styles from "./games.module.scss";
@@ -29,13 +28,13 @@ const NextBall = dynamic(() => import("./next-ball/page"));
 const ToolbarGuide = dynamic(() => import("../components/page-components/hide-toolbar-guide"));
 const SwitchGamesGuide = dynamic(() => import("../components/page-components/switch-games-guide"));
 
-
 export const Games: React.FC<Props> = ({ swiperRef, setApiErrorMessage, userStakeLevel, updateUserStakeLevel, openGameId, directMode, lobbyGamesIds }) => {
     const { isDirectMode } = useContext(URLContext);
     const { theme } = useTheme();
     const locale = tolgee.getLanguage();
     const { session } = usePlayerContext();
     const settingDispatch = useSettingDispatch();
+
     console.log("openGameId", openGameId);
 
     useEffect(() => {
@@ -85,6 +84,7 @@ export const Games: React.FC<Props> = ({ swiperRef, setApiErrorMessage, userStak
         }
     };
 
+
     const swiperSlideChild = ({ isActive, gameId }) => {
         if (isActive) {
             console.log({ isActive, gameId });
@@ -116,7 +116,7 @@ export const Games: React.FC<Props> = ({ swiperRef, setApiErrorMessage, userStak
                                 console.log(`SwiperSlide ${swipeItemId} changed`);
                             }}
                         >
-                            {({ isActive }) => swiperSlideChild({ isActive, gameId })}
+                            {({ isActive, isVisible }) => swiperSlideChild({ isActive, gameId })}
                         </SwiperSlide>
                     );
                 })}
@@ -130,9 +130,7 @@ export const Games: React.FC<Props> = ({ swiperRef, setApiErrorMessage, userStak
 
         return (
             <Swiper
-                onBeforeInit={(swiper) => {
-                    swiperRef.current = swiper;
-                }}
+                onBeforeInit={(swiper) => swiperRef.current = swiper}
                 speed={500}
                 spaceBetween={50}
                 slidesPerView={1}
@@ -142,6 +140,7 @@ export const Games: React.FC<Props> = ({ swiperRef, setApiErrorMessage, userStak
                 initialSlide={gameIndex}
                 noSwiping={true}
                 noSwipingClass={SwiperNoSwiping}
+                watchSlidesProgress={true}
             >
                 {renderSwiperItems()}
             </Swiper>
@@ -153,7 +152,6 @@ export const Games: React.FC<Props> = ({ swiperRef, setApiErrorMessage, userStak
             <SystemContextProvider>
                 <PreloadImages />
                 <div className={`${styles["game-list"]} ${isMobileOnly ? styles[isIOS ? "ios-device" : "android-device"] : ""}`}>
-                    <BackgroundGalaxy gameId={openGameId} />
                     {isDirectMode && <ToolbarGuide />}
                     {directMode ? getGameComponentById(openGameId) : renderSwiper(openGameId)}
                     {!isDirectMode && isMobileOnly && <SwitchGamesGuide />}
