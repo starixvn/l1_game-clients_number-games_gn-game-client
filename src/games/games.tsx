@@ -26,7 +26,6 @@ import { GlobalMessageTransmitter } from "../_shared/helpers/message-transmitter
 
 const BacBall = dynamic(() => import("./bac-ball"));
 const NextBall = dynamic(() => import("./next-ball/page"));
-const Footer = dynamic(() => import("../components/game-components/footer"));
 const ToolbarGuide = dynamic(() => import("../components/page-components/hide-toolbar-guide"));
 const SwitchGamesGuide = dynamic(() => import("../components/page-components/switch-games-guide"));
 
@@ -132,7 +131,7 @@ export const Games: React.FC<Props> = ({ swiperRef, setApiErrorMessage, userStak
         return (
             <Swiper
                 onBeforeInit={(swiper) => {
-                    swiperRef.current = swiper
+                    swiperRef.current = swiper;
                 }}
                 speed={500}
                 spaceBetween={50}

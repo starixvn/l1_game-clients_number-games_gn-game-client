@@ -11,12 +11,10 @@ export const getLogoName = () => {
 
 const Header = () => {
     const [openingGameId, setOpeningGameId] = useState(0);
-    const [isRenderGames, setIsRenderGames] = useState(openingGameId > 0);
 
     useEffect(() => {
         registerGlobalMessageEvent("openingGameId", ({ openingGameId }) => {
             setOpeningGameId(openingGameId);
-            setIsRenderGames(openingGameId > 0);
         });
 
         return () => {
@@ -24,7 +22,7 @@ const Header = () => {
         }
     }, []);
 
-
+    const isRenderGames = openingGameId > 0;
     return (
         <header className={`${Styles.header}`} data-testid="header">
             <div className="game-container d-flex">

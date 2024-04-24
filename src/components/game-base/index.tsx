@@ -583,21 +583,23 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     getRenderTemplate() {
         return (
             <>
-                {this.renderHeaderBlock()}
-                {this.renderResultBlock()}
-                {this.renderBettingBlock()}
-                    {this.renderScoreboards()}
+                <div className="game-area" >
+                    <div>{this.renderHeaderBlock()}</div>
+                    <div>{this.renderResultBlock()}</div>
+                    <div>{this.renderBettingBlock()}</div>
+                    <div className={SwiperNoSwiping}> {this.renderSlidingChips()}</div>
+                    <div>{this.renderStatistic()}</div>
+                    <div className={SwiperNoSwiping}>  {this.renderScoreboards()}</div>
                     <Footer />
+                </div>
                 {this.renderGameGuideModal()}
                 {this.renderMenuButtons()}
                 {this.renderPFSettingModal()}
                 {this.renderBetHistoryModal()}
                 {this.renderNewRoundTransition()}
                 {this.renderNotice()}
-                <div className={SwiperNoSwiping}> {this.renderSlidingChips()}</div>
                 {this.renderConfirmDialog()}
                 {this.renderConfirmBet()}
-                <div className={SwiperNoSwiping}>  {this.renderScoreboards()}</div>
             </>
         );
     }
