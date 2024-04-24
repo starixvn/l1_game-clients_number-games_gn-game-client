@@ -67,11 +67,12 @@
 
     .bet-value {
         display: flex;
+        align-items: center;
+        height: 1.7rem;
         font-size: 1.1rem;
         font-weight: 600;
-        color: white;
+        color: #fff;
         padding: 0 4px;
-        padding-top: 0.2rem;
         border-radius: 1rem;
         background: linear-gradient(133deg, rgba(53, 206, 97, 1) 0%, rgba(11, 178, 66, 1) 100%);
 
@@ -82,7 +83,6 @@
             width: 12px;
             height: 12px;
             margin-right: 2px;
-            margin-top: 0.1rem;
             background: url("/static/images/coin-outline.svg") no-repeat 50%;
             background-size: contain;
             vertical-align: middle;
