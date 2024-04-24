@@ -89,11 +89,6 @@ export const Games: React.FC<Props> = ({ swiperRef, setApiErrorMessage, userStak
         if (isActive) {
             console.log({ isActive, gameId });
             setTimeout(() => GlobalMessageTransmitter.broadcast({ openingGameId: gameId }), 200);
-            AnalyticsHelper.trackFunction({
-                function: TrackingFunction.SwitchGame,
-                action: TrackingAction.Swipe
-            });
-
             return <>{getGameComponentById(parseInt(gameId))}</>;
         }
 
@@ -128,16 +123,21 @@ export const Games: React.FC<Props> = ({ swiperRef, setApiErrorMessage, userStak
         return (
             <Swiper
                 onBeforeInit={(swiper) => swiperRef.current = swiper}
-                speed={500}
+                speed={isMobileOnly ? 100 : 500}
                 spaceBetween={50}
                 slidesPerView={1}
                 loop={true}
-                className="mySwiper-test"
                 autoHeight={true}
                 initialSlide={gameIndex}
                 noSwiping={true}
                 noSwipingClass={SwiperNoSwiping}
                 watchSlidesProgress={true}
+                onRealIndexChange={(swiper) => {
+                    AnalyticsHelper.trackFunction({
+                        function: TrackingFunction.SwitchGame,
+                        action: TrackingAction.Swipe
+                    });
+                }}
             >
                 {renderSwiperItems()}
             </Swiper>
