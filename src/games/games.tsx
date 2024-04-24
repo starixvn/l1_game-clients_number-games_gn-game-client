@@ -31,7 +31,7 @@ const ToolbarGuide = dynamic(() => import("../components/page-components/hide-to
 const SwitchGamesGuide = dynamic(() => import("../components/page-components/switch-games-guide"));
 
 
-export const Games: React.FC<Props> = ({ setApiErrorMessage, userStakeLevel, updateUserStakeLevel, openGameId, directMode, lobbyGamesIds }) => {
+export const Games: React.FC<Props> = ({ swiperRef, setApiErrorMessage, userStakeLevel, updateUserStakeLevel, openGameId, directMode, lobbyGamesIds }) => {
     const { isDirectMode } = useContext(URLContext);
     const { theme } = useTheme();
     const locale = tolgee.getLanguage();
@@ -128,8 +128,13 @@ export const Games: React.FC<Props> = ({ setApiErrorMessage, userStakeLevel, upd
     const renderSwiper = (openGameId: number) => {
         const gameIndex = lobbyGamesIds.indexOf(openGameId);
         console.log(`init game ${gameIndex}`);
+
         return (
             <Swiper
+                onBeforeInit={(swiper) => {
+                    swiperRef.current = swiper
+                }}
+                speed={500}
                 spaceBetween={50}
                 slidesPerView={1}
                 loop={true}

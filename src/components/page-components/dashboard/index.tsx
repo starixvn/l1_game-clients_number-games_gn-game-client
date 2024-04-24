@@ -42,6 +42,7 @@ import Register from "./register";
 import { MAX_AVATAR_ID } from "./register/avatar-gallery";
 import NameGenerator from "./register/name-generator";
 import { ILobbyConfigs, Props, State } from "./type";
+import SwiperCore from 'swiper';
 
 const Games = dynamic(() => import("../../../games/games"));
 const BaseDialog = dynamic(() => import("../../game-components/base-dialog"));
@@ -53,7 +54,7 @@ class Dashboard extends React.PureComponent<Props, State> {
     private reCheckInInterval: NodeJS.Timeout;
     private isKickOut = false;
     private readonly lobbyConnectionHandler: LobbySocketConnection;
-    private headerRef = React.createRef<HTMLDivElement>();
+    private swiperRef = React.createRef<SwiperCore>();
     private gameStyleInterval: NodeJS.Timeout;
 
     constructor(props: Props) {
@@ -420,6 +421,7 @@ class Dashboard extends React.PureComponent<Props, State> {
                 openGameName={openGameName}
                 directMode={this.props.directMode}
                 lobbyGamesIds={this.getLobbyGamesIds()}
+                swiperRef={this.swiperRef}
             />
         );
     }
@@ -463,7 +465,7 @@ class Dashboard extends React.PureComponent<Props, State> {
     renderDashBoard() {
         window.history.pushState(null, null, "/");
 
-        const { isShowErrorModal, authorizeInfo, isBlockUI, openGameId, isChangedGame, isChangePrevGame } = this.state;
+        const { isShowErrorModal, authorizeInfo, isBlockUI, isChangedGame, isChangePrevGame } = this.state;
         const authContextValue = {
             authorizeInfo: authorizeInfo,
             session: this.props.session,
@@ -486,7 +488,7 @@ class Dashboard extends React.PureComponent<Props, State> {
             <PlayerContextProvider value={authContextValue}>
                 <SettingContextProvider>
                     {allowSwipeGameOndDesktop && (
-                            <button className={`${Styles["prev-button"]}`}>
+                            <button onClick={() => this.swiperRef.current?.slideNext()} className={`${Styles["prev-button"]}`}>
                             <span className={`icon-back ${Styles["icon"]}`}></span>
                         </button>
                     )}
@@ -523,7 +525,7 @@ class Dashboard extends React.PureComponent<Props, State> {
                         )}
                     </div>
                     {allowSwipeGameOndDesktop && (
-                            <button className={`${Styles["next-button"]}`}>
+                            <button onClick={() => this.swiperRef.current?.slidePrev()} className={`${Styles["next-button"]}`}>
                             <span className={`icon-back ${Styles["icon"]}`}></span>
                         </button>
                     )}
