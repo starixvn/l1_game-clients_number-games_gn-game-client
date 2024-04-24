@@ -191,8 +191,10 @@ body {
 
 .game-area {
     display: grid;
-    grid-template-rows: 5rem 18.5rem 20.4rem;
+    grid-template-rows: 5rem 18.5rem 20.4rem 7.8rem 3.8rem 11.3rem;
+    grid-template-columns: 37.5rem;
     justify-content: center;
+    padding-top: 1rem;
 }
 
 .hide {
