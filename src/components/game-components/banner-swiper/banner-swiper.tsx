@@ -45,13 +45,8 @@ export const BannerSwiper: React.FC<{ banners: IBanner[]; openGame: Function }> 
                 disableOnInteraction: false,
                 pauseOnMouseEnter: true,
             }}
-            centeredSlides={false}
-            longSwipes={false}
-            threshold={10}
             ref={swiperRef}
-            grid={{ fill: "row" }}
             roundLengths={true}
-            shortSwipes={true}
         >
             {banners.map((banner, index) => {
                 if (!banner?.path) {
@@ -70,8 +65,8 @@ export const BannerSwiper: React.FC<{ banners: IBanner[]; openGame: Function }> 
                             className="banner-img"
                             src={banner.path}
                             alt={banner.gameId.toString()}
-                            width={375}
-                            height={200}
+                            width={348}
+                            height={124}
                             priority={index !== 0 ? false : true}
                         />
                     </SwiperSlide>
