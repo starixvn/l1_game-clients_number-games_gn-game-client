@@ -4,5 +4,6 @@ exports[`LobbyLayout render should render game board correctly 1`] = `
 <div>
   GameBoard
   GameBoard
+  ComingSoonGameBoard
 </div>
 `;

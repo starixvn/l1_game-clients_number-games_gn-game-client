@@ -3,6 +3,7 @@ import { LobbyLayout } from "../../games/lobby-layout";
 import { GameBoard } from "../../games/components/game-board";
 import { getAppSettings } from "../../../../../_shared/app-settings";
 import { useLobbyConnectionContext } from "../../../../../_shared/react-contexts";
+import { ComingSoonGameBoard } from "../../games/components/coming-soon-game-board";
 
 jest.mock("../../../../../_shared/app-settings", () => ({
     getAppSettings: jest.fn(),
@@ -18,12 +19,16 @@ jest.mock("../../../../../_shared/react-contexts", () => ({
 jest.mock("../../games/components/game-board", () => ({
     GameBoard: jest.fn().mockReturnValue("GameBoard"),
 }));
+jest.mock("../../games/components/coming-soon-game-board", () => ({
+    ComingSoonGameBoard: jest.fn().mockReturnValue("ComingSoonGameBoard"),
+}));
 
 describe(LobbyLayout.name, () => {
     const gameSettings = {
         1001: { id: 1001, gameName: "game1" },
         1002: { id: 1002, gameName: "game2" },
         1003: { id: 1003, gameName: "game3" },
+        1004: { id: 1004, gameName: "game4", isComingSoon: true },
     };
     describe("render", () => {
         beforeAll(() => {
@@ -59,6 +64,7 @@ describe(LobbyLayout.name, () => {
                 },
                 {}
             );
+            expect(ComingSoonGameBoard).toHaveBeenCalledWith({ gameSettings: gameSettings[1004] }, {});
         });
 
         it("should return empty when not exist gameTransmitters", () => {

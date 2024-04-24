@@ -93,6 +93,7 @@ export interface APIError extends Notice {
 export interface SocketInfo {
     namespace: string;
     path: string;
+    serviceName?: string;
 }
 
 export interface GameDurations {
