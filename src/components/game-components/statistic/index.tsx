@@ -47,7 +47,6 @@ export const PercentageStatistic: React.FC<PercentageStatisticProps> = (props: P
     const statisticResult = calculatePercent(statisticRuleEntries, counted, roundHistory.length);
     const { tolgeeNamespace } = useGameContext();
     const { t } = useTranslator([tolgeeNamespace]);
-    //console.log(props);
 
     if (props.group) {
         const choices = Object.keys(statisticResult);

@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 
 import { getAppSettings } from "../../../../_shared/app-settings";
 import { useTranslator } from "../../../../_shared/react-hooks";

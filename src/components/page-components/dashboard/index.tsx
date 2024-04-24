@@ -54,8 +54,7 @@ class Dashboard extends React.PureComponent<Props, State> {
     private reCheckInInterval: NodeJS.Timeout;
     private isKickOut = false;
     private readonly lobbyConnectionHandler: LobbySocketConnection;
-    private swiperRef = React.createRef<SwiperCore>();
-    private gameStyleInterval: NodeJS.Timeout;
+    private readonly swiperRef = React.createRef<SwiperCore>();
 
     constructor(props: Props) {
         super(props);
@@ -281,7 +280,6 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.notificationSocket?.close();
         this.lobbyConnectionHandler.closeSocket();
         clearInterval(this.reCheckInInterval);
-        clearInterval(this.gameStyleInterval);
     }
 
     sendMessage(data: any) {
@@ -403,9 +401,7 @@ class Dashboard extends React.PureComponent<Props, State> {
     getLobbyGamesIds = () => {
         const { lobbyConfigs, authorizeInfo } = this.state;
         const offerGamesIds = getOfferGamesIds(authorizeInfo);
-        const lobbyGamesIds = getLobbyGameIds(lobbyConfigs)?.filter((gameId) => offerGamesIds.includes(gameId));
-
-        return lobbyGamesIds;
+        return getLobbyGameIds(lobbyConfigs)?.filter((gameId) => offerGamesIds.includes(gameId));
     };
 
     renderGames() {

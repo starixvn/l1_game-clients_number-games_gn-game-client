@@ -95,7 +95,7 @@ export class TurnTimelineCounter {
             turn.id = (actualRoundId - 1) * this.totalTurn + turn.index;
 
             if (turnId > 0 && turnId !== turn.id) {
-                //console.log(turn, roundId, actualRoundId, roundRemainingTime, turnId);
+                console.log(turn, roundId, actualRoundId, roundRemainingTime, turnId);
             }
         }
 
