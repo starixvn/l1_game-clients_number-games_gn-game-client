@@ -3,6 +3,7 @@ import { GameSettings } from "../../../../game-base/type";
 import { LobbyGameTransmitter } from "../../lobby-socket-connection";
 import Image from "next/image";
 import Styles from "../../lobby.module.scss";
+import { buildVersion } from "../../../../../_shared/constants";
 
 const OnlinePlayer = dynamic(() => import("./online-player"));
 
@@ -17,7 +18,7 @@ export const GameIcon: React.FC<Props> = ({ gameSettings, transmitter }) => {
     return (
         <div className={Styles["icon-game"]}>
             <Image
-                src={`/static/images/lobby/game-board-detail/icon-${gameName.toLowerCase()}.png`}
+                src={`/static/images/lobby/game-board-detail/icon-${gameName.toLowerCase()}.png?v=${buildVersion}`}
                 width={130}
                 height={138}
                 alt={`icon-${gameName.toLowerCase()}`}
