@@ -125,5 +125,5 @@ export const NoticeErrorCode = {
     notEnoughMoney: "SB1907",
     reachMaxBet: "SB1924",
 };
-
+export const ErrorNoGameOffer = "Common.message_no_game_offer";
 export default ErrorCodeDictionary;

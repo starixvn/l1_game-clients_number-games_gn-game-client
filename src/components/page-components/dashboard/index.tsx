@@ -27,6 +27,7 @@ import {
     URLContextModel,
 } from "../../../_shared/react-contexts";
 
+import { ErrorNoGameOffer } from "../../../_shared/constants/error-code-dictionary";
 import "../../../games/scoreboards";
 import { authorize, createNickname, getLobbyConfigs, reCheckIn } from "../../../services/auth-service";
 import { updateSignInSMStatus } from "../../../services/user-setting-service";
@@ -155,7 +156,7 @@ class Dashboard extends React.PureComponent<Props, State> {
         if (authorizeInfo?.user?.offerGames && authorizeInfo?.user?.offerGames.length === 0) {
             this.setState({
                 apiError: {
-                    message: "Common.message_no_game_offer",
+                    message: ErrorNoGameOffer,
                     errorCode: "",
                 },
                 isShowErrorModal: true,
@@ -479,7 +480,7 @@ class Dashboard extends React.PureComponent<Props, State> {
 
         const changeGameStyle =
             isChangedGame && allowSwipeGameOndDesktop ? (isChangePrevGame ? Styles["slide-left"] : Styles["slide-right"]) : "";
-
+        const isNoGameOffer = this.state.apiError?.message == ErrorNoGameOffer;
         return (
             <PlayerContextProvider value={authContextValue}>
                 <SettingContextProvider>
@@ -495,9 +496,9 @@ class Dashboard extends React.PureComponent<Props, State> {
                     >
                         <Header />
 
-                        {isRenderGames ? this.renderGames() : this.renderLobby()}
+                        {isNoGameOffer ? <></> : isRenderGames ? this.renderGames() : this.renderLobby()}
 
-                        {!isRenderGames && <Footer />}
+                        {isNoGameOffer ? <></> : !isRenderGames && <Footer />}
                         {this.state.isUserGesture != null ? <MusicPlayer isUserGesture={this.state.isUserGesture} /> : <></>}
 
                         {isShowErrorModal && (
