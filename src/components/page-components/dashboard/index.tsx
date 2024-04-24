@@ -488,16 +488,16 @@ class Dashboard extends React.PureComponent<Props, State> {
             <PlayerContextProvider value={authContextValue}>
                 <SettingContextProvider>
                     {allowSwipeGameOndDesktop && (
-                            <button onClick={() => this.swiperRef.current?.slideNext()} className={`${Styles["prev-button"]}`}>
+                        <button onClick={() => this.swiperRef.current?.slideNext()} className={`${Styles["prev-button"]}`}>
                             <span className={`icon-back ${Styles["icon"]}`}></span>
                         </button>
                     )}
                     <div
-                            className={`${Styles["dashboard"]} ${changeGameStyle} ${!isRenderGames ? "no-scroll" : ""} ${isMobileOnly ? Styles["hidden-scrollbar"] : {}
-                                }`}
+                        className={`${Styles["dashboard"]} ${changeGameStyle} ${!isRenderGames ? "no-scroll" : ""} ${isMobileOnly ? Styles["hidden-scrollbar"] : {}
+                            }`}
                         id={"dashboard"}
                     >
-                            <Header />
+                        <Header />
 
                         {isRenderGames ? this.renderGames() : this.renderLobby()}
 
@@ -525,7 +525,7 @@ class Dashboard extends React.PureComponent<Props, State> {
                         )}
                     </div>
                     {allowSwipeGameOndDesktop && (
-                            <button onClick={() => this.swiperRef.current?.slidePrev()} className={`${Styles["next-button"]}`}>
+                        <button onClick={() => this.swiperRef.current?.slidePrev()} className={`${Styles["next-button"]}`}>
                             <span className={`icon-back ${Styles["icon"]}`}></span>
                         </button>
                     )}

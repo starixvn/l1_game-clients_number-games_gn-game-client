@@ -1,6 +1,6 @@
 import { useTheme } from "next-themes";
 import dynamic from "next/dynamic";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { isIOS, isMobileOnly } from "react-device-detect";
 
 import { getAppSettings } from "../_shared/app-settings";
@@ -88,7 +88,7 @@ export const Games: React.FC<Props> = ({ swiperRef, setApiErrorMessage, userStak
     const swiperSlideChild = ({ isActive, gameId }) => {
         if (isActive) {
             console.log({ isActive, gameId });
-            GlobalMessageTransmitter.broadcast({ openingGameId: gameId });
+            setTimeout(() => GlobalMessageTransmitter.broadcast({ openingGameId: gameId }), 200);
             AnalyticsHelper.trackFunction({
                 function: TrackingFunction.SwitchGame,
                 action: TrackingAction.Swipe
@@ -112,11 +112,8 @@ export const Games: React.FC<Props> = ({ swiperRef, setApiErrorMessage, userStak
                             style={{ height: "auto" }}
                             key={swipeItemId}
                             id={swipeItemId}
-                            onChange={() => {
-                                console.log(`SwiperSlide ${swipeItemId} changed`);
-                            }}
                         >
-                            {({ isActive, isVisible }) => swiperSlideChild({ isActive, gameId })}
+                            {({ isActive }) => swiperSlideChild({ isActive, gameId })}
                         </SwiperSlide>
                     );
                 })}

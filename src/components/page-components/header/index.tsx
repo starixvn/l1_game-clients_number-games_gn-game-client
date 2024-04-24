@@ -5,10 +5,6 @@ import Setting from "./setting";
 import { UserInfo } from "./user-info";
 import { GlobalMessageTransmitter, registerGlobalMessageEvent } from "../../../_shared/helpers/message-transmitter/global-transmitter";
 
-export const getLogoName = () => {
-    return "new-number-game";
-};
-
 const Header = () => {
     const [openingGameId, setOpeningGameId] = useState(0);
 
