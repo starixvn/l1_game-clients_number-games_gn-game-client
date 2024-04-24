@@ -1,4 +1,4 @@
-import { GameBaseProps } from "../../components/shared/game-base/type";
+import { GameSettings } from "../../components/game-base/type";
 
 interface ProxySetting {
     ssl: string;
@@ -16,7 +16,7 @@ export default interface AppSettings {
     socketGatewayPath: string;
     proxy: ProxySetting;
     sentry: SentryOptions;
-    gameSettings: { [id: string]: GameBaseProps };
+    gameSettings: { [id: string]: GameSettings };
     subGuideDomain: string;
     googleAnalyticId: string;
     enableMsgpackParser: boolean;

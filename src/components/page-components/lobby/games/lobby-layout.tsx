@@ -4,6 +4,7 @@ import { getLobbyGameIds, getOfferGamesIds } from "../../../../_shared/helpers";
 import { useLobbyConnectionContext, usePlayerContext } from "../../../../_shared/react-contexts";
 import { ILobbyConfigs } from "../../dashboard/type";
 import { GameBoard } from "./components/game-board";
+import { ComingSoonGameBoard } from "./components/coming-soon-game-board";
 
 type Props = {
     openGame: Function;
@@ -23,6 +24,15 @@ export const LobbyLayout: React.FC<Props> = ({ lobbyConfigs, openGame }) => {
         return [];
     }, [lobbyConfigs, authorizeInfo]);
 
+    const comingSoonGameSettings = useMemo(() => {
+        const { gameSettings: allGamesSettings } = getAppSettings();
+        if (allGamesSettings) {
+            const { gameSettings: allGamesSettings } = getAppSettings();
+            return Object.values(allGamesSettings).filter((gameSetting) => gameSetting.isComingSoon);
+        }
+        return [];
+    }, []);
+
     return (
         gameTransmitters &&
         gamesSettings && (
@@ -34,6 +44,9 @@ export const LobbyLayout: React.FC<Props> = ({ lobbyConfigs, openGame }) => {
                         openGame={openGame}
                         gameTransmitter={gameTransmitters[gameSettings.id]}
                     />
+                ))}
+                {comingSoonGameSettings.map((gameSettings) => (
+                    <ComingSoonGameBoard gameSettings={gameSettings} key={`coming-soon-${gameSettings.gameName}`} />
                 ))}
             </>
         )

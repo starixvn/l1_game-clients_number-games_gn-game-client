@@ -86,5 +86,10 @@
         "totalTurns": 8,
         "numberOfRoundHistory": 100,
         "gamePath": "next-ball"
+    },
+    "1005": {
+        "id": 1005,
+        "gameName": "SeBall",
+        "isComingSoon": true
     }
 }

@@ -3,7 +3,7 @@ import { LobbyGameTransmitter, LobbyMessageEvents } from "../../lobby-socket-con
 import Styles from "../../lobby.module.scss";
 
 type Props = {
-    transmitter: LobbyGameTransmitter;
+    transmitter?: LobbyGameTransmitter;
 };
 
 export const OnlinePlayer: React.FC<Props> = ({ transmitter }) => {

@@ -8,7 +8,7 @@ const OnlinePlayer = dynamic(() => import("./online-player"));
 
 type Props = {
     gameSettings: GameSettings;
-    transmitter: LobbyGameTransmitter;
+    transmitter?: LobbyGameTransmitter;
 };
 
 export const GameIcon: React.FC<Props> = ({ gameSettings, transmitter }) => {

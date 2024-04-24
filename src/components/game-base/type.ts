@@ -29,12 +29,14 @@ export enum RoundState {
 
 export interface GameSettings {
     id: number;
-    tolgeeNamespace: string;
+    tolgeeNamespace?: string;
     gameName: string;
-    socketInfo: SocketInfo;
-    durations: GameDurations;
-    totalTurns: number;
-    numberOfRoundHistory: number;
+    socketInfo?: SocketInfo;
+    durations?: GameDurations;
+    totalTurns?: number;
+    numberOfRoundHistory?: number;
+    gamePath?: string;
+    isComingSoon?: boolean;
 }
 
 export type GamePropsContext = {
