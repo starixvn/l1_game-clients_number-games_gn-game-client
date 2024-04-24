@@ -157,11 +157,16 @@ body {
     padding-left: 0.8rem;
     line-height: 3.2rem;
     font-size: 1.2rem;
-    color: white;
+    color: #fff;
+    opacity: 0;
+    animation-delay: 1s !important;
+}
+
+.text-animation {
     width: auto;
     overflow: hidden;
     white-space: nowrap;
-    animation: round-animation 1.3s ease-in;
+    animation: text-effect 1.3s ease-in forwards;
 }
 
 .copyright {
@@ -171,8 +176,9 @@ body {
     color: var(--color-copyright);
 }
 
-@keyframes round-animation {
+@keyframes text-effect {
     0% {
+        opacity: 1;
         max-width: 0;
     }
 
@@ -181,6 +187,7 @@ body {
     }
 
     100% {
+        opacity: 1;
         max-width: 100%;
     }
 }

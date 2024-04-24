@@ -6,7 +6,7 @@ export const DrawIdBlock = () => {
     return (
         <div>
             {drawId > 0 && (
-                <div key={drawId} id="round-id" className="round-id">
+                <div key={drawId} id="round-id" className="round-id text-animation">
                     #{drawId}
                 </div>
             )}
