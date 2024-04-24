@@ -175,10 +175,7 @@ export class PlaceBetHandler {
     };
 
     handleProcessingBet = () => {
-        this.props.dispatch({
-            type: GameEventActionType.BET_PROCESSING,
-            payload: { notice: { message: "Common.message_processing_action", duration: 2 } },
-        });
+        this.sendNotice({ message: "Common.message_processing_action", duration: 2 });
     };
 
     handlePreventBet = (gameStateContext: GameStateContextModel) => {
