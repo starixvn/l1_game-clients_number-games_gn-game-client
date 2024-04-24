@@ -28,7 +28,15 @@ const NextBall = dynamic(() => import("./next-ball/page"));
 const ToolbarGuide = dynamic(() => import("../components/page-components/hide-toolbar-guide"));
 const SwitchGamesGuide = dynamic(() => import("../components/page-components/switch-games-guide"));
 
-export const Games: React.FC<Props> = ({ swiperRef, setApiErrorMessage, userStakeLevel, updateUserStakeLevel, openGameId, directMode, lobbyGamesIds }) => {
+export const Games: React.FC<Props> = ({
+    swiperRef,
+    setApiErrorMessage,
+    userStakeLevel,
+    updateUserStakeLevel,
+    openGameId,
+    directMode,
+    lobbyGamesIds,
+}) => {
     const { isDirectMode } = useContext(URLContext);
     const { theme } = useTheme();
     const locale = tolgee.getLanguage();
@@ -84,15 +92,17 @@ export const Games: React.FC<Props> = ({ swiperRef, setApiErrorMessage, userStak
         }
     };
 
-
     const swiperSlideChild = ({ isActive, gameId }) => {
         if (isActive) {
             console.log({ isActive, gameId });
-            setTimeout(() => GlobalMessageTransmitter.broadcast({ openingGameId: gameId }), 200);
-            return <>{getGameComponentById(parseInt(gameId))}</>;
+            return getGameComponentById(parseInt(gameId));
         }
 
-        return <div className={styles["skeleton-game"]} ><GameLoading /></div>;
+        return (
+            <div className={styles["skeleton-game"]}>
+                <GameLoading />
+            </div>
+        );
     };
 
     const renderSwiperItems = () => {
@@ -103,11 +113,7 @@ export const Games: React.FC<Props> = ({ swiperRef, setApiErrorMessage, userStak
                     const swipeItemId = `SwiperSlide-${gameId}`;
 
                     return (
-                        <SwiperSlide
-                            style={{ height: "auto" }}
-                            key={swipeItemId}
-                            id={swipeItemId}
-                        >
+                        <SwiperSlide style={{ height: "auto" }} key={swipeItemId} id={swipeItemId}>
                             {({ isActive }) => swiperSlideChild({ isActive, gameId })}
                         </SwiperSlide>
                     );
@@ -122,7 +128,7 @@ export const Games: React.FC<Props> = ({ swiperRef, setApiErrorMessage, userStak
 
         return (
             <Swiper
-                onBeforeInit={(swiper) => swiperRef.current = swiper}
+                onBeforeInit={(swiper) => (swiperRef.current = swiper)}
                 speed={isMobileOnly ? 100 : 500}
                 spaceBetween={50}
                 slidesPerView={1}
@@ -135,7 +141,7 @@ export const Games: React.FC<Props> = ({ swiperRef, setApiErrorMessage, userStak
                 onRealIndexChange={(swiper) => {
                     AnalyticsHelper.trackFunction({
                         function: TrackingFunction.SwitchGame,
-                        action: TrackingAction.Swipe
+                        action: TrackingAction.Swipe,
                     });
                 }}
             >

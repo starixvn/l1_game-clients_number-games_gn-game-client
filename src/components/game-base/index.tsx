@@ -48,6 +48,7 @@ import { IGameStateHandler } from "./handlers/game-state-handler";
 import { GameBaseProps, PFClientSeedSetting, RoundState } from "./type";
 import { SwiperNoSwiping } from "../../_shared/constants";
 import BackgroundGalaxy from "../page-components/background";
+import { GlobalMessageTransmitter } from "../../_shared/helpers/message-transmitter/global-transmitter";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
     protected socket: Socket;
@@ -162,6 +163,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.syncPFSetting = this.syncPFSetting.bind(this);
 
         AnalyticsHelper.trackPage({ page_title: this.props.gameName });
+        GlobalMessageTransmitter.broadcast({ openingGameId: props.id });
     }
 
     getGameStateContext = () => {
@@ -592,7 +594,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                         <div>{this.renderBettingBlock()}</div>
                         <div className={SwiperNoSwiping}> {this.renderSlidingChips()}</div>
                         <div>{this.renderStatistic()}</div>
-                        <div className={SwiperNoSwiping}>  {this.renderScoreboards()}</div>
+                        <div className={SwiperNoSwiping}> {this.renderScoreboards()}</div>
                         <Footer />
                     </div>
                     {this.renderGameGuideModal()}
