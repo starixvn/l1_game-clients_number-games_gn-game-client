@@ -118,9 +118,9 @@ body {
     margin: 0;
     background-color: var(--page-background-color);
     font: 1.4rem/1.5 var(--font-family);
-    // color: var(--text-color);
-    // overscroll-behavior: contain;
-    // touch-action: pan-y;
+    color: var(--text-color);
+    overscroll-behavior: contain;
+    touch-action: pan-y;
 }
 
 .no-scroll-html {

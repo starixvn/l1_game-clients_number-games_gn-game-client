@@ -480,7 +480,7 @@ class Dashboard extends React.PureComponent<Props, State> {
 
         const changeGameStyle =
             isChangedGame && allowSwipeGameOndDesktop ? (isChangePrevGame ? Styles["slide-left"] : Styles["slide-right"]) : "";
-        const isNoGameOffer = this.state.apiError?.message == ErrorNoGameOffer;
+        const isNoGameOffer = this.state.apiError?.message === ErrorNoGameOffer;
         return (
             <PlayerContextProvider value={authContextValue}>
                 <SettingContextProvider>
