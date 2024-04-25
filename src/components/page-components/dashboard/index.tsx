@@ -27,6 +27,7 @@ import {
     URLContextModel,
 } from "../../../_shared/react-contexts";
 
+import SwiperCore from "swiper";
 import { ErrorNoGameOffer } from "../../../_shared/constants/error-code-dictionary";
 import "../../../games/scoreboards";
 import { authorize, createNickname, getLobbyConfigs, reCheckIn } from "../../../services/auth-service";
@@ -43,7 +44,6 @@ import Register from "./register";
 import { MAX_AVATAR_ID } from "./register/avatar-gallery";
 import NameGenerator from "./register/name-generator";
 import { ILobbyConfigs, Props, State } from "./type";
-import SwiperCore from 'swiper';
 
 const Games = dynamic(() => import("../../../games/games"));
 const BaseDialog = dynamic(() => import("../../game-components/base-dialog"));
@@ -478,9 +478,11 @@ class Dashboard extends React.PureComponent<Props, State> {
 
         console.log("renderDashBoard", { isRenderGames });
 
+        const allowSwipeGameOndDesktopStyle = isChangePrevGame ? Styles["slide-left"] : Styles["slide-right"];
         const changeGameStyle =
-            isChangedGame && allowSwipeGameOndDesktop ? (isChangePrevGame ? Styles["slide-left"] : Styles["slide-right"]) : "";
+            isChangedGame && allowSwipeGameOndDesktop ? (allowSwipeGameOndDesktopStyle) : "";
         const isNoGameOffer = this.state.apiError?.message === ErrorNoGameOffer;
+        const renderOfferGameContainer = () => (isRenderGames ? this.renderGames() : this.renderLobby());
         return (
             <PlayerContextProvider value={authContextValue}>
                 <SettingContextProvider>
@@ -490,13 +492,14 @@ class Dashboard extends React.PureComponent<Props, State> {
                         </button>
                     )}
                     <div
-                        className={`${Styles["dashboard"]} ${changeGameStyle} ${!isRenderGames ? "no-scroll" : ""} ${isMobileOnly ? Styles["hidden-scrollbar"] : {}
-                            }`}
+                        className={`${Styles["dashboard"]} ${changeGameStyle} ${!isRenderGames ? "no-scroll" : ""} ${
+                            isMobileOnly ? Styles["hidden-scrollbar"] : ""
+                        }`}
                         id={"dashboard"}
                     >
                         <Header />
 
-                        {isNoGameOffer ? <></> : isRenderGames ? this.renderGames() : this.renderLobby()}
+                        {isNoGameOffer ? <></> : renderOfferGameContainer()}
 
                         {isNoGameOffer ? <></> : !isRenderGames && <Footer />}
                         {this.state.isUserGesture != null ? <MusicPlayer isUserGesture={this.state.isUserGesture} /> : <></>}
