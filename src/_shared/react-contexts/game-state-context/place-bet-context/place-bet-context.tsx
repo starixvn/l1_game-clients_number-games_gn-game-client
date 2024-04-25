@@ -32,22 +32,14 @@ function placeBetReducer(state: PlaceBetContextModel, action: PlaceBetEventActio
         ownBets,
         acceptedBetQueue,
         suggestBet,
-        notice
     } = payload;
 
-    // console.log(`placeBetReducer: ${JSON.stringify(action)} `);
+    console.log(`placeBetReducer: ${JSON.stringify(action)} `);
     switch (type) {
         case PlaceBetEventActionType.OWN_BETS: {
             return {
                 ...state,
                 ownBets,
-            };
-        }
-
-        case PlaceBetEventActionType.END_BET: {
-            return {
-                ...state,
-                notice: null,
             };
         }
 
@@ -61,16 +53,14 @@ function placeBetReducer(state: PlaceBetContextModel, action: PlaceBetEventActio
         case PlaceBetEventActionType.BET_PROCESSING: {
             return {
                 ...state,
-                isProcessingBet: true,
-                notice,
+                isProcessingBet: true
             };
         }
 
         case PlaceBetEventActionType.END_BET_PROCESSING: {
             return {
                 ...state,
-                isProcessingBet: false,
-                notice: null,
+                isProcessingBet: false
             };
         }
 

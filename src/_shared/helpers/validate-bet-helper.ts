@@ -1,5 +1,4 @@
 import { GameConfigs, RoundState } from "../../components/game-base/type";
-import { confirmBet } from "../constants";
 import { NoticeErrorCode } from "../constants/error-code-dictionary";
 import { GameStateContextModel } from "../react-contexts/game-state-context/game-state-context-model";
 
@@ -113,14 +112,14 @@ export const isBalanceUnavailable = (
     return amount > 0 && (availableBalance - totalBetAmount === 0 || availableBalance < minBet);
 };
 
-export const isHedgeBet = (
-    hedgeBetGroups: string[],
-    betChoice: string,
-    amount: number,
-    gameStateContext: GameStateContextModel
-): boolean => {
-    return validateHedgeBet(hedgeBetGroups, gameStateContext.ownBets, gameStateContext?.notConfirmOwnBets, betChoice, amount);
-};
+// export const isHedgeBet = (
+//     hedgeBetGroups: string[],
+//     betChoice: string,
+//     amount: number,
+//     gameStateContext: GameStateContextModel
+// ): boolean => {
+//     return validateHedgeBet(hedgeBetGroups, gameStateContext.ownBets, gameStateContext?.notConfirmOwnBets, betChoice, amount);
+// };
 
 export const findHedgeBetGroup = (hedgeBetGroups: string[][], betChoice: string): string[] => {
     return hedgeBetGroups?.find((group) => group.includes(betChoice)) ?? [];
@@ -157,73 +156,73 @@ export const getMaxAvailableAmountOfChoice = (
     return remainAmount > 0 ? remainAmount : 0;
 };
 
-export const getCriteriaValidateBet = (
-    gameStateContext: GameStateContextModel,
-    betChoice: string,
-    amount: number,
-    accountBalance: number,
-    enabledQuickBet: boolean
-): { errorCode: string; args?: object } => {
-    if (betChoice !== confirmBet) {
-        const criteria = composeValidationCriteria(
-            amount,
-            accountBalance,
-            gameStateContext,
-            betChoice,
-            getTotalNotConfirmBet(gameStateContext),
-            getTotalBetAmount(gameStateContext),
-            enabledQuickBet
-        );
+// export const getCriteriaValidateBet = (
+//     gameStateContext: GameStateContextModel,
+//     betChoice: string,
+//     amount: number,
+//     accountBalance: number,
+//     enabledQuickBet: boolean
+// ): { errorCode: string; args?: object } => {
+//     if (betChoice !== confirmBet) {
+//         const criteria = composeValidationCriteria(
+//             amount,
+//             accountBalance,
+//             gameStateContext,
+//             betChoice,
+//             getTotalNotConfirmBet(gameStateContext),
+//             getTotalBetAmount(gameStateContext),
+//             enabledQuickBet
+//         );
 
-        if (criteria?.suggestAmount > 0 && criteria?.isSuggestBet) {
-            return { errorCode: NoticeErrorCode.suggestBet, args: criteria };
-        }
+//         if (criteria?.suggestAmount > 0 && criteria?.isSuggestBet) {
+//             return { errorCode: NoticeErrorCode.suggestBet, args: criteria };
+//         }
 
-        if (criteria?.errorCode) {
-            return { errorCode: criteria?.errorCode, args: criteria?.args };
-        }
-    }
+//         if (criteria?.errorCode) {
+//             return { errorCode: criteria?.errorCode, args: criteria?.args };
+//         }
+//     }
 
-    return { errorCode: NoticeErrorCode.validBet };
-};
+//     return { errorCode: NoticeErrorCode.validBet };
+// };
 
-const composeValidationCriteria = (
-    amount: number,
-    accountBalance: number,
-    context: GameStateContextModel,
-    betChoice: string,
-    totalBetNotConfirmAmount: number,
-    totalBeAmount: number,
-    enabledQuickBet: boolean
-): IAvailableSuggestBetAmount => {
-    const { gameConfigs, userStakeLevel, notConfirmOwnBets, ownBets } = context;
-    const { minBet: userMinBet, maxBet: userMaxBet } = userStakeLevel;
+// const composeValidationCriteria = (
+//     amount: number,
+//     accountBalance: number,
+//     context: GameStateContextModel,
+//     betChoice: string,
+//     totalBetNotConfirmAmount: number,
+//     totalBeAmount: number,
+//     enabledQuickBet: boolean
+// ): IAvailableSuggestBetAmount => {
+//     const { gameConfigs, userStakeLevel, notConfirmOwnBets, ownBets } = context;
+//     const { minBet: userMinBet, maxBet: userMaxBet } = userStakeLevel;
 
-    const roundMaxBet = getRoundMaxBet(gameConfigs, userMaxBet);
-    const maxBetPerChoice = getMaxBetPerChoice(gameConfigs, betChoice);
-    const currentAmountOfChoice = getCurrentAmountOfChoice(ownBets, notConfirmOwnBets, betChoice);
-    const maxAvailableAmountOfChoice = getMaxAvailableAmountOfChoice(
-        maxBetPerChoice,
-        currentAmountOfChoice,
-        roundMaxBet,
-        totalBetNotConfirmAmount,
-        totalBeAmount,
-        accountBalance,
-        enabledQuickBet
-    );
-    const suggestAmount = Math.min(accountBalance, maxAvailableAmountOfChoice);
+//     const roundMaxBet = getRoundMaxBet(gameConfigs, userMaxBet);
+//     const maxBetPerChoice = getMaxBetPerChoice(gameConfigs, betChoice);
+//     const currentAmountOfChoice = getCurrentAmountOfChoice(ownBets, notConfirmOwnBets, betChoice);
+//     const maxAvailableAmountOfChoice = getMaxAvailableAmountOfChoice(
+//         maxBetPerChoice,
+//         currentAmountOfChoice,
+//         roundMaxBet,
+//         totalBetNotConfirmAmount,
+//         totalBeAmount,
+//         accountBalance,
+//         enabledQuickBet
+//     );
+//     const suggestAmount = Math.min(accountBalance, maxAvailableAmountOfChoice);
 
-    return determineBetMode({
-        suggestAmount,
-        isInsufficientFunds: isInsufficientFunds(amount, accountBalance, totalBetNotConfirmAmount, enabledQuickBet),
-        isOptionReachMaxBet: isOptionReachMaxBet(currentAmountOfChoice + amount, maxBetPerChoice),
-        isMaxBetRound: isMaxBetRound(amount, roundMaxBet, totalBeAmount),
-        maxBetPerChoice,
-        roundMaxBet,
-        roundMinBet: getRoundMinBet(gameConfigs, userMinBet),
-        currentAmountOfChoice,
-    });
-};
+//     return determineBetMode({
+//         suggestAmount,
+//         isInsufficientFunds: isInsufficientFunds(amount, accountBalance, totalBetNotConfirmAmount, enabledQuickBet),
+//         isOptionReachMaxBet: isOptionReachMaxBet(currentAmountOfChoice + amount, maxBetPerChoice),
+//         isMaxBetRound: isMaxBetRound(amount, roundMaxBet, totalBeAmount),
+//         maxBetPerChoice,
+//         roundMaxBet,
+//         roundMinBet: getRoundMinBet(gameConfigs, userMinBet),
+//         currentAmountOfChoice,
+//     });
+// };
 
 const determineBetMode = ({
     suggestAmount,
@@ -298,9 +297,9 @@ export const getTotalNotConfirmBet = (gameStateContext: GameStateContextModel): 
     return Object.values(gameStateContext.notConfirmOwnBets).reduce((a, b) => a + b, 0);
 };
 
-export const getTotalBetAmount = (gameStateContext: GameStateContextModel): number => {
-    return (
-        Object.values(gameStateContext.notConfirmOwnBets).reduce((a, b) => a + b, 0) +
-        Object.values(gameStateContext.ownBets).reduce((a, b) => a + b, 0)
-    );
-};
+// export const getTotalBetAmount = (gameStateContext: GameStateContextModel): number => {
+//     return (
+//         Object.values(gameStateContext.notConfirmOwnBets).reduce((a, b) => a + b, 0) +
+//         Object.values(gameStateContext.ownBets).reduce((a, b) => a + b, 0)
+//     );
+// };

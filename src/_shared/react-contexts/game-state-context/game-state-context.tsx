@@ -2,7 +2,6 @@ import { useTranslate } from "@tolgee/react";
 import { createContext, useContext, useReducer } from "react";
 import { RoundState } from "../../../components/game-base/type";
 import { LanguageLocaleMapper } from "../../constants";
-import { GetLocalizedErrorMessage } from "../../helpers/notice-helper";
 import { tolgee } from "../../tolgee";
 import { GameEventAction, GameEventActionType } from "./game-event-action";
 import { GameStateContextModel, initialGameStateContextModel } from "./game-state-context-model";
@@ -46,11 +45,9 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
         settlementResult,
         status,
         rate,
-        apiError,
         userStakeLevel,
         odds,
         drawId,
-        notice,
         disconnectReason,
         showWinningAnimation,
         activeScoreboardTab,
@@ -168,23 +165,6 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
             };
         }
 
-        case GameEventActionType.API_ERROR: {
-            const isPlaceBet = apiError.isPlaceBetFailed ? apiError.isPlaceBetFailed : false;
-            const errorCode = apiError.errorCode;
-            const message = GetLocalizedErrorMessage(errorCode, isPlaceBet);
-            return {
-                ...state,
-                notice: {
-                    gameName: "gameName",
-                    roundId: apiError?.gameRoundId,
-                    message: message,
-                    duration: 3,
-                    minBet: apiError?.minBet,
-                    maxBet: apiError?.maxBet,
-                    errorCode: errorCode,
-                },
-            };
-        }
 
         case GameEventActionType.DISCONNECT_ERROR: {
             return {
@@ -199,13 +179,6 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
             return {
                 ...state,
                 userStakeLevel,
-            };
-        }
-
-        case GameEventActionType.NOTICE_USER_STAKE_LEVEL: {
-            return {
-                ...state,
-                notice: { message: "Common.message_bet_limit_change" },
             };
         }
 
@@ -232,14 +205,6 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
                 turnCounter,
             };
         }
-
-        case GameEventActionType.DISPLAY_POPUP: {
-            return {
-                ...state,
-                notice,
-            };
-        }
-
 
         case GameEventActionType.SET_NEW_GAME_STATE: {
             return {

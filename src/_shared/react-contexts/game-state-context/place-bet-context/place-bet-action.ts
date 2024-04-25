@@ -4,7 +4,6 @@ import {
 
 export enum PlaceBetEventActionType {
     OWN_BETS = "OWN_BETS",
-    END_BET = "END_BET",
     DISPLAY_POPUP = "DISPLAY_POPUP",
     ACCEPTED_BET_QUEUE = "ACCEPTED_BET_QUEUE",
     BET_PROCESSING = "BET_PROCESSING",
@@ -25,7 +24,6 @@ export interface PlaceBetEventPayload {
     };
     acceptedBetQueue?: any;
     suggestBet?: SuggestBet;
-    notice?: string
 }
 
 export interface PlaceBetEventAction {

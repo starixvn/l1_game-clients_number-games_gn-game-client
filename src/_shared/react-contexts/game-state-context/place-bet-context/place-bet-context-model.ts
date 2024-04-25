@@ -4,7 +4,7 @@ import {
 
 
 export interface PlaceBetContextModel {
-    ownBets: object;
+    ownBets: any;
     isProcessingBet?: boolean;
     acceptedBetQueue: {
         [key: number]: {

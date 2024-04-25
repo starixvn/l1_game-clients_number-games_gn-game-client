@@ -70,7 +70,7 @@ export type GameSound = {
 
 export type GameBaseProps = GamePropsContext & WithRouterProps;
 
-export interface Notice {
+export interface NoticeModel {
     gameName?: string;
     roundId?: number;
     message: string;
@@ -86,7 +86,7 @@ export interface Notice {
     hedgeBetGroup?: string[];
 }
 
-export interface APIError extends Notice {
+export interface APIError extends NoticeModel {
     gameName?: string;
     roundId?: number;
 }

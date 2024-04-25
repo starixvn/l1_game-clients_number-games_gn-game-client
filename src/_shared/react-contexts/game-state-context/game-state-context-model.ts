@@ -2,7 +2,6 @@ import {
     DrawInfo,
     GameConfigs,
     IUserStakeLevel,
-    Notice,
     PFClientSeedSetting,
     PFResult,
     Round,
@@ -27,7 +26,6 @@ export interface GameStateContextModel {
     showWinningAnimation: boolean;
     playResultAnimation: boolean;
     isShowBlink: boolean;
-    notice: Notice;
     activeScoreboardTab?: number;
     rate?: number;
     disconnectReason?: string;

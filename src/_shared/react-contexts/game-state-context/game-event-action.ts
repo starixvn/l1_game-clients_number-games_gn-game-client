@@ -2,11 +2,9 @@ import {
     DrawInfo,
     GameConfigs,
     GameDurations,
-    Notice,
     PFClientSeedSetting,
     PFResult,
     RoundState,
-    SuggestBet,
 } from "../../../components/game-base/type";
 
 export enum GameEventActionType {
@@ -21,14 +19,11 @@ export enum GameEventActionType {
     FINISH = "FINISH",
     WIN_STATUS = "WIN_STATUS",
     USER = "USER",
-    API_ERROR = "API_ERROR",
     DISCONNECT_ERROR = "DISCONNECT_ERROR",
     USER_STAKE_LEVEL = "USER_STAKE_LEVEL",
-    NOTICE_USER_STAKE_LEVEL = "NOTICE_USER_STAKE_LEVEL",
     ODDS = "ODDS",
     DRAW_ID = "DRAW_ID",
     TURN_COUNTER = "TURN_COUNTER",
-    DISPLAY_POPUP = "DISPLAY_POPUP",
     ROUND_REMAINING_TIME = "ROUND_REMAINING_TIME",
     SET_NEW_GAME_STATE = "SET_NEW_GAME_STATE",
     SHOW_WINNING_ANIMATION = "SHOW_WINNING_ANIMATION",
@@ -69,7 +64,6 @@ export interface GameEventPayload {
         bet?: number;
     };
     rate?: number;
-    apiError?: any;
     errorCode?: string;
     userStakeLevel?: {
         minBet: number;
@@ -78,7 +72,6 @@ export interface GameEventPayload {
     odds?: any;
     drawId?: number;
     kickedOut?: any;
-    notice?: Notice;
     disconnectReason?: string;
     showWinningAnimation?: boolean;
     selectedBetChoice?: string;

@@ -7,13 +7,13 @@ import {
     isInPhasePreventBet,
 } from "../../../_shared/helpers/validate-bet-helper";
 import { SystemContextModel } from "../../../_shared/react-contexts";
-import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 import { GameStateContextModel } from "../../../_shared/react-contexts/game-state-context/game-state-context-model";
-import { Notice, RoundState } from "../type";
+import { NoticeModel, RoundState } from "../type";
 import { GameMessageHandler, messageEventType } from "./";
 import { getAppSettings } from "../../../_shared/app-settings";
 import { PlaceBetEventActionType } from "../../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-action";
 import { PlaceBetContextModel } from "../../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-context-model";
+import { GlobalMessageTransmitter } from "../../../_shared/helpers/message-transmitter/global-transmitter";
 
 export type PlaceBetHandlerProps = {
     tolgeeNamespace: string;
@@ -32,16 +32,16 @@ export type PlaceBetHandlerProps = {
 export class PlaceBetHandler {
     private retryInterval: NodeJS.Timeout;
 
-    private placeBetDispatchTmp: Function;
+    private placeBetDispatch: Function;
 
     constructor(public readonly props: PlaceBetHandlerProps) {}
 
-    setPlaceBetDispatchTmp =(placeBetDispatchTmp) =>{
-        this.placeBetDispatchTmp = placeBetDispatchTmp;
+    setPlaceBetDispatchTmp =(placeBetDispatch: Function) =>{
+        this.placeBetDispatch = placeBetDispatch;
     }
 
     getPlaceBetDispatch =() =>{
-        return this.placeBetDispatchTmp;
+        return this.placeBetDispatch;
     }
 
     registerEvents = (signOut: () => void, gameStateContext: PlaceBetContextModel) => {
@@ -53,24 +53,14 @@ export class PlaceBetHandler {
 
 
     handleOwnBets = ({ ownBets }) => {
-        this.placeBetDispatchTmp({
+        this.placeBetDispatch({
             type: PlaceBetEventActionType.OWN_BETS,
-            payload: {
-                ownBets,
-            },
+            payload: {ownBets},
         });
     };
 
     handleBetFailed = ({ notice, kickedOut }, signOut: () => void) => {
-        const { dispatch } = this.props;
         const isDisabledAccount = kickedOut?.isDisabledAccount;
-        // dispatch({
-        //     type: GameEventActionType.DISPLAY_POPUP,
-        //     payload: {
-        //         notice: null,
-        //     },
-        // });
-
         const noticePayload = this.getNoticePayloadBetFailed(notice, kickedOut);
 
         noticePayload.gameName = this.props.gameName;
@@ -85,10 +75,10 @@ export class PlaceBetHandler {
             noticePayload.roundId = notice?.gameRoundId;
         }
 
-        // dispatch({ type: GameEventActionType.DISPLAY_POPUP, payload: { notice: noticePayload } });
+        GlobalMessageTransmitter.broadcast({ notice: noticePayload });
     };
 
-    getNoticePayloadBetFailed = (notice: Notice, kickedOut: any) => {
+    getNoticePayloadBetFailed = (notice: NoticeModel, kickedOut: any) => {
         const errorCode = kickedOut?.isDisabledAccount ? kickedOut.errorCode : notice.errorCode;
 
         const hedgeBetGroup = notice?.hedgeBetGroup;
@@ -98,21 +88,19 @@ export class PlaceBetHandler {
     };
 
     handleEndBet = ({ endBet, ownBets, notice, kickedOut, apiError }, signOut: () => void, gameStateContext: PlaceBetContextModel) => {
-        const { playPlaceBetSound, dispatch, gameMessageHandler } = this.props;
+        const { playPlaceBetSound, gameMessageHandler } = this.props;
         const enableSound = StorageHelper.get(localStorageKeys.enableSound) ?? true;
-        this.placeBetDispatchTmp({ type: PlaceBetEventActionType.END_BET_PROCESSING, payload: {} });
+        this.placeBetDispatch({ type: PlaceBetEventActionType.END_BET_PROCESSING, payload: {} });
+        GlobalMessageTransmitter.broadcast({ notice: null });
+
         this.clearRetryInterval();
-        // dispatch({
-        //     type: GameEventActionType.DISPLAY_POPUP,
-        //     payload: { notice: null },
-        // });
 
         if (endBet === -1) {
             !apiError && this.handleBetFailed({ notice, kickedOut }, signOut);
         } else {
             this.playAcceptedBetAnimation(endBet, gameStateContext);
             enableSound && playPlaceBetSound();
-            this.placeBetDispatchTmp({
+            this.placeBetDispatch({
                 type: PlaceBetEventActionType.OWN_BETS,
                 payload: { ownBets },
             });
@@ -123,11 +111,9 @@ export class PlaceBetHandler {
     playAcceptedBetAnimation = (amount: number, gameStateContext: PlaceBetContextModel) => {
         const { acceptedBetQueue } = gameStateContext;
         const key = uuidv4();
-        acceptedBetQueue[key] = {
-            amount,
-        };
+        acceptedBetQueue[key] = { amount};
 
-        this.placeBetDispatchTmp({
+        this.placeBetDispatch({
             type: PlaceBetEventActionType.ACCEPTED_BET_QUEUE,
             payload: { acceptedBetQueue: { ...acceptedBetQueue } },
         });
@@ -141,7 +127,7 @@ export class PlaceBetHandler {
     removeAcceptedBetQueue = (key: number, gameStateContext: PlaceBetContextModel) => {
         const { acceptedBetQueue } = gameStateContext;
         delete acceptedBetQueue[key];
-        this.placeBetDispatchTmp({
+        this.placeBetDispatch({
             type: PlaceBetEventActionType.ACCEPTED_BET_QUEUE,
             payload: { acceptedBetQueue },
         });
@@ -173,6 +159,8 @@ export class PlaceBetHandler {
 
     handleProcessingBet = () => {
         this.sendNotice({ message: "Common.message_processing_action", duration: 2 });
+        this.placeBetDispatch({type: PlaceBetEventActionType.BET_PROCESSING, payload: {}});
+        GlobalMessageTransmitter.broadcast({ notice: { message: "Common.message_processing_action", duration: 2 } });
     };
 
     handlePreventBet = (gameStateContext: GameStateContextModel) => {
@@ -194,16 +182,11 @@ export class PlaceBetHandler {
         }
     }
 
-    sendNotice = (notice: Notice) =>{
-        // this.props.dispatch({
-        //     type: GameEventActionType.DISPLAY_POPUP,
-        //     payload: {
-        //         notice,
-        //     },
-        // });
+    sendNotice = (notice: NoticeModel) =>{
+        GlobalMessageTransmitter.broadcast({ notice });
     }
 
-    protected getNotice = (errorCode: string, betChoice?: string, args?: object): Notice => {
+    protected getNotice = (errorCode: string, betChoice?: string, args?: object): NoticeModel => {
         let betChoice1 = "";
         let betChoice2 = "";
         const hedgeBetGroup = this.props.hedgeBetGroups.find((group) => group.includes(betChoice));
@@ -224,10 +207,8 @@ export class PlaceBetHandler {
     };
     protected sendBetMessage(betChoice: string, amount: number) {
         const { gameMessageHandler } = this.props;
-        this.placeBetDispatchTmp({
-            type: PlaceBetEventActionType.BET_PROCESSING,
-            payload: { notice: null },
-        });
+        this.placeBetDispatch({type: PlaceBetEventActionType.BET_PROCESSING, payload: {}});
+        GlobalMessageTransmitter.broadcast({ notice: null});
 
         gameMessageHandler.broadcastGameEvent({
             [messageEventType.SEND_SOCKET_MESSAGE_WITH_CLIENT_SEED]: {

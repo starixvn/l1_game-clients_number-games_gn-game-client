@@ -27,7 +27,7 @@ import GameGuideModal from "../game-components/game-guide";
 import GameLoading from "../game-components/game-loading";
 import { LoadingSpinner } from "../game-components/game-loading/loading-spinner";
 import NewRoundTransition from "../game-components/new-round-transition";
-import { Notice } from "../game-components/notice";
+import { NoticeDialog } from "../game-components/notice";
 import { PFSettingModal } from "../game-components/provably-fair";
 import { Settings } from "../game-components/settings";
 import BackgroundGalaxy from "../page-components/background";
@@ -515,7 +515,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     };
 
     renderNotice() {
-        return <Notice />;
+        return <NoticeDialog />;
     }
 
     renderResultSection() {
