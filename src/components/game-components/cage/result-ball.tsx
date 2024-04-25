@@ -1,6 +1,7 @@
 import Image from "next/image";
 import React, { useMemo } from "react";
 
+import { useShowBallResultSound } from "../../../_shared/react-hooks";
 import { Spritesheet } from "../sprites-sheet";
 import Styles from "./cage.module.scss";
 
@@ -11,13 +12,14 @@ const ResultBall: React.FC<{
     fps?: number;
 }> = ({ isDelayShowResult, ballColor, isShowResultAnim, fps }) => {
     const currentTime = Date.now();
+    const playShowBallResult = useShowBallResultSound();
+
     return useMemo(() => {
         if (!isDelayShowResult) {
             return null;
         }
-
         const ballImage = ballColor.includes("blue") ? "blue" : "red";
-
+        isShowResultAnim && playShowBallResult();
         return (
             <div key={currentTime} id="show-ball-anim" className={Styles["show-ball-anim"]}>
                 <Image width={120} height={120} className={Styles["ball-blur"]} src={`/static/images/cage/ball-blur.webp`} alt="img-blur" />

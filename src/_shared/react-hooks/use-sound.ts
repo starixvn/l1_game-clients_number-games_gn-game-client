@@ -8,7 +8,7 @@ const mp3File = {
     click: `click`,
     selectChip: `select-chip`,
     startingRound: `starting-round`,
-    receiveFinish: `receive-finish`,
+    showBallResult: `show-ball-result`,
 };
 
 const resourceMp3 = objectMap(mp3File, (v) => `${path}${v}.mp3?v=${buildVersion}`);
@@ -37,6 +37,6 @@ export const useStartRoundSound = () => {
     return usePlaySound(resourceMp3.startingRound);
 };
 
-export const useReceiveFinishSound = () => {
-    return usePlaySound(resourceMp3.receiveFinish);
+export const useShowBallResultSound = () => {
+    return usePlaySound(resourceMp3.showBallResult);
 };
