@@ -21,7 +21,6 @@ import styles from "./games.module.scss";
 import { Props } from "./type";
 import { Swiper, SwiperSlide } from "swiper/react";
 import GameLoading from "../components/game-components/game-loading";
-import { GlobalMessageTransmitter } from "../_shared/helpers/message-transmitter/global-transmitter";
 
 const BacBall = dynamic(() => import("./bac-ball"));
 const NextBall = dynamic(() => import("./next-ball/page"));
@@ -137,7 +136,6 @@ export const Games: React.FC<Props> = ({
                 initialSlide={gameIndex}
                 noSwiping={true}
                 noSwipingClass={SwiperNoSwiping}
-                watchSlidesProgress={true}
                 onRealIndexChange={(swiper) => {
                     AnalyticsHelper.trackFunction({
                         function: TrackingFunction.SwitchGame,
