@@ -14,7 +14,7 @@ export const PlaceBetWrapper = (props: PlaceBetWrapperProps) => {
 
     useEffect(() => {
         props.handler.registerEvents(props.signOut, placeBetContext);
-        props.handler.setPlaceBetDispatchTmp(placeBetDispatchDirect)
+        props.handler.setPlaceBetDispatch(placeBetDispatchDirect)
     }, [])
 
     return props.renderBettingBlock();

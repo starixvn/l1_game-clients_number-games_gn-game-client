@@ -31,8 +31,8 @@ export class PlaceBetHandler {
 
     constructor(public readonly props: PlaceBetHandlerProps) { }
 
-    setPlaceBetDispatchTmp = (placeBetDispatch: Function) => {
-        this.placeBetDispatch = placeBetDispatch;
+    setPlaceBetDispatch = (dispatch: Function) => {
+        this.placeBetDispatch = dispatch;
     }
 
     getPlaceBetDispatch = () => {
@@ -46,6 +46,13 @@ export class PlaceBetHandler {
         this.props.gameMessageHandler.register(messageEventType.OWN_BETS, this.handleOwnBets);
     };
 
+    broadcastNotice =(notice: object)=>{
+        GlobalMessageTransmitter.broadcast({ notice });
+    }
+
+    clearNotice = () =>{
+        this.broadcastNotice(null);
+    }
 
     handleOwnBets = ({ ownBets }) => {
         this.placeBetDispatch({
@@ -86,7 +93,7 @@ export class PlaceBetHandler {
         const { playPlaceBetSound, gameMessageHandler } = this.props;
         const enableSound = StorageHelper.get(localStorageKeys.enableSound) ?? true;
         this.placeBetDispatch({ type: PlaceBetEventActionType.END_BET_PROCESSING, payload: {} });
-        GlobalMessageTransmitter.broadcast({ notice: null });
+        this.clearNotice();
 
         this.clearRetryInterval();
 
@@ -154,7 +161,7 @@ export class PlaceBetHandler {
 
     handleProcessingBet = () => {
         this.placeBetDispatch({ type: PlaceBetEventActionType.BET_PROCESSING, payload: {} });
-        GlobalMessageTransmitter.broadcast({ notice: { message: "Common.message_processing_action", duration: 2 } });
+        this.broadcastNotice({ message: "Common.message_processing_action", duration: 2 } );
     };
 
     handlePreventBet = (gameStateContext: GameStateContextModel) => {
@@ -166,7 +173,7 @@ export class PlaceBetHandler {
             ? this.getNotice(NoticeErrorCode.cannotBet)
             : this.getNotice(totalTurns > 1 ? NoticeErrorCode.placeBetNextDraw : NoticeErrorCode.placeBetNextRound);
 
-        this.sendNotice(notice);
+        this.broadcastNotice(notice);
     };
 
     handleEnabledQuickBet(amount: number, betChoice: string) {
@@ -174,10 +181,6 @@ export class PlaceBetHandler {
             this.setRetryInterval();
             this.sendBetMessage(betChoice, amount);
         }
-    }
-
-    sendNotice = (notice: NoticeModel) => {
-        GlobalMessageTransmitter.broadcast({ notice });
     }
 
     protected getNotice = (errorCode: string, betChoice?: string, args?: object): NoticeModel => {
@@ -202,7 +205,7 @@ export class PlaceBetHandler {
     protected sendBetMessage(betChoice: string, amount: number) {
         const { gameMessageHandler } = this.props;
         this.placeBetDispatch({ type: PlaceBetEventActionType.BET_PROCESSING, payload: {} });
-        GlobalMessageTransmitter.broadcast({ notice: null });
+        this.clearNotice(); 
 
         gameMessageHandler.broadcastGameEvent({
             [messageEventType.SEND_SOCKET_MESSAGE_WITH_CLIENT_SEED]: {
