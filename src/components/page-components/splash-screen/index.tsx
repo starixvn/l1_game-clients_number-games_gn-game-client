@@ -4,9 +4,10 @@ import { useRouter } from "next/router";
 import { ReactNode, useContext, useEffect } from "react";
 
 import { getAppSettings } from "../../../_shared/app-settings";
-import { buildVersion, languageMapper, systemName } from "../../../_shared/constants";
+import { languageMapper } from "../../../_shared/constants";
 import { AnalyticsHelper, localStorageKeys, StorageHelper } from "../../../_shared/helpers";
 import { URLContext, usePlayerContext } from "../../../_shared/react-contexts";
+import { useTranslator } from "../../../_shared/react-hooks/use-translator";
 import { setSentryUser } from "../../../_shared/sentry";
 import { tolgee } from "../../../_shared/tolgee";
 import { sso, verifySession } from "../../../services/auth-service";
@@ -61,22 +62,30 @@ export default function SplashScreen(): ReactNode {
     const { token, language } = useContext(URLContext);
     const router = useRouter();
     const player = usePlayerContext();
+    const { t } = useTranslator();
+
     useEffect(() => {
         customStartup(token, language, router, player).catch(onStartupError);
     }, []);
 
-    const { session, locale } = usePlayerContext();
+    const { session } = usePlayerContext();
 
     if (session?.isUM) {
         return <UMPage />;
     } else {
         return (
             <div className={`${Styles.page}`}>
-                <img
-                    src={`/static/images/splash-screen/${locale}/logo-${systemName}.svg?${buildVersion}`}
-                    className={Styles["logo"]}
-                    alt="Logo"
-                />
+                <div className={Styles["center"]}>
+                    <div className={Styles["logo"]}></div>
+                    <div className={Styles["slogan"]}>{t("SabaNumber.splashscreen_slogan")}</div>
+                </div>
+
+                <div className={Styles["loading"]}>
+                    <div className={Styles["progress"]}>
+                        <div className={Styles["progress-bar"]}></div>
+                    </div>
+                    <p className={Styles["text-first-download"]}>{t("Common.message_download_first_visit")}</p>
+                </div>
             </div>
         );
     }
