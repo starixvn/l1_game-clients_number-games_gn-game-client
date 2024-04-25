@@ -11,7 +11,7 @@ import ModalContainer from "../../modal-container";
 import CopyableTextInput from "../copyable-text-input";
 import { ButtonPFGuide } from "../pf-guide";
 import Styles from "../provably-fair.module.scss";
-import { usePlaceBetContext } from "../../../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-context";
+import { PlaceBetProvider, usePlaceBetContext } from "../../../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-context";
 
 const NUMBER_VALUES = "0123456789";
 const GetPFInfoMessage = "getPfInfo";
@@ -48,7 +48,9 @@ const PFSettingModal: FC<{ customClientSeedInfo?: string }> = ({ customClientSee
                 isOpen={true}
                 onCloseModal={handleCloseModal}
             >
-                <PFSetting customClientSeedInfo={customClientSeedInfo} />
+                <PlaceBetProvider>
+                    <PFSetting customClientSeedInfo={customClientSeedInfo} />
+                </PlaceBetProvider>
             </ModalContainer>
         )
     );
