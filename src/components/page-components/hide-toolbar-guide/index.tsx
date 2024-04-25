@@ -26,6 +26,7 @@ const ToolbarGuide: React.FC = () => {
     const iconFullScreen = <ToolbarIcon name="icon-fullscreen" />;
     const iconPointer = <ToolbarIcon name="pointer" />;
     const animClass = isAnimClass ? "has-anim" : "";
+    const fixedUIHeight = 713;
 
     useEffect(() => {
         const isStorageHideGuide = StorageHelper.get(localStorageKeys.hideToolbarGuide) ?? false;
@@ -35,7 +36,7 @@ const ToolbarGuide: React.FC = () => {
             return;
         }
 
-        if (currentSessionHideToolbarGuide !== session?.ss) {
+        if (currentSessionHideToolbarGuide !== session?.ss && window.innerHeight < fixedUIHeight) {
             setIsEnabledToolbarGuide(true);
         }
     }, []);
