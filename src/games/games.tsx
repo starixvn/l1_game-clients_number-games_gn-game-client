@@ -8,7 +8,8 @@ import { getAppSettings } from "../_shared/app-settings";
 import { GameIds, SwiperNoSwiping } from "../_shared/constants";
 import { AnalyticsHelper, TrackingAction, TrackingFunction } from "../_shared/helpers";
 import { SettingEventActionType, SystemContextProvider, URLContext, usePlayerContext, useSettingDispatch } from "../_shared/react-contexts";
-import { usePlaceBetSound, useStartRoundSound } from "../_shared/react-hooks";
+import { usePlaceBetSound, useStartDrawSound, useStartRoundSound } from "../_shared/react-hooks";
+import { GameSound } from "../components/game-base/type";
 import GameLoading from "../components/game-components/game-loading";
 import PreloadImages from "../components/page-components/preload-images";
 import { getChipSettings } from "../services/user-setting-service";
@@ -46,8 +47,9 @@ export const Games: React.FC<Props> = ({
         })();
     }, []);
 
-    const gameSound = {
+    const gameSound : GameSound = {
         playPlaceBetSound: usePlaceBetSound(),
+        startDrawSound: useStartDrawSound(),
         startRoundSound: useStartRoundSound(),
     };
 

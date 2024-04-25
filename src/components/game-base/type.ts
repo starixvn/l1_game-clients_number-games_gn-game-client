@@ -63,8 +63,8 @@ export type GamePropsContext = {
 
 export type GameSound = {
     playPlaceBetSound: Function;
+    startDrawSound: Function;
     startRoundSound: Function;
-    receiveFinishSound: Function;
 };
 
 export type GameBaseProps = GamePropsContext & WithRouterProps;

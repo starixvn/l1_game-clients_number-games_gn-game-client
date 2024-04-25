@@ -8,16 +8,19 @@ export type GameSoundHandlerProps = {
 export class GameSoundHandler {
     constructor(private readonly props: GameSoundHandlerProps) {}
 
-    handleSound = (roundState: RoundState) => {
+    handleSound = (newRoundState: RoundState) => {
         const enableSound = StorageHelper.get(localStorageKeys.enableSound) ?? true;
-        enableSound && this.playSound(roundState);
+        enableSound && this.playSound(newRoundState);
     };
 
-    private playSound(roundState: RoundState) {
-        const { startRoundSound } = this.props.gameSound();
-        switch (roundState) {
-            case RoundState.DisplayResult:
+    private playSound(newRoundState: RoundState) {
+        const { startDrawSound, startRoundSound } = this.props.gameSound();
+        switch (newRoundState) {
+            case RoundState.SwitchRound:
                 startRoundSound();
+                break;
+            case RoundState.InRound:
+                startDrawSound();
                 break;
         }
     }

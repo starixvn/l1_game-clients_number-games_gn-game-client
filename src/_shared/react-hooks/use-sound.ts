@@ -8,6 +8,7 @@ const mp3File = {
     click: `click`,
     selectChip: `select-chip`,
     startingRound: `starting-round`,
+    startingDraw: `starting-draw`,
     showBallResult: `show-ball-result`,
 };
 
@@ -31,6 +32,10 @@ export const useSelectChipSound = () => {
 
 export const usePlaceBetSound = () => {
     return usePlaySound(resourceMp3.placeBet);
+};
+
+export const useStartDrawSound = () => {
+    return usePlaySound(resourceMp3.startingDraw);
 };
 
 export const useStartRoundSound = () => {

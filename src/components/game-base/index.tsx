@@ -3,8 +3,10 @@ import { createPortal } from "react-dom";
 import Auth from "sc-user-service-client/dist/auth";
 import { Socket } from "socket.io-client";
 
+import { SwiperNoSwiping } from "../../_shared/constants";
 import { InitSocketIO, localStorageKeys, StorageHelper, writeDebugLog } from "../../_shared/helpers";
 import { AnalyticsHelper } from "../../_shared/helpers/analytic-helper";
+import { GlobalMessageTransmitter } from "../../_shared/helpers/message-transmitter/global-transmitter";
 import {
     GameActionsContextProvider,
     GameContextProvider,
@@ -30,6 +32,7 @@ import NewRoundTransition from "../game-components/new-round-transition";
 import { Notice } from "../game-components/notice";
 import { PFSettingModal } from "../game-components/provably-fair";
 import { Settings } from "../game-components/settings";
+import BackgroundGalaxy from "../page-components/background";
 import BetSettings from "../page-components/bet-settings";
 import { IRoundStateHandler } from "../round-base/round-state-handler";
 import {
@@ -46,9 +49,6 @@ import { GameRoundDataHandler } from "./handlers/game-round-data-handler";
 import { GameSoundHandler } from "./handlers/game-sound-handler";
 import { IGameStateHandler } from "./handlers/game-state-handler";
 import { GameBaseProps, PFClientSeedSetting, RoundState } from "./type";
-import { SwiperNoSwiping } from "../../_shared/constants";
-import BackgroundGalaxy from "../page-components/background";
-import { GlobalMessageTransmitter } from "../../_shared/helpers/message-transmitter/global-transmitter";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
     protected socket: Socket;
@@ -475,7 +475,10 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 type: GameEventActionType.SET_NEW_GAME_STATE,
                 payload: { newGameState },
             });
-            this.gameSoundHandler.handleSound(gameStateContextModel.roundState);
+            const isContinuePlaying = gameStateContextModel.roundState != RoundState.None;
+            if (isContinuePlaying) {
+                this.gameSoundHandler.handleSound(newRoundState);
+            }
         }
     }
 
