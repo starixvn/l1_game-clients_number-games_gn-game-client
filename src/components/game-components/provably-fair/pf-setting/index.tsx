@@ -11,6 +11,7 @@ import ModalContainer from "../../modal-container";
 import CopyableTextInput from "../copyable-text-input";
 import { ButtonPFGuide } from "../pf-guide";
 import Styles from "../provably-fair.module.scss";
+import { usePlaceBetContext } from "../../../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-context";
 
 const NUMBER_VALUES = "0123456789";
 const GetPFInfoMessage = "getPfInfo";
@@ -58,7 +59,8 @@ const PFSetting: FC<{ customClientSeedInfo?: string }> = ({ customClientSeedInfo
     const randomSeed = useRef<HTMLInputElement>();
     const manualRadio = useRef<HTMLInputElement>();
     const manualSeed = useRef<HTMLInputElement>();
-    const { pfClientSeedSetting, ownBets, drawId } = useGameStateContext();
+    const { pfClientSeedSetting, drawId } = useGameStateContext();
+    const { ownBets } = usePlaceBetContext();
     const [isFirstLoad, setIsFirstLoad] = useState<boolean>(true);
     const [isFirstFetch, setIsFirstFetch] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);

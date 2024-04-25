@@ -15,15 +15,12 @@ export enum GameEventActionType {
     SIGN_IN = "SIGN_IN",
     SIGN_OUT = "SIGN_OUT",
     UM = "UM",
-    // REMAINING_TIME = "REMAINING_TIME",
     GAME_CONFIGS = "GAME_CONFIGS",
     ROUND_DATA = "ROUND_DATA",
     ROUND_HISTORY = "ROUND_HISTORY",
     FINISH = "FINISH",
     WIN_STATUS = "WIN_STATUS",
     USER = "USER",
-    OWN_BETS = "OWN_BETS",
-    END_BET = "END_BET",
     API_ERROR = "API_ERROR",
     DISCONNECT_ERROR = "DISCONNECT_ERROR",
     USER_STAKE_LEVEL = "USER_STAKE_LEVEL",
@@ -32,18 +29,13 @@ export enum GameEventActionType {
     DRAW_ID = "DRAW_ID",
     TURN_COUNTER = "TURN_COUNTER",
     DISPLAY_POPUP = "DISPLAY_POPUP",
-    ACCEPTED_BET_QUEUE = "ACCEPTED_BET_QUEUE",
     ROUND_REMAINING_TIME = "ROUND_REMAINING_TIME",
     SET_NEW_GAME_STATE = "SET_NEW_GAME_STATE",
     SHOW_WINNING_ANIMATION = "SHOW_WINNING_ANIMATION",
-    BET_PROCESSING = "BET_PROCESSING",
-    END_BET_PROCESSING = "END_BET_PROCESSING",
     ACTIVE_SCORE_BOARD = "ACTIVE_SCORE_BOARD",
     PLAY_RESULT_ANIMATION = "PLAY_RESULT_ANIMATION",
     SHOW_RESULT_INFO_TIME_OUT = "SHOW_RESULT_INFO_TIME_OUT",
-    SHOW_CONFIRM_BET = "SHOW_CONFIRM_BET",
     SHOW_CONFIRM_DIALOG = "SHOW_CONFIRM_DIALOG",
-    NOT_CONFIRM_OWN_BETS = "NOT_CONFIRM_OWN_BETS",
     SET_UM_FIRST_LOADING = "SET_UM_FIRST_LOADING",
     TOGGLE_BET_HISTORY = "TOGGLE_BET_HISTORY",
     TOGGLE_BET_DETAIL = "TOGGLE_BET_DETAIL",
@@ -55,7 +47,6 @@ export enum GameEventActionType {
     TOGGLE_GAME_GUIDE = "TOGGLE_GAME_GUIDE",
     TOGGLE_PF_SETTING = "TOGGLE_PF_SETTING",
     UPDATE_PF_CLIENT_SEED_SETTING = "UPDATE_PF_CLIENT_SEED_SETTING",
-    SUGGEST_BET = "SUGGEST_BET",
     START_NEW_ROUND_ANIM = "START_NEW_ROUND_ANIM",
 }
 
@@ -77,18 +68,7 @@ export interface GameEventPayload {
         win?: boolean;
         bet?: number;
     };
-    userData?: {
-        user?: any;
-        gameConfigs?: any;
-    };
-    ownBets?: any;
-    endBetData?: {
-        endBet?: number;
-        betChoice?: any;
-        notice?: string;
-        kickedOut?: boolean;
-        apiError?: boolean;
-    };
+    rate?: number;
     apiError?: any;
     errorCode?: string;
     userStakeLevel?: {
@@ -99,7 +79,6 @@ export interface GameEventPayload {
     drawId?: number;
     kickedOut?: any;
     notice?: Notice;
-    acceptedBetQueue?: any;
     disconnectReason?: string;
     showWinningAnimation?: boolean;
     selectedBetChoice?: string;
@@ -121,7 +100,6 @@ export interface GameEventPayload {
     isShowPFVerify?: boolean;
     isShowPFClientSeedInfo?: boolean;
     isShowPFVerification?: boolean;
-    suggestBet?: SuggestBet;
     pfClientSeedSetting?: PFClientSeedSetting;
     betDetailModalData?: {
         drawInfo: DrawInfo;

@@ -77,9 +77,11 @@ export class PlayerHandler {
     }
 
     handleUserData({ user, gameConfigs }: { user: Player; gameConfigs: any }) {
-        this.props.dispatch({
-            type: GameEventActionType.USER,
-            payload: { userData: { user, gameConfigs } },
-        });
+        if(gameConfigs){
+            this.props.dispatch({
+                type: GameEventActionType.USER,
+                payload: {rate: user.rate },
+            });
+        }
     }
 }

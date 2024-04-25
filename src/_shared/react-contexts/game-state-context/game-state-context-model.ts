@@ -7,7 +7,6 @@ import {
     PFResult,
     Round,
     RoundState,
-    SuggestBet,
 } from "../../../components/game-base/type";
 
 export interface GameStateContextModel {
@@ -20,17 +19,11 @@ export interface GameStateContextModel {
     roundId: number;
     result?: any;
     settlementResult?: any;
-    ownBets: object;
     errorMessage?: string | string[];
     selectedBetChoice?: string;
     isProcessingBet?: boolean;
     disabledMessage?: string;
     showResultInfo: boolean;
-    acceptedBetQueue: {
-        [key: number]: {
-            amount: number;
-        };
-    };
     showWinningAnimation: boolean;
     playResultAnimation: boolean;
     isShowBlink: boolean;
@@ -54,7 +47,6 @@ export interface GameStateContextModel {
     isShowPFVerify: boolean;
     isShowPFClientSeedInfo: boolean;
     isShowPFVerification: boolean;
-    suggestBet: SuggestBet;
     pfClientSeedSetting?: PFClientSeedSetting;
     betDetailModalData?: {
         drawInfo: DrawInfo;
@@ -72,10 +64,8 @@ export const initialGameStateContextModel = () => {
         roundData: {},
         roundHistory: [],
         roundId: 0,
-        ownBets: {},
         displayPopup: null,
         showResultInfo: false,
-        acceptedBetQueue: {},
         showWinningAnimation: false,
         playResultAnimation: false,
         isShowBlink: false,
@@ -106,12 +96,6 @@ export const initialGameStateContextModel = () => {
         },
         isShowBetHistory: false,
         isShowGameGuide: false,
-        suggestBet: {
-            currentBetChoice: "",
-            sendOutstandingBet: null,
-            suggestBetAmount: 0,
-            isInsufficientFunds: null,
-        },
         pfClientSeedSetting: {
             drawId: 0,
             randomClientSeed: "0000",

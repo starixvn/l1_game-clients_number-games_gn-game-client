@@ -46,14 +46,12 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
         result,
         settlementResult,
         status,
-        userData,
-        ownBets,
+        rate,
         apiError,
         userStakeLevel,
         odds,
         drawId,
         notice,
-        acceptedBetQueue,
         disconnectReason,
         showWinningAnimation,
         activeScoreboardTab,
@@ -61,16 +59,13 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
         newGameState,
         showResultInfo,
         isShowBlink,
-        showConfirmBet,
         showConfirmDialog,
         turnCounter,
-        notConfirmOwnBets,
         isUMInFirstLoad,
         isShowBetHistory,
         isShowGameGuide,
         isShowPFSetting,
         isShowBetDetail,
-        suggestBet,
         pfClientSeedSetting,
         betDetailModalData,
         isShowPFVerify,
@@ -79,6 +74,9 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
         isShowPFVerification,
         isPlayStartRoundAnimation,
     } = payload;
+
+
+    console.log(`gameStateReducer: ${JSON.stringify(action)} `);
 
     switch (type) {
         case GameEventActionType.CONNECT: {
@@ -168,29 +166,9 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
         }
 
         case GameEventActionType.USER: {
-            if (userData.gameConfigs) {
-                return {
-                    ...state,
-                    rate: userData.user.rate,
-                };
-            }
-
             return {
                 ...state,
-            };
-        }
-
-        case GameEventActionType.OWN_BETS: {
-            return {
-                ...state,
-                ownBets,
-            };
-        }
-
-        case GameEventActionType.END_BET: {
-            return {
-                ...state,
-                notice: null,
+                rate,
             };
         }
 
@@ -266,13 +244,6 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
             };
         }
 
-        case GameEventActionType.ACCEPTED_BET_QUEUE: {
-            return {
-                ...state,
-                acceptedBetQueue,
-            };
-        }
-
         case GameEventActionType.SET_NEW_GAME_STATE: {
             return {
                 ...state,
@@ -287,21 +258,6 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
             };
         }
 
-        case GameEventActionType.BET_PROCESSING: {
-            return {
-                ...state,
-                isProcessingBet: true,
-                notice,
-            };
-        }
-
-        case GameEventActionType.END_BET_PROCESSING: {
-            return {
-                ...state,
-                isProcessingBet: false,
-                notice: null,
-            };
-        }
         case GameEventActionType.ACTIVE_SCORE_BOARD: {
             return {
                 ...state,
@@ -333,24 +289,11 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
             };
         }
 
-        case GameEventActionType.SHOW_CONFIRM_BET: {
-            return {
-                ...state,
-                showConfirmBet,
-            };
-        }
 
         case GameEventActionType.SHOW_CONFIRM_DIALOG: {
             return {
                 ...state,
                 showConfirmDialog,
-            };
-        }
-
-        case GameEventActionType.NOT_CONFIRM_OWN_BETS: {
-            return {
-                ...state,
-                notConfirmOwnBets,
             };
         }
 
@@ -386,13 +329,6 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
             return {
                 ...state,
                 isShowPFSetting,
-            };
-        }
-
-        case GameEventActionType.SUGGEST_BET: {
-            return {
-                ...state,
-                suggestBet,
             };
         }
 

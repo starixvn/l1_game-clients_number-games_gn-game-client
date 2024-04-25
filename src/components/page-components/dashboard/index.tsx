@@ -45,13 +45,14 @@ import Register from "./register";
 import { MAX_AVATAR_ID } from "./register/avatar-gallery";
 import NameGenerator from "./register/name-generator";
 import { ILobbyConfigs, Props, State } from "./type";
+import { GlobalMessageTransmitter } from "../../../_shared/helpers/message-transmitter/global-transmitter";
 
 const Games = dynamic(() => import("../../../games/games"));
 const BaseDialog = dynamic(() => import("../../game-components/base-dialog"));
 const MusicPlayer = dynamic(() => import("../music-player"));
 const LandscapeMode = dynamic(() => import("./landscape-mode/landscape-mode"));
 
-class Dashboard extends React.PureComponent<Props, State> {
+class Dashboard extends React.Component<Props, State> {
     private notificationSocket: Socket = null;
     private reCheckInInterval: NodeJS.Timeout;
     private isKickOut = false;
@@ -126,6 +127,7 @@ class Dashboard extends React.PureComponent<Props, State> {
         if (authorizeInfo && authorizeInfo.authorized && authorizeInfo.user.red !== balance) {
             authorizeInfo.user.settings.quickBet = true;
             authorizeInfo.user.red = balance;
+            GlobalMessageTransmitter.broadcast({ userInfoRed: authorizeInfo?.user?.red });
             this.setState({ authorizeInfo });
         }
     }
@@ -179,6 +181,14 @@ class Dashboard extends React.PureComponent<Props, State> {
             const reCheckInResponse = await reCheckIn(this.props.session);
             this.handleRecheckInResponse(reCheckInResponse);
         } 
+    }
+
+    shouldComponentUpdate(nextProps: Readonly<Props>, nextState: Readonly<State>, nextContext: any): boolean {
+        if (this.state.isJoinGame
+            && this.state.authorizeInfo?.authorized) {
+            return false;
+        }
+        return true;
     }
 
     changeOrientation() {

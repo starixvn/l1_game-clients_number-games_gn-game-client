@@ -47,7 +47,6 @@ export class GameMessageHandler {
 
     registerSocketEvents = () => {
         this.register(messageEventType.GAME_CONFIG, this.handleGameConfigs);
-        this.register(messageEventType.OWN_BETS, this.handleOwnBets);
         this.register(messageEventType.ODDS, this.handleOdds);
         this.register(messageEventType.ROUND_DATA, this.handleRoundData);
         this.register(messageEventType.SIGNED_IN, this.handleSignedIn);
@@ -87,14 +86,6 @@ export class GameMessageHandler {
         });
     };
 
-    handleOwnBets = ({ ownBets }) => {
-        this.dispatch({
-            type: GameEventActionType.OWN_BETS,
-            payload: {
-                ownBets,
-            },
-        });
-    };
 
     handleOdds = ({ odds }) => {
         this.dispatch({

@@ -1,22 +1,23 @@
 import { memo, useEffect, useState } from "react";
-
 import { numberWithCommas } from "../../../_shared/helpers";
-import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import Styles from "./bet-option.module.scss";
 import { BaseProps } from "./types";
+import { usePlaceBetContext } from "../../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-context";
 
 export const OwnBet: React.FC<BaseProps> = ({ tolgeeNamespace, choice, className }) => {
-    const gameStateContext = useGameStateContext();
-    const ownBet = gameStateContext?.ownBets?.[choice] ?? 0;
-    const notConfirmOwnBets = gameStateContext?.notConfirmOwnBets?.[choice] ?? 0;
-    const ownBetValue = ownBet + notConfirmOwnBets;
+    const placeBetContext = usePlaceBetContext();
+    // const ownBet = placeBetContext?.ownBets?.[choice] ?? 0;
+
+    const notConfirmOwnBets = 0; //placeBetContext?.notConfirmOwnBets?.[choice] ?? 0;
+    // const ownBetValue = ownBet + notConfirmOwnBets;
     const [isShowBetAnim, setIsShowBetAnim] = useState(false);
     const [latestNotConfirmBet, setLatestNotConfirmBet] = useState(-1);
+    const [ownBet, setOwnBet] = useState(placeBetContext?.ownBets?.[choice] ?? 0);
 
     useEffect(() => {
         let timeOut: NodeJS.Timeout;
-
-        if (gameStateContext?.ownBets?.[choice] > 0) {
+        setOwnBet(placeBetContext?.ownBets?.[choice] ?? 0);
+        if (placeBetContext?.ownBets?.[choice] > 0) {
             if (!isShowBetAnim) {
                 setIsShowBetAnim(true);
                 timeOut = setTimeout(() => {
@@ -30,10 +31,10 @@ export const OwnBet: React.FC<BaseProps> = ({ tolgeeNamespace, choice, className
         return () => {
             clearTimeout(timeOut);
         };
-    }, [gameStateContext.ownBets[choice]]);
+    }, [placeBetContext.ownBets[choice]]);
 
     useEffect(() => {
-        const lastedBet = [...Object.values(gameStateContext?.acceptedBetQueue || [])];
+        const lastedBet = [...Object.values(placeBetContext?.acceptedBetQueue || [])];
         if (lastedBet.length > 0) {
             const amount = lastedBet[lastedBet.length - 1]?.amount || 0;
 
@@ -41,7 +42,7 @@ export const OwnBet: React.FC<BaseProps> = ({ tolgeeNamespace, choice, className
                 setLatestNotConfirmBet(amount);
             }
         }
-    }, [gameStateContext?.acceptedBetQueue]);
+    }, [placeBetContext?.acceptedBetQueue]);
 
     const ownBetUI = (value: string, animClass = "") => {
         return (
@@ -55,10 +56,10 @@ export const OwnBet: React.FC<BaseProps> = ({ tolgeeNamespace, choice, className
 
     return (
         <>
-            {ownBetValue > 0 && ownBetUI(numberWithCommas(ownBetValue, 1))}
+            {ownBet > 0 && ownBetUI(numberWithCommas(ownBet, 1))}
             {isShowBetAnim && latestNotConfirmBet > 0 && ownBetUI(numberWithCommas(latestNotConfirmBet, 1), Styles["own-bet-anim"])}
         </>
     );
 };
 
-export default memo(OwnBet);
+export default OwnBet;
