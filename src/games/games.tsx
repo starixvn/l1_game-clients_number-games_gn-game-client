@@ -3,6 +3,7 @@ import dynamic from "next/dynamic";
 import React, { useContext, useEffect } from "react";
 import { isIOS, isMobileOnly } from "react-device-detect";
 
+import { Swiper, SwiperSlide } from "swiper/react";
 import { getAppSettings } from "../_shared/app-settings";
 import { GameIds, SwiperNoSwiping } from "../_shared/constants";
 import { AnalyticsHelper, TrackingAction, TrackingFunction } from "../_shared/helpers";
@@ -10,17 +11,13 @@ import { SettingEventActionType, SystemContextProvider, URLContext, usePlayerCon
 import {
     usePlaceBetSound,
     useReceiveFinishSound,
-    useStartBettingSound,
-    useStartRoundSound,
-    useStopBettingSound,
+    useStartRoundSound
 } from "../_shared/react-hooks";
-import { tolgee } from "../_shared/tolgee";
+import GameLoading from "../components/game-components/game-loading";
 import PreloadImages from "../components/page-components/preload-images";
 import { getChipSettings } from "../services/user-setting-service";
 import styles from "./games.module.scss";
 import { Props } from "./type";
-import { Swiper, SwiperSlide } from "swiper/react";
-import GameLoading from "../components/game-components/game-loading";
 
 const BacBall = dynamic(() => import("./bac-ball"));
 const NextBall = dynamic(() => import("./next-ball/page"));
@@ -38,7 +35,6 @@ export const Games: React.FC<Props> = ({
 }) => {
     const { isDirectMode } = useContext(URLContext);
     const { theme } = useTheme();
-    const locale = tolgee.getLanguage();
     const { session } = usePlayerContext();
     const settingDispatch = useSettingDispatch();
 
@@ -60,8 +56,6 @@ export const Games: React.FC<Props> = ({
         playPlaceBetSound: usePlaceBetSound(),
         startRoundSound: useStartRoundSound(),
         receiveFinishSound: useReceiveFinishSound(),
-        startBettingSound: useStartBettingSound(locale),
-        stopBettingSound: useStopBettingSound(locale),
     };
 
     const getGameComponentById = (gameId: number) => {

@@ -6,6 +6,7 @@ export const path = "./static/sounds/";
 const mp3File = {
     placeBet: `place-bet`,
     click: `click`,
+    selectChip: `select-chip`,
     startingRound: `starting-round`,
     receiveFinish: `receive-finish`,
 };
@@ -22,6 +23,10 @@ export const usePlaySound = (resource: string) => {
 
 export const useClickSound = () => {
     return usePlaySound(resourceMp3.click);
+};
+
+export const useSelectChipSound = () => {
+    return usePlaySound(resourceMp3.selectChip);
 };
 
 export const usePlaceBetSound = () => {

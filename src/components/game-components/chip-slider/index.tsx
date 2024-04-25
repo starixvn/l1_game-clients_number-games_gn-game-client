@@ -7,10 +7,10 @@ import {
     useSystemContext,
     useSystemDispatch,
 } from "../../../_shared/react-contexts";
-import { useClickSound } from "../../../_shared/react-hooks";
+import { useSelectChipSound } from "../../../_shared/react-hooks";
+import { GameConfigs, UserStakeLevel } from "../../game-base/type";
 import { Chip } from "./chip";
 import Styles from "./chip-slider.module.scss";
-import { GameConfigs, UserStakeLevel } from "../../game-base/type";
 
 const SlidingTimeInMillisecond = 100;
 const slidesToShow = 5;
@@ -28,7 +28,7 @@ export const ChipSlider: React.FC<{ gameConfigs: GameConfigs; userStakeLevel: Us
 
     const [isSliding, setIsSliding] = useState(false);
     let sliderRef = null;
-    const playClick = useClickSound();
+    const playClickChip = useSelectChipSound();
     const chipValues = useMemo(() => {
         if (gameConfigs && userStakeLevel) {
             const maxBet = Math.min(userStakeLevel.maxBet, gameConfigs.maxBet);
@@ -65,7 +65,7 @@ export const ChipSlider: React.FC<{ gameConfigs: GameConfigs; userStakeLevel: Us
                     selectedChip: chipValue,
                 },
             });
-            playClick();
+            playClickChip();
         }
     };
 
