@@ -73,7 +73,7 @@ const PFClientSeedInfo: FC<{ fileNameExport: (data?: any) => string }> = ({ file
         clickSound();
         const header = `${translateSNGames("pf_export_csv_client_seed_info")},${translateSNGames(
             "pf_export_csv_client_seed_info_nickname"
-        )},${translateSNGames("pf_client_seed_info_subtitle_seed")}`;
+        )},${translateSNGames("pf_export_csv_client_seed_info_seed")}`;
         const content = clientSeedInfo.clientSeeds
             .map((item, index) => {
                 return `${index + 1},${item.name === name ? item.name : encryptName(item.name)},${item.clientSeed}`;
