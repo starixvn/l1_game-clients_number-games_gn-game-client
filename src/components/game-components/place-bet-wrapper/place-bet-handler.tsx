@@ -1,7 +1,6 @@
-
-import { PlaceBetHandler } from ".";
-import { usePlaceBetContext, usePlaceBetDispatch } from "../../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-context";
 import { useEffect } from "react";
+import { usePlaceBetContext, usePlaceBetDispatch } from "../../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-context";
+import { PlaceBetHandler } from "../../game-base/handlers";
 
 export type PlaceBetWrapperProps = {
     handler: PlaceBetHandler;

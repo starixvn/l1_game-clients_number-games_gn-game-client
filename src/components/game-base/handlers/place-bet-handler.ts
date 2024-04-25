@@ -1,15 +1,12 @@
 import { DefaultParamType, TFnType, TranslationKey } from "@tolgee/react";
 import { v4 as uuidv4 } from "uuid";
-
 import { NoticeErrorCode } from "../../../_shared/constants/error-code-dictionary";
 import { getGlossaryTranslate, GetLocalizedErrorMessage, localStorageKeys, StorageHelper } from "../../../_shared/helpers";
-import {
-    isInPhasePreventBet,
-} from "../../../_shared/helpers/validate-bet-helper";
+import { isInPhasePreventBet } from "../../../_shared/helpers/validate-bet-helper";
 import { SystemContextModel } from "../../../_shared/react-contexts";
 import { GameStateContextModel } from "../../../_shared/react-contexts/game-state-context/game-state-context-model";
 import { NoticeModel, RoundState } from "../type";
-import { GameMessageHandler, messageEventType } from "./";
+import { GameMessageHandler, messageEventType } from ".";
 import { getAppSettings } from "../../../_shared/app-settings";
 import { PlaceBetEventActionType } from "../../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-action";
 import { PlaceBetContextModel } from "../../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-context-model";
@@ -18,15 +15,13 @@ import { GlobalMessageTransmitter } from "../../../_shared/helpers/message-trans
 export type PlaceBetHandlerProps = {
     tolgeeNamespace: string;
     gameName: string;
-    dispatch: Function;
     gameMessageHandler: GameMessageHandler;
     translate: TFnType<DefaultParamType, string, TranslationKey>;
     playPlaceBetSound?: Function;
     hedgeBetGroups: string[][];
     getPlayerBalance: Function;
     gameId: number;
-    signOut?:Function;
-    renderBettingBlock?: Function;
+    signOut?: Function;
 };
 
 export class PlaceBetHandler {
@@ -34,13 +29,13 @@ export class PlaceBetHandler {
 
     private placeBetDispatch: Function;
 
-    constructor(public readonly props: PlaceBetHandlerProps) {}
+    constructor(public readonly props: PlaceBetHandlerProps) { }
 
-    setPlaceBetDispatchTmp =(placeBetDispatch: Function) =>{
+    setPlaceBetDispatchTmp = (placeBetDispatch: Function) => {
         this.placeBetDispatch = placeBetDispatch;
     }
 
-    getPlaceBetDispatch =() =>{
+    getPlaceBetDispatch = () => {
         return this.placeBetDispatch;
     }
 
@@ -55,7 +50,7 @@ export class PlaceBetHandler {
     handleOwnBets = ({ ownBets }) => {
         this.placeBetDispatch({
             type: PlaceBetEventActionType.OWN_BETS,
-            payload: {ownBets},
+            payload: { ownBets },
         });
     };
 
@@ -111,7 +106,7 @@ export class PlaceBetHandler {
     playAcceptedBetAnimation = (amount: number, gameStateContext: PlaceBetContextModel) => {
         const { acceptedBetQueue } = gameStateContext;
         const key = uuidv4();
-        acceptedBetQueue[key] = { amount};
+        acceptedBetQueue[key] = { amount };
 
         this.placeBetDispatch({
             type: PlaceBetEventActionType.ACCEPTED_BET_QUEUE,
@@ -154,12 +149,11 @@ export class PlaceBetHandler {
 
         if (enabledQuickBet) {
             this.handleEnabledQuickBet(amount, betChoice);
-        } 
+        }
     };
 
     handleProcessingBet = () => {
-        this.sendNotice({ message: "Common.message_processing_action", duration: 2 });
-        this.placeBetDispatch({type: PlaceBetEventActionType.BET_PROCESSING, payload: {}});
+        this.placeBetDispatch({ type: PlaceBetEventActionType.BET_PROCESSING, payload: {} });
         GlobalMessageTransmitter.broadcast({ notice: { message: "Common.message_processing_action", duration: 2 } });
     };
 
@@ -182,7 +176,7 @@ export class PlaceBetHandler {
         }
     }
 
-    sendNotice = (notice: NoticeModel) =>{
+    sendNotice = (notice: NoticeModel) => {
         GlobalMessageTransmitter.broadcast({ notice });
     }
 
@@ -207,8 +201,8 @@ export class PlaceBetHandler {
     };
     protected sendBetMessage(betChoice: string, amount: number) {
         const { gameMessageHandler } = this.props;
-        this.placeBetDispatch({type: PlaceBetEventActionType.BET_PROCESSING, payload: {}});
-        GlobalMessageTransmitter.broadcast({ notice: null});
+        this.placeBetDispatch({ type: PlaceBetEventActionType.BET_PROCESSING, payload: {} });
+        GlobalMessageTransmitter.broadcast({ notice: null });
 
         gameMessageHandler.broadcastGameEvent({
             [messageEventType.SEND_SOCKET_MESSAGE_WITH_CLIENT_SEED]: {

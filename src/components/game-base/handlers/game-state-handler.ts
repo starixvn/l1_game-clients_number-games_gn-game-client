@@ -34,12 +34,11 @@ export class GameStateHandler implements IGameStateHandler {
         durations,
         defaultResult,
         defaultSettlementResult,
-        remainingTime,
+        remainingTime
     }: GameStateHandlerProps) {
         if (gameStateContextModel) {
             const { result, settlementResult, roundId } = gameStateContextModel;
 
-            const  notice = null ; // TO DO : get notice from somewhere
             const newStateDetector = [
                 {
                     condition: nextRoundState === RoundState.InRound,
@@ -68,7 +67,6 @@ export class GameStateHandler implements IGameStateHandler {
                     condition: nextRoundState === RoundState.LockingBet,
                     state: {
                         isShowBlink: true,
-                        notice,
                         result: defaultResult ?? result,
                         settlementResult: defaultSettlementResult ?? settlementResult,
                         notConfirmOwnBets: {},

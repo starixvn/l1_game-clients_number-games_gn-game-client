@@ -27,7 +27,7 @@ describe("placeBet", () => {
         userStakeLevel = stub<IUserStakeLevel>();
         placeBetHandlerProps = {
             gameName: "test",
-            dispatch: jest.fn(),
+
             gameMessageHandler,
             translate: jest.fn(),
             playPlaceBetSound: jest.fn(),

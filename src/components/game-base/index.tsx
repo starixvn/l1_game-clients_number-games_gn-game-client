@@ -48,8 +48,7 @@ import { GameSoundHandler } from "./handlers/game-sound-handler";
 import { IGameStateHandler } from "./handlers/game-state-handler";
 import { GameBaseProps, PFClientSeedSetting, RoundState } from "./type";
 import { PlaceBetProvider } from "../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-context";
-import { PlaceBetWrapper } from "./handlers/place-bet-wrapper";
-
+import { PlaceBetWrapper } from "../game-components/place-bet-wrapper/place-bet-handler";
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
     protected socket: Socket;
     protected gameCronInterval: NodeJS.Timeout;
@@ -111,15 +110,12 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             placeBetHandler ??
             new PlaceBetHandler({
                 tolgeeNamespace: this.props.tolgeeNamespace,
-                dispatch,
                 gameMessageHandler: this.gameMessageHandler,
                 gameName: gamName,
                 getPlayerBalance: this.getPlayerBalance,
                 hedgeBetGroups: this.props.hedgeBetGroups,
                 translate: props.translate,
-                playPlaceBetSound: () => {
-                    this.props.gameSound.playPlaceBetSound();
-                },
+                playPlaceBetSound: () => { this.props.gameSound.playPlaceBetSound(); },
                 gameId: this.props.id,
             });
 
