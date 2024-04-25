@@ -1,6 +1,7 @@
 import { getGameSettings } from "../../../_shared/app-settings";
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 import { GameStateContextModel } from "../../../_shared/react-contexts/game-state-context/game-state-context-model";
+import { PlaceBetEventActionType } from "../../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-action";
 import { IRoundStateHandler } from "../../round-base/round-state-handler";
 import { GameDurations, Round } from "../type";
 import { GameMessageHandler, PlaceBetHandler, messageEventType } from "./";
@@ -78,7 +79,7 @@ export class GameFinishHandler {
             drawId
         );
 
-        dispatch({ type: GameEventActionType.END_BET_PROCESSING, payload: {} });
+        this.props.placeBetHandler.getPlaceBetDispatch()({ type: PlaceBetEventActionType.END_BET_PROCESSING, payload: {} });
         dispatch({
             type: GameEventActionType.FINISH,
             payload: {

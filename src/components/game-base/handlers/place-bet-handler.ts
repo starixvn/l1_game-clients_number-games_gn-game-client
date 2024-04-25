@@ -40,6 +40,10 @@ export class PlaceBetHandler {
         this.placeBetDispatchTmp = placeBetDispatchTmp;
     }
 
+    getPlaceBetDispatch =() =>{
+        return this.placeBetDispatchTmp;
+    }
+
     registerEvents = (signOut: () => void, gameStateContext: PlaceBetContextModel) => {
         this.props.gameMessageHandler.register(messageEventType.END_BET, (gameMessage) => {
             this.handleEndBet(gameMessage, signOut, gameStateContext);

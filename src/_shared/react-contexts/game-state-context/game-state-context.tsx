@@ -1,6 +1,5 @@
 import { useTranslate } from "@tolgee/react";
 import { createContext, useContext, useReducer } from "react";
-
 import { RoundState } from "../../../components/game-base/type";
 import { LanguageLocaleMapper } from "../../constants";
 import { GetLocalizedErrorMessage } from "../../helpers/notice-helper";
@@ -74,10 +73,7 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
         isShowPFVerification,
         isPlayStartRoundAnimation,
     } = payload;
-
-
     console.log(`gameStateReducer: ${JSON.stringify(action)} `);
-
     switch (type) {
         case GameEventActionType.CONNECT: {
             return {
@@ -244,6 +240,7 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
             };
         }
 
+
         case GameEventActionType.SET_NEW_GAME_STATE: {
             return {
                 ...state,
@@ -257,6 +254,7 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
                 showWinningAnimation,
             };
         }
+
 
         case GameEventActionType.ACTIVE_SCORE_BOARD: {
             return {
@@ -332,6 +330,7 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
             };
         }
 
+
         case GameEventActionType.UPDATE_PF_CLIENT_SEED_SETTING: {
             return {
                 ...state,
@@ -385,6 +384,8 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
         }
 
         default: {
+            console.warn(JSON.stringify(action));
+
             throw Error("Unknown action: " + action.type);
         }
     }
