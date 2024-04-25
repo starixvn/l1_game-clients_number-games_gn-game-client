@@ -8,11 +8,7 @@ import { getAppSettings } from "../_shared/app-settings";
 import { GameIds, SwiperNoSwiping } from "../_shared/constants";
 import { AnalyticsHelper, TrackingAction, TrackingFunction } from "../_shared/helpers";
 import { SettingEventActionType, SystemContextProvider, URLContext, usePlayerContext, useSettingDispatch } from "../_shared/react-contexts";
-import {
-    usePlaceBetSound,
-    useReceiveFinishSound,
-    useStartRoundSound
-} from "../_shared/react-hooks";
+import { usePlaceBetSound, useReceiveFinishSound, useStartRoundSound } from "../_shared/react-hooks";
 import GameLoading from "../components/game-components/game-loading";
 import PreloadImages from "../components/page-components/preload-images";
 import { getChipSettings } from "../services/user-setting-service";
@@ -119,6 +115,10 @@ export const Games: React.FC<Props> = ({
         const gameIndex = lobbyGamesIds.indexOf(openGameId);
         console.log(`init game ${gameIndex}`);
 
+        const isSSOToNonOfferGame = gameIndex < 0;
+        if (isSSOToNonOfferGame) {
+            return getGameComponentById(openGameId);
+        }
         return (
             <Swiper
                 onBeforeInit={(swiper) => (swiperRef.current = swiper)}
