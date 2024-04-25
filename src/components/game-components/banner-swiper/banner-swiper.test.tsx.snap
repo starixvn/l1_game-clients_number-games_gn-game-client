@@ -22,11 +22,11 @@ exports[`BannerSwiper render with normal banner should match the snapshot 1`] = 
         data-nimg="1"
         decoding="async"
         fetchpriority="high"
-        height="200"
+        height="124"
         src="/_next/image?url=%2Fstatic%2Fimages%2Flobby%2Fbanners%2F1001%2F1001_en.webp&w=750&q=75"
         srcset="/_next/image?url=%2Fstatic%2Fimages%2Flobby%2Fbanners%2F1001%2F1001_en.webp&w=384&q=75 1x, /_next/image?url=%2Fstatic%2Fimages%2Flobby%2Fbanners%2F1001%2F1001_en.webp&w=750&q=75 2x"
         style="color: transparent;"
-        width="375"
+        width="348"
       />
     </div>
     <div
@@ -37,12 +37,12 @@ exports[`BannerSwiper render with normal banner should match the snapshot 1`] = 
         class="banner-img"
         data-nimg="1"
         decoding="async"
-        height="200"
+        height="124"
         loading="lazy"
         src="/_next/image?url=%2Fstatic%2Fimages%2Flobby%2Fbanners%2F1002%2F1002_en.webp&w=750&q=75"
         srcset="/_next/image?url=%2Fstatic%2Fimages%2Flobby%2Fbanners%2F1002%2F1002_en.webp&w=384&q=75 1x, /_next/image?url=%2Fstatic%2Fimages%2Flobby%2Fbanners%2F1002%2F1002_en.webp&w=750&q=75 2x"
         style="color: transparent;"
-        width="375"
+        width="348"
       />
     </div>
   </div>
