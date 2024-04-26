@@ -48,8 +48,6 @@
         position: relative;
         width: 19.5rem;
         height: 16.2rem;
-        background-image: url("/static/images/splash-screen/1x/logo.png");
-        background-image: image-set(url("/static/images/splash-screen/1x/logo.png") 1x, url("/static/images/splash-screen/2x/logo.png") 2x);
 
         &::before {
             content: "";
@@ -114,7 +112,7 @@
 
         .progress-bar {
             height: 0.6rem;
-            width: 70%;
+            width: 1%;
             border-radius: 1rem;
             background: rgb(32, 201, 255);
             background: linear-gradient(90deg, rgba(32, 201, 255, 1) 0%, rgba(255, 255, 255, 1) 100%);

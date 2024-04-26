@@ -3,6 +3,7 @@ import { WithRouterProps } from "next/dist/client/with-router";
 import { NextRouter, useRouter } from "next/router";
 import { memo, useContext, useEffect, useState } from "react";
 
+import Image from "next/image";
 import { AuthorizeResponse, SSOResponse } from "sc-user-service-client/dist/auth";
 import { LobbyResponse } from "sc-user-service-client/dist/lobby";
 import { getAppSettings, getGameIdsSetting } from "../../../_shared/app-settings";
@@ -76,6 +77,7 @@ const SplashScreen: React.FC<{
     const [currentLocale, setCurrentLocale] = useState<string>();
     const [currentSession, setCurrentSession] = useState<SSOResponse>();
     const [gameOfferIds, setGameOfferIds] = useState<number[]>([]);
+    const [loadedImages, setLoadedImages] = useState<any>(new Set());
 
     useEffect(() => {
         const getBanners = async () => {
@@ -131,13 +133,25 @@ const SplashScreen: React.FC<{
         <>
             <div className={`${Styles.page}`}>
                 <div className={Styles["center"]}>
-                    <div className={Styles["logo"]}></div>
+                    <div className={Styles["logo"]}>
+                        <Image
+                            src={"/static/images/splash-screen/2x/logo.png"}
+                            width={195}
+                            height={162}
+                            alt="logo"
+                            onLoad={() => {
+                                setIsDoneLoadLogo(true);
+                            }}
+                            priority={true}
+                        />
+                    </div>
+
                     <div className={Styles["slogan"]}>{t("SabaNumber.splashscreen_slogan")}</div>
                 </div>
 
                 <div className={Styles["loading"]}>
                     <div className={Styles["progress"]}>
-                        <div className={Styles["progress-bar"]}></div>
+                        <div className={Styles["progress-bar"]} id="progress-bar"></div>
                     </div>
                     <p className={Styles["text-first-download"]}>{t("Common.message_download_first_visit")}</p>
                 </div>

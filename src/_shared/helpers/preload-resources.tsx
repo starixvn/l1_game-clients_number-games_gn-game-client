@@ -60,6 +60,14 @@ const PreloadResources: React.FC<{
     };
 
     useEffect(() => {
+        const progressBars = document.querySelectorAll("#progress-bar") as any;
+        const percentage = (loadedImages.size / images.length) * 100;
+        progressBars.forEach((progressBar) => {
+            if (progressBar instanceof HTMLElement) {
+                progressBar.style.width = `${percentage}%`;
+            }
+        });
+
         if (loadedImages.size === images.length) {
             const endTime = performance.now();
             const duration = endTime - startTime;
@@ -69,7 +77,6 @@ const PreloadResources: React.FC<{
     }, [loadedImages]);
 
     return useMemo(() => {
-        console.log("memo repload resource");
         return (
             <div>
                 <div id="load-img" style={{ opacity: 0 }}>
