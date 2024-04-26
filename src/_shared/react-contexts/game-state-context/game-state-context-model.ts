@@ -2,8 +2,6 @@ import {
     DrawInfo,
     GameConfigs,
     IUserStakeLevel,
-    PFClientSeedSetting,
-    PFResult,
     Round,
     RoundState,
 } from "../../../components/game-base/type";
@@ -41,16 +39,10 @@ export interface GameStateContextModel {
     isShowBetHistory: boolean;
     isShowBetDetail: boolean;
     isShowGameGuide: boolean;
-    isShowPFSetting: boolean;
-    isShowPFVerify: boolean;
-    isShowPFClientSeedInfo: boolean;
-    isShowPFVerification: boolean;
-    pfClientSeedSetting?: PFClientSeedSetting;
     betDetailModalData?: {
         drawInfo: DrawInfo;
         betLogDetails: any[];
     };
-    pfVerifyModalData?: PFResult;
     isPlayStartRoundAnimation?: boolean;
 }
 
@@ -94,12 +86,6 @@ export const initialGameStateContextModel = () => {
         },
         isShowBetHistory: false,
         isShowGameGuide: false,
-        pfClientSeedSetting: {
-            drawId: 0,
-            randomClientSeed: "0000",
-            manualClientSeed: "",
-            useManualClientSeed: false,
-        },
         isPlayStartRoundAnimation: false,
     };
 };

@@ -62,14 +62,10 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
         isShowGameGuide,
         isShowPFSetting,
         isShowBetDetail,
-        pfClientSeedSetting,
         betDetailModalData,
-        isShowPFVerify,
-        pfVerifyModalData,
-        isShowPFClientSeedInfo,
-        isShowPFVerification,
         isPlayStartRoundAnimation,
     } = payload;
+
     console.log(`gameStateReducer: ${JSON.stringify(action)} `);
     switch (type) {
         case GameEventActionType.CONNECT: {
@@ -288,24 +284,6 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
             };
         }
 
-        case GameEventActionType.TOGGLE_PF_SETTING: {
-            return {
-                ...state,
-                isShowPFSetting,
-            };
-        }
-
-
-        case GameEventActionType.UPDATE_PF_CLIENT_SEED_SETTING: {
-            return {
-                ...state,
-                pfClientSeedSetting: {
-                    ...state.pfClientSeedSetting,
-                    ...pfClientSeedSetting,
-                },
-            };
-        }
-
         case GameEventActionType.UPDATE_BET_DETAIL: {
             return {
                 ...state,
@@ -313,31 +291,6 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
             };
         }
 
-        case GameEventActionType.TOGGLE_PF_VERIFY: {
-            return {
-                ...state,
-                isShowPFVerify,
-            };
-        }
-
-        case GameEventActionType.UPDATE_PF_VERIFY: {
-            return {
-                ...state,
-                pfVerifyModalData,
-            };
-        }
-
-        case GameEventActionType.TOGGLE_PF_CLIENT_SEED_INFO: {
-            return {
-                ...state,
-                isShowPFClientSeedInfo,
-            };
-        }
-
-        case GameEventActionType.TOGGLE_PF_VERIFICATION: {
-            return {
-                ...state,
-                isShowPFVerification,
             };
         }
 
@@ -345,9 +298,6 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
             return {
                 ...state,
                 isPlayStartRoundAnimation,
-            };
-        }
-
         default: {
             console.warn(JSON.stringify(action));
 
