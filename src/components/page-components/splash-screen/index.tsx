@@ -69,15 +69,15 @@ const SplashScreen: React.FC<{
     const { token, language } = useContext(URLContext);
     const router = useRouter();
     const player = usePlayerContext();
-    const { session, locale } = usePlayerContext();
+    const { session } = usePlayerContext();
     const { t } = useTranslator();
+
     const [isDonePreloadResources, setIsDonePreloadResources] = useState<boolean>(false);
     const [isDoneLoadLogo, setIsDoneLoadLogo] = useState<boolean>(false);
     const [bannerId, setBannerId] = useState<number>(0);
     const [currentLocale, setCurrentLocale] = useState<string>();
     const [currentSession, setCurrentSession] = useState<SSOResponse>();
     const [gameOfferIds, setGameOfferIds] = useState<number[]>([]);
-    const [loadedImages, setLoadedImages] = useState<any>(new Set());
 
     useEffect(() => {
         const getBanners = async () => {
@@ -93,7 +93,6 @@ const SplashScreen: React.FC<{
             const authorizeInfo = (await authorize(session)) as AuthorizeResponse;
 
             if (authorizeInfo?.authorized) {
-                console.log("authorizeInfo", authorizeInfo);
                 const lobby: LobbyResponse = await getLobbyConfigs(session);
                 if (lobby?.lobbyConfigs) {
                     const gameIdsOfferBanner = getGameIdOfferBanner(authorizeInfo, lobby?.lobbyConfigs);
@@ -117,10 +116,13 @@ const SplashScreen: React.FC<{
     useEffect(() => {
         if (router?.isReady && isDonePreloadResources) {
             const handleStartup = async () => {
-                await customStartup(currentSession, currentLocale, router, player).catch(onStartupError);
-                router.push("");
+                try {
+                    await customStartup(currentSession, currentLocale, router, player);
+                    await router?.push("/", undefined, { shallow: true });
+                } catch (error) {
+                    onStartupError(error);
+                }
             };
-
             handleStartup();
         }
     }, [isDonePreloadResources]);

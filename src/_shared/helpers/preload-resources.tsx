@@ -5,6 +5,8 @@ import { useEffect, useMemo, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { getPathBanner, getPathIconGames, getPathImageGameId, pathImageMapping } from "../constants/resource-image-mapping";
 
+const DELAY_TIME = 1000;
+const MAX_DELAY_TIME = 5000;
 const PreloadResources: React.FC<{
     setIsDonePreloadResource: Function;
     gameId: number;
@@ -60,6 +62,7 @@ const PreloadResources: React.FC<{
     };
 
     useEffect(() => {
+        let timeout: NodeJS.Timeout;
         const progressBars = document.querySelectorAll("#progress-bar") as any;
         const percentage = (loadedImages.size / images.length) * 100;
         progressBars.forEach((progressBar) => {
@@ -72,8 +75,17 @@ const PreloadResources: React.FC<{
             const endTime = performance.now();
             const duration = endTime - startTime;
             console.log(`All images loaded in ${duration} milliseconds`);
-            setIsDonePreloadResource?.(true);
+            timeout = setTimeout(
+                () => {
+                    setIsDonePreloadResource?.(true);
+                },
+                duration < MAX_DELAY_TIME ? DELAY_TIME : 0
+            );
         }
+
+        return () => {
+            timeout && clearTimeout(timeout);
+        };
     }, [loadedImages]);
 
     return useMemo(() => {

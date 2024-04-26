@@ -116,6 +116,7 @@
             border-radius: 1rem;
             background: rgb(32, 201, 255);
             background: linear-gradient(90deg, rgba(32, 201, 255, 1) 0%, rgba(255, 255, 255, 1) 100%);
+            transition: width 0.3s;
         }
 
         .text-first-download {
