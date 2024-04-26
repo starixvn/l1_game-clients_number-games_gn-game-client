@@ -38,6 +38,8 @@ export const messageEventType = {
     ROUND_ID: "roundId",
     CLIENT_SEED_DETAIL: "clientSeedDetail",
     SAVE_PF_SETTING: "savePFSetting",
+    SAVE_PF_SETTING_FROM_TURN_ID_HANLDER: "savePFSettingFromTurnIdHandler",
+    SYNC_OWN_BETS_TO_PF: "syncPFToPF",
 };
 
 export class GameMessageHandler {

@@ -5,21 +5,21 @@ import ModalContainer from "../../modal-container";
 import { ButtonPFGuide } from "../pf-guide";
 import Styles from "../provably-fair.module.scss";
 import CopyableTextInput from "../copyable-text-input";
-import { useGameStateContext, useGameStatesDispatch } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
-import { GameEventActionType } from "../../../../_shared/react-contexts/game-state-context/game-event-action";
 import { AnalyticsHelper, TrackingAction, TrackingFunction } from "../../../../_shared/helpers";
 import { Section } from "../pf-form-components";
+import { PFEventActionType } from "../../../../_shared/react-contexts/game-state-context/pf/pf-action";
+import { usePFContext, usePFDispatch } from "../../../../_shared/react-contexts/game-state-context/pf/pf-context";
 
 const PFVerifyModal: FC<{
     renderResultBlock: Function;
 }> = ({ renderResultBlock }) => {
     const { t: translateCommon } = useCommonTranslate();
-    const { isShowPFVerify } = useGameStateContext();
-    const gameStateDispatch = useGameStatesDispatch();
+    const { isShowPFVerify } = usePFContext();
+    const dispatch = usePFDispatch();
 
     const handleCloseModal = () => {
-        gameStateDispatch({
-            type: GameEventActionType.TOGGLE_PF_VERIFY,
+        dispatch({
+            type: PFEventActionType.TOGGLE_PF_VERIFY,
             payload: { isShowPFVerify: false },
         });
     };
@@ -66,11 +66,11 @@ const useClickOutside = (callback: Function) => {
 };
 
 const PFVerify: FC<{ renderResultBlock: Function }> = ({ renderResultBlock }) => {
-    const { pfVerifyModalData: pfResult } = useGameStateContext();
+    const { pfVerifyModalData: pfResult } = usePFContext();
     const { t: translateCommon } = useCommonTranslate();
     const { t: translateSNGames } = useSNTranslate();
     const clickSound = useClickSound();
-    const dispatch = useGameStatesDispatch();
+    const dispatch = usePFDispatch();
     const handleClickOutSide = (target: any, clickedElement: any, except: any) => {
         if (!target.classList.contains(Styles["hide"]) && !except.contains(clickedElement)) {
             target.classList.add(Styles["hide"]);
@@ -96,13 +96,13 @@ const PFVerify: FC<{ renderResultBlock: Function }> = ({ renderResultBlock }) =>
 
     const handleOnClickClientSeedInfo = () => {
         clickSound();
-        dispatch({ type: GameEventActionType.TOGGLE_PF_CLIENT_SEED_INFO, payload: { isShowPFClientSeedInfo: true } });
+        dispatch({ type: PFEventActionType.TOGGLE_PF_CLIENT_SEED_INFO, payload: { isShowPFClientSeedInfo: true } });
         AnalyticsHelper.trackFunction({ function: TrackingFunction.PFClientSeeds, action: TrackingAction.Open });
     };
 
     const handleOnClickVerification = () => {
         clickSound();
-        dispatch({ type: GameEventActionType.TOGGLE_PF_VERIFICATION, payload: { isShowPFVerification: true } });
+        dispatch({ type: PFEventActionType.TOGGLE_PF_VERIFICATION, payload: { isShowPFVerification: true } });
         AnalyticsHelper.trackFunction({
             function: TrackingFunction.PFVerify,
             action: TrackingAction.Click,

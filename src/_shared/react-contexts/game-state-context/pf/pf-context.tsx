@@ -6,7 +6,7 @@ export const PFContext = createContext({} as PFContextModel);
 const PFDispatchContext = createContext(null);
 
 export function PFProvider({ children }) {
-    const [pfContextModel, dispatch] = useReducer(pfReducer, initialPFContextModel() as PFContextModel);
+    const [pfContextModel, dispatch] = useReducer(pfReducer, initialPFContextModel());
 
     return (
         <PFContext.Provider value={pfContextModel}>
@@ -21,22 +21,24 @@ export const usePFContext = () => {
     return useContext(PFContext);
 };
 
-export function usePFsDispatch() {
+export function usePFDispatch() {
     return useContext(PFDispatchContext);
 }
-
 
 function pfReducer(state: PFContextModel, action: PFEventAction) {
     const { type, payload } = action;
     const {
         pfClientSeedSetting,
         isShowPFVerify,
+        isShowPFSetting,
         pfVerifyModalData,
         isShowPFClientSeedInfo,
         isShowPFVerification,
+        ownBets
     } = payload;
 
-    console.log(`PFReducer: ${JSON.stringify(action)} `);
+
+    console.log(`pfReducer: ${JSON.stringify(payload)} `);
     switch (type) {
         case PFEventActionType.UPDATE_PF_CLIENT_SEED_SETTING: {
             return {
@@ -52,6 +54,14 @@ function pfReducer(state: PFContextModel, action: PFEventAction) {
             return {
                 ...state,
                 isShowPFVerify,
+            };
+        }
+
+        case PFEventActionType.TOGGLE_PF_SETTING: {
+            console.log(`PFReducer: ${JSON.stringify(action)} `);
+            return {
+                ...state,
+                isShowPFSetting,
             };
         }
 
@@ -76,6 +86,12 @@ function pfReducer(state: PFContextModel, action: PFEventAction) {
             };
         }
 
+        case PFEventActionType.OWN_BETS: {
+            return {
+                ...state,
+                ownBets,
+            };
+        }
         default: {
             console.warn(JSON.stringify(action));
             throw Error("Unknown action: " + action.type);

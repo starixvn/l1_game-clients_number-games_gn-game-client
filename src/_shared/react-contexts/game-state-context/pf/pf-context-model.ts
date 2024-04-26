@@ -10,15 +10,21 @@ export interface PFContextModel {
     isShowPFVerification: boolean;
     pfClientSeedSetting?: PFClientSeedSetting;
     pfVerifyModalData?: PFResult;
+    ownBets?: any;
 }
 
 export const initialPFContextModel = () => {
     return {
+        isShowPFSetting: false,
+        isShowPFVerify:false,
+        isShowPFClientSeedInfo: false,
+        isShowPFVerification: false,
+        pfVerifyModalData: null,
         pfClientSeedSetting: {
             drawId: 0,
             randomClientSeed: "0000",
             manualClientSeed: "",
             useManualClientSeed: false,
         },
-    };
+    } as PFContextModel;
 };

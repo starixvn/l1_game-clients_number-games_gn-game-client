@@ -2,8 +2,6 @@ import {
     DrawInfo,
     GameConfigs,
     GameDurations,
-    PFClientSeedSetting,
-    PFResult,
     RoundState,
 } from "../../../components/game-base/type";
 
@@ -82,17 +80,11 @@ export interface GameEventPayload {
     isUMInFirstLoad?: boolean;
     isShowBetHistory?: boolean;
     isShowGameGuide?: boolean;
-    isShowPFSetting?: boolean;
     isShowBetDetail?: boolean;
-    isShowPFVerify?: boolean;
-    isShowPFClientSeedInfo?: boolean;
-    isShowPFVerification?: boolean;
-    pfClientSeedSetting?: PFClientSeedSetting;
     betDetailModalData?: {
         drawInfo: DrawInfo;
         betLogDetails: any[];
     };
-    pfVerifyModalData?: PFResult;
     isPlayStartRoundAnimation?: boolean;
 }
 

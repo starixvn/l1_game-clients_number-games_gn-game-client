@@ -1,16 +1,16 @@
 import { DefaultParamType, TFnType, TranslationKey } from "@tolgee/react";
 import { v4 as uuidv4 } from "uuid";
-import { NoticeErrorCode } from "../../../_shared/constants/error-code-dictionary";
-import { getGlossaryTranslate, GetLocalizedErrorMessage, localStorageKeys, StorageHelper } from "../../../_shared/helpers";
-import { isInPhasePreventBet } from "../../../_shared/helpers/validate-bet-helper";
-import { SystemContextModel } from "../../../_shared/react-contexts";
-import { GameStateContextModel } from "../../../_shared/react-contexts/game-state-context/game-state-context-model";
-import { NoticeModel, RoundState } from "../type";
-import { GameMessageHandler, messageEventType } from ".";
-import { getAppSettings } from "../../../_shared/app-settings";
-import { PlaceBetEventActionType } from "../../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-action";
-import { PlaceBetContextModel } from "../../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-context-model";
-import { GlobalMessageTransmitter } from "../../../_shared/helpers/message-transmitter/global-transmitter";
+import { NoticeErrorCode } from "../../../../_shared/constants/error-code-dictionary";
+import { getGlossaryTranslate, GetLocalizedErrorMessage, localStorageKeys, StorageHelper } from "../../../../_shared/helpers";
+import { isInPhasePreventBet } from "../../../../_shared/helpers/validate-bet-helper";
+import { SystemContextModel } from "../../../../_shared/react-contexts";
+import { GameStateContextModel } from "../../../../_shared/react-contexts/game-state-context/game-state-context-model";
+import { NoticeModel, RoundState } from "../../type";
+import { GameMessageHandler, messageEventType } from "..";
+import { getAppSettings } from "../../../../_shared/app-settings";
+import { PlaceBetEventActionType } from "../../../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-action";
+import { PlaceBetContextModel } from "../../../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-context-model";
+import { GlobalMessageTransmitter } from "../../../../_shared/helpers/message-transmitter/global-transmitter";
 
 export type PlaceBetHandlerProps = {
     tolgeeNamespace: string;
@@ -31,7 +31,7 @@ export class PlaceBetHandler {
 
     constructor(public readonly props: PlaceBetHandlerProps) { }
 
-    setPlaceBetDispatch = (dispatch: Function) => {
+    setPlaceBetDispatch = (dispatch) => {
         this.placeBetDispatch = dispatch;
     }
 
@@ -43,8 +43,14 @@ export class PlaceBetHandler {
         this.props.gameMessageHandler.register(messageEventType.END_BET, (gameMessage) => {
             this.handleEndBet(gameMessage, signOut, gameStateContext);
         });
+
         this.props.gameMessageHandler.register(messageEventType.OWN_BETS, this.handleOwnBets);
     };
+
+    unRegisterEvents =()=>{
+        this.props.gameMessageHandler.removeHandler(messageEventType.END_BET);
+        this.props.gameMessageHandler.removeHandler(messageEventType.OWN_BETS);
+    }
 
     broadcastNotice =(notice: object)=>{
         GlobalMessageTransmitter.broadcast({ notice });
@@ -59,6 +65,8 @@ export class PlaceBetHandler {
             type: PlaceBetEventActionType.OWN_BETS,
             payload: { ownBets },
         });
+        console.log(`broadcastGameEvent SYNC_OWN_BETS_TO_PF : ${JSON.stringify(ownBets)}`);
+        this.props.gameMessageHandler.broadcastGameEvent({ [messageEventType.SYNC_OWN_BETS_TO_PF]: ownBets }); 
     };
 
     handleBetFailed = ({ notice, kickedOut }, signOut: () => void) => {
@@ -203,16 +211,13 @@ export class PlaceBetHandler {
         };
     };
     protected sendBetMessage(betChoice: string, amount: number) {
-        const { gameMessageHandler } = this.props;
-        this.placeBetDispatch({ type: PlaceBetEventActionType.BET_PROCESSING, payload: {} });
-        this.clearNotice(); 
-
-        gameMessageHandler.broadcastGameEvent({
+        this.props.gameMessageHandler.broadcastGameEvent({
             [messageEventType.SEND_SOCKET_MESSAGE_WITH_CLIENT_SEED]: {
                 event: "bet",
                 data: { betChoices: { [betChoice.toLowerCase()]: amount } },
             },
         });
+        
     }
 
     setRetryInterval = () => {

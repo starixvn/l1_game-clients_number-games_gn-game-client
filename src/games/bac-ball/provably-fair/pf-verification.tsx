@@ -3,17 +3,18 @@ import { FC, useEffect, useMemo, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useGameContext } from "../../../_shared/react-contexts";
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
-import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import { useCommonTranslate, useTranslator } from "../../../_shared/react-hooks";
 import { PFVerificationHeaderBlockBase, DefaultPFStyles as Styles } from "../../../components/game-components/provably-fair";
 import SmallBall from "../../../components/game-components/small-ball";
 import { Section } from "../../../components/game-components/provably-fair/pf-form-components";
+import { usePFContext, usePFDispatch } from "../../../_shared/react-contexts/game-state-context/pf/pf-context";
+import { PFEventActionType } from "../../../_shared/react-contexts/game-state-context/pf/pf-action";
 
 const PFVerification: FC = () => {
     const { tolgeeNamespace } = useGameContext();
-    const { pfVerifyModalData: pfResult } = useGameStateContext();
+    const { pfVerifyModalData: pfResult } = usePFContext();
     const [mergeClientSeed, setMergeClientSeed] = useState(pfResult?.editedMergeClientSeed || pfResult?.mergeClientSeed || "");
-    const dispatch = useGameStatesDispatch();
+    const dispatch = usePFDispatch();
     const { t: translateCommon } = useCommonTranslate();
     const { t: translateInGame } = useTranslator([tolgeeNamespace]);
     const [combinedHash, setCombinedHash] = useState(pfResult?.finalHash || "");
@@ -60,7 +61,7 @@ const PFVerification: FC = () => {
         setCombinedHash(hash);
         return () => {
             dispatch({
-                type: GameEventActionType.UPDATE_PF_VERIFY,
+                type: PFEventActionType.UPDATE_PF_VERIFY,
                 payload: {
                     pfVerifyModalData: {
                         ...pfResult,

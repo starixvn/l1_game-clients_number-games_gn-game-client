@@ -1,7 +1,7 @@
 import { FC } from "react";
 import BetDetailBase from "../../../components/game-components/bet-history/bet-detail-base";
 import BetDetailModal from "../../../components/game-components/bet-history/bet-detail-modal";
-import { PFVerifyModal } from "../../../components/game-components/provably-fair";
+import { PFSettingModal, PFVerifyModal } from "../../../components/game-components/provably-fair";
 import PFClientSeedInfoModal from "../../../components/game-components/provably-fair/pf-verify/pf-client-seed-info-modal";
 import PFVerificationModal from "../../../components/game-components/provably-fair/pf-verify/pf-verification-modal";
 import { PFVerification, makeFileNameExport, renderPFVerifyResultBlock } from "../provably-fair";
@@ -9,6 +9,7 @@ import { BetChoice, BetDetailResultBlock, DrawInfoNextBall, produceDataBetDetail
 import BetHistoryBase from "../../../components/game-components/bet-history/bet-history-base";
 import BetLogResultCell from "./bet-log-result-cell";
 import BetHistoryModalBase from "../../../components/game-components/bet-history/bet-history-modal-base";
+import { PFProvider } from "../../../_shared/react-contexts/game-state-context/pf/pf-context";
 
 const NextBallBetHistoryModal: FC = () => {
     return (

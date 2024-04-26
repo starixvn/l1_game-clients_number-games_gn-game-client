@@ -7,7 +7,7 @@ import { Round, RoundState } from "../type";
 import { GameFinishHandler, GameFinishHandlerProps } from "./game-finish-handler";
 import { GameMessageHandler, messageEventType } from "./game-message-handler";
 import { GameRoundDataHandler } from "./game-round-data-handler";
-import { PlaceBetHandler } from "./place-bet-handler";
+import { PlaceBetHandler } from "./place-bet-wrapper/place-bet-handler";
 
 jest.useFakeTimers();
 jest.mock("../../../_shared/react-contexts/game-state-context/game-state-context", () => ({

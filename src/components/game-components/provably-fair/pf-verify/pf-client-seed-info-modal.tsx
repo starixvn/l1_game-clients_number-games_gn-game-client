@@ -7,21 +7,22 @@ import ModalContainer from "../../modal-container";
 import { ButtonPFGuide } from "../pf-guide";
 import CopyableTextInput from "../copyable-text-input";
 import Styles from "../provably-fair.module.scss";
-import { useGameStateContext, useGameStatesDispatch } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
-import { GameEventActionType } from "../../../../_shared/react-contexts/game-state-context/game-event-action";
+import { useGameStateContext } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
 import { AnalyticsHelper, TrackingAction, TrackingFunction } from "../../../../_shared/helpers";
 import { Section } from "../pf-form-components";
+import { usePFContext, usePFDispatch } from "../../../../_shared/react-contexts/game-state-context/pf/pf-context";
+import { PFEventActionType } from "../../../../_shared/react-contexts/game-state-context/pf/pf-action";
 
 const PFClientSeedInfoModal: FC<{
     fileNameExport: (data?: any) => string;
 }> = ({ fileNameExport }) => {
-    const { isShowPFClientSeedInfo } = useGameStateContext();
+    const { isShowPFClientSeedInfo } = usePFContext();
     const { t: translateSNGames } = useSNTranslate();
-    const dispatch = useGameStatesDispatch();
+    const dispatch = usePFDispatch();
 
     const handleCloseModal = () => {
         dispatch({
-            type: GameEventActionType.TOGGLE_PF_CLIENT_SEED_INFO,
+            type: PFEventActionType.TOGGLE_PF_CLIENT_SEED_INFO,
             payload: {
                 isShowPFClientSeedInfo: false,
             },
@@ -62,7 +63,7 @@ const PFClientSeedInfo: FC<{ fileNameExport: (data?: any) => string }> = ({ file
     const clickSound = useClickSound();
     const { t: translateCommon } = useCommonTranslate();
     const { t: translateSNGames } = useSNTranslate();
-    const { pfVerifyModalData: clientSeedInfo } = useGameStateContext();
+    const { pfVerifyModalData: clientSeedInfo } = usePFContext();
     const {
         authorizeInfo: {
             user: { name },

@@ -34,7 +34,7 @@ function placeBetReducer(state: PlaceBetContextModel, action: PlaceBetEventActio
         suggestBet,
     } = payload;
 
-    console.log(`placeBetReducer: ${JSON.stringify(action)} `);
+    // console.log(`placeBetReducer: ${JSON.stringify(action)} `);
     switch (type) {
         case PlaceBetEventActionType.OWN_BETS: {
             return {

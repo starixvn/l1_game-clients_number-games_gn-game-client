@@ -60,13 +60,12 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
         isUMInFirstLoad,
         isShowBetHistory,
         isShowGameGuide,
-        isShowPFSetting,
         isShowBetDetail,
         betDetailModalData,
         isPlayStartRoundAnimation,
     } = payload;
 
-    console.log(`gameStateReducer: ${JSON.stringify(action)} `);
+    // console.log(`gameStateReducer: ${JSON.stringify(action)} `);
     switch (type) {
         case GameEventActionType.CONNECT: {
             return {

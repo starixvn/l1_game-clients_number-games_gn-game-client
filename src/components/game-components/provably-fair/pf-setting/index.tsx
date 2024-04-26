@@ -1,8 +1,7 @@
 import { FC, useEffect, useRef, useState } from "react";
 
 import { useGameContext } from "../../../../_shared/react-contexts";
-import { GameEventActionType } from "../../../../_shared/react-contexts/game-state-context/game-event-action";
-import { useGameStateContext, useGameStatesDispatch } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
+import { useGameStateContext } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
 import { useCommonTranslate, useSNTranslate } from "../../../../_shared/react-hooks";
 import { messageEventType } from "../../../game-base/handlers";
 import { PFSeverSeed } from "../../../game-base/type";
@@ -11,7 +10,8 @@ import ModalContainer from "../../modal-container";
 import CopyableTextInput from "../copyable-text-input";
 import { ButtonPFGuide } from "../pf-guide";
 import Styles from "../provably-fair.module.scss";
-import { PlaceBetProvider, usePlaceBetContext } from "../../../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-context";
+import { usePFContext, usePFDispatch } from "../../../../_shared/react-contexts/game-state-context/pf/pf-context";
+import { PFEventActionType } from "../../../../_shared/react-contexts/game-state-context/pf/pf-action";
 
 const NUMBER_VALUES = "0123456789";
 const GetPFInfoMessage = "getPfInfo";
@@ -27,12 +27,13 @@ const handleOnKeyDown = (event: any) => {
 };
 
 const PFSettingModal: FC<{ customClientSeedInfo?: string }> = ({ customClientSeedInfo }) => {
-    const { isShowPFSetting } = useGameStateContext();
+    const { isShowPFSetting } = usePFContext();
     const { t: translateSNGames } = useSNTranslate();
-    const dispatch = useGameStatesDispatch();
+    const dispatch = usePFDispatch();
+
 
     const handleCloseModal = () => {
-        dispatch({ type: GameEventActionType.TOGGLE_PF_SETTING, payload: { isShowPFSetting: false } });
+        dispatch({ type: PFEventActionType.TOGGLE_PF_SETTING, payload: { isShowPFSetting: false } });
     };
 
     return (
@@ -48,9 +49,7 @@ const PFSettingModal: FC<{ customClientSeedInfo?: string }> = ({ customClientSee
                 isOpen={true}
                 onCloseModal={handleCloseModal}
             >
-                <PlaceBetProvider>
-                    <PFSetting customClientSeedInfo={customClientSeedInfo} />
-                </PlaceBetProvider>
+                <PFSetting customClientSeedInfo={customClientSeedInfo} />
             </ModalContainer>
         )
     );
@@ -61,8 +60,8 @@ const PFSetting: FC<{ customClientSeedInfo?: string }> = ({ customClientSeedInfo
     const randomSeed = useRef<HTMLInputElement>();
     const manualRadio = useRef<HTMLInputElement>();
     const manualSeed = useRef<HTMLInputElement>();
-    const { pfClientSeedSetting, drawId } = useGameStateContext();
-    const { ownBets } = usePlaceBetContext();
+    const { drawId } = useGameStateContext();
+    const { pfClientSeedSetting, ownBets } = usePFContext();
     const [isFirstLoad, setIsFirstLoad] = useState<boolean>(true);
     const [isFirstFetch, setIsFirstFetch] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -184,6 +183,8 @@ const PFSetting: FC<{ customClientSeedInfo?: string }> = ({ customClientSeedInfo
         });
     };
 
+    console.log(`PFSettingModal pfClientSeedSetting:  ${JSON.stringify(pfClientSeedSetting)} `);
+    console.log(`PFSetting: ${JSON.stringify(ownBets)}`)
     return (
         <div className={Styles["pf-setting-container"]}>
             <div>

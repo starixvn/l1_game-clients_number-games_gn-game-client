@@ -7,6 +7,7 @@ export enum PFEventActionType {
     TOGGLE_PF_VERIFICATION = "TOGGLE_PF_VERIFICATION",
     TOGGLE_PF_SETTING = "TOGGLE_PF_SETTING",
     UPDATE_PF_CLIENT_SEED_SETTING = "UPDATE_PF_CLIENT_SEED_SETTING",
+    OWN_BETS = "OWN_BETS",
 }
 
 export interface PFEventPayload {
@@ -16,6 +17,7 @@ export interface PFEventPayload {
     isShowPFVerification?: boolean;
     pfClientSeedSetting?: PFClientSeedSetting;
     pfVerifyModalData?: PFResult;
+    ownBets?: any;
 }
 
 export interface PFEventAction {
