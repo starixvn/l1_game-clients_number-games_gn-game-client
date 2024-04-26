@@ -1,6 +1,7 @@
 import dynamic from "next/dynamic";
-import { useContext, useState } from "react";
+import { memo, useContext, useState } from "react";
 
+import { useRouter } from "next/router";
 import { URLContext, usePlayerContext } from "../_shared/react-contexts";
 import { usePWAWoker } from "../_shared/react-hooks/use-pwa-worker";
 import { tolgee } from "../_shared/tolgee";
@@ -9,13 +10,19 @@ import SplashScreen from "../components/page-components/splash-screen";
 
 const UMPage = dynamic(() => import("../components/page-components/um-page"));
 
-export function Home() {
+const Home = () => {
     usePWAWoker();
+    const router = useRouter();
     const { gameId, isDirectMode } = useContext(URLContext);
     const { session } = usePlayerContext();
     const shouldRenderDashboard = session?.isAuthenticated && !session?.isUM;
     const [isUm, setIsUm] = useState(session?.isUM);
+
     const toUMPage = (value) => setIsUm(value);
+
+    if (!router?.isReady) {
+        return <></>;
+    }
 
     if (isUm) {
         return <UMPage />;
@@ -26,13 +33,7 @@ export function Home() {
         return <Dashboard session={session} queryGame={gameId} setIsUm={toUMPage} directMode={isDirectMode} tolgee={tolgee} />;
     }
 
-    //Temp disable preload resource cause can not load dashboard android phone
-    return (
-        <>
-            {/* <PreloadResources setIsDonePreloadResource={setIsDonePreloadResource} /> */}
-            <SplashScreen />
-        </>
-    );
-}
+    return <SplashScreen gameId={gameId} isDirectMode={isDirectMode} />;
+};
 
-export default Home;
+export default memo(Home);

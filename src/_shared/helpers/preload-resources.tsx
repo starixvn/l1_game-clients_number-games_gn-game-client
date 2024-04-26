@@ -3,30 +3,25 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { getPathImageGameId, pathImageMapping } from "../constants/resource-image-mapping";
-import { usePlayerContext } from "../react-contexts";
+import { getPathBanner, getPathIconGames, getPathImageGameId, pathImageMapping } from "../constants/resource-image-mapping";
 
-const PreloadResources: React.FC<{ setIsDonePreloadResource: Function; gameId: number; isDirectMode: boolean }> = ({
-    setIsDonePreloadResource,
-    gameId,
-}) => {
+const PreloadResources: React.FC<{
+    setIsDonePreloadResource: Function;
+    gameId: number;
+    isDirectMode: boolean;
+    bannerId: number;
+    currentLocale: string;
+    gameIdsIcon: number[];
+}> = ({ setIsDonePreloadResource, gameId, bannerId, gameIdsIcon, currentLocale }) => {
     const router = useRouter();
-    const { session } = usePlayerContext();
     const [loadedImages, setLoadedImages] = useState<any>(new Set());
     const [startTime, setStartTime] = useState(null);
     const [images, setImages] = useState<string[]>([]);
 
-    const handleRedirect = () => {
-        const isTimeout = !session || (!session?.isUM && !session?.isAuthenticated);
-        if (!isTimeout) {
-            router.push("/", undefined, { shallow: true });
-        }
-    };
-
     useEffect(() => {
-        const getPathsImg = () => {
+        const getPathsImg = async () => {
             if (+gameId === 0) {
-                return pathImageMapping.lobby;
+                return [...pathImageMapping.lobby, ...getPathBanner(currentLocale, bannerId), ...getPathIconGames(gameIdsIcon)];
             }
 
             if (+gameId > 0) {
@@ -35,25 +30,30 @@ const PreloadResources: React.FC<{ setIsDonePreloadResource: Function; gameId: n
 
             return [];
         };
-        const fetchImages = async () => {
-            const paths = getPathsImg();
-            try {
-                const response = await axios.get("/api/preload-images", {
-                    params: {
-                        paths: JSON.stringify(paths),
-                    },
-                });
 
-                const imagesPath = response?.data || [];
-                setImages(imagesPath);
-            } catch (error) {
-                console.error("Error fetching images:", error);
+        const fetchImages = async () => {
+            const paths = await getPathsImg();
+            if (paths.length > 0) {
+                try {
+                    const response = await axios.get("/api/preload-images", {
+                        params: {
+                            paths: JSON.stringify(paths),
+                        },
+                    });
+
+                    const imagesPath = response?.data || [];
+                    setImages(imagesPath);
+                } catch (error) {
+                    console.error("Error fetching images:", error);
+                }
             }
         };
 
-        setStartTime(performance.now());
-        fetchImages();
-    }, [router.isReady]);
+        if (router?.isReady) {
+            setStartTime(performance.now());
+            fetchImages();
+        }
+    }, [router?.isReady]);
 
     const handleOnLoadingComplete = (index: number) => {
         setLoadedImages((prevLoadedImages) => new Set([...prevLoadedImages, index]));
@@ -65,11 +65,11 @@ const PreloadResources: React.FC<{ setIsDonePreloadResource: Function; gameId: n
             const duration = endTime - startTime;
             console.log(`All images loaded in ${duration} milliseconds`);
             setIsDonePreloadResource?.(true);
-            handleRedirect();
         }
     }, [loadedImages]);
 
     return useMemo(() => {
+        console.log("memo repload resource");
         return (
             <div>
                 <div id="load-img" style={{ opacity: 0 }}>
@@ -91,7 +91,7 @@ const PreloadResources: React.FC<{ setIsDonePreloadResource: Function; gameId: n
                 </div>
             </div>
         );
-    }, [images, gameId]);
+    }, [images.length > 0]);
 };
 
 export default PreloadResources;

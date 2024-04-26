@@ -18,3 +18,8 @@ export const getBannerIds = (lobbyConfigs: ILobbyConfigs) => {
 
     return banners?.map((banner) => banner.gameId) ?? [];
 };
+
+export const getLobbyGamesIds = (lobbyConfigs: ILobbyConfigs, authorizeInfo: AuthorizeResponse) => {
+    const offerGamesIds = getOfferGamesIds(authorizeInfo);
+    return getLobbyGameIds(lobbyConfigs)?.filter((gameId) => offerGamesIds.includes(gameId));
+};

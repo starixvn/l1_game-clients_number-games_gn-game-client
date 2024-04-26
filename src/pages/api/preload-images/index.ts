@@ -16,22 +16,29 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any[]>
     const imagesDir = path.join(process.cwd(), DEFAULT_STATIC_PATH);
     const imageFiles = [];
     for (const dirPath of parsedPaths) {
-        const dirToRead = path.join(imagesDir, dirPath);
+        const imagePath = path.join(DEFAULT_IMG_PATH, dirPath);
+        const ext = path.extname(imagePath).toLowerCase();
 
-        try {
-            const files = fs.readdirSync(dirToRead);
-            const validImageFiles = files.filter((file) => {
-                const ext = path.extname(file).toLowerCase();
-                return ext === ".jpg" || ext === ".png" || ext === ".gif" || ext === ".webp" || ext === ".svg";
-            });
+        if (ext === ".jpg" || ext === ".png" || ext === ".gif" || ext === ".webp" || ext === ".svg") {
+            const imageUrl = `${imagePath}?v=${process.env.buildVersion}`.replace(/\\/g, "/");
+            imageFiles.push(imageUrl);
+        } else {
+            const dirToRead = path.join(imagesDir, dirPath);
+            try {
+                const files = fs.readdirSync(dirToRead);
+                const validImageFiles = files.filter((file) => {
+                    const ext = path.extname(file).toLowerCase();
+                    return ext === ".jpg" || ext === ".png" || ext === ".gif" || ext === ".webp" || ext === ".svg";
+                });
 
-            imageFiles.push(
-                ...validImageFiles.map((file) =>
-                    path.join(DEFAULT_IMG_PATH, dirPath, `${file}?v=${process.env.buildVersion}`).replace(/\\\\/g, "\\")
-                )
-            );
-        } catch (err) {
-            console.error(`Error reading directory ${dirToRead}:`, err);
+                imageFiles.push(
+                    ...validImageFiles.map((file) =>
+                        path.join(DEFAULT_IMG_PATH, dirPath, `${file}?v=${process.env.buildVersion}`).replace(/\\/g, "/")
+                    )
+                );
+            } catch (err) {
+                console.error(`Error reading directory ${dirToRead}:`, err);
+            }
         }
     }
 
