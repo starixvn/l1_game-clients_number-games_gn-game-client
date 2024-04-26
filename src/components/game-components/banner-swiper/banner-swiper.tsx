@@ -9,7 +9,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { AnalyticsHelper, TrackingAction, TrackingFunction } from "../../../_shared/helpers";
 import { IBanner } from "../../page-components/dashboard/type";
 
-const DEFAULT_DELAY_SLIDER = 5000;
+export const DEFAULT_DELAY_SLIDER = 5000;
 export const BannerSwiper: React.FC<{ banners: IBanner[]; openGame: Function }> = ({ banners, openGame }) => {
     const swiperRef = useRef(null);
 

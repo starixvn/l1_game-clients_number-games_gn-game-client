@@ -2,14 +2,44 @@ import "swiper/css";
 import "swiper/css/pagination";
 
 import React, { useEffect, useState } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { v4 as uuidv4 } from "uuid";
 
+import { buildVersion } from "../../../../../_shared/constants";
 import { getBannerIds, getBanners, getOfferGamesIds } from "../../../../../_shared/helpers";
 import { usePlayerContext } from "../../../../../_shared/react-contexts";
 import { tolgee } from "../../../../../_shared/tolgee";
-import { BannerSwiper } from "../../../../game-components/banner-swiper/banner-swiper";
+import { BannerSwiper, DEFAULT_DELAY_SLIDER } from "../../../../game-components/banner-swiper/banner-swiper";
 import { IBanner, ILobbyConfigs } from "../../../dashboard/type";
 
 const DEFAULT_BANNER_PATH = "/static/images/lobby/banners";
+
+const DefaultBanner = () => {
+    return (
+        <Swiper
+            slidesOffsetBefore={8}
+            slidesPerView={"auto"}
+            spaceBetween={8}
+            className="swiper-banner"
+            autoplay={{
+                delay: DEFAULT_DELAY_SLIDER,
+                disableOnInteraction: false,
+                pauseOnMouseEnter: true,
+            }}
+            roundLengths={true}
+        >
+            <SwiperSlide key={uuidv4}>
+                <img
+                    className="banner-img"
+                    src={`/static/images/lobby/banners/banner-blur.jpg?v=${buildVersion}`}
+                    alt={"banner-blur"}
+                    width={696}
+                    height={248}
+                />
+            </SwiperSlide>
+        </Swiper>
+    );
+};
 
 export const Banner: React.FC<{ openGame: Function; lobbyConfigs: ILobbyConfigs }> = ({ openGame, lobbyConfigs }) => {
     const { authorizeInfo } = usePlayerContext();
@@ -99,7 +129,7 @@ export const Banner: React.FC<{ openGame: Function; lobbyConfigs: ILobbyConfigs 
     };
 
     if (banners.length === 0) {
-        return <></>;
+        return <DefaultBanner />;
     }
 
     return <BannerSwiper banners={banners} openGame={openGame} />;
