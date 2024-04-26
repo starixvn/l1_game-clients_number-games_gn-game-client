@@ -2,7 +2,6 @@ import {
     SuggestBet,
 } from "../../../../components/game-base/type";
 
-
 export interface PlaceBetContextModel {
     ownBets: any;
     isProcessingBet?: boolean;
