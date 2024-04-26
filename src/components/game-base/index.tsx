@@ -475,7 +475,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 type: GameEventActionType.SET_NEW_GAME_STATE,
                 payload: { newGameState },
             });
-            const isContinuePlaying = gameStateContextModel.roundState != RoundState.None;
+            const isContinuePlaying = gameStateContextModel.roundState !== RoundState.None;
             if (isContinuePlaying) {
                 this.gameSoundHandler.handleSound(newRoundState);
             }

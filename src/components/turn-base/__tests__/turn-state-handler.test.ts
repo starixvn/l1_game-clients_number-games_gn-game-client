@@ -55,7 +55,7 @@ describe("TurnStateHandler", () => {
         ])(
             "returns correct expected round remaining time when remainingTime is greater than endSwitchRoundPointTime",
             (roundRemainingTime, expectedResult) => {
-                const result = handler.getRoundRemainingTimeToCalculateTurnRemainingtime({ remainingTime: roundRemainingTime, durations });
+                const result = handler.getRoundRemainingTimeToCalculateTurnRemainingTime({ remainingTime: roundRemainingTime, durations });
                 expect(result).toBe(expectedResult);
             }
         );
@@ -67,7 +67,7 @@ describe("TurnStateHandler", () => {
         ])(
             "returns expected round remaining when remainingTime is on range of startSwitchRoundPointTime to beforePlaceBet",
             (roundRemainingTime, expectedResult) => {
-                const result = handler.getRoundRemainingTimeToCalculateTurnRemainingtime({ remainingTime: roundRemainingTime, durations });
+                const result = handler.getRoundRemainingTimeToCalculateTurnRemainingTime({ remainingTime: roundRemainingTime, durations });
                 expect(result).toBe(expectedResult);
             }
         );
@@ -77,7 +77,7 @@ describe("TurnStateHandler", () => {
             [109, 109],
             [108, 108],
         ])("returns expected round remaining when remainingTime is greater than beforePlaceBet", (roundRemainingTime, expectedResult) => {
-            const result = handler.getRoundRemainingTimeToCalculateTurnRemainingtime({ remainingTime: roundRemainingTime, durations });
+            const result = handler.getRoundRemainingTimeToCalculateTurnRemainingTime({ remainingTime: roundRemainingTime, durations });
             expect(result).toBe(expectedResult);
         });
     });

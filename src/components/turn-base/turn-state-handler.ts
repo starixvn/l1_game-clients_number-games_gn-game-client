@@ -1,12 +1,22 @@
+import { GameDurations, RoundState } from "../game-base/type";
 import { RoundStateHandler } from "../round-base/round-state-handler";
-import { RoundState } from "../game-base/type";
 
 export class TurnStateHandler extends RoundStateHandler {
     constructor() {
         super();
     }
 
-    determineRoundBaseState({ roundRemainingTime, wholeRound, remainingTime, durations }): RoundState {
+    determineRoundBaseState({
+        roundRemainingTime,
+        wholeRound,
+        remainingTime,
+        durations,
+    }: {
+        roundRemainingTime: number;
+        wholeRound: number;
+        remainingTime: number;
+        durations: GameDurations;
+    }): RoundState {
         const { wholeTurn, showResult, switchRoundAnimation } = durations;
         const startSwitchRoundPointTime = wholeRound - showResult;
         const endSwitchRoundPointTime = startSwitchRoundPointTime - switchRoundAnimation;
@@ -18,9 +28,9 @@ export class TurnStateHandler extends RoundStateHandler {
         return super.determineRoundBaseState({ roundRemainingTime, wholeRound: wholeTurn, remainingTime, durations });
     }
 
-    getRemainingTime({ remainingTime, durations }): number {
+    getRemainingTime({ remainingTime, durations }: { remainingTime: number; durations: GameDurations }): number {
         const turnRemainingTime =
-            this.getRoundRemainingTimeToCalculateTurnRemainingtime({ remainingTime, durations }) % durations.wholeTurn;
+            this.getRoundRemainingTimeToCalculateTurnRemainingTime({ remainingTime, durations }) % durations.wholeTurn;
 
         if (turnRemainingTime <= 0) {
             return durations.wholeTurn;
@@ -29,7 +39,13 @@ export class TurnStateHandler extends RoundStateHandler {
         return turnRemainingTime;
     }
 
-    getRoundRemainingTimeToCalculateTurnRemainingtime({ remainingTime, durations }): number {
+    getRoundRemainingTimeToCalculateTurnRemainingTime({
+        remainingTime,
+        durations,
+    }: {
+        remainingTime: number;
+        durations: GameDurations;
+    }): number {
         const { wholeRound, showResult, switchRoundAnimation, beforePlaceBet } = durations;
         const startSwitchRoundPointTime = wholeRound - showResult;
         const endSwitchRoundPointTime = startSwitchRoundPointTime - switchRoundAnimation;
@@ -45,11 +61,11 @@ export class TurnStateHandler extends RoundStateHandler {
         return remainingTime;
     }
 
-    getWholeRoundDuration({ durations }) {
+    getWholeRoundDuration({ durations }: { durations: GameDurations }) {
         return durations.wholeTurn;
     }
 
-    shouldCountDownTimer({ newRoundState }): boolean {
+    shouldCountDownTimer({ newRoundState }: { newRoundState: RoundState }): boolean {
         return newRoundState !== RoundState.SwitchRound;
     }
 }

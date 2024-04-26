@@ -1,4 +1,4 @@
-import { RoundState } from "../game-base/type";
+import { GameDurations, RoundState } from "../game-base/type";
 
 export interface IRoundStateHandler {
     determineRoundBaseState({ roundRemainingTime, wholeRound, remainingTime, durations }): RoundState;
@@ -9,7 +9,17 @@ export interface IRoundStateHandler {
 
 export class RoundStateHandler implements IRoundStateHandler {
     constructor() {}
-    determineRoundBaseState({ roundRemainingTime, wholeRound, remainingTime, durations }): RoundState {
+    determineRoundBaseState({
+        roundRemainingTime,
+        wholeRound,
+        remainingTime,
+        durations,
+    }: {
+        roundRemainingTime: number;
+        wholeRound: number;
+        remainingTime: number;
+        durations: GameDurations;
+    }): RoundState {
         const { showResult, beforePlaceBet, placingBets, lockingBet } = durations;
 
         if (remainingTime > wholeRound - showResult) {

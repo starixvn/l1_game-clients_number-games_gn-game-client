@@ -1,4 +1,4 @@
-import { GameDurations, RoundState } from "../../game-base/type";
+import { RoundState } from "../../game-base/type";
 import { TurnGameStateHandler } from "../turn-game-state-handler";
 
 describe("TurnStateHandler", () => {
@@ -9,33 +9,155 @@ describe("TurnStateHandler", () => {
     });
 
     describe("shouldIncreaseRoundId", () => {
-        it("should return true when nextRoundState is SwitchRound and durations.switchRoundAnimation is true", () => {
+        it("should return true when nextRoundState is SwitchRound and durations.switchRoundAnimation is > 0", () => {
             const result = handler.shouldIncreaseRoundId({
                 nextRoundState: RoundState.SwitchRound,
-                durations: { switchRoundAnimation: true },
+                durations: {
+                    wholeRound: 112,
+                    wholeTurn: 27,
+                    placingBets: 20,
+                    lockingBet: 3,
+                    showResult: 7,
+                    resultAnimation: 3,
+                    beforePlaceBet: 0,
+                    switchRoundAnimation: 1,
+                },
             });
             expect(result).toBe(true);
         });
 
-        it("should return false when nextRoundState is SwitchRound and durations.switchRoundAnimation is false", () => {
-            const result = handler.shouldIncreaseRoundId({
-                nextRoundState: RoundState.SwitchRound,
-                durations: { switchRoundAnimation: false },
-            });
-            expect(result).toBe(false);
-        });
-
-        it("should return false when nextRoundState is not SwitchRound and durations.switchRoundAnimation is true", () => {
-            const result = handler.shouldIncreaseRoundId({ nextRoundState: RoundState.InRound, durations: { switchRoundAnimation: true } });
-            expect(result).toBe(false);
-        });
-
-        it("should return true when nextRoundState is not SwitchRound and durations.switchRoundAnimation is false", () => {
+        it("should return false when nextRoundState is not SwitchRound and durations.switchRoundAnimation is > 0", () => {
             const result = handler.shouldIncreaseRoundId({
                 nextRoundState: RoundState.InRound,
-                durations: { switchRoundAnimation: false },
+                durations: {
+                    wholeRound: 112,
+                    wholeTurn: 27,
+                    placingBets: 20,
+                    lockingBet: 3,
+                    showResult: 7,
+                    resultAnimation: 3,
+                    beforePlaceBet: 0,
+                    switchRoundAnimation: 1,
+                },
+            });
+            expect(result).toBe(false);
+        });
+
+
+        it("should return false when nextRoundState is SwitchRound and durations.switchRoundAnimation is undefined", () => {
+            const result = handler.shouldIncreaseRoundId({
+                nextRoundState: RoundState.SwitchRound,
+                durations: {
+                    wholeRound: 112,
+                    wholeTurn: 27,
+                    placingBets: 20,
+                    lockingBet: 3,
+                    showResult: 7,
+                    resultAnimation: 3,
+                    beforePlaceBet: 0,
+                },
+            });
+            expect(result).toBe(false);
+        });
+
+        it("should return false when nextRoundState is SwitchRound and durations.switchRoundAnimation is 0", () => {
+            const result = handler.shouldIncreaseRoundId({
+                nextRoundState: RoundState.SwitchRound,
+                durations: {
+                    wholeRound: 112,
+                    wholeTurn: 27,
+                    placingBets: 20,
+                    lockingBet: 3,
+                    showResult: 7,
+                    resultAnimation: 3,
+                    beforePlaceBet: 0,
+                    switchRoundAnimation: 0,
+                },
+            });
+            expect(result).toBe(false);
+        });
+
+        it("should return false when nextRoundState is SwitchRound and durations.switchRoundAnimation is null", () => {
+            const result = handler.shouldIncreaseRoundId({
+                nextRoundState: RoundState.SwitchRound,
+                durations: {
+                    wholeRound: 112,
+                    wholeTurn: 27,
+                    placingBets: 20,
+                    lockingBet: 3,
+                    showResult: 7,
+                    resultAnimation: 3,
+                    beforePlaceBet: 0,
+                    switchRoundAnimation: null,
+                },
+            });
+            expect(result).toBe(false);
+        });
+
+        it("should return true when nextRoundState is InRound and durations.switchRoundAnimation is 0", () => {
+            const result = handler.shouldIncreaseRoundId({
+                nextRoundState: RoundState.InRound,
+                durations: {
+                    wholeRound: 112,
+                    wholeTurn: 27,
+                    placingBets: 20,
+                    lockingBet: 3,
+                    showResult: 7,
+                    resultAnimation: 3,
+                    beforePlaceBet: 0,
+                    switchRoundAnimation: 0,
+                },
             });
             expect(result).toBe(true);
+        });
+
+        it("should return true when nextRoundState is InRound and durations.switchRoundAnimation is null", () => {
+            const result = handler.shouldIncreaseRoundId({
+                nextRoundState: RoundState.InRound,
+                durations: {
+                    wholeRound: 112,
+                    wholeTurn: 27,
+                    placingBets: 20,
+                    lockingBet: 3,
+                    showResult: 7,
+                    resultAnimation: 3,
+                    beforePlaceBet: 0,
+                    switchRoundAnimation: null,
+                },
+            });
+            expect(result).toBe(true);
+        });
+
+        it("should return true when nextRoundState is InRound and durations.switchRoundAnimation is undefined", () => {
+            const result = handler.shouldIncreaseRoundId({
+                nextRoundState: RoundState.InRound,
+                durations: {
+                    wholeRound: 112,
+                    wholeTurn: 27,
+                    placingBets: 20,
+                    lockingBet: 3,
+                    showResult: 7,
+                    resultAnimation: 3,
+                    beforePlaceBet: 0,
+                },
+            });
+            expect(result).toBe(true);
+        });
+
+        it("should return false when nextRoundState is not InRound and durations.switchRoundAnimation is undefined", () => {
+            const result = handler.shouldIncreaseRoundId({
+                nextRoundState: RoundState.SwitchRound,
+                durations: {
+                    wholeRound: 112,
+                    wholeTurn: 27,
+                    placingBets: 20,
+                    lockingBet: 3,
+                    showResult: 7,
+                    resultAnimation: 3,
+                    beforePlaceBet: 0,
+                },
+            });
+            expect(result).toBe(false);
         });
     });
 });
