@@ -5,7 +5,7 @@ import { memo, useContext, useEffect, useState } from "react";
 
 import Image from "next/image";
 import { AuthorizeResponse, SSOResponse } from "sc-user-service-client/dist/auth";
-import { LobbyResponse } from "sc-user-service-client/dist/lobby";
+import { LobbyConfigs } from "sc-user-service-client/dist/lobby";
 import { getAppSettings, getGameIdsSetting } from "../../../_shared/app-settings";
 import { languageMapper } from "../../../_shared/constants";
 import { AnalyticsHelper, StorageHelper, getLobbyGamesIds, localStorageKeys } from "../../../_shared/helpers";
@@ -62,6 +62,18 @@ export function onStartupError(error: Error): void {
     globalThis.location.pathname = "timeout";
 }
 
+const isTimeoutSession = (session: SSOResponse) => {
+    return !session || (!session?.isUM && !session?.isAuthenticated);
+};
+
+const getSession = async (token: string) => {
+    return token ? sso(token, getAppSettings().appType) : verifySession();
+};
+
+const getLocaleFromSession = (session: SSOResponse, language: string) => {
+    return languageMapper[session?.language] || languageMapper[language];
+};
+
 const SplashScreen: React.FC<{
     gameId: number;
     isDirectMode: boolean;
@@ -81,37 +93,50 @@ const SplashScreen: React.FC<{
 
     useEffect(() => {
         const getBanners = async () => {
-            const session = await (token ? sso(token, getAppSettings().appType) : verifySession());
-            session && setCurrentSession(session);
-            const locale = languageMapper[currentSession?.language] || languageMapper[language];
-            locale && setCurrentLocale(locale);
-            const isTimeout = !session || (!session?.isUM && !session?.isAuthenticated);
-            if (isTimeout) {
+            const session = await getSession(token);
+            if (!session || isTimeoutSession(session)) {
                 router.push("timeout");
                 return;
             }
-            const authorizeInfo = (await authorize(session)) as AuthorizeResponse;
 
-            if (authorizeInfo?.authorized) {
-                const lobby: LobbyResponse = await getLobbyConfigs(session);
-                if (lobby?.lobbyConfigs) {
-                    const gameIdsOfferBanner = getGameIdOfferBanner(authorizeInfo, lobby?.lobbyConfigs);
-                    gameIdsOfferBanner.length > 0 && setBannerId(gameIdsOfferBanner[0]);
-                    const gameOfferIds = getLobbyGamesIds(lobby?.lobbyConfigs, authorizeInfo);
-                    gameOfferIds.length > 0 && setGameOfferIds(gameOfferIds);
-                }
-            } else {
-                // Hard code get first gameId on GameSetting
-                const gameIds = getGameIdsSetting();
-                const firstGameId = +gameIds[0];
-                if (firstGameId > 0) {
-                    setGameOfferIds([firstGameId]);
-                    setBannerId(firstGameId);
-                }
+            setCurrentSession(session);
+            setCurrentLocale(getLocaleFromSession(session, language));
+
+            const authorizeInfo = (await authorize(session)) as AuthorizeResponse;
+            if (!authorizeInfo?.authorized) {
+                handleUnauthorizedAccess();
+                return;
+            }
+
+            const lobby = await getLobbyConfigs(session);
+            if (lobby?.lobbyConfigs) {
+                handleLobbyConfigs(authorizeInfo, lobby.lobbyConfigs);
             }
         };
+
         getBanners();
     }, []);
+
+    const handleUnauthorizedAccess = () => {
+        const gameIds = getGameIdsSetting();
+        const firstGameId = +gameIds[0];
+        if (firstGameId > 0) {
+            setGameOfferIds([firstGameId]);
+            setBannerId(firstGameId);
+        }
+    };
+
+    const handleLobbyConfigs = (authorizeInfo: AuthorizeResponse, lobbyConfigs: LobbyConfigs) => {
+        const gameIdsOfferBanner = getGameIdOfferBanner(authorizeInfo, lobbyConfigs);
+        if (gameIdsOfferBanner.length > 0) {
+            setBannerId(gameIdsOfferBanner[0]);
+        }
+
+        const gameOfferIds = getLobbyGamesIds(lobbyConfigs, authorizeInfo);
+        if (gameOfferIds.length > 0) {
+            setGameOfferIds(gameOfferIds);
+        }
+    };
 
     useEffect(() => {
         if (router?.isReady && isDonePreloadResources) {
