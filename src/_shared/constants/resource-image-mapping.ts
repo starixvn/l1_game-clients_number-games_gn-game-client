@@ -2,10 +2,10 @@ export const getPathImageGameId = (gameId: number) => {
     switch (gameId) {
         case 1001:
         case 1002:
-            return ["bac-number"];
+            return ["bac-number", `${window.devicePixelRatio > 1 ? "bac-number/2x" : "bac-number/1x"}`];
         case 1003:
         case 1004:
-            return ["next-ball"];
+            return ["next-ball", `${window.devicePixelRatio > 1 ? "next-ball/2x" : "next-ball/1x"}`];
         default:
             return [];
     }
@@ -21,6 +21,6 @@ export const getPathIconGames = (gameIds: number[]): string[] => {
 };
 
 export const pathImageMapping = {
-    lobby: ["bg.webp", "bg-galaxy-small.webp", "dot", "hide-toolbar-guide"],
+    lobby: ["bg.webp", "bg-galaxy-small.webp", "dot", "hide-toolbar-guide", "lobby/banners/banner-blur.jpg"],
     game: ["cage", "cage/number", "ball", "chips/gn", "countdown-timer", "dot", "switch-games-guide", "bets", "icons"],
 };
