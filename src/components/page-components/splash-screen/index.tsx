@@ -9,7 +9,6 @@ import { AnalyticsHelper, localStorageKeys, StorageHelper } from "../../../_shar
 import { URLContext, usePlayerContext } from "../../../_shared/react-contexts";
 import { useTranslator } from "../../../_shared/react-hooks/use-translator";
 import { setSentryUser } from "../../../_shared/sentry";
-import { tolgee } from "../../../_shared/tolgee";
 import { sso, verifySession } from "../../../services/auth-service";
 import UMPage from "../um-page";
 import Styles from "./splash-screen.module.scss";
@@ -25,8 +24,6 @@ export async function customStartup(token, language, router, player): Promise<vo
     const session = await (token ? sso(token, getAppSettings().appType) : verifySession());
     const locale = languageMapper[session?.language] || languageMapper[language];
     const isTimeout = !session || (!session?.isUM && !session?.isAuthenticated);
-
-    await tolgee.changeLanguage(locale);
 
     player.locale = locale;
 

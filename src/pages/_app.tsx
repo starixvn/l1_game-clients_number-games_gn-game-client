@@ -7,13 +7,13 @@ import { ThemeProvider } from "next-themes";
 import { AppProps } from "next/app";
 import Head from "next/head";
 
-import { buildVersion, systemName, Themes } from "../_shared/constants";
+import { buildVersion, languageMapper, systemName, Themes } from "../_shared/constants";
 import { tolgee } from "../_shared/tolgee";
 import { LoadingSpinner } from "../components/game-components/game-loading/loading-spinner";
 import { GoogleAnalytic } from "../components/page-components/google-analytics";
 
-const SabaNumberApp = ({ Component, pageProps }: AppProps) => {
-    const ssrTolgee = useTolgeeSSR(tolgee, "en");
+const SabaNumberApp = ({ Component, pageProps, language }: AppProps & { language: string }) => {
+    const ssrTolgee = useTolgeeSSR(tolgee, language);
     return (
         <ThemeProvider defaultTheme={Themes.light}>
             <TolgeeProvider tolgee={ssrTolgee} fallback={<LoadingSpinner />}>
@@ -33,6 +33,10 @@ export const AppTilte = () => {
             <link rel="shortcut icon" href={`/favicon-${systemName}.ico?v=${buildVersion}`} />
         </Head>
     );
+};
+SabaNumberApp.getInitialProps = async ({ router }) => {
+    const { lang, token } = router.query;
+    return token ? { language: languageMapper[lang] || "en" } : { language: tolgee.getLanguage() };
 };
 
 export default SabaNumberApp;
