@@ -19,6 +19,8 @@ jest.mock("../../../_shared/react-hooks/use-translator", () => ({
     useTranslator: jest.fn().mockReturnValue({ t: (key: string) => key }),
 }));
 
+global.window.innerHeight = 500;
+
 describe("ToolbarGuide component", () => {
     describe("mobile + safari", () => {
         beforeEach(() => {
