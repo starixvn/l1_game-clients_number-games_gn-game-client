@@ -20,6 +20,7 @@ export const initialPFContextModel = () => {
         isShowPFClientSeedInfo: false,
         isShowPFVerification: false,
         pfVerifyModalData: null,
+        ownBets:{},
         pfClientSeedSetting: {
             drawId: 0,
             randomClientSeed: "0000",

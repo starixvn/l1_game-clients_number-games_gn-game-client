@@ -1,5 +1,6 @@
 import { GameEventAction, GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 import { GameStateContextModel } from "../../../_shared/react-contexts/game-state-context/game-state-context-model";
+import { PlaceBetEventAction, PlaceBetEventActionType } from "../../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-action";
 import { GameDurations, RoundState } from "../type";
 
 type GameStateHandlerProps = {
@@ -20,7 +21,7 @@ export interface IGameStateHandler {
         defaultSettlementResult,
         remainingTime,
     }: GameStateHandlerProps);
-    setReturnToGameState(dispatch: (action: GameEventAction) => {});
+    setReturnToGameState(dispatch: (action: PlaceBetEventAction) => {});
 }
 
 export class GameStateHandler implements IGameStateHandler {
@@ -94,18 +95,19 @@ export class GameStateHandler implements IGameStateHandler {
         }
     }
 
-    setReturnToGameState(dispatch: (action: GameEventAction) => {}) {
-        const returnToGameState = {
-            ownBets: {},
-            totalBets: {},
-            showConfirmBet: false,
-            showConfirmDialog: false,
-            suggestBet: {},
-        };
+    setReturnToGameState(dispatch: (action: PlaceBetEventAction) => {}) {
+        // const returnToGameState = {
+        //     ownBets: {},
+        //     totalBets: {},
+        //     showConfirmBet: false,
+        //     showConfirmDialog: false,
+        //     suggestBet: {},
+        // };
 
+        console.log('setReturnToGameState')
         dispatch({
-            type: GameEventActionType.SET_NEW_GAME_STATE,
-            payload: { newGameState: returnToGameState },
+            type: PlaceBetEventActionType.SET_NEW_GAME_STATE,
+            payload: {},
         });
     }
 

@@ -38,7 +38,7 @@ function pfReducer(state: PFContextModel, action: PFEventAction) {
     } = payload;
 
 
-    console.log(`pfReducer: ${JSON.stringify(payload)} `);
+    // console.log(`pfReducer: ${JSON.stringify(payload)} `);
     switch (type) {
         case PFEventActionType.UPDATE_PF_CLIENT_SEED_SETTING: {
             return {
@@ -92,6 +92,13 @@ function pfReducer(state: PFContextModel, action: PFEventAction) {
                 ownBets,
             };
         }
+
+        case PFEventActionType.SET_NEW_GAME_STATE:
+            return {
+                ...state,
+                ownBets: {}
+            };
+
         default: {
             console.warn(JSON.stringify(action));
             throw Error("Unknown action: " + action.type);

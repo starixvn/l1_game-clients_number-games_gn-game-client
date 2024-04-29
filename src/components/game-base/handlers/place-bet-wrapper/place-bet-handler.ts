@@ -29,6 +29,9 @@ export class PlaceBetHandler {
 
     private placeBetDispatch: Function;
 
+    private endBetHandlerId: any;
+    private ownBetsHandlerId: any;
+
     constructor(public readonly props: PlaceBetHandlerProps) { }
 
     setPlaceBetDispatch = (dispatch) => {
@@ -40,16 +43,16 @@ export class PlaceBetHandler {
     }
 
     registerEvents = (signOut: () => void, gameStateContext: PlaceBetContextModel) => {
-        this.props.gameMessageHandler.register(messageEventType.END_BET, (gameMessage) => {
+        this.endBetHandlerId =this.props.gameMessageHandler.register(messageEventType.END_BET, (gameMessage) => {
             this.handleEndBet(gameMessage, signOut, gameStateContext);
         });
 
-        this.props.gameMessageHandler.register(messageEventType.OWN_BETS, this.handleOwnBets);
+       this.ownBetsHandlerId= this.props.gameMessageHandler.register(messageEventType.OWN_BETS, this.handleOwnBets);
     };
 
     unRegisterEvents =()=>{
-        this.props.gameMessageHandler.removeHandler(messageEventType.END_BET);
-        this.props.gameMessageHandler.removeHandler(messageEventType.OWN_BETS);
+        this.props.gameMessageHandler.removeHandler( this.endBetHandlerId);
+        this.props.gameMessageHandler.removeHandler( this.ownBetsHandlerId);
     }
 
     broadcastNotice =(notice: object)=>{

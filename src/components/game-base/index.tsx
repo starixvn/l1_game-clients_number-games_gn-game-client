@@ -50,6 +50,7 @@ import { PlaceBetProvider } from "../../_shared/react-contexts/game-state-contex
 import { PFProvider } from "../../_shared/react-contexts/game-state-context/pf/pf-context";
 import { PlaceBetHanlderWrapper } from "./handlers/place-bet-wrapper/place-bet-handler-wrapper";
 import { PFWrapper } from "./handlers/pf-wrapper/pf-wrapper";
+import { PlaceBetEventActionType } from "../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-action";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
     protected socket: Socket;
@@ -161,6 +162,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.renderHeaderBlock = this.renderHeaderBlock.bind(this);
 
         AnalyticsHelper.trackPage({ page_title: this.props.gameName });
+        console.log(` GlobalMessageTransmitter.broadcast openingGameId: ${props.id} `)
         GlobalMessageTransmitter.broadcast({ openingGameId: props.id });
     }
 
@@ -211,7 +213,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.clearDisconnectTimeout();
         this.registerHandlers();
         this.connectToGameService();
-        this.gameStateHandler.setReturnToGameState(this.props.dispatch);
+        this.gameStateHandler.setReturnToGameState(this.placeBetHandler.getPlaceBetDispatch);
         this.gameMessageHandler.broadcastGameEvent({ [messageEventType.UPDATE_PLAYER_BALANCE]: true })
     }
 
@@ -390,11 +392,20 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 ...newGameState,
             });
 
+
             dispatch({
                 type: GameEventActionType.SET_NEW_GAME_STATE,
                 payload: { newGameState },
             });
+            
+             if ([RoundState.SwitchRound, RoundState.BeforePlaceBet, RoundState.InRound].includes(newRoundState)) {
+                this.placeBetHandler.getPlaceBetDispatch()({
+                    type: PlaceBetEventActionType.SET_NEW_GAME_STATE,
+                    payload: {},
+                })
 
+                this.gameMessageHandler.broadcastGameEvent({ [messageEventType.SYNC_OWN_BETS_TO_PF]: {} });
+            }
             const isContinuePlaying = gameStateContextModel.roundState !== RoundState.None;
             if (isContinuePlaying) {
                 this.gameSoundHandler.handleSound(newRoundState);
@@ -531,10 +542,14 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                                 renderHeaderBlock={this.renderHeaderBlock}
                                 renderPFSettingModal={this.renderPFSettingModal}
                                 renderBetHistoryModal={this.renderBetHistoryModal} />
+
                         </PFProvider>
                         <div>{this.renderResultBlock()}</div>
                         <PlaceBetProvider>
-                            <PlaceBetHanlderWrapper handler={this.placeBetHandler} renderBettingBlock={this.renderBettingBlock} signOut={(this.context as PlayerContextModel)?.signOut} />
+                            <PlaceBetHanlderWrapper
+                                handler={this.placeBetHandler}
+                                renderBettingBlock={this.renderBettingBlock}
+                                signOut={(this.context as PlayerContextModel)?.signOut} />
                         </PlaceBetProvider>
                         <div className={SwiperNoSwiping}> {this.renderSlidingChips()}</div>
                         <div>{this.renderStatistic()}</div>

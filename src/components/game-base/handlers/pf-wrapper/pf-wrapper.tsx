@@ -21,38 +21,6 @@ export const PFWrapper = (props: PFWrapperProps) => {
     const pfContext = usePFContext();
 
     useEffect(() => {
-        const sendSocketMessageWithClientSeed = (message) => {
-            const { event, data } = message[messageEventType.SEND_SOCKET_MESSAGE_WITH_CLIENT_SEED];
-            const { pfClientSeedSetting } = pfContext;
-            const clientSeed = pfClientSeedSetting?.useManualClientSeed
-                ? pfClientSeedSetting?.manualClientSeed
-                : pfClientSeedSetting?.randomClientSeed;
-            const clientSeedDetail = {
-                randomClientSeed: pfClientSeedSetting?.randomClientSeed,
-                manualClientSeed: pfClientSeedSetting?.manualClientSeed,
-                useManualClientSeed: pfClientSeedSetting?.useManualClientSeed,
-            };
-
-            props.socket.emit(event, { ...data, clientSeed, clientSeedDetail });
-        };
-
-
-        const syncPFSetting = (pfClientSeedSetting) => {
-            const { pfClientSeedSetting: oldPFClientSeedSetting } = pfContext;
-            const dataPFSettingSave = {
-                ...oldPFClientSeedSetting,
-                ...pfClientSeedSetting,
-            };
-            StorageHelper.set(`${localStorageKeys.pfSetting}-${props.uid}-${props.gameId}`, dataPFSettingSave);
-        }
-
-        const handleSavePFSetting = (message) => {
-            const { pfClientSeedSetting } = message[messageEventType.SAVE_PF_SETTING];
-            syncPFSetting(pfClientSeedSetting);
-            pfDispatch({ type: PFEventActionType.UPDATE_PF_CLIENT_SEED_SETTING, payload: { pfClientSeedSetting } });
-        }
-
-
         const loadPFSetting = () => {
             const pfClientSeedSetting = StorageHelper.get<PFClientSeedSetting>(`${localStorageKeys.pfSetting}-${props.uid}-${props.gameId}`);
             if (pfClientSeedSetting) {
@@ -71,12 +39,41 @@ export const PFWrapper = (props: PFWrapperProps) => {
             }
         }
 
+        loadPFSetting();
+
+        const loadPFSettingId = props.gameMessageHandler.register(messageEventType.SYNC_OWN_BETS_TO_PF, (message) => {
+            pfDispatch({ type: PFEventActionType.OWN_BETS, payload: { ownBets: message[messageEventType.SYNC_OWN_BETS_TO_PF] } });
+        });
+
+        return () => {
+            props.gameMessageHandler.removeHandler(loadPFSettingId);
+        }
+    }, [])
+
+    useEffect(() => {
+        const sendSocketMessageWithClientSeed = (message) => {
+            const { event, data } = message[messageEventType.SEND_SOCKET_MESSAGE_WITH_CLIENT_SEED];
+            const { pfClientSeedSetting } = pfContext;
+            console.log(` pfClientSeedSetting: ${JSON.stringify(pfClientSeedSetting)}`)
+            const clientSeed = pfClientSeedSetting?.useManualClientSeed
+                ? pfClientSeedSetting?.manualClientSeed
+                : pfClientSeedSetting?.randomClientSeed;
+            const clientSeedDetail = {
+                randomClientSeed: pfClientSeedSetting?.randomClientSeed,
+                manualClientSeed: pfClientSeedSetting?.manualClientSeed,
+                useManualClientSeed: pfClientSeedSetting?.useManualClientSeed,
+            };
+
+            console.log(`clientSeed: ${JSON.stringify(clientSeed)}, clientSeedDetail: ${JSON.stringify(clientSeedDetail)}`);
+            props.socket.emit(event, { ...data, clientSeed, clientSeedDetail });
+        };
+
         const handleSavePFSettingFromTurnIdHandler = (message) => {
-            console.log(JSON.stringify(message))
+            // console.log(`handleSavePFSettingFromTurnIdHandler: `, JSON.stringify(message))
             const { pfClientSeedSetting } = pfContext;
             const { drawId } = message[messageEventType.SAVE_PF_SETTING_FROM_TURN_ID_HANLDER];
             const oldDrawId = pfClientSeedSetting?.drawId;
-
+            console.log(`oldDrawId:  ${oldDrawId}, drawId: ${drawId}`)
             if (oldDrawId !== drawId) {
                 handleSavePFSetting({
                     [messageEventType.SAVE_PF_SETTING]: {
@@ -89,19 +86,33 @@ export const PFWrapper = (props: PFWrapperProps) => {
             }
         }
 
-        loadPFSetting();
 
-        props.gameMessageHandler.register(messageEventType.SAVE_PF_SETTING, handleSavePFSetting);
         props.gameMessageHandler.register(messageEventType.SAVE_PF_SETTING_FROM_TURN_ID_HANLDER, handleSavePFSettingFromTurnIdHandler);
-        props.gameMessageHandler.register(messageEventType.SEND_SOCKET_MESSAGE_WITH_CLIENT_SEED, sendSocketMessageWithClientSeed);
-        props.gameMessageHandler.register(messageEventType.SYNC_OWN_BETS_TO_PF, (message) => {
-            pfDispatch({ type: PFEventActionType.OWN_BETS, payload: { ownBets: message[messageEventType.SYNC_OWN_BETS_TO_PF] } });
-        });
+        const handleSavePFSetting = (message) => {
+            const { pfClientSeedSetting } = message[messageEventType.SAVE_PF_SETTING];
+            syncPFSetting(pfClientSeedSetting);
+            pfDispatch({ type: PFEventActionType.UPDATE_PF_CLIENT_SEED_SETTING, payload: { pfClientSeedSetting } });
+        }
+
+        const syncPFSetting = (pfClientSeedSetting) => {
+            const { pfClientSeedSetting: oldPFClientSeedSetting } = pfContext;
+            const dataPFSettingSave = {
+                ...oldPFClientSeedSetting,
+                ...pfClientSeedSetting,
+            };
+            StorageHelper.set(`${localStorageKeys.pfSetting}-${props.uid}-${props.gameId}`, dataPFSettingSave);
+        }
+
+
+        const savePFSettingId = props.gameMessageHandler.register(messageEventType.SAVE_PF_SETTING, handleSavePFSetting);
+        const sendSocketId = props.gameMessageHandler.register(messageEventType.SEND_SOCKET_MESSAGE_WITH_CLIENT_SEED, sendSocketMessageWithClientSeed);
+
 
         return () => {
-            // TO DO: unregister event
+            props.gameMessageHandler.removeHandler(savePFSettingId);
+            props.gameMessageHandler.removeHandler(sendSocketId);
         }
-    }, [])
+    }, [pfContext.pfClientSeedSetting])
 
     return (<>
         {props.renderHeaderBlock()}

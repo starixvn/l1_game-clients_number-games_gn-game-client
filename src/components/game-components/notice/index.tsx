@@ -7,7 +7,7 @@ import BaseDialog from "../base-dialog";
 import { ModalType } from "../base-dialog/type";
 import Styles from "./notice.module.scss";
 import { NoticeModel } from "../../game-base/type";
-import { GlobalMessageTransmitter, registerGlobalMessageEvent } from "../../../_shared/helpers/message-transmitter/global-transmitter";
+import { registerGlobalMessageEvent, unsubscribeGlobalMessageEvent } from "../../../_shared/helpers/message-transmitter/global-transmitter";
 
 const BaseNotice: React.FC<{
     onClose: () => void;
@@ -49,13 +49,14 @@ export const NoticeDialog = () => {
     const { tolgeeNamespace } = useGameContext();
     const [notice, setNotice] = useState<NoticeModel>(null);
 
+
     useEffect(() => {
-        registerGlobalMessageEvent("notice", ({ notice }) => {
+        const noticeHandlerId = registerGlobalMessageEvent("notice", ({ notice }) => {
             setNotice(notice);
         });
 
         return () => {
-            GlobalMessageTransmitter.clearAllListener();
+            unsubscribeGlobalMessageEvent(noticeHandlerId as any);
         }
     }, []);
 

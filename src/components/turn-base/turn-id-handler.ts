@@ -115,7 +115,6 @@ export class TurnIdHandler {
         this.props.gameMessageHandler.broadcastGameEvent({
             [messageEventType.SAVE_PF_SETTING_FROM_TURN_ID_HANLDER]: {drawId}
         });
-    
     };
 
     private isInDisplayResultState() {

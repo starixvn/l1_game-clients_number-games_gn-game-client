@@ -71,6 +71,14 @@ function placeBetReducer(state: PlaceBetContextModel, action: PlaceBetEventActio
             };
         }
 
+        case PlaceBetEventActionType.SET_NEW_GAME_STATE: {
+            return {
+                ...state,
+                ownBets: {},
+                suggestBet: {}
+            }
+        }
+
         default: {
             throw Error("Unknown action: " + action.type);
         }

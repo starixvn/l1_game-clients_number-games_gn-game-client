@@ -10,6 +10,7 @@ const Header = () => {
 
     useEffect(() => {
         const gameScriberId = registerGlobalMessageEvent("openingGameId", ({ openingGameId }) => {
+            console.log(`registerGlobalMessageEvent openingGameId: ${openingGameId} `)
             setOpeningGameId(openingGameId);
         });
 
@@ -18,6 +19,7 @@ const Header = () => {
         }
     }, []);
 
+    console.log(`openingGameId: ${openingGameId}`);
     const isRenderGames = openingGameId > 0;
     return (
         <header className={`${Styles.header}`} data-testid="header">

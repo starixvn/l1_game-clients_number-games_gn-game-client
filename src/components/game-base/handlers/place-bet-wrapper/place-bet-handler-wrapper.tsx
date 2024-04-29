@@ -9,17 +9,17 @@ export type PlaceBetWrapperProps = {
 };
 
 export const PlaceBetHanlderWrapper = (props: PlaceBetWrapperProps) => {
-    const placeBetDispatchDirect = usePlaceBetDispatch();
+    const dispatch = usePlaceBetDispatch();
     const placeBetContext = usePlaceBetContext();
 
     useEffect(() => {
         props.handler.registerEvents(props.signOut, placeBetContext);
-        props.handler.setPlaceBetDispatch(placeBetDispatchDirect);
+        props.handler.setPlaceBetDispatch(dispatch);
 
         return () => {
-            // TO DO: unregister event
+            props.handler.unRegisterEvents();
         }
-    }, [])
+    }, [placeBetContext]);
 
     return props.renderBettingBlock();
 }
