@@ -162,7 +162,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.renderHeaderBlock = this.renderHeaderBlock.bind(this);
 
         AnalyticsHelper.trackPage({ page_title: this.props.gameName });
-        console.log(` GlobalMessageTransmitter.broadcast openingGameId: ${props.id} `)
         GlobalMessageTransmitter.broadcast({ openingGameId: props.id });
     }
 
@@ -213,7 +212,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.clearDisconnectTimeout();
         this.registerHandlers();
         this.connectToGameService();
-        this.gameStateHandler.setReturnToGameState(this.placeBetHandler.getPlaceBetDispatch);
+        this.gameStateHandler.resetPlaceBetContext(this.placeBetHandler.getPlaceBetDispatch);
         this.gameMessageHandler.broadcastGameEvent({ [messageEventType.UPDATE_PLAYER_BALANCE]: true })
     }
 
@@ -538,11 +537,10 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                                 socket={this.socket}
                                 gameMessageHandler={this.gameMessageHandler}
                                 gameId={this.props.id}
-                                uid={(this.context as PlayerContextModel).authorizeInfo?.user?.UID}
-                                renderHeaderBlock={this.renderHeaderBlock}
-                                renderPFSettingModal={this.renderPFSettingModal}
-                                renderBetHistoryModal={this.renderBetHistoryModal} />
-
+                                uid={(this.context as PlayerContextModel).authorizeInfo?.user?.UID} />
+                            {this.renderHeaderBlock()}
+                            {this.renderPFSettingModal()}
+                            {this.renderBetHistoryModal()}
                         </PFProvider>
                         <div>{this.renderResultBlock()}</div>
                         <PlaceBetProvider>

@@ -68,7 +68,7 @@ export class PlaceBetHandler {
             type: PlaceBetEventActionType.OWN_BETS,
             payload: { ownBets },
         });
-        console.log(`broadcastGameEvent SYNC_OWN_BETS_TO_PF : ${JSON.stringify(ownBets)}`);
+        
         this.props.gameMessageHandler.broadcastGameEvent({ [messageEventType.SYNC_OWN_BETS_TO_PF]: ownBets }); 
     };
 

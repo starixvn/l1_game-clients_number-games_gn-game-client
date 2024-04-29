@@ -37,8 +37,8 @@ function pfReducer(state: PFContextModel, action: PFEventAction) {
         ownBets
     } = payload;
 
-
-    // console.log(`pfReducer: ${JSON.stringify(payload)} `);
+    console.log(`pfReducer: ${JSON.stringify(action)} `);
+    console.log(`pfReducer isShowPFSetting: ${state.isShowPFSetting} `);
     switch (type) {
         case PFEventActionType.UPDATE_PF_CLIENT_SEED_SETTING: {
             return {
@@ -58,7 +58,6 @@ function pfReducer(state: PFContextModel, action: PFEventAction) {
         }
 
         case PFEventActionType.TOGGLE_PF_SETTING: {
-            console.log(`PFReducer: ${JSON.stringify(action)} `);
             return {
                 ...state,
                 isShowPFSetting,

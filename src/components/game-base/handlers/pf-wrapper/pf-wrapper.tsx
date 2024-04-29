@@ -9,9 +9,6 @@ import { Socket } from "socket.io-client";
 export type PFWrapperProps = {
     socket: Socket;
     gameMessageHandler: GameMessageHandler;
-    renderPFSettingModal: Function;
-    renderBetHistoryModal: Function;
-    renderHeaderBlock: Function;
     uid: any;
     gameId: number
 };
@@ -54,7 +51,6 @@ export const PFWrapper = (props: PFWrapperProps) => {
         const sendSocketMessageWithClientSeed = (message) => {
             const { event, data } = message[messageEventType.SEND_SOCKET_MESSAGE_WITH_CLIENT_SEED];
             const { pfClientSeedSetting } = pfContext;
-            console.log(` pfClientSeedSetting: ${JSON.stringify(pfClientSeedSetting)}`)
             const clientSeed = pfClientSeedSetting?.useManualClientSeed
                 ? pfClientSeedSetting?.manualClientSeed
                 : pfClientSeedSetting?.randomClientSeed;
@@ -64,16 +60,13 @@ export const PFWrapper = (props: PFWrapperProps) => {
                 useManualClientSeed: pfClientSeedSetting?.useManualClientSeed,
             };
 
-            console.log(`clientSeed: ${JSON.stringify(clientSeed)}, clientSeedDetail: ${JSON.stringify(clientSeedDetail)}`);
             props.socket.emit(event, { ...data, clientSeed, clientSeedDetail });
         };
 
         const handleSavePFSettingFromTurnIdHandler = (message) => {
-            // console.log(`handleSavePFSettingFromTurnIdHandler: `, JSON.stringify(message))
             const { pfClientSeedSetting } = pfContext;
             const { drawId } = message[messageEventType.SAVE_PF_SETTING_FROM_TURN_ID_HANLDER];
             const oldDrawId = pfClientSeedSetting?.drawId;
-            console.log(`oldDrawId:  ${oldDrawId}, drawId: ${drawId}`)
             if (oldDrawId !== drawId) {
                 handleSavePFSetting({
                     [messageEventType.SAVE_PF_SETTING]: {
@@ -114,9 +107,5 @@ export const PFWrapper = (props: PFWrapperProps) => {
         }
     }, [pfContext.pfClientSeedSetting])
 
-    return (<>
-        {props.renderHeaderBlock()}
-        {props.renderPFSettingModal()}
-        {props.renderBetHistoryModal()}
-    </>)
+    return (<> </>)
 }
