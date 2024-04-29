@@ -28,7 +28,10 @@ const RippleButton: React.FC<RippleButtonProps> = ({ choice, className, id }) =>
     const chipSettings = settingContext.chipSettings;
 
     const onClickBet = useCallback(
-        (choice: string) => gameActionContext.placeBet(choice, systemContext.selectedChip),
+        (event, choice: string) => {
+            event.preventDefault();
+            gameActionContext.placeBet(choice, systemContext.selectedChip);
+        },
         [gameActionContext, systemContext.selectedChip]
     );
 
@@ -99,8 +102,8 @@ const RippleButton: React.FC<RippleButtonProps> = ({ choice, className, id }) =>
                 ref={rippleButton}
                 className={`btn-ripple ${className} ${isShowDisabledLayer}`}
                 id={id}
-                onClick={() => {
-                    onClickBet(choice);
+                onClick={(event) => {
+                    onClickBet(event, choice);
                 }}
                 style={customStyle}
             >
