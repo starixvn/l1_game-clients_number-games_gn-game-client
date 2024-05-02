@@ -20,6 +20,7 @@ const BacBall = dynamic(() => import("./bac-ball"));
 const NextBall = dynamic(() => import("./next-ball/page"));
 const ToolbarGuide = dynamic(() => import("../components/page-components/hide-toolbar-guide"));
 const SwitchGamesGuide = dynamic(() => import("../components/page-components/switch-games-guide"));
+const SeBall = dynamic(() => import("./se-ball/page"));
 
 const DURATION_TRIGGER_PRELOAD = 5000;
 
@@ -88,6 +89,9 @@ export const Games: React.FC<Props> = ({
             case GameIds.NextBall1:
             case GameIds.NextBall2:
                 return <NextBall key={`game-${gameId}`} {...gameProps} />;
+
+            case GameIds.SeBall1:
+                return <SeBall key={`game-${gameId}`} {...gameProps} />;
 
             default:
                 return null;

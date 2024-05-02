@@ -111,10 +111,7 @@ export const GameIds = {
     BacBall2: 1002,
     NextBall1: 1003,
     NextBall2: 1004,
-    HappyFour: 1112,
-    HappyWheel: 1113,
-    LuckyThree: 1114,
-    SicBalls: 1116,
+    SeBall1: 1005,
 };
 
 export const SwiperNoSwiping ='swiper-no-swiping';
