@@ -19,6 +19,10 @@ jest.mock("../../../_shared/react-hooks/use-translator", () => ({
     useTranslator: jest.fn().mockReturnValue({ t: (key: string) => key }),
 }));
 
+jest.mock("../../../_shared/react-hooks/use-sound", () => ({
+    useClickSound: jest.fn().mockReturnValue(() => {}),
+}));
+
 describe("SwitchGamesGuide component", () => {
     describe("mobile", () => {
         beforeEach(() => {
