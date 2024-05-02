@@ -117,12 +117,8 @@ const SeBallBetOptionsComponent = () => {
 
     return (
         <>
-            <div className={Style["bet-option-row"]}>
-                {renderMainOption(SeBallBetOptions.ODD)}
-            </div>
-            <div className={Style["bet-option-row"]}>
-                {renderMainOption(SeBallBetOptions.EVEN)}
-            </div>
+            <div className={Style["bet-option-row"]}>{renderMainOption(SeBallBetOptions.ODD)}</div>
+            <div className={Style["bet-option-row"]}>{renderMainOption(SeBallBetOptions.EVEN)}</div>
         </>
     );
 };
