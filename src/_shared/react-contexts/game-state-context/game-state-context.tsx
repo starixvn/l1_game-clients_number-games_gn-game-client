@@ -77,6 +77,7 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
         pfVerifyModalData,
         isShowPFClientSeedInfo,
         isShowPFVerification,
+        isPlayStartRoundAnimation,
     } = payload;
 
     switch (type) {
@@ -437,6 +438,13 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
             return {
                 ...state,
                 isShowPFVerification,
+            };
+        }
+
+        case GameEventActionType.START_NEW_ROUND_ANIM: {
+            return {
+                ...state,
+                isPlayStartRoundAnimation,
             };
         }
 

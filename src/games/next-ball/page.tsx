@@ -1,7 +1,7 @@
+import dynamic from "next/dynamic";
 import { withRouter } from "next/router";
 import { JSX } from "react";
 
-import dynamic from "next/dynamic";
 import { useSystemContext, useSystemDispatch } from "../../_shared/react-contexts";
 import {
     GameStateProvider,
@@ -9,6 +9,7 @@ import {
     useGameStatesDispatch,
 } from "../../_shared/react-contexts/game-state-context/game-state-context";
 import { useTranslator } from "../../_shared/react-hooks";
+import { tolgee } from "../../_shared/tolgee";
 import GameBase from "../../components/game-base/";
 import { GameMessageHandler, TurnIdHandler } from "../../components/game-base/handlers";
 import { GameBaseProps, Round } from "../../components/game-base/type";
@@ -17,10 +18,9 @@ import { TurnStateHandler } from "../../components/turn-base/turn-state-handler"
 import { NextBallBetOptions } from "./next-ball-constants";
 import { NextGameRoundDataHandler } from "./next-ball-game-round-data-handler";
 import NextBallResultBlock from "./next-ball-result-block";
+import Styles from "./next-ball.module.scss";
 import Scoreboard from "./scoreboard";
 import { NextBallResult, NextBallSettlementResult } from "./types";
-import { tolgee } from "../../_shared/tolgee";
-import Styles from "./next-ball.module.scss";
 
 const DrawIdBlock = dynamic(() => import("../../components/game-components/draw-id"));
 const NextBallBettingBlock = dynamic(() => import("./next-ball-betting-block"));
@@ -60,7 +60,8 @@ class NextBall extends GameBase<GameBaseProps> {
     }
 
     renderResultBlock() {
-        const { roundHistory, result, roundState, roundData, turnCounter, drawId, playResultAnimation } = this.props.gameStateContextModel;
+        const { roundHistory, result, roundState, roundData, turnCounter, drawId, playResultAnimation, isPlayStartRoundAnimation } =
+            this.props.gameStateContextModel;
 
         return (
             <NextBallResultBlock
@@ -71,6 +72,7 @@ class NextBall extends GameBase<GameBaseProps> {
                 turnCounter={turnCounter}
                 drawId={drawId}
                 playResultAnimation={playResultAnimation}
+                isPlayStartRoundAnimation={isPlayStartRoundAnimation}
             />
         );
     }

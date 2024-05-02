@@ -1,7 +1,7 @@
+import dynamic from "next/dynamic";
 import { withRouter } from "next/router";
 import { JSX } from "react";
 
-import dynamic from "next/dynamic";
 import { useSystemContext, useSystemDispatch } from "../../_shared/react-contexts";
 import {
     GameStateProvider,
@@ -52,8 +52,18 @@ class BacBall extends GameBase<GameBaseProps> {
     }
 
     renderResultBlock() {
-        const { roundHistory, result, roundState, roundData, turnCounter, drawId, playResultAnimation, settlementResult, showResultInfo } =
-            this.props.gameStateContextModel;
+        const {
+            roundHistory,
+            result,
+            roundState,
+            roundData,
+            turnCounter,
+            drawId,
+            playResultAnimation,
+            settlementResult,
+            showResultInfo,
+            isPlayStartRoundAnimation,
+        } = this.props.gameStateContextModel;
 
         return (
             <BacBallResultBlock
@@ -66,6 +76,7 @@ class BacBall extends GameBase<GameBaseProps> {
                 showResultInfo={showResultInfo}
                 drawId={drawId}
                 playResultAnimation={playResultAnimation}
+                isPlayStartRoundAnimation={isPlayStartRoundAnimation}
             />
         );
     }

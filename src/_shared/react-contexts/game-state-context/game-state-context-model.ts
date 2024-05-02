@@ -61,6 +61,7 @@ export interface GameStateContextModel {
         betLogDetails: any[];
     };
     pfVerifyModalData?: PFResult;
+    isPlayStartRoundAnimation?: boolean;
 }
 
 export const initialGameStateContextModel = () => {
@@ -117,5 +118,6 @@ export const initialGameStateContextModel = () => {
             manualClientSeed: "",
             useManualClientSeed: false,
         },
+        isPlayStartRoundAnimation: false,
     };
 };

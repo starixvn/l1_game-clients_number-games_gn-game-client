@@ -56,6 +56,7 @@ export enum GameEventActionType {
     TOGGLE_PF_SETTING = "TOGGLE_PF_SETTING",
     UPDATE_PF_CLIENT_SEED_SETTING = "UPDATE_PF_CLIENT_SEED_SETTING",
     SUGGEST_BET = "SUGGEST_BET",
+    START_NEW_ROUND_ANIM = "START_NEW_ROUND_ANIM",
 }
 
 export interface GameEventPayload {
@@ -127,6 +128,7 @@ export interface GameEventPayload {
         betLogDetails: any[];
     };
     pfVerifyModalData?: PFResult;
+    isPlayStartRoundAnimation?: boolean;
 }
 
 export interface GameEventAction {

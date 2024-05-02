@@ -12,15 +12,20 @@ import { NextBallResult } from "./types";
 export type NextBallResultBlockProps = Partial<GameStateContextModel>;
 
 const NextBallResultBlock: FC<NextBallResultBlockProps> = (props: NextBallResultBlockProps) => {
-    const { result, roundState, roundHistory, playResultAnimation } = props;
+    const { result, roundState, roundHistory, playResultAnimation, isPlayStartRoundAnimation } = props;
     const currentResult = useResult<NextBallResult>({ result, roundState, roundHistory });
 
-    if (roundState === RoundState.SwitchRound) {
+    if (roundState === RoundState.SwitchRound && !isPlayStartRoundAnimation) {
         return <></>;
     }
 
+    console.log("SwitchRound", roundState === RoundState.SwitchRound, "isPlayStartRoundAnimation", isPlayStartRoundAnimation);
     return (
-        <div className={Style["result-container"]}>
+        <div
+            className={`${Style["result-container"]} ${
+                roundState === RoundState.SwitchRound && isPlayStartRoundAnimation ? "showResultContainer" : ""
+            }`}
+        >
             <div className={Style["result"]}>
                 <Cage
                     color={CageColor.PURPLE}
@@ -30,6 +35,7 @@ const NextBallResultBlock: FC<NextBallResultBlockProps> = (props: NextBallResult
                     delayShowResultTime={0}
                     playResultAnimation={playResultAnimation}
                     roundState={roundState}
+                    isPlayStartRoundAnimation={isPlayStartRoundAnimation}
                 />
                 <ResultSlotContainer
                     defaultRoundData={defaultRoundData}

@@ -13,7 +13,7 @@ import { BacBallResult } from "./types";
 export type BacBallResultBlockProps = Partial<GameStateContextModel>;
 
 export const BacBallResultBlock: FC<BacBallResultBlockProps> = (props: BacBallResultBlockProps) => {
-    const { result, roundState, roundHistory, playResultAnimation, settlementResult, showResultInfo } = props;
+    const { result, roundState, roundHistory, playResultAnimation, settlementResult, showResultInfo, isPlayStartRoundAnimation } = props;
     const bankerDelayTime = 1000;
     const isPlayerBallHighlight = isHighLightWinningResult({
         betChoice: BacBallBetOptions.PLAYER,
@@ -31,12 +31,16 @@ export const BacBallResultBlock: FC<BacBallResultBlockProps> = (props: BacBallRe
 
     const currentResult = useResult<BacBallResult>({ result, roundState, roundHistory });
 
-    if (roundState === RoundState.SwitchRound) {
+    if (roundState === RoundState.SwitchRound && !isPlayStartRoundAnimation) {
         return <></>;
     }
 
     return (
-        <div className={Style["result-container"]}>
+        <div
+            className={`${Style["result-container"]} ${
+                roundState === RoundState.SwitchRound && isPlayStartRoundAnimation ? "showResultContainer" : ""
+            }`}
+        >
             <div className={Style["result"]}>
                 <Cage
                     color={CageColor.BLUE}
@@ -47,6 +51,7 @@ export const BacBallResultBlock: FC<BacBallResultBlockProps> = (props: BacBallRe
                     playResultAnimation={playResultAnimation}
                     roundState={roundState}
                     highlight={isPlayerBallHighlight}
+                    isPlayStartRoundAnimation={isPlayStartRoundAnimation}
                 />
                 <BacBallResultSlotContainer delayTime={0} betChoice={BacBallBetOptions.PLAYER} className="player-balls" {...props} />
             </div>
@@ -60,6 +65,7 @@ export const BacBallResultBlock: FC<BacBallResultBlockProps> = (props: BacBallRe
                     playResultAnimation={playResultAnimation}
                     roundState={roundState}
                     highlight={isBankerBallHighlight}
+                    isPlayStartRoundAnimation={isPlayStartRoundAnimation}
                 />
                 <BacBallResultSlotContainer
                     delayTime={bankerDelayTime}

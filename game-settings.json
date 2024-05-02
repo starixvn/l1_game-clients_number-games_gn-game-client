@@ -15,7 +15,8 @@
             "showResult": 7,
             "resultAnimation": 3,
             "beforePlaceBet": 0,
-            "switchRoundAnimation": 4
+            "switchRoundAnimation": 4,
+            "startNewRoundAnim": 102
         },
         "totalTurns": 4,
         "numberOfRoundHistory": 100,
@@ -37,7 +38,8 @@
             "showResult": 7,
             "resultAnimation": 3,
             "beforePlaceBet": 0,
-            "switchRoundAnimation": 4
+            "switchRoundAnimation": 4,
+            "startNewRoundAnim": 102
         },
         "totalTurns": 4,
         "numberOfRoundHistory": 100,
@@ -59,7 +61,8 @@
             "showResult": 5,
             "resultAnimation": 2,
             "beforePlaceBet": 0,
-            "switchRoundAnimation": 4
+            "switchRoundAnimation": 4,
+            "startNewRoundAnim": 196
         },
         "totalTurns": 8,
         "numberOfRoundHistory": 100,
@@ -81,7 +84,8 @@
             "showResult": 5,
             "resultAnimation": 2,
             "beforePlaceBet": 0,
-            "switchRoundAnimation": 4
+            "switchRoundAnimation": 4,
+            "startNewRoundAnim": 196
         },
         "totalTurns": 8,
         "numberOfRoundHistory": 100,

@@ -433,6 +433,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
     handleGamePlay(remainingTime: number) {
         const { durations, dispatch, gameStateContextModel } = this.props;
+
         writeDebugLog({
             remainingTime,
             roundState: RoundState[gameStateContextModel.roundState],
@@ -452,8 +453,10 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.gameMessageHandler.broadcastGameEvent({ [messageEventType.ROUND_STATE]: newRoundState });
 
         if (gameStateContextModel.roundState !== newRoundState) {
+            const isStartNewRound = gameStateContextModel.roundState === RoundState.SwitchRound && newRoundState === RoundState.InRound;
             const newGameState = {
                 roundState: newRoundState,
+                isPlayStartRoundAnimation: isStartNewRound,
                 ...this.gameStateHandler.getNextRoundState({
                     nextRoundState: newRoundState,
                     gameStateContextModel,
@@ -479,6 +482,20 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             if (isContinuePlaying) {
                 this.gameSoundHandler.handleSound(newRoundState);
             }
+        }
+
+        if (this.roundTimeCounter === durations.startNewRoundAnim) {
+            dispatch({
+                type: GameEventActionType.START_NEW_ROUND_ANIM,
+                payload: { isPlayStartRoundAnimation: true },
+            });
+        }
+
+        if (this.roundTimeCounter === durations.startNewRoundAnim - 2) {
+            dispatch({
+                type: GameEventActionType.START_NEW_ROUND_ANIM,
+                payload: { isPlayStartRoundAnimation: false },
+            });
         }
     }
 
