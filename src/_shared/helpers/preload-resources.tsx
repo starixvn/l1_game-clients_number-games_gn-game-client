@@ -7,6 +7,16 @@ import { getPathBanner, getPathIconGames, getPathImageGameId, pathImageMapping }
 
 const DELAY_TIME = 1000;
 const MAX_DELAY_TIME = 5000;
+
+export const updateProgressBar = (percentage: number) => {
+    const progressBars = document.querySelectorAll("#progress-bar");
+    progressBars.forEach((progressBar) => {
+        if (progressBar instanceof HTMLElement) {
+            progressBar.style.width = `${percentage}%`;
+        }
+    });
+};
+
 const PreloadResources: React.FC<{
     setIsDonePreloadResource: Function;
     gameId: number;
@@ -14,7 +24,8 @@ const PreloadResources: React.FC<{
     bannerId: number;
     currentLocale: string;
     gameIdsIcon: number[];
-}> = ({ setIsDonePreloadResource, gameId, bannerId, gameIdsIcon, currentLocale }) => {
+    enablePreloadResource?: boolean;
+}> = ({ setIsDonePreloadResource, gameId, bannerId, gameIdsIcon, currentLocale, enablePreloadResource = true }) => {
     const router = useRouter();
     const [loadedImages, setLoadedImages] = useState<any>(new Set());
     const [startTime, setStartTime] = useState(null);
@@ -52,8 +63,12 @@ const PreloadResources: React.FC<{
         };
 
         if (router?.isReady) {
-            setStartTime(performance.now());
-            fetchImages();
+            if (enablePreloadResource) {
+                setStartTime(performance.now());
+                fetchImages();
+            } else {
+                updateProgressBar(100);
+            }
         }
     }, [router?.isReady]);
 
@@ -63,18 +78,12 @@ const PreloadResources: React.FC<{
 
     useEffect(() => {
         let timeout: NodeJS.Timeout;
-        const progressBars = document.querySelectorAll("#progress-bar") as any;
         const percentage = (loadedImages.size / images.length) * 100;
-        progressBars.forEach((progressBar) => {
-            if (progressBar instanceof HTMLElement) {
-                progressBar.style.width = `${percentage}%`;
-            }
-        });
+        updateProgressBar(percentage);
 
         if (loadedImages.size === images.length) {
             const endTime = performance.now();
             const duration = endTime - startTime;
-            console.log(`All images loaded in ${duration} milliseconds`);
             timeout = setTimeout(
                 () => {
                     setIsDonePreloadResource?.(true);
@@ -89,6 +98,10 @@ const PreloadResources: React.FC<{
     }, [loadedImages]);
 
     return useMemo(() => {
+        if (!enablePreloadResource) {
+            return <></>;
+        }
+
         return (
             <div>
                 <div id="load-img" style={{ opacity: 0 }}>
@@ -110,7 +123,7 @@ const PreloadResources: React.FC<{
                 </div>
             </div>
         );
-    }, [images.length > 0]);
+    }, [images.length > 0, enablePreloadResource]);
 };
 
 export default PreloadResources;

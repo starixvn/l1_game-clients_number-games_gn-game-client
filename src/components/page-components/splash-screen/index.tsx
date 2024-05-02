@@ -27,12 +27,12 @@ export type SplashScreenState = {
 };
 
 export const customStartup = async (
-    currentSession: SSOResponse,
+    session: SSOResponse,
     locale: string,
     router: NextRouter,
     player: PlayerContextModel
 ): Promise<void> => {
-    const isTimeout = !currentSession || (!currentSession?.isUM && !currentSession?.isAuthenticated);
+    const isTimeout = !session || (!session?.isUM && !session?.isAuthenticated);
     await tolgee.changeLanguage(locale);
 
     player.locale = locale;
@@ -42,15 +42,15 @@ export const customStartup = async (
         return;
     }
 
-    if (currentSession?.isUM) {
-        StorageHelper.set(localStorageKeys.umInfo, currentSession.umInfo);
-        player.session = currentSession;
+    if (session?.isUM) {
+        StorageHelper.set(localStorageKeys.umInfo, session.umInfo);
+        player.session = session;
     }
 
-    if (currentSession?.isAuthenticated) {
-        setSentryUser(currentSession);
-        player.session = currentSession;
-        AnalyticsHelper.setUser(currentSession.username);
+    if (session?.isAuthenticated) {
+        setSentryUser(session);
+        player.session = session;
+        AnalyticsHelper.setUser(session.username);
     }
 };
 
@@ -118,10 +118,10 @@ const SplashScreen: React.FC<{
     }, []);
 
     const handleUnauthorizedAccess = () => {
-        const gameIds = getGameIdsSetting();
-        const firstGameId = +gameIds[0];
+        const gameIds = getGameIdsSetting()?.map((id) => parseInt(id, 10));
+        const firstGameId = gameIds[0];
         if (firstGameId > 0) {
-            setGameOfferIds([firstGameId]);
+            setGameOfferIds(gameIds);
             setBannerId(firstGameId);
         }
     };
@@ -192,6 +192,7 @@ const SplashScreen: React.FC<{
                     isDirectMode={isDirectMode}
                     currentLocale={currentLocale}
                     gameIdsIcon={gameOfferIds}
+                    enablePreloadResource={getAppSettings()?.enablePreloadResource || true}
                 />
             )}
         </>

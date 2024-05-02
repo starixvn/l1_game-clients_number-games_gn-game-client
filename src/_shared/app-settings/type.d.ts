@@ -25,4 +25,5 @@ export default interface AppSettings {
     useTolgeeStatic: boolean;
     enableDebugLogs: boolean;
     gamePath: string;
+    enablePreloadResource?: boolean;
 }

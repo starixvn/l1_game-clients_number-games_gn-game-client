@@ -17,4 +17,5 @@ window.envConfig = {
     socketGatewayPath: "gateway",
     googleAnalyticId: "G-F4HZV0YQ73",
     useTolgeeStatic: true,
+    enablePreloadResource: false,
 };
