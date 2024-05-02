@@ -34,8 +34,6 @@ export const Games: React.FC<Props> = ({
     const { session } = usePlayerContext();
     const settingDispatch = useSettingDispatch();
 
-    console.log("openGameId", openGameId);
-
     useEffect(() => {
         (async () => {
             const chipSettings = await getChipSettings(session);
@@ -56,7 +54,6 @@ export const Games: React.FC<Props> = ({
 
     const getGameComponentById = (gameId: number) => {
         const { gameSettings } = getAppSettings();
-        console.log("render " + gameId);
 
         const gameProps = {
             ...gameSettings[gameId],
@@ -98,7 +95,6 @@ export const Games: React.FC<Props> = ({
         return (
             <div>
                 {lobbyGamesIds.map((gameId) => {
-                    console.log(`render SwiperSlide-${gameId}`);
                     const swipeItemId = `SwiperSlide-${gameId}`;
 
                     return (
@@ -113,7 +109,6 @@ export const Games: React.FC<Props> = ({
 
     const renderSwiper = (openGameId: number) => {
         const gameIndex = lobbyGamesIds.indexOf(openGameId);
-        console.log(`init game ${gameIndex}`);
 
         const isSSOToNonOfferGame = gameIndex < 0;
         if (isSSOToNonOfferGame) {

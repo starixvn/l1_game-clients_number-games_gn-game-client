@@ -4,7 +4,7 @@ import { Round } from "../../components/game-base/type";
 import { BeadRoadElement, BigRoadElement, BigRoadRound } from "../../components/game-components/round-history/scoreboard/elements";
 import { registerBigRoadElement } from "../../components/page-components/lobby/games/components/scoreboard";
 import { withTranslator } from "../../components/page-components/translator";
-import { NextBallBetOptions } from "./constants";
+import { NextBallBetOptions } from "./next-ball-constants";
 import styles from "./scoreboard-elements.module.scss";
 import { NextBallResult, NextBallSettlementResult } from "./types";
 

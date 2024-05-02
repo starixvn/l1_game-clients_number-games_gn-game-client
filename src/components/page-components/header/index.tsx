@@ -3,18 +3,18 @@ import HeaderTitle from "./header-title";
 import Styles from "./header.module.scss";
 import Setting from "./setting";
 import { UserInfo } from "./user-info";
-import { GlobalMessageTransmitter, registerGlobalMessageEvent } from "../../../_shared/helpers/message-transmitter/global-transmitter";
+import { registerGlobalMessageEvent, unsubscribeGlobalMessageEvent } from "../../../_shared/helpers/message-transmitter/global-transmitter";
 
 const Header = () => {
     const [openingGameId, setOpeningGameId] = useState(0);
 
     useEffect(() => {
-        registerGlobalMessageEvent("openingGameId", ({ openingGameId }) => {
+        const gameScriberId = registerGlobalMessageEvent("openingGameId", ({ openingGameId }) => {
             setOpeningGameId(openingGameId);
         });
 
         return () => {
-            GlobalMessageTransmitter.clearAllListener();
+            unsubscribeGlobalMessageEvent(gameScriberId as any);
         }
     }, []);
 
