@@ -39,6 +39,7 @@ import Footer from "../../game-components/footer";
 import Header from "../header";
 import Lobby from "../lobby/lobby";
 import { LobbySocketConnection } from "../lobby/lobby-socket-connection";
+import ButtonSwipe from "./button-swipe";
 import Styles from "./dashboard.module.scss";
 import Register from "./register";
 import { MAX_AVATAR_ID } from "./register/avatar-gallery";
@@ -479,18 +480,13 @@ class Dashboard extends React.PureComponent<Props, State> {
         console.log("renderDashBoard", { isRenderGames });
 
         const allowSwipeGameOndDesktopStyle = isChangePrevGame ? Styles["slide-left"] : Styles["slide-right"];
-        const changeGameStyle =
-            isChangedGame && allowSwipeGameOndDesktop ? (allowSwipeGameOndDesktopStyle) : "";
+        const changeGameStyle = isChangedGame && allowSwipeGameOndDesktop ? allowSwipeGameOndDesktopStyle : "";
         const isNoGameOffer = this.state.apiError?.message === ErrorNoGameOffer;
         const renderOfferGameContainer = () => (isRenderGames ? this.renderGames() : this.renderLobby());
         return (
             <PlayerContextProvider value={authContextValue}>
                 <SettingContextProvider>
-                    {allowSwipeGameOndDesktop && (
-                        <button onClick={() => this.swiperRef.current?.slidePrev()} className={`${Styles["prev-button"]}`}>
-                            <span className={`icon-back ${Styles["icon"]}`}></span>
-                        </button>
-                    )}
+                    {allowSwipeGameOndDesktop && <ButtonSwipe isPrev={true} swiper={this.swiperRef} />}
                     <div
                         className={`${Styles["dashboard"]} ${changeGameStyle} ${!isRenderGames ? "no-scroll" : ""} ${
                             isMobileOnly ? Styles["hidden-scrollbar"] : ""
@@ -524,11 +520,7 @@ class Dashboard extends React.PureComponent<Props, State> {
                             </div>
                         )}
                     </div>
-                    {allowSwipeGameOndDesktop && (
-                        <button onClick={() => this.swiperRef.current?.slideNext()} className={`${Styles["next-button"]}`}>
-                            <span className={`icon-back ${Styles["icon"]}`}></span>
-                        </button>
-                    )}
+                    {allowSwipeGameOndDesktop && <ButtonSwipe isPrev={false} swiper={this.swiperRef} />}
                 </SettingContextProvider>
             </PlayerContextProvider>
         );
