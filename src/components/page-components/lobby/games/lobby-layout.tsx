@@ -19,7 +19,7 @@ export const LobbyLayout: React.FC<Props> = ({ lobbyConfigs, openGame }) => {
         if (lobbyConfigs && offerGamesIds) {
             const { gameSettings: allGamesSettings } = getAppSettings();
             const lobbyGameIds = getLobbyGameIds(lobbyConfigs)?.filter((gameId) => offerGamesIds.includes(gameId));
-            return lobbyGameIds?.map((gameId) => allGamesSettings[gameId]).filter((settings) => settings);
+            return lobbyGameIds?.map((gameId) => allGamesSettings[gameId]).filter((settings) => settings && !settings.isComingSoon);
         }
         return [];
     }, [lobbyConfigs, authorizeInfo]);
