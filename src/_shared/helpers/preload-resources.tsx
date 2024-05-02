@@ -3,7 +3,6 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { getPathBanner, getPathIconGames, getPathImageGameId, pathImageMapping } from "../constants/resource-image-mapping";
 
 const DELAY_TIME = 1000;
 const MAX_DELAY_TIME = 5000;
@@ -22,43 +21,29 @@ const PreloadResources: React.FC<{
     gameId: number;
     isDirectMode: boolean;
     bannerId: number;
-    currentLocale: string;
+    locale: string;
     gameIdsIcon: number[];
     enablePreloadResource?: boolean;
-}> = ({ setIsDonePreloadResource, gameId, bannerId, gameIdsIcon, currentLocale, enablePreloadResource = true }) => {
+}> = ({ setIsDonePreloadResource, gameId, bannerId, gameIdsIcon, locale, enablePreloadResource = true }) => {
     const router = useRouter();
     const [loadedImages, setLoadedImages] = useState<any>(new Set());
     const [startTime, setStartTime] = useState(null);
     const [images, setImages] = useState<string[]>([]);
 
     useEffect(() => {
-        const getPathsImg = async () => {
-            if (+gameId === 0) {
-                return [...pathImageMapping.lobby, ...getPathBanner(currentLocale, bannerId), ...getPathIconGames(gameIdsIcon)];
-            }
-
-            if (+gameId > 0) {
-                return [...pathImageMapping.game, ...getPathImageGameId(+gameId)];
-            }
-
-            return [];
-        };
-
         const fetchImages = async () => {
-            const paths = await getPathsImg();
-            if (paths.length > 0) {
-                try {
-                    const response = await axios.get("/api/preload-images", {
-                        params: {
-                            paths: JSON.stringify(paths),
-                        },
-                    });
+            try {
+                const response = await axios.post("/api/preload-images", {
+                    gameId,
+                    locale,
+                    gameIdsIcon,
+                    bannerId,
+                });
 
-                    const imagesPath = response?.data || [];
-                    setImages(imagesPath);
-                } catch (error) {
-                    console.error("Error fetching images:", error);
-                }
+                const imagesPath = response?.data || [];
+                setImages(imagesPath);
+            } catch (error) {
+                console.error("Error fetching images:", error);
             }
         };
 

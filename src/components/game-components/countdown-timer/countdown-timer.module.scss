@@ -1,3 +1,4 @@
+@import "../../../styles/components/version";
 .timer {
     position: absolute;
     top: -2rem;
@@ -50,7 +51,7 @@
         position: absolute;
         width: 3.8rem;
         height: 3.8rem;
-        background: url("/static/images/countdown-timer/countdown-placebet.png") no-repeat center center;
+        background: url("/static/images/countdown-timer/countdown-placebet.png?v=#{$version-image}") no-repeat center center;
         background-size: 3.8rem 3.8rem;
         animation: spin 2s infinite linear;
     }
@@ -64,7 +65,7 @@
         }
 
         .countdown-timer-background {
-            background: url("/static/images/countdown-timer/countdown-blockbet.png") no-repeat center center;
+            background: url("/static/images/countdown-timer/countdown-blockbet.png?v=#{$version-image}") no-repeat center center;
             background-size: 3.8rem 3.8rem;
         }
     }

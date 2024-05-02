@@ -1,3 +1,5 @@
+@import "../../../styles/components/version";
+
 .new-round-transition {
     position: absolute;
     left: 0;
@@ -26,7 +28,7 @@
             left: 0;
             z-index: 1;
             opacity: 0;
-            background: url("/static/images/new-round-transition-half.png") no-repeat;
+            background: url("/static/images/new-round-transition-half.png?v=#{$version-image}") no-repeat;
         }
 
         &:before {
@@ -52,7 +54,7 @@
         height: 6.9rem;
         opacity: 0;
         z-index: 3;
-        background: url("/static/images/new-round-transition-light.png") no-repeat;
+        background: url("/static/images/new-round-transition-light.png?v=#{$version-image}") no-repeat;
         animation: show-light 3.2s 0.5s forwards cubic-bezier(0.8, 0.33, 0.58, 1), hide-light 0.3s 3.3s forwards;
     }
 }

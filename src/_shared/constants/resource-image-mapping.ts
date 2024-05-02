@@ -1,13 +1,16 @@
 import { GameIds } from ".";
+export const getDevicePixelRatio = () => {
+    return (typeof window !== "undefined" && window?.devicePixelRatio) || 0;
+};
 
 export const getPathImageGameId = (gameId: number) => {
     switch (gameId) {
         case GameIds.BacBall1:
         case GameIds.BacBall2:
-            return ["bac-number", `${window.devicePixelRatio > 1 ? "bac-number/2x" : "bac-number/1x"}`];
+            return ["bac-number", `${getDevicePixelRatio() > 1 ? "bac-number/2x" : "bac-number/1x"}`];
         case GameIds.NextBall1:
         case GameIds.NextBall2:
-            return ["next-ball", `${window.devicePixelRatio > 1 ? "next-ball/2x" : "next-ball/1x"}`];
+            return ["next-ball", `${getDevicePixelRatio() > 1 ? "next-ball/2x" : "next-ball/1x"}`];
         default:
             return [];
     }

@@ -54,8 +54,8 @@ exports[`UserInfo render With isLobby = false should match the snapshot 1`] = `
         decoding="async"
         height="30"
         loading="lazy"
-        src="/_next/image?url=%2Fstatic%2Fimages%2Favatar%2F1.jpg&w=64&q=75"
-        srcset="/_next/image?url=%2Fstatic%2Fimages%2Favatar%2F1.jpg&w=32&q=75 1x, /_next/image?url=%2Fstatic%2Fimages%2Favatar%2F1.jpg&w=64&q=75 2x"
+        src="/_next/image?url=%2Fstatic%2Fimages%2Favatar%2F1.jpg%3Fv%3D303&w=64&q=75"
+        srcset="/_next/image?url=%2Fstatic%2Fimages%2Favatar%2F1.jpg%3Fv%3D303&w=32&q=75 1x, /_next/image?url=%2Fstatic%2Fimages%2Favatar%2F1.jpg%3Fv%3D303&w=64&q=75 2x"
         style="color: transparent;"
         width="30"
       />
@@ -118,8 +118,8 @@ exports[`UserInfo render With isLobby = true and login on Phone should match the
         decoding="async"
         height="30"
         loading="lazy"
-        src="/_next/image?url=%2Fstatic%2Fimages%2Favatar%2F1.jpg&w=64&q=75"
-        srcset="/_next/image?url=%2Fstatic%2Fimages%2Favatar%2F1.jpg&w=32&q=75 1x, /_next/image?url=%2Fstatic%2Fimages%2Favatar%2F1.jpg&w=64&q=75 2x"
+        src="/_next/image?url=%2Fstatic%2Fimages%2Favatar%2F1.jpg%3Fv%3D303&w=64&q=75"
+        srcset="/_next/image?url=%2Fstatic%2Fimages%2Favatar%2F1.jpg%3Fv%3D303&w=32&q=75 1x, /_next/image?url=%2Fstatic%2Fimages%2Favatar%2F1.jpg%3Fv%3D303&w=64&q=75 2x"
         style="color: transparent;"
         width="30"
       />
@@ -182,8 +182,8 @@ exports[`UserInfo render With isLobby = true and login on Phone should match the
         decoding="async"
         height="30"
         loading="lazy"
-        src="/_next/image?url=%2Fstatic%2Fimages%2Favatar%2F1.jpg&w=64&q=75"
-        srcset="/_next/image?url=%2Fstatic%2Fimages%2Favatar%2F1.jpg&w=32&q=75 1x, /_next/image?url=%2Fstatic%2Fimages%2Favatar%2F1.jpg&w=64&q=75 2x"
+        src="/_next/image?url=%2Fstatic%2Fimages%2Favatar%2F1.jpg%3Fv%3D303&w=64&q=75"
+        srcset="/_next/image?url=%2Fstatic%2Fimages%2Favatar%2F1.jpg%3Fv%3D303&w=32&q=75 1x, /_next/image?url=%2Fstatic%2Fimages%2Favatar%2F1.jpg%3Fv%3D303&w=64&q=75 2x"
         style="color: transparent;"
         width="30"
       />
@@ -246,8 +246,8 @@ exports[`UserInfo render With isLobby = true should match the snapshot 1`] = `
         decoding="async"
         height="30"
         loading="lazy"
-        src="/_next/image?url=%2Fstatic%2Fimages%2Favatar%2F1.jpg&w=64&q=75"
-        srcset="/_next/image?url=%2Fstatic%2Fimages%2Favatar%2F1.jpg&w=32&q=75 1x, /_next/image?url=%2Fstatic%2Fimages%2Favatar%2F1.jpg&w=64&q=75 2x"
+        src="/_next/image?url=%2Fstatic%2Fimages%2Favatar%2F1.jpg%3Fv%3D303&w=64&q=75"
+        srcset="/_next/image?url=%2Fstatic%2Fimages%2Favatar%2F1.jpg%3Fv%3D303&w=32&q=75 1x, /_next/image?url=%2Fstatic%2Fimages%2Favatar%2F1.jpg%3Fv%3D303&w=64&q=75 2x"
         style="color: transparent;"
         width="30"
       />

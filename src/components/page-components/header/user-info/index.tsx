@@ -2,6 +2,7 @@ import Image from "next/image";
 import React, { useEffect, useMemo, useState } from "react";
 import { isIOS, isMobileOnly } from "react-device-detect";
 
+import { buildVersion } from "../../../../_shared/constants";
 import { numberRoundDownWithCommas } from "../../../../_shared/helpers/number-helper";
 import { SettingEventActionType, usePlayerContext, useSettingDispatch } from "../../../../_shared/react-contexts";
 import { useClickSound } from "../../../../_shared/react-hooks";
@@ -97,7 +98,13 @@ const UserAvatar: React.FC<{ avatarId: number; classCursor: string; handleClickA
     return (
         <div data-testid="avatar" className={`${Styles["avatar"]} ${classCursor}`} onClick={() => handleClickAvatar?.()}>
             {avatarId > 0 && avatarId <= MAX_AVATAR_ID ? (
-                <Image src={`/static/images/avatar/${avatarId}.jpg`} className="img-fluid circle" height={30} width={30} alt="Avatar" />
+                <Image
+                    src={`/static/images/avatar/${avatarId}.jpg?v=${buildVersion}`}
+                    className="img-fluid circle"
+                    height={30}
+                    width={30}
+                    alt="Avatar"
+                />
             ) : (
                 <span className={`icon-user ${Styles["icon-user"]}`} data-testid="icon-user"></span>
             )}

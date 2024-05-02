@@ -1,7 +1,7 @@
+import Image from "next/image";
 import { useTranslator } from "../../../../../_shared/react-hooks/use-translator";
 import { ResourceTypes } from "../../../../../_shared/resources";
 import { GameSettings } from "../../../../game-base/type";
-import Image from "next/image";
 import Styles from "../../lobby.module.scss";
 import { GameIcon } from "./game-icon";
 

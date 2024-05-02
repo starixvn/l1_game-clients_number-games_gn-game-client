@@ -1,3 +1,5 @@
+@import "../../styles/components/version";
+
 .betting-zone {
     position: relative;
     display: flex;
@@ -46,7 +48,7 @@
         position: absolute;
         left: -0.2rem;
         top: 0;
-        background: url("/static/images/bac-number/player-disabled-layer.png") no-repeat;
+        background: url("/static/images/bac-number/player-disabled-layer.png?v=#{$version-image}") no-repeat;
         width: 18.2rem;
         height: 19rem;
         opacity: 0;
@@ -58,8 +60,8 @@
     --color: #98cdff;
 
     @extend %main-option;
-    background-image: url("/static/images/bac-number/1x/bg-player.png");
-    background-image: image-set(url("/static/images/bac-number/1x/bg-player.png") 1x, url("/static/images/bac-number/2x/bg-player.png") 2x);
+    background-image: url("/static/images/bac-number/1x/bg-player.png?v=#{$version-image}");
+    background-image: image-set(url("/static/images/bac-number/1x/bg-player.png?v=#{$version-image}") 1x, url("/static/images/bac-number/2x/bg-player.png?v=#{$version-image}") 2x);
     background-size: 17.8rem 18.8rem;
     border-bottom-left-radius: 6.6rem;
     border-top-left-radius: 3.8rem;
@@ -117,8 +119,8 @@
     --color: #f9bcb9;
 
     @extend %main-option;
-    background-image: url("/static/images/bac-number/1x/bg-banker.png");
-    background-image: image-set(url("/static/images/bac-number/1x/bg-banker.png") 1x, url("/static/images/bac-number/2x/bg-banker.png") 2x);
+    background-image: url("/static/images/bac-number/1x/bg-banker.png?v=#{$version-image}");
+    background-image: image-set(url("/static/images/bac-number/1x/bg-banker.png?v=#{$version-image}") 1x, url("/static/images/bac-number/2x/bg-banker.png?v=#{$version-image}") 2x);
 
     border-bottom-right-radius: 6.6rem;
     border-top-right-radius: 3.8rem;
@@ -181,8 +183,8 @@
 .tie {
     --color: #2fc856;
 
-    background-image: url("/static/images/bac-number/1x/bg-tie.png");
-    background-image: image-set(url("/static/images/bac-number/1x/bg-tie.png") 1x, url("/static/images/bac-number/2x/bg-tie.png") 2x);
+    background-image: url("/static/images/bac-number/1x/bg-tie.png?v=#{$version-image}");
+    background-image: image-set(url("/static/images/bac-number/1x/bg-tie.png?v=#{$version-image}") 1x, url("/static/images/bac-number/2x/bg-tie.png?v=#{$version-image}") 2x);
     width: 9.5rem;
     height: 17.2rem;
     background-size: 9.5rem 17.2rem;
@@ -229,7 +231,7 @@
         top: -0.1rem;
         width: 9.6rem;
         height: 17.6rem;
-        background: url("/static/images/bac-number/tie-disabled-layer.png") no-repeat;
+        background: url("/static/images/bac-number/tie-disabled-layer.png?v=#{$version-image}") no-repeat;
         background-size: 9.6rem 17.6rem;
         opacity: 0;
         animation: show-disabled-layer 0.3s ease-in forwards;
@@ -258,7 +260,7 @@
 .highlight-winning-banker {
     width: 17.8rem;
     height: 18.8rem;
-    background: url("/static/images/bac-number/highlight-winning-bg-player.png");
+    background: url("/static/images/bac-number/highlight-winning-bg-player.png?v=#{$version-image}");
 }
 
 .highlight-winning-tie {
@@ -266,7 +268,7 @@
     top: 0.4rem;
     width: 9.5rem;
     height: 17.2rem;
-    background: url("/static/images/bac-number/highlight-winning-bg-tie.png");
+    background: url("/static/images/bac-number/highlight-winning-bg-tie.png?v=#{$version-image}");
 }
 
 .ball-svg {
@@ -276,10 +278,10 @@
 }
 
 .highlight-prev-result-player {
-    background-image: url("/static/images/bac-number/1x/winning-previous-player.png");
+    background-image: url("/static/images/bac-number/1x/winning-previous-player.png?v=#{$version-image}");
     background-image: image-set(
-        url("/static/images/bac-number/1x/winning-previous-player.png") 1x,
-        url("/static/images/bac-number/2x/winning-previous-player.png") 2x
+        url("/static/images/bac-number/1x/winning-previous-player.png?v=#{$version-image}") 1x,
+        url("/static/images/bac-number/2x/winning-previous-player.png?v=#{$version-image}") 2x
     );
 
     height: 18.8rem;
@@ -294,10 +296,10 @@
 }
 
 .highlight-prev-result-tie {
-    background-image: url("/static/images/bac-number/1x/winning-previous-tie.png");
+    background-image: url("/static/images/bac-number/1x/winning-previous-tie.png?v=#{$version-image}");
     background-image: image-set(
-        url("/static/images/bac-number/1x/winning-previous-tie.png") 1x,
-        url("/static/images/bac-number/2x/winning-previous-tie.png") 2x
+        url("/static/images/bac-number/1x/winning-previous-tie.png?v=#{$version-image}") 1x,
+        url("/static/images/bac-number/2x/winning-previous-tie.png?v=#{$version-image}") 2x
     );
 
     width: 9.7rem;

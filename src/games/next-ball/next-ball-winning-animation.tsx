@@ -1,3 +1,4 @@
+import { buildVersion } from "../../_shared/constants";
 import { isHighLightWinningResult } from "../../_shared/react-hooks/use-high-light";
 import { RoundState } from "../../components/game-base/type";
 import { Spritesheet } from "../../components/game-components/sprites-sheet";
@@ -23,7 +24,7 @@ const NextBallWinningAnimation: React.FC<Props> = ({ choice, resourceName, round
             <div className="d-grid">
                 <Spritesheet
                     className={`${Styles[`winning-light-anim`]} ${Styles[`anim-${choice}`]}`}
-                    image={`/static/images/next-ball/highlight-winning-${resourceName}.png?v=2`}
+                    image={`/static/images/next-ball/highlight-winning-${resourceName}.png?v=${buildVersion}`}
                     widthFrame={190}
                     isResponsive
                     heightFrame={106}

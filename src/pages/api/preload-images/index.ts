@@ -1,26 +1,45 @@
 import fs from "fs";
 import { NextApiRequest, NextApiResponse } from "next";
+import NodeCache from "node-cache";
 import path from "path";
+import { buildVersion } from "../../../_shared/constants";
+import { getPathBanner, getPathIconGames, getPathImageGameId, pathImageMapping } from "../../../_shared/constants/resource-image-mapping";
+
+const cacheImages = new NodeCache();
 
 const DEFAULT_STATIC_PATH = "public/static/images/";
 const DEFAULT_IMG_PATH = "/static/images/";
 
-export default function handler(req: NextApiRequest, res: NextApiResponse<any[]>) {
-    const { paths } = req.query;
-    const parsedPaths = typeof paths === "string" ? JSON.parse(paths) : paths;
+interface RequestBody {
+    gameId: number;
+    locale: string;
+    gameIdsIcon: number[];
+    bannerId: number;
+}
 
-    if (!Array.isArray(parsedPaths)) {
+export default function handler(req: NextApiRequest, res: NextApiResponse<any[]>) {
+    const { gameId, locale, gameIdsIcon, bannerId } = req.body as RequestBody;
+    const pathsImg = getPathsImg(gameId, locale, bannerId, gameIdsIcon);
+    const cacheKey = `${gameId}-${buildVersion}`;
+
+    if (!Array.isArray(pathsImg)) {
         return res.status(400).json(["Invalid paths provided"]);
+    }
+
+    const cachedImageFiles = cacheImages.get<any>(cacheKey);
+
+    if (cachedImageFiles) {
+        return res.status(200).json(cachedImageFiles);
     }
 
     const imagesDir = path.join(process.cwd(), DEFAULT_STATIC_PATH);
     const imageFiles = [];
-    for (const dirPath of parsedPaths) {
+    for (const dirPath of pathsImg) {
         const imagePath = path.join(DEFAULT_IMG_PATH, dirPath);
         const ext = path.extname(imagePath).toLowerCase();
 
         if (ext === ".jpg" || ext === ".png" || ext === ".gif" || ext === ".webp" || ext === ".svg") {
-            const imageUrl = `${imagePath}?v=${process.env.buildVersion}`.replace(/\\/g, "/");
+            const imageUrl = `${imagePath}?v=${buildVersion}`.replace(/\\/g, "/");
             imageFiles.push(imageUrl);
         } else {
             const dirToRead = path.join(imagesDir, dirPath);
@@ -32,9 +51,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any[]>
                 });
 
                 imageFiles.push(
-                    ...validImageFiles.map((file) =>
-                        path.join(DEFAULT_IMG_PATH, dirPath, `${file}?v=${process.env.buildVersion}`).replace(/\\/g, "/")
-                    )
+                    ...validImageFiles.map((file) => path.join(DEFAULT_IMG_PATH, dirPath, `${file}?v=${buildVersion}`).replace(/\\/g, "/"))
                 );
             } catch (err) {
                 console.error(`Error reading directory ${dirToRead}:`, err);
@@ -42,8 +59,22 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any[]>
         }
     }
 
+    cacheImages.set(cacheKey, imageFiles);
+
     return res.status(200).json(imageFiles);
 }
+
+const getPathsImg = (gameId: number, currentLocale: string, bannerId: number, gameIdsIcon: number[]) => {
+    if (gameId === 0) {
+        return [...pathImageMapping.lobby, ...getPathBanner(currentLocale, bannerId), ...getPathIconGames(gameIdsIcon)];
+    }
+
+    if (gameId > 0) {
+        return [...pathImageMapping.game, ...getPathImageGameId(gameId)];
+    }
+
+    return [];
+};
 
 const readFilesFromPath = (dirPath: string, imagesDir: string) => {
     const fullDirPath = path.join(imagesDir, dirPath);
@@ -55,7 +86,7 @@ const readFilesFromPath = (dirPath: string, imagesDir: string) => {
         });
 
         const filePaths = validImageFiles.map((file) =>
-            path.join(DEFAULT_IMG_PATH, dirPath, `${file}?v=${process.env.buildVersion}`).replace(/\\\\/g, "\\")
+            path.join(DEFAULT_IMG_PATH, dirPath, `${file}?v=${buildVersion}`).replace(/\\\\/g, "\\")
         );
 
         for (const file of files) {

@@ -1,3 +1,4 @@
+import { buildVersion } from "../../_shared/constants";
 import { isHighLightWinningResult } from "../../_shared/react-hooks/use-high-light";
 import { RoundState } from "../../components/game-base/type";
 import { Spritesheet } from "../../components/game-components/sprites-sheet";
@@ -21,7 +22,7 @@ export const BacBallWinningAnimation: React.FC<Props> = ({ choice, resourceName,
             <div className={`d-grid`}>
                 <Spritesheet
                     className={Styles[`winning-light-anim-${choice}`]}
-                    image={`/static/images/bac-number/highlight-winning-${resourceName}.png`}
+                    image={`/static/images/bac-number/highlight-winning-${resourceName}.png?v=${buildVersion}`}
                     widthFrame={200}
                     isResponsive
                     heightFrame={210}

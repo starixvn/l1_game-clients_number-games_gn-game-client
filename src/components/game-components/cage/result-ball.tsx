@@ -3,6 +3,7 @@ import React, { useMemo } from "react";
 
 import { buildVersion } from "../../../_shared/constants";
 import { useShowBallResultSound } from "../../../_shared/react-hooks";
+import { buildVersion } from "../../../_shared/constants";
 import { Spritesheet } from "../sprites-sheet";
 import Styles from "./cage.module.scss";
 
@@ -23,7 +24,13 @@ const ResultBall: React.FC<{
         isShowResultAnim && playShowBallResult();
         return (
             <div key={currentTime} id="show-ball-anim" className={Styles["show-ball-anim"]}>
-                <Image width={120} height={120} className={Styles["ball-blur"]} src={`/static/images/cage/ball-blur.webp`} alt="img-blur" />
+                <Image
+                    width={120}
+                    height={120}
+                    className={Styles["ball-blur"]}
+                    src={`/static/images/cage/ball-blur.webp?v=${buildVersion}`}
+                    alt="img-blur"
+                />
 
                 {isShowResultAnim ? (
                     <Spritesheet
@@ -40,7 +47,7 @@ const ResultBall: React.FC<{
                         endAt={31}
                     />
                 ) : (
-                    <img className={"sss"} src={`/static/images/cage/${ballImage}.webp`} alt="img-result" />
+                    <img className={"sss"} src={`/static/images/cage/${ballImage}.webp?v=${buildVersion}`} alt="img-result" />
                 )}
             </div>
         );

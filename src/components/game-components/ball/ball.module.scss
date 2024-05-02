@@ -1,3 +1,5 @@
+@import "../../../styles/components/version";
+
 $delay-all-anim: 1.2s;
 
 $show-number-duration: 0.5s;
@@ -47,11 +49,11 @@ $ball-size: 3.2rem;
 }
 
 .red {
-    --bg: url("/static/images/ball/ball-red.png?v=3") no-repeat;
+    --bg: url("/static/images/ball/ball-red.png?v=#{$version-image}") no-repeat;
 }
 
 .blue {
-    --bg: url("/static/images/ball/ball-blue.png?v=3") no-repeat;
+    --bg: url("/static/images/ball/ball-blue.png?v=#{$version-image}") no-repeat;
 }
 
 .ball-bg {

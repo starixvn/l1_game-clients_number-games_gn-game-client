@@ -1,3 +1,5 @@
+@import "../../../styles/components/version";
+
 [data-theme="light"] {
     .profile-picture {
         --icon-edit-background: #577af9;
@@ -63,7 +65,7 @@
     width: 9.7rem;
     height: 9.7rem;
     border-radius: 50%;
-    background: url("/static/images/avatar/default-avatar.png") center no-repeat;
+    background: url("/static/images/avatar/default-avatar.png?v=#{$version-image}") center no-repeat;
     background-size: 3.1rem 4.3rem;
     background-color: #c7c7c7;
 }

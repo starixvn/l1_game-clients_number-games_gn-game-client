@@ -2,7 +2,7 @@ import "../_shared/helpers/string-helper";
 import "../styles/errors.scss";
 import "../styles/main.scss";
 
-import { TolgeeProvider } from "@tolgee/react";
+import { TolgeeProvider, useTolgeeSSR } from "@tolgee/react";
 import { ThemeProvider } from "next-themes";
 import { AppProps } from "next/app";
 import Head from "next/head";
@@ -16,7 +16,7 @@ const SabaNumberApp = ({ Component, pageProps, language }: AppProps & { language
     const ssrTolgee = useTolgeeSSR(tolgee, language);
     return (
         <ThemeProvider defaultTheme={Themes.light} forcedTheme={Themes.light}>
-            <TolgeeProvider tolgee={tolgee} fallback={<LoadingSpinner />}>
+            <TolgeeProvider tolgee={ssrTolgee} fallback={<LoadingSpinner />}>
                 <AppTilte />
                 <Component {...pageProps} />
                 <GoogleAnalytic />

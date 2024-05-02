@@ -1,3 +1,5 @@
+@import "version";
+
 %input-style {
     height: var(--input-height, 3.6rem);
     width: var(--input-width, 15rem);
@@ -66,7 +68,7 @@
         position: absolute;
         left: 0.4rem;
         top: 0.3rem;
-        background: url("/static/images/icons/radio-checked.svg") no-repeat;
+        background: url("/static/images/icons/radio-checked.svg?v=#{$version-image}") no-repeat;
         width: 2rem;
         height: 2rem;
         transform: scale(0);

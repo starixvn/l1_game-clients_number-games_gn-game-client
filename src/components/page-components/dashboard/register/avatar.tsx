@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { ReactNode } from "react";
 
+import { buildVersion } from "../../../../_shared/constants";
 import styles from "./avatar.module.scss";
 
 export type AvatarProps = {
@@ -14,7 +15,13 @@ export function Avatar({ id, onClick, selected }: AvatarProps): ReactNode {
 
     return (
         <div className={className} onClick={onClick}>
-            <Image src={`/static/images/avatar/${id}.jpg`} height={72} width={72} className="img-fluid circle" alt="Avatar" />
+            <Image
+                src={`/static/images/avatar/${id}.jpg?v=${buildVersion}`}
+                height={72}
+                width={72}
+                className="img-fluid circle"
+                alt="Avatar"
+            />
         </div>
     );
 }

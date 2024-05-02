@@ -1,4 +1,5 @@
 @import "../../../styles/components/ballSmall";
+@import "../../../styles/components/version";
 
 %input-style {
     height: 3.6rem;
@@ -24,11 +25,11 @@
 }
 
 .red {
-    --bg: url("/static/images/ball/ball-red.png") no-repeat;
+    --bg: url("/static/images/ball/ball-red.png?v=#{$version-image}") no-repeat;
 }
 
 .blue {
-    --bg: url("/static/images/ball/ball-blue.png") no-repeat;
+    --bg: url("/static/images/ball/ball-blue.png?v=#{$version-image}") no-repeat;
 }
 
 .balls-container {

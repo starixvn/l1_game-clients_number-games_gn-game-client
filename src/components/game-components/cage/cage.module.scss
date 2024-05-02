@@ -1,3 +1,5 @@
+@import "../../../styles/components/version";
+
 .cage-area {
     --cage-width: 13rem;
     --cage-height: 13rem;
@@ -61,9 +63,11 @@
     background-position: center;
 }
 
+
+
 .cage-bg {
     @extend %result;
-    background-image: url("/static/images/cage/cage.webp");
+    background-image: url("/static/images/cage/cage.webp?v=#{$version-image}");
     background-size: var(--cage-width) var(--cage-height);
 }
 
@@ -90,14 +94,14 @@
 
 .cage-cover {
     @extend %result;
-    background-image: url("/static/images/cage/cage-cover.webp");
+    background-image: url("/static/images/cage/cage-cover.webp?v=#{$version-image}");
 }
 
 .cage-lid {
     position: absolute;
     bottom: 1.2rem;
     right: 1rem;
-    background: url("/static/images/cage/cage-lid.webp") center center no-repeat;
+    background: url("/static/images/cage/cage-lid.webp?v=#{$version-image}") center center no-repeat;
     width: 5rem;
     height: 5.7rem;
     transform: scale(0.5);
@@ -109,26 +113,26 @@
     background-size: var(--cage-width) var(--cage-height);
 
     &.purple {
-        background-image: url("/static/images/cage/cage-border-purple.webp");
+        background-image: url("/static/images/cage/cage-border-purple.webp?v=#{$version-image}");
         background-image: image-set(
-            url("/static/images/cage/cage-border-purple.webp") 1x,
-            url("/static/images/cage/cage-border-purple-2x.webp") 2x
+            url("/static/images/cage/cage-border-purple.webp?v=#{$version-image}") 1x,
+            url("/static/images/cage/cage-border-purple-2x.webp?v=#{$version-image}") 2x
         );
     }
 
     &.blue {
-        background-image: url("/static/images/cage/cage-border-blue.webp");
+        background-image: url("/static/images/cage/cage-border-blue.webp?v=#{$version-image}");
         background-image: image-set(
-            url("/static/images/cage/cage-border-blue.webp") 1x,
-            url("/static/images/cage/cage-border-blue-2x.webp") 2x
+            url("/static/images/cage/cage-border-blue.webp?v=#{$version-image}") 1x,
+            url("/static/images/cage/cage-border-blue-2x.webp?v=#{$version-image}") 2x
         );
     }
 
     &.red {
-        background-image: url("/static/images/cage/cage-border-red.webp");
+        background-image: url("/static/images/cage/cage-border-red.webp?v=#{$version-image}");
         background-image: image-set(
-            url("/static/images/cage/cage-border-red.webp") 1x,
-            url("/static/images/cage/cage-border-red-2x.webp") 2x
+            url("/static/images/cage/cage-border-red.webp?v=#{$version-image}") 1x,
+            url("/static/images/cage/cage-border-red-2x.webp?v=#{$version-image}") 2x
         );
     }
 }

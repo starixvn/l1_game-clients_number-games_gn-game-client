@@ -99,7 +99,7 @@ export const Themes = {
 export const sabaNumberName = "Saba.numbers";
 export const sabaClubName = "Saba.games";
 
-export const buildVersion = process.env.buildVersion;
+export const buildVersion = 303;
 export const AppTypes = {
     mobile: 1,
 };
@@ -117,4 +117,4 @@ export const GameIds = {
     SicBalls: 1116,
 };
 
-export const SwiperNoSwiping ='swiper-no-swiping';
+export const SwiperNoSwiping = "swiper-no-swiping";

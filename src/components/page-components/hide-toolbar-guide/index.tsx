@@ -12,7 +12,7 @@ import Styles from "./hide-toolbar-guide.module.scss";
 const HIDE_TOOLBAR_GUIDE_PATH = "./static/images/hide-toolbar-guide";
 
 const ToolbarIcon = ({ name }) => {
-    return <img src={`${HIDE_TOOLBAR_GUIDE_PATH}/${name}.svg`} alt={name} />;
+    return <img src={`${HIDE_TOOLBAR_GUIDE_PATH}/${name}.svg?v=${buildVersion}`} alt={name} />;
 };
 
 const ToolbarGuide: React.FC = () => {

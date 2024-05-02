@@ -1,3 +1,5 @@
+@import "../../../styles/components/version";
+
 .icon-coin {
     color: var(--color);
 }
@@ -30,11 +32,11 @@
     }
 
     &.up:after {
-        background-image: url("/static/images/arrow-up.svg");
+        background-image: url("/static/images/arrow-up.svg?v=#{$version-image}");
     }
 
     &.down:after {
-        background-image: url("/static/images/arrow-down.svg");
+        background-image: url("/static/images/arrow-down.svg?v=#{$version-image}");
     }
 
     &.show-odds-icon {
@@ -84,7 +86,7 @@
             width: 1.2rem;
             height: 1.2rem;
             margin-right: 0.2rem;
-            background: url("/static/images/coin-outline.svg") no-repeat 50%;
+            background: url("/static/images/coin-outline.svg?v=#{$version-image}") no-repeat 50%;
             background-size: contain;
             vertical-align: middle;
         }

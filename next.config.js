@@ -23,7 +23,7 @@ const nextConfig = withSentryConfig({
     generateBuildId: async () => uuidv4(),
     webpack: (config, options) => {
         config.module.rules.push({
-            test: /\.(png|jpg|gif|svg|eot|ttf|woff|woff2|mp3)$/,
+            test: /\.(png|jpg|gif|svg|eot|ttf|woff|woff2|mp3|webp)$/,
             use: {
                 loader: "url-loader",
                 options: {

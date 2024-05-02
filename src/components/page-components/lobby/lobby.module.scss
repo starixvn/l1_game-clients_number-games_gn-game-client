@@ -1,3 +1,5 @@
+@import "../../../styles/components/version";
+
 @mixin background-opacity($color, $opacity) {
     background: $color;
     background: rgba($color, $opacity);
@@ -15,10 +17,10 @@
 }
 
 .game-board-detail {
-    background-image: url("/static/images/lobby/game-board-detail/bg-game-board.svg");
+    background-image: url("/static/images/lobby/game-board-detail/bg-game-board.svg?v=#{$version-image}");
     background-image: image-set(
-        url("/static/images/lobby/game-board-detail/bg-game-board.webp") 1x,
-        url("/static/images/lobby/game-board-detail/bg-game-board-2x.webp") 2x
+        url("/static/images/lobby/game-board-detail/bg-game-board.webp?v=#{$version-image}") 1x,
+        url("/static/images/lobby/game-board-detail/bg-game-board-2x.webp?v=#{$version-image}") 2x
     );
     background-repeat: no-repeat;
     background-position: top center;

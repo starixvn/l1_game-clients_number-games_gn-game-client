@@ -1,3 +1,5 @@
+@import "../../styles/components/version";
+
 .betting-zone {
     position: relative;
     display: flex;
@@ -50,7 +52,7 @@
     .disable-layer {
         position: absolute;
         top: 0;
-        background: url("/static/images/next-ball/lockbet.png") no-repeat;
+        background: url("/static/images/next-ball/lockbet.png?v=#{$version-image}") no-repeat;
         width: 17.7rem;
         height: 9.6rem;
         opacity: 0;
@@ -62,16 +64,16 @@
 .odd {
     @extend %main-option;
     --color: #98cdff;
-    --bgBetChoice: url("/static/images/next-ball/1x/bg-blue.png");
-    --bgBetChoice-2x: url("/static/images/next-ball/2x/bg-blue.png");
+    --bgBetChoice: url("/static/images/next-ball/1x/bg-blue.png?v=#{$version-image}");
+    --bgBetChoice-2x: url("/static/images/next-ball/2x/bg-blue.png?v=#{$version-image}");
 }
 
 .under,
 .even {
     @extend %main-option;
     --color: #f9bcb9;
-    --bgBetChoice: url("/static/images/next-ball/1x/bg-red.png");
-    --bgBetChoice-2x: url("/static/images/next-ball/2x/bg-red.png");
+    --bgBetChoice: url("/static/images/next-ball/1x/bg-red.png?v=#{$version-image}");
+    --bgBetChoice-2x: url("/static/images/next-ball/2x/bg-red.png?v=#{$version-image}");
 }
 
 .over {
@@ -153,7 +155,7 @@
 .highlight-winning-bg-even {
     width: 17.8rem;
     height: 9.4rem;
-    background: url("/static/images/next-ball/highlight-winning-bg.png") no-repeat;
+    background: url("/static/images/next-ball/highlight-winning-bg.png?v=#{$version-image}") no-repeat;
 }
 
 .highlight-winning-bg-under {
@@ -185,10 +187,10 @@
     position: absolute;
     left: 0;
     top: 0;
-    background-image: url("/static/images/next-ball/winning-previous.png");
+    background-image: url("/static/images/next-ball/winning-previous.png?v=#{$version-image}");
     background-image: image-set(
-        url("/static/images/next-ball/1x/winning-previous.png") 1x,
-        url("/static/images/next-ball/2x/winning-previous.png") 2x
+        url("/static/images/next-ball/1x/winning-previous.png?v=#{$version-image}") 1x,
+        url("/static/images/next-ball/2x/winning-previous.png?v=#{$version-image}") 2x
     );
 }
 

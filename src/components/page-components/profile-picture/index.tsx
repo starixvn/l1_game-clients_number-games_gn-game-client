@@ -1,5 +1,6 @@
 import React from "react";
 
+import { buildVersion } from "../../../_shared/constants";
 import { MAX_AVATAR_ID } from "../dashboard/register/avatar-gallery";
 import Styles from "./profile-picture.module.scss";
 
@@ -16,7 +17,7 @@ const ProfilePicture: React.FC<{ avatarId: number; isEditable?: boolean; onClick
         <div className={Styles["profile-picture"]} onClick={handleClick} data-testid="profile-picture">
             {avatarId > 0 && avatarId <= MAX_AVATAR_ID ? (
                 <img
-                    src={`/static/images/avatar/${avatarId}.jpg`}
+                    src={`/static/images/avatar/${avatarId}.jpg?v=${buildVersion}`}
                     className={`img-fluid ${Styles["avatar"]}`}
                     height="94"
                     width="94"

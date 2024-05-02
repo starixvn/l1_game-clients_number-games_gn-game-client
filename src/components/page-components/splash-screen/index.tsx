@@ -7,13 +7,12 @@ import Image from "next/image";
 import { AuthorizeResponse, SSOResponse } from "sc-user-service-client/dist/auth";
 import { LobbyConfigs } from "sc-user-service-client/dist/lobby";
 import { getAppSettings, getGameIdsSetting } from "../../../_shared/app-settings";
-import { languageMapper } from "../../../_shared/constants";
+import { buildVersion, languageMapper } from "../../../_shared/constants";
 import { AnalyticsHelper, StorageHelper, getLobbyGamesIds, localStorageKeys } from "../../../_shared/helpers";
 import PreloadResources from "../../../_shared/helpers/preload-resources";
 import { PlayerContextModel, URLContext, usePlayerContext } from "../../../_shared/react-contexts";
 import { useTranslator } from "../../../_shared/react-hooks";
 import { setSentryUser } from "../../../_shared/sentry";
-import { tolgee } from "../../../_shared/tolgee";
 import { authorize, getLobbyConfigs, sso, verifySession } from "../../../services/auth-service";
 import { getGameIdOfferBanner } from "../lobby/games/components/banner";
 import UMPage from "../um-page";
@@ -33,8 +32,6 @@ export const customStartup = async (
     player: PlayerContextModel
 ): Promise<void> => {
     const isTimeout = !session || (!session?.isUM && !session?.isAuthenticated);
-    await tolgee.changeLanguage(locale);
-
     player.locale = locale;
     if (isTimeout) {
         router.push("timeout");
@@ -87,7 +84,7 @@ const SplashScreen: React.FC<{
     const [isDonePreloadResources, setIsDonePreloadResources] = useState<boolean>(false);
     const [isDoneLoadLogo, setIsDoneLoadLogo] = useState<boolean>(false);
     const [bannerId, setBannerId] = useState<number>(0);
-    const [currentLocale, setCurrentLocale] = useState<string>();
+    const [locale, setLocale] = useState<string>();
     const [currentSession, setCurrentSession] = useState<SSOResponse>();
     const [gameOfferIds, setGameOfferIds] = useState<number[]>([]);
 
@@ -100,7 +97,7 @@ const SplashScreen: React.FC<{
             }
 
             setCurrentSession(session);
-            setCurrentLocale(getLocaleFromSession(session, language));
+            setLocale(getLocaleFromSession(session, language));
 
             const authorizeInfo = (await authorize(session)) as AuthorizeResponse;
             if (!authorizeInfo?.authorized) {
@@ -110,7 +107,8 @@ const SplashScreen: React.FC<{
 
             const lobby = await getLobbyConfigs(session);
             if (lobby?.lobbyConfigs) {
-                handleLobbyConfigs(authorizeInfo, lobby.lobbyConfigs);
+                handleBanner(authorizeInfo, lobby.lobbyConfigs);
+                handleGameOfferIds(authorizeInfo, lobby.lobbyConfigs);
             }
         };
 
@@ -126,12 +124,14 @@ const SplashScreen: React.FC<{
         }
     };
 
-    const handleLobbyConfigs = (authorizeInfo: AuthorizeResponse, lobbyConfigs: LobbyConfigs) => {
+    const handleBanner = (authorizeInfo: AuthorizeResponse, lobbyConfigs: LobbyConfigs) => {
         const gameIdsOfferBanner = getGameIdOfferBanner(authorizeInfo, lobbyConfigs);
         if (gameIdsOfferBanner.length > 0) {
             setBannerId(gameIdsOfferBanner[0]);
         }
+    };
 
+    const handleGameOfferIds = (authorizeInfo: AuthorizeResponse, lobbyConfigs: LobbyConfigs) => {
         const gameOfferIds = getLobbyGamesIds(lobbyConfigs, authorizeInfo);
         if (gameOfferIds.length > 0) {
             setGameOfferIds(gameOfferIds);
@@ -142,7 +142,7 @@ const SplashScreen: React.FC<{
         if (router?.isReady && isDonePreloadResources) {
             const handleStartup = async () => {
                 try {
-                    await customStartup(currentSession, currentLocale, router, player);
+                    await customStartup(currentSession, locale, router, player);
                     await router?.push("/", undefined, { shallow: true });
                 } catch (error) {
                     onStartupError(error);
@@ -162,7 +162,7 @@ const SplashScreen: React.FC<{
                 <div className={Styles["center"]}>
                     <div className={Styles["logo"]}>
                         <Image
-                            src={"/static/images/splash-screen/2x/logo.png"}
+                            src={`/static/images/splash-screen/2x/logo.png?v=${buildVersion}`}
                             width={195}
                             height={162}
                             alt="logo"
@@ -184,13 +184,13 @@ const SplashScreen: React.FC<{
                 </div>
             </div>
 
-            {isDoneLoadLogo && bannerId > 0 && !!currentLocale && (
+            {isDoneLoadLogo && bannerId > 0 && !!locale && (
                 <PreloadResources
                     bannerId={bannerId}
                     setIsDonePreloadResource={setIsDonePreloadResources}
                     gameId={gameId}
                     isDirectMode={isDirectMode}
-                    currentLocale={currentLocale}
+                    locale={locale}
                     gameIdsIcon={gameOfferIds}
                     enablePreloadResource={getAppSettings()?.enablePreloadResource || true}
                 />

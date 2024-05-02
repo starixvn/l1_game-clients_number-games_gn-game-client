@@ -29,7 +29,7 @@ exports[`Register render should match snapshot 1`] = `
             alt="Avatar"
             class="img-fluid avatar"
             height="94"
-            src="/static/images/avatar/1.jpg"
+            src="/static/images/avatar/1.jpg?v=303"
             width="94"
           />
           <div

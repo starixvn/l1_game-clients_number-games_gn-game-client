@@ -1,3 +1,5 @@
+@import "../../../styles/components/version";
+
 .page {
     display: flex;
     justify-content: center;
@@ -58,10 +60,10 @@
             display: flex;
             height: 9.4rem;
             width: 37.4rem;
-            background-image: url("/static/images/splash-screen/1x/light.png");
+            background-image: url("/static/images/splash-screen/1x/light.png?v=#{$version-image}");
             background-image: image-set(
-                url("/static/images/splash-screen/1x/light.png") 1x,
-                url("/static/images/splash-screen/2x/light.png") 2x
+                url("/static/images/splash-screen/1x/light.png?v=#{$version-image}") 1x,
+                url("/static/images/splash-screen/2x/light.png?v=#{$version-image}") 2x
             );
         }
 
@@ -72,7 +74,7 @@
             bottom: -5.5rem;
             width: 9.4rem;
             height: 7rem;
-            background-image: url("/static/images/splash-screen/light-effect.png");
+            background-image: url("/static/images/splash-screen/light-effect.png?v=#{$version-image}");
             animation: blink 1.2s ease-in-out infinite forwards;
         }
     }

@@ -359,6 +359,7 @@ class Dashboard extends React.PureComponent<Props, State> {
     async getAllLobbyConfigs() {
         const { session } = this.props;
         const lobby: LobbyResponse = await getLobbyConfigs(session);
+        console.log("lobby", lobby);
         if (lobby?.lobbyConfigs) {
             this.setState({ lobbyConfigs: lobby?.lobbyConfigs });
         } else {
@@ -508,6 +509,7 @@ class Dashboard extends React.PureComponent<Props, State> {
 
     renderComponents = (authorizeInfo: AuthorizeResponse) => {
         const { authorized } = authorizeInfo;
+        console.log("renderComponents", authorized);
 
         if (authorized) {
             return this.renderDashBoard();
