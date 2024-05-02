@@ -1,12 +1,13 @@
 import { createContext, useContext, useReducer } from "react";
 import { PFContextModel, initialPFContextModel } from "./pf-context-model";
 import { PFEventActionType, PFEventAction } from "./pf-action";
+import { localStorageKeys, StorageHelper } from "../../../helpers";
 
 export const PFContext = createContext({} as PFContextModel);
 const PFDispatchContext = createContext(null);
 
-export function PFProvider({ children }) {
-    const [pfContextModel, dispatch] = useReducer(pfReducer, initialPFContextModel());
+export function PFProvider({ children, gameId, uid }) {
+    const [pfContextModel, dispatch] = useReducer(pfReducer, initialPFContextModel({ gameId, uid }));
 
     return (
         <PFContext.Provider value={pfContextModel}>
@@ -34,73 +35,66 @@ function pfReducer(state: PFContextModel, action: PFEventAction) {
         pfVerifyModalData,
         isShowPFClientSeedInfo,
         isShowPFVerification,
-        ownBets
+        ownBets,
     } = payload;
 
-    console.log(`pfReducer: ${JSON.stringify(action)} `);
-    console.log(`pfReducer isShowPFSetting: ${state.isShowPFSetting} `);
+    // console.log(`pfReducer: ${JSON.stringify(action)} `);
+
+    let newState = null;
     switch (type) {
         case PFEventActionType.UPDATE_PF_CLIENT_SEED_SETTING: {
-            return {
-                ...state,
+            newState = {
                 pfClientSeedSetting: {
                     ...state.pfClientSeedSetting,
                     ...pfClientSeedSetting,
-                },
+                }
             };
+            break;
         }
 
         case PFEventActionType.TOGGLE_PF_VERIFY: {
-            return {
-                ...state,
-                isShowPFVerify,
-            };
+            newState = { isShowPFVerify };
+            break;
         }
 
         case PFEventActionType.TOGGLE_PF_SETTING: {
-            return {
-                ...state,
-                isShowPFSetting,
-            };
+
+            StorageHelper.set(`${localStorageKeys.showPFSetting}`, isShowPFSetting ? `${state.uid}-${state.gameId}` : "");
+            newState = { isShowPFSetting };
+            break;
         }
 
         case PFEventActionType.UPDATE_PF_VERIFY: {
-            return {
-                ...state,
-                pfVerifyModalData,
-            };
+            newState = { pfVerifyModalData };
+            break;
         }
 
         case PFEventActionType.TOGGLE_PF_CLIENT_SEED_INFO: {
-            return {
-                ...state,
-                isShowPFClientSeedInfo,
-            };
+            newState = { isShowPFClientSeedInfo };
+            break;
         }
 
         case PFEventActionType.TOGGLE_PF_VERIFICATION: {
-            return {
-                ...state,
-                isShowPFVerification,
-            };
+            newState = { isShowPFVerification };
+            break;
         }
 
         case PFEventActionType.OWN_BETS: {
-            return {
-                ...state,
-                ownBets,
-            };
+            newState = { ownBets };
+            break;
         }
 
         case PFEventActionType.SET_NEW_GAME_STATE:
-            return {
-                ...state,
-                ownBets: {}
-            };
+            newState = { ownBets: {} };
+            break;
 
         default: {
-            console.warn(JSON.stringify(action));
             throw Error("Unknown action: " + action.type);
         }
     }
+
+    return {
+        ...state,
+        ...newState
+    };
 }

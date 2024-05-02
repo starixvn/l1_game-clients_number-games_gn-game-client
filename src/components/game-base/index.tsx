@@ -526,18 +526,19 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     getRenderTemplate() {
+        const uid = (this.context as PlayerContextModel).authorizeInfo?.user?.UID;
         return (
             <>
                 <BackgroundGalaxy gameId={this.props.id} />
                 <>
                     <div className="game-area">
                         {/* <div>{this.renderHeaderBlock()}</div> */}
-                        <PFProvider>
+                        <PFProvider gameId={this.props.id} uid={uid}>
                             <PFWrapper
                                 socket={this.socket}
                                 gameMessageHandler={this.gameMessageHandler}
                                 gameId={this.props.id}
-                                uid={(this.context as PlayerContextModel).authorizeInfo?.user?.UID} />
+                                uid={uid} />
                             {this.renderHeaderBlock()}
                             {this.renderPFSettingModal()}
                             {this.renderBetHistoryModal()}
