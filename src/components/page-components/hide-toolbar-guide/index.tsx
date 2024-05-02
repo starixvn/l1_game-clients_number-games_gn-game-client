@@ -1,12 +1,13 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { isMobileOnly, isSafari } from "react-device-detect";
 
+import { buildVersion } from "../../../_shared/constants";
 import { StorageHelper, localStorageKeys } from "../../../_shared/helpers";
 import { usePlayerContext } from "../../../_shared/react-contexts";
+import { useClickSound } from "../../../_shared/react-hooks/use-sound";
 import { useTranslator } from "../../../_shared/react-hooks/use-translator";
 import { ResourceTypes } from "../../../_shared/resources";
 import Styles from "./hide-toolbar-guide.module.scss";
-import { buildVersion } from "../../../_shared/constants";
 
 const HIDE_TOOLBAR_GUIDE_PATH = "./static/images/hide-toolbar-guide";
 
@@ -17,6 +18,7 @@ const ToolbarIcon = ({ name }) => {
 const ToolbarGuide: React.FC = () => {
     const { t } = useTranslator();
     const { session } = usePlayerContext();
+    const clickSound = useClickSound();
 
     const [isAnimClass, setIsAnimClass] = useState(true);
     const [isEnabledToolbarGuide, setIsEnabledToolbarGuide] = useState(false);
@@ -66,11 +68,13 @@ const ToolbarGuide: React.FC = () => {
     }, [isEnabledToolbarGuide]);
 
     const handleDoNotShowAgain = () => {
+        clickSound();
         handleClose();
         StorageHelper.set(localStorageKeys.hideToolbarGuide, true);
     };
 
     const handleClose = () => {
+        clickSound();
         setIsEnabledToolbarGuide(false);
         StorageHelper.set(localStorageKeys.currentSessionHideToolbarGuide, session?.ss);
     };

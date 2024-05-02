@@ -1,12 +1,13 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { isMobileOnly } from "react-device-detect";
 
+import { buildVersion } from "../../../_shared/constants";
 import { StorageHelper, localStorageKeys } from "../../../_shared/helpers";
 import { usePlayerContext } from "../../../_shared/react-contexts";
+import { useClickSound } from "../../../_shared/react-hooks/use-sound";
 import { useTranslator } from "../../../_shared/react-hooks/use-translator";
 import { ResourceTypes } from "../../../_shared/resources";
 import Styles from "./switch-games-guide.module.scss";
-import { buildVersion } from "../../../_shared/constants";
 
 const SWITCH_GAMES_GUIDE_PATH = "./static/images/switch-games-guide";
 
@@ -17,6 +18,8 @@ const GuideImages = ({ name }) => {
 const SwitchGamesGuide: React.FC = () => {
     const { t } = useTranslator();
     const { session } = usePlayerContext();
+    const clickSound = useClickSound();
+
     const [isEnabledSwitchGamesGuide, setIsEnabledSwitchGamesGuide] = useState(false);
 
     const arrowLeftRight = <GuideImages name="arrow-left-right" />;
@@ -50,11 +53,13 @@ const SwitchGamesGuide: React.FC = () => {
     }, [isEnabledSwitchGamesGuide]);
 
     const handleDoNotShowAgain = () => {
+        clickSound()
         handleClose();
         StorageHelper.set(localStorageKeys.hideSwitchGameGuide, true);
     };
 
     const handleClose = () => {
+        clickSound()
         setIsEnabledSwitchGamesGuide(false);
         StorageHelper.set(localStorageKeys.currentSessionSwitchGameGuide, session?.ss);
     };
