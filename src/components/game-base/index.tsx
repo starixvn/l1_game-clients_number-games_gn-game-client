@@ -6,7 +6,6 @@ import { Socket } from "socket.io-client";
 import { SwiperNoSwiping } from "../../_shared/constants";
 import { InitSocketIO, writeDebugLog } from "../../_shared/helpers";
 import { AnalyticsHelper } from "../../_shared/helpers/analytic-helper";
-import { GlobalMessageTransmitter } from "../../_shared/helpers/message-transmitter/global-transmitter";
 import {
     GameActionsContextProvider,
     GameContextProvider,
@@ -392,13 +391,12 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 ...newGameState,
             });
 
-
             dispatch({
                 type: GameEventActionType.SET_NEW_GAME_STATE,
                 payload: { newGameState },
             });
-            
-             if ([RoundState.SwitchRound, RoundState.BeforePlaceBet, RoundState.InRound].includes(newRoundState)) {
+
+            if ([RoundState.SwitchRound, RoundState.BeforePlaceBet, RoundState.InRound].includes(newRoundState)) {
                 this.placeBetHandler.getPlaceBetDispatch()({
                     type: PlaceBetEventActionType.SET_NEW_GAME_STATE,
                     payload: {},

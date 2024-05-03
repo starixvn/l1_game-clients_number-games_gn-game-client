@@ -290,13 +290,13 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
             };
         }
 
-            };
-        }
-
         case GameEventActionType.START_NEW_ROUND_ANIM: {
             return {
                 ...state,
                 isPlayStartRoundAnimation,
+            };
+        }
+
         default: {
             console.warn(JSON.stringify(action));
 
