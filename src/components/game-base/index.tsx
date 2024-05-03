@@ -446,7 +446,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     placeBet(betChoice: string, amount: number) {
         const enabledQuickBet = (this.context as PlayerContextModel).authorizeInfo?.user?.settings?.quickBet;
 
-        this.placeBetHandler.placeBet(betChoice, amount, enabledQuickBet, this.props.gameStateContextModel, this.props.systemContextModel);
+        this.placeBetHandler.placeBet(betChoice, amount, enabledQuickBet, this.props.gameStateContextModel.roundState);
     }
 
     clearDisconnectTimeout = () => {

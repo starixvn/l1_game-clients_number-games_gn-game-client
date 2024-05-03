@@ -16,7 +16,7 @@ export const PlaceBetHanlderWrapper = (props: PlaceBetWrapperProps) => {
         console.log(`PlaceBetHanlderWrapper`);
         props.handler.registerEvents(props.signOut, placeBetContext);
         props.handler.setPlaceBetDispatch(dispatch);
-        props.handler.setPlaceBetContext(placeBetContext);
+
         return () => {
             props.handler.unRegisterEvents();
         }

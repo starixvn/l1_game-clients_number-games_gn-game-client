@@ -42,29 +42,25 @@ export class PlaceBetHandler {
         return this.placeBetDispatch;
     }
 
-    setPlaceBetContext = (placeBetContext: PlaceBetContextModel) => {
-        console.log({...placeBetContext})
+    registerEvents = (signOut: () => void, placeBetContext: PlaceBetContextModel) => {
         this.placeBetContext = placeBetContext;
-    }
-
-    registerEvents = (signOut: () => void, gameStateContext: PlaceBetContextModel) => {
-        this.endBetHandlerId =this.props.gameMessageHandler.register(messageEventType.END_BET, (gameMessage) => {
-            this.handleEndBet(gameMessage, signOut, gameStateContext);
+        this.endBetHandlerId = this.props.gameMessageHandler.register(messageEventType.END_BET, (gameMessage) => {
+            this.handleEndBet(gameMessage, signOut, placeBetContext);
         });
 
-       this.ownBetsHandlerId= this.props.gameMessageHandler.register(messageEventType.OWN_BETS, this.handleOwnBets);
+        this.ownBetsHandlerId = this.props.gameMessageHandler.register(messageEventType.OWN_BETS, this.handleOwnBets);
     };
 
-    unRegisterEvents =()=>{
-        this.props.gameMessageHandler.removeHandler( this.endBetHandlerId);
-        this.props.gameMessageHandler.removeHandler( this.ownBetsHandlerId);
+    unRegisterEvents = () => {
+        this.props.gameMessageHandler.removeHandler(this.endBetHandlerId);
+        this.props.gameMessageHandler.removeHandler(this.ownBetsHandlerId);
     }
 
-    broadcastNotice =(notice: object)=>{
+    broadcastNotice = (notice: object) => {
         GlobalMessageTransmitter.broadcast({ [GlobalTransmitterEvent.NOTICE]: notice });
     }
 
-    clearNotice = () =>{
+    clearNotice = () => {
         this.broadcastNotice(null);
     }
 
@@ -73,8 +69,8 @@ export class PlaceBetHandler {
             type: PlaceBetEventActionType.OWN_BETS,
             payload: { ownBets },
         });
-        
-        this.props.gameMessageHandler.broadcastGameEvent({ [messageEventType.SYNC_OWN_BETS_TO_PF]: ownBets }); 
+
+        this.props.gameMessageHandler.broadcastGameEvent({ [messageEventType.SYNC_OWN_BETS_TO_PF]: ownBets });
     };
 
     handleBetFailed = ({ notice, kickedOut }, signOut: () => void) => {
@@ -105,7 +101,7 @@ export class PlaceBetHandler {
         return this.getNotice(errorCode, betChoice, notice);
     };
 
-    handleEndBet = ({ endBet, ownBets, notice, kickedOut, apiError }, signOut: () => void, gameStateContext: PlaceBetContextModel) => {
+    handleEndBet = ({ endBet, ownBets, notice, kickedOut, apiError }, signOut: () => void, placeBetContext: PlaceBetContextModel) => {
         const { playPlaceBetSound, gameMessageHandler } = this.props;
         const enableSound = StorageHelper.get(localStorageKeys.enableSound) ?? true;
         this.placeBetDispatch({ type: PlaceBetEventActionType.END_BET_PROCESSING, payload: {} });
@@ -116,7 +112,7 @@ export class PlaceBetHandler {
         if (endBet === -1) {
             !apiError && this.handleBetFailed({ notice, kickedOut }, signOut);
         } else {
-            this.playAcceptedBetAnimation(endBet, gameStateContext);
+            this.playAcceptedBetAnimation(endBet, placeBetContext);
             enableSound && playPlaceBetSound();
             this.placeBetDispatch({
                 type: PlaceBetEventActionType.OWN_BETS,
@@ -126,8 +122,8 @@ export class PlaceBetHandler {
         }
     };
 
-    playAcceptedBetAnimation = (amount: number, gameStateContext: PlaceBetContextModel) => {
-        const { acceptedBetQueue } = gameStateContext;
+    playAcceptedBetAnimation = (amount: number, placeBetContext: PlaceBetContextModel) => {
+        const { acceptedBetQueue } = placeBetContext;
         const key = uuidv4();
         acceptedBetQueue[key] = { amount };
 
@@ -138,12 +134,12 @@ export class PlaceBetHandler {
 
         const animationTime = 3000;
         setTimeout(() => {
-            this.removeAcceptedBetQueue(key, gameStateContext);
+            this.removeAcceptedBetQueue(key, placeBetContext);
         }, animationTime);
     };
 
-    removeAcceptedBetQueue = (key: number, gameStateContext: PlaceBetContextModel) => {
-        const { acceptedBetQueue } = gameStateContext;
+    removeAcceptedBetQueue = (key: number, placeBetContext: PlaceBetContextModel) => {
+        const { acceptedBetQueue } = placeBetContext;
         delete acceptedBetQueue[key];
         this.placeBetDispatch({
             type: PlaceBetEventActionType.ACCEPTED_BET_QUEUE,
@@ -155,20 +151,18 @@ export class PlaceBetHandler {
         betChoice: string,
         amount: number,
         enabledQuickBet: boolean,
-        gameStateContext: GameStateContextModel,
-        systemContext: SystemContextModel
+        roundState: RoundState
     ) => {
-        if (isInPhasePreventBet(gameStateContext)) {
-            this.handlePreventBet(gameStateContext);
-
+        if (isInPhasePreventBet(roundState)) {
+            this.handlePreventBet(roundState);
             return;
         }
 
-        if (gameStateContext.isProcessingBet) {
-            this.handleProcessingBet();
+        if (this.placeBetContext.isProcessingBet) {
+            this.broadcastNotice({ message: "Common.message_processing_action", duration: 2 });
             return;
         }
-        
+
         if (isHedgeBet(findHedgeBetGroup(this.props?.hedgeBetGroups, betChoice), betChoice, amount, this.placeBetContext?.ownBets)) {
             this.broadcastNotice(this.getNotice(NoticeErrorCode.hedgeBet, betChoice));
             return;
@@ -179,13 +173,8 @@ export class PlaceBetHandler {
         }
     };
 
-    handleProcessingBet = () => {
-        this.placeBetDispatch({ type: PlaceBetEventActionType.BET_PROCESSING, payload: {} });
-        this.broadcastNotice({ message: "Common.message_processing_action", duration: 2 } );
-    };
-
-    handlePreventBet = (gameStateContext: GameStateContextModel) => {
-        const isStartingRound = gameStateContext.roundState === RoundState.BeforePlaceBet;
+    handlePreventBet = (roundState: RoundState) => {
+        const isStartingRound = roundState === RoundState.BeforePlaceBet;
         const { gameId } = this.props;
         const gameSettings = Object.values(getAppSettings().gameSettings)?.find((setting) => setting.id === +gameId);
         const totalTurns = gameSettings?.totalTurns;
@@ -223,6 +212,7 @@ export class PlaceBetHandler {
         };
     };
     protected sendBetMessage(betChoice: string, amount: number) {
+        this.placeBetDispatch({ type: PlaceBetEventActionType.BET_PROCESSING, payload: {} });
         this.props.gameMessageHandler.broadcastGameEvent({
             [messageEventType.SEND_SOCKET_MESSAGE_WITH_CLIENT_SEED]: {
                 event: "bet",

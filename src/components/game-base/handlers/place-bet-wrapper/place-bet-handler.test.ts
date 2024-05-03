@@ -47,7 +47,7 @@ describe("placeBet", () => {
             const handlePreventBetSpy = jest.spyOn(placeBetHandler, "handlePreventBet");
 
             // Act
-            placeBetHandler.placeBet("betChoice", 100, false, gameStateContextModel, systemContextModel);
+            placeBetHandler.placeBet("betChoice", 100, false, gameStateContextModel);
 
             // Assert
             expect(handlePreventBetSpy).toHaveBeenCalled();
@@ -59,7 +59,7 @@ describe("placeBet", () => {
             const handlePreventBetSpy = jest.spyOn(placeBetHandler, "handlePreventBet");
 
             // Act
-            placeBetHandler.placeBet("betChoice", 100, true, gameStateContextModel, systemContextModel);
+            placeBetHandler.placeBet("betChoice", 100, true, gameStateContextModel);
 
             // Assert
             expect(handlePreventBetSpy).toHaveBeenCalled();
@@ -71,7 +71,7 @@ describe("placeBet", () => {
             const handlePreventBetSpy = jest.spyOn(placeBetHandler, "handlePreventBet");
 
             // Act
-            placeBetHandler.placeBet("betChoice", 100, false, gameStateContextModel, systemContextModel);
+            placeBetHandler.placeBet("betChoice", 100, false, gameStateContextModel);
 
             // Assert
             expect(handlePreventBetSpy).not.toHaveBeenCalled();
@@ -89,7 +89,7 @@ describe("placeBet", () => {
             const handleProcessingBetSpy = jest.spyOn(placeBetHandler, "handleProcessingBet");
 
             // Act
-            placeBetHandler.placeBet("betChoice", 100, false, gameStateContextModel, systemContextModel);
+            placeBetHandler.placeBet("betChoice", 100, false, gameStateContextModel);
 
             // Assert
             expect(handleProcessingBetSpy).toHaveBeenCalled();
@@ -102,7 +102,7 @@ describe("placeBet", () => {
             const handleProcessingBetSpy = jest.spyOn(placeBetHandler, "handleProcessingBet");
 
             // Act
-            placeBetHandler.placeBet("betChoice", 100, true, gameStateContextModel, systemContextModel);
+            placeBetHandler.placeBet("betChoice", 100, true, gameStateContextModel,);
 
             // Assert
             expect(handleProcessingBetSpy).toHaveBeenCalled();
@@ -116,163 +116,13 @@ describe("placeBet", () => {
             const handleProcessingBetSpy = jest.spyOn(placeBetHandler, "handleProcessingBet");
 
             // Act
-            placeBetHandler.placeBet("betChoice", 100, false, gameStateContextModel, systemContextModel);
+            placeBetHandler.placeBet("betChoice", 100, false, gameStateContextModel,);
 
             // Assert
             expect(handleProcessingBetSpy).not.toHaveBeenCalled();
         });
     });
 
-    describe("isBalanceUnavailable function", () => {
-        it("returns true when available balance is zero and message: not_enough_money", () => {
-            // Arrange
-            placeBetHandlerProps.getPlayerBalance = jest.fn().mockReturnValue(0);
-            placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
-            const gameStateContext = {
-                isProcessingBet: false,
-                roundState: RoundState.InRound,
-                gameConfigs,
-                notConfirmOwnBets: {},
-                ownBets: {},
-            };
-            gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
-            const sendNoticeSpy = jest.spyOn(placeBetHandler, "sendNotice");
-            const notice = {
-                gameName: "test",
-                message: "Common.not_enough_money",
-                duration: 2,
-                errorCode: "SB1907",
-                betChoice1: "",
-                betChoice2: "",
-            };
-
-            // Act
-            placeBetHandler.placeBet("betChoice", 100, false, gameStateContextModel, systemContextModel);
-
-            // Assert
-            expect(sendNoticeSpy).toHaveBeenCalledWith(notice);
-        });
-
-        it("returns true when available balance is zero and message: not_enough_money -  enabled QuickBet", () => {
-            // Arrange
-            placeBetHandlerProps.getPlayerBalance = jest.fn().mockReturnValue(0);
-            placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
-            const gameStateContext = {
-                isProcessingBet: false,
-                roundState: RoundState.InRound,
-                gameConfigs,
-                notConfirmOwnBets: {},
-                ownBets: {},
-            };
-            gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
-            const sendNoticeSpy = jest.spyOn(placeBetHandler, "sendNotice");
-            const notice = {
-                gameName: "test",
-                message: "Common.not_enough_money",
-                duration: 2,
-                errorCode: "SB1907",
-                betChoice1: "",
-                betChoice2: "",
-            };
-
-            // Act
-            placeBetHandler.placeBet("betChoice", 100, true, gameStateContextModel, systemContextModel);
-
-            // Assert
-            expect(sendNoticeSpy).toHaveBeenCalledWith(notice);
-        });
-
-        it("returns true when amount is greater than zero and available balance `subtract` total bet amount is zero and show message: not_enough_money", () => {
-            // Arrange
-            const availableBalance = 100;
-            const amount = 100;
-
-            gameConfigs = stub<GameConfigs>();
-            placeBetHandlerProps.getPlayerBalance = jest.fn().mockReturnValue(availableBalance);
-            placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
-
-            const gameStateContext = {
-                isProcessingBet: false,
-                roundState: RoundState.InRound,
-                notConfirmOwnBets: { bet1: 50, bet2: 50 },
-                ownBets: { bet3: 20 },
-                gameConfigs,
-            };
-
-            gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
-            const sendNoticeSpy = jest.spyOn(placeBetHandler, "sendNotice");
-            const notice = {
-                gameName: "test",
-                message: "Common.not_enough_money",
-                duration: 2,
-                errorCode: "SB1907",
-                betChoice1: "",
-                betChoice2: "",
-            };
-
-            // Act
-            placeBetHandler.placeBet("betChoice", amount, false, gameStateContextModel, systemContextModel);
-
-            // Assert
-            expect(sendNoticeSpy).toHaveBeenCalledWith(notice);
-        });
-
-        it("returns true when amount is greater than zero and available balance `subtract` total bet amount is zero and show message: not_enough_money - enable QuickBet", () => {
-            // Arrange
-            const availableBalance = 0;
-            const amount = 100;
-
-            placeBetHandlerProps.getPlayerBalance = jest.fn().mockReturnValue(availableBalance);
-            placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
-
-            const gameStateContext = {
-                isProcessingBet: false,
-                roundState: RoundState.InRound,
-                notConfirmOwnBets: { bet1: 50, bet2: 30 },
-                ownBets: { bet3: 20 },
-            };
-
-            gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
-            const sendNoticeSpy = jest.spyOn(placeBetHandler, "sendNotice");
-            const notice = {
-                gameName: "test",
-                message: "Common.not_enough_money",
-                duration: 2,
-                errorCode: "SB1907",
-                betChoice1: "",
-                betChoice2: "",
-            };
-
-            // Act
-            placeBetHandler.placeBet("betChoice", amount, true, gameStateContextModel, systemContextModel);
-
-            // Assert
-            expect(sendNoticeSpy).toHaveBeenCalledWith(notice);
-        });
-
-        it("returns false when neither condition is true", () => {
-            // Arrange
-            const availableBalance = 100;
-            const amount = 50;
-            placeBetHandlerProps.getPlayerBalance = jest.fn().mockReturnValue(availableBalance);
-            placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
-            const gameStateContext = {
-                isProcessingBet: false,
-                roundState: RoundState.InRound,
-                notConfirmOwnBets: { bet1: 10, bet2: 20 },
-                ownBets: { bet3: 20 },
-                gameConfigs,
-            };
-            gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
-            const sendNoticeSpy = jest.spyOn(placeBetHandler, "sendNotice");
-
-            // Act
-            placeBetHandler.placeBet("betChoice", amount, false, gameStateContextModel, systemContextModel);
-
-            // Assert
-            expect(sendNoticeSpy).not.toHaveBeenCalled();
-        });
-    });
 
     describe("isHedgeBet function", () => {
         beforeEach(() => {
@@ -282,7 +132,6 @@ describe("placeBet", () => {
             // Arrange
             jest.mock("../../../_shared/helpers/validate-bet-helper", () => ({
                 isInPhasePreventBet: jest.fn(() => false),
-                isBalanceUnavailable: jest.fn(() => false),
             }));
 
             placeBetHandlerProps.hedgeBetGroups = [["choice1", "choice2"]];
@@ -307,7 +156,7 @@ describe("placeBet", () => {
             };
 
             // Act
-            placeBetHandler.placeBet("choice1", amount, false, gameStateContextModel, systemContextModel);
+            placeBetHandler.placeBet("choice1", amount, false, gameStateContextModel);
 
             // Assert
             expect(sendNoticeSpy).toHaveBeenCalledWith(notice);
@@ -317,7 +166,6 @@ describe("placeBet", () => {
             // Arrange
             jest.mock("../../../_shared/helpers/validate-bet-helper", () => ({
                 isInPhasePreventBet: jest.fn(() => false),
-                isBalanceUnavailable: jest.fn(() => false),
             }));
 
             placeBetHandlerProps.hedgeBetGroups = [["choice1", "choice2"]];
@@ -343,7 +191,7 @@ describe("placeBet", () => {
             };
 
             // Act
-            placeBetHandler.placeBet("choice1", amount, false, gameStateContextModel, systemContextModel);
+            placeBetHandler.placeBet("choice1", amount, false, gameStateContextModel);
 
             // Assert
             expect(sendNoticeSpy).not.toHaveBeenCalledWith(notice);
@@ -357,7 +205,6 @@ describe("placeBet", () => {
             jest.clearAllMocks();
             jest.mock("../../../_shared/helpers/validate-bet-helper", () => ({
                 isInPhasePreventBet: jest.fn(() => false),
-                isBalanceUnavailable: jest.fn(() => false),
                 isHedgeBet: jest.fn(() => false),
             }));
 
@@ -410,7 +257,7 @@ describe("placeBet", () => {
             };
 
             // Act
-            placeBetHandler.placeBet("player", amount, false, gameStateContextModel, systemContextModel);
+            placeBetHandler.placeBet("player", amount, false, gameStateContextModel);
 
             // Assert
             expect(sendNoticeSpy).toHaveBeenCalledWith(notice);
@@ -442,7 +289,7 @@ describe("placeBet", () => {
             };
 
             // Act
-            placeBetHandler.placeBet("player", amount, true, gameStateContextModel, systemContextModel);
+            placeBetHandler.placeBet("player", amount, true, gameStateContextModel);
 
             // Assert
             expect(sendNoticeSpy).toHaveBeenCalledWith(notice);
@@ -476,7 +323,7 @@ describe("placeBet", () => {
             };
 
             // Act
-            placeBetHandler.placeBet("player", amount, false, gameStateContextModel, systemContextModel);
+            placeBetHandler.placeBet("player", amount, false, gameStateContextModel);
 
             // Assert
             expect(sendNoticeSpy).toHaveBeenCalledWith(notice);
@@ -510,7 +357,7 @@ describe("placeBet", () => {
             };
 
             // Act
-            placeBetHandler.placeBet("player", amount, true, gameStateContextModel, systemContextModel);
+            placeBetHandler.placeBet("player", amount, true, gameStateContextModel);
 
             // Assert
             expect(sendNoticeSpy).toHaveBeenCalledWith(notice);
@@ -544,7 +391,7 @@ describe("placeBet", () => {
             };
 
             // Act
-            placeBetHandler.placeBet("player", amount, false, gameStateContextModel, systemContextModel);
+            placeBetHandler.placeBet("player", amount, false, gameStateContextModel);
 
             // Assert
             expect(sendNoticeSpy).not.toHaveBeenCalledWith(notice);
@@ -586,7 +433,7 @@ describe("placeBet", () => {
                 };
 
                 // Act
-                placeBetHandler.placeBet(betChoice, amount, false, gameStateContextModel, systemContextModel);
+                placeBetHandler.placeBet(betChoice, amount, false, gameStateContextModel);
 
                 // Assert
                 expect(suggestBetSpy).toHaveBeenCalledWith(betChoice, availableSuggestBet);
@@ -619,7 +466,7 @@ describe("placeBet", () => {
                 };
 
                 // Act
-                placeBetHandler.placeBet(betChoice, 1000, false, gameStateContextModel, systemContextModel);
+                placeBetHandler.placeBet(betChoice, 1000, false, gameStateContextModel);
 
                 // Assert
                 expect(suggestBetSpy).toHaveBeenCalledWith(betChoice, availableSuggestBet);
@@ -639,7 +486,7 @@ describe("placeBet", () => {
                 };
 
                 // Act
-                placeBetHandler.placeBet(betChoice, amount, true, gameStateContextModel, systemContextModel);
+                placeBetHandler.placeBet(betChoice, amount, true, gameStateContextModel);
 
                 // Assert
                 expect(suggestBetSpy).toHaveBeenCalledWith(betChoice, availableSuggestBet);
@@ -648,7 +495,7 @@ describe("placeBet", () => {
             it("call suggest-bet with case max-bet choice", () => {
                 // Arrange
                 placeBetHandlerProps.getPlayerBalance = jest.fn().mockReturnValue(200);
-                placeBetHandler.sendOutstandingBet = jest.fn();
+
                 placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
                 gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
                 const suggestBetSpy = jest.spyOn(placeBetHandler, "suggestBetAmount");
@@ -661,7 +508,7 @@ describe("placeBet", () => {
                 };
 
                 // Act
-                placeBetHandler.placeBet(betChoice, amount, false, gameStateContextModel, systemContextModel);
+                placeBetHandler.placeBet(betChoice, amount, false, gameStateContextModel);
 
                 // Assert
                 expect(suggestBetSpy).toHaveBeenCalledWith(betChoice, availableSuggestBet);
@@ -672,7 +519,7 @@ describe("placeBet", () => {
             it("call suggest-bet with case max-bet choice - Enabled QuickBet", () => {
                 // Arrange
                 placeBetHandlerProps.getPlayerBalance = jest.fn().mockReturnValue(200);
-                placeBetHandler.sendOutstandingBet = jest.fn();
+
                 placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
                 gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
                 const suggestBetSpy = jest.spyOn(placeBetHandler, "suggestBetAmount");
@@ -685,7 +532,7 @@ describe("placeBet", () => {
                 };
 
                 // Act
-                placeBetHandler.placeBet(betChoice, amount, true, gameStateContextModel, systemContextModel);
+                placeBetHandler.placeBet(betChoice, amount, true, gameStateContextModel);
 
                 // Assert
                 expect(suggestBetSpy).toHaveBeenCalledWith(betChoice, availableSuggestBet);
@@ -708,7 +555,7 @@ describe("placeBet", () => {
                 };
 
                 placeBetHandlerProps.getPlayerBalance = jest.fn().mockReturnValue(200);
-                placeBetHandler.sendOutstandingBet = jest.fn();
+
                 placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
                 gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
                 const suggestBetSpy = jest.spyOn(placeBetHandler, "suggestBetAmount");
@@ -721,7 +568,7 @@ describe("placeBet", () => {
                 };
 
                 // Act
-                placeBetHandler.placeBet(betChoice, amount, false, gameStateContextModel, systemContextModel);
+                placeBetHandler.placeBet(betChoice, amount, false, gameStateContextModel);
 
                 // Assert
                 expect(suggestBetSpy).toHaveBeenCalledWith(betChoice, availableSuggestBet);
@@ -744,7 +591,7 @@ describe("placeBet", () => {
                 };
 
                 placeBetHandlerProps.getPlayerBalance = jest.fn().mockReturnValue(200);
-                placeBetHandler.sendOutstandingBet = jest.fn();
+
                 placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
                 gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
                 const suggestBetSpy = jest.spyOn(placeBetHandler, "suggestBetAmount");
@@ -757,7 +604,7 @@ describe("placeBet", () => {
                 };
 
                 // Act
-                placeBetHandler.placeBet(betChoice, amount, true, gameStateContextModel, systemContextModel);
+                placeBetHandler.placeBet(betChoice, amount, true, gameStateContextModel);
 
                 // Assert
                 expect(suggestBetSpy).toHaveBeenCalledWith(betChoice, availableSuggestBet);
@@ -769,7 +616,7 @@ describe("placeBet", () => {
                 // Arrange
                 amount = 50;
                 placeBetHandlerProps.getPlayerBalance = jest.fn().mockReturnValue(200);
-                placeBetHandler.sendOutstandingBet = jest.fn();
+
                 placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
                 gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
                 const suggestBetSpy = jest.spyOn(placeBetHandler, "suggestBetAmount");
@@ -783,7 +630,7 @@ describe("placeBet", () => {
                 };
 
                 // Act
-                placeBetHandler.placeBet(betChoice, amount, false, gameStateContextModel, systemContextModel);
+                placeBetHandler.placeBet(betChoice, amount, false, gameStateContextModel);
 
                 // Assert
                 expect(suggestBetSpy).not.toHaveBeenCalledWith(betChoice, availableSuggestBet);
@@ -798,7 +645,7 @@ describe("placeBet", () => {
                 gameConfigs = stub<GameConfigs>(gameConfigMock);
                 gameStateContext.gameConfigs = gameConfigs;
                 placeBetHandlerProps.getPlayerBalance = jest.fn().mockReturnValue(6);
-                placeBetHandler.sendOutstandingBet = jest.fn();
+
                 placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
                 gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
                 const showConfirmDialogSpy = jest.spyOn(placeBetHandler, "showConfirmDialog");
@@ -814,7 +661,7 @@ describe("placeBet", () => {
                 };
 
                 // Act
-                placeBetHandler.placeBet(betChoice, amount, false, gameStateContextModel, systemContextModel);
+                placeBetHandler.placeBet(betChoice, amount, false, gameStateContextModel);
 
                 // Assert
 
@@ -829,7 +676,7 @@ describe("placeBet", () => {
                 gameConfigs = stub<GameConfigs>(gameConfigMock);
                 gameStateContext.gameConfigs = gameConfigs;
                 placeBetHandlerProps.getPlayerBalance = jest.fn().mockReturnValue(6);
-                placeBetHandler.sendOutstandingBet = jest.fn();
+
                 placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
                 gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
                 const showConfirmDialogSpy = jest.spyOn(placeBetHandler, "showConfirmDialog");
@@ -845,7 +692,7 @@ describe("placeBet", () => {
                 };
 
                 // Act
-                placeBetHandler.placeBet(betChoice, amount, true, gameStateContextModel, systemContextModel);
+                placeBetHandler.placeBet(betChoice, amount, true, gameStateContextModel);
 
                 // Assert
 
@@ -870,7 +717,7 @@ describe("placeBet", () => {
                 };
 
                 placeBetHandlerProps.getPlayerBalance = jest.fn().mockReturnValue(20000);
-                placeBetHandler.sendOutstandingBet = jest.fn();
+
                 placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
                 gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
                 const suggestBetSpy = jest.spyOn(placeBetHandler, "suggestBetAmount");
@@ -883,7 +730,7 @@ describe("placeBet", () => {
                 };
 
                 // Act
-                placeBetHandler.placeBet(betChoice, amount, false, gameStateContextModel, systemContextModel);
+                placeBetHandler.placeBet(betChoice, amount, false, gameStateContextModel);
 
                 // Assert
                 expect(suggestBetSpy).toHaveBeenCalledWith(betChoice, availableSuggestBet);
@@ -908,7 +755,7 @@ describe("placeBet", () => {
                 };
 
                 placeBetHandlerProps.getPlayerBalance = jest.fn().mockReturnValue(20000);
-                placeBetHandler.sendOutstandingBet = jest.fn();
+
                 placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
                 gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
                 const suggestBetSpy = jest.spyOn(placeBetHandler, "suggestBetAmount");
@@ -921,7 +768,7 @@ describe("placeBet", () => {
                 };
 
                 // Act
-                placeBetHandler.placeBet(betChoice, amount, true, gameStateContextModel, systemContextModel);
+                placeBetHandler.placeBet(betChoice, amount, true, gameStateContextModel);
 
                 // Assert
                 expect(suggestBetSpy).toHaveBeenCalledWith(betChoice, availableSuggestBet);
@@ -957,17 +804,17 @@ describe("placeBet", () => {
                 // Arrange
                 amount = 50;
                 placeBetHandlerProps.getPlayerBalance = jest.fn().mockReturnValue(200);
-                placeBetHandler.sendOutstandingBet = jest.fn();
+
                 placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
                 gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
-                const updateNotConfirmedBetStateSpy = jest.spyOn(placeBetHandler, "updateNotConfirmedBetState");
+
                 const handleEnabledQuickBetSpy = jest.spyOn(placeBetHandler, "handleEnabledQuickBet");
 
                 // Act
-                placeBetHandler.placeBet(betChoice, amount, enabledQuickBet, gameStateContextModel, systemContextModel);
+                placeBetHandler.placeBet(betChoice, amount, enabledQuickBet, gameStateContextModel);
 
                 // Assert
-                expect(updateNotConfirmedBetStateSpy).toHaveBeenCalled();
+
                 expect(handleEnabledQuickBetSpy).toHaveBeenCalledWith(amount, betChoice);
             });
 
@@ -975,14 +822,13 @@ describe("placeBet", () => {
                 // Arrange
                 amount = 300;
                 placeBetHandlerProps.getPlayerBalance = jest.fn().mockReturnValue(200);
-                placeBetHandler.sendOutstandingBet = jest.fn();
+
                 placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
                 gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
-                const updateNotConfirmedBetStateSpy = jest.spyOn(placeBetHandler, "updateNotConfirmedBetState");
                 const handleEnabledQuickBetSpy = jest.spyOn(placeBetHandler, "handleEnabledQuickBet");
 
                 // Act
-                placeBetHandler.placeBet(betChoice, amount, enabledQuickBet, gameStateContextModel, systemContextModel);
+                placeBetHandler.placeBet(betChoice, amount, enabledQuickBet, gameStateContextModel);
 
                 // Assert
                 expect(updateNotConfirmedBetStateSpy).not.toHaveBeenCalled();
@@ -1017,14 +863,14 @@ describe("placeBet", () => {
                 // Arrange
                 amount = 50;
                 placeBetHandlerProps.getPlayerBalance = jest.fn().mockReturnValue(200);
-                placeBetHandler.sendOutstandingBet = jest.fn();
+
                 placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
                 gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
                 const updateNotConfirmedBetStateSpy = jest.spyOn(placeBetHandler, "updateNotConfirmedBetState");
                 const showConfirmBetSpy = jest.spyOn(placeBetHandler, "showConfirmBet");
 
                 // Act
-                placeBetHandler.placeBet(betChoice, amount, enabledQuickBet, gameStateContextModel, systemContextModel);
+                placeBetHandler.placeBet(betChoice, amount, enabledQuickBet, gameStateContextModel);
 
                 // Assert
                 expect(updateNotConfirmedBetStateSpy).toHaveBeenCalled();
@@ -1036,14 +882,14 @@ describe("placeBet", () => {
                 amount = 50;
                 betChoice = "confirmBet";
                 placeBetHandlerProps.getPlayerBalance = jest.fn().mockReturnValue(200);
-                placeBetHandler.sendOutstandingBet = jest.fn();
+
                 placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
                 gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
                 const updateNotConfirmedBetStateSpy = jest.spyOn(placeBetHandler, "updateNotConfirmedBetState");
                 const sendConfirmBetSpy = jest.spyOn(placeBetHandler, "sendConfirmBet");
 
                 // Act
-                placeBetHandler.placeBet(betChoice, amount, enabledQuickBet, gameStateContextModel, systemContextModel);
+                placeBetHandler.placeBet(betChoice, amount, enabledQuickBet, gameStateContextModel);
 
                 // Assert
                 expect(updateNotConfirmedBetStateSpy).not.toHaveBeenCalled();
@@ -1054,14 +900,14 @@ describe("placeBet", () => {
                 // Arrange
                 amount = 300;
                 placeBetHandlerProps.getPlayerBalance = jest.fn().mockReturnValue(200);
-                placeBetHandler.sendOutstandingBet = jest.fn();
+
                 placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
                 gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
                 const updateNotConfirmedBetStateSpy = jest.spyOn(placeBetHandler, "updateNotConfirmedBetState");
                 const sendConfirmBetSpy = jest.spyOn(placeBetHandler, "sendConfirmBet");
 
                 // Act
-                placeBetHandler.placeBet(betChoice, amount, enabledQuickBet, gameStateContextModel, systemContextModel);
+                placeBetHandler.placeBet(betChoice, amount, enabledQuickBet, gameStateContextModel);
 
                 // Assert
                 expect(updateNotConfirmedBetStateSpy).not.toHaveBeenCalled();
