@@ -4,7 +4,7 @@ import { useGameContext } from "../../_shared/react-contexts";
 import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
 import { isShowHighlightPrevResult } from "../../_shared/react-hooks/use-high-light";
 import { RoundState } from "../../components/game-base/type";
-import { SeBallBetOptions, SeBallBetOptionsPercentageColor } from "./se-ball-constants";
+import { DotColorMapper, SeBallBetOptions, SeBallBetOptionsPercentageColor } from "./se-ball-constants";
 import Style from "./se-ball.module.scss";
 
 const BetChoice = dynamic(() => import("../../components/game-components/bet-option/bet-choice"));
@@ -115,10 +115,42 @@ const SeBallBetOptionsComponent = () => {
         );
     };
 
+    const renderDot = (choice: string) => {
+        const dots = DotColorMapper[choice];
+
+        if (dots) {
+            return dots.map((dot, index) => <div key={index} className={`${dot ? Style["dot-red"] : Style["dot-blue"]}`}></div>);
+        }
+
+        return null;
+    };
+
+    const renderSubOptions = (choice: string) => {
+        return (
+            <div className={`${Style[choice]} ${Style["bet-choice"]}`}>
+                <div className={`${Style["dot-wrapper"]} ${choice === "red2" ? Style["two-lines"] : ""}`}>{renderDot(choice)}</div>
+                {renderOdds(choice)}
+                <div className={Style["own-bet-container"]}>{renderOwnBet(choice)}</div>
+
+                <RippleButton className={`${Style["btn-ripple"]}`} id={`${tolgeeNamespace}-choice-${choice}`} choice={choice} />
+            </div>
+        );
+    };
+
     return (
         <>
-            <div className={Style["bet-option-row"]}>{renderMainOption(SeBallBetOptions.ODD)}</div>
-            <div className={Style["bet-option-row"]}>{renderMainOption(SeBallBetOptions.EVEN)}</div>
+            <div className="flex justify-between">
+                <div className={Style["bet-option-row"]}>{renderMainOption(SeBallBetOptions.ODD)}</div>
+                <div className={Style["bet-option-row"]}>{renderMainOption(SeBallBetOptions.EVEN)}</div>
+            </div>
+
+            <div className={Style["sub-betting-zone"]}>
+                {renderSubOptions(SeBallBetOptions.RED3)}
+                {renderSubOptions(SeBallBetOptions.RED4)}
+                {renderSubOptions(SeBallBetOptions.RED2)}
+                {renderSubOptions(SeBallBetOptions.BLUE3)}
+                {renderSubOptions(SeBallBetOptions.BLUE4)}
+            </div>
         </>
     );
 };

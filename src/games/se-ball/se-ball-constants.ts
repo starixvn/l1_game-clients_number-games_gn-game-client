@@ -11,8 +11,8 @@ export enum SeBallBetOptions {
 }
 
 export const SeBallBetOptionsPercentageColor = {
-    odd: "#98CDFF",
-    even: "#F9BCB9",
+    odd: "#FF9090",
+    even: "#84C6FF",
     red3: "#98CDFF",
     red4: "#F9BCB9",
     blue3: "#98CDFF",
@@ -26,3 +26,11 @@ export const defaultRoundData = [
     { number: 0, status: BallStatus.NONE, delayTime: 0 },
     { number: 0, status: BallStatus.NONE, delayTime: 0 },
 ];
+
+export const DotColorMapper = {
+    [SeBallBetOptions.RED3]: [true, true, true, false],
+    [SeBallBetOptions.RED4]: [true, true, true, true],
+    [SeBallBetOptions.BLUE3]: [true, false, false, false],
+    [SeBallBetOptions.BLUE4]: [false, false, false, false],
+    [SeBallBetOptions.RED2]: [true, true, false, false],
+};
