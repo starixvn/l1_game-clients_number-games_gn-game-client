@@ -105,11 +105,11 @@
             "placingBets": 20,
             "lockingBet": 3,
             "showResult": 6,
-            "resultAnimation": 2,
+            "resultAnimation": 4,
             "beforePlaceBet": 4,
             "switchRoundAnimation": 0
         },
-        "totalTurns": 0,
+        "totalTurns": 1,
         "numberOfRoundHistory": 100,
         "gamePath": "se-ball"
     }

@@ -4,7 +4,7 @@ import { GameStateContextModel } from "../../_shared/react-contexts/game-state-c
 import useResult from "../../_shared/react-hooks/use-result";
 import { RoundState } from "../../components/game-base/type";
 import Cage, { CageColor, CagePosition } from "../../components/game-components/cage";
-import { ResultSlotContainer } from "../../components/game-components/result-container/result-container";
+import { NormalRoundResultSlotContainer } from "../../components/game-components/normal-round-result-container/normal-round-result-container";
 import { defaultRoundData } from "./se-ball-constants";
 import Style from "./se-ball.module.scss";
 import { SeBallResult } from "./types";
@@ -19,8 +19,6 @@ const SeBallResultBlock: FC<SeBallResultBlockProps> = (props: SeBallResultBlockP
         return <></>;
     }
 
-    console.log("currentResult", currentResult);
-
     return (
         <div className={Style["result-container"]}>
             <Cage
@@ -34,12 +32,10 @@ const SeBallResultBlock: FC<SeBallResultBlockProps> = (props: SeBallResultBlockP
             />
 
             <div className={Style["result-right"]}>
-                <ResultSlotContainer
+                <NormalRoundResultSlotContainer
                     defaultRoundData={defaultRoundData}
-                    delayTime={0}
-                    betChoice={""}
                     className="balls"
-                    betChoiceBalls="balls"
+                    roundResult={currentResult?.balls}
                     {...props}
                 />
                 <h1 className={Style["total"]}>23</h1>

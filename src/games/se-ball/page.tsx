@@ -1,7 +1,7 @@
+import dynamic from "next/dynamic";
 import { withRouter } from "next/router";
 import { JSX } from "react";
 
-import dynamic from "next/dynamic";
 import { useSystemContext, useSystemDispatch } from "../../_shared/react-contexts";
 import {
     GameStateProvider,
@@ -9,18 +9,18 @@ import {
     useGameStatesDispatch,
 } from "../../_shared/react-contexts/game-state-context/game-state-context";
 import { useTranslator } from "../../_shared/react-hooks";
+import { tolgee } from "../../_shared/tolgee";
 import GameBase from "../../components/game-base/";
 import { GameMessageHandler } from "../../components/game-base/handlers";
 import { GameBaseProps, Round } from "../../components/game-base/type";
+import { RoundGameStateHandler } from "../../components/round-base/round-game-state-handler";
+import { RoundStateHandler } from "../../components/round-base/round-state-handler";
+import Scoreboard from "./scoreboard";
 import { SeBallBetOptions } from "./se-ball-constants";
 import { NextGameRoundDataHandler } from "./se-ball-game-round-data-handler";
 import SeBallResultBlock from "./se-ball-result-block";
-import Scoreboard from "./scoreboard";
-import { SeBallResult, SeBallSettlementResult } from "./types";
-import { tolgee } from "../../_shared/tolgee";
 import Styles from "./se-ball.module.scss";
-import { RoundStateHandler } from "../../components/round-base/round-state-handler";
-import { RoundGameStateHandler } from "../../components/round-base/round-game-state-handler";
+import { SeBallResult, SeBallSettlementResult } from "./types";
 
 const DrawIdBlock = dynamic(() => import("../../components/game-components/draw-id"));
 const SeBallBettingBlock = dynamic(() => import("./se-ball-betting-block"));
@@ -136,9 +136,7 @@ const SeBalllFC = (props) => {
                 systemDispatch: useSystemDispatch(),
                 translate: t,
                 tolgeeNamespace,
-                hedgeBetGroups: [
-                    [SeBallBetOptions.ODD, SeBallBetOptions.EVEN],
-                ],
+                hedgeBetGroups: [[SeBallBetOptions.ODD, SeBallBetOptions.EVEN]],
             }}
         />
     );

@@ -47,6 +47,7 @@ const Cage: React.FC<CageProps> = ({
 }) => {
     const [isDelayShowResult, setIsDelayShowResult] = useState<boolean>(false);
     const [ballColor, setBallColor] = useState<string>(null);
+    const [newResult, setNewResult] = useState<any>(null);
 
     useEffect(() => {
         let timeOut: NodeJS.Timeout;
@@ -64,19 +65,26 @@ const Cage: React.FC<CageProps> = ({
     }, [delayShowResultTime, playResultAnimation, roundState]);
 
     useEffect(() => {
-        !!result && setBallColor(`ball-${getBallColor(result)}-${position === CagePosition.RIGHT ? "2" : "1"}`);
+        if (result) {
+            setBallColor(`ball-${getBallColor(result)}-${position === CagePosition.RIGHT ? "2" : "1"}`);
+            setNewResult(result);
+        }
     }, [result]);
 
     useEffect(() => {
         if (listResult && listResult.length > 0) {
-            listResult.forEach((result) => {
+            listResult.forEach((result, i) => {
                 setTimeout(() => {
-                    console.log("----------result", result);
-                    setBallColor(`ball-${getBallColor(result)}-${position === CagePosition.RIGHT ? "2" : "1"}`);
-                }, 1000);
+                    loadResult(result);
+                }, i * 1000);
             });
         }
     }, [listResult]);
+
+    const loadResult = (result) => {
+        setBallColor(`ball-${getBallColor(result)}-${position === CagePosition.RIGHT ? "2" : "1"}`);
+        setNewResult(result);
+    };
 
     return (
         <div className={`${Styles["cage-area"]} ${isSmall ? Styles["small"] : ""} ${Styles[position]}`}>
@@ -97,8 +105,13 @@ const Cage: React.FC<CageProps> = ({
                 )}
             </div>
 
-            {!!result && (
-                <ResultNumber isDelayShowResult={isDelayShowResult} number={result} isShowResultAnim={playResultAnimation} fps={ballFPS} />
+            {!!newResult && (
+                <ResultNumber
+                    isDelayShowResult={isDelayShowResult}
+                    number={newResult}
+                    isShowResultAnim={playResultAnimation}
+                    fps={ballFPS}
+                />
             )}
         </div>
     );
