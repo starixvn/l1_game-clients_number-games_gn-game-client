@@ -13,9 +13,10 @@ export const PlaceBetHanlderWrapper = (props: PlaceBetWrapperProps) => {
     const placeBetContext = usePlaceBetContext();
 
     useEffect(() => {
+        console.log(`PlaceBetHanlderWrapper`);
         props.handler.registerEvents(props.signOut, placeBetContext);
         props.handler.setPlaceBetDispatch(dispatch);
-
+        props.handler.setPlaceBetContext(placeBetContext);
         return () => {
             props.handler.unRegisterEvents();
         }

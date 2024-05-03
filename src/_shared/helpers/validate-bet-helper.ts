@@ -33,11 +33,10 @@ interface SuggestBetOptions {
 export const validateHedgeBet = (
     hedgeBetGroup: string[],
     ownBets: object,
-    notConfirmOwnBets: object,
     betChoice: string,
     amount: number
 ): boolean => {
-    const betTracks = { ...ownBets, ...notConfirmOwnBets };
+    const betTracks = { ...ownBets };
     betTracks[betChoice] = (betTracks[betChoice] ?? 0) + amount;
 
     return (
@@ -112,14 +111,14 @@ export const isBalanceUnavailable = (
     return amount > 0 && (availableBalance - totalBetAmount === 0 || availableBalance < minBet);
 };
 
-// export const isHedgeBet = (
-//     hedgeBetGroups: string[],
-//     betChoice: string,
-//     amount: number,
-//     gameStateContext: GameStateContextModel
-// ): boolean => {
-//     return validateHedgeBet(hedgeBetGroups, gameStateContext.ownBets, gameStateContext?.notConfirmOwnBets, betChoice, amount);
-// };
+export const isHedgeBet = (
+    hedgeBetGroups: string[],
+    betChoice: string,
+    amount: number,
+    ownBets: any
+): boolean => {
+    return validateHedgeBet(hedgeBetGroups, ownBets, betChoice, amount);
+};
 
 export const findHedgeBetGroup = (hedgeBetGroups: string[][], betChoice: string): string[] => {
     return hedgeBetGroups?.find((group) => group.includes(betChoice)) ?? [];

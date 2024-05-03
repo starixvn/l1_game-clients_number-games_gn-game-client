@@ -2,7 +2,7 @@ import { DefaultParamType, TFnType, TranslationKey } from "@tolgee/react";
 import { v4 as uuidv4 } from "uuid";
 import { NoticeErrorCode } from "../../../../_shared/constants/error-code-dictionary";
 import { getGlossaryTranslate, GetLocalizedErrorMessage, localStorageKeys, StorageHelper } from "../../../../_shared/helpers";
-import { isInPhasePreventBet } from "../../../../_shared/helpers/validate-bet-helper";
+import { findHedgeBetGroup, isHedgeBet, isInPhasePreventBet } from "../../../../_shared/helpers/validate-bet-helper";
 import { SystemContextModel } from "../../../../_shared/react-contexts";
 import { GameStateContextModel } from "../../../../_shared/react-contexts/game-state-context/game-state-context-model";
 import { NoticeModel, RoundState } from "../../type";
@@ -26,8 +26,8 @@ export type PlaceBetHandlerProps = {
 
 export class PlaceBetHandler {
     private retryInterval: NodeJS.Timeout;
-
     private placeBetDispatch: Function;
+    private placeBetContext: PlaceBetContextModel;
 
     private endBetHandlerId: any;
     private ownBetsHandlerId: any;
@@ -40,6 +40,11 @@ export class PlaceBetHandler {
 
     getPlaceBetDispatch = () => {
         return this.placeBetDispatch;
+    }
+
+    setPlaceBetContext = (placeBetContext: PlaceBetContextModel) => {
+        console.log({...placeBetContext})
+        this.placeBetContext = placeBetContext;
     }
 
     registerEvents = (signOut: () => void, gameStateContext: PlaceBetContextModel) => {
@@ -161,7 +166,11 @@ export class PlaceBetHandler {
 
         if (gameStateContext.isProcessingBet) {
             this.handleProcessingBet();
-
+            return;
+        }
+        
+        if (isHedgeBet(findHedgeBetGroup(this.props?.hedgeBetGroups, betChoice), betChoice, amount, this.placeBetContext?.ownBets)) {
+            this.broadcastNotice(this.getNotice(NoticeErrorCode.hedgeBet, betChoice));
             return;
         }
 
@@ -220,7 +229,6 @@ export class PlaceBetHandler {
                 data: { betChoices: { [betChoice.toLowerCase()]: amount } },
             },
         });
-        
     }
 
     setRetryInterval = () => {
