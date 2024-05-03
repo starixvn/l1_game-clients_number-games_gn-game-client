@@ -57,5 +57,48 @@ export const getBalance = async (userSession: SSOResponse) => {
 };
 
 export const getLobbyConfigs = async (userSession: SSOResponse) => {
-    return lobbyService?.getLobbyConfigs(userSession.ss, userSession.username);
+    let result = lobbyService?.getLobbyConfigs(userSession.ss, userSession.username);
+
+    // TO DO: Must be remove hard code for dev Se ball
+    return {...result, ...{lobbyConfigs: {
+        "categories": [
+            {
+                "name": {
+                    "en-US": "Games",
+                    "vi-VN": "Games",
+                    "id-ID": "Games",
+                    "th-TH": "Games",
+                    "zh-CN": "Games",
+                    "zh-TW": "Games"
+                },
+                "gameSettings": [
+                    {
+                        "gameId": 1001,
+                        "bigSize": false,
+                        "newTag": true
+                    },
+                    {
+                        "gameId": 1002,
+                        "bigSize": false,
+                        "newTag": true
+                    },
+                    {
+                        "gameId": 1003,
+                        "bigSize": false,
+                        "newTag": true
+                    },
+                    {
+                        "gameId": 1004,
+                        "bigSize": false,
+                        "newTag": true
+                    },
+                    {
+                        "gameId": 1005,
+                        "bigSize": false,
+                        "newTag": true
+                    }
+                ]
+            }
+        ],
+    }}};
 };
