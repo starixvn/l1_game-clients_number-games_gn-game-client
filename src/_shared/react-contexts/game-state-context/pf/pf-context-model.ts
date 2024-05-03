@@ -35,7 +35,6 @@ export const initialPFContextModel = ({gameId, uid}) => {
     } as PFContextModel;
 
     try {
-     
         const isSameGame = StorageHelper.get<string>(`${localStorageKeys.showPFSetting}`) === `${uid}-${gameId}`;
         !isSameGame && StorageHelper.set(`${localStorageKeys.showPFSetting}`, '');
 

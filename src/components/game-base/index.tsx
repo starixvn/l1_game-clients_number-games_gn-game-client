@@ -46,6 +46,7 @@ import { GameRoundDataHandler } from "./handlers/game-round-data-handler";
 import { GameSoundHandler } from "./handlers/game-sound-handler";
 import { IGameStateHandler } from "./handlers/game-state-handler";
 import { GameBaseProps, RoundState } from "./type";
+import { GlobalMessageTransmitter, GlobalTransmitterEvent } from "../../_shared/helpers/message-transmitter/global-transmitter";
 import { PlaceBetProvider } from "../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-context";
 import { PFProvider } from "../../_shared/react-contexts/game-state-context/pf/pf-context";
 import { PlaceBetHanlderWrapper } from "./handlers/place-bet-wrapper/place-bet-handler-wrapper";
@@ -162,7 +163,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.renderHeaderBlock = this.renderHeaderBlock.bind(this);
 
         AnalyticsHelper.trackPage({ page_title: this.props.gameName });
-        GlobalMessageTransmitter.broadcast({ openingGameId: props.id });
+        GlobalMessageTransmitter.broadcast({ [GlobalTransmitterEvent.OPEN_GAME_ID]: props.id });
     }
 
     getGameStateContext = () => {

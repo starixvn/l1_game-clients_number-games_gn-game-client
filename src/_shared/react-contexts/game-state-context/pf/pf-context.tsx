@@ -58,7 +58,6 @@ function pfReducer(state: PFContextModel, action: PFEventAction) {
         }
 
         case PFEventActionType.TOGGLE_PF_SETTING: {
-
             StorageHelper.set(`${localStorageKeys.showPFSetting}`, isShowPFSetting ? `${state.uid}-${state.gameId}` : "");
             newState = { isShowPFSetting };
             break;

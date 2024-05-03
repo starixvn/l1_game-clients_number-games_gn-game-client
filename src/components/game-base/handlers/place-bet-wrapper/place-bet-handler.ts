@@ -10,7 +10,7 @@ import { GameMessageHandler, messageEventType } from "..";
 import { getAppSettings } from "../../../../_shared/app-settings";
 import { PlaceBetEventActionType } from "../../../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-action";
 import { PlaceBetContextModel } from "../../../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-context-model";
-import { GlobalMessageTransmitter } from "../../../../_shared/helpers/message-transmitter/global-transmitter";
+import { GlobalMessageTransmitter, GlobalTransmitterEvent } from "../../../../_shared/helpers/message-transmitter/global-transmitter";
 
 export type PlaceBetHandlerProps = {
     tolgeeNamespace: string;
@@ -56,7 +56,7 @@ export class PlaceBetHandler {
     }
 
     broadcastNotice =(notice: object)=>{
-        GlobalMessageTransmitter.broadcast({ notice });
+        GlobalMessageTransmitter.broadcast({ [GlobalTransmitterEvent.NOTICE]: notice });
     }
 
     clearNotice = () =>{
@@ -88,7 +88,7 @@ export class PlaceBetHandler {
             noticePayload.roundId = notice?.gameRoundId;
         }
 
-        GlobalMessageTransmitter.broadcast({ notice: noticePayload });
+        GlobalMessageTransmitter.broadcast({ [GlobalTransmitterEvent.NOTICE]: noticePayload });
     };
 
     getNoticePayloadBetFailed = (notice: NoticeModel, kickedOut: any) => {

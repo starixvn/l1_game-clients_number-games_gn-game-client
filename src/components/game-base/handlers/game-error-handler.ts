@@ -1,6 +1,5 @@
 import { GetLocalizedErrorMessage, isKickOutError } from "../../../_shared/helpers";
-import { GlobalMessageTransmitter } from "../../../_shared/helpers/message-transmitter/global-transmitter";
-import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
+import { GlobalMessageTransmitter, GlobalTransmitterEvent } from "../../../_shared/helpers/message-transmitter/global-transmitter";
 import { GameMessageHandler, messageEventType } from "./game-message-handler";
 
 export type GameErrorHandlerProps = {
@@ -35,7 +34,7 @@ export class GameErrorHandler {
         const onClose = isKickOut ? signOut : null;
         const message = GetLocalizedErrorMessage(errorCode, isPlaceBet);
 
-        GlobalMessageTransmitter.broadcast({ notice: {
+        GlobalMessageTransmitter.broadcast({ [GlobalTransmitterEvent.NOTICE]: {
             gameName: this.props.gamName,
             roundId: apiError?.gameRoundId,
             message: message,

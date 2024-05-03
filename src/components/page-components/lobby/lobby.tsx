@@ -6,7 +6,7 @@ import { ILobbyConfigs } from "../dashboard/type";
 import { Banner } from "./games/components/banner";
 import { LobbyLayout } from "./games/lobby-layout";
 import Styles from "./lobby.module.scss";
-import { GlobalMessageTransmitter } from "../../../_shared/helpers/message-transmitter/global-transmitter";
+import { GlobalMessageTransmitter, GlobalTransmitterEvent } from "../../../_shared/helpers/message-transmitter/global-transmitter";
 import { useEffect } from "react";
 
 const Settings = dynamic(() => import("../settings"));
@@ -22,7 +22,7 @@ export const Lobby: React.FC<Props> = ({ openGame, lobbyConfigs }) => {
     AnalyticsHelper.trackLobby();
 
     useEffect(() => {
-        GlobalMessageTransmitter.broadcast({ openingGameId: 0 });
+        GlobalMessageTransmitter.broadcast({ [GlobalTransmitterEvent.OPEN_GAME_ID]: 0 });
     }, []);
 
     return (

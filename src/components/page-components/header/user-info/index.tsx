@@ -8,7 +8,7 @@ import { useClickSound } from "../../../../_shared/react-hooks";
 import { MAX_AVATAR_ID } from "../../dashboard/register/avatar-gallery";
 import Styles from "./user-info.module.scss";
 import { User } from "sc-user-service-client/dist/auth";
-import { registerGlobalMessageEvent, unsubscribeGlobalMessageEvent } from "../../../../_shared/helpers/message-transmitter/global-transmitter";
+import { GlobalTransmitterEvent, registerGlobalMessageEvent, unsubscribeGlobalMessageEvent } from "../../../../_shared/helpers/message-transmitter/global-transmitter";
 
 export const UserInfo: React.FC<{
     customizeClass?: string;
@@ -39,7 +39,7 @@ export const UserInfo: React.FC<{
 
 
     useEffect(() => {
-        const userInfoRedHandlerId = registerGlobalMessageEvent("userInfoRed", ({ userInfoRed }) => {
+        const userInfoRedHandlerId = registerGlobalMessageEvent(GlobalTransmitterEvent.USER_INFO_RED, ({ userInfoRed }) => {
             setUserInfo({
                 ...userInfo,
                 red: userInfoRed

@@ -45,7 +45,7 @@ import Register from "./register";
 import { MAX_AVATAR_ID } from "./register/avatar-gallery";
 import NameGenerator from "./register/name-generator";
 import { ILobbyConfigs, Props, State } from "./type";
-import { GlobalMessageTransmitter } from "../../../_shared/helpers/message-transmitter/global-transmitter";
+import { GlobalMessageTransmitter, GlobalTransmitterEvent, registerGlobalMessageEvent, unsubscribeGlobalMessageEvent } from "../../../_shared/helpers/message-transmitter/global-transmitter";
 
 const Games = dynamic(() => import("../../../games/games"));
 const BaseDialog = dynamic(() => import("../../game-components/base-dialog"));
@@ -58,6 +58,7 @@ class Dashboard extends React.Component<Props, State> {
     private isKickOut = false;
     private readonly lobbyConnectionHandler: LobbySocketConnection;
     private readonly swiperRef = React.createRef<SwiperCore>();
+    private backToLobbyEventId = null;
 
     constructor(props: Props) {
         super(props);
@@ -127,7 +128,7 @@ class Dashboard extends React.Component<Props, State> {
         if (authorizeInfo && authorizeInfo.authorized && authorizeInfo.user.red !== balance) {
             authorizeInfo.user.settings.quickBet = true;
             authorizeInfo.user.red = balance;
-            GlobalMessageTransmitter.broadcast({ userInfoRed: authorizeInfo?.user?.red });
+            GlobalMessageTransmitter.broadcast({ [GlobalTransmitterEvent.USER_INFO_RED]: authorizeInfo?.user?.red });
             this.setState({ authorizeInfo });
         }
     }
@@ -188,6 +189,7 @@ class Dashboard extends React.Component<Props, State> {
             && this.state.authorizeInfo?.authorized) {
             return false;
         }
+
         return true;
     }
 
@@ -203,6 +205,12 @@ class Dashboard extends React.Component<Props, State> {
             return;
         }
         document.addEventListener("visibilitychange", this.onVisibilityChange);
+
+        this.backToLobbyEventId = registerGlobalMessageEvent(GlobalTransmitterEvent.BACK_TO_LOBBY, () => {
+            this.setState({ openGameId: 0 });
+            this.forceUpdate();
+        });
+
         const { session, directMode, queryGame } = this.props;
         const authorizeResponse = await authorize(session);
 
@@ -256,6 +264,7 @@ class Dashboard extends React.Component<Props, State> {
 
     componentWillUnmount() {
         document.removeEventListener("visibilitychange", this.onVisibilityChange);
+        unsubscribeGlobalMessageEvent(this.backToLobbyEventId);
         this.notificationSocket?.close();
         this.lobbyConnectionHandler.closeSocket();
         clearInterval(this.reCheckInInterval);
