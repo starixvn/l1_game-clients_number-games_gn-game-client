@@ -23,12 +23,13 @@ export enum CagePosition {
 export type CageProps = {
     color: string;
     isSmall: boolean;
-    result: number;
     delayShowResultTime?: number;
     position: string;
+    result?: number;
     highlight?: boolean;
     ballFPS?: number;
     isPlayStartRoundAnimation?: boolean;
+    listResult?: number[];
 } & Partial<GameStateContextModel>;
 
 const Cage: React.FC<CageProps> = ({
@@ -42,6 +43,7 @@ const Cage: React.FC<CageProps> = ({
     highlight,
     ballFPS,
     isPlayStartRoundAnimation,
+    listResult,
 }) => {
     const [isDelayShowResult, setIsDelayShowResult] = useState<boolean>(false);
     const [ballColor, setBallColor] = useState<string>(null);
@@ -64,6 +66,17 @@ const Cage: React.FC<CageProps> = ({
     useEffect(() => {
         !!result && setBallColor(`ball-${getBallColor(result)}-${position === CagePosition.RIGHT ? "2" : "1"}`);
     }, [result]);
+
+    useEffect(() => {
+        if (listResult && listResult.length > 0) {
+            listResult.forEach((result) => {
+                setTimeout(() => {
+                    console.log("----------result", result);
+                    setBallColor(`ball-${getBallColor(result)}-${position === CagePosition.RIGHT ? "2" : "1"}`);
+                }, 1000);
+            });
+        }
+    }, [listResult]);
 
     return (
         <div className={`${Styles["cage-area"]} ${isSmall ? Styles["small"] : ""} ${Styles[position]}`}>

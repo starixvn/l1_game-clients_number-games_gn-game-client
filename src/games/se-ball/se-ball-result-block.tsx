@@ -19,18 +19,21 @@ const SeBallResultBlock: FC<SeBallResultBlockProps> = (props: SeBallResultBlockP
         return <></>;
     }
 
+    console.log("currentResult", currentResult);
+
     return (
         <div className={Style["result-container"]}>
-            <div className={Style["result"]}>
-                <Cage
-                    color={CageColor.PURPLE}
-                    position={CagePosition.CENTER}
-                    isSmall={true}
-                    result={currentResult?.ball}
-                    delayShowResultTime={0}
-                    playResultAnimation={playResultAnimation}
-                    roundState={roundState}
-                />
+            <Cage
+                color={CageColor.PURPLE}
+                position={CagePosition.LEFT}
+                isSmall={true}
+                listResult={currentResult?.balls}
+                delayShowResultTime={0}
+                playResultAnimation={playResultAnimation}
+                roundState={roundState}
+            />
+
+            <div className={Style["result-right"]}>
                 <ResultSlotContainer
                     defaultRoundData={defaultRoundData}
                     delayTime={0}
@@ -39,6 +42,7 @@ const SeBallResultBlock: FC<SeBallResultBlockProps> = (props: SeBallResultBlockP
                     betChoiceBalls="balls"
                     {...props}
                 />
+                <h1 className={Style["total"]}>23</h1>
             </div>
         </div>
     );

@@ -8,16 +8,25 @@
 }
 
 .result-container {
+    position: relative;
+    display: flex;
     justify-content: center;
-    grid-template-columns: repeat(2, 15.3rem);
+    align-items: center;
     grid-gap: 4rem;
     height: 18.5rem;
 }
 
-.result {
-    position: relative;
-    display: grid;
-    grid-template-rows: 15.3rem 1fr;
+.result-right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .total {
+        font-weight: 600;
+        font-size: 3.6rem;
+        color: #fff;
+        text-shadow: 0.1rem 0.1rem 2rem rgba(255, 255, 255, 0.6);
+    }
 }
 
 %main-option {

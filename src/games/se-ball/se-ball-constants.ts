@@ -3,11 +3,11 @@ import { BallStatus } from "../../components/game-components/ball";
 export enum SeBallBetOptions {
     ODD = "odd",
     EVEN = "even",
-    RED3= "red3",
-    RED4= "red4",
-    BLUE3= "blue3",
-    BLUE4= "blue4",
-    RED2= "red2",
+    RED3 = "red3",
+    RED4 = "red4",
+    BLUE3 = "blue3",
+    BLUE4 = "blue4",
+    RED2 = "red2",
 }
 
 export const SeBallBetOptionsPercentageColor = {
@@ -21,10 +21,6 @@ export const SeBallBetOptionsPercentageColor = {
 };
 
 export const defaultRoundData = [
-    { number: 0, status: BallStatus.NONE, delayTime: 0 },
-    { number: 0, status: BallStatus.NONE, delayTime: 0 },
-    { number: 0, status: BallStatus.NONE, delayTime: 0 },
-    { number: 0, status: BallStatus.NONE, delayTime: 0 },
     { number: 0, status: BallStatus.NONE, delayTime: 0 },
     { number: 0, status: BallStatus.NONE, delayTime: 0 },
     { number: 0, status: BallStatus.NONE, delayTime: 0 },

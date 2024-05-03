@@ -10,7 +10,7 @@ export type SeBallSettlementResult = {
 };
 
 export type SeBallResult = {
-    ball: number;
+    balls: number[];
     drawId: number;
     time: string;
 };
