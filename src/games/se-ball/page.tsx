@@ -48,7 +48,8 @@ class SeBall extends GameBase<GameBaseProps> {
     }
 
     renderResultBlock() {
-        const { roundHistory, result, roundState, roundData, turnCounter, drawId, playResultAnimation } = this.props.gameStateContextModel;
+        const { roundHistory, result, roundState, roundData, turnCounter, drawId, playResultAnimation, isPlayStartRoundAnimation } =
+            this.props.gameStateContextModel;
 
         return (
             <SeBallResultBlock
@@ -59,6 +60,7 @@ class SeBall extends GameBase<GameBaseProps> {
                 turnCounter={turnCounter}
                 drawId={drawId}
                 playResultAnimation={playResultAnimation}
+                isPlayStartRoundAnimation={isPlayStartRoundAnimation}
             />
         );
     }

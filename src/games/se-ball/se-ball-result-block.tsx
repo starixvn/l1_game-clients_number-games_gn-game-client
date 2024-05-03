@@ -4,7 +4,7 @@ import { GameStateContextModel } from "../../_shared/react-contexts/game-state-c
 import useResult from "../../_shared/react-hooks/use-result";
 import { RoundState } from "../../components/game-base/type";
 import Cage, { CageColor, CagePosition } from "../../components/game-components/cage";
-import { NormalRoundResultSlotContainer } from "../../components/game-components/normal-round-result-container/normal-round-result-container";
+import { RoundBaseResultSlotContainer } from "../../components/game-components/round-base-result-container/round-base-result-container";
 import { defaultRoundData } from "./se-ball-constants";
 import Style from "./se-ball.module.scss";
 import { SeBallResult } from "./types";
@@ -12,15 +12,19 @@ import { SeBallResult } from "./types";
 export type SeBallResultBlockProps = Partial<GameStateContextModel>;
 
 const SeBallResultBlock: FC<SeBallResultBlockProps> = (props: SeBallResultBlockProps) => {
-    const { result, roundState, roundHistory, playResultAnimation } = props;
+    const { result, roundState, roundHistory, playResultAnimation, isPlayStartRoundAnimation } = props;
     const currentResult = useResult<SeBallResult>({ result, roundState, roundHistory });
 
-    if (roundState === RoundState.SwitchRound) {
+    if (roundState === RoundState.BeforePlaceBet && !isPlayStartRoundAnimation) {
         return <></>;
     }
 
     return (
-        <div className={Style["result-container"]}>
+        <div
+            className={`${Style["result-container"]} ${
+                roundState === RoundState.BeforePlaceBet && isPlayStartRoundAnimation ? "showResultContainer" : ""
+            }`}
+        >
             <Cage
                 color={CageColor.PURPLE}
                 position={CagePosition.LEFT}
@@ -31,15 +35,12 @@ const SeBallResultBlock: FC<SeBallResultBlockProps> = (props: SeBallResultBlockP
                 roundState={roundState}
             />
 
-            <div className={Style["result-right"]}>
-                <NormalRoundResultSlotContainer
-                    defaultRoundData={defaultRoundData}
-                    className="balls"
-                    roundResult={currentResult?.balls}
-                    {...props}
-                />
-                <h1 className={Style["total"]}>23</h1>
-            </div>
+            <RoundBaseResultSlotContainer
+                defaultRoundData={defaultRoundData}
+                className="balls"
+                roundResult={currentResult?.balls}
+                {...props}
+            />
         </div>
     );
 };

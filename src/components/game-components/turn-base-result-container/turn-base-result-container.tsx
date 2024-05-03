@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { GameStateContextModel } from "../../../_shared/react-contexts/game-state-context/game-state-context-model";
 import { RoundState } from "../../game-base/type";
 import Ball, { BallStatus, IBall } from "../ball";
-import Style from "./result-container.module.scss";
+import Style from "./turn-base-result-container.module.scss";
 
 export type IResultSlotContainer = {
     delayTime: number;
@@ -13,7 +13,7 @@ export type IResultSlotContainer = {
     betChoiceBalls: string;
 } & Partial<GameStateContextModel>;
 
-export const ResultSlotContainer: React.FC<IResultSlotContainer> = (props) => {
+export const TurnBaseResultSlotContainer: React.FC<IResultSlotContainer> = (props) => {
     const { delayTime, betChoice, className, roundState, roundData, turnCounter, defaultRoundData, betChoiceBalls, playResultAnimation } =
         props;
 

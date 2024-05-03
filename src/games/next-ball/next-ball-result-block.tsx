@@ -4,7 +4,7 @@ import { GameStateContextModel } from "../../_shared/react-contexts/game-state-c
 import useResult from "../../_shared/react-hooks/use-result";
 import { RoundState } from "../../components/game-base/type";
 import Cage, { CageColor, CagePosition } from "../../components/game-components/cage";
-import { ResultSlotContainer } from "../../components/game-components/result-container/result-container";
+import { TurnBaseResultSlotContainer } from "../../components/game-components/turn-base-result-container/turn-base-result-container";
 import { defaultRoundData } from "./next-ball-constants";
 import Style from "./next-ball.module.scss";
 import { NextBallResult } from "./types";
@@ -36,7 +36,7 @@ const NextBallResultBlock: FC<NextBallResultBlockProps> = (props: NextBallResult
                     roundState={roundState}
                     isPlayStartRoundAnimation={isPlayStartRoundAnimation}
                 />
-                <ResultSlotContainer
+                <TurnBaseResultSlotContainer
                     defaultRoundData={defaultRoundData}
                     delayTime={0}
                     betChoice={""}

@@ -362,7 +362,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         });
 
         this.gameMessageHandler.broadcastGameEvent({ [messageEventType.ROUND_STATE]: newRoundState });
-        console.log(RoundState[newRoundState])
+
         if (gameStateContextModel.roundState !== newRoundState) {
 
             const isStartNewRound = gameStateContextModel.roundState === RoundState.SwitchRound && newRoundState === RoundState.InRound;

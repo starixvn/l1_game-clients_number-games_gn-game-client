@@ -5,17 +5,17 @@ import Styles from "./new-round-transition.module.scss";
 const NewRoundTransition: React.FC<any> = (props) => {
     const { roundState } = useGameStateContext();
 
-    if (roundState !== RoundState.SwitchRound) {
-        return <></>;
+    if ([RoundState.SwitchRound, RoundState.BeforePlaceBet].includes(roundState)) {
+        return (
+            <div className={Styles["new-round-transition"]}>
+                <div className={Styles["transition-layer"]}>
+                    <div className={Styles["light"]}></div>
+                </div>
+            </div>
+        );
     }
 
-    return (
-        <div className={Styles["new-round-transition"]}>
-            <div className={Styles["transition-layer"]}>
-                <div className={Styles["light"]}></div>
-            </div>
-        </div>
-    );
+    return <></>;
 };
 
 export default NewRoundTransition;

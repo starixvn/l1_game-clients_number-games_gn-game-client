@@ -14,12 +14,12 @@ export interface IBall {
     status?: BallStatus;
     delayTime?: number;
     index?: number;
-    isNormalRound?: boolean;
+    isRoundBase?: boolean;
     roundState?: RoundState;
 }
 
 const Ball: FC<IBall> = (props) => {
-    const { number, delayTime, status, index, isNormalRound, roundState } = props;
+    const { number, delayTime, status, index, isRoundBase, roundState } = props;
 
     const color = getBallColor(number);
     const ballStyleName = `${Styles["ball-bg"]} ${Styles[color]} ${status === BallStatus.SHOW ? Styles["display-right-now"] : ""}`;
@@ -32,7 +32,7 @@ const Ball: FC<IBall> = (props) => {
     useEffect(() => {
         let timeOut: NodeJS.Timeout;
 
-        if (!isDelayShowResult && (!isNormalRound || (isNormalRound && roundState === RoundState.DisplayResult))) {
+        if (!isDelayShowResult && (!isRoundBase || (isRoundBase && roundState === RoundState.DisplayResult))) {
             timeOut = setTimeout(() => setIsDelayShowResult(true), delayTime);
         }
 
@@ -41,14 +41,8 @@ const Ball: FC<IBall> = (props) => {
         };
     }, [delayTime, isDelayShowResult]);
 
-    useEffect(() => {
-        if (isNormalRound && roundState === RoundState.None) {
-            setIsDelayShowResult(false);
-        }
-    }, [roundState]);
-
     return (
-        <div className={`${Styles.ball} ${blurStyle} ${isNormalRound ? "" : delayStyle}`}>
+        <div className={`${Styles.ball} ${blurStyle} ${isRoundBase ? "" : delayStyle}`}>
             {isDelayShowResult && number > 0 && (
                 <div className={ballStyleName}>{<span className={`${Styles["ball-number"]} ball-index-${index + 1}`}>{number}</span>}</div>
             )}

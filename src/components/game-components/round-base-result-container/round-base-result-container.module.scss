@@ -1,0 +1,24 @@
+.result-area {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 3.2rem 3.6rem;
+    justify-content: start;
+    align-items: center;
+    gap: 0.5rem;
+
+    .container {
+        display: flex;
+        justify-content: center;
+        gap: 0.6rem;
+        margin-top: -0.4rem;
+    }
+
+    .total {
+        font-weight: 600;
+        font-size: 3.6rem;
+        height: 3.6rem;
+        color: #fff;
+        text-align: center;
+        text-shadow: 0.1rem 0.1rem 2rem rgba(255, 255, 255, 0.6);
+    }
+}

@@ -16,19 +16,6 @@
     height: 18.5rem;
 }
 
-.result-right {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    .total {
-        font-weight: 600;
-        font-size: 3.6rem;
-        color: #fff;
-        text-shadow: 0.1rem 0.1rem 2rem rgba(255, 255, 255, 0.6);
-    }
-}
-
 %main-option {
     --font-bet-name: 1.6rem;
 
