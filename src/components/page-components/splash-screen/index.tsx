@@ -7,13 +7,16 @@ import Image from "next/image";
 import { AuthorizeResponse, SSOResponse } from "sc-user-service-client/dist/auth";
 import { LobbyConfigs } from "sc-user-service-client/dist/lobby";
 import { getAppSettings, getGameIdsSetting } from "../../../_shared/app-settings";
-import { buildVersion, languageMapper } from "../../../_shared/constants";
-import { AnalyticsHelper, StorageHelper, getLobbyGamesIds, localStorageKeys } from "../../../_shared/helpers";
+import { Themes, buildVersion, languageMapper } from "../../../_shared/constants";
+import { AnalyticsHelper, StorageHelper, getLobbyGamesIds, localStorageKeys, randomInteger } from "../../../_shared/helpers";
 import PreloadResources from "../../../_shared/helpers/preload-resources";
 import { PlayerContextModel, URLContext, usePlayerContext } from "../../../_shared/react-contexts";
 import { useTranslator } from "../../../_shared/react-hooks";
 import { setSentryUser } from "../../../_shared/sentry";
-import { authorize, getLobbyConfigs, sso, verifySession } from "../../../services/auth-service";
+import { authorize, createNickname, getLobbyConfigs, sso, verifySession } from "../../../services/auth-service";
+import { updateSignInSMStatus } from "../../../services/user-setting-service";
+import { MAX_AVATAR_ID } from "../dashboard/register/avatar-gallery";
+import NameGenerator from "../dashboard/register/name-generator";
 import { getGameIdOfferBanner } from "../lobby/games/components/banner";
 import UMPage from "../um-page";
 import Styles from "./splash-screen.module.scss";
@@ -71,14 +74,31 @@ const getLocaleFromSession = (session: SSOResponse, language: string) => {
     return languageMapper[session?.language] || languageMapper[language];
 };
 
+const autoCreateNickname = async (session: SSOResponse, signOut: Function) => {
+    const nickname = NameGenerator.generateName();
+    const maxAvatarId = MAX_AVATAR_ID;
+    const selectedAvatarId = randomInteger(1, maxAvatarId);
+    const authorizeResponse = (await createNickname(session, nickname, selectedAvatarId)) as AuthorizeResponse;
+    if (authorizeResponse?.authorized) {
+        Object.assign(authorizeResponse.user, { settings: { theme: Themes.light } });
+        authorizeResponse.user.isSignedInSM = true;
+        updateSignInSMStatus(session);
+    } else {
+        signOut?.();
+    }
+
+    return authorizeResponse;
+};
+
 const SplashScreen: React.FC<{
     gameId: number;
     isDirectMode: boolean;
-}> = ({ isDirectMode, gameId }) => {
+    setAuthorizeResponse: Function;
+    setLobbyConfigs: Function;
+}> = ({ isDirectMode, gameId, setAuthorizeResponse, setLobbyConfigs }) => {
     const { token, language } = useContext(URLContext);
     const router = useRouter();
     const player = usePlayerContext();
-    const { session } = usePlayerContext();
     const { t } = useTranslator();
 
     const [isDonePreloadResources, setIsDonePreloadResources] = useState<boolean>(false);
@@ -89,17 +109,26 @@ const SplashScreen: React.FC<{
     const [gameOfferIds, setGameOfferIds] = useState<number[]>([]);
 
     useEffect(() => {
-        const getBanners = async () => {
+        const handleInitialization = async () => {
+            let authorizeInfo;
             const session = await getSession(token);
             if (!session || isTimeoutSession(session)) {
-                router.push("timeout");
+                signOut();
                 return;
             }
 
             setCurrentSession(session);
             setLocale(getLocaleFromSession(session, language));
+            authorizeInfo = await authorize(session);
+            if (authorizeInfo.errorCode === "SB0002") {
+                signOut();
+                return;
+            }
 
-            const authorizeInfo = (await authorize(session)) as AuthorizeResponse;
+            if (!authorizeInfo?.authorized && isDirectMode) {
+                authorizeInfo = await autoCreateNickname(session, signOut);
+            }
+
             if (!authorizeInfo?.authorized) {
                 handleUnauthorizedAccess();
                 return;
@@ -107,13 +136,20 @@ const SplashScreen: React.FC<{
 
             const lobby = await getLobbyConfigs(session);
             if (lobby?.lobbyConfigs) {
+                setLobbyConfigs(lobby?.lobbyConfigs);
                 handleBanner(authorizeInfo, lobby.lobbyConfigs);
                 handleGameOfferIds(authorizeInfo, lobby.lobbyConfigs);
             }
+
+            authorizeInfo && setAuthorizeResponse(authorizeInfo);
         };
 
-        getBanners();
+        handleInitialization();
     }, []);
+
+    const signOut = () => {
+        router.push("timeout");
+    };
 
     const handleUnauthorizedAccess = () => {
         const gameIds = getGameIdsSetting()?.map((id) => parseInt(id, 10));
@@ -152,7 +188,7 @@ const SplashScreen: React.FC<{
         }
     }, [isDonePreloadResources]);
 
-    if (session?.isUM) {
+    if (player?.session?.isUM) {
         return <UMPage />;
     }
 

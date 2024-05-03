@@ -71,6 +71,7 @@ const PreloadResources: React.FC<{
             const duration = endTime - startTime;
             timeout = setTimeout(
                 () => {
+                    console.log("setIsDonePreloadResource");
                     setIsDonePreloadResource?.(true);
                 },
                 duration < MAX_DELAY_TIME ? DELAY_TIME : 0
@@ -100,9 +101,12 @@ const PreloadResources: React.FC<{
                                 height={1}
                                 alt={"preload-img"}
                                 data-src={image}
-                                unoptimized={true}
+                                unoptimized={image.includes("gif") ? false : true}
                                 quality={100}
                                 onLoad={() => handleOnLoadingComplete(index)}
+                                onError={(e) => {
+                                    console.log("Error preload image", image);
+                                }}
                             />
                         ))}
                 </div>

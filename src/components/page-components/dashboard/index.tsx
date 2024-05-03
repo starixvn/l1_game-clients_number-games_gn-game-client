@@ -1,37 +1,33 @@
-import dynamic from "next/dynamic";
 import { withRouter } from "next/router";
 import React from "react";
 import { isMobile, isMobileOnly } from "react-device-detect";
-import { AuthorizeResponse, ReCheckInResponse, Response } from "sc-user-service-client/dist/auth";
-import { LobbyResponse } from "sc-user-service-client/dist/lobby";
-import { Socket, io } from "socket.io-client";
+import { AuthorizeResponse, ReCheckInResponse } from "sc-user-service-client/dist/auth";
+import { io, Socket } from "socket.io-client";
 import MsgpackParser from "socket.io-msgpack-parser";
+
+import dynamic from "next/dynamic";
 import { getAppSettings } from "../../../_shared/app-settings";
-import { Themes } from "../../../_shared/constants";
 import {
-    GetLocalizedErrorMessage,
-    StorageHelper,
     buildUrl,
     getLobbyGameIds,
+    GetLocalizedErrorMessage,
     getOfferGamesIds,
-    isKickOutError,
     localStorageKeys,
+    StorageHelper,
 } from "../../../_shared/helpers";
-import { randomInteger } from "../../../_shared/helpers/number-helper";
 import {
+    loadURLContext,
     LobbyConnectionContextProvider,
     PlayerContextProvider,
     SettingContextProvider,
-    URLContextModel,
-    loadURLContext,
     updateURLContext,
+    URLContextModel,
 } from "../../../_shared/react-contexts";
 
 import SwiperCore from "swiper";
 import { ErrorNoGameOffer } from "../../../_shared/constants/error-code-dictionary";
 import "../../../games/scoreboards";
-import { authorize, createNickname, getLobbyConfigs, reCheckIn } from "../../../services/auth-service";
-import { updateSignInSMStatus } from "../../../services/user-setting-service";
+import { reCheckIn } from "../../../services/auth-service";
 import { UserStakeLevel } from "../../game-base/type";
 import { ModalType } from "../../game-components/base-dialog/type";
 import { ErrorApiText } from "../../game-components/error-api-text";
@@ -41,9 +37,6 @@ import Lobby from "../lobby/lobby";
 import { LobbySocketConnection } from "../lobby/lobby-socket-connection";
 import ButtonSwipe from "./button-swipe";
 import Styles from "./dashboard.module.scss";
-import Register from "./register";
-import { MAX_AVATAR_ID } from "./register/avatar-gallery";
-import NameGenerator from "./register/name-generator";
 import { ILobbyConfigs, Props, State } from "./type";
 
 const Games = dynamic(() => import("../../../games/games"));
@@ -81,7 +74,6 @@ class Dashboard extends React.PureComponent<Props, State> {
 
         this.lobbyConnectionHandler = new LobbySocketConnection();
 
-        this.handleRegister = this.handleRegister.bind(this);
         this.registerMainSocketEvent = this.registerMainSocketEvent.bind(this);
         this.handleKickedOut = this.handleKickedOut.bind(this);
         this.closeDialog = this.closeDialog.bind(this);
@@ -138,6 +130,7 @@ class Dashboard extends React.PureComponent<Props, State> {
 
     handleShowApiErrorMessage(errorCode: string, isDisableAccount = false) {
         if (isDisableAccount || isKickOutError(errorCode)) {
+        if (isDisableAccount || kickedOutErrorCodes.includes(errorCode)) {
             this.isKickOut = true;
             setTimeout(() => {
                 this.signOut();
@@ -192,32 +185,20 @@ class Dashboard extends React.PureComponent<Props, State> {
         if (typeof window === "undefined") {
             return;
         }
+
         document.addEventListener("visibilitychange", this.onVisibilityChange);
-        const { session, directMode, queryGame } = this.props;
-        const authorizeResponse = await authorize(session);
+        const { queryGame, authorizeResponse, session, lobbyConfigs } = this.props;
+        this.updateAuthorizeInfo(authorizeResponse);
+        this.setState({ lobbyConfigs });
 
-        const errorResponse = authorizeResponse as Response;
-
-        if (errorResponse && errorResponse.errorCode === "SB0002") {
-            this.signOut();
+        if (!authorizeResponse) {
             return;
         }
-
-        const authorizeInfo = authorizeResponse as AuthorizeResponse;
-
-        const { authorized } = authorizeInfo;
-        if (authorized === false && directMode) {
-            await this.autoCreateNickname();
-            return;
-        }
-
-        const lobbyConfigs = await this.getAllLobbyConfigs();
-        await this.connectLobbySocket(authorizeInfo, lobbyConfigs);
-        this.updateAuthorizeInfo(authorizeInfo);
-        this.updateUserBalance(authorizeInfo?.user?.red);
+        await this.connectLobbySocket(authorizeResponse, lobbyConfigs);
+        this.updateUserBalance(authorizeResponse?.user?.red);
 
         this.reCheckInInterval = setInterval(async () => {
-            const reCheckInResponse = await reCheckIn(this.props.session);
+            const reCheckInResponse = await reCheckIn(session);
             this.handleRecheckInResponse(reCheckInResponse);
         }, 60 * 1000);
 
@@ -322,17 +303,6 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.setState({ userStakeLevel: userStakeLevel });
     }
 
-    async handleRegister(authorizeInfo: AuthorizeResponse) {
-        const { session } = this.props;
-
-        updateSignInSMStatus(session);
-        authorizeInfo.user.isSignedInSM = true;
-
-        const lobbyConfigs = await this.getAllLobbyConfigs();
-        await this.connectLobbySocket(authorizeInfo, lobbyConfigs);
-        this.updateAuthorizeInfo(authorizeInfo);
-    }
-
     closeDialog() {
         this.setState({ isShowErrorModal: false });
         this.isKickOut && this.signOut();
@@ -354,18 +324,6 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.setState({ queryGame: gameId, isJoinGame: true, openGameId: gameId });
 
         updateURLContext({ gameId });
-    }
-
-    async getAllLobbyConfigs() {
-        const { session } = this.props;
-        const lobby: LobbyResponse = await getLobbyConfigs(session);
-        console.log("lobby", lobby);
-        if (lobby?.lobbyConfigs) {
-            this.setState({ lobbyConfigs: lobby?.lobbyConfigs });
-        } else {
-            console.error("Can not get Lobby configs");
-        }
-        return lobby?.lobbyConfigs;
     }
 
     getLobbyGamesIds = () => {
@@ -455,8 +413,9 @@ class Dashboard extends React.PureComponent<Props, State> {
                 <SettingContextProvider>
                     {allowSwipeGameOndDesktop && <ButtonSwipe isPrev={true} swiper={this.swiperRef} />}
                     <div
-                        className={`${Styles["dashboard"]} ${changeGameStyle} ${!isRenderGames ? "no-scroll" : ""} ${isMobileOnly ? Styles["hidden-scrollbar"] : ""
-                            }`}
+                        className={`${Styles["dashboard"]} ${changeGameStyle} ${!isRenderGames ? "no-scroll" : ""} ${
+                            isMobileOnly ? Styles["hidden-scrollbar"] : ""
+                        }`}
                         id={"dashboard"}
                     >
                         <Header />
@@ -492,30 +451,14 @@ class Dashboard extends React.PureComponent<Props, State> {
         );
     }
 
-    autoCreateNickname = async () => {
-        const { session } = this.props;
-        const nickname = NameGenerator.generateName();
-        const maxAvatarId = MAX_AVATAR_ID;
-        const selectedAvatarId = randomInteger(1, maxAvatarId);
-        const response = await createNickname(session, nickname, selectedAvatarId);
-        const authorizeResponse = response as AuthorizeResponse;
-        if (authorizeResponse?.authorized) {
-            Object.assign(authorizeResponse.user, { settings: { theme: Themes.light } });
-            await this.handleRegister(authorizeResponse);
-        } else {
-            this.signOut();
-        }
-    };
-
     renderComponents = (authorizeInfo: AuthorizeResponse) => {
         const { authorized } = authorizeInfo;
-        console.log("renderComponents", authorized);
 
         if (authorized) {
             return this.renderDashBoard();
         }
 
-        return <Register session={this.props.session} handleStateLogin={this.handleRegister} />;
+        return <></>;
     };
 
     render() {

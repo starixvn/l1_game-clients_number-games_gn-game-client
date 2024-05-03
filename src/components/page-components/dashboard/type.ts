@@ -10,6 +10,8 @@ export type Props = {
     setIsUm: Function;
     directMode: boolean;
     tolgee: TolgeeInstance;
+    authorizeResponse: AuthorizeResponse;
+    lobbyConfigs: ILobbyConfigs;
 } & WithRouterProps;
 
 type APIErrorProp = {
