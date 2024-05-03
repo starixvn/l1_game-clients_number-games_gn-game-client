@@ -50,6 +50,6 @@ export class RoundStateHandler implements IRoundStateHandler {
     }
 
     shouldCountDownTimer({ newRoundState }): boolean {
-        return newRoundState !== RoundState.BeforePlaceBet;
+        return true;
     }
 }

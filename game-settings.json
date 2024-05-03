@@ -106,8 +106,8 @@
             "lockingBet": 3,
             "showResult": 6,
             "resultAnimation": 2,
-            "beforePlaceBet": 0,
-            "switchRoundAnimation": 4
+            "beforePlaceBet": 4,
+            "switchRoundAnimation": 0
         },
         "totalTurns": 0,
         "numberOfRoundHistory": 100,
