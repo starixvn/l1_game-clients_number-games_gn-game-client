@@ -38,17 +38,24 @@ export function createBeadRoadElement(isOddEven: boolean = ODD_EVEN_AS_DEFAULT_S
 }
 
 export class SeBallBigRoadConverter extends Converter<SeBallSettlementResult> {
-    static addBlinkNode(rounds: SeBallSettlementResult[]) {}
+    static addBlinkNode(rounds: SeBallSettlementResult[]) {
+        const lastRound = rounds.find((round) => round.odd || round.even);
 
-    static instance = SeBallBigRoadConverter.getInstance(ODD_EVEN_AS_DEFAULT_SCOREBOARD);
+        const blinkRound = {
+            odd: lastRound?.odd,
+            even: undefined,
+            red3: undefined,
+            red4: undefined,
+            blue3: undefined,
+            blue4: undefined,
+            red2: undefined,
+            drawId: 0,
+        };
 
-    static getInstance(isOddEven: boolean = ODD_EVEN_AS_DEFAULT_SCOREBOARD) {
-        return new SeBallBigRoadConverter(isOddEven);
+        rounds.unshift(blinkRound);
     }
 
-    constructor(private readonly isOddEven: boolean) {
-        super();
-    }
+    static instance = new SeBallBigRoadConverter();
 
     protected positiveKey(): string {
         return SeBallBetOptions.ODD;
@@ -59,21 +66,19 @@ export class SeBallBigRoadConverter extends Converter<SeBallSettlementResult> {
     }
 }
 
-export function createBigRoadElement(isOddEven: boolean = ODD_EVEN_AS_DEFAULT_SCOREBOARD) {
-    return class Element extends BigRoadElement<SeBallSettlementResult> {
-        renderElement(round: BigRoadRound<SeBallSettlementResult>): ReactNode {
-            const odd = round.data.some((result) => result.odd);
-            const isBlinkNode = round.data.some((result) => result.even === undefined);
+export class SeBallBigRoadElement extends BigRoadElement<SeBallSettlementResult> {
+    renderElement(round: BigRoadRound<SeBallSettlementResult>): ReactNode {
+        const odd = round.data.some((result) => result.odd);
+        const isBlinkNode = round.data.some((result) => result.even === undefined || result.odd === undefined);
 
-            if (isBlinkNode) {
-                return <span className={styles.blink}></span>;
-            } else if (odd) {
-                return <span className={styles.red}></span>;
-            } else {
-                return <span className={styles.blue}></span>;
-            }
+        if (isBlinkNode) {
+            return <span className={styles.blink}></span>;
+        } else if (odd) {
+            return <span className={styles.red}></span>;
+        } else {
+            return <span className={styles.blue}></span>;
         }
-    };
+    }
 }
 
-registerBigRoadElement(createBigRoadElement(ODD_EVEN_AS_DEFAULT_SCOREBOARD), SeBallBigRoadConverter, 1003, 1004);
+registerBigRoadElement(SeBallBigRoadElement, SeBallBigRoadConverter, 1003, 1004);

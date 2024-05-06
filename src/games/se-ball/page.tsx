@@ -87,14 +87,7 @@ class SeBall extends GameBase<GameBaseProps> {
         };
 
         return (
-            <PercentageStatistic
-                roundHistory={roundHistory}
-                statisticRuleEntries={Object.entries(calculators)}
-                group={2}
-                selectedGroup={statisticGroup}
-                onSelectGroup={(index: number) => this.setState({ statisticGroup: index })}
-                className={classNameIndo}
-            />
+            <PercentageStatistic roundHistory={roundHistory} statisticRuleEntries={Object.entries(calculators)} className={classNameIndo} />
         );
     }
 

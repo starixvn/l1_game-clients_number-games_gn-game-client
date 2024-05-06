@@ -2,7 +2,7 @@ import { Component, ReactNode, memo } from "react";
 import { Round } from "../../components/game-base/type";
 import { SlidableScoreboard, SwitchableScoreboard } from "../../components/game-components/round-history/scoreboard";
 import { BeadRoadElement, BigRoadElement } from "../../components/game-components/round-history/scoreboard/elements";
-import { SeBallBigRoadConverter, createBeadRoadElement, createBigRoadElement } from "./scoreboard-elements";
+import { SeBallBigRoadConverter, SeBallBigRoadElement, createBeadRoadElement } from "./scoreboard-elements";
 import Styles from "./scoreboard.module.scss";
 import { SeBallResult, SeBallSettlementResult } from "./types";
 import { tolgee } from "../../_shared/tolgee";
@@ -27,8 +27,8 @@ export class Scoreboard extends Component<ScoreboardComponentProps> {
                     type="switch"
                     scoreboards={[
                         {
-                            element: createBigRoadElement(this.props.isOddEven),
-                            arrange: BigRoadElement.arrange(SeBallBigRoadConverter.getInstance(this.props.isOddEven)),
+                            element: SeBallBigRoadElement,
+                            arrange: BigRoadElement.arrange(SeBallBigRoadConverter.instance),
                             column: 18,
                             row: 6,
                         },
