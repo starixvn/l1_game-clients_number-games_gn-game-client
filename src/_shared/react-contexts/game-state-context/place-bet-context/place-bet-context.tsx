@@ -32,6 +32,9 @@ function placeBetReducer(state: PlaceBetContextModel, action: PlaceBetEventActio
         ownBets,
         acceptedBetQueue,
         suggestBet,
+        notConfirmOwnBets,
+        showConfirmBet,
+        showConfirmDialog
     } = payload;
 
     // console.log(`placeBetReducer: ${JSON.stringify(action)} `);
@@ -77,6 +80,27 @@ function placeBetReducer(state: PlaceBetContextModel, action: PlaceBetEventActio
                 ownBets: {},
                 suggestBet: {}
             }
+        }
+
+        case PlaceBetEventActionType.NOT_CONFIRM_OWN_BETS: {
+            return {
+                ...state,
+                notConfirmOwnBets
+            }
+        }
+
+        case PlaceBetEventActionType.SHOW_CONFIRM_BET: {
+            return {
+                ...state,
+                showConfirmBet,
+            };
+        }
+
+        case PlaceBetEventActionType.SHOW_CONFIRM_DIALOG: {
+            return {
+                ...state,
+                showConfirmDialog,
+            };
         }
 
         default: {

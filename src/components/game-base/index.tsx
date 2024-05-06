@@ -48,9 +48,11 @@ import { GameBaseProps, RoundState } from "./type";
 import { GlobalMessageTransmitter, GlobalTransmitterEvent } from "../../_shared/helpers/message-transmitter/global-transmitter";
 import { PlaceBetProvider } from "../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-context";
 import { PFProvider } from "../../_shared/react-contexts/game-state-context/pf/pf-context";
-import { PlaceBetHanlderWrapper } from "./handlers/place-bet-wrapper/place-bet-handler-wrapper";
+import { PlaceBetHandlerWrapper } from "./handlers/place-bet-wrapper/place-bet-handler-wrapper";
 import { PFWrapper } from "./handlers/pf-wrapper/pf-wrapper";
 import { PlaceBetEventActionType } from "../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-action";
+import ConfirmBet from "../game-components/confirm-bet";
+import BetConfirmDialog from "../game-components/bet-confirm-dialog";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
     protected socket: Socket;
@@ -446,7 +448,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     placeBet(betChoice: string, amount: number) {
         const enabledQuickBet = (this.context as PlayerContextModel).authorizeInfo?.user?.settings?.quickBet;
 
-        this.placeBetHandler.placeBet(betChoice, amount, enabledQuickBet, this.props.gameStateContextModel.roundState);
+        this.placeBetHandler.placeBet(betChoice, amount, enabledQuickBet, this.props.gameStateContextModel, this.props.systemContextModel);
     }
 
     clearDisconnectTimeout = () => {
@@ -516,6 +518,14 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         return <BetSettings gameConfigs={gameConfigs} userStakeLevel={userStakeLevel} />;
     }
 
+    renderConfirmBet() {
+        return <ConfirmBet />;
+    }
+
+    renderConfirmDialog() {
+        return <BetConfirmDialog />;
+    }
+
     renderStatistic() {
         return <></>;
     }
@@ -531,23 +541,26 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 <BackgroundGalaxy gameId={this.props.id} />
                 <>
                     <div className="game-area">
-                        {/* <div>{this.renderHeaderBlock()}</div> */}
                         <PFProvider gameId={this.props.id} uid={uid}>
                             <PFWrapper
                                 socket={this.socket}
                                 gameMessageHandler={this.gameMessageHandler}
                                 gameId={this.props.id}
-                                uid={uid} />
-                            {this.renderHeaderBlock()}
-                            {this.renderPFSettingModal()}
-                            {this.renderBetHistoryModal()}
+                                uid={uid} >
+                                {this.renderHeaderBlock()}
+                                {this.renderPFSettingModal()}
+                                {this.renderBetHistoryModal()}
+                            </PFWrapper>
                         </PFProvider>
                         <div>{this.renderResultBlock()}</div>
                         <PlaceBetProvider>
-                            <PlaceBetHanlderWrapper
+                            <PlaceBetHandlerWrapper
                                 handler={this.placeBetHandler}
-                                renderBettingBlock={this.renderBettingBlock}
-                                signOut={(this.context as PlayerContextModel)?.signOut} />
+                                signOut={(this.context as PlayerContextModel)?.signOut} >
+                                {this.renderBettingBlock()}
+                                {this.renderConfirmDialog()}
+                                {this.renderConfirmBet()}
+                            </PlaceBetHandlerWrapper>
                         </PlaceBetProvider>
                         <div className={SwiperNoSwiping}> {this.renderSlidingChips()}</div>
                         <div>{this.renderStatistic()}</div>
@@ -556,14 +569,8 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                     </div>
                     {this.renderGameGuideModal()}
                     {this.renderMenuButtons()}
-
-                    {/* <PFProvider>{this.renderBetHistoryModal()} </PFProvider> */}
-                    {/* {this.renderPFSettingModal()} */}
                     {this.renderNewRoundTransition()}
                     {this.renderNotice()}
-
-
-
                 </>
             </>
         );

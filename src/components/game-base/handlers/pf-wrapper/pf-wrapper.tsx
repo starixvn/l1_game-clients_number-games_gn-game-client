@@ -10,7 +10,8 @@ export type PFWrapperProps = {
     socket: Socket;
     gameMessageHandler: GameMessageHandler;
     uid: any;
-    gameId: number
+    gameId: number,
+    children: any
 };
 
 export const PFWrapper = (props: PFWrapperProps) => {
@@ -79,8 +80,6 @@ export const PFWrapper = (props: PFWrapperProps) => {
             }
         }
 
-
-        props.gameMessageHandler.register(messageEventType.SAVE_PF_SETTING_FROM_TURN_ID_HANLDER, handleSavePFSettingFromTurnIdHandler);
         const handleSavePFSetting = (message) => {
             const { pfClientSeedSetting } = message[messageEventType.SAVE_PF_SETTING];
             syncPFSetting(pfClientSeedSetting);
@@ -96,16 +95,16 @@ export const PFWrapper = (props: PFWrapperProps) => {
             StorageHelper.set(`${localStorageKeys.pfSetting}-${props.uid}-${props.gameId}`, dataPFSettingSave);
         }
 
-
         const savePFSettingId = props.gameMessageHandler.register(messageEventType.SAVE_PF_SETTING, handleSavePFSetting);
         const sendSocketId = props.gameMessageHandler.register(messageEventType.SEND_SOCKET_MESSAGE_WITH_CLIENT_SEED, sendSocketMessageWithClientSeed);
-
+        const savePFSettingFromTurnId = props.gameMessageHandler.register(messageEventType.SAVE_PF_SETTING_FROM_TURN_ID_HANLDER, handleSavePFSettingFromTurnIdHandler);
 
         return () => {
             props.gameMessageHandler.removeHandler(savePFSettingId);
             props.gameMessageHandler.removeHandler(sendSocketId);
+            props.gameMessageHandler.removeHandler(savePFSettingFromTurnId);
         }
     }, [pfContext.pfClientSeedSetting])
 
-    return (<> </>)
+    return (<> {props.children}</>)
 }

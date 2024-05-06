@@ -11,7 +11,8 @@ export enum PlaceBetEventActionType {
     SHOW_CONFIRM_BET = "SHOW_CONFIRM_BET",
     NOT_CONFIRM_OWN_BETS = "NOT_CONFIRM_OWN_BETS",
     SUGGEST_BET = "SUGGEST_BET",
-    SET_NEW_GAME_STATE="SET_NEW_GAME_STATE"
+    SET_NEW_GAME_STATE = "SET_NEW_GAME_STATE",
+    SHOW_CONFIRM_DIALOG = "SHOW_CONFIRM_DIALOG",
 }
 
 export interface PlaceBetEventPayload {
@@ -25,6 +26,9 @@ export interface PlaceBetEventPayload {
     };
     acceptedBetQueue?: any;
     suggestBet?: SuggestBet;
+    notConfirmOwnBets: object;
+    showConfirmBet: boolean;
+    showConfirmDialog: boolean;
 }
 
 export interface PlaceBetEventAction {

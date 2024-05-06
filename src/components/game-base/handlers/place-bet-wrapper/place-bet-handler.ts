@@ -2,13 +2,16 @@ import { DefaultParamType, TFnType, TranslationKey } from "@tolgee/react";
 import { v4 as uuidv4 } from "uuid";
 import { NoticeErrorCode } from "../../../../_shared/constants/error-code-dictionary";
 import { getGlossaryTranslate, GetLocalizedErrorMessage, localStorageKeys, StorageHelper } from "../../../../_shared/helpers";
-import { findHedgeBetGroup, isHedgeBet, isInPhasePreventBet } from "../../../../_shared/helpers/validate-bet-helper";
-import { NoticeModel, RoundState } from "../../type";
+import { findHedgeBetGroup, getAccountBalance, getCriteriaValidateBet, IAvailableSuggestBetAmount, isBalanceUnavailable, isHedgeBet, isInPhasePreventBet } from "../../../../_shared/helpers/validate-bet-helper";
+import { NoticeModel, RoundState, SuggestBet } from "../../type";
 import { GameMessageHandler, messageEventType } from "..";
 import { getAppSettings } from "../../../../_shared/app-settings";
 import { PlaceBetEventActionType } from "../../../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-action";
 import { PlaceBetContextModel } from "../../../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-context-model";
 import { GlobalMessageTransmitter, GlobalTransmitterEvent } from "../../../../_shared/helpers/message-transmitter/global-transmitter";
+import { SystemContextModel } from "../../../../_shared/react-contexts";
+import { GameStateContextModel } from "../../../../_shared/react-contexts/game-state-context/game-state-context-model";
+import { confirmBet } from "../../../../_shared/constants";
 
 export type PlaceBetHandlerProps = {
     tolgeeNamespace: string;
@@ -63,10 +66,7 @@ export class PlaceBetHandler {
     }
 
     handleOwnBets = ({ ownBets }) => {
-        this.placeBetDispatch({
-            type: PlaceBetEventActionType.OWN_BETS,
-            payload: { ownBets },
-        });
+        this.placeBetDispatch({ type: PlaceBetEventActionType.OWN_BETS, payload: { ownBets } });
 
         this.props.gameMessageHandler.broadcastGameEvent({ [messageEventType.SYNC_OWN_BETS_TO_PF]: ownBets });
     };
@@ -118,6 +118,17 @@ export class PlaceBetHandler {
             });
             gameMessageHandler.broadcastGameEvent({ [messageEventType.UPDATE_PLAYER_BALANCE]: {} });
         }
+
+        this.placeBetDispatch({
+            type: PlaceBetEventActionType.SHOW_CONFIRM_BET,
+            payload: { showConfirmBet: false }
+        });
+
+        this.placeBetDispatch({
+            type: PlaceBetEventActionType.NOT_CONFIRM_OWN_BETS,
+            payload: { notConfirmOwnBets: {} },
+        });
+
     };
 
     playAcceptedBetAnimation = (amount: number, placeBetContext: PlaceBetContextModel) => {
@@ -149,15 +160,21 @@ export class PlaceBetHandler {
         betChoice: string,
         amount: number,
         enabledQuickBet: boolean,
-        roundState: RoundState
+        gameStateContext: GameStateContextModel,
+        systemContext: SystemContextModel
     ) => {
-        if (isInPhasePreventBet(roundState)) {
-            this.handlePreventBet(roundState);
+        if (isInPhasePreventBet(gameStateContext.roundState)) {
+            this.handlePreventBet(gameStateContext.roundState);
             return;
         }
 
         if (this.placeBetContext.isProcessingBet) {
-            this.broadcastNotice({ message: "Common.message_processing_action", duration: 2 });
+            this.handleProcessingBet();
+            return;
+        }
+
+        if (isBalanceUnavailable(getAccountBalance(this.props.getPlayerBalance()), amount, gameStateContext, this.placeBetContext.notConfirmOwnBets, enabledQuickBet)) {
+            this.broadcastNotice(this.getNotice(NoticeErrorCode.notEnoughMoney));
             return;
         }
 
@@ -166,10 +183,105 @@ export class PlaceBetHandler {
             return;
         }
 
+        this.handleBetValidation(this.placeBetContext, gameStateContext, betChoice, amount, enabledQuickBet, systemContext);
+    };
+
+    protected handleBetValidation = (
+        placeBetContext: PlaceBetContextModel,
+        gameStateContext: GameStateContextModel,
+        betChoice: string,
+        amount: number,
+        enabledQuickBet: boolean,
+        systemContext: SystemContextModel
+    ) => {
+        const criteriaValidateBet = getCriteriaValidateBet(
+            gameStateContext,
+            this.placeBetContext,
+            betChoice,
+            amount,
+            getAccountBalance(this.props.getPlayerBalance()),
+            enabledQuickBet
+        );
+
+        if (criteriaValidateBet?.errorCode === NoticeErrorCode.validBet) {
+            this.handleValidBetChoice(enabledQuickBet, amount, betChoice, placeBetContext, systemContext);
+            return;
+        }
+
+        if (criteriaValidateBet?.errorCode === NoticeErrorCode.suggestBet) {
+            this.suggestBetAmount(betChoice, criteriaValidateBet?.args as IAvailableSuggestBetAmount);
+            return;
+        }
+
+        this.broadcastNotice(this.getNotice(criteriaValidateBet?.errorCode, betChoice, criteriaValidateBet?.args));
+    };
+
+
+    suggestBetAmount = (betChoice: string, availableSuggestBet: IAvailableSuggestBetAmount) => {
+        this.showConfirmDialog();
+        const suggestBet: SuggestBet = {
+            currentBetChoice: betChoice,
+            suggestBetAmount: availableSuggestBet?.suggestAmount,
+            sendOutstandingBet: () => this.sendOutstandingBet(betChoice, availableSuggestBet?.suggestAmount),
+            isInsufficientFunds: availableSuggestBet?.isInsufficientFunds,
+        };
+
+        this.placeBetDispatch({
+            type: PlaceBetEventActionType.SUGGEST_BET,
+            payload: { suggestBet },
+        });
+    };
+
+    sendOutstandingBet(betChoice: string, suggestAmount: number) {
+        this.sendBetMessage(betChoice, suggestAmount);
+    }
+
+    protected handleValidBetChoice = (
+        enabledQuickBet: boolean,
+        amount: number,
+        betChoice: string,
+        placeBetContext: PlaceBetContextModel,
+        systemContext: SystemContextModel
+    ) => {
         if (enabledQuickBet) {
+            this.updateNotConfirmedBetState(placeBetContext.notConfirmOwnBets, betChoice, systemContext);
             this.handleEnabledQuickBet(amount, betChoice);
+        } else {
+            if (betChoice === confirmBet) {
+                this.sendConfirmBet(placeBetContext.notConfirmOwnBets);
+                return;
+            }
+
+            const enableSound = StorageHelper.get(localStorageKeys.enableSound) ?? true;
+            enableSound && this.props.playPlaceBetSound();
+
+            this.showConfirmBet(placeBetContext);
+            this.updateNotConfirmedBetState(placeBetContext.notConfirmOwnBets, betChoice, systemContext);
         }
     };
+
+    handleProcessingBet = () => {
+        this.broadcastNotice({ message: "Common.message_processing_action", duration: 2 });
+    };
+
+    sendConfirmBet(notConfirmOwnBets: object) {
+        const betChoices = {};
+        Object.entries(notConfirmOwnBets).forEach(([key, value]) => {
+            betChoices[key] = value;
+        });
+
+        this.props.gameMessageHandler.broadcastGameEvent({
+            [messageEventType.SEND_SOCKET_MESSAGE_WITH_CLIENT_SEED]: { event: "bet", data: { betChoices } },
+        });
+    }
+
+    updateNotConfirmedBetState(notConfirmOwnBets: object, betChoice: string, systemContext: SystemContextModel) {
+        notConfirmOwnBets[betChoice] = (notConfirmOwnBets[betChoice] ?? 0) + systemContext.selectedChip;
+        this.placeBetDispatch({
+            type: PlaceBetEventActionType.NOT_CONFIRM_OWN_BETS,
+            payload: { notConfirmOwnBets },
+        });
+    }
 
     handlePreventBet = (roundState: RoundState) => {
         const isStartingRound = roundState === RoundState.BeforePlaceBet;
@@ -182,6 +294,21 @@ export class PlaceBetHandler {
 
         this.broadcastNotice(notice);
     };
+
+    showConfirmDialog = () => {
+        this.placeBetDispatch({
+            type: PlaceBetEventActionType.SHOW_CONFIRM_DIALOG,
+            payload: { showConfirmDialog: true }
+        });
+    };
+
+    showConfirmBet(placeBetContextModel: PlaceBetContextModel) {
+        !placeBetContextModel.showConfirmBet &&
+            this.placeBetDispatch({
+                type: PlaceBetEventActionType.SHOW_CONFIRM_BET,
+                payload: { showConfirmBet: true }
+            });
+    }
 
     handleEnabledQuickBet(amount: number, betChoice: string) {
         if (amount > 0) {
@@ -209,6 +336,7 @@ export class PlaceBetHandler {
             ...args,
         };
     };
+
     protected sendBetMessage(betChoice: string, amount: number) {
         this.placeBetDispatch({ type: PlaceBetEventActionType.BET_PROCESSING, payload: {} });
         this.props.gameMessageHandler.broadcastGameEvent({

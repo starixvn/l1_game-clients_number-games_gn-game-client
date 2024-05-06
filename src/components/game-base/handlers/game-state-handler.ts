@@ -55,7 +55,7 @@ export class GameStateHandler implements IGameStateHandler {
                 },
                 {
                     condition: [RoundState.SwitchRound].includes(nextRoundState),
-                    state: {roundData: {}},
+                    state: { roundData: {} },
                 },
                 {
                     condition: this.shouldIncreaseRoundId({ nextRoundState, durations }),
@@ -95,7 +95,11 @@ export class GameStateHandler implements IGameStateHandler {
     resetPlaceBetContext(dispatch: (action: PlaceBetEventAction) => {}) {
         dispatch({
             type: PlaceBetEventActionType.SET_NEW_GAME_STATE,
-            payload: {},
+            payload: {
+                notConfirmOwnBets: {},
+                showConfirmBet: false,
+                showConfirmDialog: false,
+            },
         });
     }
 

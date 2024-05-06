@@ -28,7 +28,6 @@ export enum GameEventActionType {
     ACTIVE_SCORE_BOARD = "ACTIVE_SCORE_BOARD",
     PLAY_RESULT_ANIMATION = "PLAY_RESULT_ANIMATION",
     SHOW_RESULT_INFO_TIME_OUT = "SHOW_RESULT_INFO_TIME_OUT",
-    SHOW_CONFIRM_DIALOG = "SHOW_CONFIRM_DIALOG",
     SET_UM_FIRST_LOADING = "SET_UM_FIRST_LOADING",
     TOGGLE_BET_HISTORY = "TOGGLE_BET_HISTORY",
     TOGGLE_BET_DETAIL = "TOGGLE_BET_DETAIL",
@@ -73,7 +72,6 @@ export interface GameEventPayload {
     showResultInfo?: boolean;
     isShowBlink?: boolean;
     roundState?: RoundState;
-    showConfirmBet?: boolean;
     showConfirmDialog?: boolean;
     turnCounter?: number;
     notConfirmOwnBets?: any;

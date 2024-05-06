@@ -31,10 +31,7 @@ export interface GameStateContextModel {
     betWin: number;
     kickedOut: any;
     drawId: number;
-    showConfirmBet: boolean;
-    showConfirmDialog: boolean;
     turnCounter: number;
-    notConfirmOwnBets: object;
     userStakeLevel: IUserStakeLevel;
     isShowBetHistory: boolean;
     isShowBetDetail: boolean;
@@ -76,10 +73,7 @@ export const initialGameStateContextModel = () => {
         drawId: 0,
         result: {},
         settlementResult: {},
-        showConfirmBet: false,
-        showConfirmDialog: false,
         turnCounter: 0,
-        notConfirmOwnBets: {},
         userStakeLevel: {
             minBet: 1,
             maxBet: 200_000,

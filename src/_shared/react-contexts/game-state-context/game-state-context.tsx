@@ -55,7 +55,6 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
         newGameState,
         showResultInfo,
         isShowBlink,
-        showConfirmDialog,
         turnCounter,
         isUMInFirstLoad,
         isShowBetHistory,
@@ -244,14 +243,6 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
             return {
                 ...state,
                 ...stateUpdate,
-            };
-        }
-
-
-        case GameEventActionType.SHOW_CONFIRM_DIALOG: {
-            return {
-                ...state,
-                showConfirmDialog,
             };
         }
 
