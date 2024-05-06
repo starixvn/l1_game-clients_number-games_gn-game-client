@@ -37,15 +37,25 @@ export const RoundBaseResultSlotContainer: React.FC<IResultSlotContainer> = (pro
             });
         };
 
+        const setTotalPointCallBack = (totalPoint: number) => {
+            setTimeout(() => {
+                setTotalPoint(totalPoint);
+            }, 200);
+        };
+
         const getBallsDataFromRoundData = () => {
             let clonedData = cloneDefaultData();
             if (roundResult && roundResult?.length > 0) {
+                let totalPointTmp = 0;
                 for (let i = 0; i < clonedData.length; i++) {
                     const number = roundResult[i];
                     if (number) {
+                        totalPointTmp = totalPointTmp + number;
+                        clonedData[i].totalPoint = totalPointTmp;
                         clonedData[i].number = number;
                         clonedData[i].status = BallStatus.SHOW;
                         clonedData[i].delayTime = playResultAnimation ? i * 1000 + 500 : 0;
+                        clonedData[i].setTotalPointCallBack = setTotalPointCallBack;
                     }
                 }
             }
@@ -56,16 +66,6 @@ export const RoundBaseResultSlotContainer: React.FC<IResultSlotContainer> = (pro
         updateLoadingIcon(data);
         setBallsData(data);
     }, [roundResult]);
-
-    useEffect(() => {
-        // if (roundResult && roundResult.length > 0) {
-        //     roundResult.forEach((result, i) => {
-        //         setTimeout(() => {
-        //             setTotalPoint(totalPoint +);
-        //         }, i * 1000);
-        //     });
-        // }
-    }, [totalPoint]);
 
     if (roundState !== RoundState.DisplayResult) {
         return (
@@ -86,7 +86,7 @@ export const RoundBaseResultSlotContainer: React.FC<IResultSlotContainer> = (pro
                     return <Ball key={index} index={index} {...result} isRoundBase={true} roundState={roundState} />;
                 })}
             </div>
-            <h1 className={Style["total"]}>23</h1>
+            {totalPoint > 0 && <h1 className={Style["total"]}>{totalPoint}</h1>}
         </div>
     );
 };
