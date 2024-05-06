@@ -99,7 +99,7 @@ export const Themes = {
 export const sabaNumberName = "Saba.numbers";
 export const sabaClubName = "Saba.games";
 
-export const buildVersion = 303;
+export const buildVersion = process?.env?.buildVersion || 111;
 export const AppTypes = {
     mobile: 1,
 };

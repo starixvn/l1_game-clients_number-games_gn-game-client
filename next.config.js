@@ -8,6 +8,7 @@ const appSettings = {
     ...configs,
     gameSettings,
 };
+const buildVersion = new Date().getTime();
 
 /**
  * @type {import('next').NextConfig}
@@ -36,7 +37,7 @@ const nextConfig = withSentryConfig({
     },
     basePath,
     env: {
-        buildVersion: uuidv4(),
+        buildVersion,
         REACT_APP_TOLGEE_API_URL: "https://tolgee.sabagame.com/",
         REACT_APP_TOLGEE_API_KEY: "tgpak_gvpw45brha2xg3btoztxeytunvudc5dbn5twqodtonztc",
     },
@@ -61,6 +62,9 @@ const nextConfig = withSentryConfig({
                 ],
             },
         ];
+    },
+    sassOptions: {
+        prependData: `$version-image: '${buildVersion}';`,
     },
 });
 

@@ -17,10 +17,16 @@ export const getPathImageGameId = (gameId: number) => {
 };
 
 export const getPathBanner = (locale: string, gameId: number) => {
+    if (!gameId) {
+        return [];
+    }
     return [`lobby/banners/${gameId}/${gameId}_${locale}.gif`];
 };
 
 export const getPathIconGames = (gameIds: number[]): string[] => {
+    if (gameIds?.length < 0) {
+        return [];
+    }
     const bgIcons = ["lobby/game-board-detail/bg-game-board-2x.webp", "lobby/game-board-detail/bg-game-board.webp"];
     return [...gameIds.map((gameId) => `lobby/game-board-detail/${gameId}`), ...bgIcons];
 };

@@ -1,5 +1,3 @@
-@import "../../../styles/components/version";
-
 $delay-all-anim: 1.2s;
 
 $show-number-duration: 0.5s;
@@ -8,6 +6,9 @@ $show-number-delay-time: 1s;
 $loading-duration: 2s;
 
 $ball-size: 3.2rem;
+
+$red-path-img: url("/static/images/ball/ball-red.png?v=9999");
+$blue-path-img: url("/static/images/ball/ball-blue.png?v=9999");
 
 .ball {
     position: relative;
@@ -49,11 +50,13 @@ $ball-size: 3.2rem;
 }
 
 .red {
-    --bg: url("/static/images/ball/ball-red.png?v=#{$version-image}") no-repeat;
+    // --bg: $red-path-img no-repeat;
+    background: $red-path-img no-repeat;
 }
 
 .blue {
-    --bg: url("/static/images/ball/ball-blue.png?v=#{$version-image}") no-repeat;
+    // --bg: $blue-path-img no-repeat;
+    background: $blue-path-img no-repeat;
 }
 
 .ball-bg {
@@ -81,7 +84,7 @@ $ball-size: 3.2rem;
         top: -0.2rem;
         bottom: -0.2rem;
         right: -0.2rem;
-        background: var(--bg);
+        // background: var(--bg);
         background-size: contain;
         border-radius: 50%;
         border: 0.1rem solid #000;

@@ -46,11 +46,11 @@ const Home = () => {
     }
 
     if (shouldRenderDashboard) {
+        document.body.classList.add("galaxy-bg");
         if (!authorizeResponse) {
             return <Register session={session} handleStateLogin={handleRegister} />;
         }
 
-        document.body.classList.add("galaxy-bg");
         return (
             <Dashboard
                 session={session}
@@ -63,7 +63,7 @@ const Home = () => {
             />
         );
     }
-    
+
     return (
         <SplashScreen
             gameId={gameId}
