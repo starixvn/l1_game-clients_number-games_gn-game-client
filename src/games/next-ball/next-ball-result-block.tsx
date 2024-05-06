@@ -19,7 +19,6 @@ const NextBallResultBlock: FC<NextBallResultBlockProps> = (props: NextBallResult
         return <></>;
     }
 
-    console.log("SwitchRound", roundState === RoundState.SwitchRound, "isPlayStartRoundAnimation", isPlayStartRoundAnimation);
     return (
         <div
             className={`${Style["result-container"]} ${
