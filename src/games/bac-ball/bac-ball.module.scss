@@ -2,7 +2,8 @@
     position: relative;
     display: flex;
     justify-content: space-between;
-    width: 35.8rem;
+    gap: 0.2rem;
+    width: 35.9rem;
     margin: 1rem auto auto;
     margin-bottom: 0.6rem;
     z-index: 2;
@@ -187,10 +188,7 @@
     height: 17.2rem;
     background-size: 9.5rem 17.2rem;
     position: absolute;
-    margin-left: auto;
-    margin-right: auto;
-    left: 0;
-    right: 0;
+    left: 13.2rem;
     top: -0.5rem;
     border: none;
     border-bottom-left-radius: 6.6rem;
