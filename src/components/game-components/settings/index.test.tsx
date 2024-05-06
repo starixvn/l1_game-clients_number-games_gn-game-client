@@ -1,15 +1,17 @@
-import React, { useContext } from 'react';
-import { render, fireEvent } from '@testing-library/react';
-import { useGameStateContext, useGameStatesDispatch } from '../../../_shared/react-contexts/game-state-context/game-state-context';
-import { GameEventActionType } from '../../../_shared/react-contexts/game-state-context/game-event-action';
-import { GameStateContextModel } from '../../../_shared/react-contexts/game-state-context/game-state-context-model';
-import { RoundState } from '../../game-base/type';
+import { fireEvent, render } from '@testing-library/react';
+import { useContext } from 'react';
 import { Settings } from '.';
-import { useClickSound } from '../../../_shared/react-hooks/use-sound';
+import { useGameStateContext, useGameStatesDispatch } from '../../../_shared/react-contexts/game-state-context/game-state-context';
+import { GameStateContextModel } from '../../../_shared/react-contexts/game-state-context/game-state-context-model';
+import { PFEventActionType } from '../../../_shared/react-contexts/game-state-context/pf/pf-action';
+import { usePFDispatch } from '../../../_shared/react-contexts/game-state-context/pf/pf-context';
 import { updateURLContext } from '../../../_shared/react-contexts/url-context';
+import { useClickSound } from '../../../_shared/react-hooks/use-sound';
+import { RoundState } from '../../game-base/type';
 
 const mockUseGameStateContext = useGameStateContext as jest.Mock;
 const mockUseGameStatesDispatch = useGameStatesDispatch as jest.Mock;
+const mockUsePFDispatch = usePFDispatch as jest.Mock;
 const mockUseClickSound = useClickSound as jest.Mock;
 const mockUseContext = useContext as jest.Mock;
 
@@ -23,6 +25,10 @@ jest.mock("../../../_shared/react-contexts/game-state-context/game-state-context
     useGameStatesDispatch: jest.fn(),
 }));
 
+jest.mock("../../../_shared/react-contexts/game-state-context/pf/pf-context", () => ({
+    usePFDispatch: jest.fn(),
+}));
+
 jest.mock('../../../_shared/react-hooks/use-sound', () => ({
     useClickSound: jest.fn(),
 }));
@@ -34,6 +40,7 @@ jest.mock('../../../_shared/react-contexts/url-context', () => ({
 describe('Settings Component', () => {
     const mockBackToRedirectUrl = jest.fn();
     const mockDispatch = jest.fn();
+    const mockPFDispatch = jest.fn();
     const mockClickSound = jest.fn();
 
     beforeEach(() => {
@@ -41,6 +48,7 @@ describe('Settings Component', () => {
 
         mockUseGameStateContext.mockReturnValue({ roundState: RoundState.InRound } as GameStateContextModel);
         mockUseGameStatesDispatch.mockImplementation(() => mockDispatch);
+        mockUsePFDispatch.mockImplementation(() => mockPFDispatch);
         mockUseClickSound.mockImplementation(() => mockClickSound);
         (updateURLContext as jest.Mock) = jest.fn();
 
@@ -92,8 +100,8 @@ describe('Settings Component', () => {
     test('should dispatch the correct action on PF settings button click', () => {
         render(<Settings />);
         fireEvent.click(document.getElementById('icon-pf'));
-        expect(mockDispatch).toHaveBeenCalledWith({
-            type: GameEventActionType.TOGGLE_PF_SETTING,
+        expect(mockPFDispatch).toHaveBeenCalledWith({
+            type: PFEventActionType.TOGGLE_PF_SETTING,
             payload: { isShowPFSetting: true },
         });
         expect(mockClickSound).toHaveBeenCalled();
