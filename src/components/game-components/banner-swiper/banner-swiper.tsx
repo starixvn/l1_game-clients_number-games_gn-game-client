@@ -44,6 +44,7 @@ export const BannerSwiper: React.FC<{ banners: IBanner[]; openGame: Function }> 
                 delay: DEFAULT_DELAY_SLIDER,
                 disableOnInteraction: false,
                 pauseOnMouseEnter: true,
+                reverseDirection: true,
             }}
             ref={swiperRef}
             roundLengths={true}
