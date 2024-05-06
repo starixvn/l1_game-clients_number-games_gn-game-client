@@ -16,12 +16,11 @@ export interface IBall {
     index?: number;
     isRoundBase?: boolean;
     roundState?: RoundState;
-    totalPoint?: number;
-    setTotalPointCallBack?: Function
+    incrementTotalPoint?: Function
 }
 
 const Ball: FC<IBall> = (props) => {
-    const { number, delayTime, status, index, isRoundBase, roundState, totalPoint, setTotalPointCallBack } = props;
+    const { number, delayTime, status, index, isRoundBase, roundState, incrementTotalPoint } = props;
 
     const color = getBallColor(number);
     const ballStyleName = `${Styles["ball-bg"]} ${Styles[color]} ${status === BallStatus.SHOW ? Styles["display-right-now"] : ""}`;
@@ -37,7 +36,7 @@ const Ball: FC<IBall> = (props) => {
         if (!isDelayShowResult && (!isRoundBase || (isRoundBase && roundState === RoundState.DisplayResult))) {
             timeOut = setTimeout(() => {
                 setIsDelayShowResult(true);
-                setTotalPointCallBack && setTotalPointCallBack(totalPoint);
+                incrementTotalPoint && incrementTotalPoint(number);
             }, delayTime);
         }
 

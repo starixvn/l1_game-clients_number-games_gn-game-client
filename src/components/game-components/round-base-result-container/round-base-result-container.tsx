@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import { GameStateContextModel } from "../../../_shared/react-contexts/game-state-context/game-state-context-model";
 import { RoundState } from "../../game-base/type";
@@ -16,6 +16,12 @@ export const RoundBaseResultSlotContainer: React.FC<IResultSlotContainer> = (pro
 
     const [ballsData, setBallsData] = useState<IBall[]>([]);
     const [totalPoint, setTotalPoint] = useState<number>(0);
+
+    const incrementTotalPoint = useCallback((point: number) => {
+        setTimeout(() => {
+            setTotalPoint(currentTotalPoint => currentTotalPoint + point);
+        }, 200);
+    }, []);
 
     const updateLoadingIcon = (data) => {
         const currentRound = data?.find((ball) => ball.number === 0);
@@ -37,25 +43,16 @@ export const RoundBaseResultSlotContainer: React.FC<IResultSlotContainer> = (pro
             });
         };
 
-        const setTotalPointCallBack = (totalPoint: number) => {
-            setTimeout(() => {
-                setTotalPoint(totalPoint);
-            }, 200);
-        };
-
         const getBallsDataFromRoundData = () => {
             let clonedData = cloneDefaultData();
             if (roundResult && roundResult?.length > 0) {
-                let totalPointTmp = 0;
                 for (let i = 0; i < clonedData.length; i++) {
                     const number = roundResult[i];
                     if (number) {
-                        totalPointTmp = totalPointTmp + number;
-                        clonedData[i].totalPoint = totalPointTmp;
                         clonedData[i].number = number;
                         clonedData[i].status = BallStatus.SHOW;
                         clonedData[i].delayTime = playResultAnimation ? i * 1000 + 500 : 0;
-                        clonedData[i].setTotalPointCallBack = setTotalPointCallBack;
+                        clonedData[i].incrementTotalPoint = incrementTotalPoint;
                     }
                 }
             }
