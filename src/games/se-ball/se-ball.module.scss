@@ -37,11 +37,6 @@
         background-size: 17.8rem 9.4rem;
     }
 
-    .btn-ripple {
-        border-radius: var(--border-radius);
-        z-index: 1;
-    }
-
     .disable-layer {
         position: absolute;
         top: 0;
@@ -59,6 +54,11 @@
     --bgBetChoice: url("/static/images/se-ball/1x/bg-big-red.png");
     --bgBetChoice-2x: url("/static/images/se-ball/2x/bg-big-red.png");
     --border-radius: 1.2rem 1.2rem 1.2rem 3rem;
+
+    .btn-ripple {
+        z-index: 2;
+        clip-path: polygon(16% 0%, 94% 0%, 98% 3%, 100% 10%, 100% 83%, 97% 92%, 78% 100%, 10% 100%, 2% 97%, 0 84%, 0% 23%, 4% 13%, 8% 5%);
+    }
 }
 
 .even {
@@ -67,6 +67,11 @@
     --bgBetChoice: url("/static/images/se-ball/1x/bg-big-blue.png");
     --bgBetChoice-2x: url("/static/images/se-ball/2x/bg-big-blue.png");
     --border-radius: 1.2rem 1.2rem 3rem 1.2rem;
+
+    .btn-ripple {
+        z-index: 2;
+        clip-path: polygon(87% 0, 93% 7%, 98% 19%, 100% 28%, 100% 89%, 99% 96%, 95% 100%, 21% 100%, 3% 91%, 0 82%, 0 12%, 2% 5%, 6% 0);
+    }
 }
 
 .bet-option-row {
@@ -149,6 +154,11 @@
     grid-row: 1 / span 2;
     margin-top: -12px;
     justify-content: center;
+
+    .btn-ripple {
+        z-index: 2;
+        clip-path: polygon(95% 8%, 97% 11%, 97% 94%, 96% 96%, 88% 100%, 14% 100%, 2% 97%, 0 92%, 0 12%, 3% 8%, 50% 0);
+    }
 }
 
 .blue3 {

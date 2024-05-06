@@ -8,7 +8,7 @@ import { SeBallBetOptions } from "./se-ball-constants";
 import styles from "./scoreboard-elements.module.scss";
 import { SeBallResult, SeBallSettlementResult } from "./types";
 
-export const ODD_EVEN_AS_DEFAULT_SCOREBOARD = false;
+export const ODD_EVEN_AS_DEFAULT_SCOREBOARD = true;
 
 export function createBeadRoadElement(isOddEven: boolean = ODD_EVEN_AS_DEFAULT_SCOREBOARD) {
     class Element extends BeadRoadElement<Round<SeBallResult, SeBallSettlementResult>> {
@@ -17,8 +17,11 @@ export function createBeadRoadElement(isOddEven: boolean = ODD_EVEN_AS_DEFAULT_S
 
             if (!round.settlementResult) {
                 return <span className={`${styles.blink}`}></span>;
+            } else if (round.settlementResult.odd) {
+                return <span className={styles[SeBallBetOptions.ODD]}>{character(SeBallBetOptions.ODD)}</span>;
+            } else if (round.settlementResult.even) {
+                return <span className={styles[SeBallBetOptions.EVEN]}>{character(SeBallBetOptions.EVEN)}</span>;
             }
-
         }
 
         render(): ReactNode {
@@ -34,9 +37,7 @@ export function createBeadRoadElement(isOddEven: boolean = ODD_EVEN_AS_DEFAULT_S
 }
 
 export class SeBallBigRoadConverter extends Converter<SeBallSettlementResult> {
-    static addBlinkNode(rounds: SeBallSettlementResult[]) {
-
-    }
+    static addBlinkNode(rounds: SeBallSettlementResult[]) {}
 
     static instance = SeBallBigRoadConverter.getInstance(ODD_EVEN_AS_DEFAULT_SCOREBOARD);
 
@@ -60,7 +61,17 @@ export class SeBallBigRoadConverter extends Converter<SeBallSettlementResult> {
 export function createBigRoadElement(isOddEven: boolean = ODD_EVEN_AS_DEFAULT_SCOREBOARD) {
     return class Element extends BigRoadElement<SeBallSettlementResult> {
         renderElement(round: BigRoadRound<SeBallSettlementResult>): ReactNode {
-            return <span className={styles.blink}></span>;
+            const odd = round.data.some((result) => result.odd);
+            const isBlinkNode = round.data.some((result) => result.even === undefined);
+
+            console.log(round.data);
+            if (isBlinkNode) {
+                return <span className={styles.blink}></span>;
+            } else if (odd) {
+                return <span className={styles.red}></span>;
+            } else {
+                return <span className={styles.blue}></span>;
+            }
         }
     };
 }
