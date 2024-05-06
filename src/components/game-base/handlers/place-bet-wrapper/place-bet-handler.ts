@@ -3,8 +3,6 @@ import { v4 as uuidv4 } from "uuid";
 import { NoticeErrorCode } from "../../../../_shared/constants/error-code-dictionary";
 import { getGlossaryTranslate, GetLocalizedErrorMessage, localStorageKeys, StorageHelper } from "../../../../_shared/helpers";
 import { findHedgeBetGroup, isHedgeBet, isInPhasePreventBet } from "../../../../_shared/helpers/validate-bet-helper";
-import { SystemContextModel } from "../../../../_shared/react-contexts";
-import { GameStateContextModel } from "../../../../_shared/react-contexts/game-state-context/game-state-context-model";
 import { NoticeModel, RoundState } from "../../type";
 import { GameMessageHandler, messageEventType } from "..";
 import { getAppSettings } from "../../../../_shared/app-settings";
@@ -34,7 +32,7 @@ export class PlaceBetHandler {
 
     constructor(public readonly props: PlaceBetHandlerProps) { }
 
-    setPlaceBetDispatch = (dispatch) => {
+    setPlaceBetDispatch = (dispatch: Function) => {
         this.placeBetDispatch = dispatch;
     }
 
@@ -51,7 +49,7 @@ export class PlaceBetHandler {
         this.ownBetsHandlerId = this.props.gameMessageHandler.register(messageEventType.OWN_BETS, this.handleOwnBets);
     };
 
-    unRegisterEvents = () => {
+    unregisterEvents = () => {
         this.props.gameMessageHandler.removeHandler(this.endBetHandlerId);
         this.props.gameMessageHandler.removeHandler(this.ownBetsHandlerId);
     }

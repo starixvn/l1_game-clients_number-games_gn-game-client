@@ -7,7 +7,6 @@ import ModalContainer from "../../modal-container";
 import { ButtonPFGuide } from "../pf-guide";
 import CopyableTextInput from "../copyable-text-input";
 import Styles from "../provably-fair.module.scss";
-import { useGameStateContext } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
 import { AnalyticsHelper, TrackingAction, TrackingFunction } from "../../../../_shared/helpers";
 import { Section } from "../pf-form-components";
 import { usePFContext, usePFDispatch } from "../../../../_shared/react-contexts/game-state-context/pf/pf-context";

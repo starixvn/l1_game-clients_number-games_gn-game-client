@@ -16,14 +16,14 @@ export interface PFContextModel {
     uid: number;
 }
 
-export const initialPFContextModel = ({gameId, uid}) => {
-    const defaultContext ={
+export const initialPFContextModel = ({ gameId, uid }) => {
+    const defaultContext = {
         isShowPFSetting: false,
-        isShowPFVerify:false,
+        isShowPFVerify: false,
         isShowPFClientSeedInfo: false,
         isShowPFVerification: false,
         pfVerifyModalData: null,
-        ownBets:{},
+        ownBets: {},
         gameId,
         uid,
         pfClientSeedSetting: {
@@ -35,11 +35,11 @@ export const initialPFContextModel = ({gameId, uid}) => {
     } as PFContextModel;
 
     try {
-        const isSameGame = StorageHelper.get<string>(`${localStorageKeys.showPFSetting}`) === `${uid}-${gameId}`;
-        !isSameGame && StorageHelper.set(`${localStorageKeys.showPFSetting}`, '');
+        const isShowPFSetting = StorageHelper.get<string>(`${localStorageKeys.showPFSetting}`) === `${uid}-${gameId}`;
+        !isShowPFSetting && StorageHelper.set(`${localStorageKeys.showPFSetting}`, '');
 
-        return {...defaultContext, ...{isShowPFSetting: isSameGame}};
-      } catch (error) {
-        return  defaultContext;
-      }
+        return { ...defaultContext, ...{ isShowPFSetting } };
+    } catch (error) {
+        return defaultContext;
+    }
 };
