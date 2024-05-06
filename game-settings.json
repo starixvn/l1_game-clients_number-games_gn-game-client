@@ -54,9 +54,9 @@
             "path": "luckynext1"
         },
         "durations": {
-            "wholeRound": 204,
-            "wholeTurn": 25,
-            "placingBets": 20,
+            "wholeRound": 164,
+            "wholeTurn": 20,
+            "placingBets": 15,
             "lockingBet": 3,
             "showResult": 5,
             "resultAnimation": 2,
@@ -77,9 +77,9 @@
             "path": "luckynext2"
         },
         "durations": {
-            "wholeRound": 204,
-            "wholeTurn": 25,
-            "placingBets": 20,
+            "wholeRound": 164,
+            "wholeTurn": 20,
+            "placingBets": 15,
             "lockingBet": 3,
             "showResult": 5,
             "resultAnimation": 2,
