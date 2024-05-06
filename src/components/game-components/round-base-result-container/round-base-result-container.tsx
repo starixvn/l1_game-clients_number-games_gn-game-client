@@ -18,23 +18,25 @@ export const RoundBaseResultSlotContainer: React.FC<IResultSlotContainer> = (pro
     const [totalPoint, setTotalPoint] = useState<number>(0);
 
     const incrementTotalPoint = useCallback((point: number) => {
-        setTimeout(() => {
-            setTotalPoint(currentTotalPoint => currentTotalPoint + point);
+        const timeOut = setTimeout(() => {
+            setTotalPoint((currentTotalPoint) => currentTotalPoint + point);
         }, 200);
+
+        return () => {
+            clearTimeout(timeOut);
+        };
     }, []);
 
-    const updateLoadingIcon = (data) => {
-        const currentRound = data?.find((ball) => ball.number === 0);
-        if (currentRound) {
-            currentRound.status = BallStatus.LOADING;
-        }
-    };
-
     useEffect(() => {
-        if (roundState === RoundState.LockingBet || roundState === RoundState.InRound) {
-            updateLoadingIcon([...ballsData]);
+        if (roundResult && roundState === RoundState.DisplayResult && !playResultAnimation) {
+            let totalTmp = 0;
+            roundResult.forEach((number) => {
+                totalTmp += number;
+            });
+
+            setTotalPoint(totalTmp);
         }
-    }, [roundState]);
+    }, [roundState, playResultAnimation, roundResult]);
 
     useEffect(() => {
         const cloneDefaultData = () => {
@@ -53,6 +55,8 @@ export const RoundBaseResultSlotContainer: React.FC<IResultSlotContainer> = (pro
                         clonedData[i].status = BallStatus.SHOW;
                         clonedData[i].delayTime = playResultAnimation ? i * 1000 + 500 : 0;
                         clonedData[i].incrementTotalPoint = incrementTotalPoint;
+                        console.log("clonedData", clonedData);
+                        console.log("playResultAnimation", playResultAnimation);
                     }
                 }
             }
@@ -60,7 +64,7 @@ export const RoundBaseResultSlotContainer: React.FC<IResultSlotContainer> = (pro
         };
 
         const data = getBallsDataFromRoundData();
-        updateLoadingIcon(data);
+
         setBallsData(data);
     }, [roundResult]);
 

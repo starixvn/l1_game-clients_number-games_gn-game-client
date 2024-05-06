@@ -1,11 +1,12 @@
 import { ReactNode } from "react";
 import { Converter } from "sc-scoreboards";
+
 import { Round } from "../../components/game-base/type";
 import { BeadRoadElement, BigRoadElement, BigRoadRound } from "../../components/game-components/round-history/scoreboard/elements";
 import { registerBigRoadElement } from "../../components/page-components/lobby/games/components/scoreboard";
 import { withTranslator } from "../../components/page-components/translator";
-import { SeBallBetOptions } from "./se-ball-constants";
 import styles from "./scoreboard-elements.module.scss";
+import { SeBallBetOptions } from "./se-ball-constants";
 import { SeBallResult, SeBallSettlementResult } from "./types";
 
 export const ODD_EVEN_AS_DEFAULT_SCOREBOARD = true;
@@ -64,7 +65,6 @@ export function createBigRoadElement(isOddEven: boolean = ODD_EVEN_AS_DEFAULT_SC
             const odd = round.data.some((result) => result.odd);
             const isBlinkNode = round.data.some((result) => result.even === undefined);
 
-            console.log(round.data);
             if (isBlinkNode) {
                 return <span className={styles.blink}></span>;
             } else if (odd) {
