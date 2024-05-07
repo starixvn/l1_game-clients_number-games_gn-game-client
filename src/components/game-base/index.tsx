@@ -288,6 +288,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.gameMessageHandler.register(messageEventType.SOCKET_DISCONNECTED, this.onSocketDisconnect.bind(this));
         this.gameMessageHandler.register(messageEventType.UNDER_MAINTENANCE, this.handleUM.bind(this));
         this.gameMessageHandler.register(messageEventType.REMAINING_TIME, this.handleRemainingTime.bind(this));
+        this.gameMessageHandler.register(messageEventType.ROUND_HISTORY, this.handleRoundHistory.bind(this));
         this.gameFinishHandler.registerEvents();
         this.placeBetHandler.registerEvents(signOut, this.props.gameStateContextModel);
         this.gameMessageHandler.register(messageEventType.GAME_DESTROY, this.onDestroy.bind(this));
@@ -300,7 +301,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         );
         this.playerHandler.registerEvents();
         this.gameErrorHandler.registerEvents(signOut);
-        this.gameMessageHandler.register(messageEventType.ROUND_HISTORY, this.handleRoundHistory.bind(this));
         this.gameMessageHandler.register(messageEventType.SAVE_PF_SETTING, this.handleSavePFSetting.bind(this));
     }
 
@@ -391,7 +391,15 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     handleRoundHistory(gameMessage) {
-        this.gameRoundHistoryHandler.handleRoundHistory(gameMessage);
+        console.log(`handleRoundHistory: ${RoundState[this.props.gameStateContextModel.roundState]} `);
+        const { durations } = this.props;
+        const newRoundState = this.roundStateHandler.determineRoundBaseState({
+            roundRemainingTime: this.roundTimeCounter,
+            wholeRound: durations.wholeRound,
+            remainingTime: this.timeCounter,
+            durations,
+        });
+        this.gameRoundHistoryHandler.handleRoundHistory({ ...gameMessage, newRoundState });
     }
 
     handleRemainingTime({ remainingTime }) {
@@ -442,17 +450,18 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         });
 
         this.broadcastClientRemainingTime(remainingTime);
-
+        console.log(`handleGamePlay: ${RoundState[gameStateContextModel.roundState]} `)
         const newRoundState = this.roundStateHandler.determineRoundBaseState({
             roundRemainingTime: this.roundTimeCounter,
             wholeRound: durations.wholeRound,
             remainingTime,
             durations,
         });
-
+        console.log(`handleGamePlay newRoundState : ${RoundState[newRoundState]} `)
         this.gameMessageHandler.broadcastGameEvent({ [messageEventType.ROUND_STATE]: newRoundState });
 
         if (gameStateContextModel.roundState !== newRoundState) {
+
             const isStartNewRound = gameStateContextModel.roundState === RoundState.SwitchRound && newRoundState === RoundState.InRound;
             const newGameState = {
                 roundState: newRoundState,
@@ -478,6 +487,9 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 type: GameEventActionType.SET_NEW_GAME_STATE,
                 payload: { newGameState },
             });
+
+            console.log(`handleGamePlay 111 gameStateContextModel.roundState !== newRoundState : ${RoundState[newRoundState]} `)
+
             const isContinuePlaying = gameStateContextModel.roundState !== RoundState.None;
             if (isContinuePlaying) {
                 this.gameSoundHandler.handleSound(newRoundState);
