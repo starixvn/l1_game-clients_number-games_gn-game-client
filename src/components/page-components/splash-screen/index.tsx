@@ -90,6 +90,7 @@ const autoCreateNickname = async (session: SSOResponse, signOut: Function) => {
     return authorizeResponse;
 };
 
+const DURATION_HOLD_SPLASH_SCREEN = 1000;
 const SplashScreen: React.FC<{
     gameId: number;
     isDirectMode: boolean;
@@ -229,6 +230,7 @@ const SplashScreen: React.FC<{
                     locale={locale}
                     gameIdsIcon={gameOfferIds}
                     enablePreloadResource={getAppSettings()?.enablePreloadResource || true}
+                    durationDelayDonePreload={DURATION_HOLD_SPLASH_SCREEN}
                 />
             )}
         </>

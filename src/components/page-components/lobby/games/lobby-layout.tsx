@@ -1,10 +1,10 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { getAppSettings } from "../../../../_shared/app-settings";
 import { getLobbyGameIds, getOfferGamesIds } from "../../../../_shared/helpers";
 import { useLobbyConnectionContext, usePlayerContext } from "../../../../_shared/react-contexts";
 import { ILobbyConfigs } from "../../dashboard/type";
-import { GameBoard } from "./components/game-board";
 import { ComingSoonGameBoard } from "./components/coming-soon-game-board";
+import { GameBoard } from "./components/game-board";
 
 type Props = {
     openGame: Function;
@@ -13,6 +13,7 @@ type Props = {
 export const LobbyLayout: React.FC<Props> = ({ lobbyConfigs, openGame }) => {
     const { authorizeInfo } = usePlayerContext();
     const { gameTransmitters } = useLobbyConnectionContext();
+    const [lastClickedGameId, setLastClickedGameId] = useState(null);
 
     const gamesSettings = useMemo(() => {
         const offerGamesIds = getOfferGamesIds(authorizeInfo);
@@ -43,6 +44,8 @@ export const LobbyLayout: React.FC<Props> = ({ lobbyConfigs, openGame }) => {
                         gameSettings={gameSettings}
                         openGame={openGame}
                         gameTransmitter={gameTransmitters[gameSettings.id]}
+                        lastClickedGameId={lastClickedGameId}
+                        setLastClickedGameId={setLastClickedGameId}
                     />
                 ))}
                 {comingSoonGameSettings.map((gameSettings) => (

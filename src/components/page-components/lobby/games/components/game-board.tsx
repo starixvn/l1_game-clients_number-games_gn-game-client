@@ -1,7 +1,10 @@
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
+import { getAppSettings } from "../../../../../_shared/app-settings";
+import PreloadResources from "../../../../../_shared/helpers/preload-resources";
 import { useLobbyConnectionContext } from "../../../../../_shared/react-contexts";
 import { GameSettings } from "../../../../game-base/type";
+import { LoadingSpinner } from "../../../../game-components/game-loading/loading-spinner";
 import { LobbyGameTransmitter, LobbyMessageEvents, getLobbyData } from "../../lobby-socket-connection";
 import Styles from "../../lobby.module.scss";
 import { GameIcon } from "./game-icon";
@@ -14,17 +17,24 @@ type Props = {
     gameSettings: GameSettings;
     openGame: Function;
     gameTransmitter: LobbyGameTransmitter;
+    lastClickedGameId: number;
+    setLastClickedGameId: Function;
 };
 
-export const GameBoard: React.FC<Props> = ({ gameSettings, openGame, gameTransmitter }) => {
+export const GameBoard: React.FC<Props> = ({ gameSettings, openGame, gameTransmitter, lastClickedGameId, setLastClickedGameId }) => {
     const [isShow, setIsShow] = useState<boolean>(true);
     const [transmitter, setTransmitter] = useState<LobbyGameTransmitter>(null);
     const { reconnectGameTransmitter, socket } = useLobbyConnectionContext();
+    const [isDonePreloadResources, setIsDonePreloadResources] = useState<boolean>(false);
+    const [clickGameId, setClickGameId] = useState<number>(0);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [cancelPreloadResource, setCancelPreloadResource] = useState<boolean>(false);
 
     useEffect(() => {
         document.addEventListener("visibilitychange", onVisibilityChange);
         return () => {
             document.removeEventListener("visibilitychange", onVisibilityChange);
+            setClickGameId(0);
         };
     }, []);
 
@@ -61,19 +71,53 @@ export const GameBoard: React.FC<Props> = ({ gameSettings, openGame, gameTransmi
         setIsShow(showData);
     };
 
+    const handleClickGameBoard = () => {
+        setClickGameId(gameSettings?.id);
+        setIsLoading(true);
+        setLastClickedGameId(gameSettings?.id);
+    };
+
+    useEffect(() => {
+        if (isDonePreloadResources) {
+            setIsLoading(false);
+            isShow && openGame(gameSettings.id);
+        }
+
+        if (clickGameId !== lastClickedGameId) {
+            setCancelPreloadResource(true);
+        }
+    }, [isDonePreloadResources, clickGameId, lastClickedGameId]);
+
+    useEffect(() => {
+        if (cancelPreloadResource) {
+            setClickGameId(0);
+            setIsLoading(false);
+            setCancelPreloadResource(false);
+        }
+    }, [cancelPreloadResource]);
+
     return (
         <div
             className={`${Styles["game-board-detail"]} ${!isShow ? "" : Styles["pointer"]}`}
             id={`icon-${gameSettings.gameName.toLowerCase()}`}
-            onClick={() => isShow && openGame(gameSettings.id)}
+            onClick={handleClickGameBoard}
         >
             <GameIcon gameSettings={gameSettings} transmitter={transmitter} />
             <DisabledGameBlock transmitter={transmitter} gameSettings={gameSettings} />
+            {isLoading && <LoadingSpinner />}
             {isShow && (
                 <div className={Styles["detail"]}>
                     <CountdownTimer transmitter={transmitter} gameSettings={gameSettings} />
                     {transmitter && <LobbyScoreboard gameSettings={gameSettings} transmitter={transmitter} />}
                 </div>
+            )}
+            {clickGameId > 0 && (
+                <PreloadResources
+                    gameId={clickGameId}
+                    setIsDonePreloadResource={setIsDonePreloadResources}
+                    enablePreloadResource={getAppSettings()?.enablePreloadResource || true}
+                    cancelPreloadResource={cancelPreloadResource}
+                />
             )}
         </div>
     );

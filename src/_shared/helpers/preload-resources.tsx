@@ -4,7 +4,6 @@ import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
-const DELAY_TIME = 1000;
 const MAX_DELAY_TIME = 5000;
 
 export const updateProgressBar = (percentage: number) => {
@@ -19,34 +18,45 @@ export const updateProgressBar = (percentage: number) => {
 const PreloadResources: React.FC<{
     setIsDonePreloadResource: Function;
     gameId: number;
-    isDirectMode: boolean;
-    bannerId: number;
-    locale: string;
-    gameIdsIcon: number[];
-    enablePreloadResource?: boolean;
-}> = ({ setIsDonePreloadResource, gameId, bannerId, gameIdsIcon, locale, enablePreloadResource = true }) => {
+    isDirectMode?: boolean;
+    bannerId?: number;
+    locale?: string;
+    gameIdsIcon?: number[];
+    cancelPreloadResource?: boolean;
+    durationDelayDonePreload?: number;
+    enablePreloadResource: boolean;
+}> = ({
+    setIsDonePreloadResource,
+    gameId,
+    bannerId,
+    gameIdsIcon,
+    locale = "en",
+    cancelPreloadResource,
+    durationDelayDonePreload = 0,
+    enablePreloadResource = true,
+}) => {
     const router = useRouter();
     const [loadedImages, setLoadedImages] = useState<any>(new Set());
     const [startTime, setStartTime] = useState(null);
     const [images, setImages] = useState<string[]>([]);
 
+    const fetchImages = async () => {
+        try {
+            const response = await axios.post("/api/preload-images", {
+                gameId,
+                locale,
+                gameIdsIcon,
+                bannerId,
+            });
+
+            const imagesPath = response?.data || [];
+            setImages(imagesPath);
+        } catch (error) {
+            console.error("Error fetching images:", error);
+        }
+    };
+
     useEffect(() => {
-        const fetchImages = async () => {
-            try {
-                const response = await axios.post("/api/preload-images", {
-                    gameId,
-                    locale,
-                    gameIdsIcon,
-                    bannerId,
-                });
-
-                const imagesPath = response?.data || [];
-                setImages(imagesPath);
-            } catch (error) {
-                console.error("Error fetching images:", error);
-            }
-        };
-
         if (router?.isReady) {
             if (enablePreloadResource) {
                 setStartTime(performance.now());
@@ -63,25 +73,33 @@ const PreloadResources: React.FC<{
 
     useEffect(() => {
         let timeout: NodeJS.Timeout;
+
+        if (cancelPreloadResource) {
+            setLoadedImages(new Set());
+            setImages([]);
+            setIsDonePreloadResource(false);
+            clearTimeout(timeout);
+            return;
+        }
+
         const percentage = (loadedImages.size / images.length) * 100;
         updateProgressBar(percentage);
 
-        if (loadedImages.size === images.length) {
+        if (loadedImages?.size > 0 && loadedImages?.size === images.length) {
             const endTime = performance.now();
             const duration = endTime - startTime;
             timeout = setTimeout(
                 () => {
-                    console.log("setIsDonePreloadResource");
                     setIsDonePreloadResource?.(true);
                 },
-                duration < MAX_DELAY_TIME ? DELAY_TIME : 0
+                duration < MAX_DELAY_TIME ? durationDelayDonePreload : 0
             );
         }
 
         return () => {
             timeout && clearTimeout(timeout);
         };
-    }, [loadedImages]);
+    }, [loadedImages, cancelPreloadResource]);
 
     return useMemo(() => {
         if (!enablePreloadResource) {
@@ -90,7 +108,7 @@ const PreloadResources: React.FC<{
 
         return (
             <div>
-                <div id="load-img" style={{ opacity: 0 }}>
+                <div id="load-img" style={{ opacity: 0, position: "absolute" }}>
                     {images.length > 0 &&
                         images.map((image, index) => (
                             <Image
