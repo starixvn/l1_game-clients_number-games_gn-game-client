@@ -559,7 +559,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             <div className="game-header">
                 {this.renderRoundIdSection()}
                 <div id="countdown-timer" className="countdown-timer">
-                    <CountdownTimer />
+                    <CountdownTimer gameId={this.props.id} />
                 </div>
 
                 <Settings />

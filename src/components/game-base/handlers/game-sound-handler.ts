@@ -18,7 +18,7 @@ export class GameSoundHandler {
         const soundByState = {
             [RoundState.SwitchRound]: startRoundSound,
             [RoundState.InRound]: startDrawSound,
-            [RoundState.LockingBet]: blockBetSound,
+            // [RoundState.LockingBet]: blockBetSound,
         };
         soundByState[newRoundState] && soundByState[newRoundState]();
     }
