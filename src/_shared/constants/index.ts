@@ -117,4 +117,6 @@ export const GameIds = {
     SicBalls: 1116,
 };
 
+export const LobbyGameId = 0;
+
 export const SwiperNoSwiping = "swiper-no-swiping";

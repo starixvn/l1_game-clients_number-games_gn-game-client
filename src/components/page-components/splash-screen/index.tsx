@@ -108,10 +108,11 @@ const SplashScreen: React.FC<{
     const [locale, setLocale] = useState<string>();
     const [currentSession, setCurrentSession] = useState<SSOResponse>();
     const [gameOfferIds, setGameOfferIds] = useState<number[]>([]);
+    const [currentGameId, setCurrentGameId] = useState<number>(-1);
 
     useEffect(() => {
+        let authorizeInfo;
         const handleInitialization = async () => {
-            let authorizeInfo;
             const session = await getSession(token);
             if (!session || isTimeoutSession(session)) {
                 signOut();
@@ -131,9 +132,11 @@ const SplashScreen: React.FC<{
             }
 
             if (!authorizeInfo?.authorized) {
-                handleUnauthorizedAccess();
+                setCurrentGameId(-1);
                 return;
             }
+            
+            setCurrentGameId(gameId);
 
             const lobby = await getLobbyConfigs(session);
             if (lobby?.lobbyConfigs) {
@@ -221,11 +224,11 @@ const SplashScreen: React.FC<{
                 </div>
             </div>
 
-            {isDoneLoadLogo && bannerId > 0 && !!locale && (
+            {isDoneLoadLogo && !!locale && (
                 <PreloadResources
                     bannerId={bannerId}
                     setIsDonePreloadResource={setIsDonePreloadResources}
-                    gameId={gameId}
+                    gameId={currentGameId}
                     isDirectMode={isDirectMode}
                     locale={locale}
                     gameIdsIcon={gameOfferIds}

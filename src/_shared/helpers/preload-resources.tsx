@@ -39,7 +39,7 @@ const PreloadResources: React.FC<{
     const [loadedImages, setLoadedImages] = useState<any>(new Set());
     const [startTime, setStartTime] = useState(null);
     const [images, setImages] = useState<string[]>([]);
-
+    
     const fetchImages = async () => {
         try {
             const response = await axios.post("/api/preload-images", {
@@ -50,6 +50,7 @@ const PreloadResources: React.FC<{
             });
 
             const imagesPath = response?.data || [];
+
             setImages(imagesPath);
         } catch (error) {
             console.error("Error fetching images:", error);
@@ -58,14 +59,12 @@ const PreloadResources: React.FC<{
 
     useEffect(() => {
         if (router?.isReady) {
-            if (enablePreloadResource) {
+            if (enablePreloadResource && gameId >= 0) {
                 setStartTime(performance.now());
                 fetchImages();
-            } else {
-                updateProgressBar(100);
             }
         }
-    }, [router?.isReady]);
+    }, [router?.isReady, gameId]);
 
     const handleOnLoadingComplete = (index: number) => {
         setLoadedImages((prevLoadedImages) => new Set([...prevLoadedImages, index]));
@@ -101,8 +100,15 @@ const PreloadResources: React.FC<{
         };
     }, [loadedImages, cancelPreloadResource]);
 
+    const handleStateWithoutPreloadResource = () => {
+        updateProgressBar(100);
+        setIsDonePreloadResource?.(true);
+    };
+
     return useMemo(() => {
-        if (!enablePreloadResource) {
+        if (!enablePreloadResource || gameId < 0) {
+            handleStateWithoutPreloadResource();
+
             return <></>;
         }
 
@@ -130,7 +136,7 @@ const PreloadResources: React.FC<{
                 </div>
             </div>
         );
-    }, [images.length > 0, enablePreloadResource]);
+    }, [images.length > 0, enablePreloadResource, gameId]);
 };
 
 export default PreloadResources;

@@ -1,10 +1,12 @@
-import { Component, FormEvent, ReactNode } from "react";
+import { Component, FormEvent, ReactNode, useEffect, useMemo, useState } from "react";
 import { AuthorizeResponse, SSOResponse } from "sc-user-service-client/dist/auth";
 
-import { Themes } from "../../../../_shared/constants";
+import { getAppSettings, getGameIdsSetting } from "../../../../_shared/app-settings";
+import { LobbyGameId, Themes } from "../../../../_shared/constants";
 import { AnalyticsHelper, TrackingAction, TrackingFunction } from "../../../../_shared/helpers";
 import { GetLocalizedErrorMessage } from "../../../../_shared/helpers/notice-helper";
 import { randomInteger } from "../../../../_shared/helpers/number-helper";
+import PreloadResources from "../../../../_shared/helpers/preload-resources";
 import { createNickname } from "../../../../services/auth-service";
 import BaseDialog from "../../../game-components/base-dialog";
 import { ModalType } from "../../../game-components/base-dialog/type";
@@ -12,7 +14,7 @@ import FirstLoginContainer from "../../../page-components/dashboard/container";
 import TextBlock from "../../../page-components/dashboard/text-block";
 import ProfilePicture from "../../../page-components/profile-picture";
 import { TranslatorProps, withTranslator } from "../../translator";
-import { AvatarGallery, MAX_AVATAR_ID } from "./avatar-gallery";
+import { MAX_AVATAR_ID } from "./avatar-gallery";
 import NameGenerator from "./name-generator";
 import styles from "./register.module.scss";
 
@@ -27,6 +29,7 @@ export type RegisterState = {
     isGalleryOpened: boolean;
     isValidUsername: boolean;
     formValidity: string;
+    isFirstContainerRendered: boolean;
 };
 
 export class Register extends Component<RegisterProps, RegisterState> {
@@ -36,12 +39,22 @@ export class Register extends Component<RegisterProps, RegisterState> {
         isValidUsername: true,
         name: NameGenerator.generateName(),
         formValidity: "",
+        isFirstContainerRendered: false,
     };
 
     constructor(props: RegisterProps) {
         super(props);
 
         this.state = Register.defaultState;
+    }
+
+    componentDidMount() {
+        const { isFirstContainerRendered } = this.state;
+        if (!isFirstContainerRendered) {
+            this.setState({
+                isFirstContainerRendered: true,
+            });
+        }
     }
 
     toggleAvatarGallery() {
@@ -83,7 +96,7 @@ export class Register extends Component<RegisterProps, RegisterState> {
         const response = await createNickname(session, name, avatar);
         const authorizeResponse = response as AuthorizeResponse;
 
-        if (authorizeResponse?.authorized) {
+        if (authorizeResponse && authorizeResponse.authorized) {
             Object.assign(authorizeResponse.user, { settings: { theme: Themes.light } });
             handleStateLogin(authorizeResponse);
         } else {
@@ -97,7 +110,7 @@ export class Register extends Component<RegisterProps, RegisterState> {
     }
 
     render(): ReactNode {
-        const { avatar, isGalleryOpened, isValidUsername, name, formValidity } = this.state;
+        const { avatar, isGalleryOpened, isValidUsername, name, formValidity, isFirstContainerRendered } = this.state;
         const { t } = this.props;
 
         return (
@@ -153,16 +166,41 @@ export class Register extends Component<RegisterProps, RegisterState> {
 
                 <p className={styles.note}>{t("SabaNumber.create_nickname_note")}</p>
 
-                {isGalleryOpened && (
-                    <AvatarGallery
-                        selectedAvatarId={avatar}
-                        onSelectAvatar={this.setAvatar.bind(this)}
-                        onClose={this.toggleAvatarGallery.bind(this)}
-                    />
-                )}
+                {isFirstContainerRendered && <TriggerPreloadResource gameId={LobbyGameId} />}
             </FirstLoginContainer>
         );
     }
 }
+
+const TriggerPreloadResource = ({ gameId }) => {
+    const [_, setIsDonePreloadResources] = useState<boolean>(false);
+    const [bannerId, setBannerId] = useState<number>(0);
+    const [gameOfferIds, setGameOfferIds] = useState<number[]>([]);
+
+    const handleUnauthorizedAccess = () => {
+        const gameIds = getGameIdsSetting()?.map((id) => parseInt(id, 10));
+        const firstGameId = gameIds[0];
+        if (firstGameId > 0) {
+            setGameOfferIds(gameIds);
+            setBannerId(firstGameId);
+        }
+    };
+
+    useEffect(() => {
+        handleUnauthorizedAccess();
+    }, []);
+
+    return useMemo(() => {
+        return (
+            <PreloadResources
+                gameId={gameId}
+                setIsDonePreloadResource={setIsDonePreloadResources}
+                enablePreloadResource={getAppSettings()?.enablePreloadResource || true}
+                bannerId={bannerId}
+                gameIdsIcon={gameOfferIds}
+            />
+        );
+    }, [gameId]);
+};
 
 export default withTranslator(Register);
