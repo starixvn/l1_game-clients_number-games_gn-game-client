@@ -22,7 +22,7 @@ exports[`ToolbarGuide component Not mobile + safari should match the snapshot 1`
           <img
             alt="iphone"
             class="iphone-background"
-            src="/static/images/hide-toolbar-guide/mockup-phone.svg?303"
+            src="/static/images/hide-toolbar-guide/mockup-phone.svg?111"
           />
         </div>
         <div
@@ -64,7 +64,7 @@ exports[`ToolbarGuide component Not mobile + safari should match the snapshot 1`
           >
             <img
               alt="icon-fullscreen"
-              src="./static/images/hide-toolbar-guide/icon-fullscreen.svg?v=303"
+              src="./static/images/hide-toolbar-guide/icon-fullscreen.svg?v=111"
             />
           </span>
         </div>
@@ -79,7 +79,7 @@ exports[`ToolbarGuide component Not mobile + safari should match the snapshot 1`
             >
               <img
                 alt="iconAA"
-                src="./static/images/hide-toolbar-guide/iconAA.svg?v=303"
+                src="./static/images/hide-toolbar-guide/iconAA.svg?v=111"
               />
             </span>
           </div>
@@ -92,7 +92,7 @@ exports[`ToolbarGuide component Not mobile + safari should match the snapshot 1`
         >
           <img
             alt="pointer"
-            src="./static/images/hide-toolbar-guide/pointer.svg?v=303"
+            src="./static/images/hide-toolbar-guide/pointer.svg?v=111"
           />
         </span>
       </div>
@@ -137,7 +137,7 @@ exports[`ToolbarGuide component mobile + safari should match the snapshot 1`] = 
           <img
             alt="iphone"
             class="iphone-background"
-            src="/static/images/hide-toolbar-guide/mockup-phone.svg?303"
+            src="/static/images/hide-toolbar-guide/mockup-phone.svg?111"
           />
         </div>
         <div
@@ -179,7 +179,7 @@ exports[`ToolbarGuide component mobile + safari should match the snapshot 1`] = 
           >
             <img
               alt="icon-fullscreen"
-              src="./static/images/hide-toolbar-guide/icon-fullscreen.svg?v=303"
+              src="./static/images/hide-toolbar-guide/icon-fullscreen.svg?v=111"
             />
           </span>
         </div>
@@ -194,7 +194,7 @@ exports[`ToolbarGuide component mobile + safari should match the snapshot 1`] = 
             >
               <img
                 alt="iconAA"
-                src="./static/images/hide-toolbar-guide/iconAA.svg?v=303"
+                src="./static/images/hide-toolbar-guide/iconAA.svg?v=111"
               />
             </span>
           </div>
@@ -207,7 +207,7 @@ exports[`ToolbarGuide component mobile + safari should match the snapshot 1`] = 
         >
           <img
             alt="pointer"
-            src="./static/images/hide-toolbar-guide/pointer.svg?v=303"
+            src="./static/images/hide-toolbar-guide/pointer.svg?v=111"
           />
         </span>
       </div>
