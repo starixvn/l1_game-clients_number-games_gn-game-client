@@ -100,14 +100,15 @@
             "path": "seball1"
         },
         "durations": {
-            "wholeRound": 31,
-            "wholeTurn": 31,
-            "placingBets": 20,
+            "wholeRound": 26,
+            "wholeTurn": 26,
+            "placingBets": 15,
             "lockingBet": 3,
-            "showResult": 6,
+            "showResult": 7,
             "resultAnimation": 4,
             "beforePlaceBet": 4,
-            "switchRoundAnimation": 0
+            "switchRoundAnimation": 0,
+            "startNewRoundAnim": 9
         },
         "totalTurns": 1,
         "numberOfRoundHistory": 100,
