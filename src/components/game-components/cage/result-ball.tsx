@@ -11,7 +11,8 @@ const ResultBall: React.FC<{
     ballColor: string;
     isShowResultAnim: boolean;
     fps?: number;
-}> = ({ isDelayShowResult, ballColor, isShowResultAnim, fps }) => {
+    number?: number;
+}> = ({ isDelayShowResult, ballColor, isShowResultAnim, fps, number }) => {
     const currentTime = Date.now();
     const playShowBallResult = useShowBallResultSound();
 
@@ -44,7 +45,7 @@ const ResultBall: React.FC<{
                 )}
             </div>
         );
-    }, [isDelayShowResult, ballColor, isShowResultAnim]);
+    }, [isDelayShowResult, ballColor, isShowResultAnim, number]);
 };
 
 export default ResultBall;

@@ -55,8 +55,6 @@ export const RoundBaseResultSlotContainer: React.FC<IResultSlotContainer> = (pro
                         clonedData[i].status = BallStatus.SHOW;
                         clonedData[i].delayTime = playResultAnimation ? i * 1000 + 500 : 0;
                         clonedData[i].incrementTotalPoint = incrementTotalPoint;
-                        console.log("clonedData", clonedData);
-                        console.log("playResultAnimation", playResultAnimation);
                     }
                 }
             }

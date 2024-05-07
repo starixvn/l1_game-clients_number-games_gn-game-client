@@ -101,6 +101,7 @@ const Cage: React.FC<CageProps> = ({
                         ballColor={ballColor}
                         isShowResultAnim={playResultAnimation}
                         fps={ballFPS}
+                        number={newResult}
                     />
                 )}
             </div>

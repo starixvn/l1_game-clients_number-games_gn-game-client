@@ -33,7 +33,7 @@ const SeBallResultBlock: FC<SeBallResultBlockProps> = (props: SeBallResultBlockP
                 delayShowResultTime={0}
                 playResultAnimation={playResultAnimation}
                 roundState={roundState}
-                ballFPS={40}
+                ballFPS={35}
             />
 
             <RoundBaseResultSlotContainer
