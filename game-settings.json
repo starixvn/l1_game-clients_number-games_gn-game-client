@@ -16,7 +16,7 @@
             "resultAnimation": 3,
             "beforePlaceBet": 0,
             "switchRoundAnimation": 4,
-            "startNewRoundAnim": 102
+            "startNewRoundAnim": 82
         },
         "totalTurns": 4,
         "numberOfRoundHistory": 100,
@@ -39,7 +39,7 @@
             "resultAnimation": 3,
             "beforePlaceBet": 0,
             "switchRoundAnimation": 4,
-            "startNewRoundAnim": 102
+            "startNewRoundAnim": 82
         },
         "totalTurns": 4,
         "numberOfRoundHistory": 100,
