@@ -6,6 +6,12 @@ exports[`GameIcon should render match with snapshot 1`] = `
     class="icon-game"
   >
     <img
+      alt="game-board-blur"
+      height="138"
+      src="/static/images/lobby/game-board-detail/game-board-blur.jpg?v=1"
+      width="130"
+    />
+    <img
       alt="icon-gamea"
       data-nimg="1"
       decoding="async"
