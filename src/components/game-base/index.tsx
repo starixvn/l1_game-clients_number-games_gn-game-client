@@ -497,6 +497,10 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             }
         }
 
+        if (remainingTime > 0 && remainingTime <= durations.lockingBet) {
+            this.props.gameSound.blockBetSound();
+        }
+
         if (this.roundTimeCounter === durations.startNewRoundAnim) {
             dispatch({
                 type: GameEventActionType.START_NEW_ROUND_ANIM,
@@ -559,7 +563,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             <div className="game-header">
                 {this.renderRoundIdSection()}
                 <div id="countdown-timer" className="countdown-timer">
-                    <CountdownTimer gameId={this.props.id} />
+                    <CountdownTimer />
                 </div>
 
                 <Settings />

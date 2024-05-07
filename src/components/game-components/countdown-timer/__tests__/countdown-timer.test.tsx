@@ -1,13 +1,12 @@
 import { render } from "@testing-library/react";
+import React from "react";
 
 import { useGameStateContext } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
 import { GameStateContextModel } from "../../../../_shared/react-contexts/game-state-context/game-state-context-model";
-import { useBlockBetSound } from "../../../../_shared/react-hooks";
 import { RoundState } from "../../../game-base/type";
 import CountdownTimer, { GameStatus, SimpleTimer } from "../countdown-timer";
 
 const mockUseGameStateContext = useGameStateContext as jest.Mock;
-const mockSoundBlockBetCountdown = useBlockBetSound as jest.Mock;
 
 jest.mock("../../../../_shared/react-contexts/game-state-context/game-state-context", () => ({
     useGameStateContext: jest.fn(),
@@ -22,15 +21,7 @@ jest.mock("react", () => ({
     useState: (initialValue) => [initialValue, jest.fn()],
 }));
 
-jest.mock("../../../../_shared/react-hooks", () => ({
-    useBlockBetSound: jest.fn().mockReturnValue(jest.fn()),
-}));
-
 describe("CountdownTimer File", () => {
-    let gameId;
-    beforeEach(() => {
-        gameId = 1001;
-    });
     describe("CountdownTimer Component", () => {
         const MockSimpleTimer = () => <div className="simple-timer"></div>;
         const MockGameStatus = ({ children }) => <div className="game-status">{children}</div>;
@@ -38,9 +29,7 @@ describe("CountdownTimer File", () => {
         test("renders SimpleTimer and GameStatus for InRound state", () => {
             mockUseGameStateContext.mockReturnValue({ roundState: RoundState.InRound } as GameStateContextModel);
 
-            const { container } = render(
-                <CountdownTimer SimpleTimerProp={MockSimpleTimer} GameStatusProp={MockGameStatus} gameId={gameId} />
-            );
+            const { container } = render(<CountdownTimer SimpleTimerProp={MockSimpleTimer} GameStatusProp={MockGameStatus} />);
 
             expect(container.querySelector(".simple-timer")).toBeInTheDocument();
             expect(container.querySelector(".start-betting")).toBeInTheDocument();
@@ -53,9 +42,7 @@ describe("CountdownTimer File", () => {
         test("renders SimpleTimer and GameStatus for LockingBet state", () => {
             mockUseGameStateContext.mockReturnValue({ roundState: RoundState.LockingBet } as GameStateContextModel);
 
-            const { container } = render(
-                <CountdownTimer SimpleTimerProp={MockSimpleTimer} GameStatusProp={MockGameStatus} gameId={gameId} />
-            );
+            const { container } = render(<CountdownTimer SimpleTimerProp={MockSimpleTimer} GameStatusProp={MockGameStatus} />);
 
             expect(container.querySelector(".simple-timer")).toBeInTheDocument();
             expect(container.querySelector(".start-betting")).not.toBeInTheDocument();
@@ -68,9 +55,7 @@ describe("CountdownTimer File", () => {
         test("only renders loading show result and GameStatus for DisplayResult state", () => {
             mockUseGameStateContext.mockReturnValue({ roundState: RoundState.DisplayResult } as GameStateContextModel);
 
-            const { container } = render(
-                <CountdownTimer SimpleTimerProp={MockSimpleTimer} GameStatusProp={MockGameStatus} gameId={gameId} />
-            );
+            const { container } = render(<CountdownTimer SimpleTimerProp={MockSimpleTimer} GameStatusProp={MockGameStatus} />);
 
             expect(container.querySelector(".simple-timer")).not.toBeInTheDocument();
             expect(container.querySelector(".start-betting")).not.toBeInTheDocument();
@@ -83,9 +68,7 @@ describe("CountdownTimer File", () => {
         test("only renders loading show result for None state", () => {
             mockUseGameStateContext.mockReturnValue({ roundState: RoundState.None } as GameStateContextModel);
 
-            const { container } = render(
-                <CountdownTimer SimpleTimerProp={MockSimpleTimer} GameStatusProp={MockGameStatus} gameId={gameId} />
-            );
+            const { container } = render(<CountdownTimer SimpleTimerProp={MockSimpleTimer} GameStatusProp={MockGameStatus} />);
 
             expect(container.querySelector(".simple-timer")).not.toBeInTheDocument();
             expect(container.querySelector(".start-betting")).not.toBeInTheDocument();
@@ -100,7 +83,7 @@ describe("CountdownTimer File", () => {
             (roundState) => {
                 mockUseGameStateContext.mockReturnValue({ roundState } as GameStateContextModel);
 
-                const { container } = render(<CountdownTimer SimpleTimerProp={MockSimpleTimer} gameId={gameId} />);
+                const { container } = render(<CountdownTimer SimpleTimerProp={MockSimpleTimer} />);
 
                 expect(container.querySelector(".simple-timer")).not.toBeInTheDocument();
                 expect(container.querySelector(".start-betting")).not.toBeInTheDocument();
@@ -116,7 +99,7 @@ describe("CountdownTimer File", () => {
         test("renders nothing when remainingTime is 0 or less", () => {
             mockUseGameStateContext.mockReturnValue({ roundState: RoundState.BeforePlaceBet } as GameStateContextModel);
 
-            const { container } = render(<SimpleTimer clientRemainingTime={0} gameId={gameId} />);
+            const { container } = render(<SimpleTimer clientRemainingTime={0} />);
 
             expect(container.querySelector(".countdown-timer")).not.toBeInTheDocument();
         });
@@ -129,7 +112,7 @@ describe("CountdownTimer File", () => {
             (roundState, remainingTime, expectedLockBetClassLength, expectedTextContent) => {
                 mockUseGameStateContext.mockReturnValue({ roundState } as GameStateContextModel);
 
-                const simpleTimer = render(<SimpleTimer clientRemainingTime={remainingTime} gameId={gameId} />);
+                const simpleTimer = render(<SimpleTimer clientRemainingTime={remainingTime} />);
 
                 expect(simpleTimer.container.querySelector(".timer")).toBeInTheDocument();
                 expect(simpleTimer.container.querySelector(".countdown-timer")).toBeInTheDocument();
@@ -137,25 +120,6 @@ describe("CountdownTimer File", () => {
                 expect(simpleTimer.container.querySelector(".countdown-timer").textContent).toBe(expectedTextContent);
             }
         );
-
-        test.each([
-            [RoundState.LockingBet, 3],
-            [RoundState.LockingBet, 2],
-            [RoundState.LockingBet, 1],
-        ])("play sound blockBet when RoundState is LockingBet", (roundState, remainingTime) => {
-            // Arrange
-            mockUseGameStateContext.mockReturnValue({ roundState } as GameStateContextModel);
-            const soundBlockBetCountdown = jest.fn();
-            mockSoundBlockBetCountdown.mockReturnValue(soundBlockBetCountdown);
-
-            // Act
-            const simpleTimer = render(<SimpleTimer clientRemainingTime={remainingTime} gameId={gameId} />);
-
-            // Assert
-            expect(simpleTimer.container.querySelector(".timer")).toBeInTheDocument();
-            expect(simpleTimer.container.querySelector(".countdown-timer")).toBeInTheDocument();
-            expect(soundBlockBetCountdown).toHaveBeenCalled();
-        });
     });
 
     describe("GameStatus Component", () => {

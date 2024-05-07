@@ -1,22 +1,14 @@
 import { useEffect, useState } from "react";
 
-import { getGameSettings } from "../../../_shared/app-settings";
 import { useGameContext } from "../../../_shared/react-contexts";
 import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
-import { useBlockBetSound } from "../../../_shared/react-hooks";
 import { useSNTranslate } from "../../../_shared/react-hooks/use-translator";
 import { messageEventType } from "../../game-base/handlers";
 import { RoundState } from "../../game-base/type";
 import styles from "./countdown-timer.module.scss";
 
 export type Rotation = "clockwise" | "counterclockwise";
-interface CountdownTimerProps {
-    gameId: number;
-    SimpleTimerProp?: ({ clientRemainingTime, gameId }: { clientRemainingTime: any; gameId: number }) => JSX.Element;
-    GameStatusProp?: ({ children }: { children: any }) => JSX.Element;
-}
-
-export const CountdownTimer: React.FC<CountdownTimerProps> = ({ gameId, SimpleTimerProp = SimpleTimer, GameStatusProp = GameStatus }) => {
+export const CountdownTimer = ({ SimpleTimerProp = SimpleTimer, GameStatusProp = GameStatus }) => {
     const { roundState } = useGameStateContext();
     const { t } = useSNTranslate();
     const { gameMessageHandler } = useGameContext();
@@ -36,7 +28,7 @@ export const CountdownTimer: React.FC<CountdownTimerProps> = ({ gameId, SimpleTi
         case RoundState.InRound:
             return (
                 <>
-                    <SimpleTimerProp clientRemainingTime={clientRemainingTime} gameId={gameId} />
+                    <SimpleTimerProp clientRemainingTime={clientRemainingTime} />
                     <GameStatus>
                         <div className={styles["start-betting"]}>{t("status_start_bet")}</div>
                     </GameStatus>
@@ -45,7 +37,7 @@ export const CountdownTimer: React.FC<CountdownTimerProps> = ({ gameId, SimpleTi
         case RoundState.LockingBet:
             return (
                 <>
-                    <SimpleTimerProp clientRemainingTime={clientRemainingTime} gameId={gameId} />
+                    <SimpleTimerProp clientRemainingTime={clientRemainingTime} />
                     <GameStatusProp>
                         <div className={styles["no-more-bets"]}>{t("status_stop_bet")}</div>
                     </GameStatusProp>
@@ -70,18 +62,12 @@ export const CountdownTimer: React.FC<CountdownTimerProps> = ({ gameId, SimpleTi
     }
 };
 
-export const SimpleTimer = ({ clientRemainingTime, gameId }) => {
+export const SimpleTimer = ({ clientRemainingTime }) => {
     const { roundState } = useGameStateContext();
     const [timeLeft, setTimeLeft] = useState(clientRemainingTime);
-    const playBlockBetSound = useBlockBetSound();
-    const gameSettings = getGameSettings(gameId);
     useEffect(() => {
         if (clientRemainingTime !== timeLeft) {
             setTimeLeft(clientRemainingTime);
-        }
-
-        if (clientRemainingTime > 0 && clientRemainingTime <= gameSettings?.durations?.lockingBet) {
-            playBlockBetSound();
         }
     }, [clientRemainingTime, timeLeft]);
 
