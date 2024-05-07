@@ -179,7 +179,6 @@ export const getCriteriaValidateBet = (
             enabledQuickBet
         );
 
-        console.log({ ...criteria });
         if (criteria?.suggestAmount > 0 && criteria?.isSuggestBet) {
             return { errorCode: NoticeErrorCode.suggestBet, args: criteria };
         }

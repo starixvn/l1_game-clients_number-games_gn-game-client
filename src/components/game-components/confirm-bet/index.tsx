@@ -23,9 +23,7 @@ const ConfirmBet: React.FC = () => {
         clickSound();
         dispatch({
             type: PlaceBetEventActionType.SHOW_CONFIRM_BET,
-            payload: {
-                showConfirmBet: false,
-            },
+            payload: { showConfirmBet: false }
         });
 
         dispatch({

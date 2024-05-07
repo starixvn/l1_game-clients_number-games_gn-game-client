@@ -49,6 +49,7 @@ function pfReducer(state: PFContextModel, action: PFEventAction) {
                     ...pfClientSeedSetting,
                 }
             };
+            StorageHelper.set(`${localStorageKeys.pfSetting}-${state.uid}-${state.gameId}`, newState);
             break;
         }
 

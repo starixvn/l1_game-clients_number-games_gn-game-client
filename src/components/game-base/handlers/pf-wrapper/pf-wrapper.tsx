@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { usePFContext, usePFDispatch } from "../../../../_shared/react-contexts/game-state-context/pf/pf-context";
-import { PFClientSeedSetting } from "../../type";
-import { localStorageKeys, randomNumberSeries, StorageHelper } from "../../../../_shared/helpers";
+import { randomNumberSeries } from "../../../../_shared/helpers";
 import { PFEventActionType } from "../../../../_shared/react-contexts/game-state-context/pf/pf-action";
 import { GameMessageHandler, messageEventType } from "../game-message-handler";
 import { Socket } from "socket.io-client";
@@ -19,26 +18,6 @@ export const PFWrapper = (props: PFWrapperProps) => {
     const pfContext = usePFContext();
 
     useEffect(() => {
-        const loadPFSetting = () => {
-            const pfClientSeedSetting = StorageHelper.get<PFClientSeedSetting>(`${localStorageKeys.pfSetting}-${props.uid}-${props.gameId}`);
-            if (pfClientSeedSetting) {
-                pfDispatch({
-                    type: PFEventActionType.UPDATE_PF_CLIENT_SEED_SETTING,
-                    payload: {
-                        pfClientSeedSetting: {
-                            ...pfClientSeedSetting,
-                            manualClientSeed:
-                                pfClientSeedSetting?.manualClientSeed?.length <= 0 && pfClientSeedSetting?.useManualClientSeed
-                                    ? pfClientSeedSetting?.randomClientSeed
-                                    : pfClientSeedSetting?.manualClientSeed,
-                        },
-                    },
-                });
-            }
-        }
-
-        loadPFSetting();
-
         const loadPFSettingId = props.gameMessageHandler.register(messageEventType.SYNC_OWN_BETS_TO_PF, (message) => {
             pfDispatch({ type: PFEventActionType.OWN_BETS, payload: { ownBets: message[messageEventType.SYNC_OWN_BETS_TO_PF] } });
         });
@@ -61,8 +40,14 @@ export const PFWrapper = (props: PFWrapperProps) => {
                 useManualClientSeed: pfClientSeedSetting?.useManualClientSeed,
             };
 
+            console.log({ ...data, clientSeed, clientSeedDetail });
             props.socket.emit(event, { ...data, clientSeed, clientSeedDetail });
         };
+
+        const handleSavePFSetting = (message) => {
+            const { pfClientSeedSetting } = message[messageEventType.SAVE_PF_SETTING];
+            pfDispatch({ type: PFEventActionType.UPDATE_PF_CLIENT_SEED_SETTING, payload: { pfClientSeedSetting } });
+        }
 
         const handleSavePFSettingFromTurnIdHandler = (message) => {
             const { pfClientSeedSetting } = pfContext;
@@ -80,21 +65,6 @@ export const PFWrapper = (props: PFWrapperProps) => {
             }
         }
 
-        const handleSavePFSetting = (message) => {
-            const { pfClientSeedSetting } = message[messageEventType.SAVE_PF_SETTING];
-            syncPFSetting(pfClientSeedSetting);
-            pfDispatch({ type: PFEventActionType.UPDATE_PF_CLIENT_SEED_SETTING, payload: { pfClientSeedSetting } });
-        }
-
-        const syncPFSetting = (pfClientSeedSetting) => {
-            const { pfClientSeedSetting: oldPFClientSeedSetting } = pfContext;
-            const dataPFSettingSave = {
-                ...oldPFClientSeedSetting,
-                ...pfClientSeedSetting,
-            };
-            StorageHelper.set(`${localStorageKeys.pfSetting}-${props.uid}-${props.gameId}`, dataPFSettingSave);
-        }
-
         const savePFSettingId = props.gameMessageHandler.register(messageEventType.SAVE_PF_SETTING, handleSavePFSetting);
         const sendSocketId = props.gameMessageHandler.register(messageEventType.SEND_SOCKET_MESSAGE_WITH_CLIENT_SEED, sendSocketMessageWithClientSeed);
         const savePFSettingFromTurnId = props.gameMessageHandler.register(messageEventType.SAVE_PF_SETTING_FROM_TURN_ID_HANLDER, handleSavePFSettingFromTurnIdHandler);
@@ -106,5 +76,5 @@ export const PFWrapper = (props: PFWrapperProps) => {
         }
     }, [pfContext.pfClientSeedSetting])
 
-    return (<> {props.children}</>)
+    return (<> {props.children} </>)
 }

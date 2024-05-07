@@ -35,7 +35,7 @@ const PFSettingModal: FC<{ customClientSeedInfo?: string }> = ({ customClientSee
         dispatch({ type: PFEventActionType.TOGGLE_PF_SETTING, payload: { isShowPFSetting: false } });
     };
 
-    console.log(`ishowPFSetting: ${isShowPFSetting}`);
+    // console.log(`ishowPFSetting: ${isShowPFSetting}`);
     return (
         isShowPFSetting && (
             <ModalContainer
