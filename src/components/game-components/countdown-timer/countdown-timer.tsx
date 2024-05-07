@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 
 import { useGameContext } from "../../../_shared/react-contexts";
 import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
-import { useBlockBetCountdown } from "../../../_shared/react-hooks";
 import { useSNTranslate } from "../../../_shared/react-hooks/use-translator";
 import { messageEventType } from "../../game-base/handlers";
 import { RoundState } from "../../game-base/type";
@@ -63,18 +62,12 @@ export const CountdownTimer = ({ SimpleTimerProp = SimpleTimer, GameStatusProp =
     }
 };
 
-const DURATION_BLOCK_BET = 3;
 export const SimpleTimer = ({ clientRemainingTime }) => {
     const { roundState } = useGameStateContext();
     const [timeLeft, setTimeLeft] = useState(clientRemainingTime);
-    const playBlockBetCountdown = useBlockBetCountdown();
     useEffect(() => {
         if (clientRemainingTime !== timeLeft) {
             setTimeLeft(clientRemainingTime);
-        }
-
-        if (clientRemainingTime > 0 && clientRemainingTime <= DURATION_BLOCK_BET) {
-            playBlockBetCountdown();
         }
     }, [clientRemainingTime, timeLeft]);
 

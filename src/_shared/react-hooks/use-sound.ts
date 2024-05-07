@@ -10,7 +10,7 @@ const mp3File = {
     startingRound: `starting-round`,
     startingDraw: `starting-draw`,
     showBallResult: `show-ball-result`,
-    blockBetCountdown: `blockbet-countdown`,
+    blockBet: `block-bet`,
 };
 
 const resourceMp3 = objectMap(mp3File, (v) => `${path}${v}.mp3?v=${buildVersion}`);
@@ -47,6 +47,6 @@ export const useShowBallResultSound = () => {
     return usePlaySound(resourceMp3.showBallResult);
 };
 
-export const useBlockBetCountdown = () => {
-    return usePlaySound(resourceMp3.blockBetCountdown);
+export const useBlockBetSound = () => {
+    return usePlaySound(resourceMp3.blockBet);
 };

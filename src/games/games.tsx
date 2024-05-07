@@ -8,7 +8,7 @@ import { getAppSettings } from "../_shared/app-settings";
 import { GameIds, SwiperNoSwiping } from "../_shared/constants";
 import { AnalyticsHelper, TrackingAction, TrackingFunction } from "../_shared/helpers";
 import { SettingEventActionType, SystemContextProvider, URLContext, usePlayerContext, useSettingDispatch } from "../_shared/react-contexts";
-import { usePlaceBetSound, useStartDrawSound, useStartRoundSound } from "../_shared/react-hooks";
+import { useBlockBetSound, usePlaceBetSound, useStartDrawSound, useStartRoundSound } from "../_shared/react-hooks";
 import { GameSound } from "../components/game-base/type";
 import GameLoading from "../components/game-components/game-loading";
 import PreloadImages from "../components/page-components/preload-images";
@@ -51,6 +51,7 @@ export const Games: React.FC<Props> = ({
         playPlaceBetSound: usePlaceBetSound(),
         startDrawSound: useStartDrawSound(),
         startRoundSound: useStartRoundSound(),
+        blockBetSound: useBlockBetSound()
     };
 
     const getGameComponentById = (gameId: number) => {

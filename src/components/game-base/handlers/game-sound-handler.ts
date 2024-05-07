@@ -14,14 +14,12 @@ export class GameSoundHandler {
     };
 
     private playSound(newRoundState: RoundState) {
-        const { startDrawSound, startRoundSound } = this.props.gameSound();
-        switch (newRoundState) {
-            case RoundState.SwitchRound:
-                startRoundSound();
-                break;
-            case RoundState.InRound:
-                startDrawSound();
-                break;
-        }
+        const { startDrawSound, startRoundSound, blockBetSound } = this.props.gameSound();
+        const soundByState = {
+            [RoundState.SwitchRound]: startRoundSound,
+            [RoundState.InRound]: startDrawSound,
+            [RoundState.LockingBet]: blockBetSound,
+        };
+        soundByState[newRoundState] && soundByState[newRoundState]();
     }
 }

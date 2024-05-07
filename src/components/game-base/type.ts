@@ -65,6 +65,7 @@ export type GameSound = {
     playPlaceBetSound: Function;
     startDrawSound: Function;
     startRoundSound: Function;
+    blockBetSound: Function;
 };
 
 export type GameBaseProps = GamePropsContext & WithRouterProps;
