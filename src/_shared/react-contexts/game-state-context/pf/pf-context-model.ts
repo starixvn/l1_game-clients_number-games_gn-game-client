@@ -18,10 +18,6 @@ export interface PFContextModel {
 
 export const initialPFContextModel = ({ gameId, uid }) => {
     const defaultContext = {
-        isShowPFSetting: false,
-        isShowPFVerify: false,
-        isShowPFClientSeedInfo: false,
-        isShowPFVerification: false,
         pfVerifyModalData: null,
         ownBets: {},
         gameId,
@@ -35,10 +31,16 @@ export const initialPFContextModel = ({ gameId, uid }) => {
     } as PFContextModel;
 
     try {
-        const isShowPFSetting = StorageHelper.get<string>(`${localStorageKeys.showPFSetting}`) === `${uid}-${gameId}`;
+        let isShowPFSetting = StorageHelper.get<string>(`${localStorageKeys.showPFSetting}`) === `${uid}-${gameId}`;
         !isShowPFSetting && StorageHelper.set(`${localStorageKeys.showPFSetting}`, '');
 
         const pfClientSeedSettingStorage = StorageHelper.get<PFClientSeedSetting>(`${localStorageKeys.pfSetting}-${uid}-${gameId}`);
+        const isSleepMode = StorageHelper.get<boolean>(`${localStorageKeys.isSleepMode}`);
+
+        if (!isSleepMode) {
+            isShowPFSetting = false;
+        }
+        StorageHelper.set(localStorageKeys.isSleepMode, false);
 
         return {
             ...defaultContext,

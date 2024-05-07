@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { usePFContext, usePFDispatch } from "../../../../_shared/react-contexts/game-state-context/pf/pf-context";
-import { randomNumberSeries } from "../../../../_shared/helpers";
+import { localStorageKeys, randomNumberSeries, StorageHelper } from "../../../../_shared/helpers";
 import { PFEventActionType } from "../../../../_shared/react-contexts/game-state-context/pf/pf-action";
 import { GameMessageHandler, messageEventType } from "../game-message-handler";
 import { Socket } from "socket.io-client";
@@ -24,6 +24,7 @@ export const PFWrapper = (props: PFWrapperProps) => {
 
         return () => {
             props.gameMessageHandler.removeHandler(loadPFSettingId);
+            StorageHelper.set(localStorageKeys.isSleepMode, document.hidden);
         }
     }, [])
 

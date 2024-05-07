@@ -35,14 +35,14 @@ function pfReducer(state: PFContextModel, action: PFEventAction) {
         pfVerifyModalData,
         isShowPFClientSeedInfo,
         isShowPFVerification,
-        ownBets,
+        ownBets
     } = payload;
 
     // console.log(`pfReducer: ${JSON.stringify(action)} `);
 
     let newState = null;
     switch (type) {
-        case PFEventActionType.UPDATE_PF_CLIENT_SEED_SETTING: {
+        case PFEventActionType.UPDATE_PF_CLIENT_SEED_SETTING:
             newState = {
                 pfClientSeedSetting: {
                     ...state.pfClientSeedSetting,
@@ -51,38 +51,31 @@ function pfReducer(state: PFContextModel, action: PFEventAction) {
             };
             StorageHelper.set(`${localStorageKeys.pfSetting}-${state.uid}-${state.gameId}`, newState);
             break;
-        }
 
-        case PFEventActionType.TOGGLE_PF_VERIFY: {
+        case PFEventActionType.TOGGLE_PF_VERIFY:
             newState = { isShowPFVerify };
             break;
-        }
 
-        case PFEventActionType.TOGGLE_PF_SETTING: {
+        case PFEventActionType.TOGGLE_PF_SETTING:
             StorageHelper.set(`${localStorageKeys.showPFSetting}`, isShowPFSetting ? `${state.uid}-${state.gameId}` : "");
             newState = { isShowPFSetting };
             break;
-        }
 
-        case PFEventActionType.UPDATE_PF_VERIFY: {
+        case PFEventActionType.UPDATE_PF_VERIFY:
             newState = { pfVerifyModalData };
             break;
-        }
 
-        case PFEventActionType.TOGGLE_PF_CLIENT_SEED_INFO: {
+        case PFEventActionType.TOGGLE_PF_CLIENT_SEED_INFO:
             newState = { isShowPFClientSeedInfo };
             break;
-        }
 
-        case PFEventActionType.TOGGLE_PF_VERIFICATION: {
+        case PFEventActionType.TOGGLE_PF_VERIFICATION:
             newState = { isShowPFVerification };
             break;
-        }
 
-        case PFEventActionType.OWN_BETS: {
+        case PFEventActionType.OWN_BETS:
             newState = { ownBets };
             break;
-        }
 
         case PFEventActionType.SET_NEW_GAME_STATE:
             newState = { ownBets: {} };
