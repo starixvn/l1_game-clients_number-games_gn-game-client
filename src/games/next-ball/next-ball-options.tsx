@@ -22,8 +22,8 @@ const NextBallBetOptionsComponent = () => {
 
     const isShowDisabledLayer = roundState === RoundState.LockingBet;
 
-    const renderTotalBet = (choice: string) => {
-        return <TotalBet choice={choice} className="relative" tolgeeNamespace={tolgeeNamespace} />;
+    const renderTotalBet = (choice: string, className?: string) => {
+        return <TotalBet choice={choice} className={className} tolgeeNamespace={tolgeeNamespace} />;
     };
 
     const renderBetPercentage = (choice: string) => {
@@ -37,8 +37,14 @@ const NextBallBetOptionsComponent = () => {
         );
     };
 
-    const renderPlayerBetCount = (choice: string) => {
-        return <PlayerBetCount choice={choice} className={`flex items-center players gap-1 relative`} tolgeeNamespace={tolgeeNamespace} />;
+    const renderPlayerBetCount = (choice: string, className?: string) => {
+        return (
+            <PlayerBetCount
+                choice={choice}
+                className={`flex items-center players gap-1 relative ${className}`}
+                tolgeeNamespace={tolgeeNamespace}
+            />
+        );
     };
 
     const renderBetChoice = (choice: string) => {
@@ -52,6 +58,21 @@ const NextBallBetOptionsComponent = () => {
 
     const renderOwnBet = (choice: string) => {
         return <OwnBet choice={choice} tolgeeNamespace={tolgeeNamespace} className={Style["own-bet"]} />;
+    };
+
+    const renderBetInfo = (choice) => {
+        const betInfoText = {
+            [NextBallBetOptions.OVER]: "[38 - 75]",
+            [NextBallBetOptions.UNDER]: "[1 - 37]",
+        };
+
+        const betInfoClassName = Style["bet-info"];
+
+        if (betInfoText.hasOwnProperty(choice)) {
+            return <div className={betInfoClassName}>{betInfoText[choice]}</div>;
+        }
+
+        return null;
     };
 
     const renderHighlightWinningPrevResult = (choice: string) => {
@@ -108,13 +129,14 @@ const NextBallBetOptionsComponent = () => {
             <div className={`${Style[choice]} text-white relative`}>
                 <div className={`${Style["choice-info"]} ${choiceClassName}`}>
                     <div className={Style.stake}>
-                        {renderTotalBet(choice)}
-                        {renderPlayerBetCount(choice)}
+                        {renderTotalBet(choice, Style["stake-style"])}
+                        {renderPlayerBetCount(choice, Style["stake-style"])}
                     </div>
                     {renderBetPercentage(choice)}
                 </div>
                 <div className={`${Style["choice-odds-area"]} ${oddsClassName}`}>
                     {renderBetChoice(choice)}
+                    {renderBetInfo(choice)}
                     {renderOdds(choice)}
                 </div>
 

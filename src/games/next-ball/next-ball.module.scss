@@ -217,12 +217,29 @@
     &.choice-over,
     &.choice-odd {
         flex-flow: row-reverse;
+
+        .stake-style {
+            justify-content: end;
+        }
     }
 }
 
 .choice-odds-area {
     position: relative;
     margin-top: -0.5rem;
+
+    &.choice-over,
+    &.choice-under {
+        margin-top: -1.2rem;
+    }
+
+    .bet-info {
+        font-size: 1rem;
+        color: var(--color);
+        text-align: center;
+        line-height: 1.2;
+        margin-top: -0.4rem;
+    }
 }
 
 @keyframes show-disabled-layer {
