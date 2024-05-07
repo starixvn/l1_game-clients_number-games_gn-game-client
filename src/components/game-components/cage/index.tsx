@@ -77,7 +77,7 @@ const Cage: React.FC<CageProps> = ({
                 listResult.forEach((result, i) => {
                     setTimeout(() => {
                         loadResult(result);
-                    }, i * 1000);
+                    }, i * 1300);
                 });
             } else {
                 loadResult(listResult[listResult.length - 1]);

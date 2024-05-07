@@ -5,7 +5,6 @@ export function isHighLightWinningResult({ betChoice, roundState, settlementResu
 }
 
 export function isShowHighlightPrevResult({ betChoice, roundState, roundHistory }) {
-    console.log("isShowHighlightPrevResult", betChoice, roundHistory[0].settlementResult[betChoice]);
     if (roundHistory[0]) {
         return (
             [RoundState.SwitchRound, RoundState.BeforePlaceBet, RoundState.InRound].includes(roundState) &&

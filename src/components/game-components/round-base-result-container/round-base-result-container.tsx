@@ -41,11 +41,9 @@ export const RoundBaseResultSlotContainer: React.FC<IResultSlotContainer> = (pro
             roundResult.forEach((number) => {
                 totalTmp += number;
             });
-
-            // setTotalPoint(totalTmp);
             const obj = document.getElementById("totalPoint");
             if (obj) {
-                animateValue(obj, 0, totalTmp, 500);
+                animateValue(obj, 0, totalTmp, 1000);
             }
         }
     }, [roundState, playResultAnimation, roundResult]);
@@ -65,7 +63,7 @@ export const RoundBaseResultSlotContainer: React.FC<IResultSlotContainer> = (pro
                     if (number) {
                         clonedData[i].number = number;
                         clonedData[i].status = BallStatus.SHOW;
-                        clonedData[i].delayTime = playResultAnimation ? i * 1000 + 500 : 0;
+                        clonedData[i].delayTime = playResultAnimation ? i * 1000 + 1300 : 0;
                         clonedData[i].incrementTotalPoint = incrementTotalPoint;
                     }
                 }
