@@ -7,9 +7,6 @@ $loading-duration: 2s;
 
 $ball-size: 3.2rem;
 
-$red-path-img: url("/static/images/ball/ball-red.png?v=9999");
-$blue-path-img: url("/static/images/ball/ball-blue.png?v=9999");
-
 .ball {
     position: relative;
     width: $ball-size;
@@ -50,13 +47,11 @@ $blue-path-img: url("/static/images/ball/ball-blue.png?v=9999");
 }
 
 .red {
-    // --bg: $red-path-img no-repeat;
-    background: $red-path-img no-repeat;
+    --bg:url("/static/images/ball/ball-red.png?v=#{$version-image}") no-repeat;
 }
 
 .blue {
-    // --bg: $blue-path-img no-repeat;
-    background: $blue-path-img no-repeat;
+    --bg: url("/static/images/ball/ball-blue.png?v=#{$version-image}") no-repeat;
 }
 
 .ball-bg {
@@ -84,7 +79,7 @@ $blue-path-img: url("/static/images/ball/ball-blue.png?v=9999");
         top: -0.2rem;
         bottom: -0.2rem;
         right: -0.2rem;
-        // background: var(--bg);
+        background: var(--bg);
         background-size: contain;
         border-radius: 50%;
         border: 0.1rem solid #000;
