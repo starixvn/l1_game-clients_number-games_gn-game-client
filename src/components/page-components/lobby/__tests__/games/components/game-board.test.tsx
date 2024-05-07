@@ -1,12 +1,12 @@
+import { render } from "@testing-library/react";
+import { act } from "react-dom/test-utils";
+import MessageTransmitter from "../../../../../../_shared/helpers/message-transmitter";
 import CountdownTimer from "../../../games/components/countdown-timer";
 import DisabledGameBlock from "../../../games/components/disable-game-block";
 import { GameBoard } from "../../../games/components/game-board";
 import { GameIcon } from "../../../games/components/game-icon";
 import LobbyScoreboard from "../../../games/components/scoreboard";
-import MessageTransmitter from "../../../../../../_shared/helpers/message-transmitter";
-import { render } from "@testing-library/react";
 import * as LobbyConnection from "../../../lobby-socket-connection";
-import { act } from "react-dom/test-utils";
 
 jest.mock("../../../games/components/countdown-timer", () => jest.fn().mockReturnValue("CountdownTimer"));
 jest.mock("../../../games/components/disable-game-block", () => jest.fn().mockReturnValue("DisabledGameBlock"));
@@ -19,7 +19,10 @@ jest.mock("../../../../../../_shared/react-contexts", () => ({
 describe(GameBoard.name, () => {
     const transmitter = MessageTransmitter();
     const gameSettings = { id: 1, gameName: "gameA" } as any;
+    const lastClickedGameId = gameSettings.id;
+    const setLastClickedGameId = jest.fn();
     const openGame = jest.fn();
+
     beforeAll(() => {
         // @ts-ignore
         LobbyConnection.getLobbyData = jest.fn();
@@ -29,7 +32,15 @@ describe(GameBoard.name, () => {
     });
     it("should render match the snapshot", () => {
         // act
-        const { container } = render(<GameBoard gameSettings={gameSettings} gameTransmitter={transmitter} openGame={openGame} />);
+        const { container } = render(
+            <GameBoard
+                gameSettings={gameSettings}
+                gameTransmitter={transmitter}
+                openGame={openGame}
+                lastClickedGameId={lastClickedGameId}
+                setLastClickedGameId={setLastClickedGameId}
+            />
+        );
 
         // assert
         expect(container).toMatchSnapshot();
@@ -37,11 +48,20 @@ describe(GameBoard.name, () => {
         expect(DisabledGameBlock).toHaveBeenCalledWith({ transmitter, gameSettings }, {});
         expect(CountdownTimer).toHaveBeenCalledWith({ transmitter, gameSettings }, {});
         expect(LobbyScoreboard).toHaveBeenCalledWith({ gameSettings, transmitter }, {});
+        expect(setLastClickedGameId).not.toHaveBeenCalled();
     });
 
     it("should not render countdown timer & scoreboard when showData = false", () => {
         // arrange
-        const { container } = render(<GameBoard gameSettings={gameSettings} gameTransmitter={transmitter} openGame={openGame} />);
+        const { container } = render(
+            <GameBoard
+                gameSettings={gameSettings}
+                gameTransmitter={transmitter}
+                openGame={openGame}
+                lastClickedGameId={lastClickedGameId}
+                setLastClickedGameId={setLastClickedGameId}
+            />
+        );
 
         // act
         act(() => {
@@ -54,7 +74,15 @@ describe(GameBoard.name, () => {
 
     it("should call getLobbyData when sign in successfully", () => {
         // arrange
-        render(<GameBoard gameSettings={gameSettings} gameTransmitter={transmitter} openGame={openGame} />);
+        render(
+            <GameBoard
+                gameSettings={gameSettings}
+                gameTransmitter={transmitter}
+                openGame={openGame}
+                lastClickedGameId={lastClickedGameId}
+                setLastClickedGameId={setLastClickedGameId}
+            />
+        );
 
         // act
         act(() => {

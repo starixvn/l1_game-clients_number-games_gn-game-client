@@ -1,9 +1,10 @@
 import { render } from "@testing-library/react";
-import { LobbyLayout } from "../../games/lobby-layout";
-import { GameBoard } from "../../games/components/game-board";
+import React, { useState as useStateMock } from "react";
 import { getAppSettings } from "../../../../../_shared/app-settings";
 import { useLobbyConnectionContext } from "../../../../../_shared/react-contexts";
 import { ComingSoonGameBoard } from "../../games/components/coming-soon-game-board";
+import { GameBoard } from "../../games/components/game-board";
+import { LobbyLayout } from "../../games/lobby-layout";
 
 jest.mock("../../../../../_shared/app-settings", () => ({
     getAppSettings: jest.fn(),
@@ -16,11 +17,18 @@ jest.mock("../../../../../_shared/react-contexts", () => ({
     usePlayerContext: jest.fn().mockReturnValue({}),
     useLobbyConnectionContext: jest.fn(),
 }));
-jest.mock("../../games/components/game-board", () => ({
-    GameBoard: jest.fn().mockReturnValue("GameBoard"),
-}));
+jest.mock("../../games/components/game-board", () => {
+    return {
+        GameBoard: jest.fn().mockReturnValue("GameBoard"),
+    };
+});
 jest.mock("../../games/components/coming-soon-game-board", () => ({
     ComingSoonGameBoard: jest.fn().mockReturnValue("ComingSoonGameBoard"),
+}));
+
+jest.mock("react", () => ({
+    ...jest.requireActual("react"),
+    useState: jest.fn(),
 }));
 
 describe(LobbyLayout.name, () => {
@@ -31,8 +39,12 @@ describe(LobbyLayout.name, () => {
         1004: { id: 1004, gameName: "game4", isComingSoon: true },
     };
     describe("render", () => {
+        const lastClickedGameId = 1;
+        const setState = jest.fn();
         beforeAll(() => {
             (getAppSettings as jest.Mock).mockReturnValue({ gameSettings });
+
+            (useStateMock as any).mockImplementation((init) => [init, setState]);
         });
         afterEach(() => {
             jest.clearAllMocks();
@@ -41,7 +53,7 @@ describe(LobbyLayout.name, () => {
             // Arrange
             const gameTransmitters = { 1001: { register: jest.fn() }, 1002: {} } as any;
             (useLobbyConnectionContext as jest.Mock).mockReturnValueOnce({ gameTransmitters });
-
+            jest.spyOn(React, "useState").mockImplementation(() => [lastClickedGameId, setState]);
             // Act
             const { container } = render(<LobbyLayout lobbyConfigs={[] as any} openGame={null} />);
 
@@ -53,6 +65,8 @@ describe(LobbyLayout.name, () => {
                     gameSettings: gameSettings[1001],
                     openGame: null,
                     gameTransmitter: gameTransmitters[1001],
+                    lastClickedGameId,
+                    setLastClickedGameId: setState,
                 },
                 {}
             );
@@ -61,6 +75,8 @@ describe(LobbyLayout.name, () => {
                     gameSettings: gameSettings[1002],
                     openGame: null,
                     gameTransmitter: gameTransmitters[1002],
+                    lastClickedGameId,
+                    setLastClickedGameId: setState,
                 },
                 {}
             );
