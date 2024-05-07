@@ -217,6 +217,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.connectToGameService();
         this.gameStateHandler.setReturnToGameState(this.props.dispatch);
         this.cancelConfirmBetAndResetBets();
+        this.gameMessageHandler.broadcastGameEvent({ [messageEventType.UPDATE_PLAYER_BALANCE]: true })
     }
 
     protected async connectToGameService() {
