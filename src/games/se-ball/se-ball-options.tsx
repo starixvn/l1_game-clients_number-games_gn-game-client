@@ -82,29 +82,42 @@ const SeBallBetOptionsComponent = () => {
         return <div className={className}></div>;
     };
 
-    const renderMainOption = (choice: string) => {
+    const renderHighlightWinningResult = (choice: string) => {
         let resourceName = "";
 
         switch (choice) {
             case SeBallBetOptions.ODD:
             case SeBallBetOptions.EVEN:
-                resourceName = SeBallBetOptions.ODD;
+                resourceName = SeBallBetOptions.EVEN;
+                break;
+
+            case SeBallBetOptions.BLUE3:
+            case SeBallBetOptions.RED3:
+                resourceName = SeBallBetOptions.BLUE3;
+                break;
+
+            case SeBallBetOptions.BLUE4:
+            case SeBallBetOptions.RED4:
+                resourceName = SeBallBetOptions.BLUE4;
+                break;
+
+            case SeBallBetOptions.RED2:
+                resourceName = SeBallBetOptions.RED2;
                 break;
         }
 
-        const winningResult = (
+        return (
             <SeBallWinningAnimation
                 showResultInfo={showResultInfo}
                 roundState={roundState}
                 settlementResult={settlementResult}
                 choice={choice}
                 resourceName={resourceName}
-                width={210}
-                height={210}
-                position={[90, 95]}
             />
         );
+    };
 
+    const renderMainOption = (choice: string) => {
         return (
             <div className={`${Style[choice]} text-white relative`}>
                 <div className={`${Style["choice-info"]} ${Style[`choice-${choice}`]}`}>
@@ -120,7 +133,7 @@ const SeBallBetOptionsComponent = () => {
                 </div>
 
                 {renderOwnBet(choice)}
-                {<div className={Style["winning-effect"]}>{winningResult}</div>}
+                <div className={Style["winning-effect"]}>{renderHighlightWinningResult(choice)}</div>
 
                 <RippleButton className={`${Style["btn-ripple"]}`} id={`${tolgeeNamespace}-choice-${choice}`} choice={choice} />
 
@@ -146,6 +159,7 @@ const SeBallBetOptionsComponent = () => {
                 <div className={`${Style["dot-wrapper"]} ${choice === "red2" ? Style["two-lines"] : ""}`}>{renderDot(choice)}</div>
                 {renderOdds(choice)}
                 <div className={Style["own-bet-container"]}>{renderOwnBet(choice)}</div>
+                <div className={Style["winning-effect"]}>{renderHighlightWinningResult(choice)}</div>
 
                 <RippleButton className={`${Style["btn-ripple"]}`} id={`${tolgeeNamespace}-choice-${choice}`} choice={choice} />
                 {isShowDisabledLayer && <div className={Style["disable-layer"]}></div>}

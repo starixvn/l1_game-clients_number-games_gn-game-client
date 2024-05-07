@@ -249,26 +249,18 @@
     }
 }
 
-.highlight-winning-bg-over,
-.highlight-winning-bg-under,
 .highlight-winning-bg-odd,
 .highlight-winning-bg-even {
-    width: 17.8rem;
+    width: 17.7rem;
     height: 9.4rem;
-    background: url("/static/images/next-ball/highlight-winning-bg.png") no-repeat;
+    background: url("/static/images/se-ball/highlight-winning-bg-even.png") no-repeat;
 }
 
-.highlight-winning-bg-under {
+.highlight-winning-bg-even {
     transform: scaleX(-1);
-    left: -0.1rem;
 }
 
 .highlight-winning-bg-odd {
-    transform: scaleY(-1);
-}
-
-.highlight-winning-bg-even {
-    transform: scale(-1);
     left: -0.1rem;
 }
 

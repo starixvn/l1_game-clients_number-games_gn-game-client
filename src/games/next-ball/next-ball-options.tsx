@@ -118,9 +118,6 @@ const NextBallBetOptionsComponent = () => {
                 settlementResult={settlementResult}
                 choice={choice}
                 resourceName={resourceName}
-                width={210}
-                height={210}
-                position={[90, 95]}
             />
         );
         const choiceClassName = Style[`choice-${choice}`];

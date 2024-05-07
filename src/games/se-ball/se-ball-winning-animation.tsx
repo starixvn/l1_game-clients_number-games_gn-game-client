@@ -6,9 +6,6 @@ import Styles from "./se-ball.module.scss";
 type Props = {
     choice: string;
     resourceName: string;
-    width: number;
-    height: number;
-    position: [number, number];
     className?: string;
     roundState: RoundState;
     settlementResult: any;
@@ -23,10 +20,10 @@ const SeBallWinningAnimation: React.FC<Props> = ({ choice, resourceName, roundSt
             <div className="d-grid">
                 <Spritesheet
                     className={`${Styles[`winning-light-anim`]} ${Styles[`anim-${choice}`]}`}
-                    image={`/static/images/next-ball/highlight-winning-${resourceName}.png?v=2`}
-                    widthFrame={190}
+                    image={`/static/images/se-ball/highlight-winning-${resourceName}.png?v=3`}
+                    widthFrame={186}
                     isResponsive
-                    heightFrame={106}
+                    heightFrame={104}
                     steps={10}
                     autoplay={true}
                     loop={true}
