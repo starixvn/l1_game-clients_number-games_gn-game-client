@@ -5,8 +5,8 @@ import PFVerifyModal from "../pf-verify";
 import helpers from "./helpers";
 const renderModal = helpers.renderModal;
 
-const mockGameState = usePFContext as jest.Mock;
-const mockGameStateDispatch = usePFDispatch as jest.Mock;
+const mockPFContext = usePFContext as jest.Mock;
+const mockPFDispatch = usePFDispatch as jest.Mock;
 
 String.prototype.capitalizeFirstLetter = function () {
     return this;
@@ -56,9 +56,9 @@ const defineMock = (state?: Object) => {
         pfVerifyModalData: {},
     };
 
-    mockGameState.mockReturnValue({ ...defaultState, ...state });
+    mockPFContext.mockReturnValue({ ...defaultState, ...state });
     const mockDispatch = jest.fn();
-    mockGameStateDispatch.mockReturnValue(mockDispatch);
+    mockPFDispatch.mockReturnValue(mockDispatch);
 
     return { mockDispatch };
 };
