@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 
+import { animateValue } from "../../../_shared/helpers/number-increasement";
 import { GameStateContextModel } from "../../../_shared/react-contexts/game-state-context/game-state-context-model";
 import { RoundState } from "../../game-base/type";
 import Ball, { BallStatus, IBall } from "../ball";
@@ -19,7 +20,14 @@ export const RoundBaseResultSlotContainer: React.FC<IResultSlotContainer> = (pro
 
     const incrementTotalPoint = useCallback((point: number) => {
         const timeOut = setTimeout(() => {
-            setTotalPoint((currentTotalPoint) => currentTotalPoint + point);
+            setTotalPoint((currentTotalPoint) => {
+                const obj = document.getElementById("totalPoint");
+                const newTotal = currentTotalPoint + point;
+                if (obj) {
+                    animateValue(obj, currentTotalPoint, newTotal, 1000);
+                }
+                return newTotal;
+            });
         }, 200);
 
         return () => {
@@ -34,7 +42,11 @@ export const RoundBaseResultSlotContainer: React.FC<IResultSlotContainer> = (pro
                 totalTmp += number;
             });
 
-            setTotalPoint(totalTmp);
+            // setTotalPoint(totalTmp);
+            const obj = document.getElementById("totalPoint");
+            if (obj) {
+                animateValue(obj, 0, totalTmp, 500);
+            }
         }
     }, [roundState, playResultAnimation, roundResult]);
 
@@ -85,7 +97,7 @@ export const RoundBaseResultSlotContainer: React.FC<IResultSlotContainer> = (pro
                     return <Ball key={index} index={index} {...result} isRoundBase={true} roundState={roundState} />;
                 })}
             </div>
-            {totalPoint > 0 && <h1 className={Style["total"]}>{totalPoint}</h1>}
+            {roundState === RoundState.DisplayResult && <h1 className={Style["total"]} id="totalPoint"></h1>}
         </div>
     );
 };

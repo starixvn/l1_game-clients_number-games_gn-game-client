@@ -73,15 +73,19 @@ const Cage: React.FC<CageProps> = ({
 
     useEffect(() => {
         if (listResult && listResult.length > 0) {
-            listResult.forEach((result, i) => {
-                setTimeout(() => {
-                    loadResult(result);
-                }, i * 1000);
-            });
+            if (playResultAnimation) {
+                listResult.forEach((result, i) => {
+                    setTimeout(() => {
+                        loadResult(result);
+                    }, i * 1000);
+                });
+            } else {
+                loadResult(listResult[listResult.length - 1]);
+            }
         }
     }, [listResult]);
 
-    const loadResult = (result) => {
+    const loadResult = (result: number) => {
         setBallColor(`ball-${getBallColor(result)}-${position === CagePosition.RIGHT ? "2" : "1"}`);
         setNewResult(result);
     };
