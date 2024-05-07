@@ -1,13 +1,12 @@
-import { ReactNode } from "react";
-import { AnalyticsHelper } from "../../../../_shared/helpers";
-import { useGameContext } from "../../../../_shared/react-contexts";
-import { useGameStateContext, useGameStatesDispatch } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
-import { useClickSound, useCommonTranslate, useSNTranslate } from "../../../../_shared/react-hooks";
-import PFVerifyModal from "../pf-verify";
-import { fireEvent, render } from "@testing-library/react";
+import { fireEvent } from "@testing-library/react";
+import { usePFContext, usePFDispatch } from "../../../../_shared/react-contexts/game-state-context/pf/pf-context";
 
-const mockGameState = useGameStateContext as jest.Mock;
-const mockGameStateDispatch = useGameStatesDispatch as jest.Mock;
+import PFVerifyModal from "../pf-verify";
+import helpers from "./helpers";
+const renderModal = helpers.renderModal;
+
+const mockGameState = usePFContext as jest.Mock;
+const mockGameStateDispatch = usePFDispatch as jest.Mock;
 
 String.prototype.capitalizeFirstLetter = function () {
     return this;
@@ -46,9 +45,9 @@ jest.mock("../../../../_shared/helpers", () => ({
     },
 }));
 
-jest.mock("../../../../_shared/react-contexts/game-state-context/game-state-context", () => ({
-    useGameStateContext: jest.fn(),
-    useGameStatesDispatch: jest.fn(),
+jest.mock("../../../../_shared/react-contexts/game-state-context/pf/pf-context", () => ({
+    usePFContext: jest.fn(),
+    usePFDispatch: jest.fn(),
 }));
 
 const defineMock = (state?: Object) => {
@@ -62,20 +61,6 @@ const defineMock = (state?: Object) => {
     mockGameStateDispatch.mockReturnValue(mockDispatch);
 
     return { mockDispatch };
-};
-
-const renderModal = (content?: ReactNode) => {
-    const root = <div id="dashboard"></div>;
-    const renderResult = render(root);
-    const newNode = (
-        <>
-            {root}
-            {content}
-        </>
-    );
-    renderResult.rerender(newNode);
-
-    return { renderResult, newNode };
 };
 
 describe(PFVerifyModal.name, () => {

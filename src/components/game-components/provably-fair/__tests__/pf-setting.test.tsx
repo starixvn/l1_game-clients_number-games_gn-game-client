@@ -1,10 +1,11 @@
-import { act, fireEvent, render } from "@testing-library/react";
-import { ReactNode } from "react";
+import { act, fireEvent } from "@testing-library/react";
 import { useGameContext } from "../../../../_shared/react-contexts";
 import { useGameStateContext, useGameStatesDispatch } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
 import { PFEventActionType } from "../../../../_shared/react-contexts/game-state-context/pf/pf-action";
 import { usePFContext, usePFDispatch } from "../../../../_shared/react-contexts/game-state-context/pf/pf-context";
 import PFSettingModal from "../pf-setting";
+import helpers from "./helpers";
+const renderModal = helpers.renderModal;
 
 const mockGameStateContext = useGameStateContext as jest.Mock;
 const mockPFContext = usePFContext as jest.Mock;
@@ -106,20 +107,6 @@ const defineMockPFWithDispatch = (state?: Object, gameMessageHandler?: Object) =
     mockPFDispatch.mockReturnValue(mockDispatch);
 
     return mockDispatch;
-};
-
-const renderModal = (content?: ReactNode) => {
-    const root = <div id="dashboard"></div>;
-    const renderResult = render(root);
-    const newNode = (
-        <>
-            {root}
-            {content}
-        </>
-    );
-    renderResult.rerender(newNode);
-
-    return { renderResult, newNode };
 };
 
 describe(PFSettingModal.name, () => {

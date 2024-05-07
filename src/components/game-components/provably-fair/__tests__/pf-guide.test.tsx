@@ -1,7 +1,8 @@
-import { act, fireEvent, render } from "@testing-library/react";
+import { act, fireEvent } from "@testing-library/react";
 import { useGameStateContext } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
-import { ReactNode } from "react";
 import { ButtonPFGuide } from "../pf-guide";
+import helpers from "./helpers";
+const renderModal = helpers.renderModal;
 
 const mockGameState = useGameStateContext as jest.Mock;
 jest.useFakeTimers();
@@ -64,19 +65,6 @@ const defineMock = (state?: Object) => {
     mockGameState.mockReturnValue({ ...defaultState, ...state });
 };
 
-const renderModal = (content?: ReactNode) => {
-    const root = <div id="dashboard"></div>;
-    const renderResult = render(root);
-    const newNode = (
-        <>
-            {root}
-            {content}
-        </>
-    );
-    renderResult.rerender(newNode);
-
-    return { renderResult, newNode };
-};
 
 describe("PFGuide", () => {
     describe("click button pf guide", () => {
