@@ -48,29 +48,31 @@
     }
 }
 
-.odd {
+.even {
     @extend %main-option;
     --color: #ff9090;
     --bgBetChoice: url("/static/images/se-ball/1x/bg-big-red.png");
     --bgBetChoice-2x: url("/static/images/se-ball/2x/bg-big-red.png");
-    --border-radius: 1.2rem 1.2rem 1.2rem 3rem;
-
-    .btn-ripple {
-        z-index: 2;
-        clip-path: polygon(16% 0%, 94% 0%, 98% 3%, 100% 10%, 100% 83%, 97% 92%, 78% 100%, 10% 100%, 2% 97%, 0 84%, 0% 23%, 4% 13%, 8% 5%);
-    }
-}
-
-.even {
-    @extend %main-option;
-    --color: #84c6ff;
-    --bgBetChoice: url("/static/images/se-ball/1x/bg-big-blue.png");
-    --bgBetChoice-2x: url("/static/images/se-ball/2x/bg-big-blue.png");
-    --border-radius: 1.2rem 1.2rem 3rem 1.2rem;
 
     .btn-ripple {
         z-index: 2;
         clip-path: polygon(87% 0, 93% 7%, 98% 19%, 100% 28%, 100% 89%, 99% 96%, 95% 100%, 21% 100%, 3% 91%, 0 82%, 0 12%, 2% 5%, 6% 0);
+    }
+
+    .disable-layer {
+        transform: scaleX(-1);
+    }
+}
+
+.odd {
+    @extend %main-option;
+    --color: #84c6ff;
+    --bgBetChoice: url("/static/images/se-ball/1x/bg-big-blue.png");
+    --bgBetChoice-2x: url("/static/images/se-ball/2x/bg-big-blue.png");
+
+    .btn-ripple {
+        z-index: 2;
+        clip-path: polygon(16% 0%, 94% 0%, 98% 3%, 100% 10%, 100% 83%, 97% 92%, 78% 100%, 10% 100%, 2% 97%, 0 84%, 0% 23%, 4% 13%, 8% 5%);
     }
 }
 
@@ -123,7 +125,7 @@
     }
 }
 
-.red3 {
+.blue3 {
     --bg: url("/static/images/se-ball/1x/bg-small-red.png");
     --bg-2x: url("/static/images/se-ball/2x/bg-small-red.png");
     --border-radius: 1.2rem;
@@ -132,7 +134,7 @@
     grid-row: 1;
 }
 
-.red4 {
+.blue4 {
     --bg: url("/static/images/se-ball/1x/bg-small-blue.png");
     --bg-2x: url("/static/images/se-ball/2x/bg-small-blue.png");
     --border-radius: 1.2rem 1.2rem 1.2rem 3rem;
@@ -161,7 +163,7 @@
     }
 }
 
-.blue3 {
+.red3 {
     --bg: url("/static/images/se-ball/1x/bg-small-red.png");
     --bg-2x: url("/static/images/se-ball/2x/bg-small-red.png");
     --border-radius: 1.2rem;
@@ -170,7 +172,7 @@
     grid-row: 1;
 }
 
-.blue4 {
+.red4 {
     --bg: url("/static/images/se-ball/1x/bg-small-blue.png");
     --bg-2x: url("/static/images/se-ball/2x/bg-small-blue.png");
     --border-radius: 1.2rem 1.2rem 3rem 1.2rem;
@@ -276,33 +278,68 @@
     transform: scale(0.65);
 }
 
-.highlight-prev-result-over,
-.highlight-prev-result-under,
 .highlight-prev-result-odd,
 .highlight-prev-result-even {
     height: 9.4rem;
-    width: 17.7rem;
+    width: 17.8rem;
     position: absolute;
     left: 0;
     top: 0;
-    background-image: url("/static/images/next-ball/winning-previous.png");
+    background-image: url("/static/images/se-ball/odd-even-winning-prev.png");
     background-image: image-set(
-        url("/static/images/next-ball/1x/winning-previous.png") 1x,
-        url("/static/images/next-ball/2x/winning-previous.png") 2x
+        url("/static/images/se-ball/1x/odd-even-winning-prev.png") 1x,
+        url("/static/images/se-ball/2x/odd-even-winning-prev.png") 2x
     );
 }
 
-.highlight-prev-result-under {
+.highlight-prev-result-even {
+    transform: scaleX(-1);
+    top: 0;
+}
+
+.highlight-prev-result-blue3,
+.highlight-prev-result-red3 {
+    height: 6.8rem;
+    width: 13.8rem;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-image: url("/static/images/se-ball/blue3-red3-winning-prev.png");
+    background-image: image-set(
+        url("/static/images/se-ball/1x/blue3-red3-winning-prev.png") 1x,
+        url("/static/images/se-ball/2x/blue3-red3-winning-prev.png") 2x
+    );
+}
+
+.highlight-prev-result-blue4,
+.highlight-prev-result-red4 {
+    height: 6.8rem;
+    width: 13.8rem;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-image: url("/static/images/se-ball/blue4-red4-winning-prev.png");
+    background-image: image-set(
+        url("/static/images/se-ball/1x/blue4-red4-winning-prev.png") 1x,
+        url("/static/images/se-ball/2x/blue4-red4-winning-prev.png") 2x
+    );
+}
+
+.highlight-prev-result-red4 {
     transform: scaleX(-1);
 }
 
-.highlight-prev-result-odd {
-    transform: scaleY(-1);
+.highlight-prev-result-red2 {
+    width: 7.7rem;
+    height: 14.8rem;
+    position: absolute;
+    left: 0;
     top: 0;
-}
-.highlight-prev-result-even {
-    transform: scale(-1);
-    top: 0;
+    background-image: url("/static/images/se-ball/red2-winning-prev.png");
+    background-image: image-set(
+        url("/static/images/se-ball/1x/red2-winning-prev.png") 1x,
+        url("/static/images/se-ball/2x/red2-winning-prev.png") 2x
+    );
 }
 
 .choice-info {

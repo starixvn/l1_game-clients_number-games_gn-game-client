@@ -11,13 +11,8 @@ export enum SeBallBetOptions {
 }
 
 export const SeBallBetOptionsPercentageColor = {
-    odd: "#FF9090",
-    even: "#84C6FF",
-    red3: "#98CDFF",
-    red4: "#F9BCB9",
-    blue3: "#98CDFF",
-    blue4: "#F9BCB9",
-    red2: "#98CDFF",
+    odd: "#84C6FF",
+    even: "#FF9090",
 };
 
 export const defaultRoundData = [

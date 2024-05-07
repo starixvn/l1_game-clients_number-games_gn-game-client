@@ -62,6 +62,21 @@ const SeBallBetOptionsComponent = () => {
             case SeBallBetOptions.EVEN:
                 className = `${Style["highlight-prev-result-even"]} fade-in`;
                 break;
+            case SeBallBetOptions.BLUE3:
+                className = `${Style["highlight-prev-result-blue3"]} fade-in`;
+                break;
+            case SeBallBetOptions.BLUE4:
+                className = `${Style["highlight-prev-result-blue4"]} fade-in`;
+                break;
+            case SeBallBetOptions.RED3:
+                className = `${Style["highlight-prev-result-red3"]} fade-in`;
+                break;
+            case SeBallBetOptions.RED4:
+                className = `${Style["highlight-prev-result-red4"]} fade-in`;
+                break;
+            case SeBallBetOptions.RED2:
+                className = `${Style["highlight-prev-result-red2"]} fade-in`;
+                break;
             default:
         }
         return <div className={className}></div>;
@@ -133,6 +148,8 @@ const SeBallBetOptionsComponent = () => {
                 <div className={Style["own-bet-container"]}>{renderOwnBet(choice)}</div>
 
                 <RippleButton className={`${Style["btn-ripple"]}`} id={`${tolgeeNamespace}-choice-${choice}`} choice={choice} />
+                {isShowDisabledLayer && <div className={Style["disable-layer"]}></div>}
+                {isShowHighlightPrevResult({ betChoice: choice, roundState, roundHistory }) && renderHighlightWinningPrevResult(choice)}
             </div>
         );
     };
@@ -145,11 +162,11 @@ const SeBallBetOptionsComponent = () => {
             </div>
 
             <div className={Style["sub-betting-zone"]}>
-                {renderSubOptions(SeBallBetOptions.RED3)}
-                {renderSubOptions(SeBallBetOptions.RED4)}
-                {renderSubOptions(SeBallBetOptions.RED2)}
                 {renderSubOptions(SeBallBetOptions.BLUE3)}
                 {renderSubOptions(SeBallBetOptions.BLUE4)}
+                {renderSubOptions(SeBallBetOptions.RED2)}
+                {renderSubOptions(SeBallBetOptions.RED3)}
+                {renderSubOptions(SeBallBetOptions.RED4)}
             </div>
         </>
     );

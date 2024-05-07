@@ -74,9 +74,9 @@ export class SeBallBigRoadElement extends BigRoadElement<SeBallSettlementResult>
         if (isBlinkNode) {
             return <span className={styles.blink}></span>;
         } else if (odd) {
-            return <span className={styles.red}></span>;
-        } else {
             return <span className={styles.blue}></span>;
+        } else {
+            return <span className={styles.red}></span>;
         }
     }
 }
