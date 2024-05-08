@@ -1,10 +1,10 @@
 import { render } from "@testing-library/react";
 import BetConfirmDialog from ".";
 import { usePlayerContext } from "../../../_shared/react-contexts";
-import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
+import { usePlaceBetContext, usePlaceBetDispatch } from "../../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-context";
 
-const mockUseGameStateContext = useGameStateContext as jest.Mock;
-const mockUseGameStatesDispatch = useGameStatesDispatch as jest.Mock;
+const mockUsePlaceBetContext = usePlaceBetContext as jest.Mock;
+const mockUsePlaceBetDispatch = usePlaceBetDispatch as jest.Mock;
 const mockUsePlayerContext = usePlayerContext as jest.Mock;
 
 jest.mock("../../../_shared/react-hooks", () => ({
@@ -13,9 +13,9 @@ jest.mock("../../../_shared/react-hooks", () => ({
     useClickSound: jest.fn(),
 }));
 
-jest.mock("../../../_shared/react-contexts/game-state-context/game-state-context", () => ({
-    useGameStatesDispatch: jest.fn(),
-    useGameStateContext: jest.fn(),
+jest.mock("../../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-context", () => ({
+    usePlaceBetContext: jest.fn(),
+    usePlaceBetDispatch: jest.fn(),
 }));
 
 jest.mock("../../../_shared/react-contexts/auth", () => ({
@@ -34,9 +34,9 @@ jest.mock("react", () => ({
 const messageSnapShot = "should match the snapshot";
 
 describe(BetConfirmDialog.name, () => {
-    let mockGameStateContext;
+    let mockPlaceBetContext;
     beforeEach(() => {
-        mockGameStateContext = {
+        mockPlaceBetContext = {
             showConfirmDialog: true,
             suggestBet: {
                 currentBetChoice: "choice1",
@@ -46,7 +46,7 @@ describe(BetConfirmDialog.name, () => {
             },
         };
 
-        mockUseGameStatesDispatch.mockImplementation(() => jest.fn());
+        mockUsePlaceBetDispatch.mockReturnValue(jest.fn());
         mockUsePlayerContext.mockReturnValue({
             authorizeInfo: {
                 user: {
@@ -61,7 +61,7 @@ describe(BetConfirmDialog.name, () => {
         describe("with insufficient fund", () => {
             it(messageSnapShot, () => {
                 // Arrange
-                mockUseGameStateContext.mockReturnValue(mockGameStateContext);
+                mockUsePlaceBetContext.mockReturnValue(mockPlaceBetContext);
 
                 // Act
                 const { container } = render(<BetConfirmDialog />);
@@ -74,8 +74,8 @@ describe(BetConfirmDialog.name, () => {
         describe("with reach max-bet", () => {
             it(messageSnapShot, () => {
                 // Arrange
-                mockGameStateContext.suggestBet.isInsufficientFunds = false;
-                mockUseGameStateContext.mockReturnValue(mockGameStateContext);
+                mockPlaceBetContext.suggestBet.isInsufficientFunds = false;
+                mockUsePlaceBetContext.mockReturnValue(mockPlaceBetContext);
 
                 // Act
                 const { container } = render(<BetConfirmDialog />);
@@ -88,8 +88,8 @@ describe(BetConfirmDialog.name, () => {
         describe("empty", () => {
             it(messageSnapShot, () => {
                 // Arrange
-                mockGameStateContext.showConfirmDialog = false;
-                mockUseGameStateContext.mockReturnValue(mockGameStateContext);
+                mockPlaceBetContext.showConfirmDialog = false;
+                mockUsePlaceBetContext.mockReturnValue(mockPlaceBetContext);
 
                 // Act
                 const { container } = render(<BetConfirmDialog />);
