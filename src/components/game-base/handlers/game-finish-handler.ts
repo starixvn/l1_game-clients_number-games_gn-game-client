@@ -1,5 +1,6 @@
+import { Dispatch } from "react";
 import { getGameSettings } from "../../../_shared/app-settings";
-import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
+import { GameEventAction, GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 import { GameStateContextModel } from "../../../_shared/react-contexts/game-state-context/game-state-context-model";
 import { PlaceBetEventActionType } from "../../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-action";
 import { IRoundStateHandler } from "../../round-base/round-state-handler";
@@ -8,7 +9,7 @@ import { GameMessageHandler, PlaceBetHandler, messageEventType } from "./";
 import { GameRoundDataHandler } from "./game-round-data-handler";
 
 export type GameFinishHandlerProps = {
-    dispatch: Function;
+    dispatch: Dispatch<GameEventAction>;
     gameMessageHandler: GameMessageHandler;
     placeBetHandler: PlaceBetHandler;
     durations: GameDurations;
