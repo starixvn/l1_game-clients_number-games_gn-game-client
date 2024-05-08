@@ -12,7 +12,7 @@ import { useTranslator } from "../../_shared/react-hooks";
 import { tolgee } from "../../_shared/tolgee";
 import GameBase from "../../components/game-base/";
 import { GameMessageHandler } from "../../components/game-base/handlers";
-import { GameBaseProps, Round } from "../../components/game-base/type";
+import { GameBaseHandlers, GameBaseProps, Round } from "../../components/game-base/type";
 import { RoundGameStateHandler } from "../../components/round-base/round-game-state-handler";
 import { RoundStateHandler } from "../../components/round-base/round-state-handler";
 import Scoreboard from "./scoreboard";
@@ -36,7 +36,13 @@ class SeBall extends GameBase<GameBaseProps> {
 
     constructor(props: GameBaseProps) {
         const gameMessageHandler = new GameMessageHandler(props.dispatch);
-        super(props, new RoundStateHandler(), new RoundGameStateHandler(), gameMessageHandler, new NextGameRoundDataHandler());
+        const gameBaseHandlers: GameBaseHandlers = {
+            roundStateHandler: new RoundStateHandler(),
+            gameStateHandler: new RoundGameStateHandler(),
+            gameMessageHandler: gameMessageHandler,
+            gameRoundDataHandler: new NextGameRoundDataHandler(),
+        };
+        super(props, gameBaseHandlers);
     }
 
     override registerHandlers(): void {
