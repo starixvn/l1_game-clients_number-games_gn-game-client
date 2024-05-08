@@ -1,18 +1,12 @@
 import React from "react";
 import { createPortal } from "react-dom";
-import Auth from "sc-user-service-client/dist/auth";
 import { Socket } from "socket.io-client";
 
 import { SwiperNoSwiping } from "../../_shared/constants";
 import { InitSocketIO, writeDebugLog } from "../../_shared/helpers";
 import { AnalyticsHelper } from "../../_shared/helpers/analytic-helper";
 import { GlobalMessageTransmitter, GlobalTransmitterEvent } from "../../_shared/helpers/message-transmitter/global-transmitter";
-import {
-    GameActionsContextProvider,
-    GameContextProvider,
-    PlayerContext,
-    PlayerContextModel,
-} from "../../_shared/react-contexts";
+import { GameActionsContextProvider, GameContextProvider, PlayerContext, PlayerContextModel } from "../../_shared/react-contexts";
 import { GameEventActionType } from "../../_shared/react-contexts/game-state-context/game-event-action";
 import { PFProvider } from "../../_shared/react-contexts/game-state-context/pf/pf-context";
 import { PlaceBetEventActionType } from "../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-action";
@@ -52,14 +46,13 @@ import { GameSoundHandler } from "./handlers/game-sound-handler";
 import { IGameStateHandler } from "./handlers/game-state-handler";
 import { PFWrapper } from "./handlers/pf-wrapper/pf-wrapper";
 import { PlaceBetHandlerWrapper } from "./handlers/place-bet-wrapper/place-bet-handler-wrapper";
-import { GameBaseProps, RoundState } from "./type";
+import { GameBaseHandlers, GameBaseProps, RoundState } from "./type";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
     protected socket: Socket;
     protected gameCronInterval: NodeJS.Timeout;
     protected roundTimeCounter: number;
     protected timeCounter: number;
-    protected authService: Auth;
     private disconnectTimeout: NodeJS.Timeout;
     private readonly gameMessageHandler: GameMessageHandler;
     private readonly roundStateHandler: IRoundStateHandler;
@@ -71,30 +64,32 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     private readonly gameDisabledHandler?: GameDisableHandler;
     private readonly gameRoundHistoryHandler?: GameRoundHistoryHandler;
     private readonly gameSoundHandler?: GameSoundHandler;
-    private readonly gameRoundDatatHandler?: GameRoundDataHandler;
+    private readonly gameRoundDataHandler?: GameRoundDataHandler;
 
-    constructor(
-        props: P,
-        roundStateHandler: IRoundStateHandler,
-        gameStateHandler: IGameStateHandler,
-        gameMessageHandler: GameMessageHandler,
-        gameRoundDatatHandler: GameRoundDataHandler,
-        gameErrorHandler?: GameErrorHandler,
-        playerHandler?: PlayerHandler,
-        placeBetHandler?: PlaceBetHandler,
-        gameFinishHandler?: GameFinishHandler,
-        gameDisabledHandler?: GameDisableHandler,
-        gameRoundHistoryHandler?: GameRoundHistoryHandler,
-        gameSoundHandler?: GameSoundHandler
-    ) {
+    constructor(props: P, handlers: GameBaseHandlers) {
         super(props);
 
         const { dispatch } = this.props;
         const gamName = this.props.translate(`${GameResourceKeys.GAME_NAME}_${this.props.id}`);
+        
+        const {
+            roundStateHandler,
+            gameStateHandler,
+            gameMessageHandler,
+            gameRoundDataHandler,
+            gameErrorHandler,
+            playerHandler,
+            placeBetHandler,
+            gameFinishHandler,
+            gameDisabledHandler,
+            gameRoundHistoryHandler,
+            gameSoundHandler,
+        } = handlers;
+
         this.roundStateHandler = roundStateHandler;
         this.gameStateHandler = gameStateHandler;
         this.gameMessageHandler = gameMessageHandler;
-        this.gameRoundDatatHandler = gameRoundDatatHandler ?? new GameRoundDataHandler();
+        this.gameRoundDataHandler = gameRoundDataHandler ?? new GameRoundDataHandler();
         this.gameErrorHandler =
             gameErrorHandler ??
             new GameErrorHandler({
@@ -120,8 +115,10 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 getPlayerBalance: this.getPlayerBalance,
                 hedgeBetGroups: this.props.hedgeBetGroups,
                 translate: props.translate,
-                playPlaceBetSound: () => { this.props.gameSound.playPlaceBetSound(); },
-                gameId: this.props.id
+                playPlaceBetSound: () => {
+                    this.props.gameSound.playPlaceBetSound();
+                },
+                gameId: this.props.id,
             });
 
         this.gameFinishHandler =
@@ -135,7 +132,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 runGame: (remainingTime: number) => this.runGame(remainingTime),
                 gameId: this.props.id,
                 gameStateContextModel: this.getGameStateContext.bind(this),
-                gameRoundDatatHandler: this.gameRoundDatatHandler,
+                gameRoundDataHandler: this.gameRoundDataHandler,
             });
 
         this.gameDisabledHandler =
@@ -281,10 +278,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.gameErrorHandler.registerEvents(signOut);
     }
 
-    emitSocketEvent = ({ key, data }) => {
-        this.socket?.emit(key, data);
-    };
-
     get defaultResult() {
         return null;
     }
@@ -402,7 +395,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 this.placeBetHandler.getPlaceBetDispatch()({
                     type: PlaceBetEventActionType.SET_NEW_GAME_STATE,
                     payload: {},
-                })
+                });
 
                 this.gameMessageHandler.broadcastGameEvent({ [messageEventType.SYNC_OWN_BETS_TO_PF]: {} });
             }
@@ -464,10 +457,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
     renderNotice() {
         return <NoticeDialog />;
-    }
-
-    renderResultSection() {
-        return null;
     }
 
     renderRoundIdSection() {
@@ -542,11 +531,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 <>
                     <div className="game-area">
                         <PFProvider gameId={this.props.id} uid={uid}>
-                            <PFWrapper
-                                socket={this.socket}
-                                gameMessageHandler={this.gameMessageHandler}
-                                gameId={this.props.id}
-                                uid={uid} >
+                            <PFWrapper socket={this.socket} gameMessageHandler={this.gameMessageHandler} gameId={this.props.id} uid={uid}>
                                 {this.renderHeaderBlock()}
                                 {this.renderPFSettingModal()}
                                 {this.renderBetHistoryModal()}
@@ -554,9 +539,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                         </PFProvider>
                         <div>{this.renderResultBlock()}</div>
                         <PlaceBetProvider>
-                            <PlaceBetHandlerWrapper
-                                handler={this.placeBetHandler}
-                                signOut={(this.context as PlayerContextModel)?.signOut} >
+                            <PlaceBetHandlerWrapper handler={this.placeBetHandler} signOut={(this.context as PlayerContextModel)?.signOut}>
                                 {this.renderBettingBlock()}
                                 {this.renderConfirmDialog()}
                                 {this.renderConfirmBet()}

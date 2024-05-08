@@ -12,7 +12,7 @@ describe(NameGenerator.name, () => {
             });
         });
 
-        describe("when the name doesn't matche regex", () => {
+        describe("when the name doesn't match regex", () => {
             test.each([[null], [undefined], ["12"], ["ab"], ["AB"], ["012345678901234"]])("should return false", (name) => {
                 // Act
                 const actual = NameGenerator.validateName(name);

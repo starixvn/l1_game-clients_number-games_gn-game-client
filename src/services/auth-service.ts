@@ -9,7 +9,7 @@ const lobbyService = UserClientCommunication?.getUserClientInstance()?.lobby;
 export const sso = async (token: string, appType: number): Promise<SSOResponse> => {
     const userSession = await authService?.sso(token, appType);
 
-    if (userSession && userSession.isAuthenticated) {
+    if (userSession?.isAuthenticated) {
         StorageHelper.set(localStorageKeys.session, userSession);
     }
 

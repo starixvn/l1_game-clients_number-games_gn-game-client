@@ -2,13 +2,12 @@ import { createHash } from "crypto";
 import { FC, useEffect, useMemo, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useGameContext } from "../../../_shared/react-contexts";
-import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
+import { PFEventActionType } from "../../../_shared/react-contexts/game-state-context/pf/pf-action";
+import { usePFContext, usePFDispatch } from "../../../_shared/react-contexts/game-state-context/pf/pf-context";
 import { useCommonTranslate, useTranslator } from "../../../_shared/react-hooks";
 import { PFVerificationHeaderBlockBase, DefaultPFStyles as Styles } from "../../../components/game-components/provably-fair";
-import SmallBall from "../../../components/game-components/small-ball";
 import { Section } from "../../../components/game-components/provably-fair/pf-form-components";
-import { usePFContext, usePFDispatch } from "../../../_shared/react-contexts/game-state-context/pf/pf-context";
-import { PFEventActionType } from "../../../_shared/react-contexts/game-state-context/pf/pf-action";
+import SmallBall from "../../../components/game-components/small-ball";
 
 const PFVerification: FC = () => {
     const { tolgeeNamespace } = useGameContext();

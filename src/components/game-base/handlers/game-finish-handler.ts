@@ -17,7 +17,7 @@ export type GameFinishHandlerProps = {
     runGame: Function;
     gameId: number;
     gameStateContextModel(): GameStateContextModel;
-    gameRoundDatatHandler: GameRoundDataHandler;
+    gameRoundDataHandler: GameRoundDataHandler;
 };
 
 export class GameFinishHandler {
@@ -70,15 +70,11 @@ export class GameFinishHandler {
         }
 
         const { result, settlementResult, roundId, drawId } = finish;
-        const { dispatch, gameMessageHandler, gameRoundDatatHandler, gameStateContextModel } = this.props;
+        const { dispatch, gameMessageHandler, gameRoundDataHandler, gameStateContextModel } = this.props;
         const durations = this.props.durations;
         this._finish = finish;
 
-        const roundData = gameRoundDatatHandler.buildGameRoundDataAfterReceiveFinishEvent(
-            gameStateContextModel().roundData,
-            result,
-            drawId
-        );
+        const roundData = gameRoundDataHandler.buildGameRoundDataAfterReceiveFinishEvent(gameStateContextModel().roundData, result, drawId);
 
         this.props.placeBetHandler.getPlaceBetDispatch()({ type: PlaceBetEventActionType.END_BET_PROCESSING, payload: {} });
         dispatch({

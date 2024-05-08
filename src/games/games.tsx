@@ -96,7 +96,6 @@ export const Games: React.FC<Props> = ({
 
     const swiperSlideChild = ({ isActive, gameId }) => {
         if (isActive) {
-            // console.log({ isActive, gameId });
             return getGameComponentById(parseInt(gameId));
         }
 
