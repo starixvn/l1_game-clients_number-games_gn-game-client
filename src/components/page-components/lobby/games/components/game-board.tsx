@@ -101,17 +101,18 @@ export const GameBoard: React.FC<Props> = ({ gameSettings, openGame, gameTransmi
         <div
             className={`${Styles["game-board-detail"]} ${!isShow ? "" : Styles["pointer"]}`}
             id={`icon-${gameSettings.gameName.toLowerCase()}`}
-            onClick={handleClickGameBoard}
         >
-            <GameIcon gameSettings={gameSettings} transmitter={transmitter} />
-            <DisabledGameBlock transmitter={transmitter} gameSettings={gameSettings} />
-            {isLoading && <LoadingSpinner />}
-            {isShow && (
-                <div className={Styles["detail"]}>
-                    <CountdownTimer transmitter={transmitter} gameSettings={gameSettings} />
-                    {transmitter && <LobbyScoreboard gameSettings={gameSettings} transmitter={transmitter} />}
-                </div>
-            )}
+            <div onClick={handleClickGameBoard} className="d-flex">
+                <GameIcon gameSettings={gameSettings} transmitter={transmitter} />
+                {isLoading && <LoadingSpinner />}
+                {isShow && (
+                    <div className={Styles["detail"]}>
+                        <CountdownTimer transmitter={transmitter} gameSettings={gameSettings} />
+                        {transmitter && <LobbyScoreboard gameSettings={gameSettings} transmitter={transmitter} />}
+                    </div>
+                )}
+            </div>
+
             {clickGameId > 0 && (
                 <PreloadResources
                     gameId={clickGameId}
@@ -120,6 +121,8 @@ export const GameBoard: React.FC<Props> = ({ gameSettings, openGame, gameTransmi
                     cancelPreload={cancelPreloadResource}
                 />
             )}
+
+            <DisabledGameBlock transmitter={transmitter} gameSettings={gameSettings} />
         </div>
     );
 };
