@@ -1,17 +1,18 @@
 import { DefaultParamType, TFnType, TranslationKey } from "@tolgee/react";
+import { Dispatch } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { NoticeErrorCode } from "../../../../_shared/constants/error-code-dictionary";
-import { getGlossaryTranslate, GetLocalizedErrorMessage, localStorageKeys, StorageHelper } from "../../../../_shared/helpers";
-import { findHedgeBetGroup, getAccountBalance, getCriteriaValidateBet, IAvailableSuggestBetAmount, isBalanceUnavailable, isHedgeBet, isInPhasePreventBet } from "../../../../_shared/helpers/validate-bet-helper";
-import { NoticeModel, RoundState, SuggestBet } from "../../type";
 import { GameMessageHandler, messageEventType } from "..";
 import { getAppSettings } from "../../../../_shared/app-settings";
-import { PlaceBetEventActionType } from "../../../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-action";
-import { PlaceBetContextModel } from "../../../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-context-model";
+import { confirmBet } from "../../../../_shared/constants";
+import { NoticeErrorCode } from "../../../../_shared/constants/error-code-dictionary";
+import { GetLocalizedErrorMessage, StorageHelper, getGlossaryTranslate, localStorageKeys } from "../../../../_shared/helpers";
 import { GlobalMessageTransmitter, GlobalTransmitterEvent } from "../../../../_shared/helpers/message-transmitter/global-transmitter";
+import { IAvailableSuggestBetAmount, findHedgeBetGroup, getAccountBalance, getCriteriaValidateBet, isBalanceUnavailable, isHedgeBet, isInPhasePreventBet } from "../../../../_shared/helpers/validate-bet-helper";
 import { SystemContextModel } from "../../../../_shared/react-contexts";
 import { GameStateContextModel } from "../../../../_shared/react-contexts/game-state-context/game-state-context-model";
-import { confirmBet } from "../../../../_shared/constants";
+import { PlaceBetEventAction, PlaceBetEventActionType } from "../../../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-action";
+import { PlaceBetContextModel } from "../../../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-context-model";
+import { NoticeModel, RoundState, SuggestBet } from "../../type";
 
 export type PlaceBetHandlerProps = {
     tolgeeNamespace: string;
@@ -27,7 +28,7 @@ export type PlaceBetHandlerProps = {
 
 export class PlaceBetHandler {
     private retryInterval: NodeJS.Timeout;
-    private placeBetDispatch: Function;
+    private placeBetDispatch: Dispatch<PlaceBetEventAction>;
     private placeBetContext: PlaceBetContextModel;
 
     private endBetHandlerId: any;
@@ -35,7 +36,7 @@ export class PlaceBetHandler {
 
     constructor(public readonly props: PlaceBetHandlerProps) { }
 
-    setPlaceBetDispatch = (dispatch: Function) => {
+    setPlaceBetDispatch = (dispatch: Dispatch<PlaceBetEventAction>) => {
         this.placeBetDispatch = dispatch;
     }
 

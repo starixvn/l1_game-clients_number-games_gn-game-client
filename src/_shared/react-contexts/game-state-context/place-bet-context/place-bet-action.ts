@@ -26,9 +26,9 @@ export interface PlaceBetEventPayload {
     };
     acceptedBetQueue?: any;
     suggestBet?: SuggestBet;
-    notConfirmOwnBets: object;
-    showConfirmBet: boolean;
-    showConfirmDialog: boolean;
+    notConfirmOwnBets?: object;
+    showConfirmBet?: boolean;
+    showConfirmDialog?: boolean;
 }
 
 export interface PlaceBetEventAction {

@@ -1,19 +1,16 @@
-
-import { createContext, useContext, useReducer } from "react";
+import { Dispatch, createContext, useContext, useReducer } from "react";
 import { PlaceBetEventAction, PlaceBetEventActionType } from "./place-bet-action";
-import { initialPlaceBetContext, PlaceBetContextModel } from "./place-bet-context-model";
+import { PlaceBetContextModel, initialPlaceBetContext } from "./place-bet-context-model";
 
 export const PlaceBetContext = createContext({ isProcessingBet: false } as PlaceBetContextModel);
-const PlaceBetDispatchContext = createContext(null);
+const PlaceBetDispatchContext = createContext({} as Dispatch<PlaceBetEventAction>);
 
 export function PlaceBetProvider({ children }) {
     const [placeBetContextModel, dispatch] = useReducer(placeBetReducer, initialPlaceBetContext());
 
     return (
         <PlaceBetContext.Provider value={placeBetContextModel}>
-            <PlaceBetDispatchContext.Provider value={dispatch}>
-                {children}
-            </PlaceBetDispatchContext.Provider>
+            <PlaceBetDispatchContext.Provider value={dispatch}>{children}</PlaceBetDispatchContext.Provider>
         </PlaceBetContext.Provider>
     );
 }
@@ -28,14 +25,7 @@ export function usePlaceBetDispatch() {
 
 function placeBetReducer(state: PlaceBetContextModel, action: PlaceBetEventAction) {
     const { type, payload } = action;
-    const {
-        ownBets,
-        acceptedBetQueue,
-        suggestBet,
-        notConfirmOwnBets,
-        showConfirmBet,
-        showConfirmDialog
-    } = payload;
+    const { ownBets, acceptedBetQueue, suggestBet, notConfirmOwnBets, showConfirmBet, showConfirmDialog } = payload;
 
     // console.log(`placeBetReducer: ${JSON.stringify(action)} `);
     switch (type) {
@@ -56,14 +46,14 @@ function placeBetReducer(state: PlaceBetContextModel, action: PlaceBetEventActio
         case PlaceBetEventActionType.BET_PROCESSING: {
             return {
                 ...state,
-                isProcessingBet: true
+                isProcessingBet: true,
             };
         }
 
         case PlaceBetEventActionType.END_BET_PROCESSING: {
             return {
                 ...state,
-                isProcessingBet: false
+                isProcessingBet: false,
             };
         }
 
@@ -78,15 +68,15 @@ function placeBetReducer(state: PlaceBetContextModel, action: PlaceBetEventActio
             return {
                 ...state,
                 ownBets: {},
-                suggestBet: {}
-            }
+                suggestBet: {},
+            };
         }
 
         case PlaceBetEventActionType.NOT_CONFIRM_OWN_BETS: {
             return {
                 ...state,
-                notConfirmOwnBets
-            }
+                notConfirmOwnBets,
+            };
         }
 
         case PlaceBetEventActionType.SHOW_CONFIRM_BET: {

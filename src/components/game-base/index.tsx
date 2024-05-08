@@ -6,6 +6,7 @@ import { Socket } from "socket.io-client";
 import { SwiperNoSwiping } from "../../_shared/constants";
 import { InitSocketIO, writeDebugLog } from "../../_shared/helpers";
 import { AnalyticsHelper } from "../../_shared/helpers/analytic-helper";
+import { GlobalMessageTransmitter, GlobalTransmitterEvent } from "../../_shared/helpers/message-transmitter/global-transmitter";
 import {
     GameActionsContextProvider,
     GameContextProvider,
@@ -13,8 +14,13 @@ import {
     PlayerContextModel,
 } from "../../_shared/react-contexts";
 import { GameEventActionType } from "../../_shared/react-contexts/game-state-context/game-event-action";
+import { PFProvider } from "../../_shared/react-contexts/game-state-context/pf/pf-context";
+import { PlaceBetEventActionType } from "../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-action";
+import { PlaceBetProvider } from "../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-context";
 import { GameResourceKeys } from "../../_shared/resources";
 import { getBalance } from "../../services/auth-service";
+import BetConfirmDialog from "../game-components/bet-confirm-dialog";
+import ConfirmBet from "../game-components/confirm-bet";
 import CountdownTimer from "../game-components/countdown-timer/countdown-timer";
 import DisabledModal from "../game-components/disabled-modal";
 import { ConnectFailedMessage } from "../game-components/error-message";
@@ -37,22 +43,16 @@ import {
     GameFinishHandler,
     GameMessageHandler,
     GameRoundHistoryHandler,
-    messageEventType,
     PlaceBetHandler,
     PlayerHandler,
+    messageEventType,
 } from "./handlers";
 import { GameRoundDataHandler } from "./handlers/game-round-data-handler";
 import { GameSoundHandler } from "./handlers/game-sound-handler";
 import { IGameStateHandler } from "./handlers/game-state-handler";
-import { GameBaseProps, RoundState } from "./type";
-import { GlobalMessageTransmitter, GlobalTransmitterEvent } from "../../_shared/helpers/message-transmitter/global-transmitter";
-import { PlaceBetProvider } from "../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-context";
-import { PFProvider } from "../../_shared/react-contexts/game-state-context/pf/pf-context";
-import { PlaceBetHandlerWrapper } from "./handlers/place-bet-wrapper/place-bet-handler-wrapper";
 import { PFWrapper } from "./handlers/pf-wrapper/pf-wrapper";
-import { PlaceBetEventActionType } from "../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-action";
-import ConfirmBet from "../game-components/confirm-bet";
-import BetConfirmDialog from "../game-components/bet-confirm-dialog";
+import { PlaceBetHandlerWrapper } from "./handlers/place-bet-wrapper/place-bet-handler-wrapper";
+import { GameBaseProps, RoundState } from "./type";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
     protected socket: Socket;

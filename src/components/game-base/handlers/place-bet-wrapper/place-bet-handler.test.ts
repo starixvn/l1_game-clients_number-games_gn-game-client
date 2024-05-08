@@ -1,6 +1,9 @@
 import { stub } from "jest-auto-stub";
+import { Dispatch } from "react";
 import { SystemContextModel } from "../../../../_shared/react-contexts";
 import { GameStateContextModel } from "../../../../_shared/react-contexts/game-state-context/game-state-context-model";
+import { PlaceBetEventAction } from "../../../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-action";
+import { PlaceBetContextModel } from "../../../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-context-model";
 import { GameConfigs, IUserStakeLevel, RoundState } from "../../type";
 import { GameMessageHandler } from "../game-message-handler";
 import { PlaceBetHandler, PlaceBetHandlerProps } from "./place-bet-handler";
@@ -17,14 +20,24 @@ describe("placeBet", () => {
     let placeBetHandlerProps: PlaceBetHandlerProps;
     let gameConfigs: GameConfigs;
     let userStakeLevel: IUserStakeLevel;
+    let placeBetContext: PlaceBetContextModel;
+    let placeBetDispatch: Dispatch<PlaceBetEventAction>;
+
+    const updatePlaceBetContext = (state) => {
+        placeBetContext = stub<PlaceBetContextModel>(state);
+        placeBetHandler.registerEvents(() => {}, placeBetContext);
+    };
 
     beforeEach(() => {
         jest.clearAllMocks();
 
         systemContextModel = stub<SystemContextModel>();
+        placeBetContext = stub<PlaceBetContextModel>();
         gameMessageHandler = stub<GameMessageHandler>();
         gameConfigs = stub<GameConfigs>();
         userStakeLevel = stub<IUserStakeLevel>();
+        placeBetDispatch = jest.fn();
+
         placeBetHandlerProps = {
             gameName: "test",
             gameMessageHandler,
@@ -34,9 +47,17 @@ describe("placeBet", () => {
             getPlayerBalance: jest.fn(),
             tolgeeNamespace: "test",
             gameId: 1,
+            signOut: () => {},
         };
 
         placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
+        placeBetHandler.setPlaceBetDispatch(placeBetDispatch);
+
+        placeBetHandler.registerEvents(() => {}, placeBetContext);
+    });
+
+    afterEach(() => {
+        placeBetHandler.unregisterEvents();
     });
 
     describe("isInPhasePreventBet", () => {
@@ -83,8 +104,8 @@ describe("placeBet", () => {
         });
         it("calls handleProcessingBet when isProcessingBet is true", () => {
             // Arrange
-            const gameStateContext = { isProcessingBet: true, roundState: RoundState.InRound };
-            gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
+            gameStateContextModel = stub<GameStateContextModel>({ roundState: RoundState.InRound });
+            updatePlaceBetContext({ isProcessingBet: true });
             const handleProcessingBetSpy = jest.spyOn(placeBetHandler, "handleProcessingBet");
 
             // Act
@@ -96,8 +117,8 @@ describe("placeBet", () => {
 
         it("calls handleProcessingBet when isProcessingBet is true - enabled QuickBet", () => {
             // Arrange
-            const gameStateContext = { isProcessingBet: true, roundState: RoundState.InRound };
-            gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
+            gameStateContextModel = stub<GameStateContextModel>({ roundState: RoundState.InRound });
+            updatePlaceBetContext({ isProcessingBet: true });
             const handleProcessingBetSpy = jest.spyOn(placeBetHandler, "handleProcessingBet");
 
             // Act
@@ -110,8 +131,8 @@ describe("placeBet", () => {
         it("does not call handleProcessingBet when isProcessingBet is false", () => {
             // Arrange
 
-            const gameStateContext = { isProcessingBet: false, roundState: RoundState.InRound, gameConfigs };
-            gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
+            gameStateContextModel = stub<GameStateContextModel>({ roundState: RoundState.InRound, gameConfigs });
+            updatePlaceBetContext({ isProcessingBet: false });
             const handleProcessingBetSpy = jest.spyOn(placeBetHandler, "handleProcessingBet");
 
             // Act
@@ -128,13 +149,17 @@ describe("placeBet", () => {
             placeBetHandlerProps.getPlayerBalance = jest.fn().mockReturnValue(0);
             placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
             const gameStateContext = {
-                isProcessingBet: false,
                 roundState: RoundState.InRound,
-                gameConfigs,
-                notConfirmOwnBets: {},
-                ownBets: {},
+                gameConfigs
             };
             gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
+            updatePlaceBetContext({ 
+                isProcessingBet: false,
+                notConfirmOwnBets: {},
+                ownBets: {}
+             });
+            placeBetHandler.setPlaceBetDispatch(placeBetDispatch);
+
             const broadcastNoticeSpy = jest.spyOn(placeBetHandler, "broadcastNotice");
             const notice = {
                 gameName: "test",
@@ -157,12 +182,12 @@ describe("placeBet", () => {
             placeBetHandlerProps.getPlayerBalance = jest.fn().mockReturnValue(0);
             placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
             const gameStateContext = {
-                isProcessingBet: false,
                 roundState: RoundState.InRound,
                 gameConfigs,
                 notConfirmOwnBets: {},
                 ownBets: {},
             };
+            updatePlaceBetContext({ isProcessingBet: false });
             gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
             const broadcastNoticeSpy = jest.spyOn(placeBetHandler, "broadcastNotice");
             const notice = {
@@ -191,12 +216,15 @@ describe("placeBet", () => {
             placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
 
             const gameStateContext = {
-                isProcessingBet: false,
                 roundState: RoundState.InRound,
-                notConfirmOwnBets: { bet1: 50, bet2: 50 },
-                ownBets: { bet3: 20 },
                 gameConfigs,
             };
+            updatePlaceBetContext({ 
+                isProcessingBet: false,
+                notConfirmOwnBets: { bet1: 50, bet2: 50 },
+                ownBets: { bet3: 20 }
+             });
+            placeBetHandler.setPlaceBetDispatch(placeBetDispatch);
 
             gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
             const broadcastNoticeSpy = jest.spyOn(placeBetHandler, "broadcastNotice");
@@ -224,14 +252,15 @@ describe("placeBet", () => {
             placeBetHandlerProps.getPlayerBalance = jest.fn().mockReturnValue(availableBalance);
             placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
 
-            const gameStateContext = {
+            updatePlaceBetContext({ 
                 isProcessingBet: false,
-                roundState: RoundState.InRound,
                 notConfirmOwnBets: { bet1: 50, bet2: 30 },
                 ownBets: { bet3: 20 },
-            };
+             });
 
-            gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
+            gameStateContextModel = stub<GameStateContextModel>({
+                roundState: RoundState.InRound
+            });
             const broadcastNoticeSpy = jest.spyOn(placeBetHandler, "broadcastNotice");
             const notice = {
                 gameName: "test",
@@ -256,13 +285,17 @@ describe("placeBet", () => {
             placeBetHandlerProps.getPlayerBalance = jest.fn().mockReturnValue(availableBalance);
             placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
             const gameStateContext = {
-                isProcessingBet: false,
                 roundState: RoundState.InRound,
-                notConfirmOwnBets: { bet1: 10, bet2: 20 },
-                ownBets: { bet3: 20 },
                 gameConfigs,
             };
             gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
+            updatePlaceBetContext({ 
+                isProcessingBet: false,
+                notConfirmOwnBets: { bet1: 10, bet2: 20 },
+                ownBets: { bet3: 20 }
+            });
+            placeBetHandler.setPlaceBetDispatch(placeBetDispatch);
+
             const broadcastNoticeSpy = jest.spyOn(placeBetHandler, "broadcastNotice");
 
             // Act
@@ -289,12 +322,17 @@ describe("placeBet", () => {
             placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
             const amount = 100;
             const gameStateContext = {
-                isProcessingBet: false,
                 roundState: RoundState.InRound,
-                notConfirmOwnBets: {},
-                ownBets: { choice2: 20 },
+                gameConfigs,
             };
             gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
+            updatePlaceBetContext({
+                isProcessingBet: false,
+                notConfirmOwnBets: {},
+                ownBets: { choice2: 20 },
+            });
+            placeBetHandler.setPlaceBetDispatch(placeBetDispatch);
+
             const broadcastNoticeSpy = jest.spyOn(placeBetHandler, "broadcastNotice");
             const notice = {
                 gameName: "test",
@@ -324,13 +362,17 @@ describe("placeBet", () => {
             placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
             const amount = 100;
             const gameStateContext = {
-                isProcessingBet: false,
                 roundState: RoundState.InRound,
-                notConfirmOwnBets: {},
-                ownBets: {},
-                gameConfigs,
+                gameConfigs
             };
             gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
+            updatePlaceBetContext({ 
+                isProcessingBet: false,
+                notConfirmOwnBets: {},
+                ownBets: {} 
+            });
+            placeBetHandler.setPlaceBetDispatch(placeBetDispatch);
+
             const broadcastNoticeSpy = jest.spyOn(placeBetHandler, "broadcastNotice");
             const notice = {
                 gameName: "test",
@@ -389,14 +431,16 @@ describe("placeBet", () => {
             placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
             const amount = 1;
             const gameStateContext = {
-                isProcessingBet: false,
                 roundState: RoundState.InRound,
-                notConfirmOwnBets: {},
-                ownBets: { player: 200 },
                 gameConfigs,
                 userStakeLevel,
             };
             gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
+            updatePlaceBetContext({
+                isProcessingBet: false,
+                notConfirmOwnBets: {},
+                ownBets: { player: 200 },
+            });
             const broadcastNoticeSpy = jest.spyOn(placeBetHandler, "broadcastNotice");
             const notice = {
                 gameName: "test",
@@ -421,14 +465,16 @@ describe("placeBet", () => {
             placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
             const amount = 1;
             const gameStateContext = {
-                isProcessingBet: false,
                 roundState: RoundState.InRound,
-                notConfirmOwnBets: {},
-                ownBets: { player: 200 },
                 gameConfigs,
                 userStakeLevel,
             };
             gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
+            updatePlaceBetContext({
+                isProcessingBet: false,
+                notConfirmOwnBets: {},
+                ownBets: { player: 200 },
+            });
             const broadcastNoticeSpy = jest.spyOn(placeBetHandler, "broadcastNotice");
             const notice = {
                 gameName: "test",
@@ -455,14 +501,16 @@ describe("placeBet", () => {
             placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
             const amount = 1;
             const gameStateContext = {
-                isProcessingBet: false,
                 roundState: RoundState.InRound,
-                notConfirmOwnBets: {},
-                ownBets: { player: 150 },
                 gameConfigs,
                 userStakeLevel,
             };
             gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
+            updatePlaceBetContext({
+                isProcessingBet: false,
+                notConfirmOwnBets: {},
+                ownBets: { player: 150 }
+            });
             const broadcastNoticeSpy = jest.spyOn(placeBetHandler, "broadcastNotice");
             const notice = {
                 gameName: "test",
@@ -489,14 +537,16 @@ describe("placeBet", () => {
             placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
             const amount = 1;
             const gameStateContext = {
-                isProcessingBet: false,
                 roundState: RoundState.InRound,
-                notConfirmOwnBets: {},
-                ownBets: { player: 150 },
                 gameConfigs,
                 userStakeLevel,
             };
             gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
+            updatePlaceBetContext({
+                isProcessingBet: false,
+                notConfirmOwnBets: {},
+                ownBets: { player: 150 }
+            });
             const broadcastNoticeSpy = jest.spyOn(placeBetHandler, "broadcastNotice");
             const notice = {
                 gameName: "test",
@@ -521,16 +571,20 @@ describe("placeBet", () => {
             gameConfigs = stub<GameConfigs>(gameConfigMock);
             placeBetHandlerProps.getPlayerBalance = jest.fn().mockReturnValue(300);
             placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
+            placeBetHandler.setPlaceBetDispatch(placeBetDispatch);
+
             const amount = 1;
             const gameStateContext = {
-                isProcessingBet: false,
                 roundState: RoundState.InRound,
-                notConfirmOwnBets: {},
-                ownBets: { player: 149 },
                 gameConfigs,
                 userStakeLevel,
             };
             gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
+            updatePlaceBetContext({
+                isProcessingBet: false,
+                notConfirmOwnBets: {},
+                ownBets: { player: 149 }
+            });
             const broadcastNoticeSpy = jest.spyOn(placeBetHandler, "broadcastNotice");
             const notice = {
                 gameName: "test",
@@ -560,14 +614,10 @@ describe("placeBet", () => {
                 gameConfigMock.minBet = 5;
                 gameConfigs = stub<GameConfigs>(gameConfigMock);
                 gameStateContext = {
-                    isProcessingBet: false,
                     roundState: RoundState.InRound,
-                    notConfirmOwnBets: {},
-                    ownBets: { player: 100 },
                     gameConfigs,
                     userStakeLevel,
                 };
-
                 amount = 100;
             });
 
@@ -576,6 +626,13 @@ describe("placeBet", () => {
                 placeBetHandlerProps.getPlayerBalance = jest.fn().mockReturnValue(50);
                 placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
                 gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
+                placeBetHandler.setPlaceBetDispatch(placeBetDispatch);
+                updatePlaceBetContext({
+                    isProcessingBet: false,
+                    notConfirmOwnBets: {},
+                    ownBets: { player: 100 }
+                });
+
                 const suggestBetSpy = jest.spyOn(placeBetHandler, "suggestBetAmount");
                 const availableSuggestBet = {
                     suggestAmount: 50,
@@ -599,16 +656,19 @@ describe("placeBet", () => {
                 gameConfigMock.maxBetPerChoices.player = 10000;
                 gameConfigs = stub<GameConfigs>(gameConfigMock);
                 gameStateContext = {
-                    isProcessingBet: false,
                     roundState: RoundState.InRound,
-                    notConfirmOwnBets: { player: 9000 },
-                    ownBets: {},
                     gameConfigs,
                     userStakeLevel,
                 };
                 placeBetHandlerProps.getPlayerBalance = jest.fn().mockReturnValue(9500);
                 placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
                 gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
+                placeBetHandler.setPlaceBetDispatch(placeBetDispatch);
+                updatePlaceBetContext({
+                    isProcessingBet: false,
+                    notConfirmOwnBets: { player: 9000 },
+                    ownBets: {}
+                });
                 const suggestBetSpy = jest.spyOn(placeBetHandler, "suggestBetAmount");
                 const availableSuggestBet = {
                     suggestAmount: 500,
@@ -629,6 +689,13 @@ describe("placeBet", () => {
                 placeBetHandlerProps.getPlayerBalance = jest.fn().mockReturnValue(50);
                 placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
                 gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
+                placeBetHandler.setPlaceBetDispatch(placeBetDispatch);
+                updatePlaceBetContext({
+                    isProcessingBet: false,
+                    notConfirmOwnBets: {},
+                    ownBets: { player: 100 }
+                });
+
                 const suggestBetSpy = jest.spyOn(placeBetHandler, "suggestBetAmount");
                 const availableSuggestBet = {
                     suggestAmount: 50,
@@ -649,6 +716,13 @@ describe("placeBet", () => {
                 placeBetHandlerProps.getPlayerBalance = jest.fn().mockReturnValue(200);
                 placeBetHandler.sendOutstandingBet = jest.fn();
                 placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
+                placeBetHandler.setPlaceBetDispatch(placeBetDispatch);
+                updatePlaceBetContext({
+                    isProcessingBet: false,
+                    notConfirmOwnBets: {},
+                    ownBets: { player: 100 }
+                });
+
                 gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
                 const suggestBetSpy = jest.spyOn(placeBetHandler, "suggestBetAmount");
                 const showConfirmDialogSpy = jest.spyOn(placeBetHandler, "showConfirmDialog");
@@ -674,6 +748,13 @@ describe("placeBet", () => {
                 placeBetHandler.sendOutstandingBet = jest.fn();
                 placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
                 gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
+                placeBetHandler.setPlaceBetDispatch(placeBetDispatch);
+                updatePlaceBetContext({
+                    isProcessingBet: false,
+                    notConfirmOwnBets: {},
+                    ownBets: { player: 100 }
+                });
+
                 const suggestBetSpy = jest.spyOn(placeBetHandler, "suggestBetAmount");
                 const showConfirmDialogSpy = jest.spyOn(placeBetHandler, "showConfirmDialog");
                 const availableSuggestBet = {
@@ -698,10 +779,7 @@ describe("placeBet", () => {
                 gameConfigMock.maxBetPerChoices.player = 150;
                 gameConfigs = stub<GameConfigs>(gameConfigMock);
                 gameStateContext = {
-                    isProcessingBet: false,
                     roundState: RoundState.InRound,
-                    notConfirmOwnBets: {},
-                    ownBets: { player: 100 },
                     gameConfigs,
                     userStakeLevel,
                 };
@@ -710,6 +788,13 @@ describe("placeBet", () => {
                 placeBetHandler.sendOutstandingBet = jest.fn();
                 placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
                 gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
+                placeBetHandler.setPlaceBetDispatch(placeBetDispatch);
+                updatePlaceBetContext({
+                    isProcessingBet: false,
+                    notConfirmOwnBets: {},
+                    ownBets: { player: 100 }
+                });
+
                 const suggestBetSpy = jest.spyOn(placeBetHandler, "suggestBetAmount");
                 const showConfirmDialogSpy = jest.spyOn(placeBetHandler, "showConfirmDialog");
                 const availableSuggestBet = {
@@ -734,10 +819,7 @@ describe("placeBet", () => {
                 gameConfigMock.maxBetPerChoices.player = 150;
                 gameConfigs = stub<GameConfigs>(gameConfigMock);
                 gameStateContext = {
-                    isProcessingBet: false,
                     roundState: RoundState.InRound,
-                    notConfirmOwnBets: {},
-                    ownBets: { player: 100 },
                     gameConfigs,
                     userStakeLevel,
                 };
@@ -746,6 +828,12 @@ describe("placeBet", () => {
                 placeBetHandler.sendOutstandingBet = jest.fn();
                 placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
                 gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
+                placeBetHandler.setPlaceBetDispatch(placeBetDispatch);
+                updatePlaceBetContext({
+                    isProcessingBet: false,
+                    notConfirmOwnBets: {},
+                    ownBets: { player: 100 }
+                });
                 const suggestBetSpy = jest.spyOn(placeBetHandler, "suggestBetAmount");
                 const showConfirmDialogSpy = jest.spyOn(placeBetHandler, "showConfirmDialog");
                 const availableSuggestBet = {
@@ -771,6 +859,13 @@ describe("placeBet", () => {
                 placeBetHandler.sendOutstandingBet = jest.fn();
                 placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
                 gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
+                placeBetHandler.setPlaceBetDispatch(placeBetDispatch);
+                updatePlaceBetContext({
+                    isProcessingBet: false,
+                    notConfirmOwnBets: {},
+                    ownBets: { player: 100 }
+                });
+
                 const suggestBetSpy = jest.spyOn(placeBetHandler, "suggestBetAmount");
                 const showConfirmDialogSpy = jest.spyOn(placeBetHandler, "showConfirmDialog");
                 const updateNotConfirmedBetStateSpy = jest.spyOn(placeBetHandler, "updateNotConfirmedBetState");
@@ -800,6 +895,13 @@ describe("placeBet", () => {
                 placeBetHandler.sendOutstandingBet = jest.fn();
                 placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
                 gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
+                placeBetHandler.setPlaceBetDispatch(placeBetDispatch);
+                updatePlaceBetContext({
+                    isProcessingBet: false,
+                    notConfirmOwnBets: {},
+                    ownBets: { player: 100 }
+                });
+
                 const showConfirmDialogSpy = jest.spyOn(placeBetHandler, "showConfirmDialog");
 
                 const broadcastNoticeSpy = jest.spyOn(placeBetHandler, "broadcastNotice");
@@ -831,6 +933,13 @@ describe("placeBet", () => {
                 placeBetHandler.sendOutstandingBet = jest.fn();
                 placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
                 gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
+                placeBetHandler.setPlaceBetDispatch(placeBetDispatch);
+                updatePlaceBetContext({
+                    isProcessingBet: false,
+                    notConfirmOwnBets: {},
+                    ownBets: { player: 100 }
+                });
+
                 const showConfirmDialogSpy = jest.spyOn(placeBetHandler, "showConfirmDialog");
 
                 const broadcastNoticeSpy = jest.spyOn(placeBetHandler, "broadcastNotice");
@@ -860,10 +969,7 @@ describe("placeBet", () => {
                 gameConfigMock.maxBetPerChoices.player = 20000;
                 gameConfigs = stub<GameConfigs>(gameConfigMock);
                 gameStateContext = {
-                    isProcessingBet: false,
                     roundState: RoundState.InRound,
-                    notConfirmOwnBets: { player: 5000 },
-                    ownBets: { tie: 1000 },
                     gameConfigs,
                     userStakeLevel,
                 };
@@ -872,6 +978,12 @@ describe("placeBet", () => {
                 placeBetHandler.sendOutstandingBet = jest.fn();
                 placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
                 gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
+                placeBetHandler.setPlaceBetDispatch(placeBetDispatch);
+                updatePlaceBetContext({
+                    isProcessingBet: false,
+                    notConfirmOwnBets: { player: 5000 },
+                    ownBets: { tie: 1000 }
+                });
                 const suggestBetSpy = jest.spyOn(placeBetHandler, "suggestBetAmount");
                 const showConfirmDialogSpy = jest.spyOn(placeBetHandler, "showConfirmDialog");
                 const availableSuggestBet = {
@@ -898,10 +1010,7 @@ describe("placeBet", () => {
                 gameConfigMock.maxBetPerChoices.player = 20000;
                 gameConfigs = stub<GameConfigs>(gameConfigMock);
                 gameStateContext = {
-                    isProcessingBet: false,
                     roundState: RoundState.InRound,
-                    notConfirmOwnBets: {},
-                    ownBets: { tie: 1000, player: 5000 },
                     gameConfigs,
                     userStakeLevel,
                 };
@@ -910,6 +1019,12 @@ describe("placeBet", () => {
                 placeBetHandler.sendOutstandingBet = jest.fn();
                 placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
                 gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
+                placeBetHandler.setPlaceBetDispatch(placeBetDispatch);
+                updatePlaceBetContext({
+                    isProcessingBet: false,
+                    notConfirmOwnBets: {},
+                    ownBets: { tie: 1000, player: 5000 }
+                });
                 const suggestBetSpy = jest.spyOn(placeBetHandler, "suggestBetAmount");
                 const showConfirmDialogSpy = jest.spyOn(placeBetHandler, "showConfirmDialog");
                 const availableSuggestBet = {
@@ -938,14 +1053,10 @@ describe("placeBet", () => {
             beforeEach(() => {
                 betChoice = "player";
                 gameStateContext = {
-                    isProcessingBet: false,
                     roundState: RoundState.InRound,
-                    notConfirmOwnBets: {},
-                    ownBets: { player: 100 },
                     gameConfigs,
                     userStakeLevel,
                 };
-
                 gameConfigMock.maxBetPerChoices.player = 150;
                 gameConfigMock.minBet = 5;
                 gameConfigs = stub<GameConfigs>(gameConfigMock);
@@ -959,6 +1070,12 @@ describe("placeBet", () => {
                 placeBetHandler.sendOutstandingBet = jest.fn();
                 placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
                 gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
+                placeBetHandler.setPlaceBetDispatch(placeBetDispatch);
+                updatePlaceBetContext({
+                    isProcessingBet: false,
+                    notConfirmOwnBets: {},
+                    ownBets: { player: 100 }
+                });
                 const updateNotConfirmedBetStateSpy = jest.spyOn(placeBetHandler, "updateNotConfirmedBetState");
                 const handleEnabledQuickBetSpy = jest.spyOn(placeBetHandler, "handleEnabledQuickBet");
 
@@ -977,6 +1094,12 @@ describe("placeBet", () => {
                 placeBetHandler.sendOutstandingBet = jest.fn();
                 placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
                 gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
+                placeBetHandler.setPlaceBetDispatch(placeBetDispatch);
+                updatePlaceBetContext({
+                    isProcessingBet: false,
+                    notConfirmOwnBets: {},
+                    ownBets: { player: 100 }
+                });
                 const updateNotConfirmedBetStateSpy = jest.spyOn(placeBetHandler, "updateNotConfirmedBetState");
                 const handleEnabledQuickBetSpy = jest.spyOn(placeBetHandler, "handleEnabledQuickBet");
 
@@ -994,18 +1117,14 @@ describe("placeBet", () => {
             let betChoice: string;
             let amount: number;
             let enabledQuickBet: boolean;
-
+            
             beforeEach(() => {
                 betChoice = "player";
                 gameStateContext = {
-                    isProcessingBet: false,
                     roundState: RoundState.InRound,
-                    notConfirmOwnBets: {},
-                    ownBets: { player: 100 },
                     gameConfigs,
                     userStakeLevel,
                 };
-
                 gameConfigMock.maxBetPerChoices.player = 150;
                 gameConfigMock.minBet = 5;
                 gameConfigs = stub<GameConfigs>(gameConfigMock);
@@ -1019,6 +1138,12 @@ describe("placeBet", () => {
                 placeBetHandler.sendOutstandingBet = jest.fn();
                 placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
                 gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
+                placeBetHandler.setPlaceBetDispatch(placeBetDispatch);
+                updatePlaceBetContext({
+                    isProcessingBet: false,
+                    notConfirmOwnBets: {},
+                    ownBets: { player: 100 }
+                });
                 const updateNotConfirmedBetStateSpy = jest.spyOn(placeBetHandler, "updateNotConfirmedBetState");
                 const showConfirmBetSpy = jest.spyOn(placeBetHandler, "showConfirmBet");
 
@@ -1038,6 +1163,12 @@ describe("placeBet", () => {
                 placeBetHandler.sendOutstandingBet = jest.fn();
                 placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
                 gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
+                placeBetHandler.setPlaceBetDispatch(placeBetDispatch);
+                updatePlaceBetContext({
+                    isProcessingBet: false,
+                    notConfirmOwnBets: {},
+                    ownBets: { player: 100 }
+                });
                 const updateNotConfirmedBetStateSpy = jest.spyOn(placeBetHandler, "updateNotConfirmedBetState");
                 const sendConfirmBetSpy = jest.spyOn(placeBetHandler, "sendConfirmBet");
 
@@ -1056,6 +1187,12 @@ describe("placeBet", () => {
                 placeBetHandler.sendOutstandingBet = jest.fn();
                 placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
                 gameStateContextModel = stub<GameStateContextModel>(gameStateContext);
+                placeBetHandler.setPlaceBetDispatch(placeBetDispatch);
+                updatePlaceBetContext({
+                    isProcessingBet: false,
+                    notConfirmOwnBets: {},
+                    ownBets: { player: 100 }
+                });
                 const updateNotConfirmedBetStateSpy = jest.spyOn(placeBetHandler, "updateNotConfirmedBetState");
                 const sendConfirmBetSpy = jest.spyOn(placeBetHandler, "sendConfirmBet");
 
