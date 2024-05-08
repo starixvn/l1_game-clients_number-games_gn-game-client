@@ -1,11 +1,10 @@
 import fs from "fs";
 import { NextApiRequest, NextApiResponse } from "next";
-import NodeCache from "node-cache";
 import path from "path";
 import { LobbyGameId, buildVersion } from "../../../_shared/constants";
 import { getPathBanner, getPathIconGames, getPathImageGameId, pathImageMapping } from "../../../_shared/constants/resource-image-mapping";
 
-const cacheImages = new NodeCache();
+const cacheImages = new Map();
 
 const DEFAULT_STATIC_PATH = "public/static/images/";
 const DEFAULT_IMG_PATH = "/static/images/";
@@ -26,9 +25,10 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any[]>
         return res.status(400).json(["Invalid paths provided"]);
     }
 
-    const cachedImageFiles = cacheImages.get<any>(cacheKey);
+    const cachedImageFiles = cacheImages.get(cacheKey);
 
     if (cachedImageFiles) {
+        console.log("Get Cache", cachedImageFiles);
         return res.status(200).json(cachedImageFiles);
     }
 

@@ -6,7 +6,11 @@ exports[`GameBoard should not render countdown timer & scoreboard when showData 
     class="game-board-detail "
     id="icon-gamea"
   >
-    GameIcon
+    <div
+      class="d-flex"
+    >
+      GameIcon
+    </div>
     DisabledGameBlock
   </div>
 </div>
@@ -18,14 +22,18 @@ exports[`GameBoard should render match the snapshot 1`] = `
     class="game-board-detail pointer"
     id="icon-gamea"
   >
-    GameIcon
-    DisabledGameBlock
     <div
-      class="detail"
+      class="d-flex"
     >
-      CountdownTimer
-      LobbyScoreboard
+      GameIcon
+      <div
+        class="detail"
+      >
+        CountdownTimer
+        LobbyScoreboard
+      </div>
     </div>
+    DisabledGameBlock
   </div>
 </div>
 `;
