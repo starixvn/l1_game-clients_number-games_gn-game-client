@@ -124,7 +124,7 @@ const NextBallBetOptionsComponent = () => {
             />
         );
         const choiceClassName = Style[`choice-${choice}`];
-        const oddsClassName = Style[`${choice}-choice`];
+        const oddsClassName = Style[`choice-${choice}`];
         return (
             <div className={`${Style[choice]} text-white relative`}>
                 <div className={`${Style["choice-info"]} ${choiceClassName}`}>

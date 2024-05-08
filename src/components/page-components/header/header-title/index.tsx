@@ -1,5 +1,5 @@
 import React from "react";
-
+import Image from "next/image";
 import { getAppSettings } from "../../../../_shared/app-settings";
 import { useTranslator } from "../../../../_shared/react-hooks";
 import { ResourceTypes } from "../../../../_shared/resources";
@@ -21,7 +21,7 @@ const HeaderTitle: React.FC<Props> = (props) => {
     const headerTitle = isRenderGames ? (
         <div className="text-animation">{t(`${tolgeeNamespace}.game_name_${openingGameId}`).toUpperCase()}</div>
     ) : (
-        t(`${ResourceTypes.SABA_NUMBER}.product_name`)
+        <Image src={`/static/images/logo-gn.svg`} height={26} width={110} className="logo" alt="Logo" />
     );
 
     return (
