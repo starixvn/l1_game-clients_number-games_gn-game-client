@@ -13,7 +13,7 @@ export type ScoreboardComponentProps = {
     isOddEven: boolean;
 };
 
-export class Scoreboard extends Component<ScoreboardComponentProps> {
+class ScoreboardSeBall extends Component<ScoreboardComponentProps> {
     renderBigRoad(): ReactNode {
         const { roundHistory, isShowBlink } = this.props;
         const settlements = [...roundHistory].map((round) => round.settlementResult);
@@ -68,4 +68,4 @@ export class Scoreboard extends Component<ScoreboardComponentProps> {
     }
 }
 
-export default memo(Scoreboard);
+export default memo(ScoreboardSeBall);

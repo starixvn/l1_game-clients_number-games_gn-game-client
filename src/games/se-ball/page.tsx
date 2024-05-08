@@ -15,7 +15,7 @@ import { GameMessageHandler } from "../../components/game-base/handlers";
 import { GameBaseHandlers, GameBaseProps, Round } from "../../components/game-base/type";
 import { RoundGameStateHandler } from "../../components/round-base/round-game-state-handler";
 import { RoundStateHandler } from "../../components/round-base/round-state-handler";
-import Scoreboard from "./scoreboard";
+import ScoreboardSeBall from "./scoreboard";
 import { SeBallBetOptions } from "./se-ball-constants";
 import { NextGameRoundDataHandler } from "./se-ball-game-round-data-handler";
 import SeBallResultBlock from "./se-ball-result-block";
@@ -101,7 +101,7 @@ class SeBall extends GameBase<GameBaseProps> {
         const { statisticGroup } = this.state;
 
         return (
-            <Scoreboard
+            <ScoreboardSeBall
                 isShowBlink={isShowBlink}
                 roundHistory={roundHistory as Round<SeBallResult, SeBallSettlementResult>[]}
                 isOddEven={statisticGroup === 1}
