@@ -10,8 +10,6 @@ import Dashboard from "../components/page-components/dashboard";
 import Register from "../components/page-components/dashboard/register/register";
 import { ILobbyConfigs } from "../components/page-components/dashboard/type";
 import SplashScreen from "../components/page-components/splash-screen";
-import { getLobbyConfigs } from "../services/auth-service";
-import { updateSignInSMStatus } from "../services/user-setting-service";
 
 const UMPage = dynamic(() => import("../components/page-components/um-page"));
 
@@ -27,16 +25,6 @@ const Home = () => {
 
     const toUMPage = (value) => setIsUm(value);
 
-    const handleRegister = async (authorizeInfo: AuthorizeResponse) => {
-        updateSignInSMStatus(session);
-        authorizeInfo.user.isSignedInSM = true;
-
-        const lobby = await getLobbyConfigs(session);
-        lobby?.lobbyConfigs && setLobbyConfigs(lobby?.lobbyConfigs);
-
-        setAuthorizeResponse(authorizeInfo);
-    };
-
     if (!router?.isReady) {
         return <></>;
     }
@@ -48,7 +36,7 @@ const Home = () => {
     if (shouldRenderDashboard) {
         document.body.classList.add("galaxy-bg");
         if (!authorizeResponse) {
-            return <Register session={session} handleStateLogin={handleRegister} />;
+            return <Register session={session} setAuthorizeResponse={setAuthorizeResponse} setLobbyConfigs={setLobbyConfigs} />;
         }
 
         return (

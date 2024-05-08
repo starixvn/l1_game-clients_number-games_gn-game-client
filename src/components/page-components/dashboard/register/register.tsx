@@ -7,7 +7,8 @@ import { AnalyticsHelper, TrackingAction, TrackingFunction } from "../../../../_
 import { GetLocalizedErrorMessage } from "../../../../_shared/helpers/notice-helper";
 import { randomInteger } from "../../../../_shared/helpers/number-helper";
 import PreloadResources from "../../../../_shared/helpers/preload-resources";
-import { createNickname } from "../../../../services/auth-service";
+import { createNickname, getLobbyConfigs } from "../../../../services/auth-service";
+import { updateSignInSMStatus } from "../../../../services/user-setting-service";
 import BaseDialog from "../../../game-components/base-dialog";
 import { ModalType } from "../../../game-components/base-dialog/type";
 import FirstLoginContainer from "../../../page-components/dashboard/container";
@@ -20,7 +21,8 @@ import styles from "./register.module.scss";
 
 export type RegisterProps = {
     session: SSOResponse;
-    handleStateLogin: (authorizeInfo: AuthorizeResponse) => void;
+    setAuthorizeResponse: Function;
+    setLobbyConfigs: Function;
 } & TranslatorProps;
 
 export type RegisterState = {
@@ -29,7 +31,7 @@ export type RegisterState = {
     isGalleryOpened: boolean;
     isValidUsername: boolean;
     formValidity: string;
-    isFirstContainerRendered: boolean;
+    isTriggerPreloadResources: boolean;
 };
 
 export class Register extends Component<RegisterProps, RegisterState> {
@@ -39,7 +41,7 @@ export class Register extends Component<RegisterProps, RegisterState> {
         isValidUsername: true,
         name: NameGenerator.generateName(),
         formValidity: "",
-        isFirstContainerRendered: false,
+        isTriggerPreloadResources: false,
     };
 
     constructor(props: RegisterProps) {
@@ -49,10 +51,10 @@ export class Register extends Component<RegisterProps, RegisterState> {
     }
 
     componentDidMount() {
-        const { isFirstContainerRendered } = this.state;
-        if (!isFirstContainerRendered) {
+        const { isTriggerPreloadResources } = this.state;
+        if (!isTriggerPreloadResources) {
             this.setState({
-                isFirstContainerRendered: true,
+                isTriggerPreloadResources: true,
             });
         }
     }
@@ -85,7 +87,8 @@ export class Register extends Component<RegisterProps, RegisterState> {
         event.preventDefault();
 
         const { name, avatar } = this.state;
-        const { t, session, handleStateLogin } = this.props;
+        const { t, session } = this.props;
+        let authorizeResponse;
 
         if (!NameGenerator.validateName(name)) {
             this.setState({ formValidity: t("Common.name_invalid"), isValidUsername: false });
@@ -93,15 +96,18 @@ export class Register extends Component<RegisterProps, RegisterState> {
             return;
         }
 
-        const response = await createNickname(session, name, avatar);
-        const authorizeResponse = response as AuthorizeResponse;
+        try {
+            authorizeResponse = await createNickname(session, name, avatar);
+        } catch (error) {
+            console.log("Error Create Nick Name", error);
+        }
 
-        if (authorizeResponse && authorizeResponse.authorized) {
+        if (this.isAuthorizeResponse(authorizeResponse)) {
             Object.assign(authorizeResponse.user, { settings: { theme: Themes.light } });
-            handleStateLogin(authorizeResponse);
+            await this.handleStateLogin(authorizeResponse);
         } else {
             this.setState({
-                formValidity: t(GetLocalizedErrorMessage((response as any).errorCode)),
+                formValidity: t(GetLocalizedErrorMessage(authorizeResponse.errorCode)),
                 isValidUsername: false,
             });
         }
@@ -109,8 +115,23 @@ export class Register extends Component<RegisterProps, RegisterState> {
         AnalyticsHelper.trackFunction({ function: TrackingFunction.Avatar, action: TrackingAction.Create });
     }
 
+    isAuthorizeResponse = (response): response is AuthorizeResponse => {
+        return response?.authorized;
+    };
+
+    async handleStateLogin(authorizeInfo: AuthorizeResponse) {
+        const { setAuthorizeResponse, setLobbyConfigs, session } = this.props;
+        updateSignInSMStatus(session);
+        authorizeInfo.user.isSignedInSM = true;
+
+        const lobby = await getLobbyConfigs(session);
+        lobby?.lobbyConfigs && setLobbyConfigs(lobby?.lobbyConfigs);
+
+        setAuthorizeResponse(authorizeInfo);
+    }
+
     render(): ReactNode {
-        const { avatar, isGalleryOpened, isValidUsername, name, formValidity, isFirstContainerRendered } = this.state;
+        const { avatar, isGalleryOpened, isValidUsername, name, formValidity, isTriggerPreloadResources } = this.state;
         const { t } = this.props;
 
         return (
@@ -166,14 +187,13 @@ export class Register extends Component<RegisterProps, RegisterState> {
 
                 <p className={styles.note}>{t("SabaNumber.create_nickname_note")}</p>
 
-                {isFirstContainerRendered && <TriggerPreloadResource gameId={LobbyGameId} />}
+                {isTriggerPreloadResources && <TriggerPreloadResource gameId={LobbyGameId} />}
             </FirstLoginContainer>
         );
     }
 }
 
-const TriggerPreloadResource = ({ gameId }) => {
-    const [_, setIsDonePreloadResources] = useState<boolean>(false);
+const TriggerPreloadResource: React.FC<{ gameId: number }> = ({ gameId }) => {
     const [bannerId, setBannerId] = useState<number>(0);
     const [gameOfferIds, setGameOfferIds] = useState<number[]>([]);
 
@@ -194,8 +214,8 @@ const TriggerPreloadResource = ({ gameId }) => {
         return (
             <PreloadResources
                 gameId={gameId}
-                setIsDonePreloadResource={setIsDonePreloadResources}
-                enablePreloadResource={getAppSettings()?.enablePreloadResource || true}
+                setIsDonePreload={() => {}}
+                enablePreload={getAppSettings()?.enablePreloadResource || true}
                 bannerId={bannerId}
                 gameIdsIcon={gameOfferIds}
             />

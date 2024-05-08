@@ -23,14 +23,24 @@ jest.mock("../../../../_shared/helpers", () => ({
     TrackingAction: jest.fn(),
 }));
 
+jest.mock("next/router", () => ({
+    useRouter: jest.fn().mockReturnValue({
+        query: {
+            param1: "value1",
+            param2: "value2",
+        },
+    }),
+}));
+
 describe(Register.name, () => {
     let component: Register;
 
     beforeEach(() => {
         component = new Register({
-            handleStateLogin: jest.fn(),
             session: {} as any,
             t: jest.fn(),
+            setAuthorizeResponse: jest.fn(),
+            setLobbyConfigs: jest.fn(),
         });
 
         component.setState = jest.fn();
@@ -39,7 +49,9 @@ describe(Register.name, () => {
     describe("render", () => {
         it("should match snapshot", () => {
             // Act
-            const { container } = render(<Register handleStateLogin={jest.fn()} session={{} as any} t={jest.fn()} />);
+            const { container } = render(
+                <Register session={{} as any} t={jest.fn()} setAuthorizeResponse={jest.fn()} setLobbyConfigs={jest.fn()} />
+            );
 
             // Assert
             expect(container).toMatchSnapshot();

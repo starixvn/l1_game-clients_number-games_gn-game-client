@@ -2,7 +2,7 @@ import fs from "fs";
 import { NextApiRequest, NextApiResponse } from "next";
 import NodeCache from "node-cache";
 import path from "path";
-import { buildVersion } from "../../../_shared/constants";
+import { LobbyGameId, buildVersion } from "../../../_shared/constants";
 import { getPathBanner, getPathIconGames, getPathImageGameId, pathImageMapping } from "../../../_shared/constants/resource-image-mapping";
 
 const cacheImages = new NodeCache();
@@ -65,7 +65,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any[]>
 }
 
 const getPathsImg = (gameId: number, currentLocale: string, bannerId: number, gameIdsIcon: number[]) => {
-    if (gameId === 0) {
+    if (gameId === LobbyGameId) {
         return [...pathImageMapping.lobby, ...getPathBanner(currentLocale, bannerId), ...getPathIconGames(gameIdsIcon)];
     }
 

@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 const MAX_DELAY_TIME = 5000;
+export const DURATION_HOLD_SPLASH_SCREEN = 1000;
 
 export const updateProgressBar = (percentage: number) => {
     const progressBars = document.querySelectorAll("#progress-bar");
@@ -16,30 +17,31 @@ export const updateProgressBar = (percentage: number) => {
 };
 
 const PreloadResources: React.FC<{
-    setIsDonePreloadResource: Function;
+    setIsDonePreload: Function;
     gameId: number;
     isDirectMode?: boolean;
     bannerId?: number;
     locale?: string;
     gameIdsIcon?: number[];
-    cancelPreloadResource?: boolean;
+    cancelPreload?: boolean;
     durationDelayDonePreload?: number;
-    enablePreloadResource: boolean;
+    enablePreload: boolean;
 }> = ({
-    setIsDonePreloadResource,
+    setIsDonePreload,
     gameId,
     bannerId,
     gameIdsIcon,
     locale = "en",
-    cancelPreloadResource,
+    cancelPreload,
     durationDelayDonePreload = 0,
-    enablePreloadResource = true,
+    enablePreload = true,
 }) => {
     const router = useRouter();
     const [loadedImages, setLoadedImages] = useState<any>(new Set());
     const [startTime, setStartTime] = useState(null);
     const [images, setImages] = useState<string[]>([]);
-    
+    let timeoutWithoutPreloadResource: NodeJS.Timeout;
+
     const fetchImages = async () => {
         try {
             const response = await axios.post("/api/preload-images", {
@@ -59,7 +61,7 @@ const PreloadResources: React.FC<{
 
     useEffect(() => {
         if (router?.isReady) {
-            if (enablePreloadResource && gameId >= 0) {
+            if (enablePreload && gameId >= 0) {
                 setStartTime(performance.now());
                 fetchImages();
             }
@@ -73,40 +75,48 @@ const PreloadResources: React.FC<{
     useEffect(() => {
         let timeout: NodeJS.Timeout;
 
-        if (cancelPreloadResource) {
+        if (cancelPreload) {
             setLoadedImages(new Set());
             setImages([]);
-            setIsDonePreloadResource(false);
-            clearTimeout(timeout);
-            return;
-        }
+            setIsDonePreload(false);
+            timeout && clearTimeout(timeout);
+        } else {
+            const percentage = (loadedImages.size / images.length) * 100;
+            updateProgressBar(percentage);
 
-        const percentage = (loadedImages.size / images.length) * 100;
-        updateProgressBar(percentage);
-
-        if (loadedImages?.size > 0 && loadedImages?.size === images.length) {
-            const endTime = performance.now();
-            const duration = endTime - startTime;
-            timeout = setTimeout(
-                () => {
-                    setIsDonePreloadResource?.(true);
-                },
-                duration < MAX_DELAY_TIME ? durationDelayDonePreload : 0
-            );
+            if (loadedImages?.size > 0 && loadedImages?.size === images.length) {
+                const endTime = performance.now();
+                const duration = endTime - startTime;
+                timeout && clearTimeout(timeout);
+                timeout = setTimeout(
+                    () => {
+                        setIsDonePreload?.(true);
+                    },
+                    duration < MAX_DELAY_TIME ? durationDelayDonePreload : 0
+                );
+            }
         }
 
         return () => {
             timeout && clearTimeout(timeout);
         };
-    }, [loadedImages, cancelPreloadResource]);
+    }, [loadedImages, cancelPreload]);
 
     const handleStateWithoutPreloadResource = () => {
-        updateProgressBar(100);
-        setIsDonePreloadResource?.(true);
+        timeoutWithoutPreloadResource && clearTimeout(timeoutWithoutPreloadResource);
+        const endTime = performance.now();
+        const duration = endTime - startTime;
+        timeoutWithoutPreloadResource = setTimeout(
+            () => {
+                updateProgressBar(100);
+                setIsDonePreload?.(true);
+            },
+            duration < MAX_DELAY_TIME ? durationDelayDonePreload : 0
+        );
     };
 
     return useMemo(() => {
-        if (!enablePreloadResource || gameId < 0) {
+        if (!enablePreload || gameId < 0) {
             handleStateWithoutPreloadResource();
 
             return <></>;
@@ -136,7 +146,7 @@ const PreloadResources: React.FC<{
                 </div>
             </div>
         );
-    }, [images.length > 0, enablePreloadResource, gameId]);
+    }, [images.length > 0, enablePreload, gameId]);
 };
 
 export default PreloadResources;

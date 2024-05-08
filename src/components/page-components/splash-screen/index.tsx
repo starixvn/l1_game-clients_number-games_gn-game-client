@@ -6,10 +6,10 @@ import { memo, useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import { AuthorizeResponse, SSOResponse } from "sc-user-service-client/dist/auth";
 import { LobbyConfigs } from "sc-user-service-client/dist/lobby";
-import { getAppSettings, getGameIdsSetting } from "../../../_shared/app-settings";
+import { getAppSettings } from "../../../_shared/app-settings";
 import { Themes, buildVersion, languageMapper } from "../../../_shared/constants";
 import { AnalyticsHelper, StorageHelper, getLobbyGamesIds, localStorageKeys, randomInteger } from "../../../_shared/helpers";
-import PreloadResources from "../../../_shared/helpers/preload-resources";
+import PreloadResources, { DURATION_HOLD_SPLASH_SCREEN } from "../../../_shared/helpers/preload-resources";
 import { PlayerContextModel, URLContext, usePlayerContext } from "../../../_shared/react-contexts";
 import { useTranslator } from "../../../_shared/react-hooks";
 import { setSentryUser } from "../../../_shared/sentry";
@@ -90,7 +90,6 @@ const autoCreateNickname = async (session: SSOResponse, signOut: Function) => {
     return authorizeResponse;
 };
 
-const DURATION_HOLD_SPLASH_SCREEN = 1000;
 const SplashScreen: React.FC<{
     gameId: number;
     isDirectMode: boolean;
@@ -132,10 +131,9 @@ const SplashScreen: React.FC<{
             }
 
             if (!authorizeInfo?.authorized) {
-                setCurrentGameId(-1);
                 return;
             }
-            
+
             setCurrentGameId(gameId);
 
             const lobby = await getLobbyConfigs(session);
@@ -153,15 +151,6 @@ const SplashScreen: React.FC<{
 
     const signOut = () => {
         router.push("timeout");
-    };
-
-    const handleUnauthorizedAccess = () => {
-        const gameIds = getGameIdsSetting()?.map((id) => parseInt(id, 10));
-        const firstGameId = gameIds[0];
-        if (firstGameId > 0) {
-            setGameOfferIds(gameIds);
-            setBannerId(firstGameId);
-        }
     };
 
     const handleBanner = (authorizeInfo: AuthorizeResponse, lobbyConfigs: LobbyConfigs) => {
@@ -227,12 +216,12 @@ const SplashScreen: React.FC<{
             {isDoneLoadLogo && !!locale && (
                 <PreloadResources
                     bannerId={bannerId}
-                    setIsDonePreloadResource={setIsDonePreloadResources}
+                    setIsDonePreload={setIsDonePreloadResources}
                     gameId={currentGameId}
                     isDirectMode={isDirectMode}
                     locale={locale}
                     gameIdsIcon={gameOfferIds}
-                    enablePreloadResource={getAppSettings()?.enablePreloadResource || true}
+                    enablePreload={getAppSettings()?.enablePreloadResource || true}
                     durationDelayDonePreload={DURATION_HOLD_SPLASH_SCREEN}
                 />
             )}
