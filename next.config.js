@@ -62,6 +62,7 @@ const nextConfig = withSentryConfig({
             },
         ];
     },
+    output: "standalone",
 });
 
 module.exports = nextConfig;
