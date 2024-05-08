@@ -81,4 +81,4 @@ export class SeBallBigRoadElement extends BigRoadElement<SeBallSettlementResult>
     }
 }
 
-registerBigRoadElement(SeBallBigRoadElement, SeBallBigRoadConverter, 1003, 1004);
+registerBigRoadElement(SeBallBigRoadElement, SeBallBigRoadConverter, 1005);
