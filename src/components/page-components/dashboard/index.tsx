@@ -1,7 +1,7 @@
 import { withRouter } from "next/router";
 import React from "react";
 import { isMobile, isMobileOnly } from "react-device-detect";
-import { AuthorizeResponse, ReCheckInResponse } from "sc-user-service-client/dist/auth";
+import { AuthorizeResponse, ReCheckInResponse, Response } from "sc-user-service-client/dist/auth";
 import { LobbyResponse } from "sc-user-service-client/dist/lobby";
 import { io, Socket } from "socket.io-client";
 import MsgpackParser from "socket.io-msgpack-parser";
@@ -201,18 +201,19 @@ class Dashboard extends React.PureComponent<Props, State> {
         const { session, directMode, queryGame } = this.props;
         const authorizeResponse = await authorize(session);
 
-        const errorResponse = authorizeResponse as any;
+        const errorResponse = authorizeResponse as Response;
 
         if (errorResponse && errorResponse.errorCode === "SB0002") {
             this.signOut();
             return;
         }
 
-        const authorizeInfo = authorizeResponse as any;
+        const authorizeInfo = authorizeResponse as AuthorizeResponse;
 
         const { authorized } = authorizeInfo;
         if (authorized === false && directMode) {
-            return this.autoCreateNickname();
+            this.autoCreateNickname();
+            return;
         }
 
         const lobbyConfigs = await this.getAllLobbyConfigs();
@@ -531,7 +532,7 @@ class Dashboard extends React.PureComponent<Props, State> {
         const maxAvatarId = MAX_AVATAR_ID;
         const selectedAvatarId = randomInteger(1, maxAvatarId);
         const response = await createNickname(session, nickname, selectedAvatarId);
-        const authorizeResponse = response as any;
+        const authorizeResponse = response as AuthorizeResponse;
         if (authorizeResponse?.authorized) {
             Object.assign(authorizeResponse.user, { settings: { theme: Themes.light } });
             await this.handleRegister(authorizeResponse);

@@ -81,7 +81,7 @@ export class Register extends Component<RegisterProps, RegisterState> {
         }
 
         const response = await createNickname(session, name, avatar);
-        const authorizeResponse = response as any;
+        const authorizeResponse = response as AuthorizeResponse;
 
         if (authorizeResponse && authorizeResponse.authorized) {
             Object.assign(authorizeResponse.user, { settings: { theme: Themes.light } });
