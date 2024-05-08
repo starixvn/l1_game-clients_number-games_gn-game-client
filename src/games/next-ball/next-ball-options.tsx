@@ -42,7 +42,8 @@ const NextBallBetOptionsComponent = () => {
     };
 
     const renderBetChoice = (choice: string) => {
-        return <BetChoice choice={choice} className={`${Style[`bet-name-${choice}`]}`} tolgeeNamespace={tolgeeNamespace} />;
+        const className = Style[`bet-name-${choice}`];
+        return <BetChoice choice={choice} className={className} tolgeeNamespace={tolgeeNamespace} />;
     };
 
     const renderOdds = (choice: string) => {
@@ -101,17 +102,18 @@ const NextBallBetOptionsComponent = () => {
                 position={[90, 95]}
             />
         );
-
+        const choiceClassName = Style[`choice-${choice}`];
+        const oddsClassName = Style[`${choice}-choice`];
         return (
             <div className={`${Style[choice]} text-white relative`}>
-                <div className={`${Style["choice-info"]} ${Style[`choice-${choice}`]}`}>
+                <div className={`${Style["choice-info"]} ${choiceClassName}`}>
                     <div className={Style.stake}>
                         {renderTotalBet(choice)}
                         {renderPlayerBetCount(choice)}
                     </div>
                     {renderBetPercentage(choice)}
                 </div>
-                <div className={`${Style["choice-odds-area"]} ${Style[`${choice}-choice`]}`}>
+                <div className={`${Style["choice-odds-area"]} ${oddsClassName}`}>
                     {renderBetChoice(choice)}
                     {renderOdds(choice)}
                 </div>
