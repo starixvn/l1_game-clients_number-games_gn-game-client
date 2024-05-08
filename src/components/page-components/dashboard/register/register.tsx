@@ -2,6 +2,7 @@ import { Component, FormEvent, ReactNode } from "react";
 import { AuthorizeResponse, SSOResponse } from "sc-user-service-client/dist/auth";
 
 import { Themes } from "../../../../_shared/constants";
+import { AnalyticsHelper, TrackingAction, TrackingFunction } from "../../../../_shared/helpers";
 import { GetLocalizedErrorMessage } from "../../../../_shared/helpers/notice-helper";
 import { randomInteger } from "../../../../_shared/helpers/number-helper";
 import { createNickname } from "../../../../services/auth-service";
@@ -14,7 +15,6 @@ import { TranslatorProps, withTranslator } from "../../translator";
 import { AvatarGallery, MAX_AVATAR_ID } from "./avatar-gallery";
 import NameGenerator from "./name-generator";
 import styles from "./register.module.scss";
-import { AnalyticsHelper, TrackingAction, TrackingFunction } from "../../../../_shared/helpers";
 
 export type RegisterProps = {
     session: SSOResponse;
@@ -83,7 +83,7 @@ export class Register extends Component<RegisterProps, RegisterState> {
         const response = await createNickname(session, name, avatar);
         const authorizeResponse = response as AuthorizeResponse;
 
-        if (authorizeResponse && authorizeResponse.authorized) {
+        if (authorizeResponse?.authorized) {
             Object.assign(authorizeResponse.user, { settings: { theme: Themes.light } });
             handleStateLogin(authorizeResponse);
         } else {

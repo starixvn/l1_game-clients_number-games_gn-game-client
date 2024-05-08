@@ -1,31 +1,30 @@
+import dynamic from "next/dynamic";
 import { withRouter } from "next/router";
 import React from "react";
 import { isMobile, isMobileOnly } from "react-device-detect";
 import { AuthorizeResponse, ReCheckInResponse, Response } from "sc-user-service-client/dist/auth";
 import { LobbyResponse } from "sc-user-service-client/dist/lobby";
-import { io, Socket } from "socket.io-client";
+import { Socket, io } from "socket.io-client";
 import MsgpackParser from "socket.io-msgpack-parser";
-
-import dynamic from "next/dynamic";
 import { getAppSettings } from "../../../_shared/app-settings";
 import { Themes } from "../../../_shared/constants";
 import {
+    GetLocalizedErrorMessage,
+    StorageHelper,
     buildUrl,
     getLobbyGameIds,
-    GetLocalizedErrorMessage,
     getOfferGamesIds,
     isKickOutError,
     localStorageKeys,
-    StorageHelper,
 } from "../../../_shared/helpers";
 import { randomInteger } from "../../../_shared/helpers/number-helper";
 import {
-    loadURLContext,
     LobbyConnectionContextProvider,
     PlayerContextProvider,
     SettingContextProvider,
-    updateURLContext,
     URLContextModel,
+    loadURLContext,
+    updateURLContext,
 } from "../../../_shared/react-contexts";
 
 import SwiperCore from "swiper";
