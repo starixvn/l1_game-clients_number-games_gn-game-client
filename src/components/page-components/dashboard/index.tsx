@@ -14,6 +14,7 @@ import {
     getLobbyGameIds,
     GetLocalizedErrorMessage,
     getOfferGamesIds,
+    isKickOutError,
     localStorageKeys,
     StorageHelper,
 } from "../../../_shared/helpers";
@@ -138,8 +139,7 @@ class Dashboard extends React.PureComponent<Props, State> {
     }
 
     handleShowApiErrorMessage(errorCode: string, isDisableAccount = false) {
-        const kickedOutErrorCodes = ["1001", "1002", "7001"];
-        if (isDisableAccount || kickedOutErrorCodes.includes(errorCode)) {
+        if (isDisableAccount || isKickOutError(String(errorCode))) {
             this.isKickOut = true;
             setTimeout(() => {
                 this.signOut();
@@ -488,9 +488,8 @@ class Dashboard extends React.PureComponent<Props, State> {
                 <SettingContextProvider>
                     {allowSwipeGameOndDesktop && <ButtonSwipe isPrev={true} swiper={this.swiperRef} />}
                     <div
-                        className={`${Styles["dashboard"]} ${changeGameStyle} ${!isRenderGames ? "no-scroll" : ""} ${
-                            isMobileOnly ? Styles["hidden-scrollbar"] : ""
-                        }`}
+                        className={`${Styles["dashboard"]} ${changeGameStyle} ${!isRenderGames ? "no-scroll" : ""} ${isMobileOnly ? Styles["hidden-scrollbar"] : ""
+                            }`}
                         id={"dashboard"}
                     >
                         <Header />

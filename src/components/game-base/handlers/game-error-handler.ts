@@ -1,4 +1,4 @@
-import { GetLocalizedErrorMessage } from "../../../_shared/helpers";
+import { GetLocalizedErrorMessage, isKickOutError } from "../../../_shared/helpers";
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 import { GameMessageHandler, messageEventType } from "./game-message-handler";
 
@@ -19,7 +19,7 @@ export interface ApiError {
 }
 
 export class GameErrorHandler {
-    constructor(private readonly props: GameErrorHandlerProps) {}
+    constructor(private readonly props: GameErrorHandlerProps) { }
 
     registerEvents = (signOut: Function) => {
         this.props.gameMessageHandler.register(messageEventType.API_ERROR, ({ apiError }) => {
@@ -28,10 +28,12 @@ export class GameErrorHandler {
     };
 
     handleApiError = (apiError: ApiError, signOut: Function) => {
+        console.log(`GameErrorHandler: ${apiError}`)
+        console.log({ apiError })
         const isPlaceBet = apiError.isPlaceBetFailed ? apiError.isPlaceBetFailed : false;
         const errorCode = apiError.errorCode;
-        const isKickOutError = this.isKickOutError(errorCode.toString());
-        const onClose = isKickOutError ? signOut : null;
+        const isKickOut = isKickOutError(errorCode.toString());
+        const onClose = isKickOut ? signOut : null;
         const message = GetLocalizedErrorMessage(errorCode, isPlaceBet);
 
         this.props.dispatch({
@@ -41,7 +43,7 @@ export class GameErrorHandler {
                     gameName: this.props.gamName,
                     roundId: apiError?.gameRoundId,
                     message: message,
-                    duration: isKickOutError ? 10 : 3,
+                    duration: isKickOut ? 10 : 3,
                     minBet: apiError?.minBet,
                     maxBet: apiError?.maxBet,
                     errorCode: errorCode,
@@ -49,9 +51,5 @@ export class GameErrorHandler {
                 },
             },
         });
-    };
-
-    isKickOutError = (errorCode: string) => {
-        return errorCode === "1001" || errorCode === "1002" || errorCode === "7001";
     };
 }

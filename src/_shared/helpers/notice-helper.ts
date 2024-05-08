@@ -15,6 +15,7 @@ export const GetLocalizedErrorMessage = (errorCode: string, isPlaceBet = false) 
     }
 
     let key = ErrorCodeDictionary[errorCode];
+
     const isCommonErrorCode = CommonErrorCodeList.includes(ErrorCodeDictionary[errorCode]);
     if (isCommonErrorCode && isPlaceBet) {
         key = `${key}_place_bet`;
@@ -32,3 +33,5 @@ export const createOptionForHedgeBetGroup = (hedgeBetGroup: string[], tolgeeName
 };
 
 export const getGlossaryTranslate = (ns: string, key: string) => `${ns}.glossary_${key}`;
+
+export const isKickOutError = (errorCode: string) => ["1001", "1002", "7001"].includes(errorCode);
