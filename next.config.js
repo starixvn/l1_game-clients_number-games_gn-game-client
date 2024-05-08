@@ -66,6 +66,7 @@ const nextConfig = withSentryConfig({
     sassOptions: {
         prependData: `$version-image: '${buildVersion}';`,
     },
+    output: "standalone",
 });
 
 module.exports = nextConfig;
