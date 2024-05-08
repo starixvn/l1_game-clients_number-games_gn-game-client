@@ -211,7 +211,7 @@ class Dashboard extends React.PureComponent<Props, State> {
 
         const { authorized } = authorizeInfo;
         if (authorized === false && directMode) {
-            this.autoCreateNickname();
+            await this.autoCreateNickname();
             return;
         }
 
