@@ -237,14 +237,28 @@
 
 .winning-light-anim {
     position: relative;
-    top: -0.5rem;
-    left: -0.6rem;
 
-    &.anim-under {
-        transform: scaleX(-1);
+    &.anim-odd {
+        left: -0.3rem;
+        top: -0.5rem;
     }
 
     &.anim-even {
+        left: -0.4rem;
+        top: -0.5rem;
+        transform: scaleX(-1);
+    }
+
+    &.anim-blue3,
+    &.anim-red3,
+    &.anim-red4,
+    &.anim-blue4,
+    &.anim-red2 {
+        top: -0.3rem;
+        left: 0;
+    }
+
+    &.anim-red4 {
         transform: scaleX(-1);
     }
 }
@@ -260,8 +274,35 @@
     transform: scaleX(-1);
 }
 
-.highlight-winning-bg-odd {
-    left: -0.1rem;
+.highlight-winning-bg-red2 {
+    width: 7.7rem;
+    height: 14.8rem;
+    background: url("/static/images/se-ball/highlight-winning-bg-red2.png") no-repeat;
+    left: 0.5rem;
+    top: 0.1rem;
+}
+
+.highlight-winning-bg-blue3,
+.highlight-winning-bg-red3 {
+    width: 14.6rem;
+    height: 7.4rem;
+    background: url("/static/images/se-ball/highlight-winning-bg-blue3.png") no-repeat;
+    left: 0.5rem;
+    top: 0rem;
+}
+
+.highlight-winning-bg-blue4,
+.highlight-winning-bg-red4 {
+    width: 14.6rem;
+    height: 7.4rem;
+    background: url("/static/images/se-ball/highlight-winning-bg-blue4.png") no-repeat;
+    left: 0.5rem;
+    top: 0.1rem;
+}
+
+.highlight-winning-bg-red4 {
+    transform: scaleX(-1);
+    left: -0.5rem;
 }
 
 .ball-svg {

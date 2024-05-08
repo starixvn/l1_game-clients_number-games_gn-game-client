@@ -75,7 +75,6 @@ class SeBall extends GameBase<GameBaseProps> {
 
     renderStatistic() {
         const { roundHistory } = this.props.gameStateContextModel;
-        const { statisticGroup } = this.state;
         const locale = tolgee.getLanguage() ?? "en";
         const classNameIndo = locale === "id" ? Styles["statistic-indo"] : "";
 
