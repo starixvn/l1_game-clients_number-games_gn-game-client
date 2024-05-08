@@ -72,9 +72,7 @@ export interface GameEventPayload {
     showResultInfo?: boolean;
     isShowBlink?: boolean;
     roundState?: RoundState;
-    showConfirmDialog?: boolean;
     turnCounter?: number;
-    notConfirmOwnBets?: any;
     isUMInFirstLoad?: boolean;
     isShowBetHistory?: boolean;
     isShowGameGuide?: boolean;

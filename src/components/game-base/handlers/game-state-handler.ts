@@ -66,10 +66,7 @@ export class GameStateHandler implements IGameStateHandler {
                     state: {
                         isShowBlink: true,
                         result: defaultResult ?? result,
-                        settlementResult: defaultSettlementResult ?? settlementResult,
-                        notConfirmOwnBets: {},
-                        showConfirmBet: false,
-                        showConfirmDialog: false,
+                        settlementResult: defaultSettlementResult ?? settlementResult
                     },
                 },
             ];
