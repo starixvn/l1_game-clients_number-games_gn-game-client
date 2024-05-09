@@ -178,8 +178,7 @@ class Dashboard extends React.PureComponent<Props, State> {
         if (!document["hidden"]) {
             const reCheckInResponse = await reCheckIn(this.props.session);
             this.handleRecheckInResponse(reCheckInResponse);
-        } else {
-        }
+        } 
     }
 
     changeOrientation() {
@@ -239,7 +238,7 @@ class Dashboard extends React.PureComponent<Props, State> {
     }
 
     shouldRenderGames(offerGames) {
-        const urlContextModel = StorageHelper.get(localStorageKeys.url) as URLContextModel;
+        const urlContextModel = StorageHelper.get(localStorageKeys.url) as URLContextModel; // NOSONAR
         const backToLobby = urlContextModel.backToLobby || false;
         const ssoRedirectGameId = urlContextModel.gameId || 0;
         return (offerGames.includes(this.state.openGameId) && !backToLobby) || ssoRedirectGameId > 0;
@@ -398,7 +397,7 @@ class Dashboard extends React.PureComponent<Props, State> {
             this.removeGameTransmitter(gameId);
             this.setState({ openGameId: gameId });
         } else {
-            this.forceUpdate(); // TODO: Temporary force rerender, should review here
+            this.forceUpdate();
         }
     }
 

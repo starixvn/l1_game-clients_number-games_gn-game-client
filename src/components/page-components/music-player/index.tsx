@@ -67,41 +67,25 @@ const BGMPlayer = ({ isUserGesture }) => {
 const MusicPlayer = () => {
     const [isUserGesture, setIsUserGesture] = useState(null);
 
-    const onVisibilityChange = () => {
-        if (document.visibilityState === "visible") {
-            setIsUserGesture(true);
-        } else {
-            setIsUserGesture(false);
-        }
-    };
+    const onVisibilityChange = () => (document.visibilityState === "visible" ? setIsUserGesture(true) : setIsUserGesture(false));
 
     useEffect(() => {
         handleUserGesture();
         return () => {
-            if (isMobile) {
-                document.removeEventListener("touchstart", onVisibilityChange);
-            } else {
-                document.removeEventListener("click", onVisibilityChange);
-            }
+            isMobile
+                ? document.removeEventListener("touchstart", onVisibilityChange)
+                : document.removeEventListener("click", onVisibilityChange);
         };
     }, []);
 
     const handleUserGesture = () => {
         const timeoutId = setTimeout(() => {
-            if (!isUserGesture) {
-                setIsUserGesture(true);
-            }
+            !isUserGesture && setIsUserGesture(true);
         }, 10 * 1000);
 
-        if (isMobile) {
-            window.addEventListener("touchstart", () => {
-                enableUserGesture(timeoutId);
-            });
-        } else {
-            window.addEventListener("click", () => {
-                enableUserGesture(timeoutId);
-            });
-        }
+        isMobile
+            ? window.addEventListener("touchstart", () => enableUserGesture(timeoutId))
+            : window.addEventListener("click", () => enableUserGesture(timeoutId));
     };
 
     const enableUserGesture = (timeoutId: NodeJS.Timeout) => {
@@ -115,9 +99,7 @@ const MusicPlayer = () => {
 
     useLayoutEffect(() => {
         document.addEventListener("visibilitychange", onVisibilityChange);
-        return () => {
-            document.removeEventListener("visibilitychange", onVisibilityChange);
-        };
+        return () => document.removeEventListener("visibilitychange", onVisibilityChange);
     }, []);
 
     return isUserGesture !== null ? <BGMPlayer isUserGesture={isUserGesture} /> : <></>;
