@@ -89,13 +89,14 @@ export const Notice = () => {
 
         let extendMessage = "";
         if (isKickOutError(errorCode)) {
-            extendMessage = `(${errorCode})`;
+            extendMessage = ` (${errorCode})`;
         }
 
         return (
             <BaseNotice {...{ onClose: onCloseNotice, duration, isWarning }}>
                 <div className={Styles["notice-content"]}>
-                    {t(`${message}`, params, { noWrap: true }).replaceTolgeeFormat()} {extendMessage}
+                    {t(`${message}`, params, { noWrap: true }).replaceTolgeeFormat()}
+                    {extendMessage}
                 </div>
             </BaseNotice>
         );
