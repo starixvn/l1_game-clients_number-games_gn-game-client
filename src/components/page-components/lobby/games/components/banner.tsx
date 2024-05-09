@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { v4 as uuidv4 } from "uuid";
 
+import { AuthorizeResponse } from "sc-user-service-client/dist/auth";
 import { buildVersion } from "../../../../../_shared/constants";
 import { getBannerIds, getBanners, getOfferGamesIds } from "../../../../../_shared/helpers";
 import { usePlayerContext } from "../../../../../_shared/react-contexts";
@@ -13,6 +14,19 @@ import { BannerSwiper, DEFAULT_DELAY_SLIDER } from "../../../../game-components/
 import { IBanner, ILobbyConfigs } from "../../../dashboard/type";
 
 const DEFAULT_BANNER_PATH = "/static/images/lobby/banners";
+
+export const getGameIdOfferBanner = (authorizeInfo: AuthorizeResponse, lobbyConfigs: ILobbyConfigs) => {
+    const gameIds: number[] = [];
+    const offerGamesIds = getOfferGamesIds(authorizeInfo);
+    const bannerIds = getBannerIds(lobbyConfigs);
+    bannerIds.forEach((id: number) => {
+        if (offerGamesIds.includes(id)) {
+            gameIds.push(id);
+        }
+    });
+
+    return gameIds;
+};
 
 const DefaultBanner = () => {
     return (
@@ -47,22 +61,9 @@ export const Banner: React.FC<{ openGame: Function; lobbyConfigs: ILobbyConfigs 
     const [filterBanners, setFilterBanners] = useState<IBanner[]>([]);
     const [banners, setBanners] = useState<IBanner[]>([]);
 
-    const getGameIdOfferBanner = () => {
-        const gameIds: number[] = [];
-        const offerGamesIds = getOfferGamesIds(authorizeInfo);
-        const bannerIds = getBannerIds(lobbyConfigs);
-        bannerIds.forEach((id: number) => {
-            if (offerGamesIds.includes(id)) {
-                gameIds.push(id);
-            }
-        });
-
-        return gameIds;
-    };
-
     useEffect(() => {
         if (lobbyConfigs && authorizeInfo) {
-            const gameIdsOfferBanner = getGameIdOfferBanner();
+            const gameIdsOfferBanner = getGameIdOfferBanner(authorizeInfo, lobbyConfigs);
             if (gameIdsOfferBanner.length > 0) {
                 const banners = getBanners(lobbyConfigs);
 

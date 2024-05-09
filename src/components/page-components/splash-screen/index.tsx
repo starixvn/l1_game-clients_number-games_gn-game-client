@@ -1,7 +1,7 @@
 import * as Sentry from "@sentry/nextjs";
 import { WithRouterProps } from "next/dist/client/with-router";
 import { NextRouter, useRouter } from "next/router";
-import { memo, useContext, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, memo, useContext, useEffect, useState } from "react";
 
 import Image from "next/image";
 import { AuthorizeResponse, SSOResponse } from "sc-user-service-client/dist/auth";
@@ -17,6 +17,7 @@ import { authorize, createNickname, getLobbyConfigs, sso, verifySession } from "
 import { updateSignInSMStatus } from "../../../services/user-setting-service";
 import { MAX_AVATAR_ID } from "../dashboard/register/avatar-gallery";
 import NameGenerator from "../dashboard/register/name-generator";
+import { ILobbyConfigs } from "../dashboard/type";
 import { getGameIdOfferBanner } from "../lobby/games/components/banner";
 import UMPage from "../um-page";
 import Styles from "./splash-screen.module.scss";
@@ -32,7 +33,8 @@ export const customStartup = async (
     session: SSOResponse,
     locale: string,
     router: NextRouter,
-    player: PlayerContextModel
+    player: PlayerContextModel,
+    authorizeResponse: any
 ): Promise<void> => {
     const isTimeout = !session || (!session?.isUM && !session?.isAuthenticated);
     player.locale = locale;
@@ -45,11 +47,13 @@ export const customStartup = async (
     if (session?.isUM) {
         StorageHelper.set(localStorageKeys.umInfo, session.umInfo);
         player.session = session;
+        player.authorizeInfo = authorizeResponse;
     }
 
     if (session?.isAuthenticated) {
         setSentryUser(session);
         player.session = session;
+        player.authorizeInfo = authorizeResponse;
         AnalyticsHelper.setUser(session.username);
     }
 };
@@ -93,7 +97,7 @@ const autoCreateNickname = async (session: SSOResponse, signOut: Function) => {
 const SplashScreen: React.FC<{
     gameId: number;
     isDirectMode: boolean;
-    setLobbyConfigs: Function;
+    setLobbyConfigs: Dispatch<SetStateAction<ILobbyConfigs>>;
 }> = ({ isDirectMode, gameId, setLobbyConfigs }) => {
     const { token, language } = useContext(URLContext);
     const router = useRouter();
@@ -107,6 +111,8 @@ const SplashScreen: React.FC<{
     const [currentSession, setCurrentSession] = useState<SSOResponse>();
     const [gameOfferIds, setGameOfferIds] = useState<number[]>([]);
     const [currentGameId, setCurrentGameId] = useState<number>(-1);
+    const [isTriggerStartup, setIsTriggerStartup] = useState<boolean>(false);
+    const [authorizeResponse, setAuthorizeResponse] = useState<AuthorizeResponse>(null);
 
     useEffect(() => {
         let authorizeInfo;
@@ -130,6 +136,8 @@ const SplashScreen: React.FC<{
             }
 
             if (!authorizeInfo?.authorized) {
+                setIsTriggerStartup(true);
+                authorizeInfo && setAuthorizeResponse(authorizeInfo);
                 return;
             }
 
@@ -141,8 +149,8 @@ const SplashScreen: React.FC<{
                 handleBanner(authorizeInfo, lobby.lobbyConfigs);
                 handleGameOfferIds(authorizeInfo, lobby.lobbyConfigs);
             }
-
-            authorizeInfo && (player.authorizeInfo = authorizeInfo);
+            setIsTriggerStartup(true);
+            authorizeInfo && setAuthorizeResponse(authorizeInfo);
         };
 
         handleInitialization();
@@ -167,10 +175,10 @@ const SplashScreen: React.FC<{
     };
 
     useEffect(() => {
-        if (router?.isReady && isDonePreloadResources) {
+        if (router?.isReady && isDonePreloadResources && isTriggerStartup) {
             const handleStartup = async () => {
                 try {
-                    await customStartup(currentSession, locale, router, player);
+                    await customStartup(currentSession, locale, router, player, authorizeResponse);
                     await router?.push("/", undefined, { shallow: true });
                 } catch (error) {
                     onStartupError(error);
@@ -178,7 +186,7 @@ const SplashScreen: React.FC<{
             };
             handleStartup();
         }
-    }, [isDonePreloadResources]);
+    }, [isDonePreloadResources, isTriggerStartup, authorizeResponse]);
 
     if (player?.session?.isUM) {
         return <UMPage />;

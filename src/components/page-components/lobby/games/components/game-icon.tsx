@@ -30,7 +30,7 @@ export const GameIcon: React.FC<Props> = ({ gameSettings, transmitter }) => {
             )}
 
             <Image
-                src={`/static/images/lobby/game-board-detail/icon-${gameName.toLowerCase()}.png?v=${buildVersion}`}
+                src={`/static/images/lobby/game-board-detail/${id}/icon-${gameName.toLowerCase()}.png?v=${buildVersion}`}
                 width={130}
                 height={138}
                 alt={`icon-${gameName.toLowerCase()}`}

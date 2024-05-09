@@ -14,7 +14,7 @@ import FirstLoginContainer from "../../../page-components/dashboard/container";
 import TextBlock from "../../../page-components/dashboard/text-block";
 import ProfilePicture from "../../../page-components/profile-picture";
 import { TranslatorProps, withTranslator } from "../../translator";
-import { MAX_AVATAR_ID } from "./avatar-gallery";
+import { AvatarGallery, MAX_AVATAR_ID } from "./avatar-gallery";
 import NameGenerator from "./name-generator";
 import styles from "./register.module.scss";
 
@@ -176,6 +176,13 @@ export class Register extends Component<RegisterProps, RegisterState> {
                 </form>
 
                 <p className={styles.note}>{t("SabaNumber.create_nickname_note")}</p>
+                {isGalleryOpened && (
+                    <AvatarGallery
+                        selectedAvatarId={avatar}
+                        onSelectAvatar={this.setAvatar.bind(this)}
+                        onClose={this.toggleAvatarGallery.bind(this)}
+                    />
+                )}
 
                 {isTriggerPreloadResources && (
                     <TriggerPreloadResource gameId={LobbyGameId} isCancelPreloadResource={isCancelPreloadResource} />

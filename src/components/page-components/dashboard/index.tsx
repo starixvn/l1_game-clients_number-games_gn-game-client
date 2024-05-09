@@ -25,7 +25,7 @@ import {
     URLContextModel,
 } from "../../../_shared/react-contexts";
 
-import { LobbyResponse } from "sc-user-service-client/dist/lobby";
+import { LobbyConfigs, LobbyResponse } from "sc-user-service-client/dist/lobby";
 import SwiperCore from "swiper";
 import { ErrorNoGameOffer } from "../../../_shared/constants/error-code-dictionary";
 import "../../../games/scoreboards";
@@ -35,7 +35,6 @@ import { UserStakeLevel } from "../../game-base/type";
 import { ModalType } from "../../game-components/base-dialog/type";
 import { ErrorApiText } from "../../game-components/error-api-text";
 import Footer from "../../game-components/footer";
-import { LoadingSpinner } from "../../game-components/game-loading/loading-spinner";
 import Header from "../header";
 import Lobby from "../lobby/lobby";
 import { LobbySocketConnection } from "../lobby/lobby-socket-connection";
@@ -75,7 +74,6 @@ class Dashboard extends React.PureComponent<Props, State> {
             isLandscapeMode: false,
             isChangedGame: false,
             isChangePrevGame: false,
-            isCompleteInitialData: true,
         };
 
         this.lobbyConnectionHandler = new LobbySocketConnection();
@@ -187,10 +185,6 @@ class Dashboard extends React.PureComponent<Props, State> {
         }, 100);
     }
 
-    completeInitialData() {
-        this.setState({ isCompleteInitialData: false });
-    }
-
     async componentDidMount() {
         if (typeof window === "undefined") {
             return;
@@ -199,12 +193,11 @@ class Dashboard extends React.PureComponent<Props, State> {
         document.addEventListener("visibilitychange", this.onVisibilityChange);
         const { queryGame, authorizeResponse, session, lobbyConfigs } = this.props;
         this.updateAuthorizeInfo(authorizeResponse);
-        this.setState({ lobbyConfigs });
-
-        if (!authorizeResponse) {
-            this.completeInitialData();
+        this.updateLobbyConfigs(lobbyConfigs as LobbyConfigs);
+        if (!authorizeResponse || !authorizeResponse?.authorized) {
             return;
         }
+
         await this.connectLobbySocket(authorizeResponse, lobbyConfigs);
         this.updateUserBalance(authorizeResponse?.user?.red);
 
@@ -219,7 +212,6 @@ class Dashboard extends React.PureComponent<Props, State> {
             window.addEventListener("touchmove", this.preventZoomBehavior, { passive: false });
         }
         this.connectNotificationSocket();
-        this.completeInitialData();
         queryGame && this.openGame(queryGame);
     }
 
@@ -353,11 +345,15 @@ class Dashboard extends React.PureComponent<Props, State> {
         const { session } = this.props;
         const lobby: LobbyResponse = await getLobbyConfigs(session);
         if (lobby?.lobbyConfigs) {
-            this.setState({ lobbyConfigs: lobby?.lobbyConfigs });
+            this.updateLobbyConfigs(lobby?.lobbyConfigs);
         } else {
             console.error("Can not get Lobby configs");
         }
         return lobby?.lobbyConfigs;
+    }
+
+    updateLobbyConfigs(lobbyConfigs: LobbyConfigs) {
+        this.setState({ lobbyConfigs });
     }
 
     getLobbyGamesIds = () => {
@@ -494,14 +490,10 @@ class Dashboard extends React.PureComponent<Props, State> {
     };
 
     render() {
-        const { authorizeInfo, isLandscapeMode, isCompleteInitialData } = this.state;
+        const { authorizeInfo, isLandscapeMode } = this.state;
 
         if (isLandscapeMode && isMobileOnly) {
             return <LandscapeMode />;
-        }
-
-        if (isCompleteInitialData) {
-            return <LoadingSpinner />;
         }
 
         return authorizeInfo ? <>{this.renderComponents(authorizeInfo)}</> : <></>;
