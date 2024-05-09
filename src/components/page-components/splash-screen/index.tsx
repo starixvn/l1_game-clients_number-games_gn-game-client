@@ -93,9 +93,8 @@ const autoCreateNickname = async (session: SSOResponse, signOut: Function) => {
 const SplashScreen: React.FC<{
     gameId: number;
     isDirectMode: boolean;
-    setAuthorizeResponse: Function;
     setLobbyConfigs: Function;
-}> = ({ isDirectMode, gameId, setAuthorizeResponse, setLobbyConfigs }) => {
+}> = ({ isDirectMode, gameId, setLobbyConfigs }) => {
     const { token, language } = useContext(URLContext);
     const router = useRouter();
     const player = usePlayerContext();
@@ -131,6 +130,8 @@ const SplashScreen: React.FC<{
             }
 
             if (!authorizeInfo?.authorized) {
+                console.log("Unauthorized-------------", gameId);
+                // player.authorizeInfo = authorizeInfo;
                 return;
             }
 
@@ -143,7 +144,7 @@ const SplashScreen: React.FC<{
                 handleGameOfferIds(authorizeInfo, lobby.lobbyConfigs);
             }
 
-            authorizeInfo && setAuthorizeResponse(authorizeInfo);
+            authorizeInfo && (player.authorizeInfo = authorizeInfo);
         };
 
         handleInitialization();
@@ -223,6 +224,7 @@ const SplashScreen: React.FC<{
                     gameIdsIcon={gameOfferIds}
                     enablePreload={getAppSettings()?.enablePreloadResource || true}
                     durationDelayDonePreload={DURATION_HOLD_SPLASH_SCREEN}
+                    nameTrigger="Splash"
                 />
             )}
         </>

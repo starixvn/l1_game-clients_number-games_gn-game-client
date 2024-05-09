@@ -25,19 +25,23 @@ import {
     URLContextModel,
 } from "../../../_shared/react-contexts";
 
+import { LobbyResponse } from "sc-user-service-client/dist/lobby";
 import SwiperCore from "swiper";
 import { ErrorNoGameOffer } from "../../../_shared/constants/error-code-dictionary";
 import "../../../games/scoreboards";
-import { reCheckIn } from "../../../services/auth-service";
+import { getLobbyConfigs, reCheckIn } from "../../../services/auth-service";
+import { updateSignInSMStatus } from "../../../services/user-setting-service";
 import { UserStakeLevel } from "../../game-base/type";
 import { ModalType } from "../../game-components/base-dialog/type";
 import { ErrorApiText } from "../../game-components/error-api-text";
 import Footer from "../../game-components/footer";
+import { LoadingSpinner } from "../../game-components/game-loading/loading-spinner";
 import Header from "../header";
 import Lobby from "../lobby/lobby";
 import { LobbySocketConnection } from "../lobby/lobby-socket-connection";
 import ButtonSwipe from "./button-swipe";
 import Styles from "./dashboard.module.scss";
+import Register from "./register/register";
 import { ILobbyConfigs, Props, State } from "./type";
 
 const Games = dynamic(() => import("../../../games/games"));
@@ -71,10 +75,12 @@ class Dashboard extends React.PureComponent<Props, State> {
             isLandscapeMode: false,
             isChangedGame: false,
             isChangePrevGame: false,
+            isCompleteInitialData: true,
         };
 
         this.lobbyConnectionHandler = new LobbySocketConnection();
 
+        this.handleRegister = this.handleRegister.bind(this);
         this.registerMainSocketEvent = this.registerMainSocketEvent.bind(this);
         this.handleKickedOut = this.handleKickedOut.bind(this);
         this.closeDialog = this.closeDialog.bind(this);
@@ -181,6 +187,10 @@ class Dashboard extends React.PureComponent<Props, State> {
         }, 100);
     }
 
+    completeInitialData() {
+        this.setState({ isCompleteInitialData: false });
+    }
+
     async componentDidMount() {
         if (typeof window === "undefined") {
             return;
@@ -192,6 +202,7 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.setState({ lobbyConfigs });
 
         if (!authorizeResponse) {
+            this.completeInitialData();
             return;
         }
         await this.connectLobbySocket(authorizeResponse, lobbyConfigs);
@@ -208,6 +219,7 @@ class Dashboard extends React.PureComponent<Props, State> {
             window.addEventListener("touchmove", this.preventZoomBehavior, { passive: false });
         }
         this.connectNotificationSocket();
+        this.completeInitialData();
         queryGame && this.openGame(queryGame);
     }
 
@@ -303,6 +315,17 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.setState({ userStakeLevel: userStakeLevel });
     }
 
+    async handleRegister(authorizeInfo: AuthorizeResponse) {
+        const { session } = this.props;
+
+        updateSignInSMStatus(session);
+        authorizeInfo.user.isSignedInSM = true;
+
+        const lobbyConfigs = await this.getAllLobbyConfigs();
+        await this.connectLobbySocket(authorizeInfo, lobbyConfigs);
+        this.updateAuthorizeInfo(authorizeInfo);
+    }
+
     closeDialog() {
         this.setState({ isShowErrorModal: false });
         this.isKickOut && this.signOut();
@@ -324,6 +347,17 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.setState({ queryGame: gameId, isJoinGame: true, openGameId: gameId });
 
         updateURLContext({ gameId });
+    }
+
+    async getAllLobbyConfigs() {
+        const { session } = this.props;
+        const lobby: LobbyResponse = await getLobbyConfigs(session);
+        if (lobby?.lobbyConfigs) {
+            this.setState({ lobbyConfigs: lobby?.lobbyConfigs });
+        } else {
+            console.error("Can not get Lobby configs");
+        }
+        return lobby?.lobbyConfigs;
     }
 
     getLobbyGamesIds = () => {
@@ -402,8 +436,6 @@ class Dashboard extends React.PureComponent<Props, State> {
         const isRenderGames = this.shouldRenderGames(offerGames);
         const allowSwipeGameOndDesktop = !this.props.directMode && !isMobileOnly && isRenderGames;
 
-        console.log("renderDashBoard", { isRenderGames });
-
         const allowSwipeGameOndDesktopStyle = isChangePrevGame ? Styles["slide-left"] : Styles["slide-right"];
         const changeGameStyle = isChangedGame && allowSwipeGameOndDesktop ? allowSwipeGameOndDesktopStyle : "";
         const isNoGameOffer = this.state.apiError?.message === ErrorNoGameOffer;
@@ -457,14 +489,18 @@ class Dashboard extends React.PureComponent<Props, State> {
             return this.renderDashBoard();
         }
 
-        return <></>;
+        return <Register session={this.props.session} handleStateLogin={this.handleRegister} />;
     };
 
     render() {
-        const { authorizeInfo, isLandscapeMode } = this.state;
+        const { authorizeInfo, isLandscapeMode, isCompleteInitialData } = this.state;
 
         if (isLandscapeMode && isMobileOnly) {
             return <LandscapeMode />;
+        }
+
+        if (isCompleteInitialData) {
+            return <LoadingSpinner />;
         }
 
         return authorizeInfo ? <>{this.renderComponents(authorizeInfo)}</> : <></>;

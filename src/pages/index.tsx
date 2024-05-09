@@ -2,12 +2,10 @@ import dynamic from "next/dynamic";
 import { memo, useContext, useState } from "react";
 
 import { useRouter } from "next/router";
-import { AuthorizeResponse } from "sc-user-service-client/dist/auth";
 import { URLContext, usePlayerContext } from "../_shared/react-contexts";
 import { usePWAWoker } from "../_shared/react-hooks/use-pwa-worker";
 import { tolgee } from "../_shared/tolgee";
 import Dashboard from "../components/page-components/dashboard";
-import Register from "../components/page-components/dashboard/register/register";
 import { ILobbyConfigs } from "../components/page-components/dashboard/type";
 import SplashScreen from "../components/page-components/splash-screen";
 
@@ -17,10 +15,9 @@ const Home = () => {
     usePWAWoker();
     const router = useRouter();
     const { gameId, isDirectMode } = useContext(URLContext);
-    const { session } = usePlayerContext();
+    const { session, authorizeInfo } = usePlayerContext();
     const shouldRenderDashboard = session?.isAuthenticated && !session?.isUM;
     const [isUm, setIsUm] = useState(session?.isUM);
-    const [authorizeResponse, setAuthorizeResponse] = useState<AuthorizeResponse>(null);
     const [lobbyConfigs, setLobbyConfigs] = useState<ILobbyConfigs>(null);
 
     const toUMPage = (value) => setIsUm(value);
@@ -35,10 +32,6 @@ const Home = () => {
 
     if (shouldRenderDashboard) {
         document.body.classList.add("galaxy-bg");
-        if (!authorizeResponse) {
-            return <Register session={session} setAuthorizeResponse={setAuthorizeResponse} setLobbyConfigs={setLobbyConfigs} />;
-        }
-
         return (
             <Dashboard
                 session={session}
@@ -46,20 +39,13 @@ const Home = () => {
                 setIsUm={toUMPage}
                 directMode={isDirectMode}
                 tolgee={tolgee}
-                authorizeResponse={authorizeResponse}
+                authorizeResponse={authorizeInfo}
                 lobbyConfigs={lobbyConfigs}
             />
         );
     }
 
-    return (
-        <SplashScreen
-            gameId={gameId}
-            isDirectMode={isDirectMode}
-            setAuthorizeResponse={setAuthorizeResponse}
-            setLobbyConfigs={setLobbyConfigs}
-        />
-    );
+    return <SplashScreen gameId={gameId} isDirectMode={isDirectMode} setLobbyConfigs={setLobbyConfigs} />;
 };
 
 export default memo(Home);
