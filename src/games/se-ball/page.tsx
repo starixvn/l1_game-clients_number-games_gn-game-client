@@ -11,7 +11,7 @@ import {
 import { useTranslator } from "../../_shared/react-hooks";
 import { tolgee } from "../../_shared/tolgee";
 import GameBase from "../../components/game-base/";
-import { GameMessageHandler } from "../../components/game-base/handlers";
+import { GameMessageHandler, TurnIdHandler } from "../../components/game-base/handlers";
 import { GameBaseHandlers, GameBaseProps, Round } from "../../components/game-base/type";
 import { RoundGameStateHandler } from "../../components/round-base/round-game-state-handler";
 import { RoundStateHandler } from "../../components/round-base/round-state-handler";
@@ -33,7 +33,7 @@ export type SeBallState = {
 
 class SeBall extends GameBase<GameBaseProps> {
     state: SeBallState = { statisticGroup: 0 };
-
+    private turnIdHandler?: TurnIdHandler;
     constructor(props: GameBaseProps) {
         const gameMessageHandler = new GameMessageHandler(props.dispatch);
         const gameBaseHandlers: GameBaseHandlers = {
@@ -43,10 +43,20 @@ class SeBall extends GameBase<GameBaseProps> {
             gameRoundDataHandler: new NextGameRoundDataHandler(),
         };
         super(props, gameBaseHandlers);
+
+        this.turnIdHandler = new TurnIdHandler({
+            dispatch: props.dispatch,
+            gameStateContextModel: this.getGameStateContext.bind(this),
+            gameMessageHandler,
+            totalTurns: props.totalTurns,
+            durations: props.durations,
+        });
     }
 
     override registerHandlers(): void {
         super.registerHandlers();
+
+        this.turnIdHandler?.registerEvents();
     }
 
     componentDidMount() {

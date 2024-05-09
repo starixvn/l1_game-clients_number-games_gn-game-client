@@ -127,7 +127,7 @@ const BacBallFC = (props) => {
     return (
         <BacBall
             {...props}
-            {...{
+            {...{ 
                 dispatch: useGameStatesDispatch(),
                 gameStateContextModel: useGameStateContext(),
                 systemContextModel: useSystemContext(),
