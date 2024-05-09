@@ -88,7 +88,7 @@ export const Notice = () => {
         };
 
         let extendMessage = "";
-        if (isKickOutError(String(errorCode))) {
+        if (isKickOutError(errorCode)) {
             extendMessage = `(${errorCode})`;
         }
 

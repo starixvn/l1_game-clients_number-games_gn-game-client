@@ -34,4 +34,4 @@ export const createOptionForHedgeBetGroup = (hedgeBetGroup: string[], tolgeeName
 
 export const getGlossaryTranslate = (ns: string, key: string) => `${ns}.glossary_${key}`;
 
-export const isKickOutError = (errorCode: string) => ["1001", "1002", "7000", "7001"].includes(errorCode);
+export const isKickOutError = (errorCode: string) => ["1001", "1002", "7000", "7001"].includes(String(errorCode));
