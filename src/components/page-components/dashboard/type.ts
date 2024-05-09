@@ -31,7 +31,6 @@ export type State = {
     openGameName: string;
     isOnLobby: boolean;
     isLandscapeMode: boolean;
-    isUserGesture?: boolean;
     isChangedGame: boolean;
     isChangePrevGame: boolean;
 };

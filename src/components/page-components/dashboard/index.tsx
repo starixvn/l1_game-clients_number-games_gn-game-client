@@ -75,7 +75,6 @@ class Dashboard extends React.PureComponent<Props, State> {
             openGameName: "",
             isOnLobby: true,
             isLandscapeMode: false,
-            isUserGesture: null,
             isChangedGame: false,
             isChangePrevGame: false,
         };
@@ -179,9 +178,7 @@ class Dashboard extends React.PureComponent<Props, State> {
         if (!document["hidden"]) {
             const reCheckInResponse = await reCheckIn(this.props.session);
             this.handleRecheckInResponse(reCheckInResponse);
-            this.setState({ isUserGesture: true });
         } else {
-            this.setState({ isUserGesture: false });
         }
     }
 
@@ -230,36 +227,8 @@ class Dashboard extends React.PureComponent<Props, State> {
             window.addEventListener("resize", this.changeOrientation);
             window.addEventListener("touchmove", this.preventZoomBehavior, { passive: false });
         }
-        this.handleUserGesture();
         this.connectNotificationSocket();
         queryGame && this.openGame(queryGame);
-    }
-
-    private handleUserGesture() {
-        const timeoutId = setTimeout(() => {
-            if (!this.state.isUserGesture) {
-                this.setState({ isUserGesture: true });
-            }
-        }, 10 * 1000);
-
-        if (isMobile) {
-            window.addEventListener("touchstart", () => {
-                this.enableUserGesture(timeoutId);
-            });
-        } else {
-            window.addEventListener("click", () => {
-                this.enableUserGesture(timeoutId);
-            });
-        }
-    }
-
-    private enableUserGesture(timeoutId: NodeJS.Timeout) {
-        if (!this.state.isUserGesture) {
-            this.setState({ isUserGesture: true });
-            if (timeoutId) {
-                clearTimeout(timeoutId);
-            }
-        }
     }
 
     private preventZoomBehavior(event: TouchEvent) {
@@ -278,7 +247,6 @@ class Dashboard extends React.PureComponent<Props, State> {
 
     componentWillUnmount() {
         document.removeEventListener("visibilitychange", this.onVisibilityChange);
-        this.setState({ isUserGesture: false });
         this.notificationSocket?.close();
         this.lobbyConnectionHandler.closeSocket();
         clearInterval(this.reCheckInInterval);
@@ -496,7 +464,7 @@ class Dashboard extends React.PureComponent<Props, State> {
                         {isNoGameOffer ? <></> : renderOfferGameContainer()}
 
                         {isNoGameOffer ? <></> : !isRenderGames && <Footer />}
-                        {this.state.isUserGesture != null ? <MusicPlayer isUserGesture={this.state.isUserGesture} /> : <></>}
+                        {<MusicPlayer/>}
 
                         {isShowErrorModal && (
                             <div className={Styles["container-modal"]}>
