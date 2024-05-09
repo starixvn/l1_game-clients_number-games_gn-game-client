@@ -10,7 +10,6 @@ import Head from "next/head";
 import { buildVersion, languageMapper, Themes } from "../_shared/constants";
 import { tolgee } from "../_shared/tolgee";
 import { LoadingSpinner } from "../components/game-components/game-loading/loading-spinner";
-import { GoogleAnalytic } from "../components/page-components/google-analytics";
 
 const SabaNumberApp = ({ Component, pageProps, language }: AppProps & { language: string }) => {
     const ssrTolgee = useTolgeeSSR(tolgee, language);
@@ -19,7 +18,6 @@ const SabaNumberApp = ({ Component, pageProps, language }: AppProps & { language
             <TolgeeProvider tolgee={ssrTolgee} fallback={<LoadingSpinner />}>
                 <AppTilte />
                 <Component {...pageProps} />
-                <GoogleAnalytic />
             </TolgeeProvider>
         </ThemeProvider>
     );
