@@ -20,7 +20,8 @@
         },
         "totalTurns": 4,
         "numberOfRoundHistory": 100,
-        "gamePath": "bac-ball"
+        "gamePath": "bac-ball",
+        "gameImagePath": "bac-number"
     },
     "1002": {
         "id": 1002,
@@ -43,7 +44,8 @@
         },
         "totalTurns": 4,
         "numberOfRoundHistory": 100,
-        "gamePath": "bac-ball"
+        "gamePath": "bac-ball",
+        "gameImagePath": "bac-number"
     },
     "1003": {
         "id": 1003,
@@ -66,7 +68,8 @@
         },
         "totalTurns": 8,
         "numberOfRoundHistory": 100,
-        "gamePath": "next-ball"
+        "gamePath": "next-ball",
+        "gameImagePath": "next-ball"
     },
     "1004": {
         "id": 1004,
@@ -89,11 +92,13 @@
         },
         "totalTurns": 8,
         "numberOfRoundHistory": 100,
-        "gamePath": "next-ball"
+        "gamePath": "next-ball",
+        "gameImagePath": "next-ball"
     },
     "1005": {
         "id": 1005,
         "gameName": "SeBall",
-        "isComingSoon": true
+        "isComingSoon": true,
+        "gameImagePath": ""
     }
 }

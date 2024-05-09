@@ -231,7 +231,7 @@ class Dashboard extends React.PureComponent<Props, State> {
     }
 
     shouldRenderGames(offerGames) {
-        const urlContextModel = StorageHelper.get(localStorageKeys.url) as URLContextModel; // NOSONAR
+        const urlContextModel = StorageHelper.get<URLContextModel>(localStorageKeys.url);
         const backToLobby = urlContextModel.backToLobby || false;
         const ssoRedirectGameId = urlContextModel.gameId || 0;
         return (offerGames.includes(this.state.openGameId) && !backToLobby) || ssoRedirectGameId > 0;
@@ -445,8 +445,9 @@ class Dashboard extends React.PureComponent<Props, State> {
                 <SettingContextProvider>
                     {allowSwipeGameOndDesktop && <ButtonSwipe isPrev={true} swiper={this.swiperRef} />}
                     <div
-                        className={`${Styles["dashboard"]} ${changeGameStyle} ${!isRenderGames ? "no-scroll" : ""} ${isMobileOnly ? Styles["hidden-scrollbar"] : ""
-                            }`}
+                        className={`${Styles["dashboard"]} ${changeGameStyle} ${!isRenderGames ? "no-scroll" : ""} ${
+                            isMobileOnly ? Styles["hidden-scrollbar"] : ""
+                        }`}
                         id={"dashboard"}
                     >
                         <Header />

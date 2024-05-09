@@ -1,19 +1,19 @@
-import { GameIds } from ".";
+import { getGameSettings } from "../app-settings";
+
 export const getDevicePixelRatio = () => {
     return (typeof window !== "undefined" && window?.devicePixelRatio) || 0;
 };
 
 export const getPathImageGameId = (gameId: number) => {
-    switch (gameId) {
-        case GameIds.BacBall1:
-        case GameIds.BacBall2:
-            return ["bac-number", `${getDevicePixelRatio() > 1 ? "bac-number/2x" : "bac-number/1x"}`];
-        case GameIds.NextBall1:
-        case GameIds.NextBall2:
-            return ["next-ball", `${getDevicePixelRatio() > 1 ? "next-ball/2x" : "next-ball/1x"}`];
-        default:
-            return [];
+    const gameSettings = getGameSettings(gameId);
+    const gameImagePath = gameSettings?.gameImagePath || "";
+
+    if (!gameImagePath) {
+        return [];
     }
+
+    const devicePixelRatioSuffix = getDevicePixelRatio() > 1 ? "/2x" : "/1x";
+    return [gameImagePath, `${gameImagePath}${devicePixelRatioSuffix}`];
 };
 
 export const getPathBanner = (locale: string, gameId: number) => {

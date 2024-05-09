@@ -130,8 +130,6 @@ const SplashScreen: React.FC<{
             }
 
             if (!authorizeInfo?.authorized) {
-                console.log("Unauthorized-------------", gameId);
-                // player.authorizeInfo = authorizeInfo;
                 return;
             }
 
@@ -224,7 +222,6 @@ const SplashScreen: React.FC<{
                     gameIdsIcon={gameOfferIds}
                     enablePreload={getAppSettings()?.enablePreloadResource || true}
                     durationDelayDonePreload={DURATION_HOLD_SPLASH_SCREEN}
-                    nameTrigger="Splash"
                 />
             )}
         </>

@@ -37,10 +37,9 @@ describe(Register.name, () => {
 
     beforeEach(() => {
         component = new Register({
+            handleStateLogin: jest.fn(),
             session: {} as any,
             t: jest.fn(),
-            setAuthorizeResponse: jest.fn(),
-            setLobbyConfigs: jest.fn(),
         });
 
         component.setState = jest.fn();
@@ -49,9 +48,7 @@ describe(Register.name, () => {
     describe("render", () => {
         it("should match snapshot", () => {
             // Act
-            const { container } = render(
-                <Register session={{} as any} t={jest.fn()} setAuthorizeResponse={jest.fn()} setLobbyConfigs={jest.fn()} />
-            );
+            const { container } = render(<Register session={{} as any} t={jest.fn()} handleStateLogin={jest.fn()} />);
 
             // Assert
             expect(container).toMatchSnapshot();
