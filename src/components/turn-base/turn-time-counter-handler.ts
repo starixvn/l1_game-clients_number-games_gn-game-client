@@ -93,10 +93,6 @@ export class TurnTimelineCounter {
         if (roundId > 0) {
             const actualRoundId = this.isLastTurn(roundRemainingTime, turnTimeline) ? roundId - 1 : roundId;
             turn.id = (actualRoundId - 1) * this.totalTurn + turn.index;
-
-            if (turnId > 0 && turnId !== turn.id) {
-                console.log(turn, roundId, actualRoundId, roundRemainingTime, turnId);
-            }
         }
 
         return turn;

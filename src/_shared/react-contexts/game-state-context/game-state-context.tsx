@@ -274,7 +274,6 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
         }
 
         case GameEventActionType.SET_NEW_GAME_STATE: {
-            console.log(` GameEventActionType.SET_NEW_GAME_STATE : ${RoundState[newGameState.roundState]} `)
             return {
                 ...state,
                 ...newGameState,

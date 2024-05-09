@@ -18,8 +18,6 @@ export class GameRoundHistoryHandler {
             verifiedRoundState = newRoundState;
         }
 
-        console.log(`GameRoundHistoryHandler: ${RoundState[verifiedRoundState]} `);
-
         this.props.dispatch({
             type: GameEventActionType.ROUND_HISTORY,
             payload: {

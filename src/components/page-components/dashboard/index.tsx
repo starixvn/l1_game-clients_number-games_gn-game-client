@@ -409,7 +409,6 @@ class Dashboard extends React.PureComponent<Props, State> {
     renderGames() {
         const { userStakeLevel, openGameName } = this.state;
         const urlContext = loadURLContext();
-        console.log("renderGames", urlContext.gameId);
         return (
             <Games
                 setApiErrorMessage={this.handleShowApiErrorMessage}

@@ -28,8 +28,6 @@ export class GameErrorHandler {
     };
 
     handleApiError = (apiError: ApiError, signOut: Function) => {
-        console.log(`GameErrorHandler: ${apiError}`)
-        console.log({ apiError })
         const isPlaceBet = apiError.isPlaceBetFailed ? apiError.isPlaceBetFailed : false;
         const errorCode = apiError.errorCode;
         const isKickOut = isKickOutError(errorCode.toString());
