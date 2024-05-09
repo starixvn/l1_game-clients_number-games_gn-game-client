@@ -15,6 +15,8 @@
     height: 13.5rem;
 }
 
+//-------------- CHOICE ODD EVEN -----------------//
+
 %main-option {
     --font-bet-name: 1.6rem;
 
@@ -40,9 +42,10 @@
     .disable-layer {
         position: absolute;
         top: 0;
-        background: url("/static/images/next-ball/lockbet.png") no-repeat;
-        width: 17.7rem;
-        height: 9.6rem;
+        background: url("/static/images/se-ball/disabled-layer-odd.png") no-repeat;
+        width: 17.8rem;
+        height: 9.4rem;
+        background-size: cover;
         opacity: 0;
         animation: show-disabled-layer 0.3s ease-in forwards;
     }
@@ -76,15 +79,7 @@
     }
 }
 
-.bet-option-row {
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-
-    .own-bet {
-        bottom: 0.4rem;
-    }
-}
+//-------------- CHOICE BLUE3 BLUE4 RED2 RED3 RED4 -----------------//
 
 .sub-betting-zone {
     width: 35.8rem;
@@ -123,12 +118,27 @@
         border-radius: var(--border-radius);
         z-index: 1;
     }
+
+    .disable-layer {
+        position: absolute;
+        top: var(--top, 0);
+        background: var(--bg-disable-layer);
+        width: var(--disable-layer-width);
+        height: var(--disable-layer-height);
+        background-size: cover;
+        opacity: 0;
+        animation: show-disabled-layer 0.3s ease-in forwards;
+    }
 }
 
 .blue3 {
     --bg: url("/static/images/se-ball/1x/bg-small-red.png");
     --bg-2x: url("/static/images/se-ball/2x/bg-small-red.png");
     --border-radius: 1.2rem;
+
+    --bg-disable-layer: url("/static/images/se-ball/disabled-layer-blue3.png") no-repeat;
+    --disable-layer-width: 13.6rem;
+    --disable-layer-height: 6.6rem;
 
     grid-column: 1;
     grid-row: 1;
@@ -138,6 +148,10 @@
     --bg: url("/static/images/se-ball/1x/bg-small-blue.png");
     --bg-2x: url("/static/images/se-ball/2x/bg-small-blue.png");
     --border-radius: 1.2rem 1.2rem 1.2rem 3rem;
+
+    --bg-disable-layer: url("/static/images/se-ball/disabled-layer-blue4.png") no-repeat;
+    --disable-layer-width: 13.6rem;
+    --disable-layer-height: 6.6rem;
 
     grid-column: 1;
     grid-row: 2;
@@ -151,6 +165,10 @@
     --bg: url("/static/images/se-ball/1x/bg-medium-blue.png");
     --bg-2x: url("/static/images/se-ball/2x/bg-medium-blue.png");
     --height: 149px;
+
+    --bg-disable-layer: url("/static/images/se-ball/disabled-layer-red2.png") no-repeat;
+    --disable-layer-width: 7.7rem;
+    --disable-layer-height: 14.8rem;
 
     grid-column: 2;
     grid-row: 1 / span 2;
@@ -168,6 +186,10 @@
     --bg-2x: url("/static/images/se-ball/2x/bg-small-red.png");
     --border-radius: 1.2rem;
 
+    --bg-disable-layer: url("/static/images/se-ball/disabled-layer-blue3.png") no-repeat;
+    --disable-layer-width: 13.6rem;
+    --disable-layer-height: 6.6rem;
+
     grid-column: 3;
     grid-row: 1;
 }
@@ -177,9 +199,19 @@
     --bg-2x: url("/static/images/se-ball/2x/bg-small-blue.png");
     --border-radius: 1.2rem 1.2rem 3rem 1.2rem;
 
+    --bg-disable-layer: url("/static/images/se-ball/disabled-layer-blue4.png") no-repeat;
+    --disable-layer-width: 13.6rem;
+    --disable-layer-height: 6.6rem;
+
     grid-column: 3;
     grid-row: 2;
+
+    .disable-layer {
+        transform: scaleX(-1);
+    }
 }
+
+//-------------- DOT RED BLUE INSIDE BET CHOICE -----------------//
 
 %dot {
     width: 1.5rem;
@@ -215,6 +247,16 @@
     --bg-2x: url("/static/images/se-ball/2x/dot-blue.png");
 }
 
+.bet-option-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+
+    .own-bet {
+        bottom: 0.4rem;
+    }
+}
+
 .own-bet-container {
     position: absolute;
     bottom: 0.4rem;
@@ -229,6 +271,8 @@
 .percent {
     position: relative;
 }
+
+// ----------------- WINNING HIGHLIGHT EFFECT -----------------//
 
 .winning-effect {
     position: absolute;
@@ -305,11 +349,7 @@
     left: -0.5rem;
 }
 
-.ball-svg {
-    position: absolute;
-    top: 0;
-    transform: scale(0.65);
-}
+// ----------------- HIGHLIGHT PREVIOUS RESULT -----------------//
 
 .highlight-prev-result-odd,
 .highlight-prev-result-even {
