@@ -13,6 +13,7 @@ import { tolgee } from "../../_shared/tolgee";
 import GameBase from "../../components/game-base/";
 import { GameMessageHandler, TurnIdHandler } from "../../components/game-base/handlers";
 import { GameBaseHandlers, GameBaseProps, Round } from "../../components/game-base/type";
+import OtherPercentageStatistic from "../../components/game-components/statistic/other-percentage-statistic";
 import { RoundGameStateHandler } from "../../components/round-base/round-game-state-handler";
 import { RoundStateHandler } from "../../components/round-base/round-state-handler";
 import ScoreboardSeBall from "./scoreboard";
@@ -101,8 +102,39 @@ class SeBall extends GameBase<GameBaseProps> {
                 100 - Math.round((countResult[SeBallBetOptions.ODD] * 100) / total) || 0,
         };
 
+        const otherCalculator = {
+            [SeBallBetOptions.BLUE3]: (countResult: object, total: number) =>
+                Math.round((countResult[SeBallBetOptions.BLUE3] * 100) / total) || 0,
+            [SeBallBetOptions.RED2]: (countResult: object, total: number) =>
+                Math.round((countResult[SeBallBetOptions.RED2] * 100) / total) || 0,
+            [SeBallBetOptions.RED3]: (countResult: object, total: number) =>
+                Math.round((countResult[SeBallBetOptions.RED3] * 100) / total) || 0,
+            [SeBallBetOptions.RED4]: (countResult: object, total: number) =>
+                Math.round((countResult[SeBallBetOptions.RED4] * 100) / total) || 0,
+            [SeBallBetOptions.BLUE4]: (countResult: object, total: number) =>
+                100 -
+                    (Math.round((countResult[SeBallBetOptions.BLUE4] * 100) / total) +
+                        Math.round((countResult[SeBallBetOptions.RED2] * 100) / total) +
+                        Math.round((countResult[SeBallBetOptions.RED3] * 100) / total) +
+                        Math.round((countResult[SeBallBetOptions.RED4] * 100) / total)) || 0,
+        };
+
+        const subBetOptionClass = {
+            [SeBallBetOptions.BLUE3]: Styles["statistic-blue3"],
+            [SeBallBetOptions.RED2]: Styles["statistic-red2"],
+            [SeBallBetOptions.RED3]: Styles["statistic-red3"],
+            [SeBallBetOptions.RED4]: Styles["statistic-red4"],
+            [SeBallBetOptions.BLUE4]: Styles["statistic-blue4"],
+        };
+
         return (
-            <PercentageStatistic roundHistory={roundHistory} statisticRuleEntries={Object.entries(calculators)} className={classNameIndo} />
+            <OtherPercentageStatistic
+                roundHistory={roundHistory}
+                statisticRuleEntries={Object.entries(calculators)}
+                className={classNameIndo}
+                otherStatisticRuleEntries={Object.entries(otherCalculator)}
+                subBetOptionClass={subBetOptionClass}
+            />
         );
     }
 

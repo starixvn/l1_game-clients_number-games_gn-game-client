@@ -22,8 +22,8 @@ const SeBallBetOptionsComponent = () => {
 
     const isShowDisabledLayer = roundState === RoundState.LockingBet;
 
-    const renderTotalBet = (choice: string) => {
-        return <TotalBet choice={choice} className="relative" tolgeeNamespace={tolgeeNamespace} />;
+    const renderTotalBet = (choice: string, className?: string) => {
+        return <TotalBet choice={choice} className={className} tolgeeNamespace={tolgeeNamespace} />;
     };
 
     const renderBetPercentage = (choice: string) => {
@@ -37,8 +37,10 @@ const SeBallBetOptionsComponent = () => {
         );
     };
 
-    const renderPlayerBetCount = (choice: string) => {
-        return <PlayerBetCount choice={choice} className={`flex items-center players gap-1 relative`} tolgeeNamespace={tolgeeNamespace} />;
+    const renderPlayerBetCount = (choice: string, className?: string) => {
+        return (
+            <PlayerBetCount choice={choice} className={`flex items-center players gap-1 ${className}`} tolgeeNamespace={tolgeeNamespace} />
+        );
     };
 
     const renderBetChoice = (choice: string) => {
@@ -122,8 +124,8 @@ const SeBallBetOptionsComponent = () => {
             <div className={`${Style[choice]} text-white relative`}>
                 <div className={`${Style["choice-info"]} ${Style[`choice-${choice}`]}`}>
                     <div className={Style.stake}>
-                        {renderTotalBet(choice)}
-                        {renderPlayerBetCount(choice)}
+                        {renderTotalBet(choice, choice === SeBallBetOptions.ODD ? "justify-end" : "")}
+                        {renderPlayerBetCount(choice, choice === SeBallBetOptions.ODD ? "justify-end" : "")}
                     </div>
                     {renderBetPercentage(choice)}
                 </div>

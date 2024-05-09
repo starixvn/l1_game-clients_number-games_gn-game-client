@@ -430,6 +430,37 @@
     }
 }
 
+%statistic-icon {
+    display: flex;
+    width: 1.6rem;
+    height: 1.6rem;
+}
+
+.statistic-red2 {
+    @extend %statistic-icon;
+    background: url("/static/images/se-ball/statistic-icon-red2.svg") no-repeat;
+}
+
+.statistic-red3 {
+    @extend %statistic-icon;
+    background: url("/static/images/se-ball/statistic-icon-red3.svg") no-repeat;
+}
+
+.statistic-red4 {
+    @extend %statistic-icon;
+    background: url("/static/images/se-ball/statistic-icon-red4.svg") no-repeat;
+}
+
+.statistic-blue3 {
+    @extend %statistic-icon;
+    background: url("/static/images/se-ball/statistic-icon-blue3.svg") no-repeat;
+}
+
+.statistic-blue4 {
+    @extend %statistic-icon;
+    background: url("/static/images/se-ball/statistic-icon-blue4.svg") no-repeat;
+}
+
 .choice-odds-area {
     position: relative;
     margin-top: -0.5rem;
