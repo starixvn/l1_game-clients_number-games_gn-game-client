@@ -1,4 +1,4 @@
-import { FC, ReactNode } from "react";
+import { FC, ReactNode, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { useClickSound, useCommonTranslate, useSNTranslate } from "../../../../_shared/react-hooks";
 import ModalContainer from "../../modal-container";
@@ -46,24 +46,52 @@ const PFVerifyModal: FC<{
     );
 };
 
+const useClickOutside = (callback: Function) => {
+    const ref = useRef<HTMLDivElement>();
+    useEffect(() => {
+        const handleClick = (event: any) => {
+            if (ref.current && !ref.current.contains(event.target)) {
+                callback(ref.current, event.target);
+            }
+        };
+
+        document.addEventListener("click", handleClick, true);
+
+        return () => {
+            document.removeEventListener("click", handleClick, true);
+        };
+    }, [ref]);
+
+    return ref;
+};
+
 const PFVerify: FC<{ renderResultBlock: Function }> = ({ renderResultBlock }) => {
     const { pfVerifyModalData: pfResult } = useGameStateContext();
     const { t: translateCommon } = useCommonTranslate();
     const { t: translateSNGames } = useSNTranslate();
     const clickSound = useClickSound();
     const dispatch = useGameStatesDispatch();
+    const handleClickOutSide = (target: any, clickedElement: any, except: any) => {
+        if (!target.classList.contains(Styles["hide"]) && !except.contains(clickedElement)) {
+            target.classList.add(Styles["hide"]);
+        }
+    };
+
+    const clickOutSideClientSeedTooltip = useClickOutside((target: any, clickedElement: any) => {
+        const btn = document.getElementById("btn-tooltip-client-seed");
+        handleClickOutSide(target, clickedElement, btn);
+    });
+
+    const clickOutSideClientSeedTooltipPF = useClickOutside((target: any, clickedElement: any) => {
+        const btn = document.getElementById("btn-tooltip-pf");
+        handleClickOutSide(target, clickedElement, btn);
+    });
 
     const handleClickTooltip = (event: React.MouseEvent<HTMLButtonElement> & React.FocusEvent<HTMLButtonElement>) => {
         clickSound();
         const currentTarget = event.currentTarget as HTMLElement;
         const tooltip = currentTarget.nextElementSibling as HTMLDivElement;
         tooltip.classList.toggle(Styles["hide"]);
-    };
-
-    const handleBlurTooltip = (event: React.FocusEvent<HTMLButtonElement>) => {
-        const currentTarget = event.currentTarget as HTMLElement;
-        const tooltip = currentTarget.nextElementSibling as HTMLDivElement;
-        tooltip.classList.add(Styles["hide"]);
     };
 
     const handleOnClickClientSeedInfo = () => {
@@ -99,10 +127,10 @@ const PFVerify: FC<{ renderResultBlock: Function }> = ({ renderResultBlock }) =>
             <ClientSeedForm>
                 <Section title={translateCommon("pf_header_client_seed")}>
                     <div className={Styles["tooltip-container"]}>
-                        <button className={Styles["btn-pf-intro"]} onClick={handleClickTooltip} onBlur={handleBlurTooltip}>
+                        <button className={Styles["btn-pf-intro"]} onClick={handleClickTooltip} id="btn-tooltip-client-seed">
                             <span className="icon-info" />
                         </button>
-                        <div className={`${Styles["hide"]} ${Styles["pf-tooltip"]} break`}>
+                        <div className={`${Styles["hide"]} ${Styles["pf-tooltip"]} break`} ref={clickOutSideClientSeedTooltip}>
                             {translateSNGames("pf_client_seed_tooltip")}
                         </div>
                     </div>
@@ -121,10 +149,10 @@ const PFVerify: FC<{ renderResultBlock: Function }> = ({ renderResultBlock }) =>
             <ClientSeedForm>
                 <Section title={translateCommon("pf_header_combined_sha512_hash")}>
                     <div className={Styles["tooltip-container"]}>
-                        <button className={Styles["btn-pf-intro"]} onClick={handleClickTooltip} onBlur={handleBlurTooltip}>
+                        <button className={Styles["btn-pf-intro"]} onClick={handleClickTooltip} id="btn-tooltip-pf">
                             <span className="icon-info" />
                         </button>
-                        <div className={`${Styles["hide"]} ${Styles["pf-tooltip"]}`}>
+                        <div className={`${Styles["hide"]} ${Styles["pf-tooltip"]}`} ref={clickOutSideClientSeedTooltipPF}>
                             {translateSNGames("pf_combined_sha512_hash_tooltip")}
                         </div>
                     </div>

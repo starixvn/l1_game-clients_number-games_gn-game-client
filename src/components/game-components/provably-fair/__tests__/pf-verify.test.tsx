@@ -119,7 +119,7 @@ describe(PFVerifyModal.name, () => {
             const element = renderResult.container.querySelector(".btn-pf-intro");
 
             fireEvent.click(element);
-            fireEvent.blur(element);
+            fireEvent.click(document.body);
 
             expect(renderResult.container.querySelector(".pf-tooltip:not(.hide)")).not.toBeInTheDocument();
         });

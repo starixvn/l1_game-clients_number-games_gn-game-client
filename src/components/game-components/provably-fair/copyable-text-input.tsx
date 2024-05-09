@@ -13,7 +13,7 @@ const CopyableTextInput: FC<{ value: string; id: string; position?: string; clas
     const clickSound = useClickSound();
     const handleCopy = () => {
         clickSound();
-        navigator.clipboard.writeText(value);
+        navigator.clipboard?.writeText(value);
         setIsCopySuccess(true);
         setTimeout(() => {
             setIsCopySuccess(false);
