@@ -41,6 +41,10 @@
     font-size: 1.2rem;
     gap: 1.5rem;
     height: 3.6rem;
+
+    &.other {
+        justify-content: space-between;
+    }
 }
 
 .statistic-tab-container {
@@ -170,7 +174,11 @@ $green_choices: tie;
     font-size: 0.9rem;
 }
 
-.other-statistic {
+.other-wrapper {
     display: flex;
-    gap: 1.5rem;
+    gap: 0.6rem;
+
+    .statistic-group {
+        gap: 0.2rem;
+    }
 }

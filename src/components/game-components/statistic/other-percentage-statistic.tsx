@@ -14,14 +14,16 @@ export const OtherPercentageStatistic: React.FC<PercentageStatisticProps> = (pro
     const { t } = useTranslator([tolgeeNamespace]);
 
     return (
-        <div className={`${Styles["statistic-container"]} flex`} id="bar-statistic">
-            {Object.keys(statisticResult).map((choice) => (
-                <StatisticItem key={choice} value={`${statisticResult[choice]}%`} className={props.className}>
-                    <span className={`${Styles[choice]} ${Styles["statistic-choice-icon"]}`}>{t(`beadboard_${choice}`)}</span>
-                </StatisticItem>
-            ))}
+        <div className={`flex ${Styles["statistic-container"]} ${Styles["other"]}`} id="bar-statistic">
+            <div className={Styles["other-wrapper"]}>
+                {Object.keys(statisticResult).map((choice) => (
+                    <StatisticItem key={choice} value={`${statisticResult[choice]}%`} className={props.className}>
+                        <span className={`${Styles[choice]} ${Styles["statistic-choice-icon"]}`}>{t(`beadboard_${choice}`)}</span>
+                    </StatisticItem>
+                ))}
+            </div>
 
-            <div className={Styles["other-statistic"]}>
+            <div className={Styles["other-wrapper"]}>
                 {Object.keys(otherStatisticResult).map((choice) => (
                     <StatisticItem key={choice} value={`${otherStatisticResult[choice]}%`} className={props.className}>
                         <span className={subBetOptionClass[choice]}></span>
