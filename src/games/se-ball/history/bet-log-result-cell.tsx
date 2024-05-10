@@ -1,11 +1,14 @@
 import { FC } from "react";
-import Styles from "./history.module.scss";
-import SmallBall from "../../../components/game-components/small-ball";
 
-const BetLogResultCell: FC<{ result: { ball: number } }> = ({ result: { ball } }) => {
+import SmallBall from "../../../components/game-components/small-ball";
+import Styles from "./history.module.scss";
+
+const BetLogResultCell: FC<{ result: { balls: number[] } }> = ({ result: { balls } }) => {
     return (
         <div className={Styles["result-container"]}>
-            <SmallBall number={ball} />
+            {balls.map((ball, index) => {
+                return <SmallBall number={ball} key={index} />;
+            })}
         </div>
     );
 };
