@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { createOptionForHedgeBetGroup, isKickOutError } from "../../../_shared/helpers";
+import { createOptionForHedgeBetGroup, getExtendMessageByErrorCode } from "../../../_shared/helpers";
 import { numberWithCommas } from "../../../_shared/helpers/number-helper";
 import { useGameContext } from "../../../_shared/react-contexts";
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
@@ -87,16 +87,11 @@ export const Notice = () => {
             ...hedgeBet,
         };
 
-        let extendMessage = "";
-        if (isKickOutError(errorCode)) {
-            extendMessage = ` (${errorCode})`;
-        }
-
         return (
             <BaseNotice {...{ onClose: onCloseNotice, duration, isWarning }}>
                 <div className={Styles["notice-content"]}>
                     {t(`${message}`, params, { noWrap: true }).replaceTolgeeFormat()}
-                    {extendMessage}
+                    {getExtendMessageByErrorCode(errorCode)}
                 </div>
             </BaseNotice>
         );
