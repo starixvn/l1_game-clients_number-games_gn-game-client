@@ -13,7 +13,6 @@ import { tolgee } from "../../_shared/tolgee";
 import GameBase from "../../components/game-base/";
 import { GameMessageHandler, TurnIdHandler } from "../../components/game-base/handlers";
 import { GameBaseHandlers, GameBaseProps, Round } from "../../components/game-base/type";
-import OtherPercentageStatistic from "../../components/game-components/statistic/other-percentage-statistic";
 import { RoundGameStateHandler } from "../../components/round-base/round-game-state-handler";
 import { RoundStateHandler } from "../../components/round-base/round-state-handler";
 import ScoreboardSeBall from "./scoreboard";
@@ -25,7 +24,7 @@ import { SeBallResult, SeBallSettlementResult } from "./types";
 
 const DrawIdBlock = dynamic(() => import("../../components/game-components/draw-id"));
 const SeBallBettingBlock = dynamic(() => import("./se-ball-betting-block"));
-const PercentageStatistic = dynamic(() => import("../../components/game-components/statistic"));
+const OtherPercentageStatistic = dynamic(() => import("../../components/game-components/statistic/other-percentage-statistic"));
 const SeBallBetHistoryModal = dynamic(() => import("./history"));
 
 export type SeBallState = {
