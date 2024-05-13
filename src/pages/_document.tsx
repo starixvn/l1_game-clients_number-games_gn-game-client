@@ -2,7 +2,6 @@
 import Document, { DocumentContext, Head, Html, Main, NextScript } from "next/document";
 import React from "react";
 import { buildVersion } from "../_shared/constants";
-import { GoogleAnalytic } from "../components/page-components/google-analytics";
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default class extends Document {
@@ -24,7 +23,6 @@ export default class extends Document {
                 <body>
                     <Main />
                     <NextScript />
-                    <GoogleAnalytic />
                 </body>
             </Html>
         );
