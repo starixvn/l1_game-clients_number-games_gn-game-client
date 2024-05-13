@@ -1,7 +1,7 @@
 import { Socket, io } from "socket.io-client";
+import MsgpackParser from "socket.io-msgpack-parser";
 import { getAppSettings } from "../../../_shared/app-settings";
 import { buildUrl } from "../../../_shared/helpers/url-helper";
-import MsgpackParser from "socket.io-msgpack-parser";
 import { messageEventType } from "../../game-base/handlers";
 import { initLobbyGameTransmitter } from "./games/lobby-game-transmitter";
 
@@ -50,7 +50,6 @@ export class LobbySocketConnection {
             if (socket) {
                 socket.on(messageEventType.SOCKET_CONNECTED, () => {
                     this.offerGameIds?.forEach((gameId) => {
-                        this.signInGame(session, gameId);
                         this.initGameTransmitter(gameId);
                     });
                     resolve(socket);

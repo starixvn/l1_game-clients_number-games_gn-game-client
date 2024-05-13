@@ -3,7 +3,6 @@ import React, { useMemo } from "react";
 
 import { buildVersion } from "../../../_shared/constants";
 import { useShowBallResultSound } from "../../../_shared/react-hooks";
-import { buildVersion } from "../../../_shared/constants";
 import { Spritesheet } from "../sprites-sheet";
 import Styles from "./cage.module.scss";
 
