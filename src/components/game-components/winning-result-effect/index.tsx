@@ -12,7 +12,7 @@ const WinningResultEffect: FC = () => {
             return <></>;
         }
 
-        return <div className={Styles["winning-result"]}>{`+${numberWithCommas(betWin, 1)}`}</div>;
+        return <div className={Styles["winning-result"]}>{`+${numberWithCommas(betWin, 2)}`}</div>;
     }, [betWin, showResultInfo]);
 };
 
