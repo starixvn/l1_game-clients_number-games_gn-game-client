@@ -181,11 +181,11 @@ class Dashboard extends React.Component<Props, State> {
         if (!document["hidden"]) {
             const reCheckInResponse = await reCheckIn(this.props.session);
             this.handleRecheckInResponse(reCheckInResponse);
-        } 
+        }
     }
 
     shouldComponentUpdate(nextProps: Readonly<Props>, nextState: Readonly<State>, nextContext: any): boolean {
-        if (this.state.isJoinGame
+        if (this.state.openGameId > 0
             && this.state.authorizeInfo?.authorized) {
             return false;
         }
@@ -482,7 +482,7 @@ class Dashboard extends React.Component<Props, State> {
                         {isNoGameOffer ? <></> : renderOfferGameContainer()}
 
                         {isNoGameOffer ? <></> : !isRenderGames && <Footer />}
-                        {<MusicPlayer/>}
+                        {<MusicPlayer />}
 
                         {isShowErrorModal && (
                             <div className={Styles["container-modal"]}>
