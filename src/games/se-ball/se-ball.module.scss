@@ -19,9 +19,7 @@
     }
 
     &.zoom-out {
-        // margin-top: -20px;
-        // transform: scale(0.5);
-        animation: zoom-out 0.3s linear forwards;
+        animation: zoom-out 0.5s ease-in forwards;
     }
 }
 
