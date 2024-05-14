@@ -1,5 +1,6 @@
 import React, { useMemo } from "react";
 
+import { buildVersion } from "../../../_shared/constants";
 import { Spritesheet } from "../sprites-sheet";
 import Styles from "./cage.module.scss";
 
@@ -16,7 +17,7 @@ const ResultNumber: React.FC<{
             return (
                 <div key={currentTime} id="result-text" className={Styles["number"]}>
                     <Spritesheet
-                        image={`/static/images/cage/number/${number}.png`}
+                        image={`/static/images/cage/number/${number}.png?v=${buildVersion}`}
                         widthFrame={153}
                         isResponsive
                         heightFrame={153}

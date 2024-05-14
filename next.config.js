@@ -51,7 +51,7 @@ const nextConfig = withSentryConfig({
     async headers() {
         return [
             {
-                source: "/:all*(js|png|json|mp3)",
+                source: "/:all*(js|png|json|mp3|webp|svg|jpg)",
                 locale: false,
                 headers: [
                     {

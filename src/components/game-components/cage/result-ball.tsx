@@ -1,6 +1,7 @@
 import Image from "next/image";
 import React, { useMemo } from "react";
 
+import { buildVersion } from "../../../_shared/constants";
 import { useShowBallResultSound } from "../../../_shared/react-hooks";
 import { Spritesheet } from "../sprites-sheet";
 import Styles from "./cage.module.scss";
@@ -27,7 +28,7 @@ const ResultBall: React.FC<{
                 {isShowResultAnim ? (
                     <Spritesheet
                         className={"sss"}
-                        image={`/static/images/cage/${ballColor}.webp`}
+                        image={`/static/images/cage/${ballColor}.webp?v=${buildVersion}`}
                         widthFrame={153}
                         isResponsive
                         heightFrame={153}
