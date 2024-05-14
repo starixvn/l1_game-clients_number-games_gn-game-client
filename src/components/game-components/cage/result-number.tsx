@@ -17,7 +17,7 @@ const ResultNumber: React.FC<{
             return (
                 <div key={currentTime} id="result-text" className={Styles["number"]}>
                     <Spritesheet
-                        image={`/static/images/cage/number/${number}.png?v=${buildVersion}`}
+                        image={`/static/images/cage/number/${number}.webp?v=${buildVersion}`}
                         widthFrame={153}
                         isResponsive
                         heightFrame={153}
