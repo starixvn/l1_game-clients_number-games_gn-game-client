@@ -1,13 +1,13 @@
 import { createHash } from "crypto";
 import { FC, useEffect, useMemo, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 import { useCommonTranslate, useSNTranslate } from "../../../_shared/react-hooks";
 import { PFVerificationHeaderBlockBase, DefaultPFStyles as Styles } from "../../../components/game-components/provably-fair";
 import SmallBall from "../../../components/game-components/small-ball";
 import { Section } from "../../../components/game-components/provably-fair/pf-form-components";
 import { usePFContext, usePFDispatch } from "../../../_shared/react-contexts/game-state-context/pf/pf-context";
 import { PFEventActionType } from "../../../_shared/react-contexts/game-state-context/pf/pf-action";
+import { Markup } from "interweave";
 
 const PFVerification: FC = () => {
     const { pfVerifyModalData: pfResult } = usePFContext();
@@ -17,29 +17,86 @@ const PFVerification: FC = () => {
     const { t: translateSNGames } = useSNTranslate();
     const [combinedHash, setCombinedHash] = useState(pfResult.finalHash);
 
+    const BALLS_EACH_ROUND = 4;
+    const TOTAL_BALLS = 60;
+
+    const finalHashToNumbers = (finalHash: string) => {
+        const increments = [];
+
+        for (let i = 0; i < BALLS_EACH_ROUND; i++) {
+            const value = parseInt(finalHash.slice(i * 2, i * 2 + 2), 16);
+            increments.push(value);
+        }
+
+        return increments;
+    };
+
+    const generateRemainingBalls = (totalBalls: number, drawnBalls: number[]) => {
+        const result = [];
+        for (let i = 1; i <= totalBalls; i++) {
+            result.push(i);
+        }
+        if (drawnBalls.length) {
+            return result.filter((n) => !drawnBalls.includes(n));
+        }
+
+        return result;
+    };
+
     const verifyInfo = useMemo(() => {
-        const rawTwoFirstDigits = combinedHash.substring(0, 2);
-        const valueTwoFirstDigits = parseInt(rawTwoFirstDigits, 16);
         const serverSeed = JSON.parse(pfResult?.serverSeed || "{}");
-        const randomNumber = parseInt(serverSeed?.random || "-1");
-        const remainBalls = (serverSeed?.remain || "").split(":");
-        const index = ((randomNumber + valueTwoFirstDigits) % remainBalls.length) + 1;
-        const result = remainBalls[index - 1];
+
+        const randomNumbers = (serverSeed?.random || "").split(";").map((x: string) => +x) as number[];
+
+        const rawDigits = combinedHash.match(/.{2}/g);
+
+        const increments = finalHashToNumbers(pfResult.finalHash);
+
+        const ballIndexes = randomNumbers.map((x, index) => (x + increments[index]) % (TOTAL_BALLS - index));
+
+        let remainingBalls = generateRemainingBalls(TOTAL_BALLS, []);
+
+        const resultBalls: number[] = [];
+        let remainingBallList = [];
+
+        ballIndexes.forEach((i) => {
+            resultBalls.push(remainingBalls[i]);
+            remainingBalls = generateRemainingBalls(TOTAL_BALLS, resultBalls);
+            remainingBallList.push(remainingBalls);
+            // console.log("ballresult", resultBalls, remainingBallList);
+        });
 
         return {
-            rawTwoFirstDigits,
-            valueTwoFirstDigits,
-            numberRemainBalls: remainBalls.length,
-            remainBalls,
-            randomNumber,
-            index,
-            result,
+            randomNumbers,
+            rawDigits,
+            increments,
+            ballIndexes,
+            resultBalls,
+            remainingBalls,
         };
     }, [combinedHash]);
 
     const handleChangeMergeClientSeed = (event: React.ChangeEvent<HTMLInputElement>) => {
         const input = event.target as HTMLInputElement;
         setMergeClientSeed(input.value);
+    };
+
+    const ballValues = (randomNumber: number[], convertNumber: number[], result: number[]) => {
+        const ballLines = [];
+        for (let i = 0; i < BALLS_EACH_ROUND; i++) {
+            const line = `<span style="color: #ffbc11; font-weight: 600">Ball ${i + 1} - ${translateSNGames("pf_index")} (1-${
+                TOTAL_BALLS - i
+            })</span> = ((${randomNumber[i]}+${convertNumber[i]}) mod ${
+                TOTAL_BALLS - i
+            }) + 1 = <span style="color: #ffbc11; font-weight: 600">${result[i]}</span>`;
+            ballLines.push(
+                <p>
+                    <Markup key={i} content={line} />
+                </p>
+            );
+        }
+
+        return <div>{ballLines}</div>;
     };
 
     useEffect(() => {
@@ -74,8 +131,10 @@ const PFVerification: FC = () => {
             <div className={Styles["client-seed-form"]}>
                 <div className="flex items-center gap-4">
                     <Section title={translateCommon("pf_verification_para_1")} customTitleStyles={`m-0 ${Styles["title-fix-width"]}`}>
-                        <div className="flex gap-4 items-center">
-                            <SmallBall number={verifyInfo.result} />
+                        <div className="flex gap-2 items-center">
+                            {verifyInfo.resultBalls.map((item) => (
+                                <SmallBall key={uuidv4()} number={item} />
+                            ))}
                         </div>
                     </Section>
                 </div>
@@ -85,7 +144,14 @@ const PFVerification: FC = () => {
 
                 <Section title={translateSNGames("pf_verification_para_3")}>
                     <p className="font-weight-medium">
-                        {verifyInfo.rawTwoFirstDigits} {"=>"} {verifyInfo.valueTwoFirstDigits}
+                        {verifyInfo.increments.map((item, index) => {
+                            const rawDigit = verifyInfo.rawDigits[index];
+                            return (
+                                <span style={{ display: "block" }} key={uuidv4()}>
+                                    {rawDigit} {"=>"} {item}
+                                </span>
+                            );
+                        })}
                     </p>
                     <p>
                         <span className={hightlightStyle}>{translateSNGames("pf_verification_para_4")}</span>
@@ -94,19 +160,14 @@ const PFVerification: FC = () => {
                             = (({translateSNGames("pf_algorithm_random_number")} + X) mod {translateSNGames("pf_verification_para_5")}) + 1
                         </span>
                     </p>
-                    <p>
-                        <span className={hightlightStyle}>
-                            {translateSNGames("pf_index")} (1,..., {verifyInfo.numberRemainBalls})
-                        </span>{" "}
-                        = (({verifyInfo.randomNumber} + {verifyInfo.valueTwoFirstDigits}) mod {verifyInfo.numberRemainBalls}) + 1 ={" "}
-                        <span className={hightlightStyle}>{verifyInfo.index}</span>
-                    </p>
+
+                    {ballValues(verifyInfo.randomNumbers, verifyInfo.increments, verifyInfo.resultBalls)}
                 </Section>
 
-                <Section title={translateSNGames("pf_verification_para_8")}>
+                {/* <Section title={translateSNGames("pf_verification_para_8")}>
                     <p className={Styles["result-numbers"]}>
-                        {verifyInfo.remainBalls.map((item, index) => {
-                            return index + 1 === verifyInfo.index ? (
+                        {verifyInfo.remainingBalls.map((item, index) => {
+                            return index + 1 === verifyInfo.ballIndexes[index] ? (
                                 <span key={uuidv4()} className={Styles["text-yellow"]}>
                                     {item}{" "}
                                 </span>
@@ -115,7 +176,7 @@ const PFVerification: FC = () => {
                             );
                         })}
                     </p>
-                </Section>
+                </Section> */}
             </div>
         </div>
     );
