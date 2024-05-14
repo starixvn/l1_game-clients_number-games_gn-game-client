@@ -1,8 +1,10 @@
 import React, { memo, useEffect, useMemo, useState } from "react";
 
+import { RoundState } from "../../game-base/type";
 import { CageProps } from "../cage";
 import BallLoops from "../cage/ball-loop";
 import CageStyles from "../cage/cage.module.scss";
+import Styles from "./cage-other.module.scss";
 import ResultBallOther from "./result-ball-other";
 
 const OtherCage: React.FC<CageProps> = ({
@@ -13,16 +15,17 @@ const OtherCage: React.FC<CageProps> = ({
     ballFPS,
     isPlayStartRoundAnimation,
     listResult,
+    roundState,
 }) => {
     const [showBalls, setShowBalls] = useState(false);
 
     useEffect(() => {
         let timeOut: NodeJS.Timeout;
 
-        if (!showBalls) {
+        if (!showBalls && roundState === RoundState.DisplayResult) {
             timeOut = setTimeout(() => {
                 setShowBalls(true);
-            }, 500);
+            }, 1200);
         }
 
         return () => {
@@ -52,7 +55,11 @@ const OtherCage: React.FC<CageProps> = ({
     };
 
     return (
-        <div className={`${CageStyles["cage-area"]} ${isSmall ? CageStyles["small"] : ""} ${CageStyles[position]}`}>
+        <div
+            className={`${CageStyles["cage-area"]} ${isSmall ? CageStyles["small"] : ""} ${CageStyles[position]} ${
+                Styles[`type-${listResult?.length}`]
+            }`}
+        >
             <div id="cage-bg" className={CageStyles["cage-bg"]}></div>
             <BallLoops isPlayStartRoundAnimation={isPlayStartRoundAnimation} />
             <div id="cage-cover" className={CageStyles["cage-cover"]}></div>

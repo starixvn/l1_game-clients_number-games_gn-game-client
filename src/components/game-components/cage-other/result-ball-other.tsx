@@ -34,7 +34,7 @@ const ResultBallOther: React.FC<{
                     heightFrame={height}
                     steps={2}
                     autoplay
-                    fps={fps ?? 30}
+                    fps={fps ?? 40}
                 />
                 <BallRotation
                     fps={fps}
@@ -57,7 +57,7 @@ const BallRotation: React.FC<{
     duration: number;
     color: string;
 }> = ({ ballPos, fps, number, isShowResultAnim, duration, color }) => {
-    const delayTime = ballPos * (duration ?? 700);
+    const delayTime = ballPos * (duration ?? 500);
     const [showBall, setShowBall] = useState(false);
 
     useEffect(() => {
@@ -84,7 +84,7 @@ const BallRotation: React.FC<{
                 heightFrame={153}
                 steps={8}
                 autoplay
-                fps={fps ?? 30}
+                fps={fps ?? 40}
                 startAt={0}
                 endAt={31}
             />

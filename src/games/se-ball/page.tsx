@@ -68,16 +68,23 @@ class SeBall extends GameBase<GameBaseProps> {
             this.props.gameStateContextModel;
 
         return (
-            <SeBallResultBlock
-                roundHistory={roundHistory as Round<SeBallResult, SeBallSettlementResult>[]}
-                result={result}
-                roundState={roundState}
-                roundData={roundData}
-                turnCounter={turnCounter}
-                drawId={drawId}
-                playResultAnimation={playResultAnimation}
-                isPlayStartRoundAnimation={isPlayStartRoundAnimation}
-            />
+            <div>
+                <div className={`star-field ${Styles["star-field"]}`}>
+                    <div className="layer"></div>
+                    <div className="layer"></div>
+                    <div className="layer"></div>
+                </div>
+                <SeBallResultBlock
+                    roundHistory={roundHistory as Round<SeBallResult, SeBallSettlementResult>[]}
+                    result={result}
+                    roundState={roundState}
+                    roundData={roundData}
+                    turnCounter={turnCounter}
+                    drawId={drawId}
+                    playResultAnimation={playResultAnimation}
+                    isPlayStartRoundAnimation={isPlayStartRoundAnimation}
+                />
+            </div>
         );
     }
 

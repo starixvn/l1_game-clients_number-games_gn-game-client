@@ -1,37 +1,39 @@
-.show-ball-anim {
-    position: absolute;
-    height: 180px;
-    width: 596px;
-    bottom: -128px;
-    margin-left: -10px;
-}
+.type-4 {
+    .show-ball-anim {
+        position: absolute;
+        height: 18rem;
+        width: 59.6rem;
+        bottom: -12.8rem;
+        margin-left: -1rem;
+    }
 
-.ball-rotation-1 {
-    position: absolute;
-    left: 0;
-    bottom: 50px;
-}
+    .ball-rotation-1 {
+        position: absolute;
+        left: 0;
+        bottom: 5rem;
+    }
 
-.ball-rotation-2 {
-    position: absolute;
-    left: 150px;
-    bottom: 50px;
-}
+    .ball-rotation-2 {
+        position: absolute;
+        left: 15rem;
+        bottom: 5rem;
+    }
 
-.ball-rotation-3 {
-    position: absolute;
-    right: 140px;
-    bottom: 50px;
-}
+    .ball-rotation-3 {
+        position: absolute;
+        right: 14rem;
+        bottom: 5rem;
+    }
 
-.ball-rotation-4 {
-    position: absolute;
-    right: -10px;
-    bottom: 50px;
+    .ball-rotation-4 {
+        position: absolute;
+        right: -1rem;
+        bottom: 5rem;
+    }
 }
 
 .number {
     position: absolute;
-    left: -6px;
-    top: -2px !important;
+    left: -0.6rem;
+    top: -0.2rem !important;
 }

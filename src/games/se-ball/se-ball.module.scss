@@ -13,13 +13,16 @@
     align-items: center;
     grid-gap: 4rem;
     height: 13.5rem;
+    transform-style: preserve-3d;
+    transition: perspective 5s;
 
     &.zoom-in {
         transform: scale(1);
     }
 
     &.zoom-out {
-        animation: zoom-out 0.5s ease-in forwards;
+        // transform: translateZ(500px);
+        animation: zoom-out 1s ease-in-out forwards;
     }
 }
 
@@ -29,8 +32,54 @@
         transform: scale(1);
     }
     to {
-        margin-top: -20px;
+        margin-top: -2rem;
         transform: scale(0.5);
+    }
+}
+
+// Add more stars
+.star-field {
+    top: -100px;
+}
+
+.star-field .layer:nth-child(1) {
+    animation: sf-fly-by-1 var(--starLayerDuration) linear infinite;
+}
+.star-field .layer:nth-child(2) {
+    animation: sf-fly-by-2 var(--starLayerDuration) linear infinite;
+}
+.star-field .layer:nth-child(3) {
+    animation: sf-fly-by-3 var(--starLayerDuration) linear infinite;
+}
+
+@keyframes sf-fly-by-1 {
+    from {
+        transform: scale(2) translateZ(-600px);
+        opacity: 0.5;
+    }
+    to {
+        transform: scale(2) translateZ(0);
+        opacity: 0.5;
+    }
+}
+@keyframes sf-fly-by-2 {
+    from {
+        transform: scale(2) translateZ(-1200px);
+        opacity: 0.5;
+    }
+    to {
+        transform: scale(2) translateZ(-600px);
+        opacity: 0.5;
+    }
+}
+@keyframes sf-fly-by-3 {
+    from {
+        transform: scale(2) translateZ(-1800px);
+        opacity: 0.5;
+    }
+    to {
+        transform: scale(2) translateZ(-1200px);
+        opacity: 0.5;
     }
 }
 
