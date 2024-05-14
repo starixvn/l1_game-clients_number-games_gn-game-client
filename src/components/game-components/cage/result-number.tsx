@@ -9,13 +9,14 @@ const ResultNumber: React.FC<{
     isShowResultAnim: boolean;
     number: string;
     fps?: number;
-}> = ({ isDelayShowResult, number, isShowResultAnim, fps }) => {
+    className?: string;
+}> = ({ isDelayShowResult, number, isShowResultAnim, fps, className }) => {
     const currentTime = Date.now();
 
     return useMemo(() => {
         if (isDelayShowResult) {
             return (
-                <div key={currentTime} id="result-text" className={Styles["number"]}>
+                <div key={currentTime} id="result-text" className={`${Styles["number"]} ${className}`}>
                     <Spritesheet
                         image={`/static/images/cage/number/${number}.webp?v=${buildVersion}`}
                         widthFrame={153}

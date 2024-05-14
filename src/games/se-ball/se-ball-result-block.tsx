@@ -3,9 +3,8 @@ import { FC, memo } from "react";
 import { GameStateContextModel } from "../../_shared/react-contexts/game-state-context/game-state-context-model";
 import useResult from "../../_shared/react-hooks/use-result";
 import { RoundState } from "../../components/game-base/type";
-import Cage, { CageColor, CagePosition } from "../../components/game-components/cage";
-import { RoundBaseResultSlotContainer } from "../../components/game-components/round-base-result-container/round-base-result-container";
-import { defaultRoundData } from "./se-ball-constants";
+import { CageColor, CagePosition } from "../../components/game-components/cage";
+import OtherCage from "../../components/game-components/cage-other";
 import Style from "./se-ball.module.scss";
 import { SeBallResult } from "./types";
 
@@ -19,28 +18,28 @@ const SeBallResultBlock: FC<SeBallResultBlockProps> = (props: SeBallResultBlockP
         return <></>;
     }
 
+    let zoomClass = "";
+    if (roundState === RoundState.DisplayResult) {
+        zoomClass = Style["zoom-out"];
+    }
+
+    if (roundState === RoundState.BeforePlaceBet) {
+        zoomClass = Style["zoom-in"];
+    }
+
     return (
         <div
-            className={`${Style["result-container"]} ${
-                roundState === RoundState.BeforePlaceBet && isPlayStartRoundAnimation ? "showResultContainer" : ""
+            className={`${Style["result-container"]} ${zoomClass} ${
+                roundState === RoundState.BeforePlaceBet && isPlayStartRoundAnimation ? `showResultContainer ` : ""
             }`}
         >
-            <Cage
+            <OtherCage
                 color={CageColor.PURPLE}
                 position={CagePosition.LEFT}
                 isSmall={true}
                 listResult={currentResult?.balls}
-                delayShowResultTime={0}
                 playResultAnimation={playResultAnimation}
-                roundState={roundState}
                 ballFPS={25}
-            />
-
-            <RoundBaseResultSlotContainer
-                defaultRoundData={defaultRoundData}
-                className="balls"
-                roundResult={currentResult?.balls}
-                {...props}
             />
         </div>
     );

@@ -28,7 +28,6 @@ const ResultBall: React.FC<{
 
                 {isShowResultAnim ? (
                     <Spritesheet
-                        className={"sss"}
                         image={`/static/images/cage/${ballColor}.webp?v=${buildVersion}`}
                         widthFrame={153}
                         isResponsive
@@ -41,7 +40,7 @@ const ResultBall: React.FC<{
                         endAt={31}
                     />
                 ) : (
-                    <img className={"sss"} src={`/static/images/cage/${ballImage}.webp`} alt="img-result" />
+                    <img src={`/static/images/cage/${ballImage}.webp`} alt="img-result" />
                 )}
             </div>
         );

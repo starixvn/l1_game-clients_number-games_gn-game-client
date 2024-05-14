@@ -26,7 +26,6 @@ const ChoiceWinningSize = {
 const SeBallWinningAnimation: React.FC<Props> = ({ choice, resourceName, roundState, settlementResult, showResultInfo }) => {
     const winningHighLightResult = isHighLightWinningResult;
     const [width, height] = ChoiceWinningSize[choice];
-    console.log("winningHighLightResult", width, height, choice, resourceName);
 
     return (
         winningHighLightResult({ betChoice: choice, roundState, settlementResult, showResultInfo }) && (

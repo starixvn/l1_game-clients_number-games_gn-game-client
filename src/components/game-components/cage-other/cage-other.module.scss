@@ -1,0 +1,37 @@
+.show-ball-anim {
+    position: absolute;
+    height: 180px;
+    width: 596px;
+    bottom: -128px;
+    margin-left: -10px;
+}
+
+.ball-rotation-1 {
+    position: absolute;
+    left: 0;
+    bottom: 50px;
+}
+
+.ball-rotation-2 {
+    position: absolute;
+    left: 150px;
+    bottom: 50px;
+}
+
+.ball-rotation-3 {
+    position: absolute;
+    right: 140px;
+    bottom: 50px;
+}
+
+.ball-rotation-4 {
+    position: absolute;
+    right: -10px;
+    bottom: 50px;
+}
+
+.number {
+    position: absolute;
+    left: -6px;
+    top: -2px !important;
+}
