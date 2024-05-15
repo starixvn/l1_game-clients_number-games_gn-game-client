@@ -23,15 +23,6 @@ describe("PreloadImages", () => {
         jest.restoreAllMocks();
     });
 
-    it("should preload images and log the preload time", async () => {
-        render(<PreloadImages pathImages={preloadImagesData} />);
-
-        await waitFor(() => {
-            expect(console.log).toHaveBeenCalledWith("pathImages", preloadImagesData);
-            expect(console.log).toHaveBeenCalledWith(expect.stringMatching(/Preloaded images in \d+\.\d+ ms/));
-        });
-    });
-
     it("should log an error if preloading fails", async () => {
         global.fetch = jest.fn().mockRejectedValueOnce("Error preloading images");
 

@@ -20,17 +20,11 @@ export const getCagePaths = () => {
 
 const PreloadImages: React.FC<{ pathImages?: string[] }> = ({ pathImages = [] }) => {
     const preloadImages = () => {
-        console.log("pathImages", pathImages);
         const images = Array.isArray(pathImages) ? pathImages : [];
         const requests = images.map((url) => new Request(url, { mode: "no-cors" }));
-        const startTime = performance.now();
 
         Promise.all(requests.map((request) => fetch(request)))
-            .then(() => {
-                const endTime = performance.now();
-                const totalTime = endTime - startTime;
-                console.log(`Preloaded images in ${totalTime.toFixed(2)} ms`);
-            })
+            .then(() => {})
             .catch((error) => {
                 console.error("Error preloading images:", error);
             });
