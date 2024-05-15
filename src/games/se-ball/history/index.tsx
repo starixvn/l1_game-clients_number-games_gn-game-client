@@ -5,7 +5,7 @@ import { PFVerifyModal } from "../../../components/game-components/provably-fair
 import PFClientSeedInfoModal from "../../../components/game-components/provably-fair/pf-verify/pf-client-seed-info-modal";
 import PFVerificationModal from "../../../components/game-components/provably-fair/pf-verify/pf-verification-modal";
 import { PFVerification, makeFileNameExport, renderPFVerifyResultBlock } from "../provably-fair";
-import { BetChoice, BetDetailResultBlock, DrawInfoSeBall, produceDataBetDetailRow } from "./bet-detail-result-block";
+import { BetChoice, BetDetailResultBlock, RoundInfoSeBall, produceDataBetDetailRow } from "./bet-detail-result-block";
 import BetHistoryBase from "../../../components/game-components/bet-history/bet-history-base";
 import BetLogResultCell from "./bet-log-result-cell";
 import BetHistoryModalBase from "../../../components/game-components/bet-history/bet-history-modal-base";
@@ -19,7 +19,7 @@ const SeBallBetHistoryModal: FC = () => {
             <BetDetailModal>
                 <BetDetailBase
                     isTurnBase={false}
-                    renderBetDetailResultBlock={(drawInfo: DrawInfoSeBall) => <BetDetailResultBlock drawInfo={drawInfo} />}
+                    renderBetDetailResultBlock={(drawInfo: RoundInfoSeBall) => <BetDetailResultBlock roundInfo={drawInfo} />}
                     produceDataBetDetailRow={produceDataBetDetailRow}
                     renderBetChoice={(choice) => <BetChoice choice={choice} />}
                 />

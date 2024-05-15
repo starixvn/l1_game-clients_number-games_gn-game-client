@@ -6,7 +6,7 @@ import SmallBall from "../../../components/game-components/small-ball";
 import { DrawInfo, PFResult } from "../../../components/game-base/type";
 import { SeBallBetOptions } from "../se-ball-constants";
 
-export interface DrawInfoSeBall extends DrawInfo {
+export interface RoundInfoSeBall extends DrawInfo {
     drawId: number;
     result: {
         balls: Array<number>;
@@ -32,7 +32,7 @@ export interface DrawInfoSeBall extends DrawInfo {
     pfResult: PFResult;
 }
 
-export const BetDetailResultBlock: FC<{ drawInfo: DrawInfoSeBall }> = ({ drawInfo }) => {
+export const BetDetailResultBlock: FC<{ roundInfo: RoundInfoSeBall }> = ({ roundInfo: drawInfo }) => {
     const { t: translateCommon } = useCommonTranslate();
     const { drawId, result } = drawInfo;
     let totalPoint = 0;
@@ -59,7 +59,7 @@ const calculateWin = (isWin: boolean, amount: number, odds: number) => {
     return isWin ? amount * odds : 0;
 };
 
-export const produceDataBetDetailRow = (item: any, drawInfo: DrawInfoSeBall) => {
+export const produceDataBetDetailRow = (item: any, drawInfo: RoundInfoSeBall) => {
     const win = calculateWin(drawInfo.settlementResult?.[item.choice], item.amount, drawInfo.odds[item.choice]);
 
     return {
