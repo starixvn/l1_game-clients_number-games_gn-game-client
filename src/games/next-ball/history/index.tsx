@@ -14,10 +14,11 @@ const NextBallBetHistoryModal: FC = () => {
     return (
         <>
             <BetHistoryModalBase>
-                <BetHistoryBase renderBetLogResult={(result) => <BetLogResultCell result={result} />} />
+                <BetHistoryBase isTurnBase={true} renderBetLogResult={(result) => <BetLogResultCell result={result} />} />
             </BetHistoryModalBase>
             <BetDetailModal>
                 <BetDetailBase
+                    isTurnBase={true}
                     renderBetDetailResultBlock={(drawInfo: DrawInfoNextBall) => <BetDetailResultBlock drawInfo={drawInfo} />}
                     produceDataBetDetailRow={produceDataBetDetailRow}
                     renderBetChoice={(choice) => <BetChoice choice={choice} />}

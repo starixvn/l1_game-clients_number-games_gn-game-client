@@ -14,10 +14,11 @@ const SeBallBetHistoryModal: FC = () => {
     return (
         <>
             <BetHistoryModalBase>
-                <BetHistoryBase renderBetLogResult={(result) => <BetLogResultCell result={result} />} />
+                <BetHistoryBase isTurnBase={false} renderBetLogResult={(result) => <BetLogResultCell result={result} />} />
             </BetHistoryModalBase>
             <BetDetailModal>
                 <BetDetailBase
+                    isTurnBase={false}
                     renderBetDetailResultBlock={(drawInfo: DrawInfoSeBall) => <BetDetailResultBlock drawInfo={drawInfo} />}
                     produceDataBetDetailRow={produceDataBetDetailRow}
                     renderBetChoice={(choice) => <BetChoice choice={choice} />}

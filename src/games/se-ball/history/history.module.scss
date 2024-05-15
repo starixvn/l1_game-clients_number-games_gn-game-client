@@ -1,8 +1,9 @@
 @import "./../../../styles/components/pages/history";
 
-.result-container {
-    display: grid;
-    grid-template-columns: repeat(2, 26px);
-    grid-template-rows: repeat(2, 1fr);
-    gap: 0.5rem;
+.draw-info {
+    justify-content: space-between;
+}
+
+.bet-detail-total {
+    font-size: 2rem;
 }

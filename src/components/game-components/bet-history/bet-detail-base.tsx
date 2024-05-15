@@ -10,6 +10,7 @@ import { PFEventActionType } from "../../../_shared/react-contexts/game-state-co
 import { usePFDispatch } from "../../../_shared/react-contexts/game-state-context/pf/pf-context";
 
 const BetDetailBase: FC<{
+    isTurnBase: boolean;
     renderBetDetailResultBlock: (drawInfo: DrawInfo) => ReactNode;
     produceDataBetDetailRow: (
         betLogDetail: any,

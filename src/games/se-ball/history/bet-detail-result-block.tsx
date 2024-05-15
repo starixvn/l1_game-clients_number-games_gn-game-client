@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { useGameContext } from "../../../_shared/react-contexts";
-import { useSNTranslate, useTranslator } from "../../../_shared/react-hooks";
+import { useCommonTranslate, useSNTranslate, useTranslator } from "../../../_shared/react-hooks";
 import Styles from "./history.module.scss";
 import SmallBall from "../../../components/game-components/small-ball";
 import { DrawInfo, PFResult } from "../../../components/game-base/type";
@@ -8,7 +8,7 @@ import { DrawInfo, PFResult } from "../../../components/game-base/type";
 export interface DrawInfoSeBall extends DrawInfo {
     drawId: number;
     result: {
-        ball: number;
+        balls: Array<number>;
     };
     odds: {
         odd: number;
@@ -32,16 +32,23 @@ export interface DrawInfoSeBall extends DrawInfo {
 }
 
 export const BetDetailResultBlock: FC<{ drawInfo: DrawInfoSeBall }> = ({ drawInfo }) => {
-    const { t: translateSNGames } = useSNTranslate();
+    const { t: translateCommon } = useCommonTranslate();
     const { drawId, result } = drawInfo;
+    let totalPoint = 0;
 
     return (
         <div className={Styles["draw-info"]}>
             <div className={`${Styles["info-item"]} font-weight-500`}>
-                {translateSNGames("glossary_draw_id").capitalizeFirstLetter()}: <span>{drawId}</span>
+                {translateCommon("round").capitalizeFirstLetter()}: <span>{drawId}</span>
             </div>
             <div className={Styles["info-item"]}>
-                <SmallBall number={result.ball} />
+                {
+                    result.balls.map((ball, index) => {
+                        totalPoint += ball;
+                        return <SmallBall key={index} number={ball} />
+                    })
+                }
+                <div className={Styles["bet-detail-total"]}> - {totalPoint}</div>
             </div>
         </div>
     );

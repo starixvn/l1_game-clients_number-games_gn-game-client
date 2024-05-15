@@ -23,10 +23,11 @@ export interface BetLog {
 }
 
 export interface BetHistoryProps {
+    isTurnBase: boolean;
     renderBetLogResult: (result: any) => ReactNode;
 }
 
-const BetHistoryBase: FC<BetHistoryProps> = ({ renderBetLogResult }) => {
+const BetHistoryBase: FC<BetHistoryProps> = ({ renderBetLogResult, isTurnBase }) => {
     const { t: translateCommon } = useCommonTranslate();
     const { t: translateSNGames } = useSNTranslate();
 
@@ -99,10 +100,12 @@ const BetHistoryBase: FC<BetHistoryProps> = ({ renderBetLogResult }) => {
 
     const header = [
         { node: translateCommon("time") },
-        { node: translateSNGames("glossary_draw_id").capitalizeFirstLetter() },
         {
-            node: <>{translateCommon("result")}</>,
+            node: isTurnBase ?
+                translateSNGames("glossary_draw_id").capitalizeFirstLetter() :
+                translateCommon("round").capitalizeFirstLetter()
         },
+        { node: <>{translateCommon("result")}</> },
         { node: translateCommon("total_stake") },
         { node: translateCommon("win") },
     ];
