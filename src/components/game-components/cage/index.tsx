@@ -23,13 +23,12 @@ export enum CagePosition {
 export type CageProps = {
     color: string;
     isSmall: boolean;
+    result: number;
     delayShowResultTime?: number;
     position: string;
-    result?: number;
     highlight?: boolean;
     ballFPS?: number;
     isPlayStartRoundAnimation?: boolean;
-    listResult?: number[];
 } & Partial<GameStateContextModel>;
 
 const Cage: React.FC<CageProps> = ({
@@ -43,11 +42,9 @@ const Cage: React.FC<CageProps> = ({
     highlight,
     ballFPS,
     isPlayStartRoundAnimation,
-    listResult,
 }) => {
     const [isDelayShowResult, setIsDelayShowResult] = useState<boolean>(false);
     const [ballColor, setBallColor] = useState<string>(null);
-    const [newResult, setNewResult] = useState<any>(null);
 
     useEffect(() => {
         let timeOut: NodeJS.Timeout;
@@ -65,30 +62,8 @@ const Cage: React.FC<CageProps> = ({
     }, [delayShowResultTime, playResultAnimation, roundState]);
 
     useEffect(() => {
-        if (result) {
-            setBallColor(`ball-${getBallColor(result)}-${position === CagePosition.RIGHT ? "2" : "1"}`);
-            setNewResult(result);
-        }
+        !!result && setBallColor(`ball-${getBallColor(result)}-${position === CagePosition.RIGHT ? "2" : "1"}`);
     }, [result]);
-
-    useEffect(() => {
-        if (listResult && listResult.length > 0) {
-            if (playResultAnimation) {
-                listResult.forEach((result, i) => {
-                    setTimeout(() => {
-                        loadResult(result);
-                    }, i * 1300);
-                });
-            } else {
-                loadResult(listResult[listResult.length - 1]);
-            }
-        }
-    }, [listResult]);
-
-    const loadResult = (result: number) => {
-        setBallColor(`ball-${getBallColor(result)}-${position === CagePosition.RIGHT ? "2" : "1"}`);
-        setNewResult(result);
-    };
 
     return (
         <div className={`${Styles["cage-area"]} ${isSmall ? Styles["small"] : ""} ${Styles[position]}`}>
@@ -105,18 +80,12 @@ const Cage: React.FC<CageProps> = ({
                         ballColor={ballColor}
                         isShowResultAnim={playResultAnimation}
                         fps={ballFPS}
-                        number={newResult}
                     />
                 )}
             </div>
 
-            {!!newResult && (
-                <ResultNumber
-                    isDelayShowResult={isDelayShowResult}
-                    number={newResult}
-                    isShowResultAnim={playResultAnimation}
-                    fps={ballFPS}
-                />
+            {!!result && (
+                <ResultNumber isDelayShowResult={isDelayShowResult} number={result} isShowResultAnim={playResultAnimation} fps={ballFPS} />
             )}
         </div>
     );

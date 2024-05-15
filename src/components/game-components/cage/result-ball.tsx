@@ -11,8 +11,7 @@ const ResultBall: React.FC<{
     ballColor: string;
     isShowResultAnim: boolean;
     fps?: number;
-    number?: number;
-}> = ({ isDelayShowResult, ballColor, isShowResultAnim, fps, number }) => {
+}> = ({ isDelayShowResult, ballColor, isShowResultAnim, fps }) => {
     const currentTime = Date.now();
     const playShowBallResult = useShowBallResultSound();
 
@@ -28,6 +27,7 @@ const ResultBall: React.FC<{
 
                 {isShowResultAnim ? (
                     <Spritesheet
+                        className={"sss"}
                         image={`/static/images/cage/${ballColor}.webp?v=${buildVersion}`}
                         widthFrame={153}
                         isResponsive
@@ -40,11 +40,11 @@ const ResultBall: React.FC<{
                         endAt={31}
                     />
                 ) : (
-                    <img src={`/static/images/cage/${ballImage}.webp`} alt="img-result" />
+                    <img className={"sss"} src={`/static/images/cage/${ballImage}.webp`} alt="img-result" />
                 )}
             </div>
         );
-    }, [isDelayShowResult, ballColor, isShowResultAnim, number]);
+    }, [isDelayShowResult, ballColor, isShowResultAnim]);
 };
 
 export default ResultBall;
