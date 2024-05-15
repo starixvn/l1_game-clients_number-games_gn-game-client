@@ -4,7 +4,7 @@ import React from "react";
 import { useGameStateContext } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
 import { GameStateContextModel } from "../../../../_shared/react-contexts/game-state-context/game-state-context-model";
 import { RoundState } from "../../../game-base/type";
-import CountdownTimer, { GameStatus, SimpleTimer } from "../countdown-timer";
+import CountdownTimer, { TurnBaseStatus, SimpleTimer } from "../countdown-timer";
 
 const mockUseGameStateContext = useGameStateContext as jest.Mock;
 
@@ -128,9 +128,9 @@ describe("CountdownTimer File", () => {
             mockUseGameStateContext.mockReturnValue({ turnCounter: 1 } as GameStateContextModel);
 
             const screen = render(
-                <GameStatus>
+                <TurnBaseStatus>
                     <MockGameStatusChildren />
-                </GameStatus>
+                </TurnBaseStatus>
             );
 
             expect(screen.getByText("draw_1")).toBeInTheDocument();
@@ -140,9 +140,9 @@ describe("CountdownTimer File", () => {
             mockUseGameStateContext.mockReturnValue({ turnCounter: 0 } as GameStateContextModel);
 
             const screen = render(
-                <GameStatus>
+                <TurnBaseStatus>
                     <MockGameStatusChildren />
-                </GameStatus>
+                </TurnBaseStatus>
             );
 
             expect(screen.queryByText(/draw_/)).not.toBeInTheDocument();
@@ -152,7 +152,7 @@ describe("CountdownTimer File", () => {
             mockUseGameStateContext.mockReturnValue({ turnCounter: 1 } as GameStateContextModel);
 
             const childContent = "Test Child Content";
-            const screen = render(<GameStatus>{childContent}</GameStatus>);
+            const screen = render(<TurnBaseStatus>{childContent}</TurnBaseStatus>);
             expect(screen.getByText(childContent)).toBeInTheDocument();
         });
     });

@@ -21,6 +21,7 @@ import { NextGameRoundDataHandler } from "./se-ball-game-round-data-handler";
 import SeBallResultBlock from "./se-ball-result-block";
 import Styles from "./se-ball.module.scss";
 import { SeBallResult, SeBallSettlementResult } from "./types";
+import { GameStatusMap } from "../../components/game-components/countdown-timer/countdown-timer";
 
 const DrawIdBlock = dynamic(() => import("../../components/game-components/draw-id"));
 const SeBallBettingBlock = dynamic(() => import("./se-ball-betting-block"));
@@ -119,10 +120,10 @@ class SeBall extends GameBase<GameBaseProps> {
                 Math.round((countResult[SeBallBetOptions.RED4] * 100) / total) || 0,
             [SeBallBetOptions.BLUE4]: (countResult: object, total: number) =>
                 100 -
-                    (Math.round((countResult[SeBallBetOptions.BLUE4] * 100) / total) +
-                        Math.round((countResult[SeBallBetOptions.RED2] * 100) / total) +
-                        Math.round((countResult[SeBallBetOptions.RED3] * 100) / total) +
-                        Math.round((countResult[SeBallBetOptions.RED4] * 100) / total)) || 0,
+                (Math.round((countResult[SeBallBetOptions.BLUE4] * 100) / total) +
+                    Math.round((countResult[SeBallBetOptions.RED2] * 100) / total) +
+                    Math.round((countResult[SeBallBetOptions.RED3] * 100) / total) +
+                    Math.round((countResult[SeBallBetOptions.RED4] * 100) / total)) || 0,
         };
 
         const subBetOptionClass = {
@@ -142,6 +143,10 @@ class SeBall extends GameBase<GameBaseProps> {
                 subBetOptionClass={subBetOptionClass}
             />
         );
+    }
+
+    renderGameStatus() {
+        return GameStatusMap.RoundBaseStatus;
     }
 
     renderScoreboards() {

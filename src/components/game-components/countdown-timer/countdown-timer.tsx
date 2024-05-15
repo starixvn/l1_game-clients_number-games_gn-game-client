@@ -8,7 +8,9 @@ import { RoundState } from "../../game-base/type";
 import styles from "./countdown-timer.module.scss";
 
 export type Rotation = "clockwise" | "counterclockwise";
-export const CountdownTimer = ({ SimpleTimerProp = SimpleTimer, GameStatusProp = GameStatus }) => {
+
+
+export const CountdownTimer = ({ SimpleTimerProp = SimpleTimer, GameStatusProp = GameStatusMap.TurnBaseStatus }) => {
     const { roundState } = useGameStateContext();
     const { t } = useSNTranslate();
     const { gameMessageHandler } = useGameContext();
@@ -29,9 +31,9 @@ export const CountdownTimer = ({ SimpleTimerProp = SimpleTimer, GameStatusProp =
             return (
                 <>
                     <SimpleTimerProp clientRemainingTime={clientRemainingTime} />
-                    <GameStatus>
+                    <GameStatusProp>
                         <div className={styles["start-betting"]}>{t("status_start_bet")}</div>
-                    </GameStatus>
+                    </GameStatusProp>
                 </>
             );
         case RoundState.LockingBet:
@@ -48,9 +50,9 @@ export const CountdownTimer = ({ SimpleTimerProp = SimpleTimer, GameStatusProp =
             return (
                 <>
                     <div className={`loader-show-result`}></div>
-                    <GameStatus>
+                    <GameStatusProp>
                         <div className={styles["open-result"]}>{t("status_result")}</div>
-                    </GameStatus>
+                    </GameStatusProp>
                 </>
             );
 
@@ -83,7 +85,7 @@ export const SimpleTimer = ({ clientRemainingTime }) => {
     );
 };
 
-export const GameStatus = ({ children }) => {
+export const TurnBaseStatus = ({ children }) => {
     const { turnCounter } = useGameStateContext();
     const { t } = useSNTranslate();
 
@@ -98,5 +100,19 @@ export const GameStatus = ({ children }) => {
         </div>
     );
 };
+
+export const RoundBaseStatus = ({ children }) => {
+    return (
+        <div className={`${styles["game-status"]}`}>
+            {children}
+        </div>
+    );
+};
+
+export const GameStatusMap = {
+    TurnBaseStatus: TurnBaseStatus,
+    RoundBaseStatus: RoundBaseStatus,
+}
+
 
 export default CountdownTimer;

@@ -15,7 +15,7 @@ import { GameResourceKeys } from "../../_shared/resources";
 import { getBalance } from "../../services/auth-service";
 import BetConfirmDialog from "../game-components/bet-confirm-dialog";
 import ConfirmBet from "../game-components/confirm-bet";
-import CountdownTimer from "../game-components/countdown-timer/countdown-timer";
+import CountdownTimer, { GameStatusMap } from "../game-components/countdown-timer/countdown-timer";
 import DisabledModal from "../game-components/disabled-modal";
 import { ConnectFailedMessage } from "../game-components/error-message";
 import { ConnectFailedReasonKey } from "../game-components/error-message/type";
@@ -462,12 +462,17 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     renderRoundIdSection() {
         return <></>;
     }
+
+    renderGameStatus() {
+        return GameStatusMap.TurnBaseStatus;
+    }
+
     renderHeaderBlock() {
         return (
             <div className="game-header">
                 {this.renderRoundIdSection()}
                 <div id="countdown-timer" className="countdown-timer">
-                    <CountdownTimer />
+                    <CountdownTimer GameStatusProp={this.renderGameStatus()} />
                 </div>
                 <Settings />
             </div>
