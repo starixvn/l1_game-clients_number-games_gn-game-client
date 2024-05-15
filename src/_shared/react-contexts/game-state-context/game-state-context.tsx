@@ -64,7 +64,6 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
         isPlayStartRoundAnimation,
     } = payload;
 
-    // console.log(`gameStateReducer: ${JSON.stringify(action)} `);
     switch (type) {
         case GameEventActionType.CONNECT: {
             return {

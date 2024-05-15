@@ -41,7 +41,6 @@ export const PFWrapper = (props: PFWrapperProps) => {
                 useManualClientSeed: pfClientSeedSetting?.useManualClientSeed,
             };
 
-            console.log({ ...data, clientSeed, clientSeedDetail });
             props.socket.emit(event, { ...data, clientSeed, clientSeedDetail });
         };
 

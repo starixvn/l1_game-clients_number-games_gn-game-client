@@ -38,8 +38,6 @@ function pfReducer(state: PFContextModel, action: PFEventAction) {
         ownBets
     } = payload;
 
-    // console.log(`pfReducer: ${JSON.stringify(action)} `);
-
     let newState = null;
     switch (type) {
         case PFEventActionType.UPDATE_PF_CLIENT_SEED_SETTING:
