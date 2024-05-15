@@ -29,6 +29,8 @@ export type CageProps = {
     highlight?: boolean;
     ballFPS?: number;
     isPlayStartRoundAnimation?: boolean;
+    listResult?: number[];
+    initialDelayBallTime?: number;
 } & Partial<GameStateContextModel>;
 
 const Cage: React.FC<CageProps> = ({

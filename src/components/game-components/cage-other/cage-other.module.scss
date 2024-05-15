@@ -37,3 +37,26 @@
     left: -0.6rem;
     top: -0.2rem !important;
 }
+
+.ball-blur {
+    left: 1.8rem;
+    top: 1.5rem;
+    animation: fade-in 1s linear forwards;
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 0.3;
+    }
+}
+
+.total-point {
+    position: absolute;
+    font-size: 3.6rem;
+    font-weight: 600;
+    color: #fff;
+}

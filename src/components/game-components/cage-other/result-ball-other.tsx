@@ -15,8 +15,9 @@ const ResultBallOther: React.FC<{
     height: number;
     fps?: number;
     number?: number;
-    duration?: number;
-}> = ({ ballPos, isShowResultAnim, gameFolder, width, height, fps, number, duration }) => {
+    delayTime?: number;
+    incrementTotalPoint?: Function;
+}> = ({ ballPos, isShowResultAnim, gameFolder, width, height, fps, number, delayTime, incrementTotalPoint }) => {
     const playShowBallResult = useShowBallResultSound();
     const color = getBallColor(number);
     const ballName = `ball-${color}-pos-${ballPos}`;
@@ -41,8 +42,9 @@ const ResultBallOther: React.FC<{
                     ballPos={ballPos}
                     number={number}
                     isShowResultAnim={isShowResultAnim}
-                    duration={duration}
+                    delayTime={delayTime}
                     color={color}
+                    incrementTotalPoint={incrementTotalPoint}
                 />
             </div>
         );
@@ -54,16 +56,17 @@ const BallRotation: React.FC<{
     fps: number;
     number: number;
     isShowResultAnim: boolean;
-    duration: number;
+    delayTime: number;
     color: string;
-}> = ({ ballPos, fps, number, isShowResultAnim, duration, color }) => {
-    const delayTime = ballPos * (duration ?? 450) + 80;
+    incrementTotalPoint?: Function;
+}> = ({ ballPos, fps, number, isShowResultAnim, delayTime, color, incrementTotalPoint }) => {
     const [showBall, setShowBall] = useState(false);
 
     useEffect(() => {
         let timeOut: NodeJS.Timeout;
         timeOut = setTimeout(() => {
             setShowBall(true);
+            incrementTotalPoint(number, ballPos);
         }, delayTime);
 
         return () => {
