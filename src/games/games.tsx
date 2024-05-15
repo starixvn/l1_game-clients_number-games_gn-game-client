@@ -1,6 +1,6 @@
 import { useTheme } from "next-themes";
 import dynamic from "next/dynamic";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { isIOS, isMobileOnly } from "react-device-detect";
 
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -11,7 +11,6 @@ import { SettingEventActionType, SystemContextProvider, URLContext, usePlayerCon
 import { useBlockBetSound, usePlaceBetSound, useStartDrawSound, useStartRoundSound } from "../_shared/react-hooks";
 import { GameSound } from "../components/game-base/type";
 import GameLoading from "../components/game-components/game-loading";
-import PreloadImages, { DEFAULT_PATH_IMAGE, getCagePaths } from "../components/page-components/preload-images";
 import { getChipSettings } from "../services/user-setting-service";
 import styles from "./games.module.scss";
 import { Props } from "./type";
@@ -20,8 +19,6 @@ const BacBall = dynamic(() => import("./bac-ball"));
 const NextBall = dynamic(() => import("./next-ball/page"));
 const ToolbarGuide = dynamic(() => import("../components/page-components/hide-toolbar-guide"));
 const SwitchGamesGuide = dynamic(() => import("../components/page-components/switch-games-guide"));
-
-const DURATION_TRIGGER_PRELOAD = 5000;
 
 export const Games: React.FC<Props> = ({
     swiperRef,
@@ -36,8 +33,6 @@ export const Games: React.FC<Props> = ({
     const { theme } = useTheme();
     const { session } = usePlayerContext();
     const settingDispatch = useSettingDispatch();
-    const [isTriggerPreloadCages, setIsTriggerPreloadCages] = useState<boolean>(false);
-
     useEffect(() => {
         (async () => {
             const chipSettings = await getChipSettings(session);
@@ -48,17 +43,6 @@ export const Games: React.FC<Props> = ({
                 },
             });
         })();
-
-        let timeoutId: NodeJS.Timeout;
-        const handleTimeout = () => {
-            timeoutId = setTimeout(() => {
-                setIsTriggerPreloadCages(true);
-            }, DURATION_TRIGGER_PRELOAD);
-        };
-
-        handleTimeout();
-
-        return () => timeoutId && clearTimeout(timeoutId);
     }, []);
 
     const gameSound: GameSound = {
@@ -155,12 +139,10 @@ export const Games: React.FC<Props> = ({
     return (
         <div className={`game-container ${styles["game-wrapper"]} ${styles["open-chips"]}`}>
             <SystemContextProvider>
-                <PreloadImages pathImages={[`${DEFAULT_PATH_IMAGE}/bg-galaxy-small.webp`]} />
                 <div className={`${styles["game-list"]} ${isMobileOnly ? styles[isIOS ? "ios-device" : "android-device"] : ""}`}>
                     {isDirectMode && <ToolbarGuide />}
                     {directMode ? getGameComponentById(openGameId) : renderSwiper(openGameId)}
                     {!isDirectMode && isMobileOnly && <SwitchGamesGuide />}
-                    {isTriggerPreloadCages && <PreloadImages pathImages={getCagePaths()} />}
                 </div>
             </SystemContextProvider>
         </div>

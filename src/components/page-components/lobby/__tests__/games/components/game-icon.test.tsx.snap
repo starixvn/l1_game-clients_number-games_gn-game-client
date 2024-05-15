@@ -17,8 +17,8 @@ exports[`GameIcon should render match with snapshot 1`] = `
       decoding="async"
       height="138"
       loading="lazy"
-      src="/_next/image?url=%2Fstatic%2Fimages%2Flobby%2Fgame-board-detail%2Ficon-gamea.png%3Fv%3D1&w=384&q=75"
-      srcset="/_next/image?url=%2Fstatic%2Fimages%2Flobby%2Fgame-board-detail%2Ficon-gamea.png%3Fv%3D1&w=256&q=75 1x, /_next/image?url=%2Fstatic%2Fimages%2Flobby%2Fgame-board-detail%2Ficon-gamea.png%3Fv%3D1&w=384&q=75 2x"
+      src="/_next/image?url=%2Fstatic%2Fimages%2Flobby%2Fgame-board-detail%2Fundefined%2Ficon-gamea.png%3Fv%3D1&w=384&q=75"
+      srcset="/_next/image?url=%2Fstatic%2Fimages%2Flobby%2Fgame-board-detail%2Fundefined%2Ficon-gamea.png%3Fv%3D1&w=256&q=75 1x, /_next/image?url=%2Fstatic%2Fimages%2Flobby%2Fgame-board-detail%2Fundefined%2Ficon-gamea.png%3Fv%3D1&w=384&q=75 2x"
       style="color: transparent;"
       width="130"
     />
