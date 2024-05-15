@@ -4,6 +4,7 @@ import { useCommonTranslate, useSNTranslate, useTranslator } from "../../../_sha
 import Styles from "./history.module.scss";
 import SmallBall from "../../../components/game-components/small-ball";
 import { DrawInfo, PFResult } from "../../../components/game-base/type";
+import { SeBallBetOptions } from "../se-ball-constants";
 
 export interface DrawInfoSeBall extends DrawInfo {
     drawId: number;
@@ -74,5 +75,10 @@ export const produceDataBetDetailRow = (item: any, drawInfo: DrawInfoSeBall) => 
 export const BetChoice: FC<{ choice: string }> = ({ choice }) => {
     const { tolgeeNamespace } = useGameContext();
     const { t: translateSeBall } = useTranslator([tolgeeNamespace]);
-    return <span className="font-text">{translateSeBall(`glossary_${choice}`)}</span>;
+
+    return <span className="font-text">{
+        choice === SeBallBetOptions.ODD || choice === SeBallBetOptions.EVEN ?
+            translateSeBall(`glossary_${choice}`) :
+            <img src={`/static/images/se-ball/bet-detail-${choice}.svg`} alt="" />}
+    </span>;
 };
