@@ -57,7 +57,7 @@ const BallRotation: React.FC<{
     duration: number;
     color: string;
 }> = ({ ballPos, fps, number, isShowResultAnim, duration, color }) => {
-    const delayTime = ballPos * (duration ?? 500);
+    const delayTime = ballPos * (duration ?? 450) + 80;
     const [showBall, setShowBall] = useState(false);
 
     useEffect(() => {
