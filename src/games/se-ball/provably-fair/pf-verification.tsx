@@ -50,29 +50,29 @@ const PFVerification: FC = () => {
 
         const rawDigits = combinedHash.match(/.{2}/g);
 
-        const increments = finalHashToNumbers(pfResult.finalHash);
+        const convertNumber = finalHashToNumbers(combinedHash);
 
-        const ballIndexes = randomNumbers.map((x, index) => (x + increments[index]) % (TOTAL_BALLS - index));
+        const ballIndexes = randomNumbers.map((x, index) => ((x + convertNumber[index]) % (TOTAL_BALLS - index)) + 1);
 
         let remainingBalls = generateRemainingBalls(TOTAL_BALLS, []);
 
         const resultBalls: number[] = [];
         let remainingBallList = [];
+        remainingBallList.push(remainingBalls);
 
         ballIndexes.forEach((i) => {
-            resultBalls.push(remainingBalls[i]);
+            resultBalls.push(remainingBalls[i - 1]);
             remainingBalls = generateRemainingBalls(TOTAL_BALLS, resultBalls);
             remainingBallList.push(remainingBalls);
-            // console.log("ballresult", resultBalls, remainingBallList);
         });
 
         return {
             randomNumbers,
             rawDigits,
-            increments,
+            convertNumber,
             ballIndexes,
             resultBalls,
-            remainingBalls,
+            remainingBallList,
         };
     }, [combinedHash]);
 
@@ -81,14 +81,14 @@ const PFVerification: FC = () => {
         setMergeClientSeed(input.value);
     };
 
-    const ballValues = (randomNumber: number[], convertNumber: number[], result: number[]) => {
+    const ballIndexRender = (randomNumber: number[], convertNumber: number[], ballIndexes: number[]) => {
         const ballLines = [];
         for (let i = 0; i < BALLS_EACH_ROUND; i++) {
             const line = `<span style="color: #ffbc11; font-weight: 600">Ball ${i + 1} - ${translateSNGames("pf_index")} (1-${
                 TOTAL_BALLS - i
             })</span> = ((${randomNumber[i]}+${convertNumber[i]}) mod ${
                 TOTAL_BALLS - i
-            }) + 1 = <span style="color: #ffbc11; font-weight: 600">${result[i]}</span>`;
+            }) + 1 = <span style="color: #ffbc11; font-weight: 600">${ballIndexes[i]}</span>`;
             ballLines.push(
                 <p>
                     <Markup key={i} content={line} />
@@ -96,7 +96,33 @@ const PFVerification: FC = () => {
             );
         }
 
-        return <div>{ballLines}</div>;
+        return ballLines;
+    };
+
+    const renderFinalResult = (remainingBallList, resultBalls) => {
+        const finalResult = [];
+        for (let i = 0; i < BALLS_EACH_ROUND; i++) {
+            finalResult.push(
+                <div style={{ marginBottom: "1rem" }}>
+                    <div className={Styles["section-title"]}>
+                        {translateSNGames("pf_verifier_tool_ball", { value: i + 1 })} - {translateCommon("pf_verification_para_1")}
+                    </div>
+                    <div className={Styles["result-numbers"]}>
+                        {remainingBallList[i].map((item, index) => {
+                            return index + 1 === resultBalls[i] ? (
+                                <span key={uuidv4()} className={Styles["text-yellow"]}>
+                                    {item}{" "}
+                                </span>
+                            ) : (
+                                `${item} `
+                            );
+                        })}
+                    </div>
+                </div>
+            );
+        }
+
+        return finalResult;
     };
 
     useEffect(() => {
@@ -144,7 +170,7 @@ const PFVerification: FC = () => {
 
                 <Section title={translateSNGames("pf_verification_para_3")}>
                     <p className="font-weight-medium">
-                        {verifyInfo.increments.map((item, index) => {
+                        {verifyInfo.convertNumber.map((item, index) => {
                             const rawDigit = verifyInfo.rawDigits[index];
                             return (
                                 <span style={{ display: "block" }} key={uuidv4()}>
@@ -153,7 +179,7 @@ const PFVerification: FC = () => {
                             );
                         })}
                     </p>
-                    <p>
+                    <p className="break-word">
                         <span className={hightlightStyle}>{translateSNGames("pf_verification_para_4")}</span>
                         <span>
                             {" "}
@@ -161,22 +187,12 @@ const PFVerification: FC = () => {
                         </span>
                     </p>
 
-                    {ballValues(verifyInfo.randomNumbers, verifyInfo.increments, verifyInfo.resultBalls)}
+                    {ballIndexRender(verifyInfo.randomNumbers, verifyInfo.convertNumber, verifyInfo.ballIndexes)}
                 </Section>
 
-                {/* <Section title={translateSNGames("pf_verification_para_8")}>
-                    <p className={Styles["result-numbers"]}>
-                        {verifyInfo.remainingBalls.map((item, index) => {
-                            return index + 1 === verifyInfo.ballIndexes[index] ? (
-                                <span key={uuidv4()} className={Styles["text-yellow"]}>
-                                    {item}{" "}
-                                </span>
-                            ) : (
-                                `${item} `
-                            );
-                        })}
-                    </p>
-                </Section> */}
+                <Section title={translateSNGames("pf_verification_para_8")}>
+                    {renderFinalResult(verifyInfo.remainingBallList, verifyInfo.resultBalls)}
+                </Section>
             </div>
         </div>
     );
