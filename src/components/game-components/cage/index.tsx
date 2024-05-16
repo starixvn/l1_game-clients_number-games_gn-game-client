@@ -23,7 +23,7 @@ export enum CagePosition {
 export type CageProps = {
     color: string;
     isSmall: boolean;
-    result: number;
+    result?: number;
     delayShowResultTime?: number;
     position: string;
     highlight?: boolean;
