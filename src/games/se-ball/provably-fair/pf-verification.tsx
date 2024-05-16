@@ -31,15 +31,11 @@ const PFVerification: FC = () => {
         return increments;
     };
 
-    const generateRemainingBalls = (totalBalls: number, drawnBalls: number[]) => {
+    const generateRemainingBalls = (totalBalls: number) => {
         const result = [];
         for (let i = 1; i <= totalBalls; i++) {
             result.push(i);
         }
-        if (drawnBalls.length) {
-            return result.filter((n) => !drawnBalls.includes(n));
-        }
-
         return result;
     };
 
@@ -54,16 +50,19 @@ const PFVerification: FC = () => {
 
         const ballIndexes = randomNumbers.map((x, index) => ((x + convertNumber[index]) % (TOTAL_BALLS - index)) + 1);
 
-        let remainingBalls = generateRemainingBalls(TOTAL_BALLS, []);
+        let remainingBalls = generateRemainingBalls(TOTAL_BALLS);
 
         const resultBalls: number[] = [];
         let remainingBallList = [];
         remainingBallList.push(remainingBalls);
 
+        let removedRemainingBallList = [...remainingBalls];
+
         ballIndexes.forEach((i) => {
             resultBalls.push(remainingBalls[i - 1]);
-            remainingBalls = generateRemainingBalls(TOTAL_BALLS, resultBalls);
-            remainingBallList.push(remainingBalls);
+            removedRemainingBallList = removedRemainingBallList.filter(item => item !== remainingBalls[i - 1]);
+            remainingBalls = removedRemainingBallList.filter(item => item !== remainingBalls[i - 1]);
+            remainingBallList.push(removedRemainingBallList);
         });
 
         return {
@@ -84,11 +83,9 @@ const PFVerification: FC = () => {
     const ballIndexRender = (randomNumber: number[], convertNumber: number[], ballIndexes: number[]) => {
         const ballLines = [];
         for (let i = 0; i < BALLS_EACH_ROUND; i++) {
-            const line = `<span style="color: #ffbc11; font-weight: 600">Ball ${i + 1} - ${translateSNGames("pf_index")} (1-${
-                TOTAL_BALLS - i
-            })</span> = ((${randomNumber[i]}+${convertNumber[i]}) mod ${
-                TOTAL_BALLS - i
-            }) + 1 = <span style="color: #ffbc11; font-weight: 600">${ballIndexes[i]}</span>`;
+            const line = `<span style="color: #ffbc11; font-weight: 600">Ball ${i + 1} - ${translateSNGames("pf_index")} (1-${TOTAL_BALLS - i
+                })</span> = ((${randomNumber[i]}+${convertNumber[i]}) mod ${TOTAL_BALLS - i
+                }) + 1 = <span style="color: #ffbc11; font-weight: 600">${ballIndexes[i]}</span>`;
             ballLines.push(
                 <p>
                     <Markup key={i} content={line} />
@@ -99,8 +96,9 @@ const PFVerification: FC = () => {
         return ballLines;
     };
 
-    const renderFinalResult = (remainingBallList, resultBalls) => {
+    const renderFinalResult = (remainingBallList, ballIndexes) => {
         const finalResult = [];
+
         for (let i = 0; i < BALLS_EACH_ROUND; i++) {
             finalResult.push(
                 <div style={{ marginBottom: "1rem" }}>
@@ -109,7 +107,7 @@ const PFVerification: FC = () => {
                     </div>
                     <div className={Styles["result-numbers"]}>
                         {remainingBallList[i].map((item, index) => {
-                            return index + 1 === resultBalls[i] ? (
+                            return index + 1 === ballIndexes[i] ? (
                                 <span key={uuidv4()} className={Styles["text-yellow"]}>
                                     {item}{" "}
                                 </span>
@@ -191,7 +189,7 @@ const PFVerification: FC = () => {
                 </Section>
 
                 <Section title={translateSNGames("pf_verification_para_8")}>
-                    {renderFinalResult(verifyInfo.remainingBallList, verifyInfo.resultBalls)}
+                    {renderFinalResult(verifyInfo.remainingBallList, verifyInfo.ballIndexes)}
                 </Section>
             </div>
         </div>
