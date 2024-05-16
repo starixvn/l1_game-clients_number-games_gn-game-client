@@ -39,39 +39,33 @@ const PFVerification: FC = () => {
         return result;
     };
 
-    const verifyInfo = useMemo(() => {
-        const serverSeed = JSON.parse(pfResult?.serverSeed || "{}");
-
-        const randomNumbers = (serverSeed?.random || "").split(";").map((x: string) => +x) as number[];
-
-        const rawDigits = combinedHash.match(/.{2}/g);
-
-        const convertNumber = finalHashToNumbers(combinedHash);
-
-        const ballIndexes = randomNumbers.map((x, index) => ((x + convertNumber[index]) % (TOTAL_BALLS - index)) + 1);
-
+    const buildRemainingBallList = (ballIndexes: number[]) => {
+        let resultBalls: number[] = [];
         let remainingBalls = generateRemainingBalls(TOTAL_BALLS);
-
-        const resultBalls: number[] = [];
-        let remainingBallList = [];
-        remainingBallList.push(remainingBalls);
-
-        let removedRemainingBallList = [...remainingBalls];
+        let remainingBallList = [remainingBalls];
 
         ballIndexes.forEach((i) => {
             resultBalls.push(remainingBalls[i - 1]);
-            removedRemainingBallList = removedRemainingBallList.filter(item => item !== remainingBalls[i - 1]);
-            remainingBalls = removedRemainingBallList.filter(item => item !== remainingBalls[i - 1]);
-            remainingBallList.push(removedRemainingBallList);
+            remainingBalls = remainingBalls.filter(item => item !== remainingBalls[i - 1]);
+            remainingBallList.push(remainingBalls);
         });
+
+        return { resultBalls, remainingBallList };
+    }
+
+    const verifyInfo = useMemo(() => {
+        const serverSeed = JSON.parse(pfResult?.serverSeed || "{}");
+        const randomNumbers = (serverSeed?.random || "").split(";").map((x: string) => +x) as number[];
+        const rawDigits = combinedHash.match(/.{2}/g);
+        const convertNumber = finalHashToNumbers(combinedHash);
+        const ballIndexes = randomNumbers.map((x, index) => ((x + convertNumber[index]) % (TOTAL_BALLS - index)) + 1);
 
         return {
             randomNumbers,
             rawDigits,
             convertNumber,
             ballIndexes,
-            resultBalls,
-            remainingBallList,
+            ...buildRemainingBallList(ballIndexes)
         };
     }, [combinedHash]);
 
