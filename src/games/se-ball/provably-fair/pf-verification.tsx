@@ -8,6 +8,7 @@ import { Section } from "../../../components/game-components/provably-fair/pf-fo
 import { usePFContext, usePFDispatch } from "../../../_shared/react-contexts/game-state-context/pf/pf-context";
 import { PFEventActionType } from "../../../_shared/react-contexts/game-state-context/pf/pf-action";
 import { Markup } from "interweave";
+import { SeBallPfHelper, SeBallConstant } from "./pf-helper";
 
 const PFVerification: FC = () => {
     const { pfVerifyModalData: pfResult } = usePFContext();
@@ -17,90 +18,39 @@ const PFVerification: FC = () => {
     const { t: translateSNGames } = useSNTranslate();
     const [combinedHash, setCombinedHash] = useState(pfResult.finalHash);
 
-    const BALLS_EACH_ROUND = 4;
-    const TOTAL_BALLS = 60;
-
-    const finalHashToNumbers = (finalHash: string) => {
-        const increments = [];
-
-        for (let i = 0; i < BALLS_EACH_ROUND; i++) {
-            const value = parseInt(finalHash.slice(i * 2, i * 2 + 2), 16);
-            increments.push(value);
-        }
-
-        return increments;
-    };
-
-    const generateRemainingBalls = (totalBalls: number) => {
-        const result = [];
-        for (let i = 1; i <= totalBalls; i++) {
-            result.push(i);
-        }
-        return result;
-    };
-
-    const buildRemainingBallList = (ballIndexes: number[]) => {
-        let resultBalls: number[] = [];
-        let remainingBalls = generateRemainingBalls(TOTAL_BALLS);
-        let remainingBallList = [remainingBalls];
-
-        ballIndexes.forEach((i) => {
-            resultBalls.push(remainingBalls[i - 1]);
-            remainingBalls = remainingBalls.filter(item => item !== remainingBalls[i - 1]);
-            remainingBallList.push(remainingBalls);
-        });
-
-        return { resultBalls, remainingBallList };
-    }
-
-    const verifyInfo = useMemo(() => {
-        const serverSeed = JSON.parse(pfResult?.serverSeed || "{}");
-        const randomNumbers = (serverSeed?.random || "").split(";").map((x: string) => +x) as number[];
-        const rawDigits = combinedHash.match(/.{2}/g);
-        const convertNumber = finalHashToNumbers(combinedHash);
-        const ballIndexes = randomNumbers.map((x, index) => ((x + convertNumber[index]) % (TOTAL_BALLS - index)) + 1);
-
-        return {
-            randomNumbers,
-            rawDigits,
-            convertNumber,
-            ballIndexes,
-            ...buildRemainingBallList(ballIndexes)
-        };
-    }, [combinedHash]);
+    const verifyInfo = useMemo(() => SeBallPfHelper.buildVerifyInfo({ pfResult, combinedHash }), [combinedHash]);
 
     const handleChangeMergeClientSeed = (event: React.ChangeEvent<HTMLInputElement>) => {
         const input = event.target as HTMLInputElement;
         setMergeClientSeed(input.value);
     };
 
-    const ballIndexRender = (randomNumber: number[], convertNumber: number[], ballIndexes: number[]) => {
-        const ballLines = [];
-        for (let i = 0; i < BALLS_EACH_ROUND; i++) {
-            const line = `<span style="color: #ffbc11; font-weight: 600">Ball ${i + 1} - ${translateSNGames("pf_index")} (1-${TOTAL_BALLS - i
-                })</span> = ((${randomNumber[i]}+${convertNumber[i]}) mod ${TOTAL_BALLS - i
-                }) + 1 = <span style="color: #ffbc11; font-weight: 600">${ballIndexes[i]}</span>`;
-            ballLines.push(
-                <p>
-                    <Markup key={i} content={line} />
-                </p>
-            );
-        }
+    const ballIndexRender = () => {
+        const { BALLS_EACH_ROUND, TOTAL_BALLS } = SeBallConstant;
 
-        return ballLines;
+        return Array.from(Array(BALLS_EACH_ROUND), (_, index) => {
+            const { randomNumbers, convertNumber, ballIndexes } = verifyInfo;
+
+            const line = `<span style="color: #ffbc11; font-weight: 600">Ball ${index + 1} - ${translateSNGames("pf_index")} (1-${TOTAL_BALLS - index
+                })</span> = ((${randomNumbers[index]}+${convertNumber[index]}) mod ${TOTAL_BALLS - index
+                }) + 1 = <span style="color: #ffbc11; font-weight: 600">${ballIndexes[index]}</span>`;
+
+            return (<p key={index}><Markup content={line} /></p>);
+        });
     };
 
-    const renderFinalResult = (remainingBallList, ballIndexes) => {
+    const renderFinalResult = () => {
+        const { remainingBalls, ballIndexes } = verifyInfo;
         const finalResult = [];
 
-        for (let i = 0; i < BALLS_EACH_ROUND; i++) {
+        for (let i = 0; i < SeBallConstant.BALLS_EACH_ROUND; i++) {
             finalResult.push(
                 <div style={{ marginBottom: "1rem" }}>
                     <div className={Styles["section-title"]}>
                         {translateSNGames("pf_verifier_tool_ball", { value: i + 1 })} - {translateCommon("pf_verification_para_1")}
                     </div>
                     <div className={Styles["result-numbers"]}>
-                        {remainingBallList[i].map((item, index) => {
+                        {remainingBalls[i].map((item, index) => {
                             return index + 1 === ballIndexes[i] ? (
                                 <span key={uuidv4()} className={Styles["text-yellow"]}>
                                     {item}{" "}
@@ -121,6 +71,7 @@ const PFVerification: FC = () => {
         const mergeSeed = `${pfResult.serverSeed}${mergeClientSeed}`;
         const hash = createHash("sha512").update(mergeSeed).digest("hex");
         setCombinedHash(hash);
+
         return () => {
             dispatch({
                 type: PFEventActionType.UPDATE_PF_VERIFY,
@@ -150,7 +101,7 @@ const PFVerification: FC = () => {
                 <div className="flex items-center gap-4">
                     <Section title={translateCommon("pf_verification_para_1")} customTitleStyles={`m-0 ${Styles["title-fix-width"]}`}>
                         <div className="flex gap-2 items-center">
-                            {verifyInfo.resultBalls.map((item) => (
+                            {verifyInfo.results.map((item) => (
                                 <SmallBall key={uuidv4()} number={item} />
                             ))}
                         </div>
@@ -179,11 +130,11 @@ const PFVerification: FC = () => {
                         </span>
                     </p>
 
-                    {ballIndexRender(verifyInfo.randomNumbers, verifyInfo.convertNumber, verifyInfo.ballIndexes)}
+                    {ballIndexRender()}
                 </Section>
 
                 <Section title={translateSNGames("pf_verification_para_8")}>
-                    {renderFinalResult(verifyInfo.remainingBallList, verifyInfo.ballIndexes)}
+                    {renderFinalResult()}
                 </Section>
             </div>
         </div>
