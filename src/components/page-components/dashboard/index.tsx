@@ -30,7 +30,6 @@ import SwiperCore from "swiper";
 import { ErrorNoGameOffer } from "../../../_shared/constants/error-code-dictionary";
 import "../../../games/scoreboards";
 import { getLobbyConfigs, reCheckIn } from "../../../services/auth-service";
-import { updateSignInSMStatus } from "../../../services/user-setting-service";
 import { UserStakeLevel } from "../../game-base/type";
 import { ModalType } from "../../game-components/base-dialog/type";
 import { ErrorApiText } from "../../game-components/error-api-text";
@@ -40,7 +39,6 @@ import Lobby from "../lobby/lobby";
 import { LobbySocketConnection } from "../lobby/lobby-socket-connection";
 import ButtonSwipe from "./button-swipe";
 import Styles from "./dashboard.module.scss";
-import Register from "./register/register";
 import { ILobbyConfigs, Props, State } from "./type";
 
 const Games = dynamic(() => import("../../../games/games"));
@@ -78,7 +76,6 @@ class Dashboard extends React.PureComponent<Props, State> {
 
         this.lobbyConnectionHandler = new LobbySocketConnection();
 
-        this.handleRegister = this.handleRegister.bind(this);
         this.registerMainSocketEvent = this.registerMainSocketEvent.bind(this);
         this.handleKickedOut = this.handleKickedOut.bind(this);
         this.closeDialog = this.closeDialog.bind(this);
@@ -175,7 +172,7 @@ class Dashboard extends React.PureComponent<Props, State> {
         if (!document["hidden"]) {
             const reCheckInResponse = await reCheckIn(this.props.session);
             this.handleRecheckInResponse(reCheckInResponse);
-        } 
+        }
     }
 
     changeOrientation() {
@@ -192,11 +189,10 @@ class Dashboard extends React.PureComponent<Props, State> {
 
         document.addEventListener("visibilitychange", this.onVisibilityChange);
         const { queryGame, authorizeResponse, session, lobbyConfigs } = this.props;
+        console.log("componentDidMount");
+        console.log("authorizeResponse--------", authorizeResponse, lobbyConfigs);
         this.updateAuthorizeInfo(authorizeResponse);
         this.updateLobbyConfigs(lobbyConfigs as LobbyConfigs);
-        if (!authorizeResponse || !authorizeResponse?.authorized) {
-            return;
-        }
 
         await this.connectLobbySocket(authorizeResponse, lobbyConfigs);
         this.updateUserBalance(authorizeResponse?.user?.red);
@@ -305,17 +301,6 @@ class Dashboard extends React.PureComponent<Props, State> {
 
     handleUpdateUserStakeLevel(userStakeLevel: UserStakeLevel) {
         this.setState({ userStakeLevel: userStakeLevel });
-    }
-
-    async handleRegister(authorizeInfo: AuthorizeResponse) {
-        const { session } = this.props;
-
-        updateSignInSMStatus(session);
-        authorizeInfo.user.isSignedInSM = true;
-
-        const lobbyConfigs = await this.getAllLobbyConfigs();
-        await this.connectLobbySocket(authorizeInfo, lobbyConfigs);
-        this.updateAuthorizeInfo(authorizeInfo);
     }
 
     closeDialog() {
@@ -451,7 +436,7 @@ class Dashboard extends React.PureComponent<Props, State> {
                         {isNoGameOffer ? <></> : renderOfferGameContainer()}
 
                         {isNoGameOffer ? <></> : !isRenderGames && <Footer />}
-                        {<MusicPlayer/>}
+                        {<MusicPlayer />}
 
                         {isShowErrorModal && (
                             <div className={Styles["container-modal"]}>
@@ -479,24 +464,19 @@ class Dashboard extends React.PureComponent<Props, State> {
         );
     }
 
-    renderComponents = (authorizeInfo: AuthorizeResponse) => {
-        const { authorized } = authorizeInfo;
-
-        if (authorized) {
-            return this.renderDashBoard();
-        }
-
-        return <Register session={this.props.session} handleStateLogin={this.handleRegister} />;
+    renderDashboard = () => {
+        return this.renderDashBoard();
     };
 
     render() {
         const { authorizeInfo, isLandscapeMode } = this.state;
+        console.log("authorizeInfo--", authorizeInfo);
 
         if (isLandscapeMode && isMobileOnly) {
             return <LandscapeMode />;
         }
 
-        return authorizeInfo ? <>{this.renderComponents(authorizeInfo)}</> : <></>;
+        return authorizeInfo?.authorized ? <>{this.renderDashboard()}</> : <></>;
     }
 }
 

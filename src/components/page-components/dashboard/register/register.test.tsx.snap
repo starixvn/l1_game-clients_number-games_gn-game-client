@@ -69,18 +69,24 @@ exports[`Register render should match snapshot 1`] = `
             </button>
           </div>
           <button
-            class="btn-green submit"
+            class="btn-green submit "
             type="submit"
           />
         </form>
         <p
           class="note"
         />
-        <div>
+        <div
+          class="loading"
+        >
           <div
-            id="load-img"
-            style="opacity: 0; position: absolute;"
-          />
+            class="progress"
+          >
+            <div
+              class="progress-bar"
+              id="register-progress-bar"
+            />
+          </div>
         </div>
       </div>
     </div>

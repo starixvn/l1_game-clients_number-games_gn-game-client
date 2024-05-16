@@ -2,6 +2,8 @@ import { render } from "@testing-library/react";
 
 import { Register } from "./register";
 
+jest.mock("..", () => jest.fn().mockReturnValue("Dashboard"));
+
 jest.mock("../../../../services/auth-service", () => ({
     createNickname: jest.fn(),
 }));
@@ -37,9 +39,10 @@ describe(Register.name, () => {
 
     beforeEach(() => {
         component = new Register({
-            handleStateLogin: jest.fn(),
+            isDirectMode: false,
             session: {} as any,
             t: jest.fn(),
+            gameId: 1001,
         });
 
         component.setState = jest.fn();
@@ -48,7 +51,7 @@ describe(Register.name, () => {
     describe("render", () => {
         it("should match snapshot", () => {
             // Act
-            const { container } = render(<Register session={{} as any} t={jest.fn()} handleStateLogin={jest.fn()} />);
+            const { container } = render(<Register session={{} as any} t={jest.fn()} isDirectMode={false} gameId={1001} />);
 
             // Assert
             expect(container).toMatchSnapshot();

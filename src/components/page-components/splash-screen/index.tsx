@@ -1,33 +1,42 @@
 import * as Sentry from "@sentry/nextjs";
 import { WithRouterProps } from "next/dist/client/with-router";
 import { NextRouter, useRouter } from "next/router";
-import { Dispatch, SetStateAction, memo, useContext, useEffect, useState } from "react";
+import { memo, useContext, useEffect, useState } from "react";
 
 import Image from "next/image";
 import { AuthorizeResponse, SSOResponse } from "sc-user-service-client/dist/auth";
-import { LobbyConfigs } from "sc-user-service-client/dist/lobby";
 import { getAppSettings } from "../../../_shared/app-settings";
 import { Themes, buildVersion, languageMapper } from "../../../_shared/constants";
-import { AnalyticsHelper, StorageHelper, getLobbyGamesIds, localStorageKeys, randomInteger } from "../../../_shared/helpers";
-import PreloadResources, { DURATION_HOLD_SPLASH_SCREEN } from "../../../_shared/helpers/preload-resources";
+import { AnalyticsHelper, StorageHelper, localStorageKeys, randomInteger } from "../../../_shared/helpers";
+import PreloadResources, {
+    DURATION_HOLD_SPLASH_SCREEN,
+    getAndHandleGameOfferIds,
+    getAndHandleBannerOffer as handleBannerOffer,
+    updateProgressBar,
+} from "../../../_shared/helpers/preload-resources";
 import { PlayerContextModel, URLContext, usePlayerContext } from "../../../_shared/react-contexts";
 import { useTranslator } from "../../../_shared/react-hooks";
 import { setSentryUser } from "../../../_shared/sentry";
+import { tolgee } from "../../../_shared/tolgee";
 import { authorize, createNickname, getLobbyConfigs, sso, verifySession } from "../../../services/auth-service";
 import { updateSignInSMStatus } from "../../../services/user-setting-service";
+import Dashboard from "../dashboard";
 import { MAX_AVATAR_ID } from "../dashboard/register/avatar-gallery";
 import NameGenerator from "../dashboard/register/name-generator";
+import Register from "../dashboard/register/register";
 import { ILobbyConfigs } from "../dashboard/type";
-import { getGameIdOfferBanner } from "../lobby/games/components/banner";
 import UMPage from "../um-page";
 import Styles from "./splash-screen.module.scss";
 
 export type SplashScreenProps = WithRouterProps;
-
 export type SplashScreenState = {
     locale: string;
     underMaintenance: boolean;
 };
+
+// const UMPage = dynamic(() => import("../um-page"));
+// const Register = dynamic(() => import("../dashboard/register/register"));
+// const Dashboard = dynamic(() => import("../dashboard"));
 
 export const customStartup = async (
     session: SSOResponse,
@@ -94,16 +103,13 @@ const autoCreateNickname = async (session: SSOResponse, signOut: Function) => {
     return authorizeResponse;
 };
 
-const SplashScreen: React.FC<{
-    gameId: number;
-    isDirectMode: boolean;
-    setLobbyConfigs: Dispatch<SetStateAction<ILobbyConfigs>>;
-}> = ({ isDirectMode, gameId, setLobbyConfigs }) => {
-    const { token, language } = useContext(URLContext);
+const SplashScreen: React.FC = () => {
+    const { gameId, isDirectMode, token, language } = useContext(URLContext);
     const router = useRouter();
     const player = usePlayerContext();
     const { t } = useTranslator();
 
+    const [isUm, setIsUm] = useState(player?.session?.isUM);
     const [isDonePreloadResources, setIsDonePreloadResources] = useState<boolean>(false);
     const [isDoneLoadLogo, setIsDoneLoadLogo] = useState<boolean>(false);
     const [bannerId, setBannerId] = useState<number>(0);
@@ -111,8 +117,14 @@ const SplashScreen: React.FC<{
     const [currentSession, setCurrentSession] = useState<SSOResponse>();
     const [gameOfferIds, setGameOfferIds] = useState<number[]>([]);
     const [currentGameId, setCurrentGameId] = useState<number>(-1);
-    const [isTriggerStartup, setIsTriggerStartup] = useState<boolean>(false);
     const [authorizeResponse, setAuthorizeResponse] = useState<AuthorizeResponse>(null);
+    const [lobbyConfigs, setLobbyConfigs] = useState<ILobbyConfigs>(null);
+    const [isRenderRegisterPage, setIsRenderRegisterPage] = useState<boolean>(false);
+    const [isRenderDashboard, setIsRenderDashboard] = useState<boolean>(false);
+
+    const signOut = () => {
+        router.push("timeout");
+    };
 
     useEffect(() => {
         let authorizeInfo;
@@ -136,8 +148,7 @@ const SplashScreen: React.FC<{
             }
 
             if (!authorizeInfo?.authorized) {
-                setIsTriggerStartup(true);
-                authorizeInfo && setAuthorizeResponse(authorizeInfo);
+                setIsRenderRegisterPage(true);
                 return;
             }
 
@@ -146,50 +157,59 @@ const SplashScreen: React.FC<{
             const lobby = await getLobbyConfigs(session);
             if (lobby?.lobbyConfigs) {
                 setLobbyConfigs(lobby?.lobbyConfigs);
-                handleBanner(authorizeInfo, lobby.lobbyConfigs);
-                handleGameOfferIds(authorizeInfo, lobby.lobbyConfigs);
+                handleBannerOffer(authorizeInfo, lobby.lobbyConfigs, setBannerId);
+                getAndHandleGameOfferIds(authorizeInfo, lobby.lobbyConfigs, setGameOfferIds);
             }
-            setIsTriggerStartup(true);
             authorizeInfo && setAuthorizeResponse(authorizeInfo);
         };
 
         handleInitialization();
     }, []);
 
-    const signOut = () => {
-        router.push("timeout");
-    };
-
-    const handleBanner = (authorizeInfo: AuthorizeResponse, lobbyConfigs: LobbyConfigs) => {
-        const gameIdsOfferBanner = getGameIdOfferBanner(authorizeInfo, lobbyConfigs);
-        if (gameIdsOfferBanner.length > 0) {
-            setBannerId(gameIdsOfferBanner[0]);
-        }
-    };
-
-    const handleGameOfferIds = (authorizeInfo: AuthorizeResponse, lobbyConfigs: LobbyConfigs) => {
-        const gameOfferIds = getLobbyGamesIds(lobbyConfigs, authorizeInfo);
-        if (gameOfferIds.length > 0) {
-            setGameOfferIds(gameOfferIds);
-        }
-    };
-
     useEffect(() => {
-        if (router?.isReady && isDonePreloadResources && isTriggerStartup) {
+        if (router?.isReady && isDonePreloadResources && authorizeResponse) {
             const handleStartup = async () => {
                 try {
                     await customStartup(currentSession, locale, router, player, authorizeResponse);
-                    await router?.push("/", undefined, { shallow: true });
+                    setIsRenderDashboard(true);
                 } catch (error) {
                     onStartupError(error);
                 }
             };
+
             handleStartup();
         }
-    }, [isDonePreloadResources, isTriggerStartup, authorizeResponse]);
+    }, [isDonePreloadResources, authorizeResponse]);
 
-    if (player?.session?.isUM) {
+    useEffect(() => {
+        if (player?.session?.isAuthenticated && !player?.session?.isUM) {
+            updateProgressBar(100);
+            setIsRenderDashboard(true);
+        }
+    }, [player?.session]);
+
+    if (player?.session?.isUM || isUm) {
         return <UMPage />;
+    }
+
+    if (isRenderDashboard) {
+        document.body.classList.add("galaxy-bg");
+        return (
+            <Dashboard
+                session={player?.session}
+                queryGame={gameId}
+                setIsUm={setIsUm}
+                directMode={isDirectMode}
+                tolgee={tolgee}
+                authorizeResponse={player?.authorizeInfo}
+                lobbyConfigs={lobbyConfigs}
+            />
+        );
+    }
+
+    if (isRenderRegisterPage) {
+        document.body.classList.add("galaxy-bg");
+        return <Register session={currentSession} isUm={isUm} isDirectMode={isDirectMode} gameId={gameId} />;
     }
 
     return (

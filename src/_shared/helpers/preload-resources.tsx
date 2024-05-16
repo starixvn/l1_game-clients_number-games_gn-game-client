@@ -2,13 +2,32 @@ import axios from "axios";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
+import { AuthorizeResponse } from "sc-user-service-client/dist/auth";
+import { LobbyConfigs } from "sc-user-service-client/dist/lobby";
 import { v4 as uuidv4 } from "uuid";
+import { getGameIdOfferBanner } from "../../components/page-components/lobby/games/components/banner";
+import { getLobbyGamesIds } from "./lobby-helper";
 
 const MAX_DELAY_TIME = 5000;
+const DEFAULT_PROGRESS_BAR_ID = "progress-bar";
 export const DURATION_HOLD_SPLASH_SCREEN = 1000;
 
-export const updateProgressBar = (percentage: number) => {
-    const progressBars = document.querySelectorAll("#progress-bar");
+export const getAndHandleBannerOffer = (authorizeInfo: AuthorizeResponse, lobbyConfigs: LobbyConfigs, callbackFn: Function) => {
+    const gameIdsOfferBanner = getGameIdOfferBanner(authorizeInfo, lobbyConfigs);
+    if (gameIdsOfferBanner.length > 0) {
+        callbackFn(gameIdsOfferBanner[0]);
+    }
+};
+
+export const getAndHandleGameOfferIds = (authorizeInfo: AuthorizeResponse, lobbyConfigs: LobbyConfigs, callbackFn: Function) => {
+    const gameOfferIds = getLobbyGamesIds(lobbyConfigs, authorizeInfo);
+    if (gameOfferIds.length > 0) {
+        callbackFn(gameOfferIds);
+    }
+};
+
+export const updateProgressBar = (percentage: number, progressBarId = DEFAULT_PROGRESS_BAR_ID) => {
+    const progressBars = document.querySelectorAll(`#${progressBarId}`);
     progressBars.forEach((progressBar) => {
         if (progressBar instanceof HTMLElement) {
             progressBar.style.width = `${percentage}%`;
@@ -26,6 +45,7 @@ const PreloadResources: React.FC<{
     cancelPreload?: boolean;
     durationDelayDonePreload?: number;
     enablePreload: boolean;
+    progressBarId?: string;
 }> = ({
     setIsDonePreload,
     gameId,
@@ -35,6 +55,7 @@ const PreloadResources: React.FC<{
     cancelPreload,
     durationDelayDonePreload = 0,
     enablePreload = true,
+    progressBarId,
 }) => {
     const router = useRouter();
     const [loadedImages, setLoadedImages] = useState<any>(new Set());
@@ -82,7 +103,7 @@ const PreloadResources: React.FC<{
             timeout && clearTimeout(timeout);
         } else {
             const percentage = (loadedImages.size / images.length) * 100;
-            updateProgressBar(percentage);
+            updateProgressBar(percentage, progressBarId);
 
             if (loadedImages?.size > 0 && loadedImages?.size === images.length) {
                 const endTime = performance.now();
@@ -108,7 +129,7 @@ const PreloadResources: React.FC<{
         const duration = endTime - startTime;
         timeoutWithoutPreloadResource = setTimeout(
             () => {
-                updateProgressBar(100);
+                updateProgressBar(100, progressBarId);
                 setIsDonePreload?.(true);
             },
             duration < MAX_DELAY_TIME ? durationDelayDonePreload : 0
