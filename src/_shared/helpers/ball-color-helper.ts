@@ -6,16 +6,8 @@ enum BallColor {
 export const getBallColor = (index: number) => {
     const balls = {};
 
-    let isRedColor = true;
-    let countTemp = 0;
-
     for (let i = 1; i <= 75; i++) {
-        if (countTemp === 2) {
-            countTemp = 0;
-            isRedColor = !isRedColor;
-        }
-        balls[i] = isRedColor ? BallColor.RED : BallColor.BLUE;
-        countTemp++;
+        balls[i] = i % 2 === 0 ? BallColor.RED : BallColor.BLUE;
     }
 
     return balls[index];
