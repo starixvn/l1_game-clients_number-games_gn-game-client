@@ -18,7 +18,6 @@ export interface GameStateContextModel {
     settlementResult?: any;
     errorMessage?: string | string[];
     selectedBetChoice?: string;
-    isProcessingBet?: boolean;
     disabledMessage?: string;
     showResultInfo: boolean;
     showWinningAnimation: boolean;

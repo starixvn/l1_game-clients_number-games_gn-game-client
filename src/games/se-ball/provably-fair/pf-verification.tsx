@@ -8,7 +8,7 @@ import { Section } from "../../../components/game-components/provably-fair/pf-fo
 import { usePFContext, usePFDispatch } from "../../../_shared/react-contexts/game-state-context/pf/pf-context";
 import { PFEventActionType } from "../../../_shared/react-contexts/game-state-context/pf/pf-action";
 import { Markup } from "interweave";
-import { SeBallPfHelper, SeBallConstant } from "./pf-helper";
+import PfRoundBaseHelper from "../../../_shared/helpers/pf/pf-round-base-helper";
 
 const PFVerification: FC = () => {
     const { pfVerifyModalData: pfResult } = usePFContext();
@@ -18,7 +18,15 @@ const PFVerification: FC = () => {
     const { t: translateSNGames } = useSNTranslate();
     const [combinedHash, setCombinedHash] = useState(pfResult.finalHash);
 
-    const verifyInfo = useMemo(() => SeBallPfHelper.buildVerifyInfo({ pfResult, combinedHash }), [combinedHash]);
+    const BALLS_EACH_ROUND = 4;
+    const TOTAL_BALLS = 60;
+
+    const verifyInfo = useMemo(() => PfRoundBaseHelper.buildVerifyInfo({
+        pfResult,
+        combinedHash,
+        totalBalls: TOTAL_BALLS,
+        ballsEachRound: BALLS_EACH_ROUND
+    }), [combinedHash]);
 
     const handleChangeMergeClientSeed = (event: React.ChangeEvent<HTMLInputElement>) => {
         const input = event.target as HTMLInputElement;
@@ -26,8 +34,6 @@ const PFVerification: FC = () => {
     };
 
     const ballIndexRender = () => {
-        const { BALLS_EACH_ROUND, TOTAL_BALLS } = SeBallConstant;
-
         return Array.from(Array(BALLS_EACH_ROUND), (_, index) => {
             const { randomNumbers, convertNumber, ballIndexes } = verifyInfo;
 
@@ -43,9 +49,9 @@ const PFVerification: FC = () => {
         const { remainingBalls, ballIndexes } = verifyInfo;
         const finalResult = [];
 
-        for (let i = 0; i < SeBallConstant.BALLS_EACH_ROUND; i++) {
+        for (let i = 0; i < BALLS_EACH_ROUND; i++) {
             finalResult.push(
-                <div style={{ marginBottom: "1rem" }}>
+                <div key={`final-result-${i}`} style={{ marginBottom: "1rem" }}>
                     <div className={Styles["section-title"]}>
                         {translateSNGames("pf_verifier_tool_ball", { value: i + 1 })} - {translateCommon("pf_verification_para_1")}
                     </div>
