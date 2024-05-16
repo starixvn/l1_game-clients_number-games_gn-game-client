@@ -17,18 +17,26 @@ const OtherCage: React.FC<CageProps> = ({
     isPlayStartRoundAnimation,
     listResult,
     roundState,
-    initialDelayBallTime,
+    initialBallDelayTime,
 }) => {
     const [showBalls, setShowBalls] = useState(false);
     const [totalPoint, setTotalPoint] = useState(0);
+    const [highlightStyle, setHighlightStyle] = useState("");
+
+    const defaultBallDelayTime = 450;
+    const delayBallRotation = 80;
+    const delayShowTotalPoint = 700;
 
     useEffect(() => {
         let timeOut: NodeJS.Timeout;
 
         if (!showBalls && roundState === RoundState.DisplayResult) {
-            timeOut = setTimeout(() => {
-                setShowBalls(true);
-            }, 1200);
+            timeOut = setTimeout(
+                () => {
+                    setShowBalls(true);
+                },
+                playResultAnimation ? 1200 : 0
+            );
         }
 
         return () => {
@@ -37,18 +45,19 @@ const OtherCage: React.FC<CageProps> = ({
     });
 
     const incrementTotalPoint = useCallback((point: number, pos: number) => {
+        const delayTime = playResultAnimation ? delayShowTotalPoint + pos * delayBallRotation : 0;
         const timeOut = setTimeout(() => {
             setTotalPoint((currentTotalPoint) => currentTotalPoint + point);
-        }, 700 + pos * 80);
+            if (listResult && pos === listResult.length) {
+                setHighlightStyle(`${Styles["highlight"]}`);
+            }
+        }, delayTime);
 
         return () => {
             clearTimeout(timeOut);
+            setHighlightStyle("");
         };
     }, []);
-
-    const getBallDelayTime = (pos: number) => {
-        return pos * (initialDelayBallTime ?? 450) + 80;
-    };
 
     const showResult = () => {
         if (!listResult) {
@@ -57,7 +66,7 @@ const OtherCage: React.FC<CageProps> = ({
 
         return listResult.map((result, i) => {
             const ballPos = i + 1;
-            const delayTime = getBallDelayTime(ballPos);
+            const delayTime = playResultAnimation ? ballPos * (initialBallDelayTime ?? defaultBallDelayTime) + delayBallRotation : 0;
 
             return (
                 <ResultBallOther
@@ -99,9 +108,9 @@ const OtherCage: React.FC<CageProps> = ({
                 />
             )}
 
-            {playResultAnimation && showBalls && totalPoint > 0 && <div className={Styles["total-point"]}>{totalPoint}</div>}
+            {showBalls && totalPoint > 0 && <div className={`${Styles["total-point"]} ${highlightStyle}`}>{totalPoint}</div>}
 
-            {playResultAnimation && showBalls && showResult()}
+            {showBalls && showResult()}
         </div>
     );
 };

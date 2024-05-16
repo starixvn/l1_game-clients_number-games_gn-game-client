@@ -56,7 +56,47 @@
 
 .total-point {
     position: absolute;
-    font-size: 3.6rem;
+    font-size: 3.8rem;
     font-weight: 600;
     color: #fff;
+    font-variant-numeric: tabular-nums;
+}
+
+.highlight {
+    animation: heartbeat 1.5s ease-in-out both;
+}
+
+@keyframes heartbeat {
+    from {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+        -webkit-transform-origin: center center;
+        transform-origin: center center;
+        -webkit-animation-timing-function: ease-out;
+        animation-timing-function: ease-out;
+    }
+    10% {
+        -webkit-transform: scale(0.92);
+        transform: scale(0.92);
+        -webkit-animation-timing-function: ease-in;
+        animation-timing-function: ease-in;
+    }
+    17% {
+        -webkit-transform: scale(0.99);
+        transform: scale(0.99);
+        -webkit-animation-timing-function: ease-out;
+        animation-timing-function: ease-out;
+    }
+    33% {
+        -webkit-transform: scale(0.88);
+        transform: scale(0.88);
+        -webkit-animation-timing-function: ease-in;
+        animation-timing-function: ease-in;
+    }
+    45% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+        -webkit-animation-timing-function: ease-out;
+        animation-timing-function: ease-out;
+    }
 }

@@ -22,6 +22,10 @@
     &.zoom-out {
         animation: zoom-out 1s cubic-bezier(0.47, 0, 0.745, 0.715) forwards;
     }
+
+    &.zoom-out-no-animation {
+        transform: scale(0.5) translateY(-5.5rem);
+    }
 }
 
 @keyframes zoom-out {

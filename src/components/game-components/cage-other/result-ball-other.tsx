@@ -27,16 +27,18 @@ const ResultBallOther: React.FC<{
 
         return (
             <div key={uuidv4()} id="show-ball-anim" className={Styles["show-ball-anim"]}>
-                <Spritesheet
-                    className={`${Styles["ball-result"]}`}
-                    image={`/static/images/${gameFolder}/result-ball/${ballName}.webp`}
-                    widthFrame={width}
-                    isResponsive
-                    heightFrame={height}
-                    steps={2}
-                    autoplay
-                    fps={fps ?? 40}
-                />
+                {isShowResultAnim && (
+                    <Spritesheet
+                        className={`${Styles["ball-result"]}`}
+                        image={`/static/images/${gameFolder}/result-ball/${ballName}.webp`}
+                        widthFrame={width}
+                        isResponsive
+                        heightFrame={height}
+                        steps={2}
+                        autoplay
+                        fps={fps ?? 40}
+                    />
+                )}
                 <BallRotation
                     fps={fps}
                     ballPos={ballPos}
@@ -88,7 +90,7 @@ const BallRotation: React.FC<{
                 steps={8}
                 autoplay
                 fps={fps ?? 40}
-                startAt={0}
+                startAt={isShowResultAnim ? 0 : 31}
                 endAt={31}
             />
             <ResultNumber

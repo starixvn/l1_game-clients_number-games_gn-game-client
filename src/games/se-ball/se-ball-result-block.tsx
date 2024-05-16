@@ -18,13 +18,14 @@ const SeBallResultBlock: FC<SeBallResultBlockProps> = (props: SeBallResultBlockP
         return <></>;
     }
 
-    let zoomClass = "";
-    if (roundState === RoundState.DisplayResult) {
+    let zoomClass = "zoom-in";
+
+    if (roundState === RoundState.DisplayResult && playResultAnimation) {
         zoomClass = Style["zoom-out"];
     }
 
-    if (roundState === RoundState.BeforePlaceBet) {
-        zoomClass = Style["zoom-in"];
+    if (roundState === RoundState.DisplayResult && !playResultAnimation) {
+        zoomClass = Style["zoom-out-no-animation"];
     }
 
     return (
