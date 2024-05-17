@@ -32,11 +32,10 @@ export const BannerSwiper: React.FC<{ banners: IBanner[]; openGame: Function }> 
 
     return (
         <Swiper
-            slidesOffsetBefore={8}
             loop={true}
             rewind={true}
             slidesPerView={"auto"}
-            spaceBetween={8}
+            spaceBetween={4}
             pagination={{ clickable: true }}
             modules={[Pagination, Autoplay]}
             className="swiper-banner"
@@ -44,7 +43,6 @@ export const BannerSwiper: React.FC<{ banners: IBanner[]; openGame: Function }> 
                 delay: DEFAULT_DELAY_SLIDER,
                 disableOnInteraction: false,
                 pauseOnMouseEnter: true,
-                reverseDirection: true,
             }}
             ref={swiperRef}
             roundLengths={true}

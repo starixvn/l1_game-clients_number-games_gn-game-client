@@ -17,9 +17,8 @@ const DEFAULT_BANNER_PATH = "/static/images/lobby/banners";
 const DefaultBanner = () => {
     return (
         <Swiper
-            slidesOffsetBefore={8}
             slidesPerView={"auto"}
-            spaceBetween={8}
+            spaceBetween={4}
             className="swiper-banner"
             autoplay={{
                 delay: DEFAULT_DELAY_SLIDER,
