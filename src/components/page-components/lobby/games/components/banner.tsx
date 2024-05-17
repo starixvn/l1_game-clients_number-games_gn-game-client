@@ -32,7 +32,7 @@ const DefaultBanner = () => {
                     className="banner-img"
                     src={`/static/images/lobby/banners/banner-blur.jpg?v=${buildVersion}`}
                     alt={"banner-blur"}
-                    width={696}
+                    width={734}
                     height={248}
                 />
             </SwiperSlide>
