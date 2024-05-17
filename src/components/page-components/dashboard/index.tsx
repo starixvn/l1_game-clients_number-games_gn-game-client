@@ -40,6 +40,7 @@ import { LobbySocketConnection } from "../lobby/lobby-socket-connection";
 import ButtonSwipe from "./button-swipe";
 import Styles from "./dashboard.module.scss";
 import { ILobbyConfigs, Props, State } from "./type";
+import { registerGlobalMessageEvent, unsubscribeGlobalMessageEvent } from "../../../_shared/helpers/message-transmitter/global-transmitter";
 
 const Games = dynamic(() => import("../../../games/games"));
 const BaseDialog = dynamic(() => import("../../game-components/base-dialog"));
@@ -52,6 +53,7 @@ class Dashboard extends React.PureComponent<Props, State> {
     private isKickOut = false;
     private readonly lobbyConnectionHandler: LobbySocketConnection;
     private readonly swiperRef = React.createRef<SwiperCore>();
+    private updateGameIdDashboardId: any;
 
     constructor(props: Props) {
         super(props);
@@ -96,6 +98,7 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.updateAvatar = this.updateAvatar.bind(this);
         this.getLobbyGamesIds = this.getLobbyGamesIds.bind(this);
         this.changeOrientation = this.changeOrientation.bind(this);
+        this.updateGameIdDashboardEvent = this.updateGameIdDashboardEvent.bind(this);
 
         const buildId = process.env.buildVersion;
         const buildVersion = StorageHelper.get(localStorageKeys.buildVersion) ?? 0;
@@ -182,6 +185,13 @@ class Dashboard extends React.PureComponent<Props, State> {
         }, 100);
     }
 
+    async updateGameIdDashboardEvent() {
+        this.setState({ openGameId: 0 });
+        console.log("updateGameIdDashboard");
+        console.log({ ...this.state.lobbyConfigs });
+        // await this.connectLobbySocket(this.state.authorizeInfo, this.state.lobbyConfigs);
+    }
+
     async componentDidMount() {
         if (typeof window === "undefined") {
             return;
@@ -191,11 +201,13 @@ class Dashboard extends React.PureComponent<Props, State> {
         const { queryGame, authorizeResponse, session, lobbyConfigs } = this.props;
         console.log("componentDidMount");
         console.log("authorizeResponse--------", authorizeResponse, lobbyConfigs);
-        this.updateAuthorizeInfo(authorizeResponse);
         this.updateLobbyConfigs(lobbyConfigs as LobbyConfigs);
+
+        this.updateGameIdDashboardId = registerGlobalMessageEvent("updateGameIdDashboard", async () => this.updateGameIdDashboardEvent());
 
         await this.connectLobbySocket(authorizeResponse, lobbyConfigs);
         this.updateUserBalance(authorizeResponse?.user?.red);
+        this.updateAuthorizeInfo(authorizeResponse);
 
         this.reCheckInInterval = setInterval(async () => {
             const reCheckInResponse = await reCheckIn(session);
@@ -219,13 +231,14 @@ class Dashboard extends React.PureComponent<Props, State> {
     }
 
     shouldRenderGames(offerGames) {
-        const urlContextModel = StorageHelper.get<URLContextModel>(localStorageKeys.url);
+        const urlContextModel = JSON.parse(localStorage.getItem("urlContext")); //StorageHelper.get<URLContextModel>(localStorageKeys.url);
         const backToLobby = urlContextModel.backToLobby || false;
         const ssoRedirectGameId = urlContextModel.gameId || 0;
         return (offerGames.includes(this.state.openGameId) && !backToLobby) || ssoRedirectGameId > 0;
     }
 
     componentWillUnmount() {
+        unsubscribeGlobalMessageEvent(this.updateGameIdDashboardId as any);
         document.removeEventListener("visibilitychange", this.onVisibilityChange);
         this.notificationSocket?.close();
         this.lobbyConnectionHandler.closeSocket();
@@ -257,12 +270,15 @@ class Dashboard extends React.PureComponent<Props, State> {
     }
 
     connectLobbySocket = async (authorizeInfo: AuthorizeResponse, lobbyConfigs: ILobbyConfigs) => {
+
         const { gameId } = loadURLContext();
         const offerGamesIds = getOfferGamesIds(authorizeInfo)?.filter((id) => id !== gameId);
         const { gameSettings } = getAppSettings();
         const lobbyGamesIds = getLobbyGameIds(lobbyConfigs)?.filter((gameId) => offerGamesIds.includes(gameId) && gameSettings[gameId]);
-
+        console.log(`connectLobbySocket lobbyGamesIds`)
+        console.log({ ...lobbyGamesIds })
         if (!authorizeInfo?.authorized || lobbyGamesIds?.length === 0) {
+            console.log(`False connectLobbySocket lobbyGamesIds`)
             return;
         }
         await this.lobbyConnectionHandler.initLobbySocket(this.props.session, lobbyGamesIds);
@@ -344,6 +360,8 @@ class Dashboard extends React.PureComponent<Props, State> {
     getLobbyGamesIds = () => {
         const { lobbyConfigs, authorizeInfo } = this.state;
         const offerGamesIds = getOfferGamesIds(authorizeInfo);
+        console.log('getLobbyGamesIds')
+        console.log({ ...offerGamesIds })
         return getLobbyGameIds(lobbyConfigs)?.filter((gameId) => offerGamesIds.includes(gameId));
     };
 
@@ -396,6 +414,7 @@ class Dashboard extends React.PureComponent<Props, State> {
     }
 
     reconnectGameTransmitter(gameId: number) {
+        console.log(`reconnectGameTransmitter: ${gameId}`)
         this.lobbyConnectionHandler.signInGame(this.props.session, gameId);
         return this.lobbyConnectionHandler.initGameTransmitter(gameId);
     }
@@ -426,9 +445,8 @@ class Dashboard extends React.PureComponent<Props, State> {
                 <SettingContextProvider>
                     {allowSwipeGameOndDesktop && <ButtonSwipe isPrev={true} swiper={this.swiperRef} />}
                     <div
-                        className={`${Styles["dashboard"]} ${changeGameStyle} ${!isRenderGames ? "no-scroll" : ""} ${
-                            isMobileOnly ? Styles["hidden-scrollbar"] : ""
-                        }`}
+                        className={`${Styles["dashboard"]} ${changeGameStyle} ${!isRenderGames ? "no-scroll" : ""} ${isMobileOnly ? Styles["hidden-scrollbar"] : ""
+                            }`}
                         id={"dashboard"}
                     >
                         <Header />

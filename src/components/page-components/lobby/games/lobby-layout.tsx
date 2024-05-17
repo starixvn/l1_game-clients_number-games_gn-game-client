@@ -34,6 +34,9 @@ export const LobbyLayout: React.FC<Props> = ({ lobbyConfigs, openGame }) => {
         return [];
     }, []);
 
+    console.log(`LobbyLayout`)
+    console.log({ ...gamesSettings })
+
     return (
         gameTransmitters &&
         gamesSettings && (

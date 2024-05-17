@@ -23,6 +23,7 @@ type Props = {
 };
 
 export const GameBoard: React.FC<Props> = ({ gameSettings, openGame, gameTransmitter, lastClickedGameId, setLastClickedGameId }) => {
+    console.log({ gameSettings, openGame, gameTransmitter, lastClickedGameId, setLastClickedGameId })
     const [isShow, setIsShow] = useState<boolean>(true);
     const [transmitter, setTransmitter] = useState<LobbyGameTransmitter>(null);
     const { reconnectGameTransmitter, socket } = useLobbyConnectionContext();
@@ -54,17 +55,22 @@ export const GameBoard: React.FC<Props> = ({ gameSettings, openGame, gameTransmi
 
     useEffect(() => {
         const listenerIds: string[] = [];
+        console.log(`GameBoard`)
         if (transmitter) {
+            console.log({ ...listenerIds })
             listenerIds.push(transmitter.register(LobbyMessageEvents.SIGNED_IN, handleSignedIn));
             listenerIds.push(transmitter.register(LobbyMessageEvents.SHOW_DATA, handleShowData));
             transmitter.signedIn && getLobbyData(socket, gameSettings.id);
         }
+
+
         return () => {
             listenerIds.forEach((listenerId) => transmitter?.unsubscribe(listenerId));
         };
     }, [transmitter]);
 
     const handleSignedIn = ({ signedIn }) => {
+        console.log(`GameBoard handleSignedIn : ${gameSettings.id} `)
         signedIn && getLobbyData(socket, gameSettings.id);
     };
 

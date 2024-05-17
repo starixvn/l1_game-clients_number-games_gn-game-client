@@ -3,6 +3,7 @@ import Router from "next/router";
 import { createContext, useContext } from "react";
 import { AnalyticsHelper, StorageHelper, localStorageKeys } from "../helpers";
 import { GameUtils } from "../helpers/base-64-helper";
+import { GlobalMessageTransmitter } from "../helpers/message-transmitter/global-transmitter";
 
 export type URLContextModel = {
     token?: string;
@@ -31,13 +32,18 @@ export function parseContextFromURL(): URLContextModel | undefined {
 
 export function loadURLContext(): URLContextModel {
     const contextFromURL = parseContextFromURL();
-    const contextFromLocalStorage = StorageHelper?.get(localStorageKeys.url) || null;
+    let contextFromLocalStorage = {};
+    if (typeof window !== 'undefined') {
+        contextFromLocalStorage = JSON.parse(localStorage.getItem("urlContext"));
+    }
 
     if (!!contextFromURL) {
         const contextString = { ...contextFromURL, token: undefined };
 
         globalThis.history.pushState(null, "", globalThis.location?.href.split("?")[0]);
-        StorageHelper?.set(localStorageKeys.url, contextString);
+        if (typeof window !== 'undefined') {
+            localStorage.setItem("urlContext", JSON.stringify(contextString));
+        }
         AnalyticsHelper?.login(contextFromURL);
     }
 
@@ -51,7 +57,8 @@ export const initialURLContextData = {
             globalThis.location.href = GameUtils.base64Decode(redirectUrl);
         } else {
             updateURLContext({ backToLobby: true });
-            Router.push("/", null, { shallow: true });
+            GlobalMessageTransmitter.broadcast({ updateGameIdDashboard: {} });
+            // Router.push("/", null, { shallow: true });
         }
     },
 };
@@ -61,11 +68,19 @@ export const URLContext = createContext<URLContextModel>(initialURLContextData);
 export const useURLContext = () => useContext(URLContext);
 
 export function updateURLContext(context: Partial<URLContextModel>) {
-    const contextFromLocalStorage = StorageHelper.get<URLContextModel>(localStorageKeys.url) || {};
+    if (typeof window !== 'undefined') {
+        const contextFromLocalStorage = JSON.parse(localStorage.getItem("urlContext"));
 
-    StorageHelper.set(localStorageKeys.url, { ...contextFromLocalStorage, ...context });
+        localStorage.setItem("urlContext", JSON.stringify({ ...contextFromLocalStorage, ...context }));
+
+
+        // StorageHelper.set("urlContext", { ...contextFromLocalStorage, ...context });
+    }
 }
 
 export function getURLContext() {
-    return StorageHelper.get<URLContextModel>(localStorageKeys.url) || {};
+    if (typeof window !== 'undefined') {
+        return JSON.parse(localStorage.getItem("urlContext"));
+    }
+    return {};
 }

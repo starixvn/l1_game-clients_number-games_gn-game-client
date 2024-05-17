@@ -36,6 +36,9 @@ export class LobbySocketConnection {
     offerGameIds: number[] = [];
     initLobbySocket(session: any, offerGameIds: number[]) {
         this.offerGameIds = offerGameIds;
+        console.log(`initLobbySocket initLobbySocket initLobbySocket`)
+        console.log([...offerGameIds]);
+
         const { proxy, enableMsgpackParser, socketGatewayPath } = getAppSettings();
         const socketUri = buildUrl();
         const socketOption = {
@@ -50,6 +53,9 @@ export class LobbySocketConnection {
             if (socket) {
                 socket.on(messageEventType.SOCKET_CONNECTED, () => {
                     this.offerGameIds?.forEach((gameId) => {
+
+
+                        this.signInGame(session, gameId);
                         this.initGameTransmitter(gameId);
                     });
                     resolve(socket);
@@ -71,7 +77,9 @@ export class LobbySocketConnection {
     initGameTransmitter(gameId: number) {
         const { gameSettings } = getAppSettings();
         const gameSetting = gameSettings[gameId];
+        console.log(`messageEventType.SOCKET_CONNECTED: ${gameId}`)
         if (gameSetting) {
+
             this.gameTransmitters[gameId] = initLobbyGameTransmitter(this.socket, gameSetting.gameName);
             !this.offerGameIds.includes(gameId) && this.offerGameIds.push(gameId);
             this.registerGameEvents(gameId);
@@ -80,6 +88,7 @@ export class LobbySocketConnection {
     }
 
     signInGame(session: any, gameId: number) {
+        console.log(`signInGame: ${gameId}`)
         if (!this.socket || !session) {
             return;
         }
@@ -88,6 +97,7 @@ export class LobbySocketConnection {
         if (gameSetting) {
             const serviceName = gameSetting.socketInfo?.serviceName;
             const appMini = 3;
+            console.log(`signInGame gameSetting: ${gameId}`)
             this.socket.emit("signIn", {
                 gameName: gameSetting.gameName,
                 session: { ...session, system: appMini },
@@ -132,7 +142,10 @@ export class LobbySocketConnection {
     }
 
     private clearAllGameTransmitters() {
+        console.log(`clearAllGameTransmitters`)
+
         Object.values(this.gameTransmitters)?.forEach((transmitter) => {
+            console.log({ ...transmitter })
             transmitter?.clearAllListener();
         });
         this.gameTransmitters = {};
