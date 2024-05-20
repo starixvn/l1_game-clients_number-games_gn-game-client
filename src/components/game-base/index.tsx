@@ -338,7 +338,9 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     };
 
     loadQuickBetSetting() {
-        const isEnableQuickBet = (this.context as PlayerContextModel).authorizeInfo?.user?.settings.quickBet;
+        const { authorizeInfo, enableQuickBet } = (this.context as PlayerContextModel);
+        const isEnableQuickBet = authorizeInfo?.user?.settings.quickBet || enableQuickBet;
+
         this.props.systemDispatch({
             type: SystemEventActionType.SET_QUICK_BET,
             payload: {
@@ -528,7 +530,8 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     placeBet(betChoice: string, amount: number) {
-        const enabledQuickBet = (this.context as PlayerContextModel).authorizeInfo?.user?.settings?.quickBet;
+        const { authorizeInfo, enableQuickBet } = (this.context as PlayerContextModel);
+        const enabledQuickBet = authorizeInfo?.user?.settings.quickBet || enableQuickBet;
 
         this.placeBetHandler.placeBet(betChoice, amount, enabledQuickBet, this.props.gameStateContextModel, this.props.systemContextModel);
     }

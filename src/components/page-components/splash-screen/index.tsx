@@ -137,31 +137,41 @@ const SplashScreen: React.FC = () => {
                 return;
             }
 
+
             setCurrentSession(session);
             setLocale(getLocaleFromSession(session, language));
             authorizeInfo = await authorize(session);
+
             if (authorizeInfo.errorCode === "SB0002") {
                 signOut();
                 return;
             }
 
+
             if (!authorizeInfo?.authorized && isDirectMode) {
                 authorizeInfo = await autoCreateNickname(session, signOut);
             }
+
+
 
             if (!authorizeInfo?.authorized) {
                 setIsRenderRegisterPage(true);
                 return;
             }
 
+
             setCurrentGameId(gameId);
 
             const lobby = await getLobbyConfigs(session);
+
+
             if (lobby?.lobbyConfigs) {
                 setLobbyConfigs(lobby?.lobbyConfigs);
                 handleBannerOffer(authorizeInfo, lobby.lobbyConfigs, setBannerId);
                 getAndHandleGameOfferIds(authorizeInfo, lobby.lobbyConfigs, setGameOfferIds);
             }
+
+
             authorizeInfo && setAuthorizeResponse(authorizeInfo);
         };
 

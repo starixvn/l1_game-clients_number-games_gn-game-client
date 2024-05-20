@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 
 import { confirmBet } from "../../../_shared/constants";
-import { useGameActionContext, usePlayerContext } from "../../../_shared/react-contexts";
+import { PlayerContextModel, useGameActionContext, usePlayerContext } from "../../../_shared/react-contexts";
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import { useClickSound, useSNTranslate } from "../../../_shared/react-hooks";
@@ -11,12 +11,13 @@ const ConfirmBet: React.FC = () => {
     const dispatch = useGameStatesDispatch();
     const gameActionContext = useGameActionContext();
     const gameStateContext = useGameStateContext();
-    const enabledQuickBet = usePlayerContext().authorizeInfo.user.settings.quickBet;
+    const { authorizeInfo, enableQuickBet } = (usePlayerContext() as PlayerContextModel);
+    const enabledQuickBet = authorizeInfo?.user?.settings.quickBet || enableQuickBet;
     const clickSound = useClickSound();
     const { t } = useSNTranslate();
 
     useEffect(() => {
-        return () => {};
+        return () => { };
     }, []);
 
     const onCancel = () => {

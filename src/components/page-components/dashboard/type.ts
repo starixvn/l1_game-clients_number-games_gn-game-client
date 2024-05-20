@@ -35,7 +35,6 @@ export type State = {
     isLandscapeMode: boolean;
     isChangedGame: boolean;
     isChangePrevGame: boolean;
-    isQuickBet: boolean;
 };
 
 export type GameOffer = {

@@ -73,7 +73,6 @@ class Dashboard extends React.PureComponent<Props, State> {
             isLandscapeMode: false,
             isChangedGame: false,
             isChangePrevGame: false,
-            isQuickBet: true,
         };
 
         this.lobbyConnectionHandler = new LobbySocketConnection();
@@ -107,14 +106,8 @@ class Dashboard extends React.PureComponent<Props, State> {
     }
 
     updateAuthorizeInfo(authorizeInfo: AuthorizeResponse) {
-
-        const clonedAuthorizeInfo = { ...authorizeInfo };
-        if (authorizeInfo?.authorized) {
-            clonedAuthorizeInfo.user.settings = { ...clonedAuthorizeInfo.user.settings, quickBet: true };
-        }
-
-        this.checkOfferedGame(clonedAuthorizeInfo);
-        this.setState({ authorizeInfo: clonedAuthorizeInfo });
+        this.checkOfferedGame(authorizeInfo);
+        this.setState({ authorizeInfo });
     }
 
 
@@ -257,7 +250,6 @@ class Dashboard extends React.PureComponent<Props, State> {
     }
 
     connectLobbySocket = async (authorizeInfo: AuthorizeResponse, lobbyConfigs: ILobbyConfigs) => {
-
         const { gameId } = loadURLContext();
         const offerGamesIds = getOfferGamesIds(authorizeInfo)?.filter((id) => id !== gameId);
         const { gameSettings } = getAppSettings();
@@ -415,6 +407,7 @@ class Dashboard extends React.PureComponent<Props, State> {
             session: this.props.session,
             signOut: this.signOut,
             fractionalOddsFormat: authorizeInfo.user?.fractionalOddsFormat ?? false,
+            enableQuickBet: true
         };
 
         const offerGames = getOfferGamesIds(authorizeInfo);

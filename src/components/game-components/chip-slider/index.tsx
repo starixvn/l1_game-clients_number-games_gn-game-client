@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Slider from "react-slick";
 import {
+    PlayerContextModel,
     SystemEventActionType,
     usePlayerContext,
     useSettingContext,
@@ -19,7 +20,8 @@ let isSwipe = true;
 export const ChipSlider: React.FC<{ gameConfigs: GameConfigs; userStakeLevel: UserStakeLevel }> = ({ gameConfigs, userStakeLevel }) => {
     const systemContext = useSystemContext();
     const dispatch = useSystemDispatch();
-    const enabledQuickBet = usePlayerContext().authorizeInfo?.user?.settings?.quickBet;
+    const { authorizeInfo, enableQuickBet } = (usePlayerContext() as PlayerContextModel);
+    const enabledQuickBet = authorizeInfo?.user?.settings.quickBet || enableQuickBet;
     const { selectedChip } = systemContext;
     const [enabledPrevBtn, setEnabledPrevBtn] = useState(false);
     const [enabledNextBtn, setEnabledNextBtn] = useState(true);

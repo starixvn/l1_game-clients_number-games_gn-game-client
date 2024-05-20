@@ -8,9 +8,13 @@ export type PlayerContextModel = {
     locale?: string;
     signOut?: () => void;
     fractionalOddsFormat?: boolean;
+    enableQuickBet: boolean
 };
 
-export const PlayerContext = React.createContext<PlayerContextModel>({ locale: locales.vi });
+export const PlayerContext = React.createContext<PlayerContextModel>({
+    locale: locales.vi,
+    enableQuickBet: true
+});
 PlayerContext.displayName = "AuthContext";
 
 export const PlayerContextProvider = PlayerContext.Provider;
