@@ -163,7 +163,7 @@ class SeBall extends GameBase<GameBaseProps> {
     }
 
     renderRoundIdSection(): JSX.Element {
-        return <DrawIdBlock />;
+        return <DrawIdBlock showRoundId={true} />;
     }
 }
 
