@@ -8,6 +8,8 @@ import { SettingEventActionType, usePlayerContext, useSettingDispatch } from "..
 import { useClickSound } from "../../../../_shared/react-hooks";
 import { MAX_AVATAR_ID } from "../../dashboard/register/avatar-gallery";
 import Styles from "./user-info.module.scss";
+import { GlobalTransmitterEvent, registerGlobalMessageEvent, unsubscribeGlobalMessageEvent } from "../../../../_shared/helpers/message-transmitter/global-transmitter";
+import { User } from "sc-user-service-client/dist/auth";
 
 export const UserInfo: React.FC<{
     customizeClass?: string;
@@ -17,7 +19,8 @@ export const UserInfo: React.FC<{
     const [classCursor, setClassCursor] = useState<string>();
     const settingDispatch = useSettingDispatch();
     const { authorizeInfo } = usePlayerContext();
-    const user = authorizeInfo.user;
+    const [userInfo, setUserInfo] = useState<User>(authorizeInfo?.user);
+
     let deviceClass = "";
     if (isMobileOnly) {
         deviceClass = isIOS ? Styles["ios-device"] : Styles["android-device"];
@@ -35,6 +38,19 @@ export const UserInfo: React.FC<{
     };
 
     useEffect(() => {
+        const userInfoRedHandlerId = registerGlobalMessageEvent(GlobalTransmitterEvent.USER_INFO_RED, ({ userInfoRed }) => {
+            setUserInfo({
+                ...userInfo,
+                red: userInfoRed
+            });
+        });
+
+        return () => {
+            unsubscribeGlobalMessageEvent(userInfoRedHandlerId as any);
+        }
+    }, []);
+
+    useEffect(() => {
         if (isLobby) {
             setClassCursor(Styles["user-cursor"]);
         } else {
@@ -45,16 +61,16 @@ export const UserInfo: React.FC<{
     return (
         <div className={`${Styles["user"]} ${customizeClass ? Styles[customizeClass] : ""} ${deviceClass}`}>
             <div className={Styles["info"]}>
-                <UserName name={user?.name || ""} />
+                <UserName name={userInfo?.name || ""} />
                 <div className={`${Styles.balance}`} data-testid="balance">
                     <span id="user-info_balance" className={Styles["balance-text"]}>
-                        <UserAmount amount={user?.red || 0} />
-                        <UserCurrency currency={user.currency} isDisplayPlayerCurrency={user.isDisplayPlayerCurrency} />
+                        <UserAmount amount={userInfo?.red || 0} />
+                        <UserCurrency currency={userInfo.currency} isDisplayPlayerCurrency={userInfo.isDisplayPlayerCurrency} />
                     </span>
                     <Image className="img-fluid" src={`/static/images/icons/icon-coin.svg`} width={10} height={11} alt={`icon-coin`} />
                 </div>
             </div>
-            <UserAvatar avatarId={user?.avatarId} classCursor={classCursor} handleClickAvatar={handleClickAvatar} />
+            <UserAvatar avatarId={userInfo?.avatarId} classCursor={classCursor} handleClickAvatar={handleClickAvatar} />
         </div>
     );
 };

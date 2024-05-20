@@ -22,7 +22,6 @@ import {
     PlayerContextProvider,
     SettingContextProvider,
     updateURLContext,
-    URLContextModel,
 } from "../../../_shared/react-contexts";
 
 import { LobbyConfigs, LobbyResponse } from "sc-user-service-client/dist/lobby";
@@ -40,7 +39,7 @@ import { LobbySocketConnection } from "../lobby/lobby-socket-connection";
 import ButtonSwipe from "./button-swipe";
 import Styles from "./dashboard.module.scss";
 import { ILobbyConfigs, Props, State } from "./type";
-import { registerGlobalMessageEvent, unsubscribeGlobalMessageEvent } from "../../../_shared/helpers/message-transmitter/global-transmitter";
+import { GlobalMessageTransmitter, GlobalTransmitterEvent, registerGlobalMessageEvent, unsubscribeGlobalMessageEvent } from "../../../_shared/helpers/message-transmitter/global-transmitter";
 
 const Games = dynamic(() => import("../../../games/games"));
 const BaseDialog = dynamic(() => import("../../game-components/base-dialog"));
@@ -74,6 +73,8 @@ class Dashboard extends React.PureComponent<Props, State> {
             isLandscapeMode: false,
             isChangedGame: false,
             isChangePrevGame: false,
+            isQuickBet: true,
+            avatarId: 0
         };
 
         this.lobbyConnectionHandler = new LobbySocketConnection();
@@ -83,7 +84,6 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.closeDialog = this.closeDialog.bind(this);
         this.handleReload = this.handleReload.bind(this);
         this.updateAuthorizeInfo = this.updateAuthorizeInfo.bind(this);
-        this.updateUserBalance = this.updateUserBalance.bind(this);
         this.handleShowApiErrorMessage = this.handleShowApiErrorMessage.bind(this);
         this.handleUpdateUserStakeLevel = this.handleUpdateUserStakeLevel.bind(this);
         this.signOut = this.signOut.bind(this);
@@ -109,6 +109,7 @@ class Dashboard extends React.PureComponent<Props, State> {
     }
 
     updateAuthorizeInfo(authorizeInfo: AuthorizeResponse) {
+
         const clonedAuthorizeInfo = { ...authorizeInfo };
         if (authorizeInfo?.authorized) {
             clonedAuthorizeInfo.user.settings = { ...clonedAuthorizeInfo.user.settings, quickBet: true };
@@ -118,14 +119,6 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.setState({ authorizeInfo: clonedAuthorizeInfo });
     }
 
-    updateUserBalance(balance: number) {
-        const authorizeInfo = { ...this.state.authorizeInfo };
-        if (authorizeInfo && authorizeInfo.authorized && authorizeInfo.user.red !== balance) {
-            authorizeInfo.user.settings.quickBet = true;
-            authorizeInfo.user.red = balance;
-            this.setState({ authorizeInfo });
-        }
-    }
 
     updateAvatar(avatarId: number) {
         const authorizeInfo = { ...this.state.authorizeInfo };
@@ -167,7 +160,7 @@ class Dashboard extends React.PureComponent<Props, State> {
         } else if (response.apiError) {
             this.handleShowApiErrorMessage(response.apiError.errorCode, response.isDisableAccount);
         } else {
-            this.updateUserBalance(response.balance);
+            GlobalMessageTransmitter.broadcast({ [GlobalTransmitterEvent.USER_INFO_RED]: response.balance });
         }
     }
 
@@ -189,12 +182,11 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.setState({ openGameId: 0 });
         console.log("updateGameIdDashboard");
         console.log({ ...this.state.lobbyConfigs });
-        // await this.connectLobbySocket(this.state.authorizeInfo, this.state.lobbyConfigs);
     }
 
     async componentDidMount() {
         if (typeof window === "undefined") {
-            return;
+            return; ``
         }
 
         document.addEventListener("visibilitychange", this.onVisibilityChange);
@@ -206,7 +198,10 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.updateGameIdDashboardId = registerGlobalMessageEvent("updateGameIdDashboard", async () => this.updateGameIdDashboardEvent());
 
         await this.connectLobbySocket(authorizeResponse, lobbyConfigs);
-        this.updateUserBalance(authorizeResponse?.user?.red);
+
+        GlobalMessageTransmitter.broadcast({ [GlobalTransmitterEvent.USER_INFO_RED]: authorizeResponse?.user?.red });
+        // this.updateUserBalance(authorizeResponse?.user?.red);
+
         this.updateAuthorizeInfo(authorizeResponse);
 
         this.reCheckInInterval = setInterval(async () => {
@@ -426,7 +421,7 @@ class Dashboard extends React.PureComponent<Props, State> {
         const authContextValue = {
             authorizeInfo: authorizeInfo,
             session: this.props.session,
-            setBalance: this.updateUserBalance,
+            // setBalance: this.updateUserBalance,
             signOut: this.signOut,
             fractionalOddsFormat: authorizeInfo.user?.fractionalOddsFormat ?? false,
             updateAvatar: this.updateAvatar,

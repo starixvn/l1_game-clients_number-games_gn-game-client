@@ -6,7 +6,7 @@ import { Socket } from "socket.io-client";
 import { SwiperNoSwiping } from "../../_shared/constants";
 import { InitSocketIO, localStorageKeys, StorageHelper, writeDebugLog } from "../../_shared/helpers";
 import { AnalyticsHelper } from "../../_shared/helpers/analytic-helper";
-import { GlobalMessageTransmitter } from "../../_shared/helpers/message-transmitter/global-transmitter";
+import { GlobalMessageTransmitter, GlobalTransmitterEvent } from "../../_shared/helpers/message-transmitter/global-transmitter";
 import {
     GameActionsContextProvider,
     GameContextProvider,
@@ -520,7 +520,8 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         const authContext = this.context as PlayerContextModel;
         const balanceResponse = await getBalance(authContext?.session);
         if (balanceResponse.isSuccessful) {
-            authContext?.setBalance(balanceResponse.balance);
+            GlobalMessageTransmitter.broadcast({ [GlobalTransmitterEvent.USER_INFO_RED]: balanceResponse.balance });
+            // authContext?.setBalance(balanceResponse.balance);
         } else {
             this.props.setApiErrorMessage(balanceResponse.errorCode);
         }

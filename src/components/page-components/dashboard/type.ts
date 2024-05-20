@@ -35,6 +35,9 @@ export type State = {
     isLandscapeMode: boolean;
     isChangedGame: boolean;
     isChangePrevGame: boolean;
+    // balance: number;
+    isQuickBet: boolean;
+    avatarId: number;
 };
 
 export type GameOffer = {
