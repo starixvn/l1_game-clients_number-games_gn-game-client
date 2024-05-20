@@ -6,7 +6,8 @@ export enum GlobalTransmitterEvent {
     BACK_TO_LOBBY = "backToLobby",
     OPEN_GAME_ID = "openingGameId",
     NOTICE = "notice",
-    USER_INFO_RED = "userInfoRed"
+    USER_INFO_RED = "userInfoRed",
+    CHANGE_AVATAR_ID = "avatarId"
 }
 
 export const registerGlobalMessageEvent = (messageKey: string, handler: Function) => {

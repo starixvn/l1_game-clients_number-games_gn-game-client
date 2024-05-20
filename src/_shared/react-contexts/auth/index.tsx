@@ -6,10 +6,8 @@ export type PlayerContextModel = {
     authorizeInfo?: AuthorizeResponse;
     session?: SSOResponse;
     locale?: string;
-    // setBalance?: (balance: number) => void;
     signOut?: () => void;
     fractionalOddsFormat?: boolean;
-    updateAvatar?: (avatarId: number) => void;
 };
 
 export const PlayerContext = React.createContext<PlayerContextModel>({ locale: locales.vi });

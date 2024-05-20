@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/nextjs";
 import { useEffect, useState } from "react";
 import { SettingEventActionType, usePlayerContext, useSettingContext, useSettingDispatch } from "../../../../_shared/react-contexts";
 import { useClickSound } from "../../../../_shared/react-hooks";
@@ -5,12 +6,13 @@ import { updateUserAvatar } from "../../../../services/user-setting-service";
 import { AvatarGallery } from "../../dashboard/register/avatar-gallery";
 import Styles from "./index.module.scss";
 import { AnalyticsHelper, TrackingAction, TrackingFunction } from "../../../../_shared/helpers";
+import { GlobalMessageTransmitter, GlobalTransmitterEvent } from "../../../../_shared/helpers/message-transmitter/global-transmitter";
 
 const ChangeAvatar: React.FC = () => {
     const settingContext = useSettingContext();
     const settingDispatch = useSettingDispatch();
     const clickSound = useClickSound();
-    const { session, authorizeInfo, updateAvatar } = usePlayerContext();
+    const { session, authorizeInfo } = usePlayerContext();
     const { user } = authorizeInfo;
     const [avatarId, setAvatarId] = useState<number>();
 
@@ -32,9 +34,15 @@ const ChangeAvatar: React.FC = () => {
 
     const handleSelectAvatar = async (avatarId: number) => {
         setAvatarId(avatarId);
-        await updateUserAvatar(session, avatarId);
-        updateAvatar(avatarId);
         AnalyticsHelper.trackFunction({ function: TrackingFunction.Avatar, action: TrackingAction.Change });
+        const result = await updateUserAvatar(session, avatarId);
+
+        if (result["ok"] === 1) { // TO DO: define Result type
+            GlobalMessageTransmitter.broadcast({ [GlobalTransmitterEvent.CHANGE_AVATAR_ID]: avatarId });
+        }
+        else {
+            Sentry.captureException(result);
+        }
     };
 
     return (

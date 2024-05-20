@@ -74,7 +74,6 @@ class Dashboard extends React.PureComponent<Props, State> {
             isChangedGame: false,
             isChangePrevGame: false,
             isQuickBet: true,
-            avatarId: 0
         };
 
         this.lobbyConnectionHandler = new LobbySocketConnection();
@@ -95,7 +94,6 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.openGameFromLobby = this.openGameFromLobby.bind(this);
         this.removeGameTransmitter = this.removeGameTransmitter.bind(this);
         this.reconnectGameTransmitter = this.reconnectGameTransmitter.bind(this);
-        this.updateAvatar = this.updateAvatar.bind(this);
         this.getLobbyGamesIds = this.getLobbyGamesIds.bind(this);
         this.changeOrientation = this.changeOrientation.bind(this);
         this.updateGameIdDashboardEvent = this.updateGameIdDashboardEvent.bind(this);
@@ -119,12 +117,6 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.setState({ authorizeInfo: clonedAuthorizeInfo });
     }
 
-
-    updateAvatar(avatarId: number) {
-        const authorizeInfo = { ...this.state.authorizeInfo };
-        authorizeInfo.user.avatarId = avatarId;
-        this.setState({ authorizeInfo });
-    }
 
     handleShowApiErrorMessage(errorCode: string, isDisableAccount = false) {
         if (isDisableAccount || isKickOutError(errorCode)) {
@@ -421,10 +413,8 @@ class Dashboard extends React.PureComponent<Props, State> {
         const authContextValue = {
             authorizeInfo: authorizeInfo,
             session: this.props.session,
-            // setBalance: this.updateUserBalance,
             signOut: this.signOut,
             fractionalOddsFormat: authorizeInfo.user?.fractionalOddsFormat ?? false,
-            updateAvatar: this.updateAvatar,
         };
 
         const offerGames = getOfferGamesIds(authorizeInfo);
