@@ -20,7 +20,6 @@ jest.mock("../../../../_shared/react-contexts/game-state-context/pf/pf-context",
     usePFDispatch: jest.fn(),
 }));
 
-
 jest.mock("../../../../_shared/react-hooks", () => ({
     useClickSound: jest.fn(),
     useCommonTranslate: jest.fn().mockReturnValue({ t: (key: string) => key }),
@@ -45,7 +44,13 @@ describe(BetDetailBase.name, () => {
                 mockUseGameStateContext.mockReturnValue(state);
                 const renderBetDetailResultBlock = jest.fn();
 
-                render(<BetDetailBase renderBetDetailResultBlock={renderBetDetailResultBlock} produceDataBetDetailRow={jest.fn()} />);
+                render(
+                    <BetDetailBase
+                        isTurnBase={true}
+                        renderBetDetailResultBlock={renderBetDetailResultBlock}
+                        produceDataBetDetailRow={jest.fn()}
+                    />
+                );
 
                 expect(renderBetDetailResultBlock).toHaveBeenCalled();
             });
@@ -61,7 +66,13 @@ describe(BetDetailBase.name, () => {
                 mockUseGameStateContext.mockReturnValue(state);
                 const renderBetDetailResultBlock = jest.fn();
 
-                render(<BetDetailBase renderBetDetailResultBlock={renderBetDetailResultBlock} produceDataBetDetailRow={jest.fn()} />);
+                render(
+                    <BetDetailBase
+                        isTurnBase={true}
+                        renderBetDetailResultBlock={renderBetDetailResultBlock}
+                        produceDataBetDetailRow={jest.fn()}
+                    />
+                );
 
                 expect(renderBetDetailResultBlock).toHaveBeenCalledTimes(0);
             });
@@ -88,6 +99,7 @@ describe(BetDetailBase.name, () => {
 
                     render(
                         <BetDetailBase
+                            isTurnBase={true}
                             renderBetDetailResultBlock={jest.fn()}
                             produceDataBetDetailRow={produceDataBetDetailRow}
                             renderBetChoice={doNothing}
@@ -117,6 +129,7 @@ describe(BetDetailBase.name, () => {
 
                     render(
                         <BetDetailBase
+                            isTurnBase={true}
                             renderBetDetailResultBlock={jest.fn()}
                             produceDataBetDetailRow={produceDataBetDetailRow}
                             renderBetChoice={doNothing}
@@ -143,7 +156,13 @@ describe(BetDetailBase.name, () => {
             mockSound.mockReturnValue(clickSound);
             const renderBetDetailResultBlock = jest.fn();
 
-            render(<BetDetailBase renderBetDetailResultBlock={renderBetDetailResultBlock} produceDataBetDetailRow={jest.fn()} />);
+            render(
+                <BetDetailBase
+                    isTurnBase={true}
+                    renderBetDetailResultBlock={renderBetDetailResultBlock}
+                    produceDataBetDetailRow={jest.fn()}
+                />
+            );
 
             const button = screen.getAllByRole("button")[0];
             fireEvent.click(button);
