@@ -4,14 +4,14 @@ export const finalHashToNumbers = (finalHash: string, index: number) => {
 
 export default class PfRoundBaseHelper {
     static buildRemainingBalls({ ballIndexes, totalBalls }) {
-        let results: number[] = [];
+        const results: number[] = [];
         let balls = Array.from(Array(totalBalls), (_, index) => index + 1);
-        let remainingBalls = [balls];
+        const remainingBalls = [balls];
 
         ballIndexes.forEach((index: number) => {
             const result = balls[index - 1];
             results.push(result);
-            balls = balls.filter(ballValue => ballValue !== result);
+            balls = balls.filter((ballValue) => ballValue !== result);
             remainingBalls.push(balls);
         });
 
@@ -30,7 +30,7 @@ export default class PfRoundBaseHelper {
             rawDigits,
             convertNumber,
             ballIndexes,
-            ...this.buildRemainingBalls({ ballIndexes, totalBalls })
+            ...this.buildRemainingBalls({ ballIndexes, totalBalls }),
         };
     }
 }

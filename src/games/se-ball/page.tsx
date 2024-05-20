@@ -34,7 +34,7 @@ export type SeBallState = {
 
 class SeBall extends GameBase<GameBaseProps> {
     state: SeBallState = { statisticGroup: 0 };
-    private turnIdHandler?: TurnIdHandler;
+    private readonly turnIdHandler?: TurnIdHandler;
     constructor(props: GameBaseProps) {
         const gameMessageHandler = new GameMessageHandler(props.dispatch);
         const gameBaseHandlers: GameBaseHandlers = {

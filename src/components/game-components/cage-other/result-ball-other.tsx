@@ -65,8 +65,7 @@ const BallRotation: React.FC<{
     const [showBall, setShowBall] = useState(false);
 
     useEffect(() => {
-        let timeOut: NodeJS.Timeout;
-        timeOut = setTimeout(() => {
+        const timeOut = setTimeout(() => {
             setShowBall(true);
             incrementTotalPoint(number, ballPos);
         }, delayTime);

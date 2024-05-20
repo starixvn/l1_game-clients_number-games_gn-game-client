@@ -56,7 +56,7 @@ export const RoundBaseResultSlotContainer: React.FC<IResultSlotContainer> = (pro
         };
 
         const getBallsDataFromRoundData = () => {
-            let clonedData = cloneDefaultData();
+            const clonedData = cloneDefaultData();
             if (roundResult && roundResult?.length > 0) {
                 for (let i = 0; i < clonedData.length; i++) {
                     const number = roundResult[i];

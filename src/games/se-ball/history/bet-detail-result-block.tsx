@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { useGameContext } from "../../../_shared/react-contexts";
-import { useCommonTranslate, useSNTranslate, useTranslator } from "../../../_shared/react-hooks";
+import { useCommonTranslate, useTranslator } from "../../../_shared/react-hooks";
 import Styles from "./history.module.scss";
 import SmallBall from "../../../components/game-components/small-ball";
 import { DrawInfo, PFResult } from "../../../components/game-base/type";
@@ -43,12 +43,10 @@ export const BetDetailResultBlock: FC<{ roundInfo: RoundInfoSeBall }> = ({ round
                 {translateCommon("round").capitalizeFirstLetter()}: <span>{drawId}</span>
             </div>
             <div className={Styles["info-item"]}>
-                {
-                    result.balls.map((ball, index) => {
-                        totalPoint += ball;
-                        return <SmallBall key={index} number={ball} />
-                    })
-                }
+                {result.balls.map((ball, index) => {
+                    totalPoint += ball;
+                    return <SmallBall key={index} number={ball} />;
+                })}
                 <div className={Styles["bet-detail-total"]}> - {totalPoint}</div>
             </div>
         </div>
@@ -76,9 +74,13 @@ export const BetChoice: FC<{ choice: string }> = ({ choice }) => {
     const { tolgeeNamespace } = useGameContext();
     const { t: translateSeBall } = useTranslator([tolgeeNamespace]);
 
-    return <span className="font-text">{
-        choice === SeBallBetOptions.ODD || choice === SeBallBetOptions.EVEN ?
-            translateSeBall(`glossary_${choice}`) :
-            <img src={`/static/images/se-ball/bet-detail-${choice}.svg`} alt="" />}
-    </span>;
+    return (
+        <span className="font-text">
+            {choice === SeBallBetOptions.ODD || choice === SeBallBetOptions.EVEN ? (
+                translateSeBall(`glossary_${choice}`)
+            ) : (
+                <img src={`/static/images/se-ball/bet-detail-${choice}.svg`} alt="" />
+            )}
+        </span>
+    );
 };

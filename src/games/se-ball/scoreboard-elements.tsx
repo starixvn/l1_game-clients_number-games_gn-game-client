@@ -23,6 +23,7 @@ export function createBeadRoadElement(isOddEven: boolean = ODD_EVEN_AS_DEFAULT_S
             } else if (round.settlementResult.even) {
                 return <span className={styles[SeBallBetOptions.EVEN]}>{character(SeBallBetOptions.EVEN)}</span>;
             }
+            return <></>;
         }
 
         render(): ReactNode {
@@ -31,6 +32,7 @@ export function createBeadRoadElement(isOddEven: boolean = ODD_EVEN_AS_DEFAULT_S
             if (round) {
                 return this.renderElement(round, t);
             }
+            return null;
         }
     }
 

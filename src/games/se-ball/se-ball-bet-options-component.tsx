@@ -44,7 +44,7 @@ const SeBallBetOptionsComponent = () => {
     };
 
     const renderBetChoice = (choice: string) => {
-        return <BetChoice choice={choice} className={`${Style[`bet-name-${choice}`]}`} tolgeeNamespace={tolgeeNamespace} />;
+        return <BetChoice choice={choice} className={Style[`bet-name-${choice}`]} tolgeeNamespace={tolgeeNamespace} />;
     };
 
     const renderOdds = (choice: string) => {
@@ -120,16 +120,17 @@ const SeBallBetOptionsComponent = () => {
     };
 
     const renderMainOption = (choice: string) => {
+        const className = Style[`choice-${choice}`];
         return (
             <div className={`${Style[choice]} text-white relative`}>
-                <div className={`${Style["choice-info"]} ${Style[`choice-${choice}`]}`}>
+                <div className={`${Style["choice-info"]} ${className}`}>
                     <div className={Style.stake}>
                         {renderTotalBet(choice, choice === SeBallBetOptions.ODD ? "justify-end" : "")}
                         {renderPlayerBetCount(choice, choice === SeBallBetOptions.ODD ? "justify-end" : "")}
                     </div>
                     {renderBetPercentage(choice)}
                 </div>
-                <div className={`${Style["choice-odds-area"]} ${Style[`${choice}-choice`]}`}>
+                <div className={`${Style["choice-odds-area"]}`}>
                     {renderBetChoice(choice)}
                     {renderOdds(choice)}
                 </div>

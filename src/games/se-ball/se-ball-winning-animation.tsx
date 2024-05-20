@@ -31,7 +31,7 @@ const SeBallWinningAnimation: React.FC<Props> = ({ choice, resourceName, roundSt
         winningHighLightResult({ betChoice: choice, roundState, settlementResult, showResultInfo }) && (
             <div className="d-grid">
                 <Spritesheet
-                    className={`${Styles[`winning-light-anim`]} ${Styles[`anim-${choice}`]}`}
+                    className={`${Styles["winning-light-anim"]} ${Styles["anim-" + choice]}`}
                     image={`/static/images/se-ball/highlight-winning-${resourceName}.png?v=4`}
                     widthFrame={width}
                     isResponsive
@@ -44,7 +44,7 @@ const SeBallWinningAnimation: React.FC<Props> = ({ choice, resourceName, roundSt
                     endAt={29}
                 />
 
-                <div className={`highlight-winning-bg-anim ${Styles[`highlight-winning-bg-${choice}`]}`}></div>
+                <div className={`highlight-winning-bg-anim ${Styles["highlight-winning-bg-" + choice]}`}></div>
             </div>
         )
     );
