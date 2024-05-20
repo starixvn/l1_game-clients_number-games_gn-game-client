@@ -7,7 +7,14 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { getAppSettings } from "../_shared/app-settings";
 import { GameIds, SwiperNoSwiping } from "../_shared/constants";
 import { AnalyticsHelper, TrackingAction, TrackingFunction } from "../_shared/helpers";
-import { SettingEventActionType, SystemContextProvider, URLContext, usePlayerContext, useSettingDispatch } from "../_shared/react-contexts";
+import {
+    SettingEventActionType,
+    SystemContextProvider,
+    URLContext,
+    updateURLContext,
+    usePlayerContext,
+    useSettingDispatch,
+} from "../_shared/react-contexts";
 import { useBlockBetSound, usePlaceBetSound, useStartDrawSound, useStartRoundSound } from "../_shared/react-hooks";
 import { GameSound } from "../components/game-base/type";
 import GameLoading from "../components/game-components/game-loading";
@@ -100,6 +107,8 @@ export const Games: React.FC<Props> = ({
 
     const swiperSlideChild = ({ isActive, gameId }) => {
         if (isActive) {
+            +gameId !== +openGameId && updateURLContext({ gameId });
+
             return getGameComponentById(parseInt(gameId));
         }
 

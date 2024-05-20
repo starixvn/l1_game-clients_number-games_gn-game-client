@@ -120,7 +120,7 @@ class SeBall extends GameBase<GameBaseProps> {
                 Math.round((countResult[SeBallBetOptions.RED4] * 100) / total) || 0,
             [SeBallBetOptions.BLUE4]: (countResult: object, total: number) =>
                 100 -
-                    (Math.round((countResult[SeBallBetOptions.BLUE4] * 100) / total) +
+                    (Math.round((countResult[SeBallBetOptions.BLUE3] * 100) / total) +
                         Math.round((countResult[SeBallBetOptions.RED2] * 100) / total) +
                         Math.round((countResult[SeBallBetOptions.RED3] * 100) / total) +
                         Math.round((countResult[SeBallBetOptions.RED4] * 100) / total)) || 0,
@@ -167,15 +167,15 @@ class SeBall extends GameBase<GameBaseProps> {
     }
 }
 
-const SeBalllWrapper = (props) => {
+const SeBallWrapper = (props) => {
     return (
         <GameStateProvider>
-            <SeBalllFC {...props} />
+            <SeBallFC {...props} />
         </GameStateProvider>
     );
 };
 
-const SeBalllFC = (props) => {
+const SeBallFC = (props) => {
     const tolgeeNamespace = props["tolgeeNamespace"];
     const { t } = useTranslator([tolgeeNamespace]);
 
@@ -195,4 +195,4 @@ const SeBalllFC = (props) => {
     );
 };
 
-export default withRouter(SeBalllWrapper);
+export default withRouter(SeBallWrapper);
