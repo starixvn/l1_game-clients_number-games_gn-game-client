@@ -288,9 +288,8 @@ export class PlaceBetHandler {
         const { gameId } = this.props;
         const gameSettings = Object.values(getAppSettings().gameSettings)?.find((setting) => setting.id === +gameId);
         const totalTurns = gameSettings?.totalTurns;
-        const notice = isStartingRound
-            ? this.getNotice(NoticeErrorCode.cannotBet)
-            : this.getNotice(totalTurns > 1 ? NoticeErrorCode.placeBetNextDraw : NoticeErrorCode.placeBetNextRound);
+        const errorCodeDuringSettlement = totalTurns > 1 ? NoticeErrorCode.placeBetNextDraw : NoticeErrorCode.placeBetNextRound;
+        const notice = isStartingRound ? this.getNotice(NoticeErrorCode.cannotBet) : this.getNotice(errorCodeDuringSettlement);
 
         this.broadcastNotice(notice);
     };
@@ -326,16 +325,24 @@ export class PlaceBetHandler {
             betChoice2 = this.props.translate(getGlossaryTranslate(this.props.tolgeeNamespace, hedgeBetGroup[1]));
         }
 
+        const gameErrorCode = this.isReachRoundMaxBet(errorCode) ? NoticeErrorCode.roundMaxBet : errorCode;
+
         return {
             gameName: this.props.gameName,
-            message: GetLocalizedErrorMessage(errorCode),
+            message: GetLocalizedErrorMessage(gameErrorCode),
             duration: 2,
-            errorCode: errorCode,
+            errorCode: gameErrorCode,
             betChoice1,
             betChoice2,
             ...args,
         };
     };
+
+    private isReachRoundMaxBet(errorCode: string) {
+        const gameSettings = Object.values(getAppSettings().gameSettings)?.find((setting) => setting.id === +this.props.gameId);
+        const totalTurns = gameSettings?.totalTurns;
+        return errorCode === NoticeErrorCode.drawMaxBet && totalTurns === 1;
+    }
 
     protected sendBetMessage(betChoice: string, amount: number) {
         this.isProcessingBet = true;

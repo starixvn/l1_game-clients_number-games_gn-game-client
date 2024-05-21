@@ -15,44 +15,34 @@ type Props = {
 } & BaseProps;
 
 export const Odds: React.FC<Props> = ({ tolgeeNamespace, choice, className, animationDuration, turnCounter, isFormatOddsAuto }) => {
-    const [showOddsIcon, setShowOddsIcon] = useState(false);
-    const [isOddUp, setIsOddUp] = useState(false);
+    const [showOddsIcon, setShowOddsIcon] = useState("");
+    const [classOddsIcon, setClassOddsIcon] = useState("");
     const [oddsValue, setOddsValue] = useState(0);
     const { gameConfigs, roundState } = useGameStateContext();
     const { fractionalOddsFormat } = usePlayerContext();
     const odds = isFormatOddsAuto ? formatOdds(oddsValue, fractionalOddsFormat, 1) : formatOdds(oddsValue, fractionalOddsFormat);
 
     useEffect(() => {
-        const odds = gameConfigs?.odds?.[choice] ?? 0;
-        oddsValue === 0 && setOddsValue(odds);
+        const currentOdds = gameConfigs?.odds?.[choice] ?? 0;
+        oddsValue === 0 && setOddsValue(currentOdds);
         if (roundState === RoundState.InRound) {
             if (turnCounter !== 1) {
-                oddsValue > 0 && oddsValue !== +odds && setShowOddsIcon(true);
-                setIsOddUp(odds > oddsValue);
+                oddsValue > 0 && oddsValue !== +currentOdds && showIcon();
+                setClassOddsIcon(currentOdds > oddsValue ? "up" : "down");
             }
 
-            setOddsValue(odds);
+            setOddsValue(currentOdds);
         }
-    }, [gameConfigs?.odds?.[choice] ?? 0, roundState]);
+    }, [gameConfigs?.odds?.[choice], roundState]);
 
-    useEffect(() => {
-        let timeOut: NodeJS.Timeout;
-
-        if (showOddsIcon) {
-            timeOut = setTimeout(() => {
-                setShowOddsIcon(false);
-            }, animationDuration * 1000);
-        }
-
-        return () => {
-            clearTimeout(timeOut);
-        };
-    }, [showOddsIcon, animationDuration]);
+    const showIcon = () => {
+        setShowOddsIcon(Styles["show-odds-icon"]);
+        setTimeout(() => {
+            setShowOddsIcon("");
+        }, animationDuration * 1000);
+    };
 
     return useMemo(() => {
-        const styleUpOrDown = isOddUp ? Styles["up"] : Styles["down"];
-        const styleShowOddsIcon = showOddsIcon ? Styles["show-odds-icon"] : "";
-
         if (oddsValue <= 0) {
             return null;
         }
@@ -60,7 +50,7 @@ export const Odds: React.FC<Props> = ({ tolgeeNamespace, choice, className, anim
         return (
             <div
                 id={`${tolgeeNamespace}-${choice}-odds`}
-                className={`text-center ${Styles["bet-odds"]} ${className} ${styleUpOrDown} ${styleShowOddsIcon}`}
+                className={`text-center ${Styles["bet-odds"]} ${className} ${Styles[classOddsIcon]} ${showOddsIcon}`}
             >
                 {odds}
             </div>
