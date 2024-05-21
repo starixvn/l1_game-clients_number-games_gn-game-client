@@ -1,17 +1,14 @@
-
-import { loadURLContext, PlayerContextModel } from "../../../../_shared/react-contexts";
-import { getLobbyGameIds, getOfferGamesIds } from "../../../../_shared/helpers";
 import { getAppSettings } from "../../../../_shared/app-settings";
+import { getLobbyGameIds, getOfferGamesIds, localStorageKeys, StorageHelper } from "../../../../_shared/helpers";
+import { GlobalMessageTransmitter, GlobalTransmitterEvent } from "../../../../_shared/helpers/message-transmitter/global-transmitter";
+import { loadURLContext, PlayerContextModel, URLContextModel } from "../../../../_shared/react-contexts";
 import { LobbySocketConnection } from "../../lobby/lobby-socket-connection";
 import { DashboardProps } from "../type";
-import { GlobalMessageTransmitter, GlobalTransmitterEvent } from "../../../../_shared/helpers/message-transmitter/global-transmitter";
 
 export class DashboardHandler {
     public readonly lobbyConnection: LobbySocketConnection;
 
-    constructor(
-        private props: DashboardProps,
-        private signOut: Function) {
+    constructor(private props: DashboardProps, private signOut: Function) {
         this.lobbyConnection = new LobbySocketConnection();
 
         this.connectLobbySocket();
@@ -19,17 +16,16 @@ export class DashboardHandler {
     }
 
     checkIsNotOfferGame() {
-        return this.props.authorizeResponse?.user?.offerGames &&
-            this.props.authorizeResponse?.user?.offerGames.length === 0;
+        return this.props.authorizeResponse?.user?.offerGames && this.props.authorizeResponse?.user?.offerGames.length === 0;
     }
 
     shouldRenderGames = (offerGames: number[], openGameId: number) => {
-        const urlContextModel = JSON.parse(localStorage.getItem("urlContext"));
+        const urlContextModel = StorageHelper.get<URLContextModel>(localStorageKeys.url);
         const backToLobby = urlContextModel.backToLobby || false;
         const ssoRedirectGameId = urlContextModel.gameId || 0;
 
         return (offerGames.includes(openGameId) && !backToLobby) || ssoRedirectGameId > 0;
-    }
+    };
     getLobbyGamesIds = () => {
         const offerGamesIds = getOfferGamesIds(this.props.authorizeResponse);
         return getLobbyGameIds(this.props.lobbyConfigs)?.filter((gameId) => offerGamesIds.includes(gameId));
@@ -37,16 +33,16 @@ export class DashboardHandler {
 
     removeGameTransmitter = (gameId: number) => {
         this.lobbyConnection.unsubscribeGame(gameId);
-    }
+    };
 
     reconnectGameTransmitter = (gameId: number) => {
         this.lobbyConnection.signInGame(this.props.session, gameId);
         return this.lobbyConnection.initGameTransmitter(gameId);
-    }
+    };
 
     getOfferGamesIds = () => {
         return getOfferGamesIds(this.props.authorizeResponse);
-    }
+    };
 
     buildLobbyConnectionContextValue = () => {
         return {
@@ -54,8 +50,8 @@ export class DashboardHandler {
             gameTransmitters: this.lobbyConnection.getTransmitters(),
             removeGameTransmitter: this.removeGameTransmitter,
             reconnectGameTransmitter: this.reconnectGameTransmitter,
-        }
-    }
+        };
+    };
 
     buildAuthContextValue = () => {
         return {
@@ -63,23 +59,25 @@ export class DashboardHandler {
             session: this.props.session,
             signOut: this.signOut,
             fractionalOddsFormat: this.props.authorizeResponse.user?.fractionalOddsFormat ?? false,
-            enableQuickBet: true
+            enableQuickBet: true,
         } as PlayerContextModel;
-    }
+    };
 
     async connectLobbySocket() {
         const { gameId } = loadURLContext();
         const offerGamesIds = getOfferGamesIds(this.props.authorizeResponse)?.filter((id) => id !== gameId);
         const { gameSettings } = getAppSettings();
-        const lobbyGamesIds = getLobbyGameIds(this.props.lobbyConfigs)?.filter((gameId) => offerGamesIds.includes(gameId) && gameSettings[gameId]);
+        const lobbyGamesIds = getLobbyGameIds(this.props.lobbyConfigs)?.filter(
+            (gameId) => offerGamesIds.includes(gameId) && gameSettings[gameId]
+        );
 
         if (lobbyGamesIds?.length === 0) {
-            console.log(`False connectLobbySocket lobbyGamesIds`)
+            console.log(`False connectLobbySocket lobbyGamesIds`);
             return;
         }
 
         await this.lobbyConnection.initLobbySocket(this.props.session, lobbyGamesIds);
-    };
+    }
 
     reset() {
         this.lobbyConnection.closeSocket();

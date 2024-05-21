@@ -4,12 +4,6 @@ import React from "react";
 import { isMobile, isMobileOnly } from "react-device-detect";
 import { GetLocalizedErrorMessage, StorageHelper, localStorageKeys } from "../../../_shared/helpers";
 import {
-    GetLocalizedErrorMessage,
-    localStorageKeys,
-    StorageHelper,
-} from "../../../_shared/helpers";
-import {
-    loadURLContext,
     LobbyConnectionContextProvider,
     PlayerContextProvider,
     SettingContextProvider,
@@ -32,12 +26,10 @@ import Footer from "../../game-components/footer";
 import Header from "../header";
 import Lobby from "../lobby/lobby";
 import ButtonSwipe from "./button-swipe";
-import { DashboardHandler } from "./dash-board-handler";
 import Styles from "./dashboard.module.scss";
-import { DashboardProps, DashboardState } from "./type";
-import { registerGlobalMessageEvent, unsubscribeGlobalMessageEvent } from "../../../_shared/helpers/message-transmitter/global-transmitter";
 import { DashboardHandler } from "./handlers/dash-board-handler";
 import { NotificationHandler } from "./handlers/notification-handler";
+import { DashboardProps, DashboardState } from "./type";
 
 const Games = dynamic(() => import("../../../games/games"));
 const BaseDialog = dynamic(() => import("../../game-components/base-dialog"));
@@ -54,7 +46,8 @@ class Dashboard extends React.PureComponent<DashboardProps, DashboardState> {
         props: DashboardProps,
         state: DashboardState,
         dashboardHandler: DashboardHandler = null,
-        notificationHandler: NotificationHandler = null) {
+        notificationHandler: NotificationHandler = null
+    ) {
         super(props);
 
         this.state = {
@@ -91,11 +84,8 @@ class Dashboard extends React.PureComponent<DashboardProps, DashboardState> {
 
         this.dashboardHandler = dashboardHandler ?? new DashboardHandler(this.props, this.signOut);
 
-        this.notificationHandler = notificationHandler ?? new NotificationHandler(
-            this.props.session,
-            this.props.setIsUm,
-            this.showApiErrorMessage,
-            this.signOut);
+        this.notificationHandler =
+            notificationHandler ?? new NotificationHandler(this.props.session, this.props.setIsUm, this.showApiErrorMessage, this.signOut);
     }
 
     async onVisibilityChange() {
