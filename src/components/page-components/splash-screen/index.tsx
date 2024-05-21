@@ -234,11 +234,11 @@ const SplashScreen: React.FC = () => {
                     <div className={Styles["slogan"]}>{t("SabaNumber.splashscreen_slogan")}</div>
                 </div>
 
-                <div className={Styles["loading"]}>
-                    <div className={Styles["progress"]}>
-                        <div className={Styles["progress-bar"]} id="progress-bar"></div>
+                <div className={"loading"}>
+                    <div className={"progress"}>
+                        <div className={"progress-bar"} id="progress-bar"></div>
                     </div>
-                    <p className={Styles["text-first-download"]}>{t("Common.message_download_first_visit")}</p>
+                    <p className={"text-first-download"}>{t("Common.message_download_first_visit")}</p>
                 </div>
             </div>
 
