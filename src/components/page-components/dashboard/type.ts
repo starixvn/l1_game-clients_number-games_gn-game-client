@@ -4,7 +4,7 @@ import { AuthorizeResponse, SSOResponse } from "sc-user-service-client/dist/auth
 
 import { UserStakeLevel } from "../../game-base/type";
 
-export type Props = {
+export type DashboardProps = {
     session: SSOResponse;
     queryGame: number;
     setIsUm: Function;
@@ -19,14 +19,13 @@ type APIErrorProp = {
     errorCode: string;
 };
 
-export type State = {
+export type DashboardState = {
     userStakeLevel: UserStakeLevel;
     isShowErrorModal: boolean;
     apiError: APIErrorProp;
     isShowAnnouncement: boolean;
     isBlockUI: boolean;
     queryGame: number;
-    isJoinGame: boolean;
     openGameId: number;
     openGameName: string;
     isLandscapeMode: boolean;
