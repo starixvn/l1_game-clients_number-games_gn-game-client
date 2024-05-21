@@ -2,7 +2,6 @@ import { FormEvent, PureComponent, ReactNode, useEffect, useMemo, useState } fro
 import { AuthorizeResponse, SSOResponse } from "sc-user-service-client/dist/auth";
 
 import dynamic from "next/dynamic";
-import Dashboard from "..";
 import { getAppSettings, getGameIdsSetting } from "../../../../_shared/app-settings";
 import { LobbyGameId, Themes } from "../../../../_shared/constants";
 import { AnalyticsHelper, TrackingAction, TrackingFunction } from "../../../../_shared/helpers";
@@ -23,6 +22,7 @@ import NameGenerator from "./name-generator";
 import styles from "./register.module.scss";
 
 const UMPage = dynamic(() => import("./../../um-page"));
+const Dashboard = dynamic(() => import(".."));
 
 export type RegisterProps = {
     session: SSOResponse;

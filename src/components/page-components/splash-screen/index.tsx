@@ -3,6 +3,7 @@ import { WithRouterProps } from "next/dist/client/with-router";
 import { NextRouter, useRouter } from "next/router";
 import { memo, useContext, useEffect, useState } from "react";
 
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import { AuthorizeResponse, SSOResponse } from "sc-user-service-client/dist/auth";
 import { getAppSettings } from "../../../_shared/app-settings";
@@ -20,12 +21,9 @@ import { setSentryUser } from "../../../_shared/sentry";
 import { tolgee } from "../../../_shared/tolgee";
 import { authorize, createNickname, getLobbyConfigs, sso, verifySession } from "../../../services/auth-service";
 import { updateSignInSMStatus } from "../../../services/user-setting-service";
-import Dashboard from "../dashboard";
 import { MAX_AVATAR_ID } from "../dashboard/register/avatar-gallery";
 import NameGenerator from "../dashboard/register/name-generator";
-import Register from "../dashboard/register/register";
 import { ILobbyConfigs } from "../dashboard/type";
-import UMPage from "../um-page";
 import Styles from "./splash-screen.module.scss";
 
 export type SplashScreenProps = WithRouterProps;
@@ -34,9 +32,9 @@ export type SplashScreenState = {
     underMaintenance: boolean;
 };
 
-// const UMPage = dynamic(() => import("../um-page"));
-// const Register = dynamic(() => import("../dashboard/register/register"));
-// const Dashboard = dynamic(() => import("../dashboard"));
+const UMPage = dynamic(() => import("../um-page"));
+const Register = dynamic(() => import("../dashboard/register/register"));
+const Dashboard = dynamic(() => import("../dashboard"));
 
 export const customStartup = async (
     session: SSOResponse,
@@ -104,9 +102,8 @@ const autoCreateNickname = async (session: SSOResponse, signOut: Function) => {
 };
 
 const SplashScreen: React.FC = () => {
-
     const { gameId, isDirectMode, token, language } = useContext(URLContext);
-    console.log({ gameId, isDirectMode, token, language })
+    console.log({ gameId, isDirectMode, token, language });
     const router = useRouter();
     const player = usePlayerContext();
     const { t } = useTranslator();
@@ -137,7 +134,6 @@ const SplashScreen: React.FC = () => {
                 return;
             }
 
-
             setCurrentSession(session);
             setLocale(getLocaleFromSession(session, language));
             authorizeInfo = await authorize(session);
@@ -147,30 +143,24 @@ const SplashScreen: React.FC = () => {
                 return;
             }
 
-
             if (!authorizeInfo?.authorized && isDirectMode) {
                 authorizeInfo = await autoCreateNickname(session, signOut);
             }
-
-
 
             if (!authorizeInfo?.authorized) {
                 setIsRenderRegisterPage(true);
                 return;
             }
 
-
             setCurrentGameId(gameId);
 
             const lobby = await getLobbyConfigs(session);
-
 
             if (lobby?.lobbyConfigs) {
                 setLobbyConfigs(lobby?.lobbyConfigs);
                 handleBannerOffer(authorizeInfo, lobby.lobbyConfigs, setBannerId);
                 getAndHandleGameOfferIds(authorizeInfo, lobby.lobbyConfigs, setGameOfferIds);
             }
-
 
             authorizeInfo && setAuthorizeResponse(authorizeInfo);
         };
