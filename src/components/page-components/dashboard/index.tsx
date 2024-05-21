@@ -1,7 +1,8 @@
+import dynamic from "next/dynamic";
 import { withRouter } from "next/router";
 import React from "react";
 import { isMobile, isMobileOnly } from "react-device-detect";
-import dynamic from "next/dynamic";
+import { GetLocalizedErrorMessage, StorageHelper, localStorageKeys } from "../../../_shared/helpers";
 import {
     GetLocalizedErrorMessage,
     localStorageKeys,
@@ -12,11 +13,17 @@ import {
     LobbyConnectionContextProvider,
     PlayerContextProvider,
     SettingContextProvider,
+    loadURLContext,
     updateURLContext,
 } from "../../../_shared/react-contexts";
 
 import SwiperCore from "swiper";
 import { ErrorNoGameOffer } from "../../../_shared/constants/error-code-dictionary";
+import {
+    GlobalTransmitterEvent,
+    registerGlobalMessageEvent,
+    unsubscribeGlobalMessageEvent,
+} from "../../../_shared/helpers/message-transmitter/global-transmitter";
 import "../../../games/scoreboards";
 import { UserStakeLevel } from "../../game-base/type";
 import { ModalType } from "../../game-components/base-dialog/type";
@@ -25,6 +32,7 @@ import Footer from "../../game-components/footer";
 import Header from "../header";
 import Lobby from "../lobby/lobby";
 import ButtonSwipe from "./button-swipe";
+import { DashboardHandler } from "./dash-board-handler";
 import Styles from "./dashboard.module.scss";
 import { DashboardProps, DashboardState } from "./type";
 import { registerGlobalMessageEvent, unsubscribeGlobalMessageEvent } from "../../../_shared/helpers/message-transmitter/global-transmitter";
@@ -40,7 +48,7 @@ class Dashboard extends React.PureComponent<DashboardProps, DashboardState> {
     private readonly dashboardHandler: DashboardHandler;
     private readonly notificationHandler: NotificationHandler;
     private readonly swiperRef = React.createRef<SwiperCore>();
-    private updateGameIdDashboardId: any;
+    private updateGameIdDashboardId: string;
 
     constructor(
         props: DashboardProps,
@@ -113,7 +121,9 @@ class Dashboard extends React.PureComponent<DashboardProps, DashboardState> {
         }
 
         document.addEventListener("visibilitychange", this.onVisibilityChange);
-        this.updateGameIdDashboardId = registerGlobalMessageEvent("updateGameIdDashboard", async () => this.resetGameIdDashboardEvent());
+        this.updateGameIdDashboardId = registerGlobalMessageEvent(GlobalTransmitterEvent.UPDATE_GAME_ID_DASHBOARD, async () =>
+            this.resetGameIdDashboardEvent()
+        );
 
         if (this.dashboardHandler.checkIsNotOfferGame()) {
             this.setState({
@@ -235,8 +245,9 @@ class Dashboard extends React.PureComponent<DashboardProps, DashboardState> {
                 <SettingContextProvider>
                     {allowSwipeGameOndDesktop && <ButtonSwipe isPrev={true} swiper={this.swiperRef} />}
                     <div
-                        className={`${Styles["dashboard"]} ${changeGameStyle} ${!isRenderGames ? "no-scroll" : ""} ${isMobileOnly ? Styles["hidden-scrollbar"] : ""
-                            }`}
+                        className={`${Styles["dashboard"]} ${changeGameStyle} ${!isRenderGames ? "no-scroll" : ""} ${
+                            isMobileOnly ? Styles["hidden-scrollbar"] : ""
+                        }`}
                         id={"dashboard"}
                     >
                         <Header />

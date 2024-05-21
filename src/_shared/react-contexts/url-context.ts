@@ -32,18 +32,13 @@ export function parseContextFromURL(): URLContextModel | undefined {
 
 export function loadURLContext(): URLContextModel {
     const contextFromURL = parseContextFromURL();
-    let contextFromLocalStorage = {};
-    if (typeof window !== 'undefined') {
-        contextFromLocalStorage = JSON.parse(localStorage.getItem("urlContext"));
-    }
+    const contextFromLocalStorage = StorageHelper?.get(localStorageKeys.url) || null;
 
     if (!!contextFromURL) {
         const contextString = { ...contextFromURL, token: undefined };
 
         globalThis.history.pushState(null, "", globalThis.location?.href.split("?")[0]);
-        if (typeof window !== 'undefined') {
-            localStorage.setItem("urlContext", JSON.stringify(contextString));
-        }
+        StorageHelper?.set(localStorageKeys.url, contextString);
         AnalyticsHelper?.login(contextFromURL);
     }
 
@@ -58,7 +53,7 @@ export const initialURLContextData = {
         } else {
             updateURLContext({ backToLobby: true });
             GlobalMessageTransmitter.broadcast({ updateGameIdDashboard: {} });
-            // Router.push("/", null, { shallow: true });
+            Router.push("/", null, { shallow: true });
         }
     },
 };
@@ -68,19 +63,11 @@ export const URLContext = createContext<URLContextModel>(initialURLContextData);
 export const useURLContext = () => useContext(URLContext);
 
 export function updateURLContext(context: Partial<URLContextModel>) {
-    if (typeof window !== 'undefined') {
-        const contextFromLocalStorage = JSON.parse(localStorage.getItem("urlContext"));
+    const contextFromLocalStorage = StorageHelper.get<URLContextModel>(localStorageKeys.url) || {};
 
-        localStorage.setItem("urlContext", JSON.stringify({ ...contextFromLocalStorage, ...context }));
-
-
-        // StorageHelper.set("urlContext", { ...contextFromLocalStorage, ...context });
-    }
+    StorageHelper.set(localStorageKeys.url, { ...contextFromLocalStorage, ...context });
 }
 
 export function getURLContext() {
-    if (typeof window !== 'undefined') {
-        return JSON.parse(localStorage.getItem("urlContext"));
-    }
-    return {};
+    return StorageHelper.get<URLContextModel>(localStorageKeys.url) || {};
 }

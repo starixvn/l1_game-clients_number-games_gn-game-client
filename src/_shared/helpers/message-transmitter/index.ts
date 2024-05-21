@@ -5,9 +5,10 @@ import { Listener } from "./type";
 export default function messageTransmitter() {
     let listeners: Array<Listener> = [];
 
-    const register = (messageKey: string, handleMessage: Function) => {
+    const register = (messageKey: string, handleMessage: Function): string => {
         const listenerId = uuidv4();
         listeners.push({ messageKey, listenerId, handleMessage });
+
         return listenerId;
     };
 

@@ -217,7 +217,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.connectToGameService();
         this.gameStateHandler.setReturnToGameState(this.props.dispatch);
         this.cancelConfirmBetAndResetBets();
-        this.gameMessageHandler.broadcastGameEvent({ [messageEventType.UPDATE_PLAYER_BALANCE]: true })
+        this.gameMessageHandler.broadcastGameEvent({ [messageEventType.UPDATE_PLAYER_BALANCE]: true });
     }
 
     protected async connectToGameService() {
@@ -338,7 +338,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     };
 
     loadQuickBetSetting() {
-        const { authorizeInfo, enableQuickBet } = (this.context as PlayerContextModel);
+        const { authorizeInfo, enableQuickBet } = this.context as PlayerContextModel;
         const isEnableQuickBet = authorizeInfo?.user?.settings.quickBet || enableQuickBet;
 
         this.props.systemDispatch({
@@ -462,7 +462,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.gameMessageHandler.broadcastGameEvent({ [messageEventType.ROUND_STATE]: newRoundState });
 
         if (gameStateContextModel.roundState !== newRoundState) {
-
             const isStartNewRound = gameStateContextModel.roundState === RoundState.SwitchRound && newRoundState === RoundState.InRound;
             const newGameState = {
                 roundState: newRoundState,
@@ -523,14 +522,13 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         const balanceResponse = await getBalance(authContext?.session);
         if (balanceResponse.isSuccessful) {
             GlobalMessageTransmitter.broadcast({ [GlobalTransmitterEvent.USER_INFO_RED]: balanceResponse.balance });
-            // authContext?.setBalance(balanceResponse.balance);
         } else {
             this.props.setApiErrorMessage(balanceResponse.errorCode);
         }
     }
 
     placeBet(betChoice: string, amount: number) {
-        const { authorizeInfo, enableQuickBet } = (this.context as PlayerContextModel);
+        const { authorizeInfo, enableQuickBet } = this.context as PlayerContextModel;
         const enabledQuickBet = authorizeInfo?.user?.settings.quickBet || enableQuickBet;
 
         this.placeBetHandler.placeBet(betChoice, amount, enabledQuickBet, this.props.gameStateContextModel, this.props.systemContextModel);

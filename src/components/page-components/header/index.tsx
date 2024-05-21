@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { registerGlobalMessageEvent, unsubscribeGlobalMessageEvent } from "../../../_shared/helpers/message-transmitter/global-transmitter";
 import HeaderTitle from "./header-title";
 import Styles from "./header.module.scss";
 import Setting from "./setting";
 import { UserInfo } from "./user-info";
-import { registerGlobalMessageEvent, unsubscribeGlobalMessageEvent } from "../../../_shared/helpers/message-transmitter/global-transmitter";
 
 const Header = () => {
     const [openingGameId, setOpeningGameId] = useState(0);
@@ -14,8 +14,8 @@ const Header = () => {
         });
 
         return () => {
-            unsubscribeGlobalMessageEvent(gameScriberId as any);
-        }
+            unsubscribeGlobalMessageEvent(gameScriberId);
+        };
     }, []);
 
     const isRenderGames = openingGameId > 0;
