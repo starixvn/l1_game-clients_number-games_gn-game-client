@@ -4,7 +4,6 @@ import { isMobile, isMobileOnly } from "react-device-detect";
 import dynamic from "next/dynamic";
 import {
     GetLocalizedErrorMessage,
-    getOfferGamesIds,
     localStorageKeys,
     StorageHelper,
 } from "../../../_shared/helpers";
@@ -29,7 +28,8 @@ import ButtonSwipe from "./button-swipe";
 import Styles from "./dashboard.module.scss";
 import { DashboardProps, DashboardState } from "./type";
 import { registerGlobalMessageEvent, unsubscribeGlobalMessageEvent } from "../../../_shared/helpers/message-transmitter/global-transmitter";
-import { DashboardHandler } from "./dash-board-handler";
+import { DashboardHandler } from "./handlers/dash-board-handler";
+import { NotificationHandler } from "./handlers/notification-handler";
 
 const Games = dynamic(() => import("../../../games/games"));
 const BaseDialog = dynamic(() => import("../../game-components/base-dialog"));
@@ -38,10 +38,15 @@ const LandscapeMode = dynamic(() => import("./landscape-mode/landscape-mode"));
 
 class Dashboard extends React.PureComponent<DashboardProps, DashboardState> {
     private readonly dashboardHandler: DashboardHandler;
+    private readonly notificationHandler: NotificationHandler;
     private readonly swiperRef = React.createRef<SwiperCore>();
     private updateGameIdDashboardId: any;
 
-    constructor(props: DashboardProps) {
+    constructor(
+        props: DashboardProps,
+        state: DashboardState,
+        dashboardHandler: DashboardHandler = null,
+        notificationHandler: NotificationHandler = null) {
         super(props);
 
         this.state = {
@@ -76,15 +81,18 @@ class Dashboard extends React.PureComponent<DashboardProps, DashboardState> {
             buildVersion && location.reload();
         }
 
-        this.dashboardHandler = new DashboardHandler(
-            this.props,
+        this.dashboardHandler = dashboardHandler ?? new DashboardHandler(this.props, this.signOut);
+
+        this.notificationHandler = notificationHandler ?? new NotificationHandler(
+            this.props.session,
+            this.props.setIsUm,
             this.showApiErrorMessage,
             this.signOut);
     }
 
     async onVisibilityChange() {
         if (!document["hidden"]) {
-            this.dashboardHandler.handleReCheckIn();
+            this.notificationHandler.handleReCheckIn();
         }
     }
 
@@ -139,6 +147,7 @@ class Dashboard extends React.PureComponent<DashboardProps, DashboardState> {
         unsubscribeGlobalMessageEvent(this.updateGameIdDashboardId as any);
         document.removeEventListener("visibilitychange", this.onVisibilityChange);
 
+        this.notificationHandler.reset();
         this.dashboardHandler.reset();
     }
 
@@ -147,7 +156,7 @@ class Dashboard extends React.PureComponent<DashboardProps, DashboardState> {
     }
 
     handleUpdateUserStakeLevel(userStakeLevel: UserStakeLevel) {
-        this.setState({ userStakeLevel: userStakeLevel });
+        this.setState({ userStakeLevel });
     }
 
     showApiErrorMessage(errorCode: string) {
@@ -156,7 +165,7 @@ class Dashboard extends React.PureComponent<DashboardProps, DashboardState> {
 
     closeDialog() {
         this.setState({ isShowErrorModal: false });
-        this.dashboardHandler.isKickOut && this.signOut();
+        this.notificationHandler.isKickOut && this.signOut();
     }
 
     toggleAnnouncementModal() {
@@ -175,7 +184,7 @@ class Dashboard extends React.PureComponent<DashboardProps, DashboardState> {
 
         return (
             <Games
-                setApiErrorMessage={this.dashboardHandler.handleShowApiErrorMessage}
+                setApiErrorMessage={this.notificationHandler.handleShowApiErrorMessage}
                 userStakeLevel={userStakeLevel}
                 updateUserStakeLevel={this.handleUpdateUserStakeLevel}
                 openGameId={urlContext.gameId}
@@ -203,7 +212,7 @@ class Dashboard extends React.PureComponent<DashboardProps, DashboardState> {
 
         return (
             <LobbyConnectionContextProvider value={this.dashboardHandler.buildLobbyConnectionContextValue()}>
-                <Lobby openGame={(gameId) => this.openGameFromLobby(gameId)} lobbyConfigs={this.props.lobbyConfigs} />
+                <Lobby openGame={(gameId: number) => this.openGameFromLobby(gameId)} lobbyConfigs={this.props.lobbyConfigs} />
             </LobbyConnectionContextProvider>
         );
     }
