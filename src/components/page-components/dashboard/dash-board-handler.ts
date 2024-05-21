@@ -167,7 +167,7 @@ export class DashboardHandler {
         const { gameSettings } = getAppSettings();
         const lobbyGamesIds = getLobbyGameIds(this.props.lobbyConfigs)?.filter((gameId) => offerGamesIds.includes(gameId) && gameSettings[gameId]);
 
-        if (!this.props.authorizeResponse?.authorized || lobbyGamesIds?.length === 0) {
+        if (lobbyGamesIds?.length === 0) {
             console.log(`False connectLobbySocket lobbyGamesIds`)
             return;
         }
