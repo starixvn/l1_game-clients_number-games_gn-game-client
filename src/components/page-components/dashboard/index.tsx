@@ -106,10 +106,6 @@ class Dashboard extends React.PureComponent<DashboardProps, DashboardState> {
     }
 
     async componentDidMount() {
-        if (typeof window === "undefined") {
-            return;
-        }
-
         document.addEventListener("visibilitychange", this.onVisibilityChange);
         this.updateGameIdDashboardId = registerGlobalMessageEvent(GlobalTransmitterEvent.UPDATE_GAME_ID_DASHBOARD, async () =>
             this.resetGameIdDashboardEvent()

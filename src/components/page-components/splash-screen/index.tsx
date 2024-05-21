@@ -118,7 +118,7 @@ const SplashScreen: React.FC = () => {
     const [currentGameId, setCurrentGameId] = useState<number>(-1);
     const [authorizeResponse, setAuthorizeResponse] = useState<AuthorizeResponse>(null);
     const [lobbyConfigs, setLobbyConfigs] = useState<ILobbyConfigs>(null);
-    const [isRenderRegisterPage, setIsRenderRegisterPage] = useState<boolean>(false);
+    const [isRenderRegister, setIsRenderRegister] = useState<boolean>(false);
     const [isRenderDashboard, setIsRenderDashboard] = useState<boolean>(false);
 
     const signOut = () => {
@@ -148,7 +148,7 @@ const SplashScreen: React.FC = () => {
             }
 
             if (!authorizeInfo?.authorized) {
-                setIsRenderRegisterPage(true);
+                setIsRenderRegister(true);
                 return;
             }
 
@@ -209,7 +209,7 @@ const SplashScreen: React.FC = () => {
         );
     }
 
-    if (isRenderRegisterPage) {
+    if (isRenderRegister) {
         document.body.classList.add("galaxy-bg");
         return <Register session={currentSession} isUm={isUm} isDirectMode={isDirectMode} gameId={gameId} />;
     }
