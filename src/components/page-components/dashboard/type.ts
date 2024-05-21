@@ -21,17 +21,14 @@ type APIErrorProp = {
 
 export type State = {
     userStakeLevel: UserStakeLevel;
-    authorizeInfo: AuthorizeResponse;
     isShowErrorModal: boolean;
     apiError: APIErrorProp;
     isShowAnnouncement: boolean;
     isBlockUI: boolean;
     queryGame: number;
     isJoinGame: boolean;
-    lobbyConfigs: ILobbyConfigs;
     openGameId: number;
     openGameName: string;
-    isOnLobby: boolean;
     isLandscapeMode: boolean;
     isChangedGame: boolean;
     isChangePrevGame: boolean;

@@ -24,22 +24,21 @@ import {
     updateURLContext,
 } from "../../../_shared/react-contexts";
 
-import { LobbyConfigs, LobbyResponse } from "sc-user-service-client/dist/lobby";
 import SwiperCore from "swiper";
 import { ErrorNoGameOffer } from "../../../_shared/constants/error-code-dictionary";
 import "../../../games/scoreboards";
-import { getLobbyConfigs, reCheckIn } from "../../../services/auth-service";
+import { reCheckIn } from "../../../services/auth-service";
 import { UserStakeLevel } from "../../game-base/type";
 import { ModalType } from "../../game-components/base-dialog/type";
 import { ErrorApiText } from "../../game-components/error-api-text";
 import Footer from "../../game-components/footer";
 import Header from "../header";
 import Lobby from "../lobby/lobby";
-import { LobbySocketConnection } from "../lobby/lobby-socket-connection";
 import ButtonSwipe from "./button-swipe";
 import Styles from "./dashboard.module.scss";
-import { ILobbyConfigs, Props, State } from "./type";
+import { Props, State } from "./type";
 import { GlobalMessageTransmitter, GlobalTransmitterEvent, registerGlobalMessageEvent, unsubscribeGlobalMessageEvent } from "../../../_shared/helpers/message-transmitter/global-transmitter";
+import { DashboardHandler } from "./dash-board-handler";
 
 const Games = dynamic(() => import("../../../games/games"));
 const BaseDialog = dynamic(() => import("../../game-components/base-dialog"));
@@ -50,7 +49,7 @@ class Dashboard extends React.PureComponent<Props, State> {
     private notificationSocket: Socket = null;
     private reCheckInInterval: NodeJS.Timeout;
     private isKickOut = false;
-    private readonly lobbyConnectionHandler: LobbySocketConnection;
+    private readonly dashboardHandler: DashboardHandler;
     private readonly swiperRef = React.createRef<SwiperCore>();
     private updateGameIdDashboardId: any;
 
@@ -59,29 +58,23 @@ class Dashboard extends React.PureComponent<Props, State> {
 
         this.state = {
             userStakeLevel: { minBet: 0, maxBet: 0 },
-            authorizeInfo: null,
             isShowErrorModal: false,
             apiError: null,
             isShowAnnouncement: false,
             isBlockUI: false,
             queryGame: this.props.queryGame,
             isJoinGame: false,
-            lobbyConfigs: null,
             openGameId: null,
             openGameName: "",
-            isOnLobby: true,
             isLandscapeMode: false,
             isChangedGame: false,
             isChangePrevGame: false,
         };
 
-        this.lobbyConnectionHandler = new LobbySocketConnection();
-
         this.registerMainSocketEvent = this.registerMainSocketEvent.bind(this);
         this.handleKickedOut = this.handleKickedOut.bind(this);
         this.closeDialog = this.closeDialog.bind(this);
         this.handleReload = this.handleReload.bind(this);
-        this.updateAuthorizeInfo = this.updateAuthorizeInfo.bind(this);
         this.handleShowApiErrorMessage = this.handleShowApiErrorMessage.bind(this);
         this.handleUpdateUserStakeLevel = this.handleUpdateUserStakeLevel.bind(this);
         this.signOut = this.signOut.bind(this);
@@ -93,9 +86,14 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.openGameFromLobby = this.openGameFromLobby.bind(this);
         this.removeGameTransmitter = this.removeGameTransmitter.bind(this);
         this.reconnectGameTransmitter = this.reconnectGameTransmitter.bind(this);
-        this.getLobbyGamesIds = this.getLobbyGamesIds.bind(this);
         this.changeOrientation = this.changeOrientation.bind(this);
         this.updateGameIdDashboardEvent = this.updateGameIdDashboardEvent.bind(this);
+
+        this.dashboardHandler = new DashboardHandler({
+            authorizeInfo: this.props.authorizeResponse,
+            session: this.props.session,
+            lobbyConfigs: this.props.lobbyConfigs
+        });
 
         const buildId = process.env.buildVersion;
         const buildVersion = StorageHelper.get(localStorageKeys.buildVersion) ?? 0;
@@ -104,12 +102,6 @@ class Dashboard extends React.PureComponent<Props, State> {
             buildVersion && location.reload();
         }
     }
-
-    updateAuthorizeInfo(authorizeInfo: AuthorizeResponse) {
-        this.checkOfferedGame(authorizeInfo);
-        this.setState({ authorizeInfo });
-    }
-
 
     handleShowApiErrorMessage(errorCode: string, isDisableAccount = false) {
         if (isDisableAccount || isKickOutError(errorCode)) {
@@ -165,29 +157,23 @@ class Dashboard extends React.PureComponent<Props, State> {
 
     async updateGameIdDashboardEvent() {
         this.setState({ openGameId: 0 });
-        console.log("updateGameIdDashboard");
-        console.log({ ...this.state.lobbyConfigs });
     }
 
     async componentDidMount() {
         if (typeof window === "undefined") {
-            return; ``
+            return;
         }
 
         document.addEventListener("visibilitychange", this.onVisibilityChange);
-        const { queryGame, authorizeResponse, session, lobbyConfigs } = this.props;
-        console.log("componentDidMount");
-        console.log("authorizeResponse--------", authorizeResponse, lobbyConfigs);
-        this.updateLobbyConfigs(lobbyConfigs as LobbyConfigs);
+        const { queryGame, authorizeResponse, session } = this.props;
+
 
         this.updateGameIdDashboardId = registerGlobalMessageEvent("updateGameIdDashboard", async () => this.updateGameIdDashboardEvent());
-
-        await this.connectLobbySocket(authorizeResponse, lobbyConfigs);
 
         GlobalMessageTransmitter.broadcast({ [GlobalTransmitterEvent.USER_INFO_RED]: authorizeResponse?.user?.red });
         // this.updateUserBalance(authorizeResponse?.user?.red);
 
-        this.updateAuthorizeInfo(authorizeResponse);
+        this.checkOfferedGame(authorizeResponse);
 
         this.reCheckInInterval = setInterval(async () => {
             const reCheckInResponse = await reCheckIn(session);
@@ -221,7 +207,7 @@ class Dashboard extends React.PureComponent<Props, State> {
         unsubscribeGlobalMessageEvent(this.updateGameIdDashboardId as any);
         document.removeEventListener("visibilitychange", this.onVisibilityChange);
         this.notificationSocket?.close();
-        this.lobbyConnectionHandler.closeSocket();
+        this.dashboardHandler.lobbyConnection.closeSocket();
         clearInterval(this.reCheckInInterval);
     }
 
@@ -248,20 +234,6 @@ class Dashboard extends React.PureComponent<Props, State> {
         this.notificationSocket = io(socketUri, socketOption);
         this.registerMainSocketEvent(this.notificationSocket);
     }
-
-    connectLobbySocket = async (authorizeInfo: AuthorizeResponse, lobbyConfigs: ILobbyConfigs) => {
-        const { gameId } = loadURLContext();
-        const offerGamesIds = getOfferGamesIds(authorizeInfo)?.filter((id) => id !== gameId);
-        const { gameSettings } = getAppSettings();
-        const lobbyGamesIds = getLobbyGameIds(lobbyConfigs)?.filter((gameId) => offerGamesIds.includes(gameId) && gameSettings[gameId]);
-        console.log(`connectLobbySocket lobbyGamesIds`)
-        console.log({ ...lobbyGamesIds })
-        if (!authorizeInfo?.authorized || lobbyGamesIds?.length === 0) {
-            console.log(`False connectLobbySocket lobbyGamesIds`)
-            return;
-        }
-        await this.lobbyConnectionHandler.initLobbySocket(this.props.session, lobbyGamesIds);
-    };
 
     registerMainSocketEvent(mainSocket: Socket) {
         mainSocket.on("auth", this.handleAuth);
@@ -317,32 +289,8 @@ class Dashboard extends React.PureComponent<Props, State> {
 
     openGame(gameId: number) {
         this.setState({ queryGame: gameId, isJoinGame: true, openGameId: gameId });
-
         updateURLContext({ gameId });
     }
-
-    async getAllLobbyConfigs() {
-        const { session } = this.props;
-        const lobby: LobbyResponse = await getLobbyConfigs(session);
-        if (lobby?.lobbyConfigs) {
-            this.updateLobbyConfigs(lobby?.lobbyConfigs);
-        } else {
-            console.error("Can not get Lobby configs");
-        }
-        return lobby?.lobbyConfigs;
-    }
-
-    updateLobbyConfigs(lobbyConfigs: LobbyConfigs) {
-        this.setState({ lobbyConfigs });
-    }
-
-    getLobbyGamesIds = () => {
-        const { lobbyConfigs, authorizeInfo } = this.state;
-        const offerGamesIds = getOfferGamesIds(authorizeInfo);
-        console.log('getLobbyGamesIds')
-        console.log({ ...offerGamesIds })
-        return getLobbyGameIds(lobbyConfigs)?.filter((gameId) => offerGamesIds.includes(gameId));
-    };
 
     renderGames() {
         const { userStakeLevel, openGameName } = this.state;
@@ -355,7 +303,7 @@ class Dashboard extends React.PureComponent<Props, State> {
                 openGameId={urlContext.gameId}
                 openGameName={openGameName}
                 directMode={this.props.directMode}
-                lobbyGamesIds={this.getLobbyGamesIds()}
+                lobbyGamesIds={this.dashboardHandler.getLobbyGamesIds()}
                 swiperRef={this.swiperRef}
             />
         );
@@ -373,44 +321,46 @@ class Dashboard extends React.PureComponent<Props, State> {
     }
 
     renderLobby() {
-        const { lobbyConfigs } = this.state;
         updateURLContext({ backToLobby: true });
         const lobbyConnectionContextValue = {
-            socket: this.lobbyConnectionHandler.getSocket(),
-            gameTransmitters: this.lobbyConnectionHandler.getTransmitters(),
+            socket: this.dashboardHandler.lobbyConnection.getSocket(),
+            gameTransmitters: this.dashboardHandler.lobbyConnection.getTransmitters(),
             removeGameTransmitter: this.removeGameTransmitter,
             reconnectGameTransmitter: this.reconnectGameTransmitter,
         };
+
         return (
             <LobbyConnectionContextProvider value={lobbyConnectionContextValue}>
-                <Lobby openGame={(gameId) => this.openGameFromLobby(gameId)} lobbyConfigs={lobbyConfigs} />
+                <Lobby openGame={(gameId) => this.openGameFromLobby(gameId)} lobbyConfigs={this.props.lobbyConfigs} />
             </LobbyConnectionContextProvider>
         );
     }
 
     removeGameTransmitter(gameId: number) {
-        this.lobbyConnectionHandler.unsubscribeGame(gameId);
+        this.dashboardHandler.lobbyConnection.unsubscribeGame(gameId);
     }
 
     reconnectGameTransmitter(gameId: number) {
         console.log(`reconnectGameTransmitter: ${gameId}`)
-        this.lobbyConnectionHandler.signInGame(this.props.session, gameId);
-        return this.lobbyConnectionHandler.initGameTransmitter(gameId);
+        this.dashboardHandler.lobbyConnection.signInGame(this.props.session, gameId);
+        return this.dashboardHandler.lobbyConnection.initGameTransmitter(gameId);
     }
 
     renderDashBoard() {
         window.history.pushState(null, null, "/");
 
-        const { isShowErrorModal, authorizeInfo, isBlockUI, isChangedGame, isChangePrevGame } = this.state;
+        const { isShowErrorModal, isBlockUI, isChangedGame, isChangePrevGame } = this.state;
+        const { authorizeResponse } = this.props;
+
         const authContextValue = {
-            authorizeInfo: authorizeInfo,
+            authorizeInfo: authorizeResponse,
             session: this.props.session,
             signOut: this.signOut,
-            fractionalOddsFormat: authorizeInfo.user?.fractionalOddsFormat ?? false,
+            fractionalOddsFormat: authorizeResponse.user?.fractionalOddsFormat ?? false,
             enableQuickBet: true
         };
 
-        const offerGames = getOfferGamesIds(authorizeInfo);
+        const offerGames = getOfferGamesIds(authorizeResponse);
         const isRenderGames = this.shouldRenderGames(offerGames);
         const allowSwipeGameOndDesktop = !this.props.directMode && !isMobileOnly && isRenderGames;
 
@@ -465,14 +415,13 @@ class Dashboard extends React.PureComponent<Props, State> {
     };
 
     render() {
-        const { authorizeInfo, isLandscapeMode } = this.state;
-        console.log("authorizeInfo--", authorizeInfo);
+        const { isLandscapeMode } = this.state;
 
         if (isLandscapeMode && isMobileOnly) {
             return <LandscapeMode />;
         }
 
-        return authorizeInfo?.authorized ? <>{this.renderDashboard()}</> : <></>;
+        return this.props.authorizeResponse?.authorized ? <>{this.renderDashboard()}</> : <></>;
     }
 }
 
