@@ -82,20 +82,6 @@ class Dashboard extends React.PureComponent<DashboardProps, DashboardState> {
             this.signOut);
     }
 
-    checkOfferedGame() {
-        if (this.props.authorizeResponse?.user?.offerGames &&
-            this.props.authorizeResponse?.user?.offerGames.length === 0) {
-            this.setState({
-                apiError: {
-                    message: ErrorNoGameOffer,
-                    errorCode: "",
-                },
-                isShowErrorModal: true,
-                isBlockUI: true,
-            });
-        }
-    }
-
     async onVisibilityChange() {
         if (!document["hidden"]) {
             this.dashboardHandler.handleReCheckIn();
@@ -119,10 +105,18 @@ class Dashboard extends React.PureComponent<DashboardProps, DashboardState> {
         }
 
         document.addEventListener("visibilitychange", this.onVisibilityChange);
-
-
         this.updateGameIdDashboardId = registerGlobalMessageEvent("updateGameIdDashboard", async () => this.resetGameIdDashboardEvent());
-        this.checkOfferedGame();
+
+        if (this.dashboardHandler.checkIsNotOfferGame()) {
+            this.setState({
+                apiError: {
+                    message: ErrorNoGameOffer,
+                    errorCode: "",
+                },
+                isShowErrorModal: true,
+                isBlockUI: true,
+            });
+        }
 
         if (isMobile) {
             this.changeOrientation();
@@ -218,9 +212,7 @@ class Dashboard extends React.PureComponent<DashboardProps, DashboardState> {
         window.history.pushState(null, null, "/");
 
         const { isShowErrorModal, isBlockUI, isChangedGame, isChangePrevGame, openGameId } = this.state;
-        const { authorizeResponse } = this.props;
-
-        const offerGames = getOfferGamesIds(authorizeResponse);
+        const offerGames = this.dashboardHandler.getOfferGamesIds();
         const isRenderGames = this.dashboardHandler.shouldRenderGames(offerGames, openGameId);
         const allowSwipeGameOndDesktop = !this.props.directMode && !isMobileOnly && isRenderGames;
 

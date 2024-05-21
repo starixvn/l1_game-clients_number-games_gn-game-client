@@ -34,7 +34,6 @@ export class DashboardHandler {
         GlobalMessageTransmitter.broadcast({ [GlobalTransmitterEvent.USER_INFO_RED]: this.props.authorizeResponse?.user?.red });
     }
 
-
     connectNotificationSocket() {
         const { proxy, enableMsgpackParser } = getAppSettings();
 
@@ -55,6 +54,11 @@ export class DashboardHandler {
         this.registerMainSocketEvent(this.notificationSocket);
     }
 
+    checkIsNotOfferGame() {
+        return this.props.authorizeResponse?.user?.offerGames &&
+            this.props.authorizeResponse?.user?.offerGames.length === 0;
+    }
+
     handleRecheckInResponse(response: ReCheckInResponse) {
         if (!response || !response.isSuccessful) {
             this.signOut();
@@ -64,7 +68,6 @@ export class DashboardHandler {
             GlobalMessageTransmitter.broadcast({ [GlobalTransmitterEvent.USER_INFO_RED]: response.balance });
         }
     }
-
 
     handleShowApiErrorMessage(errorCode: string, isDisableAccount = false) {
         if (isDisableAccount || isKickOutError(errorCode)) {
@@ -77,13 +80,11 @@ export class DashboardHandler {
         this.showApiErrorMessage(errorCode)
     }
 
-
     registerMainSocketEvent(mainSocket: Socket) {
         mainSocket.on("auth", this.handleAuth);
         mainSocket.on("kickedOut", this.handleKickedOut);
         mainSocket.on("reload", this.handleReload);
     }
-
 
     handleAuth = (authData) => {
         if (!authData.authorized) {
@@ -135,6 +136,10 @@ export class DashboardHandler {
     reconnectGameTransmitter = (gameId: number) => {
         this.lobbyConnection.signInGame(this.props.session, gameId);
         return this.lobbyConnection.initGameTransmitter(gameId);
+    }
+
+    getOfferGamesIds = () => {
+        return getOfferGamesIds(this.props.authorizeResponse);
     }
 
     buildLobbyConnectionContextValue = () => {
