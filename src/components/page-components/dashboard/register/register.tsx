@@ -1,15 +1,13 @@
-import { FormEvent, PureComponent, ReactNode, useEffect, useMemo, useState } from "react";
+import { FormEvent, PureComponent, ReactNode } from "react";
 import { AuthorizeResponse, SSOResponse } from "sc-user-service-client/dist/auth";
 
 import dynamic from "next/dynamic";
-import { getAppSettings, getGameIdsSetting } from "../../../../_shared/app-settings";
 import { LobbyGameId, Themes } from "../../../../_shared/constants";
 import { AnalyticsHelper, TrackingAction, TrackingFunction } from "../../../../_shared/helpers";
 import { GetLocalizedErrorMessage } from "../../../../_shared/helpers/notice-helper";
 import { randomInteger } from "../../../../_shared/helpers/number-helper";
-import PreloadResources, { getAndHandleBannerOffer, getAndHandleGameOfferIds } from "../../../../_shared/helpers/preload-resources";
 import { tolgee } from "../../../../_shared/tolgee";
-import { createNickname, getLobbyConfigs } from "../../../../services/auth-service";
+import { createNickname } from "../../../../services/auth-service";
 import BaseDialog from "../../../game-components/base-dialog";
 import { ModalType } from "../../../game-components/base-dialog/type";
 import FirstLoginContainer from "../../../page-components/dashboard/container";
@@ -19,6 +17,7 @@ import { TranslatorProps, withTranslator } from "../../translator";
 import { ILobbyConfigs } from "../type";
 import { AvatarGallery, MAX_AVATAR_ID } from "./avatar-gallery";
 import NameGenerator from "./name-generator";
+import PreloadResourceRegister from "./preload-resource";
 import styles from "./register.module.scss";
 
 const UMPage = dynamic(() => import("./../../um-page"));
@@ -235,7 +234,7 @@ export class Register extends PureComponent<RegisterProps, RegisterState> {
                 )}
 
                 {isTriggerPreloadResources && (
-                    <TriggerPreloadResource
+                    <PreloadResourceRegister
                         gameId={LobbyGameId}
                         updateStatePreloadResource={this.updateStatePreloadResource.bind(this)}
                         updateLobbyConfigs={this.updateLobbyConfigs.bind(this)}
@@ -247,49 +246,5 @@ export class Register extends PureComponent<RegisterProps, RegisterState> {
         );
     }
 }
-
-const TriggerPreloadResource: React.FC<{
-    gameId: number;
-    updateStatePreloadResource: Function;
-    updateLobbyConfigs: Function;
-    session: SSOResponse;
-    authorizeResponse: AuthorizeResponse;
-}> = ({ gameId, updateStatePreloadResource, updateLobbyConfigs, session, authorizeResponse }) => {
-    const [bannerId, setBannerId] = useState<number>(0);
-    const [gameOfferIds, setGameOfferIds] = useState<number[]>([]);
-
-    const handleUnauthorizedAccess = async () => {
-        const lobby = await getLobbyConfigs(session);
-        if (lobby?.lobbyConfigs) {
-            updateLobbyConfigs(lobby?.lobbyConfigs);
-            getAndHandleBannerOffer(authorizeResponse, lobby?.lobbyConfigs, setBannerId);
-            getAndHandleGameOfferIds(authorizeResponse, lobby?.lobbyConfigs, setGameOfferIds);
-        }
-
-        const gameIds = getGameIdsSetting()?.map((id) => parseInt(id, 10));
-        const firstGameId = gameIds[0];
-        if (firstGameId > 0) {
-            setGameOfferIds(gameIds);
-            setBannerId(firstGameId);
-        }
-    };
-
-    useEffect(() => {
-        handleUnauthorizedAccess();
-    }, []);
-
-    return useMemo(() => {
-        return (
-            <PreloadResources
-                gameId={gameId}
-                setIsDonePreload={updateStatePreloadResource}
-                enablePreload={getAppSettings()?.enablePreloadResource || true}
-                bannerId={bannerId}
-                gameIdsIcon={gameOfferIds}
-                progressBarId="register-progress-bar"
-            />
-        );
-    }, [gameId]);
-};
 
 export default withTranslator(Register);
