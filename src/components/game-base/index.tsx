@@ -126,7 +126,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             new GameFinishHandler({
                 dispatch,
                 gameMessageHandler: this.gameMessageHandler,
-                placeBetHandler: this.placeBetHandler,
                 durations: this.props.durations,
                 roundStateHandler: this.roundStateHandler,
                 runGame: (remainingTime: number) => this.runGame(remainingTime),
@@ -211,8 +210,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.clearDisconnectTimeout();
         this.registerHandlers();
         this.connectToGameService();
-        this.gameStateHandler.resetPlaceBetContext(this.placeBetHandler.getPlaceBetDispatch);
-        this.gameMessageHandler.broadcastGameEvent({ [messageEventType.UPDATE_PLAYER_BALANCE]: true })
+        this.gameMessageHandler.broadcastGameEvent({ [messageEventType.UPDATE_PLAYER_BALANCE]: true });
     }
 
     protected async connectToGameService() {
@@ -364,7 +362,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.gameMessageHandler.broadcastGameEvent({ [messageEventType.ROUND_STATE]: newRoundState });
 
         if (gameStateContextModel.roundState !== newRoundState) {
-
             const isStartNewRound = gameStateContextModel.roundState === RoundState.SwitchRound && newRoundState === RoundState.InRound;
             const newGameState = {
                 roundState: newRoundState,
@@ -567,7 +564,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     renderGame() {
         const gameActionsContext = {
             placeBet: this.placeBet,
-            playAcceptedBetAnimation: this.placeBetHandler.playAcceptedBetAnimation,
             setActiveScoreboardTab: this.setActiveScoreboardTab,
         };
 

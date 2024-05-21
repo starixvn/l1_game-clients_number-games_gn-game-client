@@ -1,9 +1,6 @@
 import { stub } from "jest-auto-stub";
 import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 import { GameStateContextModel } from "../../../_shared/react-contexts/game-state-context/game-state-context-model";
-import {
-    PlaceBetEventActionType
-} from "../../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-action";
 import { BacBallResult } from "../../../games/bac-ball/types";
 import { IRoundStateHandler } from "../../round-base/round-state-handler";
 import { Round, RoundState } from "../type";
@@ -36,8 +33,6 @@ describe("GameFinishHandler", () => {
         roundStateHandler = stub<IRoundStateHandler>();
         gameFinishPros.dispatch = jest.fn();
         gameFinishPros.gameMessageHandler = gameMessageHandler;
-        gameFinishPros.placeBetHandler = placeBetHandler;
-        gameFinishPros.placeBetHandler.getPlaceBetDispatch = jest.fn().mockReturnValue(jest.fn());
         gameFinishPros.gameRoundDataHandler = gameRoundDataHandler;
         gameFinishPros.roundStateHandler = roundStateHandler;
         gameFinishPros.gameStateContextModel = jest.fn().mockReturnValue({ roundState: RoundState.InRound } as GameStateContextModel);
@@ -89,10 +84,6 @@ describe("GameFinishHandler", () => {
             gameFinishHandler.handleFinish({ finish: mockFinish });
 
             // Assert
-            expect(gameFinishPros.placeBetHandler.getPlaceBetDispatch()).toHaveBeenCalledWith({
-                type: PlaceBetEventActionType.END_BET_PROCESSING,
-                payload: {},
-            });
             expect(gameFinishPros.dispatch).toHaveBeenCalledWith({
                 type: GameEventActionType.FINISH,
                 payload: {

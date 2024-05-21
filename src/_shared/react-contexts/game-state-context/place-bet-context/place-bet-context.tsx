@@ -2,7 +2,7 @@ import { Dispatch, createContext, useContext, useReducer } from "react";
 import { PlaceBetEventAction, PlaceBetEventActionType } from "./place-bet-action";
 import { PlaceBetContextModel, initialPlaceBetContext } from "./place-bet-context-model";
 
-export const PlaceBetContext = createContext({ isProcessingBet: false } as PlaceBetContextModel);
+export const PlaceBetContext = createContext({} as PlaceBetContextModel);
 const PlaceBetDispatchContext = createContext({} as Dispatch<PlaceBetEventAction>);
 
 export function PlaceBetProvider({ children }) {
@@ -25,34 +25,13 @@ export function usePlaceBetDispatch() {
 
 function placeBetReducer(state: PlaceBetContextModel, action: PlaceBetEventAction) {
     const { type, payload } = action;
-    const { ownBets, acceptedBetQueue, suggestBet, notConfirmOwnBets, showConfirmBet, showConfirmDialog } = payload;
+    const { ownBets, suggestBet, notConfirmOwnBets, showConfirmBet, showConfirmDialog } = payload;
 
     switch (type) {
         case PlaceBetEventActionType.OWN_BETS: {
             return {
                 ...state,
                 ownBets,
-            };
-        }
-
-        case PlaceBetEventActionType.ACCEPTED_BET_QUEUE: {
-            return {
-                ...state,
-                acceptedBetQueue,
-            };
-        }
-
-        case PlaceBetEventActionType.BET_PROCESSING: {
-            return {
-                ...state,
-                isProcessingBet: true,
-            };
-        }
-
-        case PlaceBetEventActionType.END_BET_PROCESSING: {
-            return {
-                ...state,
-                isProcessingBet: false,
             };
         }
 

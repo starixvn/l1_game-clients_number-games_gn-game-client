@@ -1,5 +1,4 @@
 import { GameStateContextModel } from "../../../_shared/react-contexts/game-state-context/game-state-context-model";
-import { PlaceBetEventAction, PlaceBetEventActionType } from "../../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-action";
 import { GameDurations, RoundState } from "../type";
 
 type GameStateHandlerProps = {
@@ -20,7 +19,6 @@ export interface IGameStateHandler {
         defaultSettlementResult,
         remainingTime,
     }: GameStateHandlerProps);
-    resetPlaceBetContext(dispatch: (action: PlaceBetEventAction) => {});
 }
 
 export class GameStateHandler implements IGameStateHandler {
@@ -34,7 +32,7 @@ export class GameStateHandler implements IGameStateHandler {
         durations,
         defaultResult,
         defaultSettlementResult,
-        remainingTime
+        remainingTime,
     }: GameStateHandlerProps) {
         if (gameStateContextModel) {
             const { result, settlementResult, roundId } = gameStateContextModel;
@@ -66,7 +64,7 @@ export class GameStateHandler implements IGameStateHandler {
                     state: {
                         isShowBlink: true,
                         result: defaultResult ?? result,
-                        settlementResult: defaultSettlementResult ?? settlementResult
+                        settlementResult: defaultSettlementResult ?? settlementResult,
                     },
                 },
             ];
@@ -87,17 +85,6 @@ export class GameStateHandler implements IGameStateHandler {
                 }
             );
         }
-    }
-
-    resetPlaceBetContext(dispatch: (action: PlaceBetEventAction) => {}) {
-        dispatch({
-            type: PlaceBetEventActionType.SET_NEW_GAME_STATE,
-            payload: {
-                notConfirmOwnBets: {},
-                showConfirmBet: false,
-                showConfirmDialog: false,
-            },
-        });
     }
 
     private getTimeCounter({
