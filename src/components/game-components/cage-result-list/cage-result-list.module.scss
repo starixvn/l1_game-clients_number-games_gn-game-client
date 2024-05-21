@@ -1,3 +1,22 @@
+.ball {
+    position: relative;
+    display: grid;
+    grid: 1fr/1fr;
+    place-items: center;
+    place-content: center;
+    grid-template: "container";
+
+    &.hide-ball {
+        animation: hide 0.3s ease-in forwards;
+    }
+}
+
+@keyframes hide {
+    to {
+        opacity: 0;
+    }
+}
+
 .type-4 {
     .show-ball-anim {
         position: absolute;
@@ -39,8 +58,8 @@
 }
 
 .ball-blur {
-    left: 1.8rem;
-    top: 1.5rem;
+    left: 0.8rem;
+    top: 0.9rem;
     animation: fade-in 1s linear forwards;
 }
 
@@ -50,15 +69,16 @@
     }
 
     to {
-        opacity: 0.3;
+        opacity: 1;
     }
 }
 
 .total-point {
     position: absolute;
-    font-size: 3.8rem;
-    font-weight: 600;
+    font-size: 9.2rem;
+    font-weight: 500;
     color: #fff;
+    text-shadow: 0.1rem 0.1rem 2rem rgba(255, 255, 255, 0.6);
     font-variant-numeric: tabular-nums;
 }
 

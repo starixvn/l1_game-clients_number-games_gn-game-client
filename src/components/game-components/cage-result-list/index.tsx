@@ -21,11 +21,7 @@ const CageResultList: React.FC<CageProps> = ({
 }) => {
     const [showBalls, setShowBalls] = useState(false);
     const [totalPoint, setTotalPoint] = useState(0);
-    const [highlightStyle, setHighlightStyle] = useState("");
 
-    const defaultBallDelayTime = 450;
-    const ballRotationDelayTime = 80;
-    const showTotalPointDelayTime = 700;
     const showBallDelayTime = 1200;
 
     useEffect(() => {
@@ -46,19 +42,7 @@ const CageResultList: React.FC<CageProps> = ({
     });
 
     const incrementTotalPoint = useCallback((point: number, pos: number) => {
-        const delayTime = playResultAnimation ? showTotalPointDelayTime + pos * ballRotationDelayTime : 0;
-
-        const timeOut = setTimeout(() => {
-            setTotalPoint((currentTotalPoint) => currentTotalPoint + point);
-            if (listResult && pos === listResult.length) {
-                setHighlightStyle(`${Styles["highlight"]}`);
-            }
-        }, delayTime);
-
-        return () => {
-            setHighlightStyle("");
-            clearTimeout(timeOut);
-        };
+        setTotalPoint((currentTotalPoint) => currentTotalPoint + point);
     }, []);
 
     const showResult = () => {
@@ -67,6 +51,8 @@ const CageResultList: React.FC<CageProps> = ({
         }
 
         return listResult.map((result, i) => {
+            const ballRotationDelayTime = 80;
+            const defaultBallDelayTime = 450;
             const ballPos = i + 1;
             const delayTime = playResultAnimation ? ballPos * (initialBallDelayTime ?? defaultBallDelayTime) + ballRotationDelayTime : 0;
 
@@ -93,24 +79,25 @@ const CageResultList: React.FC<CageProps> = ({
                 Styles[`type-${listResult?.length}`]
             }`}
         >
-            <div id="cage-bg" className={CageStyles["cage-bg"]}></div>
-            <BallLoops isPlayStartRoundAnimation={isPlayStartRoundAnimation} />
-            <div id="cage-cover" className={CageStyles["cage-cover"]}></div>
-            <div id="cage-border" className={`${CageStyles["cage-border"]} ${CageStyles[color]}`}>
-                {!playResultAnimation && <div id="cage-lid" className={CageStyles["cage-lid"]} />}
+            <div className={`${Styles["ball"]} ${totalPoint > 0 ? Styles["hide-ball"] : ""}`}>
+                <div id="cage-bg" className={CageStyles["cage-bg"]}></div>
+                <BallLoops isPlayStartRoundAnimation={isPlayStartRoundAnimation} />
+                <div id="cage-cover" className={CageStyles["cage-cover"]}></div>
+                <div id="cage-border" className={`${CageStyles["cage-border"]} ${CageStyles[color]}`}>
+                    {!playResultAnimation && <div id="cage-lid" className={CageStyles["cage-lid"]} />}
+                </div>
+
+                {playResultAnimation && (
+                    <Image
+                        width={140}
+                        height={140}
+                        className={`${CageStyles["ball-blur"]} ${Styles["ball-blur"]}`}
+                        src={`/static/images/cage/cage-border-purple-blur.webp?v=2`}
+                        alt="img-blur"
+                    />
+                )}
             </div>
-
-            {playResultAnimation && (
-                <Image
-                    width={120}
-                    height={120}
-                    className={`${CageStyles["ball-blur"]} ${Styles["ball-blur"]}`}
-                    src={`/static/images/cage/ball-blur.webp`}
-                    alt="img-blur"
-                />
-            )}
-
-            {showBalls && totalPoint > 0 && <div className={`${Styles["total-point"]} ${highlightStyle}`}>{totalPoint}</div>}
+            {showBalls && totalPoint > 0 && <div className={`${Styles["total-point"]} `}>{totalPoint}</div>}
 
             {showBalls && showResult()}
         </div>

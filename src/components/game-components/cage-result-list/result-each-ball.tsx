@@ -30,7 +30,7 @@ const ResultEachBall: React.FC<{
                 {isShowResultAnim && (
                     <Spritesheet
                         className={`${Styles["ball-result"]}`}
-                        image={`/static/images/${gameFolder}/result-ball/${ballName}.webp`}
+                        image={`/static/images/${gameFolder}/result-ball/${ballName}.webp?v=1`}
                         widthFrame={width}
                         isResponsive
                         heightFrame={height}

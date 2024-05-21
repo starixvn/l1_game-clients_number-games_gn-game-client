@@ -122,4 +122,4 @@ div.ball_1_blue_36::after {max-width:596px; width:100%;height:0;padding: 0 0 30.
 .ball_1_blue_37::after {content: '\00a0';display: inline-block; width:596px; height:180px; background-position: 100% 100%;background-size: 200% 1900%;background-image: url(ball-blue-pos-1.png);padding: 0; }
 div.ball_1_blue_37::after {max-width:596px; width:100%;height:0;padding: 0 0 30.201342281879196% 0;}
 
-/* $TexturePacker:SmartUpdate:445b373a343abf9c08a0b3e5ac46d349:d7dcbff6c9189333417d2707ae25722e:02853995f4fe36a8d156e6efa6cb5664$ */
+/* $TexturePacker:SmartUpdate:e2daa8684a9990000662b8dfa00f2540:77ff1335463af389fb31d8f424222550:02853995f4fe36a8d156e6efa6cb5664$ */

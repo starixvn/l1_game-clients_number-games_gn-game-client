@@ -18,11 +18,16 @@ const BallRotation: React.FC<{
     useEffect(() => {
         const timeOut = setTimeout(() => {
             setShowBall(true);
-            incrementTotalPoint(number, ballPos);
         }, delayTime);
+
+        const ballRotationTime = 1000;
+        const timeOutTotalPoint = setTimeout(() => {
+            incrementTotalPoint(number, ballPos);
+        }, delayTime + ballRotationTime);
 
         return () => {
             clearTimeout(timeOut);
+            clearTimeout(timeOutTotalPoint);
         };
     }, [ballPos]);
 
