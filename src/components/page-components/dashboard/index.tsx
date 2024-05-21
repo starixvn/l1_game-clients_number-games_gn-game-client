@@ -82,8 +82,9 @@ class Dashboard extends React.PureComponent<DashboardProps, DashboardState> {
             this.signOut);
     }
 
-    checkOfferedGame(authorizeInfo) {
-        if (authorizeInfo?.user?.offerGames && authorizeInfo?.user?.offerGames.length === 0) {
+    checkOfferedGame() {
+        if (this.props.authorizeResponse?.user?.offerGames &&
+            this.props.authorizeResponse?.user?.offerGames.length === 0) {
             this.setState({
                 apiError: {
                     message: ErrorNoGameOffer,
@@ -118,10 +119,10 @@ class Dashboard extends React.PureComponent<DashboardProps, DashboardState> {
         }
 
         document.addEventListener("visibilitychange", this.onVisibilityChange);
-        const { queryGame, authorizeResponse } = this.props;
+
 
         this.updateGameIdDashboardId = registerGlobalMessageEvent("updateGameIdDashboard", async () => this.resetGameIdDashboardEvent());
-        this.checkOfferedGame(authorizeResponse);
+        this.checkOfferedGame();
 
         if (isMobile) {
             this.changeOrientation();
@@ -129,6 +130,7 @@ class Dashboard extends React.PureComponent<DashboardProps, DashboardState> {
             window.addEventListener("touchmove", this.preventZoomBehavior, { passive: false });
         }
 
+        const { queryGame } = this.props;
         queryGame && this.openGame(queryGame);
     }
 
@@ -275,7 +277,7 @@ class Dashboard extends React.PureComponent<DashboardProps, DashboardState> {
             return <LandscapeMode />;
         }
 
-        return this.props.authorizeResponse?.authorized ? <>{this.renderDashBoard()}</> : <></>;
+        return this.renderDashBoard();
     }
 }
 
