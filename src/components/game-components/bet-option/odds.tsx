@@ -50,17 +50,20 @@ export const Odds: React.FC<Props> = ({ tolgeeNamespace, choice, className, anim
     }, [showOddsIcon, animationDuration]);
 
     return useMemo(() => {
-        return oddsValue > 0 ? (
+        const styleUpOrDown = isOddUp ? Styles["up"] : Styles["down"];
+        const styleShowOddsIcon = showOddsIcon ? Styles["show-odds-icon"] : "";
+
+        if (oddsValue <= 0) {
+            return null;
+        }
+
+        return (
             <div
                 id={`${tolgeeNamespace}-${choice}-odds`}
-                className={`text-center ${Styles["bet-odds"]} ${className} ${isOddUp ? Styles["up"] : Styles["down"]} ${
-                    showOddsIcon ? Styles["show-odds-icon"] : ""
-                }`}
+                className={`text-center ${Styles["bet-odds"]} ${className} ${styleUpOrDown} ${styleShowOddsIcon}`}
             >
                 {odds}
             </div>
-        ) : (
-            <></>
         );
     }, [odds, showOddsIcon]);
 };

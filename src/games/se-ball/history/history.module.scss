@@ -11,8 +11,6 @@
 
 .bet-detail-red3 {
     display: flex;
-    // width: 4rem;
-    // height: 1rem;
     background: url("/static/images/se-ball/bet-detail-red3.svg") no-repeat;
 }
 
@@ -26,4 +24,8 @@
 
 .bet-detail-blue4 {
     background: url("/static/images/se-ball/bet-detail-icon-blue4.svg") no-repeat;
+}
+
+.result-container {
+    gap: 0.2rem;
 }
