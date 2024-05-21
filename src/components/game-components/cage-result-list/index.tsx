@@ -5,10 +5,10 @@ import { RoundState } from "../../game-base/type";
 import { CageProps } from "../cage";
 import BallLoops from "../cage/ball-loop";
 import CageStyles from "../cage/cage.module.scss";
-import Styles from "./cage-other.module.scss";
-import ResultBallOther from "./result-ball-other";
+import Styles from "./cage-result-list.module.scss";
+import ResultEachBall from "./result-each-ball";
 
-const OtherCage: React.FC<CageProps> = ({
+const CageResultList: React.FC<CageProps> = ({
     position,
     isSmall,
     color,
@@ -24,8 +24,9 @@ const OtherCage: React.FC<CageProps> = ({
     const [highlightStyle, setHighlightStyle] = useState("");
 
     const defaultBallDelayTime = 450;
-    const delayBallRotation = 80;
-    const delayShowTotalPoint = 700;
+    const ballRotationDelayTime = 80;
+    const showTotalPointDelayTime = 700;
+    const showBallDelayTime = 1200;
 
     useEffect(() => {
         let timeOut: NodeJS.Timeout;
@@ -35,7 +36,7 @@ const OtherCage: React.FC<CageProps> = ({
                 () => {
                     setShowBalls(true);
                 },
-                playResultAnimation ? 1200 : 0
+                playResultAnimation ? showBallDelayTime : 0
             );
         }
 
@@ -45,7 +46,8 @@ const OtherCage: React.FC<CageProps> = ({
     });
 
     const incrementTotalPoint = useCallback((point: number, pos: number) => {
-        const delayTime = playResultAnimation ? delayShowTotalPoint + pos * delayBallRotation : 0;
+        const delayTime = playResultAnimation ? showTotalPointDelayTime + pos * ballRotationDelayTime : 0;
+
         const timeOut = setTimeout(() => {
             setTotalPoint((currentTotalPoint) => currentTotalPoint + point);
             if (listResult && pos === listResult.length) {
@@ -54,8 +56,8 @@ const OtherCage: React.FC<CageProps> = ({
         }, delayTime);
 
         return () => {
-            clearTimeout(timeOut);
             setHighlightStyle("");
+            clearTimeout(timeOut);
         };
     }, []);
 
@@ -66,10 +68,10 @@ const OtherCage: React.FC<CageProps> = ({
 
         return listResult.map((result, i) => {
             const ballPos = i + 1;
-            const delayTime = playResultAnimation ? ballPos * (initialBallDelayTime ?? defaultBallDelayTime) + delayBallRotation : 0;
+            const delayTime = playResultAnimation ? ballPos * (initialBallDelayTime ?? defaultBallDelayTime) + ballRotationDelayTime : 0;
 
             return (
-                <ResultBallOther
+                <ResultEachBall
                     key={result}
                     ballPos={ballPos}
                     isShowResultAnim={playResultAnimation}
@@ -115,4 +117,4 @@ const OtherCage: React.FC<CageProps> = ({
     );
 };
 
-export default memo(OtherCage);
+export default memo(CageResultList);

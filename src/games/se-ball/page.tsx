@@ -25,7 +25,7 @@ import { SeBallResult, SeBallSettlementResult } from "./types";
 
 const DrawIdBlock = dynamic(() => import("../../components/game-components/draw-id"));
 const SeBallBettingBlock = dynamic(() => import("./se-ball-betting-block"));
-const OtherPercentageStatistic = dynamic(() => import("../../components/game-components/statistic/other-percentage-statistic"));
+const OtherPercentageStatistic = dynamic(() => import("../../components/game-components/statistic/red-blue-statistic"));
 const SeBallBetHistoryModal = dynamic(() => import("./history"));
 
 export type SeBallState = {

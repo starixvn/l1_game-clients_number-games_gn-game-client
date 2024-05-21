@@ -4,7 +4,7 @@ import { GameStateContextModel } from "../../_shared/react-contexts/game-state-c
 import useResult from "../../_shared/react-hooks/use-result";
 import { RoundState } from "../../components/game-base/type";
 import { CageColor, CagePosition } from "../../components/game-components/cage";
-import OtherCage from "../../components/game-components/cage-other";
+import CageResultList from "../../components/game-components/cage-result-list";
 import Style from "./se-ball.module.scss";
 import { SeBallResult } from "./types";
 
@@ -34,7 +34,7 @@ const SeBallResultBlock: FC<SeBallResultBlockProps> = (props: SeBallResultBlockP
                 roundState === RoundState.BeforePlaceBet && isPlayStartRoundAnimation ? `showResultContainer ` : ""
             }`}
         >
-            <OtherCage
+            <CageResultList
                 color={CageColor.PURPLE}
                 position={CagePosition.LEFT}
                 isSmall={true}

@@ -5,7 +5,7 @@ import StatisticItem from "./statistic-item";
 import Styles from "./statistic.module.scss";
 import { PercentageStatisticProps } from "./types";
 
-export const OtherPercentageStatistic: React.FC<PercentageStatisticProps> = (props: PercentageStatisticProps) => {
+export const RedAndBlueStatistic: React.FC<PercentageStatisticProps> = (props: PercentageStatisticProps) => {
     const { statisticRuleEntries, roundHistory, otherStatisticRuleEntries, subBetOptionClass } = props;
     const counted = countSettlementResult(roundHistory);
     const statisticResult = calculatePercent(statisticRuleEntries, counted, roundHistory.length);
@@ -33,4 +33,4 @@ export const OtherPercentageStatistic: React.FC<PercentageStatisticProps> = (pro
         </div>
     );
 };
-export default OtherPercentageStatistic;
+export default RedAndBlueStatistic;

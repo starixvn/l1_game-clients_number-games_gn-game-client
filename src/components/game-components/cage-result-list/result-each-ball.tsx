@@ -1,13 +1,13 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 import { getBallColor } from "../../../_shared/helpers/ball-color-helper";
 import { useShowBallResultSound } from "../../../_shared/react-hooks";
-import ResultNumber from "../cage/result-number";
 import { Spritesheet } from "../sprites-sheet";
-import Styles from "./cage-other.module.scss";
+import BallRotation from "./ball-rotation";
+import Styles from "./cage-result-list.module.scss";
 
-const ResultBallOther: React.FC<{
+const ResultEachBall: React.FC<{
     ballPos: number;
     isShowResultAnim: boolean;
     gameFolder: string;
@@ -53,54 +53,4 @@ const ResultBallOther: React.FC<{
     }, [ballPos]);
 };
 
-const BallRotation: React.FC<{
-    ballPos: number;
-    fps: number;
-    number: number;
-    isShowResultAnim: boolean;
-    delayTime: number;
-    color: string;
-    incrementTotalPoint?: Function;
-}> = ({ ballPos, fps, number, isShowResultAnim, delayTime, color, incrementTotalPoint }) => {
-    const [showBall, setShowBall] = useState(false);
-
-    useEffect(() => {
-        const timeOut = setTimeout(() => {
-            setShowBall(true);
-            incrementTotalPoint(number, ballPos);
-        }, delayTime);
-
-        return () => {
-            clearTimeout(timeOut);
-        };
-    }, [ballPos]);
-
-    if (!showBall) {
-        return <></>;
-    }
-
-    return (
-        <div className={Styles[`ball-rotation-${ballPos}`]}>
-            <Spritesheet
-                image={`/static/images/cage/ball-${color}-middle-light.webp`}
-                widthFrame={153}
-                isResponsive
-                heightFrame={153}
-                steps={8}
-                autoplay
-                fps={fps ?? 40}
-                startAt={isShowResultAnim ? 0 : 31}
-                endAt={31}
-            />
-            <ResultNumber
-                className={Styles["number"]}
-                isDelayShowResult={true}
-                number={number.toString()}
-                isShowResultAnim={isShowResultAnim}
-                fps={fps}
-            />
-        </div>
-    );
-};
-
-export default ResultBallOther;
+export default ResultEachBall;
