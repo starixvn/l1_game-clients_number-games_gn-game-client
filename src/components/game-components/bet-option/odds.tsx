@@ -11,15 +11,16 @@ type Props = {
     animationClass?: string;
     animationDuration?: number;
     turnCounter: number;
+    isFormatOddsAuto?: boolean;
 } & BaseProps;
 
-export const Odds: React.FC<Props> = ({ tolgeeNamespace, choice, className, animationDuration, turnCounter }) => {
+export const Odds: React.FC<Props> = ({ tolgeeNamespace, choice, className, animationDuration, turnCounter, isFormatOddsAuto }) => {
     const [showOddsIcon, setShowOddsIcon] = useState(false);
     const [isOddUp, setIsOddUp] = useState(false);
     const [oddsValue, setOddsValue] = useState(0);
     const { gameConfigs, roundState } = useGameStateContext();
     const { fractionalOddsFormat } = usePlayerContext();
-    const odds = formatOdds(oddsValue, fractionalOddsFormat);
+    const odds = isFormatOddsAuto ? formatOdds(oddsValue, fractionalOddsFormat, 1) : formatOdds(oddsValue, fractionalOddsFormat);
 
     useEffect(() => {
         const odds = gameConfigs?.odds?.[choice] ?? 0;

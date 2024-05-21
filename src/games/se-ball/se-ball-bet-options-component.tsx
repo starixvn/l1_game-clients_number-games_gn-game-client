@@ -48,7 +48,15 @@ const SeBallBetOptionsComponent = () => {
     };
 
     const renderOdds = (choice: string) => {
-        return <Odds turnCounter={turnCounter} choice={choice} tolgeeNamespace={tolgeeNamespace} animationDuration={6} />;
+        return (
+            <Odds
+                turnCounter={turnCounter}
+                choice={choice}
+                tolgeeNamespace={tolgeeNamespace}
+                animationDuration={6}
+                isFormatOddsAuto={true}
+            />
+        );
     };
 
     const renderOwnBet = (choice: string) => {
