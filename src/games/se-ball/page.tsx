@@ -120,10 +120,10 @@ class SeBall extends GameBase<GameBaseProps> {
                 Math.round((countResult[SeBallBetOptions.RED4] * 100) / total) || 0,
             [SeBallBetOptions.BLUE4]: (countResult: object, total: number) =>
                 100 -
-                    (Math.round((countResult[SeBallBetOptions.BLUE3] * 100) / total) +
-                        Math.round((countResult[SeBallBetOptions.RED2] * 100) / total) +
-                        Math.round((countResult[SeBallBetOptions.RED3] * 100) / total) +
-                        Math.round((countResult[SeBallBetOptions.RED4] * 100) / total)) || 0,
+                    (Math.round(((countResult[SeBallBetOptions.BLUE3] ?? 0) * 100) / total) +
+                        Math.round(((countResult[SeBallBetOptions.RED2] ?? 0) * 100) / total) +
+                        Math.round(((countResult[SeBallBetOptions.RED3] ?? 0) * 100) / total) +
+                        Math.round(((countResult[SeBallBetOptions.RED4] ?? 0) * 100) / total)) || 0,
         };
 
         const subBetOptionClass = {

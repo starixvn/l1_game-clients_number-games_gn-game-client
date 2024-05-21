@@ -1,6 +1,7 @@
 @import "../../../styles/components/chip";
 
 .bet-settings {
+    position: relative;
     z-index: var(--bet-setting-index);
     width: 100%;
     cursor: auto;

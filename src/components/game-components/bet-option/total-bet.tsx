@@ -28,7 +28,7 @@ export const TotalBet: React.FC<BaseProps> = ({ tolgeeNamespace, choice, classNa
     const { rate, roundState } = useGameStateContext();
     const totalBet = totalBets?.[choice] ?? 0;
 
-    if (totalBet <= 0 || rate === 0 || roundState === RoundState.SwitchRound) {
+    if (totalBet <= 0 || rate === 0 || [RoundState.SwitchRound, RoundState.BeforePlaceBet].includes(roundState)) {
         return <></>;
     }
 
