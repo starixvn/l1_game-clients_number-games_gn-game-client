@@ -8,7 +8,9 @@ import { DashboardProps } from "../type";
 export class DashboardHandler {
     public readonly lobbyConnection: LobbySocketConnection;
 
-    constructor(private props: DashboardProps, private signOut: Function) {
+    constructor(
+        private readonly props: DashboardProps,
+        private readonly signOut: Function) {
         this.lobbyConnection = new LobbySocketConnection();
 
         this.connectLobbySocket();

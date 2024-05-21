@@ -9,17 +9,17 @@ import { ReCheckInResponse, SSOResponse } from "sc-user-service-client/dist/auth
 import { GlobalMessageTransmitter, GlobalTransmitterEvent } from "../../../../_shared/helpers/message-transmitter/global-transmitter";
 
 export class NotificationHandler {
-    private reCheckInInterval: NodeJS.Timeout;
+    private readonly reCheckInInterval: NodeJS.Timeout;
 
     public isKickOut = false;
     public readonly lobbyConnection: LobbySocketConnection;
     public notificationSocket: Socket = null;
 
     constructor(
-        private session: SSOResponse,
-        private setIsUm: Function,
-        private showApiErrorMessage: Function,
-        private signOut: Function) {
+        private readonly session: SSOResponse,
+        private readonly setIsUm: Function,
+        private readonly showApiErrorMessage: Function,
+        private readonly signOut: Function) {
         this.lobbyConnection = new LobbySocketConnection();
 
         this.connectNotificationSocket();
