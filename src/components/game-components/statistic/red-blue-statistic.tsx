@@ -17,15 +17,17 @@ export const RedAndBlueStatistic: React.FC<PercentageStatisticProps> = (props: P
         <div className={`flex ${Styles["statistic-container"]} ${Styles["other"]}`} id="bar-statistic">
             <div className={Styles["other-wrapper"]}>
                 {Object.keys(statisticResult).map((choice) => (
-                    <StatisticItem key={choice} value={`${statisticResult[choice]}%`} className={props.className}>
-                        <span className={`${Styles[choice]} ${Styles["statistic-choice-icon"]}`}>{t(`beadboard_${choice}`)}</span>
+                    <StatisticItem key={choice} value={`${statisticResult[choice]}%`}>
+                        <span className={`${Styles[choice]} ${Styles["statistic-choice-icon"]}  ${props.className}`}>
+                            {t(`beadboard_${choice}`)}
+                        </span>
                     </StatisticItem>
                 ))}
             </div>
 
             <div className={Styles["other-wrapper"]}>
                 {Object.keys(otherStatisticResult).map((choice) => (
-                    <StatisticItem key={choice} value={`${otherStatisticResult[choice]}%`} className={props.className}>
+                    <StatisticItem key={choice} value={`${otherStatisticResult[choice]}%`}>
                         <span className={subBetOptionClass[choice]}></span>
                     </StatisticItem>
                 ))}
