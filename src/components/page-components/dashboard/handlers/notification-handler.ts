@@ -29,7 +29,7 @@ export class NotificationHandler {
         }, 60 * 1000);
     }
 
-    connectNotificationSocket() {
+    connectNotificationSocket = () => {
         const { proxy, enableMsgpackParser } = getAppSettings();
 
         const socketUri = buildUrl();
@@ -49,7 +49,7 @@ export class NotificationHandler {
         this.registerNotificationSocketEvent();
     }
 
-    handleRecheckInResponse(response: ReCheckInResponse) {
+    handleRecheckInResponse = (response: ReCheckInResponse) => {
         if (!response || !response.isSuccessful) {
             this.signOut();
         } else if (response.apiError) {
@@ -59,7 +59,7 @@ export class NotificationHandler {
         }
     }
 
-    handleShowApiErrorMessage(errorCode: string, isDisableAccount = false) {
+    handleShowApiErrorMessage = (errorCode: string, isDisableAccount = false) => {
         if (isDisableAccount || isKickOutError(errorCode)) {
             this.isKickOut = true;
             setTimeout(() => {
@@ -70,7 +70,7 @@ export class NotificationHandler {
         this.showApiErrorMessage(errorCode)
     }
 
-    registerNotificationSocketEvent() {
+    registerNotificationSocketEvent = () => {
         this.notificationSocket.on("auth", this.handleAuth);
         this.notificationSocket.on("kickedOut", this.handleKickedOut);
         this.notificationSocket.on("reload", this.handleReload);
@@ -100,13 +100,12 @@ export class NotificationHandler {
         globalThis.location.reload();
     }
 
-    async handleReCheckIn() {
+    handleReCheckIn = async () => {
         const reCheckInResponse = await reCheckIn(this.session);
         this.handleRecheckInResponse(reCheckInResponse);
     }
 
-
-    reset() {
+    reset = () => {
         this.notificationSocket?.close();
         clearInterval(this.reCheckInInterval);
     }

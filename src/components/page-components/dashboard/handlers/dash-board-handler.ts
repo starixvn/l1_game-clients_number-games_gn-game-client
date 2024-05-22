@@ -19,7 +19,7 @@ export class DashboardHandler {
         GlobalMessageTransmitter.broadcast({ [GlobalTransmitterEvent.USER_INFO_RED]: this.props.authorizeResponse?.user?.red });
     }
 
-    checkIsNotOfferGame() {
+    checkIsNotOfferGame = () => {
         return this.props.authorizeResponse?.user?.offerGames && this.props.authorizeResponse?.user?.offerGames.length === 0;
     }
 
@@ -30,6 +30,7 @@ export class DashboardHandler {
 
         return (offerGames.includes(openGameId) && !backToLobby) || ssoRedirectGameId > 0;
     };
+
     getLobbyGamesIds = () => {
         const offerGamesIds = getOfferGamesIds(this.props.authorizeResponse);
         return getLobbyGameIds(this.props.lobbyConfigs)?.filter((gameId) => offerGamesIds.includes(gameId));
@@ -67,7 +68,7 @@ export class DashboardHandler {
         } as PlayerContextModel;
     };
 
-    async connectLobbySocket() {
+    connectLobbySocket = async () => {
         const { gameId } = loadURLContext();
         const offerGamesIds = getOfferGamesIds(this.props.authorizeResponse)?.filter((id) => id !== gameId);
         const { gameSettings } = getAppSettings();
@@ -84,7 +85,7 @@ export class DashboardHandler {
         this.updateGameTransmitters(this.lobbyConnection.getTransmitters());
     }
 
-    reset() {
+    reset = () => {
         this.lobbyConnection.closeSocket();
     }
 }
