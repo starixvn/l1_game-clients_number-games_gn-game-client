@@ -40,6 +40,7 @@ export type RegisterState = {
     authorizeResponse: AuthorizeResponse;
     lobbyConfigs: ILobbyConfigs;
     isUm: boolean;
+    isClickRegister: boolean;
 };
 
 export class Register extends PureComponent<RegisterProps, RegisterState> {
@@ -54,6 +55,7 @@ export class Register extends PureComponent<RegisterProps, RegisterState> {
         authorizeResponse: null,
         lobbyConfigs: null,
         isUm: false,
+        isClickRegister: false,
     };
 
     constructor(props: RegisterProps) {
@@ -90,8 +92,13 @@ export class Register extends PureComponent<RegisterProps, RegisterState> {
         this.setState({ isUm: true });
     }
 
+    updateClickRegister(isClickRegister: boolean) {
+        this.setState({ isClickRegister });
+    }
+
     async submit(event: FormEvent) {
         event.preventDefault();
+        this.updateClickRegister(true);
 
         const { name, avatar } = this.state;
         const { t, session } = this.props;
@@ -99,7 +106,7 @@ export class Register extends PureComponent<RegisterProps, RegisterState> {
 
         if (!NameGenerator.validateName(name)) {
             this.setState({ formValidity: t("Common.name_invalid"), isValidUsername: false });
-
+            this.updateClickRegister(false);
             return;
         }
 
@@ -127,7 +134,7 @@ export class Register extends PureComponent<RegisterProps, RegisterState> {
     };
 
     updateStatePreloadResource() {
-        this.setState({ isDonePreloadResource: true });
+        this.setState({ isDonePreloadResource: true, isClickRegister: false });
     }
 
     updateLobbyConfigs(lobbyConfigs: any) {
@@ -146,6 +153,7 @@ export class Register extends PureComponent<RegisterProps, RegisterState> {
             authorizeResponse,
             lobbyConfigs,
             isUm,
+            isClickRegister,
         } = this.state;
         const { t, session, isDirectMode, gameId } = this.props;
 
@@ -213,17 +221,19 @@ export class Register extends PureComponent<RegisterProps, RegisterState> {
                     </div>
                     {!isValidUsername && <label className={styles.error}>{formValidity}</label>}
 
-                    <button className={`btn-green ${styles.submit} ${isDonePreloadResource ? styles["btn-blur"] : ""}`} type="submit">
+                    <button className={`btn-green ${styles.submit} ${isClickRegister ? styles["btn-blur"] : ""}`} type="submit">
                         {t("SabaNumber.button_play_now")}
                     </button>
                 </form>
 
                 <p className={styles.note}>{t("SabaNumber.create_nickname_note")}</p>
-                <div className="loading">
-                    <div className="progress">
-                        <div className="progress-bar" id="register-progress-bar"></div>
+                {isClickRegister && (
+                    <div className="loading">
+                        <div className="progress">
+                            <div className="progress-bar" id="register-progress-bar"></div>
+                        </div>
                     </div>
-                </div>
+                )}
 
                 {isGalleryOpened && (
                     <AvatarGallery

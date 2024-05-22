@@ -76,18 +76,6 @@ exports[`Register render should match snapshot 1`] = `
         <p
           class="note"
         />
-        <div
-          class="loading"
-        >
-          <div
-            class="progress"
-          >
-            <div
-              class="progress-bar"
-              id="register-progress-bar"
-            />
-          </div>
-        </div>
       </div>
     </div>
   </div>
