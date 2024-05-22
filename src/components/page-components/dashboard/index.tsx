@@ -64,6 +64,7 @@ class Dashboard extends React.Component<Props, State> {
     private readonly lobbyConnectionHandler: LobbySocketConnection;
     private readonly swiperRef = React.createRef<SwiperCore>();
     private backToLobbyEventId = null;
+    private isUpdatingBalance = false;
 
     constructor(props: Props) {
         super(props);
@@ -134,6 +135,7 @@ class Dashboard extends React.Component<Props, State> {
             authorizeInfo.user.settings.quickBet = true;
             authorizeInfo.user.red = balance;
             GlobalMessageTransmitter.broadcast({ [GlobalTransmitterEvent.USER_INFO_RED]: authorizeInfo?.user?.red });
+            this.isUpdatingBalance = true;
             this.setState({ authorizeInfo });
         }
     }
@@ -190,10 +192,8 @@ class Dashboard extends React.Component<Props, State> {
     }
 
     shouldComponentUpdate(nextProps: Readonly<Props>, nextState: Readonly<State>, nextContext: any): boolean {
-        if (this.state.isLandscapeMode !== nextState.isLandscapeMode) {
-            return true;
-        }
-        if (this.state.openGameId > 0 && this.state.authorizeInfo?.authorized) {
+        if (this.state.openGameId > 0 && this.isUpdatingBalance) {
+            this.isUpdatingBalance = false;
             return false;
         }
 
