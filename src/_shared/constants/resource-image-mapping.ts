@@ -6,14 +6,15 @@ export const getDevicePixelRatio = () => {
 
 export const getPathImageGameId = (gameId: number) => {
     const gameSettings = getGameSettings(gameId);
-    const gameImagePath = gameSettings?.gameImagePath || "";
+    const gameImagePath = gameSettings?.gameResourceConfigs?.path || "";
+    const optionalGamePaths = gameSettings?.gameResourceConfigs?.optionalPaths || [];
 
     if (!gameImagePath) {
         return [];
     }
 
     const devicePixelRatioSuffix = getDevicePixelRatio() > 1 ? "/2x" : "/1x";
-    return [gameImagePath, `${gameImagePath}${devicePixelRatioSuffix}`];
+    return [gameImagePath, `${gameImagePath}${devicePixelRatioSuffix}`, ...optionalGamePaths];
 };
 
 export const getPathBanner = (locale: string, gameId: number) => {

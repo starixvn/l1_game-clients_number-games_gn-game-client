@@ -37,7 +37,10 @@ export interface GameSettings {
     numberOfRoundHistory?: number;
     gamePath?: string;
     isComingSoon?: boolean;
-    gameImagePath?: string;
+    gameResourceConfigs: {
+        path: string;
+        optionalPaths?: string[];
+    };
 }
 
 export type GamePropsContext = {
