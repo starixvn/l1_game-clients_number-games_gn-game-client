@@ -10,7 +10,9 @@ export class DashboardHandler {
 
     constructor(
         private readonly props: DashboardProps,
-        private readonly signOut: Function) {
+        private readonly signOut: Function,
+        private readonly updateGameTransmitters: Function
+    ) {
         this.lobbyConnection = new LobbySocketConnection();
 
         this.connectLobbySocket();
@@ -79,6 +81,7 @@ export class DashboardHandler {
         }
 
         await this.lobbyConnection.initLobbySocket(this.props.session, lobbyGamesIds);
+        this.updateGameTransmitters(this.lobbyConnection.getTransmitters());
     }
 
     reset() {

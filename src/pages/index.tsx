@@ -6,8 +6,7 @@ import { usePWAWoker } from "../_shared/react-hooks/use-pwa-worker";
 import SplashScreen from "../components/page-components/splash-screen";
 
 const Home = () => {
-    const { gameId, isDirectMode, token, language } = useContext(URLContext);
-    console.log(`Home`, { gameId, isDirectMode, token, language });
+    useContext(URLContext);
     usePWAWoker();
     const router = useRouter();
 

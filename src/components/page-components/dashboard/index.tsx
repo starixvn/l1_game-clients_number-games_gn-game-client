@@ -25,6 +25,7 @@ import { ErrorApiText } from "../../game-components/error-api-text";
 import Footer from "../../game-components/footer";
 import Header from "../header";
 import Lobby from "../lobby/lobby";
+import { LobbyGameTransmitter } from "../lobby/lobby-socket-connection";
 import ButtonSwipe from "./button-swipe";
 import Styles from "./dashboard.module.scss";
 import { DashboardHandler } from "./handlers/dash-board-handler";
@@ -62,6 +63,7 @@ class Dashboard extends React.PureComponent<DashboardProps, DashboardState> {
             isLandscapeMode: false,
             isChangedGame: false,
             isChangePrevGame: false,
+            gameTransmitters: {},
         };
 
         this.closeDialog = this.closeDialog.bind(this);
@@ -74,6 +76,7 @@ class Dashboard extends React.PureComponent<DashboardProps, DashboardState> {
         this.openGameFromLobby = this.openGameFromLobby.bind(this);
         this.changeOrientation = this.changeOrientation.bind(this);
         this.resetGameIdDashboardEvent = this.resetGameIdDashboardEvent.bind(this);
+        this.updateGameTransmitters = this.updateGameTransmitters.bind(this);
 
         const buildId = process.env.buildVersion;
         const buildVersion = StorageHelper.get(localStorageKeys.buildVersion) ?? 0;
@@ -82,7 +85,7 @@ class Dashboard extends React.PureComponent<DashboardProps, DashboardState> {
             buildVersion && location.reload();
         }
 
-        this.dashboardHandler = dashboardHandler ?? new DashboardHandler(this.props, this.signOut);
+        this.dashboardHandler = dashboardHandler ?? new DashboardHandler(this.props, this.signOut, this.updateGameTransmitters);
 
         this.notificationHandler =
             notificationHandler ?? new NotificationHandler(this.props.session, this.props.setIsUm, this.showApiErrorMessage, this.signOut);
@@ -103,6 +106,10 @@ class Dashboard extends React.PureComponent<DashboardProps, DashboardState> {
 
     async resetGameIdDashboardEvent() {
         this.setState({ openGameId: 0 });
+    }
+
+    updateGameTransmitters(gameTransmitters: Record<number, LobbyGameTransmitter>) {
+        this.setState({ gameTransmitters });
     }
 
     async componentDidMount() {
@@ -208,7 +215,11 @@ class Dashboard extends React.PureComponent<DashboardProps, DashboardState> {
 
         return (
             <LobbyConnectionContextProvider value={this.dashboardHandler.buildLobbyConnectionContextValue()}>
-                <Lobby openGame={(gameId: number) => this.openGameFromLobby(gameId)} lobbyConfigs={this.props.lobbyConfigs} />
+                <Lobby
+                    openGame={(gameId: number) => this.openGameFromLobby(gameId)}
+                    lobbyConfigs={this.props.lobbyConfigs}
+                    gameTransmitters={this.state.gameTransmitters}
+                />
             </LobbyConnectionContextProvider>
         );
     }

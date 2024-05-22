@@ -28,7 +28,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any[]>
     const cachedImageFiles = cacheImages.get(cacheKey);
 
     if (cachedImageFiles) {
-        console.log("Get Cache", cachedImageFiles);
         return res.status(200).json(cachedImageFiles);
     }
 

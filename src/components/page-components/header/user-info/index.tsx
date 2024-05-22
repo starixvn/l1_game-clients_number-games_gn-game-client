@@ -46,7 +46,6 @@ export const UserInfo: React.FC<{
         });
 
         const avatarIdHandlerId = registerGlobalMessageEvent(GlobalTransmitterEvent.CHANGE_AVATAR_ID, ({ avatarId }) => {
-            console.log({ avatarId })
             setUserInfo({
                 ...userInfo,
                 avatarId: avatarId

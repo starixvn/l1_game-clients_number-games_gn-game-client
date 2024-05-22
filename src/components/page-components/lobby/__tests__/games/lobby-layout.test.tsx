@@ -1,7 +1,6 @@
 import { render } from "@testing-library/react";
 import React, { useState as useStateMock } from "react";
 import { getAppSettings } from "../../../../../_shared/app-settings";
-import { useLobbyConnectionContext } from "../../../../../_shared/react-contexts";
 import { ComingSoonGameBoard } from "../../games/components/coming-soon-game-board";
 import { GameBoard } from "../../games/components/game-board";
 import { LobbyLayout } from "../../games/lobby-layout";
@@ -15,7 +14,6 @@ jest.mock("../../../../../_shared/helpers", () => ({
 }));
 jest.mock("../../../../../_shared/react-contexts", () => ({
     usePlayerContext: jest.fn().mockReturnValue({}),
-    useLobbyConnectionContext: jest.fn(),
 }));
 jest.mock("../../games/components/game-board", () => {
     return {
@@ -52,10 +50,10 @@ describe(LobbyLayout.name, () => {
         it("should render game board correctly", () => {
             // Arrange
             const gameTransmitters = { 1001: { register: jest.fn() }, 1002: {} } as any;
-            (useLobbyConnectionContext as jest.Mock).mockReturnValueOnce({ gameTransmitters });
             jest.spyOn(React, "useState").mockImplementation(() => [lastClickedGameId, setState]);
+
             // Act
-            const { container } = render(<LobbyLayout lobbyConfigs={[] as any} openGame={null} />);
+            const { container } = render(<LobbyLayout lobbyConfigs={[] as any} openGame={null} gameTransmitters={gameTransmitters} />);
 
             // Assert
             expect(container).toMatchSnapshot();
@@ -85,10 +83,10 @@ describe(LobbyLayout.name, () => {
 
         it("should return empty when not exist gameTransmitters", () => {
             // Arrange
-            (useLobbyConnectionContext as jest.Mock).mockReturnValueOnce({ gameTransmitters: null });
+            const mockGameTransmitters = null;
 
             // Act
-            const { container } = render(<LobbyLayout lobbyConfigs={[] as any} openGame={null} />);
+            const { container } = render(<LobbyLayout lobbyConfigs={[] as any} openGame={null} gameTransmitters={mockGameTransmitters} />);
 
             // Assert
             expect(container.innerHTML).toEqual("");

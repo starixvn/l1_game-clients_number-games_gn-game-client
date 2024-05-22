@@ -1,18 +1,19 @@
 import { useMemo, useState } from "react";
 import { getAppSettings } from "../../../../_shared/app-settings";
 import { getLobbyGameIds, getOfferGamesIds } from "../../../../_shared/helpers";
-import { useLobbyConnectionContext, usePlayerContext } from "../../../../_shared/react-contexts";
+import { usePlayerContext } from "../../../../_shared/react-contexts";
 import { ILobbyConfigs } from "../../dashboard/type";
+import { LobbyGameTransmitter } from "../lobby-socket-connection";
 import { ComingSoonGameBoard } from "./components/coming-soon-game-board";
 import { GameBoard } from "./components/game-board";
 
 type Props = {
     openGame: Function;
     lobbyConfigs: ILobbyConfigs;
+    gameTransmitters: Record<number, LobbyGameTransmitter>;
 };
-export const LobbyLayout: React.FC<Props> = ({ lobbyConfigs, openGame }) => {
+export const LobbyLayout: React.FC<Props> = ({ lobbyConfigs, openGame, gameTransmitters }) => {
     const { authorizeInfo } = usePlayerContext();
-    const { gameTransmitters } = useLobbyConnectionContext();
     const [lastClickedGameId, setLastClickedGameId] = useState(null);
 
     const gamesSettings = useMemo(() => {
@@ -34,11 +35,9 @@ export const LobbyLayout: React.FC<Props> = ({ lobbyConfigs, openGame }) => {
         return [];
     }, []);
 
-    console.log(`LobbyLayout`)
-    console.log({ ...gamesSettings })
-
     return (
         gameTransmitters &&
+        Object.values(gameTransmitters).length > 0 &&
         gamesSettings && (
             <>
                 {gamesSettings.map((gameSettings) => (
