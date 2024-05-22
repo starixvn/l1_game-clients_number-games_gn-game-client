@@ -10,12 +10,15 @@ import { PFEventActionType } from "../../../_shared/react-contexts/game-state-co
 import { Markup } from "interweave";
 import PfRoundBaseHelper from "../../../_shared/helpers/pf/pf-round-base-helper";
 import { ResourceTypes } from "../../../_shared/resources";
+import { useGameContext } from "../../../_shared/react-contexts";
 
 const PFVerification: FC = () => {
+    const { tolgeeNamespace } = useGameContext();
     const { pfVerifyModalData: pfResult } = usePFContext();
     const [mergeClientSeed, setMergeClientSeed] = useState(pfResult?.editedMergeClientSeed || pfResult?.mergeClientSeed || "");
     const dispatch = usePFDispatch();
     const { t } = useTranslator();
+    const { t: translateInGame } = useTranslator([tolgeeNamespace]);
     const [combinedHash, setCombinedHash] = useState(pfResult.finalHash);
 
     const BALLS_EACH_ROUND = 4;
@@ -41,11 +44,11 @@ const PFVerification: FC = () => {
         return Array.from(Array(BALLS_EACH_ROUND), (_, index) => {
             const { randomNumbers, convertNumber, ballIndexes } = verifyInfo;
 
-            const line = `<span style="color: #ffbc11; font-weight: 600">Ball ${index + 1} - ${t(
-                `${ResourceTypes.SABA_NUMBER}.pf_index`
-            )} (1-${TOTAL_BALLS - index})</span> = ((${randomNumbers[index]}+${convertNumber[index]}) mod ${
-                TOTAL_BALLS - index
-            }) + 1 = <span style="color: #ffbc11; font-weight: 600">${ballIndexes[index]}</span>`;
+            const line = `<span style="color: #ffbc11; font-weight: 600">${t(`${ResourceTypes.SABA_NUMBER}.pf_verifier_tool_ball`, {
+                value: index + 1,
+            })} - ${t(`${ResourceTypes.SABA_NUMBER}.pf_index`)} (1-${TOTAL_BALLS - index})</span> = ((${randomNumbers[index]}+${
+                convertNumber[index]
+            }) mod ${TOTAL_BALLS - index}) + 1 = <span style="color: #ffbc11; font-weight: 600">${ballIndexes[index]}</span>`;
 
             return (
                 <p key={index}>
@@ -131,7 +134,7 @@ const PFVerification: FC = () => {
                     <p className="text-wrap">{combinedHash}</p>
                 </Section>
 
-                <Section title={t(`${ResourceTypes.SABA_NUMBER}.pf_verification_para_3`)}>
+                <Section title={translateInGame("pf_verifier_tool_para_24")}>
                     <p className="font-weight-medium">
                         {verifyInfo.convertNumber.map((item, index) => {
                             const rawDigit = verifyInfo.rawDigits[index];

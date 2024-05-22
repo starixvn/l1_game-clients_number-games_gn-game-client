@@ -364,7 +364,11 @@
     &.anim-blue3,
     &.anim-red3,
     &.anim-red4,
-    &.anim-blue4,
+    &.anim-blue4 {
+        top: -0.4rem;
+        left: 0;
+    }
+
     &.anim-red2 {
         top: -0.3rem;
         left: 0;
