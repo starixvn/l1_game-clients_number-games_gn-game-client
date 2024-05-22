@@ -8,7 +8,7 @@ export type GameRoundHistorydHandlerProps = {
 };
 
 export class GameRoundHistoryHandler {
-    constructor(private readonly props: GameRoundHistorydHandlerProps) { }
+    constructor(private readonly props: GameRoundHistorydHandlerProps) {}
 
     handleRoundHistory({ roundHistory, roundId, newRoundState }) {
         const { roundState, isUMInFirstLoad } = this.props.gameStateContextModel();
@@ -23,9 +23,8 @@ export class GameRoundHistoryHandler {
             payload: {
                 roundHistory: roundHistory,
                 roundId: [RoundState.DisplayResult].includes(verifiedRoundState) || isUMInFirstLoad ? roundId - 1 : roundId,
-                settlementResult: verifiedRoundState === RoundState.LockingBet ? {} : roundHistory[0]?.settlementResult,
-                playResultAnimation: false,
-                showResultInfo: [RoundState.DisplayResult].includes(verifiedRoundState) || isUMInFirstLoad ? true : false,
+                settlementResult: roundHistory[0]?.settlementResult,
+                isShowBlink: [RoundState.LockingBet].includes(verifiedRoundState),
             },
         });
     }

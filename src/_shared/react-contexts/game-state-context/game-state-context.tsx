@@ -127,8 +127,9 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
                 roundId,
                 result,
                 settlementResult,
-                playResultAnimation,
-                showResultInfo,
+                isShowBlink,
+                playResultAnimation: false,
+                showResultInfo: true,
             };
         }
 
@@ -141,6 +142,7 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
                 roundId,
                 drawId,
                 roundData,
+                showResultInfo: false,
             };
         }
 
@@ -157,7 +159,6 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
                 rate,
             };
         }
-
 
         case GameEventActionType.DISCONNECT_ERROR: {
             return {
@@ -212,7 +213,6 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
                 showWinningAnimation,
             };
         }
-
 
         case GameEventActionType.ACTIVE_SCORE_BOARD: {
             return {
