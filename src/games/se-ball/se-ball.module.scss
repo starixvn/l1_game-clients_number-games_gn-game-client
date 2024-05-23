@@ -335,9 +335,10 @@
 
 .highlight-winning-bg-odd,
 .highlight-winning-bg-even {
-    width: 17.7rem;
+    width: 17.8rem;
     height: 9.4rem;
     background: url("/static/images/se-ball/highlight-winning-bg-even.png") no-repeat;
+    //background-size: 17.8rem 9.4rem;
 }
 
 .highlight-winning-bg-even {
@@ -367,7 +368,6 @@
     height: 7.4rem;
     background: url("/static/images/se-ball/highlight-winning-bg-blue4.png") no-repeat;
     left: 0.5rem;
-    top: 0.1rem;
 }
 
 .highlight-winning-bg-red4 {
@@ -382,17 +382,27 @@
     height: 9.4rem;
     width: 17.8rem;
     position: absolute;
-    left: 0;
-    top: 0;
+
     background-image: url("/static/images/se-ball/odd-even-winning-prev.png");
     background-image: image-set(
         url("/static/images/se-ball/1x/odd-even-winning-prev.png") 1x,
         url("/static/images/se-ball/2x/odd-even-winning-prev.png") 2x
     );
+    background-repeat: no-repeat;
+}
+
+.highlight-prev-result-odd {
+    height: 9.4rem;
+    width: 18rem;
+    left: -0.1rem;
+    top: 0;
 }
 
 .highlight-prev-result-even {
     transform: scaleX(-1);
+    height: 9.4rem;
+    width: 18rem;
+    right: -0.1rem;
     top: 0;
 }
 
@@ -401,8 +411,8 @@
     height: 6.8rem;
     width: 13.8rem;
     position: absolute;
-    left: 0;
-    top: 0;
+    left: -0.1rem;
+    top: -0.1rem;
     background-image: url("/static/images/se-ball/blue3-red3-winning-prev.png");
     background-image: image-set(
         url("/static/images/se-ball/1x/blue3-red3-winning-prev.png") 1x,
@@ -415,8 +425,8 @@
     height: 6.8rem;
     width: 13.8rem;
     position: absolute;
-    left: 0;
-    top: 0;
+    left: -0.1rem;
+    top: -0.1rem;
     background-image: url("/static/images/se-ball/blue4-red4-winning-prev.png");
     background-image: image-set(
         url("/static/images/se-ball/1x/blue4-red4-winning-prev.png") 1x,
@@ -433,7 +443,7 @@
     height: 14.8rem;
     position: absolute;
     left: 0;
-    top: 0;
+    top: 0.1rem;
     background-image: url("/static/images/se-ball/red2-winning-prev.png");
     background-image: image-set(
         url("/static/images/se-ball/1x/red2-winning-prev.png") 1x,
