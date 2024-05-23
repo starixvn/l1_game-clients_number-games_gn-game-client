@@ -22,32 +22,32 @@
         position: absolute;
         height: 18rem;
         width: 59.6rem;
-        bottom: -12.8rem;
+        bottom: -11.5rem;
         margin-left: -1rem;
     }
 
     .ball-rotation-1 {
         position: absolute;
-        left: 0;
-        bottom: 5rem;
+        left: 11px;
+        bottom: 37px;
     }
 
     .ball-rotation-2 {
         position: absolute;
-        left: 15rem;
-        bottom: 5rem;
+        left: 153px;
+        bottom: 37px;
     }
 
     .ball-rotation-3 {
         position: absolute;
-        right: 14rem;
-        bottom: 5rem;
+        right: 142px;
+        bottom: 37px;
     }
 
     .ball-rotation-4 {
         position: absolute;
-        right: -1rem;
-        bottom: 5rem;
+        right: 0;
+        bottom: 37px;
     }
 }
 
@@ -80,43 +80,4 @@
     color: #fff;
     text-shadow: 0.1rem 0.1rem 2rem rgba(255, 255, 255, 0.6);
     font-variant-numeric: tabular-nums;
-}
-
-.highlight {
-    animation: heartbeat 1.5s ease-in-out both;
-}
-
-@keyframes heartbeat {
-    from {
-        -webkit-transform: scale(1);
-        transform: scale(1);
-        -webkit-transform-origin: center center;
-        transform-origin: center center;
-        -webkit-animation-timing-function: ease-out;
-        animation-timing-function: ease-out;
-    }
-    10% {
-        -webkit-transform: scale(0.92);
-        transform: scale(0.92);
-        -webkit-animation-timing-function: ease-in;
-        animation-timing-function: ease-in;
-    }
-    17% {
-        -webkit-transform: scale(0.99);
-        transform: scale(0.99);
-        -webkit-animation-timing-function: ease-out;
-        animation-timing-function: ease-out;
-    }
-    33% {
-        -webkit-transform: scale(0.88);
-        transform: scale(0.88);
-        -webkit-animation-timing-function: ease-in;
-        animation-timing-function: ease-in;
-    }
-    45% {
-        -webkit-transform: scale(1);
-        transform: scale(1);
-        -webkit-animation-timing-function: ease-out;
-        animation-timing-function: ease-out;
-    }
 }

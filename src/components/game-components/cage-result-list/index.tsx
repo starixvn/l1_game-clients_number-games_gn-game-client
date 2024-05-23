@@ -1,14 +1,27 @@
 import Image from "next/image";
-import React, { memo, useCallback, useEffect, useState } from "react";
+import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
 
+import { GameStateContextModel } from "../../../_shared/react-contexts/game-state-context/game-state-context-model";
 import { RoundState } from "../../game-base/type";
-import { CageProps } from "../cage";
 import BallLoops from "../cage/ball-loop";
 import CageStyles from "../cage/cage.module.scss";
+import { Spritesheet } from "../sprites-sheet";
 import Styles from "./cage-result-list.module.scss";
-import ResultEachBall from "./result-each-ball";
+import ResultGroup from "./result-group";
 
-const CageResultList: React.FC<CageProps> = ({
+export type CageResultListProps = {
+    color: string;
+    isSmall: boolean;
+    position: string;
+    isPlayStartRoundAnimation?: boolean;
+    listResult: number[];
+    gameFolder: string;
+    listBallAnimSize: number[];
+    initialBallDelayTime?: number;
+    ballFPS?: number;
+} & Partial<GameStateContextModel>;
+
+const CageResultList: React.FC<CageResultListProps> = ({
     position,
     isSmall,
     color,
@@ -18,6 +31,8 @@ const CageResultList: React.FC<CageProps> = ({
     listResult,
     roundState,
     initialBallDelayTime,
+    gameFolder,
+    listBallAnimSize,
 }) => {
     const [showBalls, setShowBalls] = useState(false);
     const [totalPoint, setTotalPoint] = useState(0);
@@ -45,34 +60,6 @@ const CageResultList: React.FC<CageProps> = ({
         setTotalPoint((currentTotalPoint) => currentTotalPoint + point);
     }, []);
 
-    const showResult = () => {
-        if (!listResult) {
-            return <></>;
-        }
-
-        return listResult.map((result, i) => {
-            const ballRotationDelayTime = 80;
-            const defaultBallDelayTime = 450;
-            const ballPos = i + 1;
-            const delayTime = playResultAnimation ? ballPos * (initialBallDelayTime ?? defaultBallDelayTime) + ballRotationDelayTime : 0;
-
-            return (
-                <ResultEachBall
-                    key={result}
-                    ballPos={ballPos}
-                    isShowResultAnim={playResultAnimation}
-                    fps={ballFPS}
-                    number={result}
-                    gameFolder={"se-ball"}
-                    width={596}
-                    height={180}
-                    delayTime={delayTime}
-                    incrementTotalPoint={incrementTotalPoint}
-                />
-            );
-        });
-    };
-
     return (
         <div
             className={`${CageStyles["cage-area"]} ${isSmall ? CageStyles["small"] : ""} ${CageStyles[position]} ${
@@ -99,7 +86,30 @@ const CageResultList: React.FC<CageProps> = ({
             </div>
             {showBalls && totalPoint > 0 && <div className={`${Styles["total-point"]} `}>{totalPoint}</div>}
 
-            {showBalls && showResult()}
+            <div id="show-ball-anim" className={Styles["show-ball-anim"]}>
+                {showBalls && (
+                    <ResultGroup
+                        listResult={listResult}
+                        playResultAnimation={playResultAnimation}
+                        initialBallDelayTime={initialBallDelayTime}
+                        fps={ballFPS}
+                        incrementTotalPoint={incrementTotalPoint}
+                    />
+                )}
+
+                {playResultAnimation && (
+                    <Spritesheet
+                        className={`${Styles["ball-result"]}`}
+                        image={`/static/images/${gameFolder}/result-ball/ball-highlight.webp?v=1`}
+                        widthFrame={listBallAnimSize[0]}
+                        isResponsive
+                        heightFrame={listBallAnimSize[1]}
+                        steps={6}
+                        autoplay
+                        fps={ballFPS ?? 40}
+                    />
+                )}
+            </div>
         </div>
     );
 };
