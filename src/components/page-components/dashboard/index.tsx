@@ -129,13 +129,13 @@ class Dashboard extends React.Component<Props, State> {
         this.setState({ authorizeInfo: clonedAuthorizeInfo });
     }
 
-    updateUserBalance(balance: number) {
+    updateUserBalance(balance: number, setBalanceByPlaceBet = true) {
         const authorizeInfo = { ...this.state.authorizeInfo };
         if (authorizeInfo && authorizeInfo.authorized && authorizeInfo.user.red !== balance) {
             authorizeInfo.user.settings.quickBet = true;
             authorizeInfo.user.red = balance;
             GlobalMessageTransmitter.broadcast({ [GlobalTransmitterEvent.USER_INFO_RED]: authorizeInfo?.user?.red });
-            this.isUpdatingBalance = true;
+            this.isUpdatingBalance = setBalanceByPlaceBet;
             this.setState({ authorizeInfo });
         }
     }
@@ -180,7 +180,7 @@ class Dashboard extends React.Component<Props, State> {
         } else if (response.apiError) {
             this.handleShowApiErrorMessage(response.apiError.errorCode, response.isDisableAccount);
         } else {
-            this.updateUserBalance(response.balance);
+            this.updateUserBalance(response.balance, false);
         }
     }
 
@@ -454,8 +454,10 @@ class Dashboard extends React.Component<Props, State> {
 
     renderDashBoard() {
         window.history.pushState(null, null, "/");
+        this.isUpdatingBalance = true;
 
         const { isShowErrorModal, authorizeInfo, isBlockUI, isChangedGame, isChangePrevGame } = this.state;
+
         const authContextValue = {
             authorizeInfo: authorizeInfo,
             session: this.props.session,
@@ -469,7 +471,6 @@ class Dashboard extends React.Component<Props, State> {
         const isRenderGames = this.shouldRenderGames(offerGames);
         const allowSwipeGameOndDesktop = !this.props.directMode && !isMobileOnly && isRenderGames;
 
-        console.log("renderDashBoard", { isRenderGames });
 
         const allowSwipeGameOndDesktopStyle = isChangePrevGame ? Styles["slide-left"] : Styles["slide-right"];
         const changeGameStyle = isChangedGame && allowSwipeGameOndDesktop ? allowSwipeGameOndDesktopStyle : "";
@@ -480,9 +481,8 @@ class Dashboard extends React.Component<Props, State> {
                 <SettingContextProvider>
                     {allowSwipeGameOndDesktop && <ButtonSwipe isPrev={true} swiper={this.swiperRef} />}
                     <div
-                        className={`${Styles["dashboard"]} ${changeGameStyle} ${!isRenderGames ? "no-scroll" : ""} ${
-                            isMobileOnly ? Styles["hidden-scrollbar"] : ""
-                        }`}
+                        className={`${Styles["dashboard"]} ${changeGameStyle} ${!isRenderGames ? "no-scroll" : ""} ${isMobileOnly ? Styles["hidden-scrollbar"] : ""
+                            }`}
                         id={"dashboard"}
                     >
                         <Header />
