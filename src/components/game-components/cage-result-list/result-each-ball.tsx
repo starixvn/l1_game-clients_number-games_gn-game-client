@@ -27,7 +27,7 @@ const ResultEachBall: React.FC<{
 
         return (
             <div key={uuidv4()} id="show-ball-anim" className={Styles["show-ball-anim"]}>
-                {isShowResultAnim && (
+                {/* {isShowResultAnim && (
                     <Spritesheet
                         className={`${Styles["ball-result"]}`}
                         image={`/static/images/${gameFolder}/result-ball/${ballName}.webp?v=1`}
@@ -38,7 +38,7 @@ const ResultEachBall: React.FC<{
                         autoplay
                         fps={fps ?? 40}
                     />
-                )}
+                )} */}
                 <BallRotation
                     fps={fps}
                     ballPos={ballPos}
