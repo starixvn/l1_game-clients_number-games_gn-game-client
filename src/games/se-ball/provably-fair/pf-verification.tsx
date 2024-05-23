@@ -43,12 +43,15 @@ const PFVerification: FC = () => {
     const ballIndexRender = () => {
         return Array.from(Array(BALLS_EACH_ROUND), (_, index) => {
             const { randomNumbers, convertNumber, ballIndexes } = verifyInfo;
-
-            const line = `<span style="color: #ffbc11; font-weight: 600">${t(`${ResourceTypes.SABA_NUMBER}.pf_verifier_tool_ball`, {
+            const ballIndexText = t(`${ResourceTypes.SABA_NUMBER}.pf_verifier_tool_ball`, {
                 value: index + 1,
-            })} - ${t(`${ResourceTypes.SABA_NUMBER}.pf_index`)} (1-${TOTAL_BALLS - index})</span> = ((${randomNumbers[index]}+${
-                convertNumber[index]
-            }) mod ${TOTAL_BALLS - index}) + 1 = <span style="color: #ffbc11; font-weight: 600">${ballIndexes[index]}</span>`;
+            });
+
+            const line = `<span style="color: #ffbc11; font-weight: 600">${ballIndexText} - ${t(
+                `${ResourceTypes.SABA_NUMBER}.pf_index`
+            )} (1-${TOTAL_BALLS - index})</span> = ((${randomNumbers[index]}+${convertNumber[index]}) mod ${
+                TOTAL_BALLS - index
+            }) + 1 = <span style="color: #ffbc11; font-weight: 600">${ballIndexes[index]}</span>`;
 
             return (
                 <p key={index}>
