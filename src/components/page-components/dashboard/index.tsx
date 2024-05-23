@@ -55,7 +55,6 @@ class Dashboard extends React.PureComponent<DashboardProps, DashboardState> {
             userStakeLevel: { minBet: 0, maxBet: 0 },
             isShowErrorModal: false,
             apiError: null,
-            isShowAnnouncement: false,
             isBlockUI: false,
             queryGame: this.props.queryGame,
             openGameId: null,
@@ -70,7 +69,6 @@ class Dashboard extends React.PureComponent<DashboardProps, DashboardState> {
         this.showApiErrorMessage = this.showApiErrorMessage.bind(this);
         this.handleUpdateUserStakeLevel = this.handleUpdateUserStakeLevel.bind(this);
         this.signOut = this.signOut.bind(this);
-        this.toggleAnnouncementModal = this.toggleAnnouncementModal.bind(this);
         this.openGame = this.openGame.bind(this);
         this.onVisibilityChange = this.onVisibilityChange.bind(this);
         this.openGameFromLobby = this.openGameFromLobby.bind(this);
@@ -91,7 +89,7 @@ class Dashboard extends React.PureComponent<DashboardProps, DashboardState> {
             notificationHandler ?? new NotificationHandler(this.props.session, this.props.setIsUm, this.showApiErrorMessage, this.signOut);
     }
 
-    async onVisibilityChange() {
+    onVisibilityChange() {
         if (!document["hidden"]) {
             this.notificationHandler.handleReCheckIn();
         }
@@ -104,7 +102,7 @@ class Dashboard extends React.PureComponent<DashboardProps, DashboardState> {
         }, 100);
     }
 
-    async resetGameIdDashboardEvent() {
+    resetGameIdDashboardEvent() {
         this.setState({ openGameId: 0 });
     }
 
@@ -169,11 +167,6 @@ class Dashboard extends React.PureComponent<DashboardProps, DashboardState> {
     closeDialog() {
         this.setState({ isShowErrorModal: false });
         this.notificationHandler.isKickOut && this.signOut();
-    }
-
-    toggleAnnouncementModal() {
-        const { isShowAnnouncement } = this.state;
-        this.setState({ isShowAnnouncement: !isShowAnnouncement });
     }
 
     openGame(gameId: number) {

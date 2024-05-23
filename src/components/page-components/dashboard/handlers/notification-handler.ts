@@ -1,7 +1,6 @@
 
 import { buildUrl, isKickOutError, localStorageKeys, StorageHelper } from "../../../../_shared/helpers";
 import { getAppSettings } from "../../../../_shared/app-settings";
-import { LobbySocketConnection } from "../../lobby/lobby-socket-connection";
 import { io, Socket } from "socket.io-client";
 import MsgpackParser from "socket.io-msgpack-parser";
 import { reCheckIn } from "../../../../services/auth-service";
@@ -10,9 +9,7 @@ import { GlobalMessageTransmitter, GlobalTransmitterEvent } from "../../../../_s
 
 export class NotificationHandler {
     private readonly reCheckInInterval: NodeJS.Timeout;
-
     public isKickOut = false;
-    public readonly lobbyConnection: LobbySocketConnection;
     public notificationSocket: Socket = null;
 
     constructor(
@@ -20,7 +17,6 @@ export class NotificationHandler {
         private readonly setIsUm: Function,
         private readonly showApiErrorMessage: Function,
         private readonly signOut: Function) {
-        this.lobbyConnection = new LobbySocketConnection();
 
         this.connectNotificationSocket();
         this.reCheckInInterval = setInterval(async () => {

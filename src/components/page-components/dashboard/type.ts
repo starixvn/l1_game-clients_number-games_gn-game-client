@@ -24,7 +24,6 @@ export type DashboardState = {
     userStakeLevel: UserStakeLevel;
     isShowErrorModal: boolean;
     apiError: APIErrorProp;
-    isShowAnnouncement: boolean;
     isBlockUI: boolean;
     queryGame: number;
     openGameId: number;

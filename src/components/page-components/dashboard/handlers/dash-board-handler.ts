@@ -11,9 +11,10 @@ export class DashboardHandler {
     constructor(
         private readonly props: DashboardProps,
         private readonly signOut: Function,
-        private readonly updateGameTransmitters: Function
+        private readonly updateGameTransmitters: Function,
+        lobbyConnection: LobbySocketConnection = null
     ) {
-        this.lobbyConnection = new LobbySocketConnection();
+        this.lobbyConnection = lobbyConnection ?? new LobbySocketConnection();
 
         this.connectLobbySocket();
         GlobalMessageTransmitter.broadcast({ [GlobalTransmitterEvent.USER_INFO_RED]: this.props.authorizeResponse?.user?.red });
