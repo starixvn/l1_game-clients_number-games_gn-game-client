@@ -6,6 +6,7 @@ export type PlayerContextModel = {
     authorizeInfo?: AuthorizeResponse;
     session?: SSOResponse;
     locale?: string;
+    setBalance?: (balance: number) => void;
     signOut?: () => void;
     fractionalOddsFormat?: boolean;
     enableQuickBet: boolean

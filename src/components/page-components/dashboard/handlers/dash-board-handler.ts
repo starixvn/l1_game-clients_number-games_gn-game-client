@@ -1,7 +1,6 @@
 import { getAppSettings } from "../../../../_shared/app-settings";
 import { getLobbyGameIds, getOfferGamesIds, localStorageKeys, StorageHelper } from "../../../../_shared/helpers";
-import { GlobalMessageTransmitter, GlobalTransmitterEvent } from "../../../../_shared/helpers/message-transmitter/global-transmitter";
-import { loadURLContext, PlayerContextModel, URLContextModel } from "../../../../_shared/react-contexts";
+import { loadURLContext, URLContextModel } from "../../../../_shared/react-contexts";
 import { LobbySocketConnection } from "../../lobby/lobby-socket-connection";
 import { DashboardProps } from "../type";
 
@@ -10,14 +9,11 @@ export class DashboardHandler {
 
     constructor(
         private readonly props: DashboardProps,
-        private readonly signOut: Function,
         private readonly updateGameTransmitters: Function,
         lobbyConnection: LobbySocketConnection = null
     ) {
         this.lobbyConnection = lobbyConnection ?? new LobbySocketConnection();
-
         this.connectLobbySocket();
-        GlobalMessageTransmitter.broadcast({ [GlobalTransmitterEvent.USER_INFO_RED]: this.props.authorizeResponse?.user?.red });
     }
 
     checkIsNotOfferGame = () => {
@@ -57,16 +53,6 @@ export class DashboardHandler {
             removeGameTransmitter: this.removeGameTransmitter,
             reconnectGameTransmitter: this.reconnectGameTransmitter,
         };
-    };
-
-    buildAuthContextValue = () => {
-        return {
-            authorizeInfo: this.props.authorizeResponse,
-            session: this.props.session,
-            signOut: this.signOut,
-            fractionalOddsFormat: this.props.authorizeResponse.user?.fractionalOddsFormat ?? false,
-            enableQuickBet: true,
-        } as PlayerContextModel;
     };
 
     connectLobbySocket = async () => {

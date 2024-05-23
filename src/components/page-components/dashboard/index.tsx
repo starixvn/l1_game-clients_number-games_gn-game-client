@@ -14,6 +14,7 @@ import {
 import SwiperCore from "swiper";
 import { ErrorNoGameOffer } from "../../../_shared/constants/error-code-dictionary";
 import {
+    GlobalMessageTransmitter,
     GlobalTransmitterEvent,
     registerGlobalMessageEvent,
     unsubscribeGlobalMessageEvent,
@@ -53,6 +54,7 @@ class Dashboard extends React.PureComponent<DashboardProps, DashboardState> {
 
         this.state = {
             userStakeLevel: { minBet: 0, maxBet: 0 },
+            authorizeInfo: this.props.authorizeResponse,
             isShowErrorModal: false,
             apiError: null,
             isBlockUI: false,
@@ -75,6 +77,7 @@ class Dashboard extends React.PureComponent<DashboardProps, DashboardState> {
         this.changeOrientation = this.changeOrientation.bind(this);
         this.resetGameIdDashboardEvent = this.resetGameIdDashboardEvent.bind(this);
         this.updateGameTransmitters = this.updateGameTransmitters.bind(this);
+        this.updateUserBalance = this.updateUserBalance.bind(this);
 
         const buildId = process.env.buildVersion;
         const buildVersion = StorageHelper.get(localStorageKeys.buildVersion) ?? 0;
@@ -83,10 +86,25 @@ class Dashboard extends React.PureComponent<DashboardProps, DashboardState> {
             buildVersion && location.reload();
         }
 
-        this.dashboardHandler = dashboardHandler ?? new DashboardHandler(this.props, this.signOut, this.updateGameTransmitters);
+        this.dashboardHandler = dashboardHandler ?? new DashboardHandler(this.props, this.updateGameTransmitters);
 
         this.notificationHandler =
-            notificationHandler ?? new NotificationHandler(this.props.session, this.props.setIsUm, this.showApiErrorMessage, this.signOut);
+            notificationHandler ?? new NotificationHandler(
+                this.props.session,
+                this.props.setIsUm, this.updateUserBalance,
+                this.showApiErrorMessage,
+                this.signOut);
+
+        GlobalMessageTransmitter.broadcast({ [GlobalTransmitterEvent.USER_INFO_RED]: this.props.authorizeResponse.user.red });
+    }
+
+    updateUserBalance = (balance: number) => {
+        const authorizeInfo = { ...this.state.authorizeInfo };
+        if (authorizeInfo.user.red !== balance) {
+            authorizeInfo.user.red = balance;
+            GlobalMessageTransmitter.broadcast({ [GlobalTransmitterEvent.USER_INFO_RED]: authorizeInfo.user.red });
+            this.setState({ authorizeInfo });
+        }
     }
 
     onVisibilityChange() {
@@ -220,7 +238,7 @@ class Dashboard extends React.PureComponent<DashboardProps, DashboardState> {
     renderDashBoard() {
         window.history.pushState(null, null, "/");
 
-        const { isShowErrorModal, isBlockUI, isChangedGame, isChangePrevGame, openGameId } = this.state;
+        const { isShowErrorModal, authorizeInfo, isBlockUI, isChangedGame, isChangePrevGame, openGameId, } = this.state;
         const offerGames = this.dashboardHandler.getOfferGamesIds();
         const isRenderGames = this.dashboardHandler.shouldRenderGames(offerGames, openGameId);
         const allowSwipeGameOndDesktop = !this.props.directMode && !isMobileOnly && isRenderGames;
@@ -230,14 +248,22 @@ class Dashboard extends React.PureComponent<DashboardProps, DashboardState> {
         const isNoGameOffer = this.state.apiError?.message === ErrorNoGameOffer;
         const renderOfferGameContainer = () => (isRenderGames ? this.renderGames() : this.renderLobby());
 
+        const authContextValue = {
+            authorizeInfo: authorizeInfo,
+            session: this.props.session,
+            setBalance: this.updateUserBalance,
+            signOut: this.signOut,
+            fractionalOddsFormat: authorizeInfo.user?.fractionalOddsFormat ?? false,
+            enableQuickBet: true
+        };
+
         return (
-            <PlayerContextProvider value={this.dashboardHandler.buildAuthContextValue()}>
+            <PlayerContextProvider value={authContextValue}>
                 <SettingContextProvider>
                     {allowSwipeGameOndDesktop && <ButtonSwipe isPrev={true} swiper={this.swiperRef} />}
                     <div
-                        className={`${Styles["dashboard"]} ${changeGameStyle} ${!isRenderGames ? "no-scroll" : ""} ${
-                            isMobileOnly ? Styles["hidden-scrollbar"] : ""
-                        }`}
+                        className={`${Styles["dashboard"]} ${changeGameStyle} ${!isRenderGames ? "no-scroll" : ""} ${isMobileOnly ? Styles["hidden-scrollbar"] : ""
+                            }`}
                         id={"dashboard"}
                     >
                         <Header />

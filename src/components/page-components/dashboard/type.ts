@@ -22,6 +22,7 @@ type APIErrorProp = {
 
 export type DashboardState = {
     userStakeLevel: UserStakeLevel;
+    authorizeInfo: AuthorizeResponse;
     isShowErrorModal: boolean;
     apiError: APIErrorProp;
     isBlockUI: boolean;

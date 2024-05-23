@@ -5,7 +5,6 @@ import { io, Socket } from "socket.io-client";
 import MsgpackParser from "socket.io-msgpack-parser";
 import { reCheckIn } from "../../../../services/auth-service";
 import { ReCheckInResponse, SSOResponse } from "sc-user-service-client/dist/auth";
-import { GlobalMessageTransmitter, GlobalTransmitterEvent } from "../../../../_shared/helpers/message-transmitter/global-transmitter";
 
 export class NotificationHandler {
     private readonly reCheckInInterval: NodeJS.Timeout;
@@ -15,6 +14,7 @@ export class NotificationHandler {
     constructor(
         private readonly session: SSOResponse,
         private readonly setIsUm: Function,
+        private readonly updateUserBalance: Function,
         private readonly showApiErrorMessage: Function,
         private readonly signOut: Function) {
 
@@ -51,7 +51,7 @@ export class NotificationHandler {
         } else if (response.apiError) {
             this.handleShowApiErrorMessage(response.apiError.errorCode, response.isDisableAccount);
         } else {
-            GlobalMessageTransmitter.broadcast({ [GlobalTransmitterEvent.USER_INFO_RED]: response.balance });
+            this.updateUserBalance(response.balance);
         }
     }
 
