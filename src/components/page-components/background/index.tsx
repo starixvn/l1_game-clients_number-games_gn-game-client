@@ -1,6 +1,7 @@
 import Image from "next/image";
 
 import { buildVersion, GameIds } from "../../../_shared/constants";
+import { memo } from "react";
 
 type Props = {
     gameId: number;
@@ -37,4 +38,4 @@ export const BackgroundGalaxy: React.FC<Props> = ({ gameId }) => {
     );
 };
 
-export default BackgroundGalaxy;
+export default memo(BackgroundGalaxy);

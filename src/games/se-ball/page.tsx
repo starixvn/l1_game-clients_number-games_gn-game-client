@@ -16,10 +16,8 @@ import { GameBaseHandlers, GameBaseProps, Round } from "../../components/game-ba
 import { GameStatusMap } from "../../components/game-components/countdown-timer/countdown-timer";
 import { RoundGameStateHandler } from "../../components/round-base/round-game-state-handler";
 import { RoundStateHandler } from "../../components/round-base/round-state-handler";
-import ScoreboardSeBall from "./scoreboard";
 import { SeBallBetOptions } from "./se-ball-constants";
 import { NextGameRoundDataHandler } from "./se-ball-game-round-data-handler";
-import SeBallResultBlock from "./se-ball-result-block";
 import Styles from "./se-ball.module.scss";
 import { SeBallResult, SeBallSettlementResult } from "./types";
 
@@ -27,6 +25,8 @@ const DrawIdBlock = dynamic(() => import("../../components/game-components/draw-
 const SeBallBettingBlock = dynamic(() => import("./se-ball-betting-block"));
 const OtherPercentageStatistic = dynamic(() => import("../../components/game-components/statistic/red-blue-statistic"));
 const SeBallBetHistoryModal = dynamic(() => import("./history"));
+const ScoreboardSeBall = dynamic(() => import("./scoreboard"));
+const SeBallResultBlock = dynamic(() => import("./se-ball-result-block"));
 
 export type SeBallState = {
     statisticGroup?: number;
@@ -69,23 +69,16 @@ class SeBall extends GameBase<GameBaseProps> {
             this.props.gameStateContextModel;
 
         return (
-            <div>
-                <div className={`star-field ${Styles["star-field"]}`}>
-                    <div className="layer"></div>
-                    <div className="layer"></div>
-                    <div className="layer"></div>
-                </div>
-                <SeBallResultBlock
-                    roundHistory={roundHistory as Round<SeBallResult, SeBallSettlementResult>[]}
-                    result={result}
-                    roundState={roundState}
-                    roundData={roundData}
-                    turnCounter={turnCounter}
-                    drawId={drawId}
-                    playResultAnimation={playResultAnimation}
-                    isPlayStartRoundAnimation={isPlayStartRoundAnimation}
-                />
-            </div>
+            <SeBallResultBlock
+                roundHistory={roundHistory as Round<SeBallResult, SeBallSettlementResult>[]}
+                result={result}
+                roundState={roundState}
+                roundData={roundData}
+                turnCounter={turnCounter}
+                drawId={drawId}
+                playResultAnimation={playResultAnimation}
+                isPlayStartRoundAnimation={isPlayStartRoundAnimation}
+            />
         );
     }
 
