@@ -51,12 +51,6 @@ export const customStartup = async (
         return;
     }
 
-    if (session?.isUM) {
-        StorageHelper.set(localStorageKeys.umInfo, session.umInfo);
-        player.session = session;
-        player.authorizeInfo = authorizeResponse;
-    }
-
     if (session?.isAuthenticated) {
         setSentryUser(session);
         player.session = session;
@@ -124,12 +118,23 @@ const SplashScreen: React.FC = () => {
         router.push("timeout");
     };
 
+    const handleUM = (session: SSOResponse) => {
+        StorageHelper.set(localStorageKeys.umInfo, session.umInfo);
+        player.session = session;
+        setIsUm(true);
+    };
+
     useEffect(() => {
         let authorizeInfo;
         const handleInitialization = async () => {
             const session = await getSession(token);
             if (!session || isTimeoutSession(session)) {
                 signOut();
+                return;
+            }
+
+            if (session?.isUM) {
+                handleUM(session);
                 return;
             }
 
