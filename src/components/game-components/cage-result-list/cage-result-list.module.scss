@@ -17,20 +17,15 @@
     }
 }
 
+%ball {
+    position: absolute;
+    height: 15.3rem;
+    width: 15.3rem;
+    bottom: var(--bottom);
+}
+
 .type-4 {
-    --bottom: 46px;
-
-    @media screen and (min-width: 1600px) {
-        --bottom: 35px;
-    }
-
-    @media (min-aspect-ratio: 3/4) {
-        --bottom: 34px;
-    }
-
-    @media screen and (min-width: 500px) and (orientation: portrait) {
-        --bottom: 40px;
-    }
+    --bottom: -3.4rem;
 
     .show-ball-anim {
         position: absolute;
@@ -41,34 +36,30 @@
     }
 
     .ball-rotation-1 {
-        position: absolute;
+        @extend %ball;
         left: 0.3rem;
-        bottom: var(--bottom);
     }
 
     .ball-rotation-2 {
-        position: absolute;
+        @extend %ball;
         left: 15rem;
-        bottom: var(--bottom);
     }
 
     .ball-rotation-3 {
-        position: absolute;
+        @extend %ball;
         right: 13.9rem;
-        bottom: var(--bottom);
     }
 
     .ball-rotation-4 {
-        position: absolute;
+        @extend %ball;
         right: -1rem;
-        bottom: var(--bottom);
     }
 }
 
 .number {
     position: absolute;
     left: -0.6rem;
-    top: -0.2rem !important;
+    top: -1rem !important;
 }
 
 .ball-blur {
