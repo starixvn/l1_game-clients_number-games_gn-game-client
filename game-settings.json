@@ -124,10 +124,29 @@
         },
         "totalTurns": 1,
         "numberOfRoundHistory": 100,
-        "gamePath": "se-ball",
-        "gameResourceConfigs": {
-            "path": "se-ball",
-            "optionalPaths": ["se-ball/result-ball"]
-        }
+        "gamePath": "se-ball"
+    },
+    "1006": {
+        "id": 1006,
+        "gameName": "LuckyThree",
+        "tolgeeNamespace": "LuckyThree",
+        "socketInfo": {
+            "namespace": "luckythree",
+            "path": "luckythree"
+        },
+        "durations": {
+            "wholeRound": 67,
+            "wholeTurn": 21,
+            "placingBets": 15,
+            "lockingBet": 3,
+            "showResult": 5,
+            "resultAnimation": 2,
+            "beforePlaceBet": 0,
+            "switchRoundAnimation": 4,
+            "startNewRoundAnim": 59
+        },
+        "totalTurns": 3,
+        "numberOfRoundHistory": 100,
+        "gamePath": "lucky-three"
     }
 }
