@@ -14,6 +14,19 @@
     grid-gap: 4rem;
     margin-top: 0.5rem;
     height: 13.5rem;
+    --move-up: -6.5rem;
+
+    @media screen and (min-width: 1600px) {
+        --move-up: -5.5rem;
+    }
+
+    @media (min-aspect-ratio: 3/4) {
+        --move-up: -5.5rem;
+    }
+
+    @media screen and (min-width: 500px) and (orientation: portrait) {
+        --move-up: -5.5rem;
+    }
 
     &.zoom-in {
         transform: scale(1);
@@ -24,7 +37,7 @@
     }
 
     &.zoom-out-no-animation {
-        transform: scale(0.5) translateY(-5.5rem);
+        transform: scale(0.5) translateY(var(--move-up));
     }
 }
 
@@ -33,7 +46,7 @@
         transform: scale(1) translateY(0);
     }
     100% {
-        transform: scale(0.5) translateY(-5.5rem);
+        transform: scale(0.5) translateY(var(--move-up));
     }
 }
 

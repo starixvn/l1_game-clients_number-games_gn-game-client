@@ -16,7 +16,7 @@ const ResultGroup: React.FC<{
         }
 
         return listResult.map((result, i) => {
-            const ballRotationDelayTime = 80;
+            const ballRotationDelayTime = 100;
             const defaultBallDelayTime = 500;
             const ballPos = i + 1;
             const delayTime = playResultAnimation ? ballPos * (initialBallDelayTime ?? defaultBallDelayTime) + ballRotationDelayTime : 0;

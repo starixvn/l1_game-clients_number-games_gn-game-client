@@ -18,6 +18,20 @@
 }
 
 .type-4 {
+    --bottom: 46px;
+
+    @media screen and (min-width: 1600px) {
+        --bottom: 35px;
+    }
+
+    @media (min-aspect-ratio: 3/4) {
+        --bottom: 34px;
+    }
+
+    @media screen and (min-width: 500px) and (orientation: portrait) {
+        --bottom: 40px;
+    }
+
     .show-ball-anim {
         position: absolute;
         height: 18rem;
@@ -28,26 +42,26 @@
 
     .ball-rotation-1 {
         position: absolute;
-        left: 0.5rem;
-        bottom: 3.7rem;
+        left: 0.3rem;
+        bottom: var(--bottom);
     }
 
     .ball-rotation-2 {
         position: absolute;
         left: 15rem;
-        bottom: 3.7rem;
+        bottom: var(--bottom);
     }
 
     .ball-rotation-3 {
         position: absolute;
         right: 13.9rem;
-        bottom: 3.7rem;
+        bottom: var(--bottom);
     }
 
     .ball-rotation-4 {
         position: absolute;
         right: -1rem;
-        bottom: 3.7rem;
+        bottom: var(--bottom);
     }
 }
 
@@ -82,10 +96,22 @@
 
 .total-point {
     position: absolute;
-    top: -0.8rem;
+    top: -0.2rem;
     font-size: 9.2rem;
     font-weight: 500;
     color: #fff;
     text-shadow: 0.1rem 0.1rem 2rem rgba(255, 255, 255, 0.6);
     font-variant-numeric: tabular-nums;
+
+    @media screen and (min-width: 1600px) {
+        top: -0.8rem;
+    }
+
+    @media (min-aspect-ratio: 3/4) {
+        top: -0.8rem;
+    }
+
+    @media screen and (min-width: 500px) and (orientation: portrait) {
+        top: -0.8rem;
+    }
 }
