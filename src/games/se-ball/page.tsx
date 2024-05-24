@@ -16,6 +16,7 @@ import { GameBaseHandlers, GameBaseProps, Round } from "../../components/game-ba
 import { GameStatusMap } from "../../components/game-components/countdown-timer/countdown-timer";
 import { RoundGameStateHandler } from "../../components/round-base/round-game-state-handler";
 import { RoundStateHandler } from "../../components/round-base/round-state-handler";
+import { TurnGameSoundHandler } from "../../components/turn-base/turn-game-sound-hanlder";
 import { SeBallBetOptions } from "./se-ball-constants";
 import { NextGameRoundDataHandler } from "./se-ball-game-round-data-handler";
 import Styles from "./se-ball.module.scss";
@@ -42,6 +43,7 @@ class SeBall extends GameBase<GameBaseProps> {
             gameStateHandler: new RoundGameStateHandler(),
             gameMessageHandler: gameMessageHandler,
             gameRoundDataHandler: new NextGameRoundDataHandler(),
+            gameSoundHandler: new TurnGameSoundHandler({ gameSound: () => props.gameSound }),
         };
         super(props, gameBaseHandlers);
 

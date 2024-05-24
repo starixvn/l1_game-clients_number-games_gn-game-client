@@ -71,7 +71,7 @@ export const Games: React.FC<Props> = ({
 
     const gameSound: GameSound = {
         playPlaceBetSound: usePlaceBetSound(),
-        startDrawSound: useStartDrawSound(),
+        startPlaceBetSound: useStartDrawSound(),
         startRoundSound: useStartRoundSound(),
         blockBetSound: useBlockBetSound(),
     };

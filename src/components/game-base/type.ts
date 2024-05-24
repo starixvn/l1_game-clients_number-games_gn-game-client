@@ -4,11 +4,18 @@ import { WithRouterProps } from "next/dist/client/with-router";
 import { SystemContextModel, SystemEventAction } from "../../_shared/react-contexts";
 import { GameEventAction } from "../../_shared/react-contexts/game-state-context/game-event-action";
 import { GameStateContextModel } from "../../_shared/react-contexts/game-state-context/game-state-context-model";
+import { GameSoundHandler } from "../round-base/game-sound-handler";
 import { IRoundStateHandler } from "../round-base/round-state-handler";
-import { GameDisableHandler, GameErrorHandler, GameFinishHandler, GameRoundHistoryHandler, PlaceBetHandler, PlayerHandler } from "./handlers";
+import {
+    GameDisableHandler,
+    GameErrorHandler,
+    GameFinishHandler,
+    GameRoundHistoryHandler,
+    PlaceBetHandler,
+    PlayerHandler,
+} from "./handlers";
 import { GameMessageHandler } from "./handlers/game-message-handler";
 import { GameRoundDataHandler } from "./handlers/game-round-data-handler";
-import { GameSoundHandler } from "./handlers/game-sound-handler";
 import { IGameStateHandler } from "./handlers/game-state-handler";
 
 export interface GameConfigs {
@@ -68,7 +75,7 @@ export type GamePropsContext = {
 
 export type GameSound = {
     playPlaceBetSound: Function;
-    startDrawSound: Function;
+    startPlaceBetSound: Function;
     startRoundSound: Function;
     blockBetSound: Function;
 };

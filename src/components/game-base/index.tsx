@@ -30,6 +30,7 @@ import { PFSettingModal } from "../game-components/provably-fair";
 import { Settings } from "../game-components/settings";
 import BackgroundGalaxy from "../page-components/background";
 import BetSettings from "../page-components/bet-settings";
+import { GameSoundHandler, IGameSoundHandler } from "../round-base/game-sound-handler";
 import { IRoundStateHandler } from "../round-base/round-state-handler";
 import {
     GameDisableHandler,
@@ -42,7 +43,6 @@ import {
     messageEventType,
 } from "./handlers";
 import { GameRoundDataHandler } from "./handlers/game-round-data-handler";
-import { GameSoundHandler } from "./handlers/game-sound-handler";
 import { IGameStateHandler } from "./handlers/game-state-handler";
 import { PFWrapper } from "./handlers/pf-wrapper/pf-wrapper";
 import { PlaceBetHandlerWrapper } from "./handlers/place-bet-wrapper/place-bet-handler-wrapper";
@@ -63,7 +63,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     private readonly gameFinishHandler?: GameFinishHandler;
     private readonly gameDisabledHandler?: GameDisableHandler;
     private readonly gameRoundHistoryHandler?: GameRoundHistoryHandler;
-    private readonly gameSoundHandler?: GameSoundHandler;
+    private readonly gameSoundHandler: IGameSoundHandler;
     private readonly gameRoundDataHandler?: GameRoundDataHandler;
 
     constructor(props: P, handlers: GameBaseHandlers) {
