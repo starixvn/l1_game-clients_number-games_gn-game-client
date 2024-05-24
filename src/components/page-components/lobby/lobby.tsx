@@ -8,6 +8,7 @@ import { LobbyLayout } from "./games/lobby-layout";
 import Styles from "./lobby.module.scss";
 import { GlobalMessageTransmitter, GlobalTransmitterEvent } from "../../../_shared/helpers/message-transmitter/global-transmitter";
 import { useEffect } from "react";
+import { localStorageKeys, StorageHelper } from "../../../_shared/helpers";
 
 const Settings = dynamic(() => import("../settings"));
 const ChangeAvatar = dynamic(() => import("../header/change-avatar"));
@@ -22,6 +23,7 @@ export const Lobby: React.FC<Props> = ({ openGame, lobbyConfigs }) => {
     AnalyticsHelper.trackLobby();
 
     useEffect(() => {
+        StorageHelper.set(`${localStorageKeys.showPFSetting}`, "");
         GlobalMessageTransmitter.broadcast({ [GlobalTransmitterEvent.OPEN_GAME_ID]: 0 });
     }, []);
 
