@@ -24,7 +24,7 @@ import { SeBallResult, SeBallSettlementResult } from "./types";
 
 const DrawIdBlock = dynamic(() => import("../../components/game-components/draw-id"));
 const SeBallBettingBlock = dynamic(() => import("./se-ball-betting-block"));
-const OtherPercentageStatistic = dynamic(() => import("../../components/game-components/statistic/red-blue-statistic"));
+const RedAndBlueStatistic = dynamic(() => import("../../components/game-components/statistic/red-blue-statistic"));
 const SeBallBetHistoryModal = dynamic(() => import("./history"));
 const ScoreboardSeBall = dynamic(() => import("./scoreboard"));
 const SeBallResultBlock = dynamic(() => import("./se-ball-result-block"));
@@ -97,14 +97,14 @@ class SeBall extends GameBase<GameBaseProps> {
         const locale = tolgee.getLanguage() ?? "en";
         const classNameIndo = locale === "id" ? Styles["statistic-indo"] : "";
 
-        const calculators = {
+        const mainChoicesCalculators = {
             [SeBallBetOptions.ODD]: (countResult: object, total: number) =>
                 Math.round((countResult[SeBallBetOptions.ODD] * 100) / total) || 0,
             [SeBallBetOptions.EVEN]: (countResult: object, total: number) =>
                 100 - Math.round((countResult[SeBallBetOptions.ODD] * 100) / total) || 0,
         };
 
-        const otherCalculator = {
+        const subChoicesCalculator = {
             [SeBallBetOptions.BLUE3]: (countResult: object, total: number) =>
                 Math.round((countResult[SeBallBetOptions.BLUE3] * 100) / total) || 0,
             [SeBallBetOptions.RED2]: (countResult: object, total: number) =>
@@ -121,21 +121,21 @@ class SeBall extends GameBase<GameBaseProps> {
                         Math.round(((countResult[SeBallBetOptions.RED4] ?? 0) * 100) / total)) || 0,
         };
 
-        const subBetOptionClass = {
-            [SeBallBetOptions.BLUE3]: Styles["statistic-blue3"],
-            [SeBallBetOptions.RED2]: Styles["statistic-red2"],
-            [SeBallBetOptions.RED3]: Styles["statistic-red3"],
-            [SeBallBetOptions.RED4]: Styles["statistic-red4"],
-            [SeBallBetOptions.BLUE4]: Styles["statistic-blue4"],
+        const subChoicesClass = {
+            [SeBallBetOptions.BLUE3]: Styles[`statistic-${SeBallBetOptions.BLUE3}`],
+            [SeBallBetOptions.RED2]: Styles[`statistic-${SeBallBetOptions.RED2}`],
+            [SeBallBetOptions.RED3]: Styles[`statistic-${SeBallBetOptions.RED3}`],
+            [SeBallBetOptions.RED4]: Styles[`statistic-${SeBallBetOptions.RED4}`],
+            [SeBallBetOptions.BLUE4]: Styles[`statistic-${SeBallBetOptions.BLUE4}`],
         };
 
         return (
-            <OtherPercentageStatistic
+            <RedAndBlueStatistic
                 roundHistory={roundHistory}
-                statisticRuleEntries={Object.entries(calculators)}
+                statisticRuleEntries={Object.entries(mainChoicesCalculators)}
                 className={classNameIndo}
-                otherStatisticRuleEntries={Object.entries(otherCalculator)}
-                subBetOptionClass={subBetOptionClass}
+                subChoicesStatisticRuleEntries={Object.entries(subChoicesCalculator)}
+                subChoicesClass={subChoicesClass}
             />
         );
     }
