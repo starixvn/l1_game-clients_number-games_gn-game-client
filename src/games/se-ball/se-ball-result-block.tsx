@@ -40,9 +40,8 @@ const SeBallResultBlock: FC<SeBallResultBlockProps> = (props: SeBallResultBlockP
                 isSmall={true}
                 listResult={currentResult?.balls}
                 playResultAnimation={playResultAnimation}
-                ballFPS={25}
                 gameFolder="se-ball"
-                listBallAnimSize={[624, 216]}
+                highlightBallSize={{ width: 624, height: 216 }}
                 roundState={roundState}
             />
         </div>

@@ -16,7 +16,7 @@ export type CageResultListProps = {
     isPlayStartRoundAnimation?: boolean;
     listResult: number[];
     gameFolder: string;
-    listBallAnimSize: number[];
+    highlightBallSize: { width: number; height: number };
     initialBallDelayTime?: number;
     ballFPS?: number;
 } & Partial<GameStateContextModel>;
@@ -32,12 +32,12 @@ const CageResultList: React.FC<CageResultListProps> = ({
     roundState,
     initialBallDelayTime,
     gameFolder,
-    listBallAnimSize,
+    highlightBallSize,
 }) => {
     const [showBalls, setShowBalls] = useState(false);
     const [totalPoint, setTotalPoint] = useState(0);
 
-    const showBallDelayTime = 1200;
+    const showBallDelayTime = 1000;
 
     useEffect(() => {
         let timeOut: NodeJS.Timeout;
@@ -84,7 +84,7 @@ const CageResultList: React.FC<CageResultListProps> = ({
                     />
                 )}
             </div>
-            {showBalls && totalPoint > 0 && <div className={`${Styles["total-point"]} `}>{totalPoint}</div>}
+            {showBalls && totalPoint > 0 && <div className={`${Styles["total-point"]} fade-in`}>{totalPoint}</div>}
 
             <div id="show-ball-anim" className={Styles["show-ball-anim"]}>
                 {showBalls && (
@@ -92,21 +92,20 @@ const CageResultList: React.FC<CageResultListProps> = ({
                         listResult={listResult}
                         playResultAnimation={playResultAnimation}
                         initialBallDelayTime={initialBallDelayTime}
-                        fps={ballFPS}
                         incrementTotalPoint={incrementTotalPoint}
                     />
                 )}
 
-                {playResultAnimation && (
+                {showBalls && playResultAnimation && (
                     <Spritesheet
                         className={`${Styles["ball-result"]}`}
                         image={`/static/images/${gameFolder}/result-ball/ball-highlight.webp?v=1`}
-                        widthFrame={listBallAnimSize[0]}
+                        widthFrame={highlightBallSize.width}
                         isResponsive
-                        heightFrame={listBallAnimSize[1]}
+                        heightFrame={highlightBallSize.height}
                         steps={6}
                         autoplay
-                        fps={ballFPS ?? 40}
+                        fps={ballFPS ?? 32}
                     />
                 )}
             </div>

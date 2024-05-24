@@ -8,13 +8,12 @@ import Styles from "./cage-result-list.module.scss";
 
 const BallRotation: React.FC<{
     ballPos: number;
-    fps: number;
     number: number;
     isShowResultAnim: boolean;
     delayTime: number;
     color: string;
-    incrementTotalPoint?: Function;
-}> = ({ ballPos, fps, number, isShowResultAnim, delayTime, color, incrementTotalPoint }) => {
+    incrementTotalPoint: Function;
+}> = ({ ballPos, number, isShowResultAnim, delayTime, color, incrementTotalPoint }) => {
     const [showBall, setShowBall] = useState(false);
     const playShowBallResult = useShowBallResultSound();
 
@@ -50,7 +49,7 @@ const BallRotation: React.FC<{
                     heightFrame={153}
                     steps={8}
                     autoplay
-                    fps={fps ?? 40}
+                    fps={30}
                     startAt={isShowResultAnim ? 0 : 31}
                     endAt={31}
                 />
@@ -59,7 +58,7 @@ const BallRotation: React.FC<{
                     isDelayShowResult={true}
                     number={number.toString()}
                     isShowResultAnim={isShowResultAnim}
-                    fps={fps}
+                    fps={30}
                 />
             </div>
         );

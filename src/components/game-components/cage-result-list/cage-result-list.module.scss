@@ -7,11 +7,11 @@
     grid-template: "container";
 
     &.hide-ball {
-        animation: hide 0.3s ease-in forwards;
+        animation: fade-out 0.3s ease-in forwards;
     }
 }
 
-@keyframes hide {
+@keyframes fade-out {
     to {
         opacity: 0;
     }
@@ -28,26 +28,26 @@
 
     .ball-rotation-1 {
         position: absolute;
-        left: 11px;
-        bottom: 37px;
+        left: 0.5rem;
+        bottom: 3.7rem;
     }
 
     .ball-rotation-2 {
         position: absolute;
-        left: 153px;
-        bottom: 37px;
+        left: 15rem;
+        bottom: 3.7rem;
     }
 
     .ball-rotation-3 {
         position: absolute;
-        right: 142px;
-        bottom: 37px;
+        right: 13.9rem;
+        bottom: 3.7rem;
     }
 
     .ball-rotation-4 {
         position: absolute;
-        right: 0;
-        bottom: 37px;
+        right: -1rem;
+        bottom: 3.7rem;
     }
 }
 
@@ -63,6 +63,13 @@
     animation: fade-in 1s linear forwards;
 }
 
+.ball-result {
+    position: absolute;
+    z-index: 2;
+    left: -1.2rem;
+    top: -0.2px;
+}
+
 @keyframes fade-in {
     from {
         opacity: 0;
@@ -75,6 +82,7 @@
 
 .total-point {
     position: absolute;
+    top: -0.8rem;
     font-size: 9.2rem;
     font-weight: 500;
     color: #fff;
