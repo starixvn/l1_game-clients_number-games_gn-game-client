@@ -5,17 +5,13 @@ import NextErrorComponent from "next/error";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { buildVersion } from "../_shared/constants";
-
-const errorMsg = {
-    en: "An error has occurred, please contact CSD for details.",
-    vi: "Đã xảy ra lỗi. Vui lòng liên hệ với bộ phận CSKH để được hỗ trợ.",
-};
+import { useCommonTranslate } from "../_shared/react-hooks";
 
 const MyError = ({ statusCode, hasGetInitialPropsRun, err }) => {
     if (!hasGetInitialPropsRun && err) {
         Sentry.captureException(err);
     }
-
+    const { t } = useCommonTranslate();
     const router = useRouter();
     const { theme } = useTheme();
     const [isLoading, setIsLoading] = useState(true);
@@ -31,7 +27,7 @@ const MyError = ({ statusCode, hasGetInitialPropsRun, err }) => {
     return (
         <div className="error-page">
             <img className="error-background small" src={`/static/images/error-${theme}.svg?v=${buildVersion}`} alt="error" />
-            <p className="info">{`${errorMsg[router.locale]}(${statusCode})`}</p>
+            <p className="info">{t("message_error_occurred", { errorCode: statusCode }).replaceTolgeeFormat()}</p>
         </div>
     );
 };

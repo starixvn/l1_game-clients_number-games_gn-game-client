@@ -4,9 +4,8 @@ import "../styles/main.scss";
 
 import { TolgeeProvider, useTolgeeSSR } from "@tolgee/react";
 import { ThemeProvider } from "next-themes";
-import { AppProps } from "next/app";
+import App, { AppContext, AppInitialProps, AppProps } from "next/app";
 import Head from "next/head";
-
 import { buildVersion, languageMapper, Themes } from "../_shared/constants";
 import { tolgee } from "../_shared/tolgee";
 import { LoadingSpinner } from "../components/game-components/game-loading/loading-spinner";
@@ -36,9 +35,15 @@ export const AppTilte = () => {
         </Head>
     );
 };
-SabaNumberApp.getInitialProps = async ({ router }) => {
-    const { lang, token } = router.query;
-    return token ? { language: languageMapper[lang] || "en" } : { language: tolgee.getLanguage() };
+SabaNumberApp.getInitialProps = async (context: AppContext) => {
+    const initialProps = await App.getInitialProps(context);
+
+    const { lang, token } = context.router.query;
+    const appInitialProps = {
+        ...initialProps,
+        language: token ? languageMapper[lang as string] || "en" : tolgee.getLanguage(),
+    };
+    return appInitialProps;
 };
 
 export default SabaNumberApp;
