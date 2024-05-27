@@ -11,7 +11,7 @@ import { SeBallResult } from "./types";
 export type SeBallResultBlockProps = Partial<GameStateContextModel>;
 
 const SeBallResultBlock: FC<SeBallResultBlockProps> = (props: SeBallResultBlockProps) => {
-    const { result, roundState, roundHistory, playResultAnimation, isPlayStartRoundAnimation } = props;
+    const { result, roundState, roundHistory, playResultAnimation, isPlayStartRoundAnimation, showResultInfo } = props;
     const currentResult = useResult<SeBallResult>({ result, roundState, roundHistory });
 
     if (roundState === RoundState.BeforePlaceBet && !isPlayStartRoundAnimation) {
@@ -20,7 +20,7 @@ const SeBallResultBlock: FC<SeBallResultBlockProps> = (props: SeBallResultBlockP
 
     let zoomClass = "zoom-in";
 
-    if (roundState === RoundState.DisplayResult && playResultAnimation) {
+    if (roundState === RoundState.Disabled || (roundState === RoundState.DisplayResult && playResultAnimation)) {
         zoomClass = Style["zoom-out"];
     }
 
