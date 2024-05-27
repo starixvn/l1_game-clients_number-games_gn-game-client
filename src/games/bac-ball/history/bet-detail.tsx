@@ -12,13 +12,14 @@ import {
 } from "../../../_shared/helpers";
 import TableRow from "./row-table";
 import { BacBallBetOptions } from "../constants";
-import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
-import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
+import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import { v4 as uuidv4 } from "uuid";
 import SmallBall from "../../../components/game-components/small-ball";
 import { DrawInfo, PFResult } from "../../../components/game-base/type";
 import { useClickSound, useCommonTranslate, useSNTranslate, useTranslator } from "../../../_shared/react-hooks";
 import Styles from "./common.module.scss";
+import { PFEventActionType } from "../../../_shared/react-contexts/game-state-context/pf/pf-action";
+import { usePFDispatch } from "../../../_shared/react-contexts/game-state-context/pf/pf-context";
 
 interface DrawInfoBacBall extends DrawInfo {
     drawId: number;
@@ -43,7 +44,7 @@ const BetDetail: FC = () => {
     const {
         betDetailModalData: { drawInfo, betLogDetails },
     } = useGameStateContext();
-    const dispatch = useGameStatesDispatch();
+    const dispatch = usePFDispatch();
     const { drawId, result } = drawInfo;
     const [isHaveMoreData, setIsHaveMoreData] = useState(true);
     const { t: translateCommon } = useCommonTranslate();
@@ -55,7 +56,7 @@ const BetDetail: FC = () => {
     const handleClickProvablyFair = () => {
         clickSound();
         dispatch({
-            type: GameEventActionType.UPDATE_PF_VERIFY,
+            type: PFEventActionType.UPDATE_PF_VERIFY,
             payload: {
                 pfVerifyModalData: {
                     ...drawInfo.pfResult,
@@ -64,7 +65,7 @@ const BetDetail: FC = () => {
             },
         });
         dispatch({
-            type: GameEventActionType.TOGGLE_PF_VERIFY,
+            type: PFEventActionType.TOGGLE_PF_VERIFY,
             payload: {
                 isShowPFVerify: true,
             },

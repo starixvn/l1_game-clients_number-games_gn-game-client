@@ -1,29 +1,29 @@
 import { numberRoundDownWithCommas } from "../../../_shared/helpers";
 import { PlayerContextModel, usePlayerContext } from "../../../_shared/react-contexts";
-import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
-import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
+import { PlaceBetEventActionType } from "../../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-action";
+import { usePlaceBetContext, usePlaceBetDispatch } from "../../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-context";
 import { useTranslator } from "../../../_shared/react-hooks";
 import ConfirmDialog from "../confirm-dialog";
 
 const BetConfirmDialog = () => {
-    const dispatch = useGameStatesDispatch();
-    const gameStateContext = useGameStateContext();
+    const dispatch = usePlaceBetDispatch();
+    const placeBetContext = usePlaceBetContext();
     const { authorizeInfo, enableQuickBet } = (usePlayerContext() as PlayerContextModel);
     const enabledQuickBet = authorizeInfo?.user?.settings.quickBet || enableQuickBet;
-    const suggestBet = gameStateContext.suggestBet;
+    const suggestBet = placeBetContext.suggestBet;
     const currentBetChoice = suggestBet.currentBetChoice;
     const outstandingBalance = suggestBet.suggestBetAmount;
     const isInsufficientFunds = suggestBet.isInsufficientFunds;
 
     const { t } = useTranslator();
 
-    if (!gameStateContext.showConfirmDialog) {
+    if (!placeBetContext.showConfirmDialog) {
         return null;
     }
 
     const removeSuggestBet = () => {
         dispatch({
-            type: GameEventActionType.SUGGEST_BET,
+            type: PlaceBetEventActionType.SUGGEST_BET,
             payload: {
                 suggestBet: {
                     currentBetChoice: "",
@@ -37,10 +37,8 @@ const BetConfirmDialog = () => {
 
     const handleCloseModal = () => {
         dispatch({
-            type: GameEventActionType.SHOW_CONFIRM_DIALOG,
-            payload: {
-                showConfirmDialog: false,
-            },
+            type: PlaceBetEventActionType.SHOW_CONFIRM_DIALOG,
+            payload: { showConfirmDialog: false }
         });
 
         enabledQuickBet && removeSuggestBet();
@@ -48,34 +46,28 @@ const BetConfirmDialog = () => {
 
     const handleSubmitBet = () => {
         dispatch({
-            type: GameEventActionType.SHOW_CONFIRM_DIALOG,
-            payload: {
-                showConfirmDialog: false,
-            },
+            type: PlaceBetEventActionType.SHOW_CONFIRM_DIALOG,
+            payload: { showConfirmDialog: false }
         });
 
         if (enabledQuickBet) {
-            gameStateContext.suggestBet.sendOutstandingBet();
+            placeBetContext.suggestBet.sendOutstandingBet();
             removeSuggestBet();
 
             return;
         }
 
         dispatch({
-            type: GameEventActionType.SHOW_CONFIRM_BET,
-            payload: {
-                showConfirmBet: true,
-            },
+            type: PlaceBetEventActionType.SHOW_CONFIRM_BET,
+            payload: { showConfirmBet: true }
         });
 
-        const notConfirmOwnBets = gameStateContext.notConfirmOwnBets;
+        const notConfirmOwnBets = placeBetContext.notConfirmOwnBets;
         notConfirmOwnBets[currentBetChoice] = (notConfirmOwnBets[currentBetChoice] ?? 0) + outstandingBalance;
 
         dispatch({
-            type: GameEventActionType.NOT_CONFIRM_OWN_BETS,
-            payload: {
-                notConfirmOwnBets,
-            },
+            type: PlaceBetEventActionType.NOT_CONFIRM_OWN_BETS,
+            payload: { notConfirmOwnBets }
         });
     };
 

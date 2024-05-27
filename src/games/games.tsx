@@ -7,7 +7,14 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { getAppSettings } from "../_shared/app-settings";
 import { GameIds, SwiperNoSwiping } from "../_shared/constants";
 import { AnalyticsHelper, TrackingAction, TrackingFunction } from "../_shared/helpers";
-import { SettingEventActionType, SystemContextProvider, URLContext, usePlayerContext, useSettingDispatch } from "../_shared/react-contexts";
+import {
+    SettingEventActionType,
+    SystemContextProvider,
+    URLContext,
+    updateURLContext,
+    usePlayerContext,
+    useSettingDispatch,
+} from "../_shared/react-contexts";
 import { useBlockBetSound, usePlaceBetSound, useStartDrawSound, useStartRoundSound } from "../_shared/react-hooks";
 import { GameSound } from "../components/game-base/type";
 import GameLoading from "../components/game-components/game-loading";
@@ -19,6 +26,7 @@ const BacBall = dynamic(() => import("./bac-ball"));
 const NextBall = dynamic(() => import("./next-ball/page"));
 const ToolbarGuide = dynamic(() => import("../components/page-components/hide-toolbar-guide"));
 const SwitchGamesGuide = dynamic(() => import("../components/page-components/switch-games-guide"));
+const SeBall = dynamic(() => import("./se-ball/page"));
 
 export const Games: React.FC<Props> = ({
     swiperRef,
@@ -47,7 +55,7 @@ export const Games: React.FC<Props> = ({
 
     const gameSound: GameSound = {
         playPlaceBetSound: usePlaceBetSound(),
-        startDrawSound: useStartDrawSound(),
+        startPlaceBetSound: useStartDrawSound(),
         startRoundSound: useStartRoundSound(),
         blockBetSound: useBlockBetSound(),
     };
@@ -73,6 +81,9 @@ export const Games: React.FC<Props> = ({
             case GameIds.NextBall2:
                 return <NextBall key={`game-${gameId}`} {...gameProps} />;
 
+            case GameIds.SeBall1:
+                return <SeBall key={`game-${gameId}`} {...gameProps} />;
+
             default:
                 return null;
         }
@@ -80,6 +91,8 @@ export const Games: React.FC<Props> = ({
 
     const swiperSlideChild = ({ isActive, gameId }) => {
         if (isActive) {
+            +gameId !== +openGameId && updateURLContext({ gameId });
+
             return getGameComponentById(parseInt(gameId));
         }
 

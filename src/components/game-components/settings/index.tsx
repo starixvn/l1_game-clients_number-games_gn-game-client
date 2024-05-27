@@ -1,18 +1,19 @@
 import { useContext } from "react";
-import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
-import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
+import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import { URLContext, updateURLContext } from "../../../_shared/react-contexts/url-context";
 import { useClickSound } from "../../../_shared/react-hooks";
 import { RoundState } from "../../game-base/type";
 import { Menu } from "./menu";
 import styles from "./settings.module.scss";
 import { AnalyticsHelper, TrackingAction, TrackingFunction } from "../../../_shared/helpers";
+import { usePFDispatch } from "../../../_shared/react-contexts/game-state-context/pf/pf-context";
+import { PFEventActionType } from "../../../_shared/react-contexts/game-state-context/pf/pf-action";
 
 const ButtonSettingClassName = "setting-button";
 
 export function Settings() {
     const { roundState } = useGameStateContext();
-    const dispatch = useGameStatesDispatch();
+    const pfDispatch = usePFDispatch();
     const clickSound = useClickSound();
     const { backToRedirectUrl, isDirectMode, redirectUrl } = useContext(URLContext);
 
@@ -22,8 +23,8 @@ export function Settings() {
         }
 
         clickSound();
-        dispatch({
-            type: GameEventActionType.TOGGLE_PF_SETTING,
+        pfDispatch({
+            type: PFEventActionType.TOGGLE_PF_SETTING,
             payload: {
                 isShowPFSetting: true,
             },

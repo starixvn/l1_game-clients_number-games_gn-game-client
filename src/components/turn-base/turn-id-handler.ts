@@ -2,7 +2,7 @@ import { GameEventActionType } from "../../_shared/react-contexts/game-state-con
 import { GameStateContextModel } from "../../_shared/react-contexts/game-state-context/game-state-context-model";
 import { GameDurations, RoundState } from "../game-base/type";
 import { GameMessageHandler, messageEventType } from "../game-base/handlers/game-message-handler";
-import { randomNumberSeries, writeDebugLog } from "../../_shared/helpers";
+import {  writeDebugLog } from "../../_shared/helpers";
 import { Turn, TurnTimelineCounter } from "./turn-time-counter-handler";
 
 export type TurnIdHandlerProps = {
@@ -112,18 +112,9 @@ export class TurnIdHandler {
     };
 
     dispatchClientSeed = (drawId) => {
-        const { pfClientSeedSetting } = this.props.gameStateContextModel();
-        const oldDrawId = pfClientSeedSetting?.drawId;
-        if (oldDrawId !== drawId) {
-            this.props.gameMessageHandler.broadcastGameEvent({
-                [messageEventType.SAVE_PF_SETTING]: {
-                    pfClientSeedSetting: {
-                        drawId: drawId,
-                        randomClientSeed: randomNumberSeries(4),
-                    },
-                },
-            });
-        }
+        this.props.gameMessageHandler.broadcastGameEvent({
+            [messageEventType.SAVE_PF_SETTING_FROM_TURN_ID_HANLDER]: {drawId}
+        });
     };
 
     private isInDisplayResultState() {

@@ -75,7 +75,7 @@ describe(BetHistoryBase.name, () => {
                 };
                 mockGameContext.mockReturnValue({ gameMessageHandler });
 
-                render(<BetHistoryBase renderBetLogResult={jest.fn()} />);
+                render(<BetHistoryBase isTurnBase={true} renderBetLogResult={jest.fn()} />);
 
                 expect(gameMessageHandler.broadcastGameEvent).toHaveBeenCalled();
             });
@@ -95,7 +95,7 @@ describe(BetHistoryBase.name, () => {
                 const mockRenderBetLogResult = jest.fn();
                 mockRenderBetLogResult.mockReturnValue(<div></div>);
 
-                const betHistoryBase = <BetHistoryBase renderBetLogResult={mockRenderBetLogResult} />;
+                const betHistoryBase = <BetHistoryBase isTurnBase={true} renderBetLogResult={mockRenderBetLogResult} />;
                 const renderResult = render(betHistoryBase);
                 act(() => {
                     mockCallback({
@@ -133,7 +133,7 @@ describe(BetHistoryBase.name, () => {
                 const mockRenderBetLogResult = jest.fn();
                 mockRenderBetLogResult.mockReturnValue(<div></div>);
 
-                const betHistoryBase = <BetHistoryBase renderBetLogResult={mockRenderBetLogResult} />;
+                const betHistoryBase = <BetHistoryBase isTurnBase={true} renderBetLogResult={mockRenderBetLogResult} />;
                 const renderResult = render(betHistoryBase);
                 act(() => {
                     mockCallback({
@@ -165,7 +165,7 @@ describe(BetHistoryBase.name, () => {
             mockRenderBetLogResult.mockReturnValue(<div></div>);
             mockDispatch.mockReturnValue(jest.fn());
 
-            const betHistoryBase = <BetHistoryBase renderBetLogResult={mockRenderBetLogResult} />;
+            const betHistoryBase = <BetHistoryBase isTurnBase={true} renderBetLogResult={mockRenderBetLogResult} />;
             const renderResult = render(betHistoryBase);
             act(() => {
                 mockCallback({
@@ -206,7 +206,7 @@ describe(BetHistoryBase.name, () => {
             mockRenderBetLogResult.mockReturnValue(<div></div>);
             mockDispatch.mockReturnValue(jest.fn());
 
-            const betHistoryBase = <BetHistoryBase renderBetLogResult={mockRenderBetLogResult} />;
+            const betHistoryBase = <BetHistoryBase isTurnBase={true} renderBetLogResult={mockRenderBetLogResult} />;
             const renderResult = render(betHistoryBase);
             act(() => {
                 mockCallback({

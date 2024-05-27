@@ -8,8 +8,8 @@ import { SettingEventActionType, usePlayerContext, useSettingDispatch } from "..
 import { useClickSound } from "../../../../_shared/react-hooks";
 import { MAX_AVATAR_ID } from "../../dashboard/register/avatar-gallery";
 import Styles from "./user-info.module.scss";
-import { GlobalTransmitterEvent, registerGlobalMessageEvent, unsubscribeGlobalMessageEvent } from "../../../../_shared/helpers/message-transmitter/global-transmitter";
 import { User } from "sc-user-service-client/dist/auth";
+import { GlobalTransmitterEvent, registerGlobalMessageEvent, unsubscribeGlobalMessageEvent } from "../../../../_shared/helpers/message-transmitter/global-transmitter";
 
 export const UserInfo: React.FC<{
     customizeClass?: string;
@@ -25,6 +25,7 @@ export const UserInfo: React.FC<{
     if (isMobileOnly) {
         deviceClass = isIOS ? Styles["ios-device"] : Styles["android-device"];
     }
+
     const handleClickAvatar = () => {
         if (isLobby) {
             clickSound();
@@ -36,6 +37,20 @@ export const UserInfo: React.FC<{
             });
         }
     };
+
+
+    useEffect(() => {
+        const userInfoRedHandlerId = registerGlobalMessageEvent(GlobalTransmitterEvent.USER_INFO_RED, ({ userInfoRed }) => {
+            setUserInfo({
+                ...userInfo,
+                red: userInfoRed
+            });
+        });
+
+        return () => {
+            unsubscribeGlobalMessageEvent(userInfoRedHandlerId as any);
+        }
+    }, []);
 
     useEffect(() => {
         const userInfoRedHandlerId = registerGlobalMessageEvent(GlobalTransmitterEvent.USER_INFO_RED, ({ userInfoRed }) => {

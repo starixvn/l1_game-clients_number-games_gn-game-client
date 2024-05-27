@@ -1,14 +1,16 @@
 import { FC, ReactNode } from "react";
-import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
+import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import { useClickSound, useCommonTranslate } from "../../../_shared/react-hooks";
 import { usePlayerContext } from "../../../_shared/react-contexts";
 import { numberWithCommas, separateDateTime, sortedCollectionByTime } from "../../../_shared/helpers";
-import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 import { DrawInfo } from "../../game-base/type";
 import { InfiniteTable } from "../infinite-table";
 import Styles from "./bet-history.module.scss";
+import { PFEventActionType } from "../../../_shared/react-contexts/game-state-context/pf/pf-action";
+import { usePFDispatch } from "../../../_shared/react-contexts/game-state-context/pf/pf-context";
 
 const BetDetailBase: FC<{
+    isTurnBase: boolean;
     renderBetDetailResultBlock: (drawInfo: DrawInfo) => ReactNode;
     produceDataBetDetailRow: (
         betLogDetail: any,
@@ -26,7 +28,7 @@ const BetDetailBase: FC<{
     const {
         betDetailModalData: { drawInfo, betLogDetails },
     } = useGameStateContext();
-    const dispatch = useGameStatesDispatch();
+    const dispatch = usePFDispatch();
     const { t: translateCommon } = useCommonTranslate();
     const { fractionalOddsFormat } = usePlayerContext();
     const clickSound = useClickSound();
@@ -34,7 +36,7 @@ const BetDetailBase: FC<{
     const handleClickProvablyFair = () => {
         clickSound();
         dispatch({
-            type: GameEventActionType.UPDATE_PF_VERIFY,
+            type: PFEventActionType.UPDATE_PF_VERIFY,
             payload: {
                 pfVerifyModalData: {
                     ...drawInfo.pfResult,
@@ -43,7 +45,7 @@ const BetDetailBase: FC<{
             },
         });
         dispatch({
-            type: GameEventActionType.TOGGLE_PF_VERIFY,
+            type: PFEventActionType.TOGGLE_PF_VERIFY,
             payload: {
                 isShowPFVerify: true,
             },

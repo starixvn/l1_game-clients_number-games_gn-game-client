@@ -3,8 +3,9 @@ import React, { memo } from "react";
 import { useGameContext } from "../../../_shared/react-contexts";
 import { useTranslator } from "../../../_shared/react-hooks";
 import { Round } from "../../game-base/type";
+import StatisticItem from "./statistic-item";
 import Styles from "./statistic.module.scss";
-import { PercentageStatisticProps, Props } from "./types";
+import { PercentageStatisticProps } from "./types";
 
 export const countSettlementResult = (roundHistory: Round<any, any>[]) => {
     return roundHistory.reduce((result, { settlementResult }) => {
@@ -30,15 +31,6 @@ export const calculatePercent = (
         result[choice] = rule(countResult, total);
         return result;
     }, {});
-};
-
-const StatisticItem: React.FC<Props> = (props) => {
-    return (
-        <div className={`${Styles["statistic-group"]} ${props.className}`}>
-            {props.children}
-            <span className={Styles["number"]}>{props.value}</span>
-        </div>
-    );
 };
 
 export const PercentageStatistic: React.FC<PercentageStatisticProps> = (props: PercentageStatisticProps) => {

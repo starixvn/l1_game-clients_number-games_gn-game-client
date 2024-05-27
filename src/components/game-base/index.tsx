@@ -1,25 +1,21 @@
 import React from "react";
 import { createPortal } from "react-dom";
-import Auth from "sc-user-service-client/dist/auth";
 import { Socket } from "socket.io-client";
 
 import { SwiperNoSwiping } from "../../_shared/constants";
-import { InitSocketIO, localStorageKeys, StorageHelper, writeDebugLog } from "../../_shared/helpers";
+import { InitSocketIO, writeDebugLog } from "../../_shared/helpers";
 import { AnalyticsHelper } from "../../_shared/helpers/analytic-helper";
-import { GlobalMessageTransmitter } from "../../_shared/helpers/message-transmitter/global-transmitter";
-import {
-    GameActionsContextProvider,
-    GameContextProvider,
-    PlayerContext,
-    PlayerContextModel,
-    SystemEventActionType,
-} from "../../_shared/react-contexts";
+import { GlobalMessageTransmitter, GlobalTransmitterEvent } from "../../_shared/helpers/message-transmitter/global-transmitter";
+import { GameActionsContextProvider, GameContextProvider, PlayerContext, PlayerContextModel } from "../../_shared/react-contexts";
 import { GameEventActionType } from "../../_shared/react-contexts/game-state-context/game-event-action";
+import { PFProvider } from "../../_shared/react-contexts/game-state-context/pf/pf-context";
+import { PlaceBetEventActionType } from "../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-action";
+import { PlaceBetProvider } from "../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-context";
 import { GameResourceKeys } from "../../_shared/resources";
 import { getBalance } from "../../services/auth-service";
 import BetConfirmDialog from "../game-components/bet-confirm-dialog";
 import ConfirmBet from "../game-components/confirm-bet";
-import CountdownTimer from "../game-components/countdown-timer/countdown-timer";
+import CountdownTimer, { GameStatusMap } from "../game-components/countdown-timer/countdown-timer";
 import DisabledModal from "../game-components/disabled-modal";
 import { ConnectFailedMessage } from "../game-components/error-message";
 import { ConnectFailedReasonKey } from "../game-components/error-message/type";
@@ -29,11 +25,12 @@ import GameGuideModal from "../game-components/game-guide";
 import GameLoading from "../game-components/game-loading";
 import { LoadingSpinner } from "../game-components/game-loading/loading-spinner";
 import NewRoundTransition from "../game-components/new-round-transition";
-import { Notice } from "../game-components/notice";
+import { NoticeDialog } from "../game-components/notice";
 import { PFSettingModal } from "../game-components/provably-fair";
 import { Settings } from "../game-components/settings";
 import BackgroundGalaxy from "../page-components/background";
 import BetSettings from "../page-components/bet-settings";
+import { GameSoundHandler, IGameSoundHandler } from "../round-base/game-sound-handler";
 import { IRoundStateHandler } from "../round-base/round-state-handler";
 import {
     GameDisableHandler,
@@ -41,21 +38,21 @@ import {
     GameFinishHandler,
     GameMessageHandler,
     GameRoundHistoryHandler,
-    messageEventType,
     PlaceBetHandler,
     PlayerHandler,
+    messageEventType,
 } from "./handlers";
 import { GameRoundDataHandler } from "./handlers/game-round-data-handler";
-import { GameSoundHandler } from "./handlers/game-sound-handler";
 import { IGameStateHandler } from "./handlers/game-state-handler";
-import { GameBaseProps, PFClientSeedSetting, RoundState } from "./type";
+import { PFWrapper } from "./handlers/pf-wrapper/pf-wrapper";
+import { PlaceBetHandlerWrapper } from "./handlers/place-bet-wrapper/place-bet-handler-wrapper";
+import { GameBaseHandlers, GameBaseProps, RoundState } from "./type";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
     protected socket: Socket;
     protected gameCronInterval: NodeJS.Timeout;
     protected roundTimeCounter: number;
     protected timeCounter: number;
-    protected authService: Auth;
     private disconnectTimeout: NodeJS.Timeout;
     private readonly gameMessageHandler: GameMessageHandler;
     private readonly roundStateHandler: IRoundStateHandler;
@@ -66,31 +63,33 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     private readonly gameFinishHandler?: GameFinishHandler;
     private readonly gameDisabledHandler?: GameDisableHandler;
     private readonly gameRoundHistoryHandler?: GameRoundHistoryHandler;
-    private readonly gameSoundHandler?: GameSoundHandler;
-    private readonly gameRoundDatatHandler?: GameRoundDataHandler;
+    private readonly gameSoundHandler: IGameSoundHandler;
+    private readonly gameRoundDataHandler?: GameRoundDataHandler;
 
-    constructor(
-        props: P,
-        roundStateHandler: IRoundStateHandler,
-        gameStateHandler: IGameStateHandler,
-        gameMessageHandler: GameMessageHandler,
-        gameRoundDatatHandler: GameRoundDataHandler,
-        gameErrorHandler?: GameErrorHandler,
-        playerHandler?: PlayerHandler,
-        placeBetHandler?: PlaceBetHandler,
-        gameFinishHandler?: GameFinishHandler,
-        gameDisabledHandler?: GameDisableHandler,
-        gameRoundHistoryHandler?: GameRoundHistoryHandler,
-        gameSoundHandler?: GameSoundHandler
-    ) {
+    constructor(props: P, handlers: GameBaseHandlers) {
         super(props);
 
         const { dispatch } = this.props;
         const gamName = this.props.translate(`${GameResourceKeys.GAME_NAME}_${this.props.id}`);
+
+        const {
+            roundStateHandler,
+            gameStateHandler,
+            gameMessageHandler,
+            gameRoundDataHandler,
+            gameErrorHandler,
+            playerHandler,
+            placeBetHandler,
+            gameFinishHandler,
+            gameDisabledHandler,
+            gameRoundHistoryHandler,
+            gameSoundHandler,
+        } = handlers;
+
         this.roundStateHandler = roundStateHandler;
         this.gameStateHandler = gameStateHandler;
         this.gameMessageHandler = gameMessageHandler;
-        this.gameRoundDatatHandler = gameRoundDatatHandler ?? new GameRoundDataHandler();
+        this.gameRoundDataHandler = gameRoundDataHandler ?? new GameRoundDataHandler();
         this.gameErrorHandler =
             gameErrorHandler ??
             new GameErrorHandler({
@@ -111,7 +110,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             placeBetHandler ??
             new PlaceBetHandler({
                 tolgeeNamespace: this.props.tolgeeNamespace,
-                dispatch,
                 gameMessageHandler: this.gameMessageHandler,
                 gameName: gamName,
                 getPlayerBalance: this.getPlayerBalance,
@@ -128,13 +126,12 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             new GameFinishHandler({
                 dispatch,
                 gameMessageHandler: this.gameMessageHandler,
-                placeBetHandler: this.placeBetHandler,
                 durations: this.props.durations,
                 roundStateHandler: this.roundStateHandler,
                 runGame: (remainingTime: number) => this.runGame(remainingTime),
                 gameId: this.props.id,
                 gameStateContextModel: this.getGameStateContext.bind(this),
-                gameRoundDatatHandler: this.gameRoundDatatHandler,
+                gameRoundDataHandler: this.gameRoundDataHandler,
             });
 
         this.gameDisabledHandler =
@@ -160,10 +157,10 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.placeBet = this.placeBet.bind(this);
         this.updateUserBalance = this.updateUserBalance.bind(this);
         this.setActiveScoreboardTab = this.setActiveScoreboardTab.bind(this);
-        this.syncPFSetting = this.syncPFSetting.bind(this);
+        this.renderHeaderBlock = this.renderHeaderBlock.bind(this);
 
         AnalyticsHelper.trackPage({ page_title: this.props.gameName });
-        GlobalMessageTransmitter.broadcast({ openingGameId: props.id });
+        GlobalMessageTransmitter.broadcast({ [GlobalTransmitterEvent.OPEN_GAME_ID]: props.id });
     }
 
     getGameStateContext = () => {
@@ -210,13 +207,9 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.socket = null;
         this.gameMessageHandler.clearAllHandlers();
         this.props.dispatch({ type: GameEventActionType.DISCONNECT, payload: {} });
-        this.props.dispatch({ type: GameEventActionType.END_BET_PROCESSING, payload: {} });
         this.clearDisconnectTimeout();
         this.registerHandlers();
-        this.loadAuthorizeUserSetting();
         this.connectToGameService();
-        this.gameStateHandler.setReturnToGameState(this.props.dispatch);
-        this.cancelConfirmBetAndResetBets();
         this.gameMessageHandler.broadcastGameEvent({ [messageEventType.UPDATE_PLAYER_BALANCE]: true });
     }
 
@@ -227,22 +220,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
         this.socket = socket;
     }
-
-    cancelConfirmBetAndResetBets = () => {
-        const { dispatch } = this.props;
-        dispatch({
-            type: GameEventActionType.NOT_CONFIRM_OWN_BETS,
-            payload: {
-                notConfirmOwnBets: {},
-            },
-        });
-        dispatch({
-            type: GameEventActionType.SHOW_CONFIRM_BET,
-            payload: {
-                showConfirmBet: false,
-            },
-        });
-    };
 
     onVisibilityChange = () => {
         document.visibilityState === "hidden" ? this.onDestroy() : this.onStart();
@@ -291,23 +268,13 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.gameMessageHandler.register(messageEventType.REMAINING_TIME, this.handleRemainingTime.bind(this));
         this.gameMessageHandler.register(messageEventType.ROUND_HISTORY, this.handleRoundHistory.bind(this));
         this.gameFinishHandler.registerEvents();
-        this.placeBetHandler.registerEvents(signOut, this.props.gameStateContextModel);
         this.gameMessageHandler.register(messageEventType.GAME_DESTROY, this.onDestroy.bind(this));
         this.gameMessageHandler.register(messageEventType.CLEAR_GAME_TIMEOUT_AND_INTERVAL, this.clearGameTimeoutAndInterval.bind(this));
         this.gameMessageHandler.register(messageEventType.SEND_SOCKET_MESSAGE, this.sendSocketMessage.bind(this));
         this.gameMessageHandler.register(messageEventType.UPDATE_PLAYER_BALANCE, this.updateUserBalance.bind(this));
-        this.gameMessageHandler.register(
-            messageEventType.SEND_SOCKET_MESSAGE_WITH_CLIENT_SEED,
-            this.sendSocketMessageWithClientSeed.bind(this)
-        );
         this.playerHandler.registerEvents();
         this.gameErrorHandler.registerEvents(signOut);
-        this.gameMessageHandler.register(messageEventType.SAVE_PF_SETTING, this.handleSavePFSetting.bind(this));
     }
-
-    emitSocketEvent = ({ key, data }) => {
-        this.socket?.emit(key, data);
-    };
 
     get defaultResult() {
         return null;
@@ -322,72 +289,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.socket.emit(event, data);
     };
 
-    sendSocketMessageWithClientSeed = (message) => {
-        const { event, data } = message[messageEventType.SEND_SOCKET_MESSAGE_WITH_CLIENT_SEED];
-        const { pfClientSeedSetting } = this.props.gameStateContextModel;
-        const clientSeed = pfClientSeedSetting?.useManualClientSeed
-            ? pfClientSeedSetting?.manualClientSeed
-            : pfClientSeedSetting?.randomClientSeed;
-        const clientSeedDetail = {
-            randomClientSeed: pfClientSeedSetting?.randomClientSeed,
-            manualClientSeed: pfClientSeedSetting?.manualClientSeed,
-            useManualClientSeed: pfClientSeedSetting?.useManualClientSeed,
-        };
 
-        this.socket.emit(event, { ...data, clientSeed, clientSeedDetail });
-    };
-
-    loadQuickBetSetting() {
-        const { authorizeInfo, enableQuickBet } = this.context as PlayerContextModel;
-        const isEnableQuickBet = authorizeInfo?.user?.settings.quickBet || enableQuickBet;
-
-        this.props.systemDispatch({
-            type: SystemEventActionType.SET_QUICK_BET,
-            payload: {
-                isEnableQuickBet,
-            },
-        });
-    }
-
-    loadAuthorizeUserSetting() {
-        this.loadQuickBetSetting();
-        this.loadPFSetting();
-    }
-
-    loadPFSetting() {
-        const uid = (this.context as PlayerContextModel).authorizeInfo?.user?.UID;
-        const pfClientSeedSetting = StorageHelper.get<PFClientSeedSetting>(`${localStorageKeys.pfSetting}-${uid}-${this.props.id}`);
-        if (pfClientSeedSetting) {
-            this.props.dispatch({
-                type: GameEventActionType.UPDATE_PF_CLIENT_SEED_SETTING,
-                payload: {
-                    pfClientSeedSetting: {
-                        ...pfClientSeedSetting,
-                        manualClientSeed:
-                            pfClientSeedSetting?.manualClientSeed?.length <= 0 && pfClientSeedSetting?.useManualClientSeed
-                                ? pfClientSeedSetting?.randomClientSeed
-                                : pfClientSeedSetting?.manualClientSeed,
-                    },
-                },
-            });
-        }
-    }
-
-    handleSavePFSetting(message) {
-        const { pfClientSeedSetting } = message[messageEventType.SAVE_PF_SETTING];
-        this.syncPFSetting(pfClientSeedSetting);
-        this.props.dispatch({ type: GameEventActionType.UPDATE_PF_CLIENT_SEED_SETTING, payload: { pfClientSeedSetting } });
-    }
-
-    syncPFSetting(pfClientSeedSetting) {
-        const uid = (this.context as PlayerContextModel).authorizeInfo?.user?.UID;
-        const { pfClientSeedSetting: oldPFClientSeedSetting } = this.props.gameStateContextModel;
-        const dataPFSettingSave = {
-            ...oldPFClientSeedSetting,
-            ...pfClientSeedSetting,
-        };
-        StorageHelper.set(`${localStorageKeys.pfSetting}-${uid}-${this.props.id}`, dataPFSettingSave);
-    }
 
     handleUM(gameMessage) {
         this.gameDisabledHandler.handleUM(gameMessage, this.timeCounter);
@@ -488,6 +390,14 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 payload: { newGameState },
             });
 
+            if ([RoundState.SwitchRound, RoundState.BeforePlaceBet, RoundState.InRound].includes(newRoundState)) {
+                this.placeBetHandler.getPlaceBetDispatch()({
+                    type: PlaceBetEventActionType.SET_NEW_GAME_STATE,
+                    payload: {},
+                });
+
+                this.gameMessageHandler.broadcastGameEvent({ [messageEventType.SYNC_OWN_BETS_TO_PF]: {} });
+            }
             const isContinuePlaying = gameStateContextModel.roundState !== RoundState.None;
             if (isContinuePlaying) {
                 this.gameSoundHandler.handleSound(newRoundState);
@@ -546,24 +456,24 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     };
 
     renderNotice() {
-        return <Notice />;
-    }
-
-    renderResultSection() {
-        return null;
+        return <NoticeDialog />;
     }
 
     renderRoundIdSection() {
         return <></>;
     }
+
+    renderGameStatus() {
+        return GameStatusMap.TurnBaseStatus;
+    }
+
     renderHeaderBlock() {
         return (
             <div className="game-header">
                 {this.renderRoundIdSection()}
                 <div id="countdown-timer" className="countdown-timer">
-                    <CountdownTimer />
+                    <CountdownTimer GameStatusProp={this.renderGameStatus()} />
                 </div>
-
                 <Settings />
             </div>
         );
@@ -619,14 +529,27 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     getRenderTemplate() {
+        const uid = (this.context as PlayerContextModel).authorizeInfo?.user?.UID;
         return (
             <>
                 <BackgroundGalaxy gameId={this.props.id} />
                 <>
-                    <div className="game-area">
-                        <div>{this.renderHeaderBlock()}</div>
+                    <div className={`game-area game-${this.props.id}`}>
+                        <PFProvider gameId={this.props.id} uid={uid}>
+                            <PFWrapper socket={this.socket} gameMessageHandler={this.gameMessageHandler} gameId={this.props.id} uid={uid}>
+                                {this.renderHeaderBlock()}
+                                {this.renderPFSettingModal()}
+                                {this.renderBetHistoryModal()}
+                            </PFWrapper>
+                        </PFProvider>
                         <div>{this.renderResultBlock()}</div>
-                        <div>{this.renderBettingBlock()}</div>
+                        <PlaceBetProvider>
+                            <PlaceBetHandlerWrapper handler={this.placeBetHandler} signOut={(this.context as PlayerContextModel)?.signOut}>
+                                {this.renderBettingBlock()}
+                                {this.renderConfirmDialog()}
+                                {this.renderConfirmBet()}
+                            </PlaceBetHandlerWrapper>
+                        </PlaceBetProvider>
                         <div className={SwiperNoSwiping}> {this.renderSlidingChips()}</div>
                         <div>{this.renderStatistic()}</div>
                         <div className={SwiperNoSwiping}> {this.renderScoreboards()}</div>
@@ -634,12 +557,8 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                     </div>
                     {this.renderGameGuideModal()}
                     {this.renderMenuButtons()}
-                    {this.renderPFSettingModal()}
-                    {this.renderBetHistoryModal()}
                     {this.renderNewRoundTransition()}
                     {this.renderNotice()}
-                    {this.renderConfirmDialog()}
-                    {this.renderConfirmBet()}
                 </>
             </>
         );
@@ -648,7 +567,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     renderGame() {
         const gameActionsContext = {
             placeBet: this.placeBet,
-            playAcceptedBetAnimation: this.placeBetHandler.playAcceptedBetAnimation,
             setActiveScoreboardTab: this.setActiveScoreboardTab,
         };
 

@@ -7,7 +7,7 @@ import { Round, RoundState } from "../type";
 import { GameFinishHandler, GameFinishHandlerProps } from "./game-finish-handler";
 import { GameMessageHandler, messageEventType } from "./game-message-handler";
 import { GameRoundDataHandler } from "./game-round-data-handler";
-import { PlaceBetHandler } from "./place-bet-handler";
+import { PlaceBetHandler } from "./place-bet-wrapper/place-bet-handler";
 
 jest.useFakeTimers();
 jest.mock("../../../_shared/react-contexts/game-state-context/game-state-context", () => ({
@@ -21,20 +21,19 @@ describe("GameFinishHandler", () => {
     let placeBetHandler: PlaceBetHandler;
     let roundStateHandler: IRoundStateHandler;
     let gameFinishPros: GameFinishHandlerProps;
-    let gameRoundDatatHandler: GameRoundDataHandler;
+    let gameRoundDataHandler: GameRoundDataHandler;
     let buildGameRoundDataAfterReceiveFinishEvent: jest.Mock;
 
     beforeEach(() => {
         buildGameRoundDataAfterReceiveFinishEvent = jest.fn();
         gameFinishPros = stub<GameFinishHandlerProps>();
         gameMessageHandler = stub<GameMessageHandler>({ broadcastGameEvent: jest.fn(), register: jest.fn() });
-        gameRoundDatatHandler = stub<GameRoundDataHandler>({ buildGameRoundDataAfterReceiveFinishEvent });
+        gameRoundDataHandler = stub<GameRoundDataHandler>({ buildGameRoundDataAfterReceiveFinishEvent });
         placeBetHandler = stub<PlaceBetHandler>();
         roundStateHandler = stub<IRoundStateHandler>();
         gameFinishPros.dispatch = jest.fn();
         gameFinishPros.gameMessageHandler = gameMessageHandler;
-        gameFinishPros.placeBetHandler = placeBetHandler;
-        gameFinishPros.gameRoundDatatHandler = gameRoundDatatHandler;
+        gameFinishPros.gameRoundDataHandler = gameRoundDataHandler;
         gameFinishPros.roundStateHandler = roundStateHandler;
         gameFinishPros.gameStateContextModel = jest.fn().mockReturnValue({ roundState: RoundState.InRound } as GameStateContextModel);
 
@@ -85,11 +84,6 @@ describe("GameFinishHandler", () => {
             gameFinishHandler.handleFinish({ finish: mockFinish });
 
             // Assert
-            expect(gameFinishPros.dispatch).toHaveBeenCalledTimes(2);
-            expect(gameFinishPros.dispatch).toHaveBeenCalledWith({
-                type: GameEventActionType.END_BET_PROCESSING,
-                payload: {},
-            });
             expect(gameFinishPros.dispatch).toHaveBeenCalledWith({
                 type: GameEventActionType.FINISH,
                 payload: {

@@ -1,8 +1,7 @@
 import { FC, useEffect, useRef, useState } from "react";
 
 import { useGameContext } from "../../../../_shared/react-contexts";
-import { GameEventActionType } from "../../../../_shared/react-contexts/game-state-context/game-event-action";
-import { useGameStateContext, useGameStatesDispatch } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
+import { useGameStateContext } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
 import { useCommonTranslate, useSNTranslate } from "../../../../_shared/react-hooks";
 import { messageEventType } from "../../../game-base/handlers";
 import { PFSeverSeed } from "../../../game-base/type";
@@ -11,6 +10,8 @@ import ModalContainer from "../../modal-container";
 import CopyableTextInput from "../copyable-text-input";
 import { ButtonPFGuide } from "../pf-guide";
 import Styles from "../provably-fair.module.scss";
+import { usePFContext, usePFDispatch } from "../../../../_shared/react-contexts/game-state-context/pf/pf-context";
+import { PFEventActionType } from "../../../../_shared/react-contexts/game-state-context/pf/pf-action";
 
 const NUMBER_VALUES = "0123456789";
 const GetPFInfoMessage = "getPfInfo";
@@ -26,12 +27,12 @@ const handleOnKeyDown = (event: any) => {
 };
 
 const PFSettingModal: FC<{ customClientSeedInfo?: string }> = ({ customClientSeedInfo }) => {
-    const { isShowPFSetting } = useGameStateContext();
+    const { isShowPFSetting } = usePFContext();
     const { t: translateSNGames } = useSNTranslate();
-    const dispatch = useGameStatesDispatch();
+    const dispatch = usePFDispatch();
 
     const handleCloseModal = () => {
-        dispatch({ type: GameEventActionType.TOGGLE_PF_SETTING, payload: { isShowPFSetting: false } });
+        dispatch({ type: PFEventActionType.TOGGLE_PF_SETTING, payload: { isShowPFSetting: false } });
     };
 
     return (
@@ -58,7 +59,8 @@ const PFSetting: FC<{ customClientSeedInfo?: string }> = ({ customClientSeedInfo
     const randomSeed = useRef<HTMLInputElement>();
     const manualRadio = useRef<HTMLInputElement>();
     const manualSeed = useRef<HTMLInputElement>();
-    const { pfClientSeedSetting, ownBets, drawId } = useGameStateContext();
+    const { drawId } = useGameStateContext();
+    const { pfClientSeedSetting, ownBets } = usePFContext();
     const [isFirstLoad, setIsFirstLoad] = useState<boolean>(true);
     const [isFirstFetch, setIsFirstFetch] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);

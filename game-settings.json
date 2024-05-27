@@ -105,8 +105,25 @@
     },
     "1005": {
         "id": 1005,
-        "gameName": "SeBall",
-        "isComingSoon": true,
-        "gameImagePath": ""
+        "gameName": "SeBall1",
+        "tolgeeNamespace": "SeBall",
+        "socketInfo": {
+            "namespace": "seball1",
+            "path": "seball1"
+        },
+        "durations": {
+            "wholeRound": 26,
+            "wholeTurn": 26,
+            "placingBets": 15,
+            "lockingBet": 3,
+            "showResult": 7,
+            "resultAnimation": 4,
+            "beforePlaceBet": 4,
+            "switchRoundAnimation": 0,
+            "startNewRoundAnim": 16
+        },
+        "totalTurns": 1,
+        "numberOfRoundHistory": 100,
+        "gamePath": "se-ball"
     }
 }

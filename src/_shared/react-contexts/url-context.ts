@@ -2,7 +2,7 @@ import isEmpty from "lodash/isEmpty";
 import { createContext, useContext } from "react";
 import { AnalyticsHelper, StorageHelper, localStorageKeys } from "../helpers";
 import { GameUtils } from "../helpers/base-64-helper";
-import { GlobalMessageTransmitter } from "../helpers/message-transmitter/global-transmitter";
+import { GlobalMessageTransmitter, GlobalTransmitterEvent } from "../helpers/message-transmitter/global-transmitter";
 
 export type URLContextModel = {
     token?: string;
@@ -51,7 +51,7 @@ export const initialURLContextData = {
             globalThis.location.href = GameUtils.base64Decode(redirectUrl);
         } else {
             updateURLContext({ backToLobby: true });
-            GlobalMessageTransmitter.broadcast({ updateGameIdDashboard: {} });
+            GlobalMessageTransmitter.broadcast({ [GlobalTransmitterEvent.BACK_TO_LOBBY]: {} });
         }
     },
 };

@@ -38,11 +38,12 @@ const BaseDialog = dynamic(() => import("../../game-components/base-dialog"));
 const MusicPlayer = dynamic(() => import("../music-player"));
 const LandscapeMode = dynamic(() => import("./landscape-mode/landscape-mode"));
 
-class Dashboard extends React.PureComponent<DashboardProps, DashboardState> {
+class Dashboard extends React.Component<DashboardProps, DashboardState> {
     private readonly dashboardHandler: DashboardHandler;
     private readonly notificationHandler: NotificationHandler;
     private readonly swiperRef = React.createRef<SwiperCore>();
-    private updateGameIdDashboardId: string;
+    private backToLobbyEventId = null;
+    private isUpdatingBalance = false;
 
     constructor(
         props: DashboardProps,
@@ -98,11 +99,12 @@ class Dashboard extends React.PureComponent<DashboardProps, DashboardState> {
         GlobalMessageTransmitter.broadcast({ [GlobalTransmitterEvent.USER_INFO_RED]: this.props.authorizeResponse.user.red });
     }
 
-    updateUserBalance = (balance: number) => {
+    updateUserBalance = (balance: number, setBalanceByPlaceBet = true) => {
         const authorizeInfo = { ...this.state.authorizeInfo };
         if (authorizeInfo.user.red !== balance) {
             authorizeInfo.user.red = balance;
             GlobalMessageTransmitter.broadcast({ [GlobalTransmitterEvent.USER_INFO_RED]: authorizeInfo.user.red });
+            this.isUpdatingBalance = setBalanceByPlaceBet;
             this.setState({ authorizeInfo });
         }
     }
@@ -122,15 +124,26 @@ class Dashboard extends React.PureComponent<DashboardProps, DashboardState> {
 
     resetGameIdDashboardEvent() {
         this.setState({ openGameId: 0 });
+        this.forceUpdate();
     }
 
     updateGameTransmitters(gameTransmitters: Record<number, LobbyGameTransmitter>) {
         this.setState({ gameTransmitters });
     }
 
+    shouldComponentUpdate(nextProps: Readonly<DashboardProps>, nextState: Readonly<DashboardState>, nextContext: any): boolean {
+        if (this.state.openGameId > 0 && this.isUpdatingBalance) {
+            this.isUpdatingBalance = false;
+            return false;
+        }
+
+        return true;
+    }
+
+
     async componentDidMount() {
         document.addEventListener("visibilitychange", this.onVisibilityChange);
-        this.updateGameIdDashboardId = registerGlobalMessageEvent(GlobalTransmitterEvent.UPDATE_GAME_ID_DASHBOARD, async () =>
+        this.backToLobbyEventId = registerGlobalMessageEvent(GlobalTransmitterEvent.BACK_TO_LOBBY, async () =>
             this.resetGameIdDashboardEvent()
         );
 
@@ -163,7 +176,7 @@ class Dashboard extends React.PureComponent<DashboardProps, DashboardState> {
     }
 
     componentWillUnmount() {
-        unsubscribeGlobalMessageEvent(this.updateGameIdDashboardId as any);
+        unsubscribeGlobalMessageEvent(this.backToLobbyEventId);
         document.removeEventListener("visibilitychange", this.onVisibilityChange);
 
         this.notificationHandler.reset();
@@ -237,6 +250,7 @@ class Dashboard extends React.PureComponent<DashboardProps, DashboardState> {
 
     renderDashBoard() {
         window.history.pushState(null, null, "/");
+        this.isUpdatingBalance = true;
 
         const { isShowErrorModal, authorizeInfo, isBlockUI, isChangedGame, isChangePrevGame, openGameId, } = this.state;
         const offerGames = this.dashboardHandler.getOfferGamesIds();

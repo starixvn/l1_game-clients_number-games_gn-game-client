@@ -24,14 +24,20 @@ const BettingBlock: FC<PropsWithChildren> = ({ children }: PropsWithChildren) =>
             setBettingZoneState((prevState) => ({ ...prevState, playerBetCount }));
         };
 
+        const handleAcceptedBets = ({ endBet }) => {
+            endBet > 0 && setBettingZoneState((prevState) => ({ ...prevState, acceptedBets: endBet }));
+        };
+
         const totalBetHandler = gameMessageHandler.register(messageEventType.TOTAL_BETS, handleTotalBets);
         const betPercentageHandler = gameMessageHandler.register(messageEventType.BET_PERCENTAGE, handleBetPercentage);
         const playerBetCountHandler = gameMessageHandler.register(messageEventType.PLAYER_BET_COUNT, handlePlayerBetCount);
+        const acceptedBetsHandler = gameMessageHandler.register(messageEventType.END_BET, handleAcceptedBets);
 
         return () => {
             gameMessageHandler.removeHandler(totalBetHandler);
             gameMessageHandler.removeHandler(betPercentageHandler);
             gameMessageHandler.removeHandler(playerBetCountHandler);
+            gameMessageHandler.removeHandler(acceptedBetsHandler);
         };
     }, [gameMessageHandler, bettingZoneState]);
 

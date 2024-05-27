@@ -1,11 +1,11 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import BetDetailBase from "../bet-detail-base";
-import React from "react";
-import { useGameStateContext, useGameStatesDispatch } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
+import { useGameStateContext } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
+import { usePFDispatch } from "../../../../_shared/react-contexts/game-state-context/pf/pf-context";
 import { useClickSound } from "../../../../_shared/react-hooks";
+import BetDetailBase from "../bet-detail-base";
 
 const mockUseGameStateContext = useGameStateContext as jest.Mock;
-const mockDispatch = useGameStatesDispatch as jest.Mock;
+const mockDispatch = usePFDispatch as jest.Mock;
 const mockSound = useClickSound as jest.Mock;
 
 String.prototype.capitalizeFirstLetter = function () {
@@ -14,7 +14,10 @@ String.prototype.capitalizeFirstLetter = function () {
 
 jest.mock("../../../../_shared/react-contexts/game-state-context/game-state-context", () => ({
     useGameStateContext: jest.fn(),
-    useGameStatesDispatch: jest.fn(),
+}));
+
+jest.mock("../../../../_shared/react-contexts/game-state-context/pf/pf-context", () => ({
+    usePFDispatch: jest.fn(),
 }));
 
 jest.mock("../../../../_shared/react-hooks", () => ({
@@ -41,7 +44,13 @@ describe(BetDetailBase.name, () => {
                 mockUseGameStateContext.mockReturnValue(state);
                 const renderBetDetailResultBlock = jest.fn();
 
-                render(<BetDetailBase renderBetDetailResultBlock={renderBetDetailResultBlock} produceDataBetDetailRow={jest.fn()} />);
+                render(
+                    <BetDetailBase
+                        isTurnBase={true}
+                        renderBetDetailResultBlock={renderBetDetailResultBlock}
+                        produceDataBetDetailRow={jest.fn()}
+                    />
+                );
 
                 expect(renderBetDetailResultBlock).toHaveBeenCalled();
             });
@@ -57,7 +66,13 @@ describe(BetDetailBase.name, () => {
                 mockUseGameStateContext.mockReturnValue(state);
                 const renderBetDetailResultBlock = jest.fn();
 
-                render(<BetDetailBase renderBetDetailResultBlock={renderBetDetailResultBlock} produceDataBetDetailRow={jest.fn()} />);
+                render(
+                    <BetDetailBase
+                        isTurnBase={true}
+                        renderBetDetailResultBlock={renderBetDetailResultBlock}
+                        produceDataBetDetailRow={jest.fn()}
+                    />
+                );
 
                 expect(renderBetDetailResultBlock).toHaveBeenCalledTimes(0);
             });
@@ -84,6 +99,7 @@ describe(BetDetailBase.name, () => {
 
                     render(
                         <BetDetailBase
+                            isTurnBase={true}
                             renderBetDetailResultBlock={jest.fn()}
                             produceDataBetDetailRow={produceDataBetDetailRow}
                             renderBetChoice={doNothing}
@@ -113,6 +129,7 @@ describe(BetDetailBase.name, () => {
 
                     render(
                         <BetDetailBase
+                            isTurnBase={true}
                             renderBetDetailResultBlock={jest.fn()}
                             produceDataBetDetailRow={produceDataBetDetailRow}
                             renderBetChoice={doNothing}
@@ -139,7 +156,13 @@ describe(BetDetailBase.name, () => {
             mockSound.mockReturnValue(clickSound);
             const renderBetDetailResultBlock = jest.fn();
 
-            render(<BetDetailBase renderBetDetailResultBlock={renderBetDetailResultBlock} produceDataBetDetailRow={jest.fn()} />);
+            render(
+                <BetDetailBase
+                    isTurnBase={true}
+                    renderBetDetailResultBlock={renderBetDetailResultBlock}
+                    produceDataBetDetailRow={jest.fn()}
+                />
+            );
 
             const button = screen.getAllByRole("button")[0];
             fireEvent.click(button);

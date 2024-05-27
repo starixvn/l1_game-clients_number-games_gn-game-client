@@ -2,12 +2,8 @@ import {
     DrawInfo,
     GameConfigs,
     IUserStakeLevel,
-    Notice,
-    PFClientSeedSetting,
-    PFResult,
     Round,
     RoundState,
-    SuggestBet,
 } from "../../../components/game-base/type";
 
 export interface GameStateContextModel {
@@ -20,21 +16,13 @@ export interface GameStateContextModel {
     roundId: number;
     result?: any;
     settlementResult?: any;
-    ownBets: object;
     errorMessage?: string | string[];
     selectedBetChoice?: string;
-    isProcessingBet?: boolean;
     disabledMessage?: string;
     showResultInfo: boolean;
-    acceptedBetQueue: {
-        [key: number]: {
-            amount: number;
-        };
-    };
     showWinningAnimation: boolean;
     playResultAnimation: boolean;
     isShowBlink: boolean;
-    notice: Notice;
     activeScoreboardTab?: number;
     rate?: number;
     disconnectReason?: string;
@@ -42,25 +30,15 @@ export interface GameStateContextModel {
     betWin: number;
     kickedOut: any;
     drawId: number;
-    showConfirmBet: boolean;
-    showConfirmDialog: boolean;
     turnCounter: number;
-    notConfirmOwnBets: object;
     userStakeLevel: IUserStakeLevel;
     isShowBetHistory: boolean;
     isShowBetDetail: boolean;
     isShowGameGuide: boolean;
-    isShowPFSetting: boolean;
-    isShowPFVerify: boolean;
-    isShowPFClientSeedInfo: boolean;
-    isShowPFVerification: boolean;
-    suggestBet: SuggestBet;
-    pfClientSeedSetting?: PFClientSeedSetting;
     betDetailModalData?: {
         drawInfo: DrawInfo;
         betLogDetails: any[];
     };
-    pfVerifyModalData?: PFResult;
     isPlayStartRoundAnimation?: boolean;
 }
 
@@ -72,10 +50,8 @@ export const initialGameStateContextModel = () => {
         roundData: {},
         roundHistory: [],
         roundId: 0,
-        ownBets: {},
         displayPopup: null,
         showResultInfo: false,
-        acceptedBetQueue: {},
         showWinningAnimation: false,
         playResultAnimation: false,
         isShowBlink: false,
@@ -96,28 +72,13 @@ export const initialGameStateContextModel = () => {
         drawId: 0,
         result: {},
         settlementResult: {},
-        showConfirmBet: false,
-        showConfirmDialog: false,
         turnCounter: 0,
-        notConfirmOwnBets: {},
         userStakeLevel: {
             minBet: 1,
             maxBet: 200_000,
         },
         isShowBetHistory: false,
         isShowGameGuide: false,
-        suggestBet: {
-            currentBetChoice: "",
-            sendOutstandingBet: null,
-            suggestBetAmount: 0,
-            isInsufficientFunds: null,
-        },
-        pfClientSeedSetting: {
-            drawId: 0,
-            randomClientSeed: "0000",
-            manualClientSeed: "",
-            useManualClientSeed: false,
-        },
         isPlayStartRoundAnimation: false,
     };
 };

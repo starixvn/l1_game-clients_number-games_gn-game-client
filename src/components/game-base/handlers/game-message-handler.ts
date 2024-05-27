@@ -38,6 +38,8 @@ export const messageEventType = {
     ROUND_ID: "roundId",
     CLIENT_SEED_DETAIL: "clientSeedDetail",
     SAVE_PF_SETTING: "savePFSetting",
+    SAVE_PF_SETTING_FROM_TURN_ID_HANLDER: "savePFSettingFromTurnIdHandler",
+    SYNC_OWN_BETS_TO_PF: "syncOwnBetsToPF",
 };
 
 export class GameMessageHandler {
@@ -47,7 +49,6 @@ export class GameMessageHandler {
 
     registerSocketEvents = () => {
         this.register(messageEventType.GAME_CONFIG, this.handleGameConfigs);
-        this.register(messageEventType.OWN_BETS, this.handleOwnBets);
         this.register(messageEventType.ODDS, this.handleOdds);
         this.register(messageEventType.ROUND_DATA, this.handleRoundData);
         this.register(messageEventType.SIGNED_IN, this.handleSignedIn);
@@ -87,14 +88,6 @@ export class GameMessageHandler {
         });
     };
 
-    handleOwnBets = ({ ownBets }) => {
-        this.dispatch({
-            type: GameEventActionType.OWN_BETS,
-            payload: {
-                ownBets,
-            },
-        });
-    };
 
     handleOdds = ({ odds }) => {
         this.dispatch({

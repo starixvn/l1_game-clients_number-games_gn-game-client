@@ -8,7 +8,7 @@ export const BetPercentage: React.FC<BaseProps> = ({ tolgeeNamespace, choice, cl
     const { betPercentage } = useGameBettingZoneContext();
     const { roundState } = useGameStateContext();
 
-    if (roundState === RoundState.SwitchRound) {
+    if ([RoundState.SwitchRound, RoundState.BeforePlaceBet].includes(roundState)) {
         return <></>;
     }
 

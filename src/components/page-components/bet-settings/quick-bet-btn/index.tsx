@@ -2,16 +2,16 @@ import { useState } from "react";
 import { isIOS, isMobileOnly } from "react-device-detect";
 
 import { SystemEventActionType, usePlayerContext, useSystemContext, useSystemDispatch } from "../../../../_shared/react-contexts";
-import { useGameStateContext } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
 import { useClickSound, useSNTranslate } from "../../../../_shared/react-hooks";
 import { updateUserQuickBetSetting } from "../../../../services/user-setting-service";
 import BaseDialog from "../../../game-components/base-dialog";
 import { ModalType } from "../../../game-components/base-dialog/type";
 import QuickBetHint from "../quick-bet-hint";
 import Styles from "./quick-bet-btn.module.scss";
+import { usePlaceBetContext } from "../../../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-context";
 
 export const QuickBetBtn = () => {
-    const { showConfirmBet } = useGameStateContext();
+    const { showConfirmBet } = usePlaceBetContext();
     const authContext = usePlayerContext();
     const enabledQuickBet = useSystemContext().isEnableQuickBet;
     const systemDispatch = useSystemDispatch();

@@ -14,4 +14,6 @@ export type PercentageStatisticProps = {
     selectedGroup?: number;
     onSelectGroup?: Function;
     className?: string;
+    subChoicesStatisticRuleEntries?: [string, (countResult: object, total: number) => number][];
+    subChoicesClass?: {};
 };

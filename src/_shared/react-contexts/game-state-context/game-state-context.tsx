@@ -1,9 +1,7 @@
 import { useTranslate } from "@tolgee/react";
 import { createContext, useContext, useReducer } from "react";
-
 import { RoundState } from "../../../components/game-base/type";
 import { LanguageLocaleMapper } from "../../constants";
-import { GetLocalizedErrorMessage } from "../../helpers/notice-helper";
 import { tolgee } from "../../tolgee";
 import { GameEventAction, GameEventActionType } from "./game-event-action";
 import { GameStateContextModel, initialGameStateContextModel } from "./game-state-context-model";
@@ -46,14 +44,10 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
         result,
         settlementResult,
         status,
-        userData,
-        ownBets,
-        apiError,
+        rate,
         userStakeLevel,
         odds,
         drawId,
-        notice,
-        acceptedBetQueue,
         disconnectReason,
         showWinningAnimation,
         activeScoreboardTab,
@@ -61,22 +55,12 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
         newGameState,
         showResultInfo,
         isShowBlink,
-        showConfirmBet,
-        showConfirmDialog,
         turnCounter,
-        notConfirmOwnBets,
         isUMInFirstLoad,
         isShowBetHistory,
         isShowGameGuide,
-        isShowPFSetting,
         isShowBetDetail,
-        suggestBet,
-        pfClientSeedSetting,
         betDetailModalData,
-        isShowPFVerify,
-        pfVerifyModalData,
-        isShowPFClientSeedInfo,
-        isShowPFVerification,
         isPlayStartRoundAnimation,
     } = payload;
 
@@ -143,8 +127,9 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
                 roundId,
                 result,
                 settlementResult,
-                playResultAnimation,
-                showResultInfo,
+                isShowBlink,
+                playResultAnimation: false,
+                showResultInfo: true,
             };
         }
 
@@ -157,6 +142,7 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
                 roundId,
                 drawId,
                 roundData,
+                showResultInfo: false,
             };
         }
 
@@ -168,47 +154,9 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
         }
 
         case GameEventActionType.USER: {
-            if (userData.gameConfigs) {
-                return {
-                    ...state,
-                    rate: userData.user.rate,
-                };
-            }
-
             return {
                 ...state,
-            };
-        }
-
-        case GameEventActionType.OWN_BETS: {
-            return {
-                ...state,
-                ownBets,
-            };
-        }
-
-        case GameEventActionType.END_BET: {
-            return {
-                ...state,
-                notice: null,
-            };
-        }
-
-        case GameEventActionType.API_ERROR: {
-            const isPlaceBet = apiError.isPlaceBetFailed ? apiError.isPlaceBetFailed : false;
-            const errorCode = apiError.errorCode;
-            const message = GetLocalizedErrorMessage(errorCode, isPlaceBet);
-            return {
-                ...state,
-                notice: {
-                    gameName: "gameName",
-                    roundId: apiError?.gameRoundId,
-                    message: message,
-                    duration: 3,
-                    minBet: apiError?.minBet,
-                    maxBet: apiError?.maxBet,
-                    errorCode: errorCode,
-                },
+                rate,
             };
         }
 
@@ -225,13 +173,6 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
             return {
                 ...state,
                 userStakeLevel,
-            };
-        }
-
-        case GameEventActionType.NOTICE_USER_STAKE_LEVEL: {
-            return {
-                ...state,
-                notice: { message: "Common.message_bet_limit_change" },
             };
         }
 
@@ -259,20 +200,6 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
             };
         }
 
-        case GameEventActionType.DISPLAY_POPUP: {
-            return {
-                ...state,
-                notice,
-            };
-        }
-
-        case GameEventActionType.ACCEPTED_BET_QUEUE: {
-            return {
-                ...state,
-                acceptedBetQueue,
-            };
-        }
-
         case GameEventActionType.SET_NEW_GAME_STATE: {
             return {
                 ...state,
@@ -287,21 +214,6 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
             };
         }
 
-        case GameEventActionType.BET_PROCESSING: {
-            return {
-                ...state,
-                isProcessingBet: true,
-                notice,
-            };
-        }
-
-        case GameEventActionType.END_BET_PROCESSING: {
-            return {
-                ...state,
-                isProcessingBet: false,
-                notice: null,
-            };
-        }
         case GameEventActionType.ACTIVE_SCORE_BOARD: {
             return {
                 ...state,
@@ -333,27 +245,6 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
             };
         }
 
-        case GameEventActionType.SHOW_CONFIRM_BET: {
-            return {
-                ...state,
-                showConfirmBet,
-            };
-        }
-
-        case GameEventActionType.SHOW_CONFIRM_DIALOG: {
-            return {
-                ...state,
-                showConfirmDialog,
-            };
-        }
-
-        case GameEventActionType.NOT_CONFIRM_OWN_BETS: {
-            return {
-                ...state,
-                notConfirmOwnBets,
-            };
-        }
-
         case GameEventActionType.SET_UM_FIRST_LOADING: {
             return {
                 ...state,
@@ -382,62 +273,10 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
             };
         }
 
-        case GameEventActionType.TOGGLE_PF_SETTING: {
-            return {
-                ...state,
-                isShowPFSetting,
-            };
-        }
-
-        case GameEventActionType.SUGGEST_BET: {
-            return {
-                ...state,
-                suggestBet,
-            };
-        }
-
-        case GameEventActionType.UPDATE_PF_CLIENT_SEED_SETTING: {
-            return {
-                ...state,
-                pfClientSeedSetting: {
-                    ...state.pfClientSeedSetting,
-                    ...pfClientSeedSetting,
-                },
-            };
-        }
-
         case GameEventActionType.UPDATE_BET_DETAIL: {
             return {
                 ...state,
                 betDetailModalData,
-            };
-        }
-
-        case GameEventActionType.TOGGLE_PF_VERIFY: {
-            return {
-                ...state,
-                isShowPFVerify,
-            };
-        }
-
-        case GameEventActionType.UPDATE_PF_VERIFY: {
-            return {
-                ...state,
-                pfVerifyModalData,
-            };
-        }
-
-        case GameEventActionType.TOGGLE_PF_CLIENT_SEED_INFO: {
-            return {
-                ...state,
-                isShowPFClientSeedInfo,
-            };
-        }
-
-        case GameEventActionType.TOGGLE_PF_VERIFICATION: {
-            return {
-                ...state,
-                isShowPFVerification,
             };
         }
 
@@ -449,6 +288,8 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
         }
 
         default: {
+            console.warn(JSON.stringify(action));
+
             throw Error("Unknown action: " + action.type);
         }
     }

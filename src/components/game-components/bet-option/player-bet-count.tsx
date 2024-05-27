@@ -10,7 +10,7 @@ export const PlayerBetCount: React.FC<BaseProps> = ({ tolgeeNamespace, choice, c
     const { playerBetCount } = useGameBettingZoneContext();
     const { roundState } = useGameStateContext();
 
-    if (isEmpty(playerBetCount) || !playerBetCount[choice] || roundState === RoundState.SwitchRound) {
+    if (isEmpty(playerBetCount) || !playerBetCount[choice] || [RoundState.SwitchRound, RoundState.BeforePlaceBet].includes(roundState)) {
         return <></>;
     }
 

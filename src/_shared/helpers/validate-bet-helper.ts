@@ -2,6 +2,7 @@ import { GameConfigs, RoundState } from "../../components/game-base/type";
 import { confirmBet } from "../constants";
 import { NoticeErrorCode } from "../constants/error-code-dictionary";
 import { GameStateContextModel } from "../react-contexts/game-state-context/game-state-context-model";
+import { PlaceBetContextModel } from "../react-contexts/game-state-context/place-bet-context/place-bet-context-model";
 
 export interface IAvailableSuggestBetAmount {
     suggestAmount?: number;
@@ -31,14 +32,8 @@ interface SuggestBetOptions {
     currentAmountOfChoice: number;
 }
 
-export const validateHedgeBet = (
-    hedgeBetGroup: string[],
-    ownBets: object,
-    notConfirmOwnBets: object,
-    betChoice: string,
-    amount: number
-): boolean => {
-    const betTracks = { ...ownBets, ...notConfirmOwnBets };
+export const validateHedgeBet = (hedgeBetGroup: string[], ownBets: object, betChoice: string, amount: number): boolean => {
+    const betTracks = { ...ownBets };
     betTracks[betChoice] = (betTracks[betChoice] ?? 0) + amount;
 
     return (
@@ -93,14 +88,15 @@ export const isMaxBetRound = (amount: number, roundMaxBet: number, totalBetAmoun
     return amount + totalBetAmount > roundMaxBet || totalBetAmount > roundMaxBet;
 };
 
-export const isInPhasePreventBet = (gameStateContext: GameStateContextModel): boolean => {
-    return gameStateContext.roundState !== RoundState.InRound;
+export const isInPhasePreventBet = (roundState: RoundState): boolean => {
+    return roundState !== RoundState.InRound;
 };
 
 export const isBalanceUnavailable = (
     availableBalance: number,
     amount: number,
     gameStateContext: GameStateContextModel,
+    notConfirmOwnBets: object,
     enabledQuickBet: boolean
 ): boolean => {
     if (enabledQuickBet && availableBalance === 0) {
@@ -109,17 +105,12 @@ export const isBalanceUnavailable = (
 
     const { gameConfigs, userStakeLevel } = gameStateContext;
     const minBet = getRoundMinBet(gameConfigs, userStakeLevel?.minBet || 0) ?? 0;
-    const totalBetAmount = getTotalNotConfirmBet(gameStateContext);
+    const totalBetAmount = getTotalNotConfirmBet(notConfirmOwnBets);
     return amount > 0 && (availableBalance - totalBetAmount === 0 || availableBalance < minBet);
 };
 
-export const isHedgeBet = (
-    hedgeBetGroups: string[],
-    betChoice: string,
-    amount: number,
-    gameStateContext: GameStateContextModel
-): boolean => {
-    return validateHedgeBet(hedgeBetGroups, gameStateContext.ownBets, gameStateContext?.notConfirmOwnBets, betChoice, amount);
+export const isHedgeBet = (hedgeBetGroups: string[], betChoice: string, amount: number, ownBets: object): boolean => {
+    return validateHedgeBet(hedgeBetGroups, ownBets, betChoice, amount);
 };
 
 export const findHedgeBetGroup = (hedgeBetGroups: string[][], betChoice: string): string[] => {
@@ -159,21 +150,14 @@ export const getMaxAvailableAmountOfChoice = (
 
 export const getCriteriaValidateBet = (
     gameStateContext: GameStateContextModel,
+    placeBetContext: PlaceBetContextModel,
     betChoice: string,
     amount: number,
     accountBalance: number,
     enabledQuickBet: boolean
 ): { errorCode: string; args?: object } => {
     if (betChoice !== confirmBet) {
-        const criteria = composeValidationCriteria(
-            amount,
-            accountBalance,
-            gameStateContext,
-            betChoice,
-            getTotalNotConfirmBet(gameStateContext),
-            getTotalBetAmount(gameStateContext),
-            enabledQuickBet
-        );
+        const criteria = composeValidationCriteria(amount, accountBalance, gameStateContext, placeBetContext, betChoice, enabledQuickBet);
 
         if (criteria?.suggestAmount > 0 && criteria?.isSuggestBet) {
             return { errorCode: NoticeErrorCode.suggestBet, args: criteria };
@@ -191,13 +175,15 @@ const composeValidationCriteria = (
     amount: number,
     accountBalance: number,
     context: GameStateContextModel,
+    placeBetContext: PlaceBetContextModel,
     betChoice: string,
-    totalBetNotConfirmAmount: number,
-    totalBeAmount: number,
     enabledQuickBet: boolean
 ): IAvailableSuggestBetAmount => {
-    const { gameConfigs, userStakeLevel, notConfirmOwnBets, ownBets } = context;
+    const { gameConfigs, userStakeLevel } = context;
+    const { notConfirmOwnBets, ownBets } = placeBetContext;
     const { minBet: userMinBet, maxBet: userMaxBet } = userStakeLevel;
+    const totalBetNotConfirmAmount = getTotalNotConfirmBet(notConfirmOwnBets);
+    const totalBeAmount = getTotalBetAmount(placeBetContext);
 
     const roundMaxBet = getRoundMaxBet(gameConfigs, userMaxBet);
     const maxBetPerChoice = getMaxBetPerChoice(gameConfigs, betChoice);
@@ -294,13 +280,13 @@ const isSuggestBetAvailable = (
     );
 };
 
-export const getTotalNotConfirmBet = (gameStateContext: GameStateContextModel): number => {
-    return Object.values(gameStateContext.notConfirmOwnBets).reduce((a, b) => a + b, 0);
+export const getTotalNotConfirmBet = (notConfirmOwnBets: object): number => {
+    return Object.values(notConfirmOwnBets).reduce((a, b) => a + b, 0);
 };
 
-export const getTotalBetAmount = (gameStateContext: GameStateContextModel): number => {
+export const getTotalBetAmount = (placeBetContext: PlaceBetContextModel): number => {
     return (
-        Object.values(gameStateContext.notConfirmOwnBets).reduce((a, b) => a + b, 0) +
-        Object.values(gameStateContext.ownBets).reduce((a, b) => a + b, 0)
+        Object.values(placeBetContext.notConfirmOwnBets).reduce((a, b) => a + b, 0) +
+        Object.values(placeBetContext.ownBets).reduce((a, b) => a + b, 0)
     );
 };

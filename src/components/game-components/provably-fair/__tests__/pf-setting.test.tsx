@@ -1,13 +1,17 @@
-import { act, render, fireEvent } from "@testing-library/react";
-import { useGameStateContext, useGameStatesDispatch } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
-import PFSettingModal from "../pf-setting";
+import { act, fireEvent } from "@testing-library/react";
 import { useGameContext } from "../../../../_shared/react-contexts";
-import { ReactNode } from "react";
-import { GameEventActionType } from "../../../../_shared/react-contexts/game-state-context/game-event-action";
+import { useGameStateContext, useGameStatesDispatch } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
+import { PFEventActionType } from "../../../../_shared/react-contexts/game-state-context/pf/pf-action";
+import { usePFContext, usePFDispatch } from "../../../../_shared/react-contexts/game-state-context/pf/pf-context";
+import PFSettingModal from "../pf-setting";
+import helpers from "./helpers";
+const renderModal = helpers.renderModal;
 
-const mockGameState = useGameStateContext as jest.Mock;
+const mockGameStateContext = useGameStateContext as jest.Mock;
+const mockPFContext = usePFContext as jest.Mock;
 const mockGameContext = useGameContext as jest.Mock;
 const mockGameStateDispatch = useGameStatesDispatch as jest.Mock;
+const mockPFDispatch = usePFDispatch as jest.Mock;
 
 jest.useFakeTimers();
 
@@ -19,6 +23,11 @@ jest.mock("../../game-loading/loading-spinner", () => {
 jest.mock("../../../../_shared/react-contexts/game-state-context/game-state-context", () => ({
     useGameStateContext: jest.fn(),
     useGameStatesDispatch: jest.fn(),
+}));
+
+jest.mock("../../../../_shared/react-contexts/game-state-context/pf/pf-context", () => ({
+    usePFContext: jest.fn(),
+    usePFDispatch: jest.fn(),
 }));
 
 jest.mock("../../../../_shared/react-contexts", () => ({
@@ -48,12 +57,29 @@ jest.mock("../../modal-container", () => {
     return ModalContainer;
 });
 
-const defineMock = (state?: Object, gameMessageHandler?: Object) => {
+const defineGameStateMock = (state?: Object, gameMessageHandler?: Object) => {
     const defaultState = {
-        isShowPFSetting: true,
-        pfClientSeedSetting: {},
         ownBets: {},
         drawId: 1,
+    };
+
+    const defaultGameMessageHandler = {
+        broadcastGameEvent: jest.fn(),
+        register: jest.fn(),
+        removeHandler: jest.fn(),
+    };
+
+    mockGameStateContext.mockReturnValue({ ...defaultState, ...state });
+    mockGameContext.mockReturnValue({
+        gameMessageHandler: { ...defaultGameMessageHandler, ...gameMessageHandler },
+    });
+};
+
+const definePFMock = (state?: Object, gameMessageHandler?: Object) => {
+    const defaultState = {
+        ownBets: {},
+        isShowPFSetting: true,
+        pfClientSeedSetting: {},
     };
     const defaultGameMessageHandler = {
         broadcastGameEvent: jest.fn(),
@@ -61,32 +87,26 @@ const defineMock = (state?: Object, gameMessageHandler?: Object) => {
         removeHandler: jest.fn(),
     };
 
-    mockGameState.mockReturnValue({ ...defaultState, ...state });
+    mockPFContext.mockReturnValue({ ...defaultState, ...state });
     mockGameContext.mockReturnValue({
         gameMessageHandler: { ...defaultGameMessageHandler, ...gameMessageHandler },
     });
 };
 
-const defineMockWithDispatch = (state?: Object, gameMessageHandler?: Object) => {
-    defineMock(state, gameMessageHandler);
+const defineMockGameStateWithDispatch = (state?: Object, gameMessageHandler?: Object) => {
+    defineGameStateMock(state, gameMessageHandler);
     const mockDispatch = jest.fn();
     mockGameStateDispatch.mockReturnValue(mockDispatch);
 
     return mockDispatch;
 };
 
-const renderModal = (content?: ReactNode) => {
-    const root = <div id="dashboard"></div>;
-    const renderResult = render(root);
-    const newNode = (
-        <>
-            {root}
-            {content}
-        </>
-    );
-    renderResult.rerender(newNode);
+const defineMockPFWithDispatch = (state?: Object, gameMessageHandler?: Object) => {
+    definePFMock(state, gameMessageHandler);
+    const mockDispatch = jest.fn();
+    mockPFDispatch.mockReturnValue(mockDispatch);
 
-    return { renderResult, newNode };
+    return mockDispatch;
 };
 
 describe(PFSettingModal.name, () => {
@@ -96,7 +116,8 @@ describe(PFSettingModal.name, () => {
             [123, 1],
         ])("if draw id is %s then broadcast game event is %s", (drawId, expected) => {
             const broadcastGameEvent = jest.fn();
-            defineMock({ isShowPFSetting: true, drawId }, { broadcastGameEvent });
+            defineGameStateMock({ drawId }, { broadcastGameEvent });
+            defineMockPFWithDispatch({ isShowPFSetting: true }, { broadcastGameEvent });
 
             renderModal(<PFSettingModal />);
 
@@ -106,7 +127,7 @@ describe(PFSettingModal.name, () => {
             [true, true],
             [false, false],
         ])("when show modal state is %s then show modal %s", (isShow, expected) => {
-            defineMock({ isShowPFSetting: isShow });
+            defineMockPFWithDispatch({ isShowPFSetting: isShow });
 
             const { renderResult } = renderModal(<PFSettingModal />);
 
@@ -124,7 +145,7 @@ describe(PFSettingModal.name, () => {
                     }
                 },
             };
-            defineMockWithDispatch({ isShowPFSetting: true }, gameMessageHandler);
+            defineMockPFWithDispatch({ isShowPFSetting: true }, gameMessageHandler);
 
             const { renderResult } = renderModal(<PFSettingModal />);
 
@@ -152,8 +173,8 @@ describe(PFSettingModal.name, () => {
                             }
                         },
                     };
-
-                    defineMockWithDispatch({ isShowPFSetting: true }, gameMessageHandler);
+                    defineMockGameStateWithDispatch({}, gameMessageHandler);
+                    defineMockPFWithDispatch({ isShowPFSetting: true }, gameMessageHandler);
 
                     const { renderResult } = renderModal(<PFSettingModal />);
 
@@ -180,7 +201,7 @@ describe(PFSettingModal.name, () => {
                         },
                     };
 
-                    defineMockWithDispatch({ isShowPFSetting: true }, gameMessageHandler);
+                    defineMockPFWithDispatch({ isShowPFSetting: true }, gameMessageHandler);
 
                     const { renderResult } = renderModal(<PFSettingModal />);
 
@@ -209,7 +230,8 @@ describe(PFSettingModal.name, () => {
                     }
                 },
             };
-            defineMock(
+            defineGameStateMock({}, gameMessageHandler);
+            defineMockPFWithDispatch(
                 {
                     pfClientSeedSetting: {
                         useManualClientSeed,
@@ -235,7 +257,7 @@ describe(PFSettingModal.name, () => {
         });
         describe("when time out", () => {
             it("close loading", () => {
-                defineMock({ isShowPFSetting: true });
+                defineMockPFWithDispatch({ isShowPFSetting: true });
 
                 const { renderResult } = renderModal(<PFSettingModal />);
 
@@ -249,13 +271,13 @@ describe(PFSettingModal.name, () => {
     });
     describe("click close button", () => {
         it("should call dispatch", () => {
-            const mockDispatch = defineMockWithDispatch({ isShowPFSetting: true });
+            const mockDispatch = defineMockPFWithDispatch({ isShowPFSetting: true });
 
             const { renderResult } = renderModal(<PFSettingModal />);
 
             renderResult.queryByTestId("close-modal").click();
 
-            expect(mockDispatch).toHaveBeenCalledWith({ type: GameEventActionType.TOGGLE_PF_SETTING, payload: { isShowPFSetting: false } });
+            expect(mockDispatch).toHaveBeenCalledWith({ type: PFEventActionType.TOGGLE_PF_SETTING, payload: { isShowPFSetting: false } });
         });
     });
     describe("input manual client seed", () => {
@@ -271,7 +293,7 @@ describe(PFSettingModal.name, () => {
                     }
                 },
             };
-            defineMock({}, gameMessageHandler);
+            definePFMock({}, gameMessageHandler);
 
             const { renderResult } = renderModal(<PFSettingModal />);
 
@@ -305,7 +327,7 @@ describe(PFSettingModal.name, () => {
                     }
                 },
             };
-            defineMock({}, gameMessageHandler);
+            defineMockPFWithDispatch({}, gameMessageHandler);
 
             const { renderResult } = renderModal(<PFSettingModal />);
 
@@ -339,7 +361,7 @@ describe(PFSettingModal.name, () => {
                     }
                 },
             };
-            defineMockWithDispatch(
+            defineMockPFWithDispatch(
                 {
                     pfClientSeedSetting: {
                         useManualClientSeed: true,
@@ -387,7 +409,7 @@ describe(PFSettingModal.name, () => {
                     }
                 },
             };
-            defineMockWithDispatch(
+            defineMockPFWithDispatch(
                 {
                     pfClientSeedSetting: {
                         useManualClientSeed: useManualClientSeed,
@@ -434,7 +456,7 @@ describe(PFSettingModal.name, () => {
                         }
                     },
                 };
-                defineMockWithDispatch(
+                defineMockPFWithDispatch(
                     {
                         pfClientSeedSetting: {
                             useManualClientSeed: true,

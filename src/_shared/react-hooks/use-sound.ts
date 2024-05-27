@@ -18,8 +18,10 @@ const resourceMp3 = objectMap(mp3File, (v) => `${path}${v}.mp3?v=${buildVersion}
 export const usePlaySound = (resource: string) => {
     const [playSound] = useSound(resource, {});
     return () => {
-        const enable = StorageHelper.get(localStorageKeys.enableSound) ?? true;
-        enable && playSound();
+        if (document.visibilityState === "visible") {
+            const enable = StorageHelper.get(localStorageKeys.enableSound) ?? true;
+            enable && playSound();
+        }
     };
 };
 

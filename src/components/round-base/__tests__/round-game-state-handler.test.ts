@@ -11,30 +11,9 @@ describe("RoundGameStateHandler", () => {
     });
 
     describe("shouldIncreaseRoundId", () => {
-        it("returns true when durations.beforePlaceBet is true and nextRoundState is RoundState.BeforePlaceBet", () => {
-            const result = handler.shouldIncreaseRoundId({
-                nextRoundState: RoundState.BeforePlaceBet,
-                durations: { beforePlaceBet: true },
-            });
+        it("returns true when nextRoundState is InRound", () => {
+            const result = handler.shouldIncreaseRoundId({ nextRoundState: RoundState.InRound });
             expect(result).toBe(true);
-        });
-
-        it("returns false when durations.beforePlaceBet is true and nextRoundState is not RoundState.BeforePlaceBet", () => {
-            const result = handler.shouldIncreaseRoundId({ nextRoundState: RoundState.InRound, durations: { beforePlaceBet: true } });
-            expect(result).toBe(false);
-        });
-
-        it("returns true when durations.beforePlaceBet is false and nextRoundState is RoundState.InRound", () => {
-            const result = handler.shouldIncreaseRoundId({ nextRoundState: RoundState.InRound, durations: { beforePlaceBet: false } });
-            expect(result).toBe(true);
-        });
-
-        it("returns false when durations.beforePlaceBet is false and nextRoundState is not RoundState.InRound", () => {
-            const result = handler.shouldIncreaseRoundId({
-                nextRoundState: RoundState.BeforePlaceBet,
-                durations: { beforePlaceBet: false },
-            });
-            expect(result).toBe(false);
         });
     });
 });

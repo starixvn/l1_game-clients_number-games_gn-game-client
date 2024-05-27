@@ -3,12 +3,13 @@ import { isMobileOnly, isSafari } from "react-device-detect";
 
 import { useEffect } from "react";
 import { AnalyticsHelper } from "../../../_shared/helpers/analytic-helper";
-import { GlobalMessageTransmitter } from "../../../_shared/helpers/message-transmitter/global-transmitter";
 import { ILobbyConfigs } from "../dashboard/type";
 import { Banner } from "./games/components/banner";
 import { LobbyLayout } from "./games/lobby-layout";
 import { LobbyGameTransmitter } from "./lobby-socket-connection";
 import Styles from "./lobby.module.scss";
+import { GlobalMessageTransmitter, GlobalTransmitterEvent } from "../../../_shared/helpers/message-transmitter/global-transmitter";
+import { localStorageKeys, StorageHelper } from "../../../_shared/helpers";
 
 const Settings = dynamic(() => import("../settings"));
 const ChangeAvatar = dynamic(() => import("../header/change-avatar"));
@@ -24,7 +25,8 @@ export const Lobby: React.FC<Props> = ({ openGame, lobbyConfigs, gameTransmitter
     AnalyticsHelper.trackLobby();
 
     useEffect(() => {
-        GlobalMessageTransmitter.broadcast({ openingGameId: 0 });
+        StorageHelper.set(`${localStorageKeys.showPFSetting}`, "");
+        GlobalMessageTransmitter.broadcast({ [GlobalTransmitterEvent.OPEN_GAME_ID]: 0 });
     }, []);
 
     return (

@@ -1,5 +1,5 @@
 import { GetLocalizedErrorMessage, isKickOutError } from "../../../_shared/helpers";
-import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
+import { GlobalMessageTransmitter, GlobalTransmitterEvent } from "../../../_shared/helpers/message-transmitter/global-transmitter";
 import { GameMessageHandler, messageEventType } from "./game-message-handler";
 
 export type GameErrorHandlerProps = {
@@ -34,20 +34,15 @@ export class GameErrorHandler {
         const onClose = isKickOut ? signOut : null;
         const message = GetLocalizedErrorMessage(errorCode, isPlaceBet);
 
-        this.props.dispatch({
-            type: GameEventActionType.DISPLAY_POPUP,
-            payload: {
-                notice: {
-                    gameName: this.props.gamName,
-                    roundId: apiError?.gameRoundId,
-                    message: message,
+        GlobalMessageTransmitter.broadcast({ [GlobalTransmitterEvent.NOTICE]: {
+            gameName: this.props.gamName,
+            roundId: apiError?.gameRoundId,
+            message: message,
                     duration: isKickOut ? 10 : 3,
-                    minBet: apiError?.minBet,
-                    maxBet: apiError?.maxBet,
-                    errorCode: errorCode,
-                    onClose,
-                },
-            },
-        });
+            minBet: apiError?.minBet,
+            maxBet: apiError?.maxBet,
+            errorCode: errorCode,
+            onClose,
+        } });
     };
 }

@@ -7,9 +7,6 @@ import Styles from "./next-ball.module.scss";
 type Props = {
     choice: string;
     resourceName: string;
-    width: number;
-    height: number;
-    position: [number, number];
     className?: string;
     roundState: RoundState;
     settlementResult: any;

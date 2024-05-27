@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react";
-import { registerGlobalMessageEvent, unsubscribeGlobalMessageEvent } from "../../../_shared/helpers/message-transmitter/global-transmitter";
 import HeaderTitle from "./header-title";
 import Styles from "./header.module.scss";
 import Setting from "./setting";
 import { UserInfo } from "./user-info";
-
+import { GlobalTransmitterEvent, registerGlobalMessageEvent, unsubscribeGlobalMessageEvent } from "../../../_shared/helpers/message-transmitter/global-transmitter";
 const Header = () => {
     const [openingGameId, setOpeningGameId] = useState(0);
 
     useEffect(() => {
-        const gameScriberId = registerGlobalMessageEvent("openingGameId", ({ openingGameId }) => {
+        const gameScriberId = registerGlobalMessageEvent(GlobalTransmitterEvent.OPEN_GAME_ID, ({ openingGameId }) => {
             setOpeningGameId(openingGameId);
         });
 

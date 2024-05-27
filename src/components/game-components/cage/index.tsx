@@ -23,12 +23,11 @@ export enum CagePosition {
 export type CageProps = {
     color: string;
     isSmall: boolean;
-    result: number;
+    result?: number;
     delayShowResultTime?: number;
     position: string;
     highlight?: boolean;
     ballFPS?: number;
-    isPlayStartRoundAnimation?: boolean;
 } & Partial<GameStateContextModel>;
 
 const Cage: React.FC<CageProps> = ({

@@ -12,7 +12,7 @@ import { useTranslator } from "../../_shared/react-hooks";
 import { tolgee } from "../../_shared/tolgee";
 import GameBase from "../../components/game-base/";
 import { GameMessageHandler, TurnIdHandler } from "../../components/game-base/handlers";
-import { GameBaseProps, Round } from "../../components/game-base/type";
+import { GameBaseHandlers, GameBaseProps, Round } from "../../components/game-base/type";
 import { TurnGameStateHandler } from "../../components/turn-base/turn-game-state-handler";
 import { TurnStateHandler } from "../../components/turn-base/turn-state-handler";
 import { NextBallBetOptions } from "./next-ball-constants";
@@ -38,7 +38,14 @@ class NextBall extends GameBase<GameBaseProps> {
 
     constructor(props: GameBaseProps) {
         const gameMessageHandler = new GameMessageHandler(props.dispatch);
-        super(props, new TurnStateHandler(), new TurnGameStateHandler(), gameMessageHandler, new NextGameRoundDataHandler());
+        const gameBaseHandlers: GameBaseHandlers = {
+            roundStateHandler: new TurnStateHandler(),
+            gameStateHandler: new TurnGameStateHandler(),
+            gameMessageHandler: gameMessageHandler,
+            gameRoundDataHandler: new NextGameRoundDataHandler(),
+        };
+
+        super(props, gameBaseHandlers);
 
         this.turnIdHandler = new TurnIdHandler({
             dispatch: props.dispatch,
@@ -132,15 +139,15 @@ class NextBall extends GameBase<GameBaseProps> {
     }
 }
 
-const NextBalllWrapper = (props) => {
+const NextBallWrapper = (props) => {
     return (
         <GameStateProvider>
-            <NextBalllFC {...props} />
+            <NextBallFC {...props} />
         </GameStateProvider>
     );
 };
 
-const NextBalllFC = (props) => {
+const NextBallFC = (props) => {
     const tolgeeNamespace = props["tolgeeNamespace"];
     const { t } = useTranslator([tolgeeNamespace]);
 
@@ -163,4 +170,4 @@ const NextBalllFC = (props) => {
     );
 };
 
-export default withRouter(NextBalllWrapper);
+export default withRouter(NextBallWrapper);

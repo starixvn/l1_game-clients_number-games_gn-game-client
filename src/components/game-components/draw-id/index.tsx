@@ -1,13 +1,14 @@
 import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 
-export const DrawIdBlock = () => {
-    const { drawId } = useGameStateContext();
+export const DrawIdBlock = ({ showRoundId = false }) => {
+    const { drawId, roundId } = useGameStateContext();
+    const id = showRoundId ? roundId : drawId;
 
     return (
         <div>
-            {drawId > 0 && (
-                <div key={drawId} id="round-id" className="round-id text-animation">
-                    #{drawId}
+            {id > 0 && (
+                <div key={id} id="round-id" className="round-id text-animation">
+                    #{id}
                 </div>
             )}
         </div>

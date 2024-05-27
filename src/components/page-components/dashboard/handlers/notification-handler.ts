@@ -51,7 +51,7 @@ export class NotificationHandler {
         } else if (response.apiError) {
             this.handleShowApiErrorMessage(response.apiError.errorCode, response.isDisableAccount);
         } else {
-            this.updateUserBalance(response.balance);
+            this.updateUserBalance(response.balance, false);
         }
     }
 

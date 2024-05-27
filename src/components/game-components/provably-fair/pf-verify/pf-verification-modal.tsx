@@ -3,22 +3,22 @@ import { createPortal } from "react-dom";
 import { useCommonTranslate } from "../../../../_shared/react-hooks";
 import ModalContainer from "../../modal-container";
 import { ButtonPFGuide } from "../pf-guide";
-import { useGameStateContext, useGameStatesDispatch } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
-import { GameEventActionType } from "../../../../_shared/react-contexts/game-state-context/game-event-action";
+import { usePFContext, usePFDispatch } from "../../../../_shared/react-contexts/game-state-context/pf/pf-context";
+import { PFEventActionType } from "../../../../_shared/react-contexts/game-state-context/pf/pf-action";
 
 const PFVerificationModal: FC<{ children: ReactNode }> = ({ children }) => {
     const { t: translateCommon } = useCommonTranslate();
-    const { isShowPFVerification, pfVerifyModalData } = useGameStateContext();
-    const dispatch = useGameStatesDispatch();
+    const { isShowPFVerification, pfVerifyModalData } = usePFContext();
+    const dispatch = usePFDispatch();
 
     const handleCloseModal = () => {
-        dispatch({ type: GameEventActionType.TOGGLE_PF_VERIFICATION, payload: { isShowPFVerification: false } });
+        dispatch({ type: PFEventActionType.TOGGLE_PF_VERIFICATION, payload: { isShowPFVerification: false } });
     };
 
     useEffect(() => {
         if (!isShowPFVerification) {
             dispatch({
-                type: GameEventActionType.UPDATE_PF_VERIFY,
+                type: PFEventActionType.UPDATE_PF_VERIFY,
                 payload: {
                     pfVerifyModalData: {
                         ...pfVerifyModalData,

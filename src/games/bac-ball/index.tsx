@@ -11,11 +11,11 @@ import {
 import { useTranslator } from "../../_shared/react-hooks";
 import GameBase from "../../components/game-base/";
 import { GameMessageHandler, TurnIdHandler } from "../../components/game-base/handlers";
-import { GameBaseProps, Round } from "../../components/game-base/type";
+import { GameBaseHandlers, GameBaseProps, Round } from "../../components/game-base/type";
 import { DrawIdBlock } from "../../components/game-components/draw-id";
 import { TurnGameStateHandler } from "../../components/turn-base/turn-game-state-handler";
 import { TurnStateHandler } from "../../components/turn-base/turn-state-handler";
-import { BacBallGameRoundDatatHandler } from "./bac-ball-game-round-data-handler";
+import { BacBallGameRoundDataHandler } from "./bac-ball-game-round-data-handler";
 import BacBallResultBlock from "./bac-ball-result-block";
 import { BacBallBetOptions, StatisticRuleEntries } from "./constants";
 import Scoreboard from "./scoreboard";
@@ -30,7 +30,13 @@ class BacBall extends GameBase<GameBaseProps> {
 
     constructor(props: GameBaseProps) {
         const gameMessageHandler = new GameMessageHandler(props.dispatch);
-        super(props, new TurnStateHandler(), new TurnGameStateHandler(), gameMessageHandler, new BacBallGameRoundDatatHandler());
+        const gameBaseHandlers: GameBaseHandlers = {
+            roundStateHandler :new TurnStateHandler(),
+            gameStateHandler:new TurnGameStateHandler(),
+            gameMessageHandler:gameMessageHandler,
+            gameRoundDataHandler: new BacBallGameRoundDataHandler()
+        }
+        super(props, gameBaseHandlers);
 
         this.turnIdHandler = new TurnIdHandler({
             dispatch: props.dispatch,
@@ -121,7 +127,7 @@ const BacBallFC = (props) => {
     return (
         <BacBall
             {...props}
-            {...{
+            {...{ 
                 dispatch: useGameStatesDispatch(),
                 gameStateContextModel: useGameStateContext(),
                 systemContextModel: useSystemContext(),

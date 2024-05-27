@@ -1,4 +1,3 @@
-import { GameEventAction, GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 import { GameStateContextModel } from "../../../_shared/react-contexts/game-state-context/game-state-context-model";
 import { GameDurations, RoundState } from "../type";
 
@@ -20,7 +19,6 @@ export interface IGameStateHandler {
         defaultSettlementResult,
         remainingTime,
     }: GameStateHandlerProps);
-    setReturnToGameState(dispatch: (action: GameEventAction) => {});
 }
 
 export class GameStateHandler implements IGameStateHandler {
@@ -37,7 +35,7 @@ export class GameStateHandler implements IGameStateHandler {
         remainingTime,
     }: GameStateHandlerProps) {
         if (gameStateContextModel) {
-            const { notice, result, settlementResult, roundId } = gameStateContextModel;
+            const { result, settlementResult, roundId } = gameStateContextModel;
 
             const newStateDetector = [
                 {
@@ -47,8 +45,6 @@ export class GameStateHandler implements IGameStateHandler {
                 {
                     condition: [RoundState.SwitchRound, RoundState.BeforePlaceBet, RoundState.InRound].includes(nextRoundState),
                     state: {
-                        ownBets: {},
-                        totalBets: {},
                         showWinningAnimation: false,
                         isShowBlink: false,
                         playResultAnimation: false,
@@ -57,9 +53,7 @@ export class GameStateHandler implements IGameStateHandler {
                 },
                 {
                     condition: [RoundState.SwitchRound].includes(nextRoundState),
-                    state: {
-                        roundData: {},
-                    },
+                    state: { roundData: {} },
                 },
                 {
                     condition: this.shouldIncreaseRoundId({ nextRoundState, durations }),
@@ -69,12 +63,8 @@ export class GameStateHandler implements IGameStateHandler {
                     condition: nextRoundState === RoundState.LockingBet,
                     state: {
                         isShowBlink: true,
-                        notice,
                         result: defaultResult ?? result,
                         settlementResult: defaultSettlementResult ?? settlementResult,
-                        notConfirmOwnBets: {},
-                        showConfirmBet: false,
-                        showConfirmDialog: false,
                     },
                 },
             ];
@@ -95,21 +85,6 @@ export class GameStateHandler implements IGameStateHandler {
                 }
             );
         }
-    }
-
-    setReturnToGameState(dispatch: (action: GameEventAction) => {}) {
-        const returnToGameState = {
-            ownBets: {},
-            totalBets: {},
-            showConfirmBet: false,
-            showConfirmDialog: false,
-            suggestBet: {},
-        };
-
-        dispatch({
-            type: GameEventActionType.SET_NEW_GAME_STATE,
-            payload: { newGameState: returnToGameState },
-        });
     }
 
     private getTimeCounter({

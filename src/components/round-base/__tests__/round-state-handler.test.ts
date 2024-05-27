@@ -76,15 +76,15 @@ describe("RoundStateHandler", () => {
         });
     });
 
-    describe("shouldCountDownTimer", () => {
-        test("returns false when newRoundState is BeforePlaceBet", () => {
-            const shouldCount = roundStateHandler.shouldCountDownTimer({ newRoundState: RoundState.BeforePlaceBet });
-            expect(shouldCount).toBe(false);
-        });
 
-        test("returns true for other states", () => {
-            const shouldCount = roundStateHandler.shouldCountDownTimer({ newRoundState: RoundState.InRound });
-            expect(shouldCount).toBe(true);
-        });
+    describe("shouldCountDownTimer", () => {
+        it.each([
+            RoundState.InRound,
+            RoundState.BeforePlaceBet,
+            RoundState.LockingBet,
+            RoundState.DisplayResult])("always returns true", (newRoundState) => {
+                const shouldCount = roundStateHandler.shouldCountDownTimer({ newRoundState });
+                expect(shouldCount).toBe(true);
+            });
     });
 });

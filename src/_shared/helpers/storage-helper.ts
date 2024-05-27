@@ -124,6 +124,8 @@ export const localStorageKeys = {
     currentSessionHideToolbarGuide: buildLocalStorageKey("currentSessionHideToolbarGuide"),
     hideSwitchGameGuide: buildLocalStorageKey("hideSwitchGameGuide"),
     currentSessionSwitchGameGuide: buildLocalStorageKey("currentSessionSwitchGameGuide"),
+    showPFSetting: buildLocalStorageKey("show-pf-setting"),
+    isSleepMode: buildLocalStorageKey("is-sleep-mode"),
 };
 
 export function buildLocalStorageKey(key: string) {

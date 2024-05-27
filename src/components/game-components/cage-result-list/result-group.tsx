@@ -1,0 +1,40 @@
+import { useMemo } from "react";
+import { v4 as uuidv4 } from "uuid";
+
+import { getBallColor } from "../../../_shared/helpers";
+import BallRotation from "./ball-rotation";
+
+const ResultGroup: React.FC<{
+    listResult: number[];
+    playResultAnimation: boolean;
+    initialBallDelayTime: number;
+    incrementTotalPoint: Function;
+}> = ({ listResult, playResultAnimation, initialBallDelayTime, incrementTotalPoint }) => {
+    return useMemo(() => {
+        if (!listResult) {
+            return <></>;
+        }
+
+        return listResult.map((result, i) => {
+            const ballRotationDelayTime = 100;
+            const defaultBallDelayTime = 500;
+            const ballPos = i + 1;
+            const delayTime = playResultAnimation ? ballPos * (initialBallDelayTime ?? defaultBallDelayTime) + ballRotationDelayTime : 0;
+            const color = getBallColor(result);
+
+            return (
+                <BallRotation
+                    key={uuidv4()}
+                    ballPos={ballPos}
+                    isShowResultAnim={playResultAnimation}
+                    color={color}
+                    number={result}
+                    delayTime={delayTime}
+                    incrementTotalPoint={incrementTotalPoint}
+                />
+            );
+        });
+    }, [listResult]);
+};
+
+export default ResultGroup;

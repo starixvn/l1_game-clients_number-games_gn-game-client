@@ -4,7 +4,19 @@ import { WithRouterProps } from "next/dist/client/with-router";
 import { SystemContextModel, SystemEventAction } from "../../_shared/react-contexts";
 import { GameEventAction } from "../../_shared/react-contexts/game-state-context/game-event-action";
 import { GameStateContextModel } from "../../_shared/react-contexts/game-state-context/game-state-context-model";
+import { GameSoundHandler } from "../round-base/game-sound-handler";
+import { IRoundStateHandler } from "../round-base/round-state-handler";
+import {
+    GameDisableHandler,
+    GameErrorHandler,
+    GameFinishHandler,
+    GameRoundHistoryHandler,
+    PlaceBetHandler,
+    PlayerHandler,
+} from "./handlers";
 import { GameMessageHandler } from "./handlers/game-message-handler";
+import { GameRoundDataHandler } from "./handlers/game-round-data-handler";
+import { IGameStateHandler } from "./handlers/game-state-handler";
 
 export interface GameConfigs {
     odds: { [key: string]: number };
@@ -67,14 +79,14 @@ export type GamePropsContext = {
 
 export type GameSound = {
     playPlaceBetSound: Function;
-    startDrawSound: Function;
+    startPlaceBetSound: Function;
     startRoundSound: Function;
     blockBetSound: Function;
 };
 
 export type GameBaseProps = GamePropsContext & WithRouterProps;
 
-export interface Notice {
+export interface NoticeModel {
     gameName?: string;
     roundId?: number;
     message: string;
@@ -90,7 +102,7 @@ export interface Notice {
     hedgeBetGroup?: string[];
 }
 
-export interface APIError extends Notice {
+export interface APIError extends NoticeModel {
     gameName?: string;
     roundId?: number;
 }
@@ -226,3 +238,17 @@ export interface IUserStakeLevel {
     minBet: number;
     maxBet: number;
 }
+
+export type GameBaseHandlers = {
+    roundStateHandler: IRoundStateHandler;
+    gameStateHandler: IGameStateHandler;
+    gameMessageHandler: GameMessageHandler;
+    gameRoundDataHandler: GameRoundDataHandler;
+    gameErrorHandler?: GameErrorHandler;
+    playerHandler?: PlayerHandler;
+    placeBetHandler?: PlaceBetHandler;
+    gameFinishHandler?: GameFinishHandler;
+    gameDisabledHandler?: GameDisableHandler;
+    gameRoundHistoryHandler?: GameRoundHistoryHandler;
+    gameSoundHandler?: GameSoundHandler;
+};

@@ -205,6 +205,10 @@ body {
     grid-template-columns: 37.5rem;
     justify-content: center;
     padding-top: 1rem;
+
+    &.game-1005 {
+        grid-template-rows: 5rem 13.5rem 25.4rem 7.8rem 3.8rem 11.3rem;
+    }
 }
 
 .hide {

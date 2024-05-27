@@ -1,21 +1,21 @@
+import { Dispatch } from "react";
 import { getGameSettings } from "../../../_shared/app-settings";
-import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
+import { GameEventAction, GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 import { GameStateContextModel } from "../../../_shared/react-contexts/game-state-context/game-state-context-model";
 import { IRoundStateHandler } from "../../round-base/round-state-handler";
 import { GameDurations, Round } from "../type";
-import { GameMessageHandler, PlaceBetHandler, messageEventType } from "./";
+import { GameMessageHandler, messageEventType } from "./";
 import { GameRoundDataHandler } from "./game-round-data-handler";
 
 export type GameFinishHandlerProps = {
-    dispatch: Function;
+    dispatch: Dispatch<GameEventAction>;
     gameMessageHandler: GameMessageHandler;
-    placeBetHandler: PlaceBetHandler;
     durations: GameDurations;
     roundStateHandler: IRoundStateHandler;
     runGame: Function;
     gameId: number;
     gameStateContextModel(): GameStateContextModel;
-    gameRoundDatatHandler: GameRoundDataHandler;
+    gameRoundDataHandler: GameRoundDataHandler;
 };
 
 export class GameFinishHandler {
@@ -39,7 +39,6 @@ export class GameFinishHandler {
     };
 
     handleFinishHandler(finish) {
-        this.props.placeBetHandler.clearRetryInterval();
         this.handleFinish(finish);
         this.props.runGame?.(this.props.roundStateHandler.getWholeRoundDuration({ durations: this.props.durations }));
     }
@@ -68,17 +67,12 @@ export class GameFinishHandler {
         }
 
         const { result, settlementResult, roundId, drawId } = finish;
-        const { dispatch, gameMessageHandler, gameRoundDatatHandler, gameStateContextModel } = this.props;
+        const { dispatch, gameMessageHandler, gameRoundDataHandler, gameStateContextModel } = this.props;
         const durations = this.props.durations;
         this._finish = finish;
 
-        const roundData = gameRoundDatatHandler.buildGameRoundDataAfterReceiveFinishEvent(
-            gameStateContextModel().roundData,
-            result,
-            drawId
-        );
+        const roundData = gameRoundDataHandler.buildGameRoundDataAfterReceiveFinishEvent(gameStateContextModel().roundData, result, drawId);
 
-        dispatch({ type: GameEventActionType.END_BET_PROCESSING, payload: {} });
         dispatch({
             type: GameEventActionType.FINISH,
             payload: {

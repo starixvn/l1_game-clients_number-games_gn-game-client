@@ -2,15 +2,15 @@ import React, { useEffect } from "react";
 
 import { confirmBet } from "../../../_shared/constants";
 import { PlayerContextModel, useGameActionContext, usePlayerContext } from "../../../_shared/react-contexts";
-import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
-import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import { useClickSound, useSNTranslate } from "../../../_shared/react-hooks";
 import Styles from "./confirm-bet.module.scss";
+import { usePlaceBetContext, usePlaceBetDispatch } from "../../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-context";
+import { PlaceBetEventActionType } from "../../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-action";
 
 const ConfirmBet: React.FC = () => {
-    const dispatch = useGameStatesDispatch();
+    const dispatch = usePlaceBetDispatch();
     const gameActionContext = useGameActionContext();
-    const gameStateContext = useGameStateContext();
+    const placeBetContext = usePlaceBetContext();
     const { authorizeInfo, enableQuickBet } = (usePlayerContext() as PlayerContextModel);
     const enabledQuickBet = authorizeInfo?.user?.settings.quickBet || enableQuickBet;
     const clickSound = useClickSound();
@@ -23,14 +23,12 @@ const ConfirmBet: React.FC = () => {
     const onCancel = () => {
         clickSound();
         dispatch({
-            type: GameEventActionType.SHOW_CONFIRM_BET,
-            payload: {
-                showConfirmBet: false,
-            },
+            type: PlaceBetEventActionType.SHOW_CONFIRM_BET,
+            payload: { showConfirmBet: false }
         });
 
         dispatch({
-            type: GameEventActionType.NOT_CONFIRM_OWN_BETS,
+            type: PlaceBetEventActionType.NOT_CONFIRM_OWN_BETS,
             payload: { notConfirmOwnBets: {} },
         });
 
@@ -39,7 +37,7 @@ const ConfirmBet: React.FC = () => {
 
     const removeSuggestBet = () => {
         dispatch({
-            type: GameEventActionType.SUGGEST_BET,
+            type: PlaceBetEventActionType.SUGGEST_BET,
             payload: {
                 suggestBet: {
                     currentBetChoice: "",
@@ -51,7 +49,7 @@ const ConfirmBet: React.FC = () => {
 
     const onConfirm = () => {
         if (enabledQuickBet) {
-            gameStateContext.suggestBet.sendOutstandingBet();
+            placeBetContext.suggestBet.sendOutstandingBet();
             removeSuggestBet();
 
             return;
@@ -59,7 +57,7 @@ const ConfirmBet: React.FC = () => {
         gameActionContext.placeBet(confirmBet, 0);
     };
 
-    if (!gameStateContext.showConfirmBet) {
+    if (!placeBetContext.showConfirmBet) {
         return <></>;
     }
 
