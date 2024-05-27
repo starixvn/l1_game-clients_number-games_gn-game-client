@@ -76,7 +76,7 @@ const PreloadResources: React.FC<{
 
             setImages(imagesPath);
         } catch (error) {
-            console.error("Error fetching images:", error);
+            console.log("Error fetching images:", error);
         }
     };
 
