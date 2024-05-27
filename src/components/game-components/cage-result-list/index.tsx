@@ -1,6 +1,7 @@
 import Image from "next/image";
 import React, { memo, useCallback, useEffect, useState } from "react";
 
+import { buildVersion } from "../../../_shared/constants";
 import { GameStateContextModel } from "../../../_shared/react-contexts/game-state-context/game-state-context-model";
 import { RoundState } from "../../game-base/type";
 import BallLoops from "../cage/ball-loop";
@@ -79,7 +80,7 @@ const CageResultList: React.FC<CageResultListProps> = ({
                         width={140}
                         height={140}
                         className={`${CageStyles["ball-blur"]} ${Styles["ball-blur"]}`}
-                        src={`/static/images/cage/cage-border-purple-blur.webp?v=2`}
+                        src={`/static/images/cage/cage-border-purple-blur.webp?v=${buildVersion}`}
                         alt="img-blur"
                     />
                 )}
@@ -99,7 +100,7 @@ const CageResultList: React.FC<CageResultListProps> = ({
                 {showBalls && playResultAnimation && (
                     <Spritesheet
                         className={`${Styles["ball-result"]}`}
-                        image={`/static/images/${gameFolder}/result-ball/ball-highlight.webp?v=1`}
+                        image={`/static/images/${gameFolder}/result-ball/ball-highlight.webp?v=${buildVersion}`}
                         widthFrame={highlightBallSize.width}
                         isResponsive
                         heightFrame={highlightBallSize.height}

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
+import { buildVersion } from "../../../_shared/constants";
 import { useShowBallResultSound } from "../../../_shared/react-hooks";
 import ResultNumber from "../cage/result-number";
 import { Spritesheet } from "../sprites-sheet";
@@ -43,7 +44,7 @@ const BallRotation: React.FC<{
         return (
             <div key={uuidv4()} className={Styles[`ball-rotation-${ballPos}`]}>
                 <Spritesheet
-                    image={`/static/images/cage/ball-${color}-middle-light.webp`}
+                    image={`/static/images/cage/ball-${color}-middle-light.webp?v=${buildVersion}`}
                     widthFrame={153}
                     isResponsive
                     heightFrame={153}

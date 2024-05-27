@@ -77,7 +77,7 @@
     .disable-layer {
         position: absolute;
         top: 0;
-        background: url("/static/images/se-ball/disabled-layer-odd.png") no-repeat;
+        background: url("/static/images/se-ball/disabled-layer-odd.png?v=#{$version-image}") no-repeat;
         width: 17.8rem;
         height: 9.4rem;
         background-size: cover;
@@ -89,8 +89,8 @@
 .even {
     @extend %main-option;
     --color: #ff9090;
-    --bgBetChoice: url("/static/images/se-ball/1x/bg-big-red.png");
-    --bgBetChoice-2x: url("/static/images/se-ball/2x/bg-big-red.png");
+    --bgBetChoice: url("/static/images/se-ball/1x/bg-big-red.png?v=#{$version-image}");
+    --bgBetChoice-2x: url("/static/images/se-ball/2x/bg-big-red.png?v=#{$version-image}");
 
     .btn-ripple {
         z-index: 2;
@@ -105,8 +105,8 @@
 .odd {
     @extend %main-option;
     --color: #84c6ff;
-    --bgBetChoice: url("/static/images/se-ball/1x/bg-big-blue.png");
-    --bgBetChoice-2x: url("/static/images/se-ball/2x/bg-big-blue.png");
+    --bgBetChoice: url("/static/images/se-ball/1x/bg-big-blue.png?v=#{$version-image}");
+    --bgBetChoice-2x: url("/static/images/se-ball/2x/bg-big-blue.png?v=#{$version-image}");
 
     .btn-ripple {
         z-index: 2;
@@ -167,11 +167,11 @@
 }
 
 .blue3 {
-    --bg: url("/static/images/se-ball/1x/bg-small-red.png");
-    --bg-2x: url("/static/images/se-ball/2x/bg-small-red.png");
+    --bg: url("/static/images/se-ball/1x/bg-small-red.png?v=#{$version-image}");
+    --bg-2x: url("/static/images/se-ball/2x/bg-small-red.png?v=#{$version-image}");
     --border-radius: 1.2rem;
 
-    --bg-disable-layer: url("/static/images/se-ball/disabled-layer-blue3.png") no-repeat;
+    --bg-disable-layer: url("/static/images/se-ball/disabled-layer-blue3.png?v=#{$version-image}") no-repeat;
     --disable-layer-width: 13.6rem;
     --disable-layer-height: 6.6rem;
 
@@ -180,11 +180,11 @@
 }
 
 .blue4 {
-    --bg: url("/static/images/se-ball/1x/bg-small-blue.png");
-    --bg-2x: url("/static/images/se-ball/2x/bg-small-blue.png");
+    --bg: url("/static/images/se-ball/1x/bg-small-blue.png?v=#{$version-image}");
+    --bg-2x: url("/static/images/se-ball/2x/bg-small-blue.png?v=#{$version-image}");
     --border-radius: 1.2rem 1.2rem 1.2rem 3rem;
 
-    --bg-disable-layer: url("/static/images/se-ball/disabled-layer-blue4.png") no-repeat;
+    --bg-disable-layer: url("/static/images/se-ball/disabled-layer-blue4.png?v=#{$version-image}") no-repeat;
     --disable-layer-width: 13.6rem;
     --disable-layer-height: 6.6rem;
 
@@ -197,11 +197,11 @@
 }
 
 .red2 {
-    --bg: url("/static/images/se-ball/1x/bg-medium-blue.png");
-    --bg-2x: url("/static/images/se-ball/2x/bg-medium-blue.png");
+    --bg: url("/static/images/se-ball/1x/bg-medium-blue.png?v=#{$version-image}");
+    --bg-2x: url("/static/images/se-ball/2x/bg-medium-blue.png?v=#{$version-image}");
     --height: 149px;
 
-    --bg-disable-layer: url("/static/images/se-ball/disabled-layer-red2.png") no-repeat;
+    --bg-disable-layer: url("/static/images/se-ball/disabled-layer-red2.png?v=#{$version-image}") no-repeat;
     --disable-layer-width: 7.7rem;
     --disable-layer-height: 14.8rem;
 
@@ -217,11 +217,11 @@
 }
 
 .red3 {
-    --bg: url("/static/images/se-ball/1x/bg-small-red.png");
-    --bg-2x: url("/static/images/se-ball/2x/bg-small-red.png");
+    --bg: url("/static/images/se-ball/1x/bg-small-red.png?v=#{$version-image}");
+    --bg-2x: url("/static/images/se-ball/2x/bg-small-red.png?v=#{$version-image}");
     --border-radius: 1.2rem;
 
-    --bg-disable-layer: url("/static/images/se-ball/disabled-layer-blue3.png") no-repeat;
+    --bg-disable-layer: url("/static/images/se-ball/disabled-layer-blue3.png?v=#{$version-image}") no-repeat;
     --disable-layer-width: 13.6rem;
     --disable-layer-height: 6.6rem;
 
@@ -230,11 +230,11 @@
 }
 
 .red4 {
-    --bg: url("/static/images/se-ball/1x/bg-small-blue.png");
-    --bg-2x: url("/static/images/se-ball/2x/bg-small-blue.png");
+    --bg: url("/static/images/se-ball/1x/bg-small-blue.png?v=#{$version-image}");
+    --bg-2x: url("/static/images/se-ball/2x/bg-small-blue.png?v=#{$version-image}");
     --border-radius: 1.2rem 1.2rem 3rem 1.2rem;
 
-    --bg-disable-layer: url("/static/images/se-ball/disabled-layer-blue4.png") no-repeat;
+    --bg-disable-layer: url("/static/images/se-ball/disabled-layer-blue4.png?v=#{$version-image}") no-repeat;
     --disable-layer-width: 13.6rem;
     --disable-layer-height: 6.6rem;
 
@@ -272,14 +272,14 @@
 
 .dot-red {
     @extend %dot;
-    --bg: url("/static/images/se-ball/1x/dot-red.png");
-    --bg-2x: url("/static/images/se-ball/2x/dot-red.png");
+    --bg: url("/static/images/se-ball/1x/dot-red.png?v=#{$version-image}");
+    --bg-2x: url("/static/images/se-ball/2x/dot-red.png?v=#{$version-image}");
 }
 
 .dot-blue {
     @extend %dot;
-    --bg: url("/static/images/se-ball/1x/dot-blue.png");
-    --bg-2x: url("/static/images/se-ball/2x/dot-blue.png");
+    --bg: url("/static/images/se-ball/1x/dot-blue.png?v=#{$version-image}");
+    --bg-2x: url("/static/images/se-ball/2x/dot-blue.png?v=#{$version-image}");
 }
 
 .bet-option-row {
@@ -350,7 +350,7 @@
 .highlight-winning-bg-even {
     width: 17.8rem;
     height: 9.4rem;
-    background: url("/static/images/se-ball/highlight-winning-bg-even.png") no-repeat;
+    background: url("/static/images/se-ball/highlight-winning-bg-even.png?v=#{$version-image}") no-repeat;
     //background-size: 17.8rem 9.4rem;
 }
 
@@ -361,7 +361,7 @@
 .highlight-winning-bg-red2 {
     width: 7.7rem;
     height: 14.8rem;
-    background: url("/static/images/se-ball/highlight-winning-bg-red2.png") no-repeat;
+    background: url("/static/images/se-ball/highlight-winning-bg-red2.png?v=#{$version-image}") no-repeat;
     left: 0.5rem;
     top: 0.1rem;
 }
@@ -370,7 +370,7 @@
 .highlight-winning-bg-red3 {
     width: 14.6rem;
     height: 7.4rem;
-    background: url("/static/images/se-ball/highlight-winning-bg-blue3.png") no-repeat;
+    background: url("/static/images/se-ball/highlight-winning-bg-blue3.png?v=#{$version-image}") no-repeat;
     left: 0.5rem;
     top: 0rem;
 }
@@ -379,7 +379,7 @@
 .highlight-winning-bg-red4 {
     width: 14.6rem;
     height: 7.4rem;
-    background: url("/static/images/se-ball/highlight-winning-bg-blue4.png") no-repeat;
+    background: url("/static/images/se-ball/highlight-winning-bg-blue4.png?v=#{$version-image}") no-repeat;
     left: 0.5rem;
 }
 
@@ -396,10 +396,10 @@
     width: 17.8rem;
     position: absolute;
 
-    background-image: url("/static/images/se-ball/odd-even-winning-prev.png");
+    background-image: url("/static/images/se-ball/odd-even-winning-prev.png?v=#{$version-image}");
     background-image: image-set(
-        url("/static/images/se-ball/1x/odd-even-winning-prev.png") 1x,
-        url("/static/images/se-ball/2x/odd-even-winning-prev.png") 2x
+        url("/static/images/se-ball/1x/odd-even-winning-prev.png?v=#{$version-image}") 1x,
+        url("/static/images/se-ball/2x/odd-even-winning-prev.png?v=#{$version-image}") 2x
     );
     background-repeat: no-repeat;
 }
@@ -426,10 +426,10 @@
     position: absolute;
     left: -0.1rem;
     top: -0.1rem;
-    background-image: url("/static/images/se-ball/blue3-red3-winning-prev.png");
+    background-image: url("/static/images/se-ball/blue3-red3-winning-prev.png?v=#{$version-image}");
     background-image: image-set(
-        url("/static/images/se-ball/1x/blue3-red3-winning-prev.png") 1x,
-        url("/static/images/se-ball/2x/blue3-red3-winning-prev.png") 2x
+        url("/static/images/se-ball/1x/blue3-red3-winning-prev.png?v=#{$version-image}") 1x,
+        url("/static/images/se-ball/2x/blue3-red3-winning-prev.png?v=#{$version-image}") 2x
     );
 }
 
@@ -440,10 +440,10 @@
     position: absolute;
     left: -0.1rem;
     top: -0.1rem;
-    background-image: url("/static/images/se-ball/blue4-red4-winning-prev.png");
+    background-image: url("/static/images/se-ball/blue4-red4-winning-prev.png?v=#{$version-image}");
     background-image: image-set(
-        url("/static/images/se-ball/1x/blue4-red4-winning-prev.png") 1x,
-        url("/static/images/se-ball/2x/blue4-red4-winning-prev.png") 2x
+        url("/static/images/se-ball/1x/blue4-red4-winning-prev.png?v=#{$version-image}") 1x,
+        url("/static/images/se-ball/2x/blue4-red4-winning-prev.png?v=#{$version-image}") 2x
     );
 }
 
@@ -457,10 +457,10 @@
     position: absolute;
     left: 0;
     top: 0.1rem;
-    background-image: url("/static/images/se-ball/red2-winning-prev.png");
+    background-image: url("/static/images/se-ball/red2-winning-prev.png?v=#{$version-image}");
     background-image: image-set(
-        url("/static/images/se-ball/1x/red2-winning-prev.png") 1x,
-        url("/static/images/se-ball/2x/red2-winning-prev.png") 2x
+        url("/static/images/se-ball/1x/red2-winning-prev.png?v=#{$version-image}") 1x,
+        url("/static/images/se-ball/2x/red2-winning-prev.png?v=#{$version-image}") 2x
     );
 }
 

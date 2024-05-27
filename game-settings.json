@@ -124,6 +124,10 @@
         },
         "totalTurns": 1,
         "numberOfRoundHistory": 100,
-        "gamePath": "se-ball"
+        "gamePath": "se-ball",
+        "gameResourceConfigs": {
+            "path": "se-ball",
+            "optionalPaths": ["se-ball/result-ball"]
+        }
     }
 }
