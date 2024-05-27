@@ -22,7 +22,7 @@ export class GameRoundHistoryHandler {
             type: GameEventActionType.ROUND_HISTORY,
             payload: {
                 roundHistory: roundHistory,
-                roundId: [RoundState.DisplayResult].includes(verifiedRoundState) || isUMInFirstLoad ? roundId - 1 : roundId,
+                roundId: [RoundState.DisplayResult].includes(newRoundState) || isUMInFirstLoad ? roundId - 1 : roundId,
                 settlementResult: roundHistory[0]?.settlementResult,
                 isShowBlink: [RoundState.LockingBet].includes(verifiedRoundState),
             },
