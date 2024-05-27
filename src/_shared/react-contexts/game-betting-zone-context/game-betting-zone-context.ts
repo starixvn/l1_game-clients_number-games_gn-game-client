@@ -4,6 +4,7 @@ export type GameBettingZoneContextProps = {
     totalBets?: object;
     betPercentage?: object;
     playerBetCount?: object;
+    acceptedBets?: number;
 };
 
 export const GameBettingZoneContext = React.createContext<GameBettingZoneContextProps>({});

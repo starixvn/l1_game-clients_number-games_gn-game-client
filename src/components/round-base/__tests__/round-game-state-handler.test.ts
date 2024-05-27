@@ -12,7 +12,7 @@ describe("RoundGameStateHandler", () => {
 
     describe("shouldIncreaseRoundId", () => {
         it("returns true when nextRoundState is InRound", () => {
-            const result = handler.shouldIncreaseRoundId({ nextRoundState: RoundState.InRound, durations: {} });
+            const result = handler.shouldIncreaseRoundId({ nextRoundState: RoundState.InRound });
             expect(result).toBe(true);
         });
     });
