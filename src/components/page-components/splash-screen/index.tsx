@@ -214,7 +214,6 @@ const SplashScreen: React.FC = () => {
     }
 
     if (isRenderRegister) {
-        document.body.classList.add("galaxy-bg");
         return <Register session={currentSession} isUm={isUm} isDirectMode={isDirectMode} gameId={gameId} />;
     }
 

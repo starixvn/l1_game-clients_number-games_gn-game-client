@@ -115,6 +115,12 @@ body {
     background-attachment: fixed;
     background-size: cover;
     background-repeat: no-repeat;
+
+    @media screen and (max-device-width: 400px) {
+        &:not(.register) {
+            background: var(--page-background-color);
+        }
+    }
 }
 
 body {

@@ -1,7 +1,7 @@
+import dynamic from "next/dynamic";
 import { FormEvent, PureComponent, ReactNode } from "react";
 import { AuthorizeResponse, SSOResponse } from "sc-user-service-client/dist/auth";
 
-import dynamic from "next/dynamic";
 import { LobbyGameId, Themes } from "../../../../_shared/constants";
 import { AnalyticsHelper, TrackingAction, TrackingFunction } from "../../../../_shared/helpers";
 import { GetLocalizedErrorMessage } from "../../../../_shared/helpers/notice-helper";
@@ -157,11 +157,15 @@ export class Register extends PureComponent<RegisterProps, RegisterState> {
         } = this.state;
         const { t, session, isDirectMode, gameId } = this.props;
 
+        document.body.classList.add("galaxy-bg", "register");
+
         if (isUm) {
             return <UMPage />;
         }
 
         if (isDonePreloadResource) {
+            document.body.classList.remove("register");
+
             return (
                 <Dashboard
                     session={session}
