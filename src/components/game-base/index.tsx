@@ -30,8 +30,8 @@ import { PFSettingModal } from "../game-components/provably-fair";
 import { Settings } from "../game-components/settings";
 import BackgroundGalaxy from "../page-components/background";
 import BetSettings from "../page-components/bet-settings";
-import { GameSoundHandler, IGameSoundHandler } from "../round-base/game-sound-handler";
 import { IRoundStateHandler } from "../round-base/round-state-handler";
+import { GameSoundHandler, IGameSoundHandler } from "../turn-base/game-sound-handler";
 import {
     GameDisableHandler,
     GameErrorHandler,

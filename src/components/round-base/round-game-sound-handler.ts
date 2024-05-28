@@ -1,7 +1,7 @@
 import { RoundState } from "../game-base/type";
-import { GameSoundHandler, GameSoundHandlerProps } from "../round-base/game-sound-handler";
+import { GameSoundHandler, GameSoundHandlerProps } from "../turn-base/game-sound-handler";
 
-export class TurnGameSoundHandler extends GameSoundHandler {
+export class RoundGameSoundHandler extends GameSoundHandler {
     constructor(protected readonly props: GameSoundHandlerProps) {
         super(props);
     }

@@ -4,8 +4,8 @@ import { WithRouterProps } from "next/dist/client/with-router";
 import { SystemContextModel, SystemEventAction } from "../../_shared/react-contexts";
 import { GameEventAction } from "../../_shared/react-contexts/game-state-context/game-event-action";
 import { GameStateContextModel } from "../../_shared/react-contexts/game-state-context/game-state-context-model";
-import { GameSoundHandler } from "../round-base/game-sound-handler";
 import { IRoundStateHandler } from "../round-base/round-state-handler";
+import { GameSoundHandler } from "../turn-base/game-sound-handler";
 import {
     GameDisableHandler,
     GameErrorHandler,
