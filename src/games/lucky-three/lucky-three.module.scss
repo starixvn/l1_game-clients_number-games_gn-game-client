@@ -44,7 +44,7 @@
 
     position: relative;
     overflow: hidden;
-    width: 17.8rem;
+    width: 17.7rem;
     height: 9.4rem;
     border: none;
 
@@ -58,46 +58,46 @@
         height: 100%;
         background-image: var(--bgBetChoice);
         background-image: image-set(var(--bgBetChoice) 1x, var(--bgBetChoice-2x) 2x);
-        background-size: 17.8rem 9.4rem;
+        background-size: 17.7rem 9.4rem;
+    }
+
+    .btn-ripple {
+        border-radius: var(--border-radius);
+        z-index: 1;
     }
 
     .disable-layer {
         position: absolute;
         top: 0;
-        background: url("/static/images/se-ball/disabled-layer-odd.png") no-repeat;
-        width: 17.8rem;
-        height: 9.4rem;
-        background-size: cover;
+        background: url("/static/images/next-ball/lockbet.png?v=#{$version-image}") no-repeat;
+        width: 17.7rem;
+        height: 9.6rem;
         opacity: 0;
         animation: show-disabled-layer 0.3s ease-in forwards;
     }
 }
 
-.even {
+.over {
     @extend %main-option;
-    --color: #ff9090;
-    --bgBetChoice: url("/static/images/se-ball/1x/bg-big-red.png");
-    --bgBetChoice-2x: url("/static/images/se-ball/2x/bg-big-red.png");
+    --color: #98cdff;
+    --bgBetChoice: url("/static/images/lucky-three/1x/bg-blue.png?v=#{$version-image}");
+    --bgBetChoice-2x: url("/static/images/lucky-three/2x/bg-blue.png?v=#{$version-image}");
+    --border-radius: 3rem 1.2rem 1.2rem 1.2rem;
+    --borderTopLeft: 3rem;
+    --borderTopRight: 1.2rem;
+    --borderBottomLeft: 1.2rem;
+    --borderBottomRight: 1.2rem;
+}
 
-    .btn-ripple {
-        z-index: 2;
-        clip-path: polygon(87% 0, 93% 7%, 98% 19%, 100% 28%, 100% 89%, 99% 96%, 95% 100%, 21% 100%, 3% 91%, 0 82%, 0 12%, 2% 5%, 6% 0);
-    }
+.under {
+    @extend %main-option;
+    --color: #f9bcb9;
+    --bgBetChoice: url("/static/images/lucky-three/1x/bg-red.png?v=#{$version-image}");
+    --bgBetChoice-2x: url("/static/images/lucky-three/2x/bg-red.png?v=#{$version-image}");
+    --border-radius: 1.2rem 3rem 1.2rem 1.2rem;
 
     .disable-layer {
         transform: scaleX(-1);
-    }
-}
-
-.odd {
-    @extend %main-option;
-    --color: #84c6ff;
-    --bgBetChoice: url("/static/images/se-ball/1x/bg-big-blue.png");
-    --bgBetChoice-2x: url("/static/images/se-ball/2x/bg-big-blue.png");
-
-    .btn-ripple {
-        z-index: 2;
-        clip-path: polygon(16% 0%, 94% 0%, 98% 3%, 100% 10%, 100% 83%, 97% 92%, 78% 100%, 10% 100%, 2% 97%, 0 84%, 0% 23%, 4% 13%, 8% 5%);
     }
 }
 
@@ -108,11 +108,8 @@
     margin-left: auto;
     margin-right: auto;
     margin-top: 0.5rem;
-    display: grid;
-    grid-template-columns: 13.6rem 7.7rem 13.6rem;
-    grid-template-rows: 6.6rem 6.6rem;
+    display: flex;
     justify-content: space-between;
-    row-gap: 0.5rem;
 }
 
 .bet-choice {
@@ -120,8 +117,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    row-gap: 0.3rem;
-    padding-top: 1.2rem;
+    justify-content: center;
+    row-gap: 0.5rem;
+    height: 10.4rem;
+    width: 8.5rem;
 
     &::before {
         content: "";
@@ -133,7 +132,7 @@
         top: 0;
         left: 0;
         width: 100%;
-        height: var(--height, 6.6rem);
+        height: var(--height, 10.4rem);
     }
 
     .btn-ripple {
@@ -153,84 +152,37 @@
     }
 }
 
-.blue3 {
-    --bg: url("/static/images/se-ball/1x/bg-small-red.png");
-    --bg-2x: url("/static/images/se-ball/2x/bg-small-red.png");
-    --border-radius: 1.2rem;
+.blue3,
+.red3 {
+    --bg: url("/static/images/lucky-three/1x/bg-side-bet-left.png");
+    --bg-2x: url("/static/images/lucky-three/2x/bg-side-bet-left.png");
 
     --bg-disable-layer: url("/static/images/se-ball/disabled-layer-blue3.png") no-repeat;
     --disable-layer-width: 13.6rem;
     --disable-layer-height: 6.6rem;
-
-    grid-column: 1;
-    grid-row: 1;
 }
 
-.blue4 {
-    --bg: url("/static/images/se-ball/1x/bg-small-blue.png");
-    --bg-2x: url("/static/images/se-ball/2x/bg-small-blue.png");
+.blue3 {
     --border-radius: 1.2rem 1.2rem 1.2rem 3rem;
+}
 
-    --bg-disable-layer: url("/static/images/se-ball/disabled-layer-blue4.png") no-repeat;
-    --disable-layer-width: 13.6rem;
-    --disable-layer-height: 6.6rem;
-
-    grid-column: 1;
-    grid-row: 2;
+.red3 {
+    --border-radius: 1.2rem 1.2rem 3rem 1.2rem;
 
     &::before {
         transform: scaleX(-1);
     }
 }
 
-.red2 {
-    --bg: url("/static/images/se-ball/1x/bg-medium-blue.png");
-    --bg-2x: url("/static/images/se-ball/2x/bg-medium-blue.png");
-    --height: 149px;
+.red2,
+.blue2 {
+    --bg: url("/static/images/lucky-three/1x/bg-side-bet-center.png");
+    --bg-2x: url("/static/images/lucky-three/2x/bg-side-bet-center.png");
+    --border-radius: 1.2rem;
 
     --bg-disable-layer: url("/static/images/se-ball/disabled-layer-red2.png") no-repeat;
     --disable-layer-width: 7.7rem;
     --disable-layer-height: 14.8rem;
-
-    grid-column: 2;
-    grid-row: 1 / span 2;
-    margin-top: -12px;
-    justify-content: center;
-
-    .btn-ripple {
-        z-index: 2;
-        clip-path: polygon(95% 8%, 97% 11%, 97% 94%, 96% 96%, 88% 100%, 14% 100%, 2% 97%, 0 92%, 0 12%, 3% 8%, 50% 0);
-    }
-}
-
-.red3 {
-    --bg: url("/static/images/se-ball/1x/bg-small-red.png");
-    --bg-2x: url("/static/images/se-ball/2x/bg-small-red.png");
-    --border-radius: 1.2rem;
-
-    --bg-disable-layer: url("/static/images/se-ball/disabled-layer-blue3.png") no-repeat;
-    --disable-layer-width: 13.6rem;
-    --disable-layer-height: 6.6rem;
-
-    grid-column: 3;
-    grid-row: 1;
-}
-
-.red4 {
-    --bg: url("/static/images/se-ball/1x/bg-small-blue.png");
-    --bg-2x: url("/static/images/se-ball/2x/bg-small-blue.png");
-    --border-radius: 1.2rem 1.2rem 3rem 1.2rem;
-
-    --bg-disable-layer: url("/static/images/se-ball/disabled-layer-blue4.png") no-repeat;
-    --disable-layer-width: 13.6rem;
-    --disable-layer-height: 6.6rem;
-
-    grid-column: 3;
-    grid-row: 2;
-
-    .disable-layer {
-        transform: scaleX(-1);
-    }
 }
 
 //-------------- DOT RED BLUE INSIDE BET CHOICE -----------------//
@@ -338,7 +290,6 @@
     width: 17.8rem;
     height: 9.4rem;
     background: url("/static/images/se-ball/highlight-winning-bg-even.png") no-repeat;
-    //background-size: 17.8rem 9.4rem;
 }
 
 .highlight-winning-bg-even {
@@ -370,84 +321,55 @@
     left: 0.5rem;
 }
 
-.highlight-winning-bg-red4 {
-    transform: scaleX(-1);
-    left: -0.5rem;
-}
-
 // ----------------- HIGHLIGHT PREVIOUS RESULT -----------------//
 
-.highlight-prev-result-odd,
-.highlight-prev-result-even {
+.highlight-prev-result-over,
+.highlight-prev-result-under {
     height: 9.4rem;
-    width: 17.8rem;
+    width: 17.7rem;
     position: absolute;
+    top: 0;
 
-    background-image: url("/static/images/se-ball/odd-even-winning-prev.png");
+    background-image: url("/static/images/lucky-three/winning-previous.png");
     background-image: image-set(
-        url("/static/images/se-ball/1x/odd-even-winning-prev.png") 1x,
-        url("/static/images/se-ball/2x/odd-even-winning-prev.png") 2x
+        url("/static/images/lucky-three/1x/winning-previous.png") 1x,
+        url("/static/images/lucky-three/2x/winning-previous.png") 2x
     );
     background-repeat: no-repeat;
 }
 
-.highlight-prev-result-odd {
-    height: 9.4rem;
-    width: 18rem;
-    left: -0.1rem;
-    top: 0;
-}
-
-.highlight-prev-result-even {
+.highlight-prev-result-under {
     transform: scaleX(-1);
-    height: 9.4rem;
-    width: 18rem;
-    right: -0.1rem;
-    top: 0;
 }
 
 .highlight-prev-result-blue3,
 .highlight-prev-result-red3 {
-    height: 6.8rem;
-    width: 13.8rem;
+    height: 10.4rem;
+    width: 8.4rem;
     position: absolute;
-    left: -0.1rem;
-    top: -0.1rem;
-    background-image: url("/static/images/se-ball/blue3-red3-winning-prev.png");
+
+    background-image: url("/static/images/lucky-three/winning-prev-side-bet-left.png");
     background-image: image-set(
-        url("/static/images/se-ball/1x/blue3-red3-winning-prev.png") 1x,
-        url("/static/images/se-ball/2x/blue3-red3-winning-prev.png") 2x
+        url("/static/images/lucky-three/1x/winning-prev-side-bet-left.png") 1x,
+        url("/static/images/lucky-three/2x/winning-prev-side-bet-left.png") 2x
     );
 }
 
-.highlight-prev-result-blue4,
-.highlight-prev-result-red4 {
-    height: 6.8rem;
-    width: 13.8rem;
-    position: absolute;
-    left: -0.1rem;
-    top: -0.1rem;
-    background-image: url("/static/images/se-ball/blue4-red4-winning-prev.png");
-    background-image: image-set(
-        url("/static/images/se-ball/1x/blue4-red4-winning-prev.png") 1x,
-        url("/static/images/se-ball/2x/blue4-red4-winning-prev.png") 2x
-    );
-}
-
-.highlight-prev-result-red4 {
+.highlight-prev-result-red3 {
     transform: scaleX(-1);
 }
 
-.highlight-prev-result-red2 {
-    width: 7.7rem;
-    height: 14.8rem;
+.highlight-prev-result-red2,
+.highlight-prev-result-blue2 {
+    width: 8.5rem;
+    height: 10.4rem;
     position: absolute;
     left: 0;
-    top: 0.1rem;
-    background-image: url("/static/images/se-ball/red2-winning-prev.png");
+    top: 0;
+    background-image: url("/static/images/lucky-three/winning-prev-side-bet-center.png");
     background-image: image-set(
-        url("/static/images/se-ball/1x/red2-winning-prev.png") 1x,
-        url("/static/images/se-ball/2x/red2-winning-prev.png") 2x
+        url("/static/images/lucky-three/1x/winning-prev-side-bet-center.png") 1x,
+        url("/static/images/lucky-three/2x/winning-prev-side-bet-center.png") 2x
     );
 }
 
@@ -499,7 +421,15 @@
 
 .choice-odds-area {
     position: relative;
-    margin-top: -0.5rem;
+    margin-top: -1.3rem;
+
+    .bet-info {
+        font-size: 1rem;
+        color: var(--color);
+        text-align: center;
+        line-height: 1.2;
+        margin-top: -0.4rem;
+    }
 }
 
 @keyframes show-disabled-layer {

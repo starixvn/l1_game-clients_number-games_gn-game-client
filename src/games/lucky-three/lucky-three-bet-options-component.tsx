@@ -48,29 +48,36 @@ const LuckyThreeBetOptionsComponent = () => {
     };
 
     const renderOdds = (choice: string) => {
-        return (
-            <Odds
-                turnCounter={turnCounter}
-                choice={choice}
-                tolgeeNamespace={tolgeeNamespace}
-                animationDuration={6}
-                isFormatOddsAuto={true}
-            />
-        );
+        return <Odds turnCounter={turnCounter} choice={choice} tolgeeNamespace={tolgeeNamespace} animationDuration={6} />;
     };
 
     const renderOwnBet = (choice: string) => {
         return <OwnBet choice={choice} tolgeeNamespace={tolgeeNamespace} className={Style["own-bet"]} />;
     };
 
+    const renderBetInfo = (choice) => {
+        const betInfoText = {
+            [LuckyThreeBetOptions.OVER]: "[137 - 267]",
+            [LuckyThreeBetOptions.UNDER]: "[6 -136]",
+        };
+
+        const betInfoClassName = Style["bet-info"];
+
+        if (betInfoText.hasOwnProperty(choice)) {
+            return <div className={betInfoClassName}>{betInfoText[choice]}</div>;
+        }
+
+        return null;
+    };
+
     const renderHighlightWinningPrevResult = (choice: string) => {
         let className = "";
         switch (choice) {
             case LuckyThreeBetOptions.OVER:
-                className = `${Style["highlight-prev-result-odd"]} fade-in`;
+                className = `${Style["highlight-prev-result-over"]} fade-in`;
                 break;
             case LuckyThreeBetOptions.UNDER:
-                className = `${Style["highlight-prev-result-even"]} fade-in`;
+                className = `${Style["highlight-prev-result-under"]} fade-in`;
                 break;
             case LuckyThreeBetOptions.RED2:
                 className = `${Style["highlight-prev-result-red2"]} fade-in`;
@@ -82,7 +89,7 @@ const LuckyThreeBetOptionsComponent = () => {
                 className = `${Style["highlight-prev-result-blue3"]} fade-in`;
                 break;
             case LuckyThreeBetOptions.BLUE2:
-                className = `${Style["highlight-prev-result-blue4"]} fade-in`;
+                className = `${Style["highlight-prev-result-blue2"]} fade-in`;
                 break;
             default:
         }
@@ -123,6 +130,7 @@ const LuckyThreeBetOptionsComponent = () => {
 
     const renderMainOption = (choice: string) => {
         const className = Style[`choice-${choice}`];
+
         return (
             <div className={`${Style[choice]} text-white relative`}>
                 <div className={`${Style["choice-info"]} ${className}`}>
@@ -134,6 +142,7 @@ const LuckyThreeBetOptionsComponent = () => {
                 </div>
                 <div className={`${Style["choice-odds-area"]}`}>
                     {renderBetChoice(choice)}
+                    {renderBetInfo(choice)}
                     {renderOdds(choice)}
                 </div>
 
@@ -161,7 +170,7 @@ const LuckyThreeBetOptionsComponent = () => {
     const renderSubOptions = (choice: string) => {
         return (
             <div className={`${Style[choice]} ${Style["bet-choice"]}`}>
-                <div className={`${Style["dot-wrapper"]} ${choice === "red2" ? Style["two-lines"] : ""}`}>{renderDot(choice)}</div>
+                <div className={`${Style["dot-wrapper"]}`}>{renderDot(choice)}</div>
                 {renderOdds(choice)}
                 <div className={Style["own-bet-container"]}>{renderOwnBet(choice)}</div>
                 <div className={Style["winning-effect"]}>{renderHighlightWinningResult(choice)}</div>

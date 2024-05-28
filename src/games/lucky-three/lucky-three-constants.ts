@@ -22,8 +22,8 @@ export const defaultRoundData = [
 ];
 
 export const DotColorMapper = {
-    [LuckyThreeBetOptions.RED2]: [true, true, false, false],
-    [LuckyThreeBetOptions.RED3]: [true, true, true, false],
-    [LuckyThreeBetOptions.BLUE2]: [false, false, false, false],
-    [LuckyThreeBetOptions.BLUE3]: [true, false, false, false],
+    [LuckyThreeBetOptions.RED2]: [false, true, true],
+    [LuckyThreeBetOptions.RED3]: [true, true, true],
+    [LuckyThreeBetOptions.BLUE2]: [false, false, true],
+    [LuckyThreeBetOptions.BLUE3]: [false, false, false],
 };
