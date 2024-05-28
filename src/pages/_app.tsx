@@ -4,7 +4,7 @@ import "../styles/main.scss";
 
 import { TolgeeProvider, useTolgeeSSR } from "@tolgee/react";
 import { ThemeProvider } from "next-themes";
-import App, { AppContext, AppInitialProps, AppProps } from "next/app";
+import App, { AppContext, AppProps } from "next/app";
 import Head from "next/head";
 import { buildVersion, languageMapper, Themes } from "../_shared/constants";
 import { tolgee } from "../_shared/tolgee";
@@ -39,11 +39,10 @@ SabaNumberApp.getInitialProps = async (context: AppContext) => {
     const initialProps = await App.getInitialProps(context);
 
     const { lang, token } = context.router.query;
-    const appInitialProps = {
+    return {
         ...initialProps,
         language: token ? languageMapper[lang as string] || "en" : tolgee.getLanguage(),
     };
-    return appInitialProps;
 };
 
 export default SabaNumberApp;
