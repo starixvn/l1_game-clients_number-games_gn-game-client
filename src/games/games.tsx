@@ -27,6 +27,7 @@ const NextBall = dynamic(() => import("./next-ball/page"));
 const ToolbarGuide = dynamic(() => import("../components/page-components/hide-toolbar-guide"));
 const SwitchGamesGuide = dynamic(() => import("../components/page-components/switch-games-guide"));
 const SeBall = dynamic(() => import("./se-ball/page"));
+const LuckyThree = dynamic(() => import("./lucky-three/page"));
 
 export const Games: React.FC<Props> = ({
     swiperRef,
@@ -83,6 +84,9 @@ export const Games: React.FC<Props> = ({
 
             case GameIds.SeBall1:
                 return <SeBall key={`game-${gameId}`} {...gameProps} />;
+
+            case GameIds.LuckyThree:
+                return <LuckyThree key={`game-${gameId}`} {...gameProps} />;
 
             default:
                 return null;

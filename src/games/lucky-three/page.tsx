@@ -15,7 +15,7 @@ import { GameMessageHandler, TurnIdHandler } from "../../components/game-base/ha
 import { GameBaseHandlers, GameBaseProps, Round } from "../../components/game-base/type";
 import { GameStatusMap } from "../../components/game-components/countdown-timer/countdown-timer";
 import { LuckyThreeBetOptions } from "./lucky-three-constants";
-import Styles from "./se-ball.module.scss";
+import Styles from "./lucky-three.module.scss";
 import { LuckyThreeResult, LuckyThreeSettlementResult } from "./types";
 import { NextGameRoundDataHandler } from "./lucky-three-game-round-data-handler";
 import { TurnStateHandler } from "../../components/turn-base/turn-state-handler";
@@ -23,7 +23,7 @@ import { TurnGameStateHandler } from "../../components/turn-base/turn-game-state
 
 const DrawIdBlock = dynamic(() => import("../../components/game-components/draw-id"));
 const LuckyThreeBettingBlock = dynamic(() => import("./lucky-three-betting-block"));
-const OtherPercentageStatistic = dynamic(() => import("../../components/game-components/statistic/red-blue-statistic"));
+const RedAndBlueStatistic = dynamic(() => import("../../components/game-components/statistic/red-blue-statistic"));
 const LuckyThreeBetHistoryModal = dynamic(() => import("./history"));
 const ScoreboardLuckyThree = dynamic(() => import("./scoreboard"));
 const LuckyThreeResultBlock = dynamic(() => import("./lucky-three-result-block"));
@@ -121,12 +121,12 @@ class LuckyThree extends GameBase<GameBaseProps> {
         };
 
         return (
-            <OtherPercentageStatistic
+            <RedAndBlueStatistic
                 roundHistory={roundHistory}
                 statisticRuleEntries={Object.entries(calculators)}
                 className={classNameIndo}
-                otherStatisticRuleEntries={Object.entries(otherCalculator)}
-                subBetOptionClass={subBetOptionClass}
+                subChoicesStatisticRuleEntries={Object.entries(otherCalculator)}
+                subChoicesClass={subBetOptionClass}
             />
         );
     }

@@ -2,7 +2,7 @@ import { isHighLightWinningResult } from "../../_shared/react-hooks/use-high-lig
 import { RoundState } from "../../components/game-base/type";
 import { Spritesheet } from "../../components/game-components/sprites-sheet";
 import { LuckyThreeBetOptions } from "./lucky-three-constants";
-import Styles from "./se-ball.module.scss";
+import Styles from "./lucky-three.module.scss";
 
 type Props = {
     choice: string;

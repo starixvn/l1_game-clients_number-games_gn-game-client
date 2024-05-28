@@ -5,7 +5,7 @@ import { useGameStateContext } from "../../_shared/react-contexts/game-state-con
 import { isShowHighlightPrevResult } from "../../_shared/react-hooks/use-high-light";
 import { RoundState } from "../../components/game-base/type";
 import { DotColorMapper, LuckyThreeBetOptions, LuckyThreeBetOptionsPercentageColor } from "./lucky-three-constants";
-import Style from "./se-ball.module.scss";
+import Style from "./lucky-three.module.scss";
 
 const BetChoice = dynamic(() => import("../../components/game-components/bet-option/bet-choice"));
 const RippleButton = dynamic(() => import("../../components/game-components/bet-option/ripple-button"));
