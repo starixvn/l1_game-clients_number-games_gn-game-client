@@ -56,6 +56,33 @@
     }
 }
 
+.type-3 {
+    --bottom: -62px;
+
+    .show-ball-anim {
+        position: absolute;
+        height: 18rem;
+        width: 47.8rem;
+        bottom: -10.6rem;
+        left: -150px;
+    }
+
+    .ball-rotation-1 {
+        @extend %ball;
+        left: 8px;
+    }
+
+    .ball-rotation-2 {
+        @extend %ball;
+        left: 159px;
+    }
+
+    .ball-rotation-3 {
+        @extend %ball;
+        right: 14px;
+    }
+}
+
 .number {
     position: absolute;
     width: 153px;

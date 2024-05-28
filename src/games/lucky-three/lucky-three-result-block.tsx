@@ -14,13 +14,13 @@ const LuckyThreeResultBlock: FC<LuckyThreeResultBlockProps> = (props: LuckyThree
     const { result, roundState, roundHistory, playResultAnimation, isPlayStartRoundAnimation } = props;
     const currentResult = useResult<LuckyThreeResult>({ result, roundState, roundHistory });
 
-    if (roundState === RoundState.BeforePlaceBet && !isPlayStartRoundAnimation) {
+    if (roundState === RoundState.SwitchRound && !isPlayStartRoundAnimation) {
         return <></>;
     }
 
     let zoomClass = "zoom-in";
 
-    if (roundState === RoundState.DisplayResult && playResultAnimation) {
+    if (roundState === RoundState.Disabled || (roundState === RoundState.DisplayResult && playResultAnimation)) {
         zoomClass = Style["zoom-out"];
     }
 
@@ -30,8 +30,9 @@ const LuckyThreeResultBlock: FC<LuckyThreeResultBlockProps> = (props: LuckyThree
 
     return (
         <div
-            className={`${Style["result-container"]} ${zoomClass} ${roundState === RoundState.BeforePlaceBet && isPlayStartRoundAnimation ? `showResultContainer ` : ""
-                }`}
+            className={`${Style["result-container"]} ${zoomClass} ${
+                roundState === RoundState.BeforePlaceBet && isPlayStartRoundAnimation ? `showResultContainer ` : ""
+            }`}
         >
             <CageResultList
                 color={CageColor.PURPLE}
@@ -39,9 +40,10 @@ const LuckyThreeResultBlock: FC<LuckyThreeResultBlockProps> = (props: LuckyThree
                 isSmall={true}
                 listResult={currentResult?.balls}
                 playResultAnimation={playResultAnimation}
-                gameFolder="se-ball"
-                highlightBallSize={{ width: 624, height: 216 }}
+                gameFolder="lucky-three"
+                highlightBallSize={{ width: 478, height: 246 }}
                 roundState={roundState}
+                ballFPS={25}
             />
         </div>
     );

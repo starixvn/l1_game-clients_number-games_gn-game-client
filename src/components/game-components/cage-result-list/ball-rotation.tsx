@@ -25,7 +25,7 @@ const BallRotation: React.FC<{
 
         const ballRotationTime = 1000;
         const timeOutTotalPoint = setTimeout(() => {
-            incrementTotalPoint(number, ballPos);
+            incrementTotalPoint(number);
         }, delayTime + ballRotationTime);
 
         return () => {

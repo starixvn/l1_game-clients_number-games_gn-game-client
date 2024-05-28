@@ -57,7 +57,14 @@ const CageResultList: React.FC<CageResultListProps> = ({
         };
     });
 
-    const incrementTotalPoint = useCallback((point: number, pos: number) => {
+    useEffect(() => {
+        if (roundState === RoundState.InRound) {
+            setTotalPoint(0);
+            setShowBalls(false);
+        }
+    }, [roundState]);
+
+    const incrementTotalPoint = useCallback((point: number) => {
         setTotalPoint((currentTotalPoint) => currentTotalPoint + point);
     }, []);
 
