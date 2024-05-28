@@ -40,6 +40,7 @@ export const messageEventType = {
     SAVE_PF_SETTING: "savePFSetting",
     SAVE_PF_SETTING_FROM_TURN_ID_HANLDER: "savePFSettingFromTurnIdHandler",
     SYNC_OWN_BETS_TO_PF: "syncOwnBetsToPF",
+    START_PLACE_BET: "spb",
 };
 
 export class GameMessageHandler {
@@ -87,7 +88,6 @@ export class GameMessageHandler {
             },
         });
     };
-
 
     handleOdds = ({ odds }) => {
         this.dispatch({

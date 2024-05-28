@@ -2,7 +2,7 @@ import { GameEventActionType } from "../../_shared/react-contexts/game-state-con
 import { GameStateContextModel } from "../../_shared/react-contexts/game-state-context/game-state-context-model";
 import { GameDurations, RoundState } from "../game-base/type";
 import { GameMessageHandler, messageEventType } from "../game-base/handlers/game-message-handler";
-import {  writeDebugLog } from "../../_shared/helpers";
+import { writeDebugLog } from "../../_shared/helpers";
 import { Turn, TurnTimelineCounter } from "./turn-time-counter-handler";
 
 export type TurnIdHandlerProps = {
@@ -19,14 +19,14 @@ export class TurnIdHandler {
     private shouldRunWhenFirstLoad = false;
     private roundRemainingTime = 0;
     private drawId = 0;
-    private roundId = 0;
+    protected roundId = 0;
     private readonly turnTimelineCounter: TurnTimelineCounter;
 
-    constructor(private readonly props: TurnIdHandlerProps, turnTimelineCounter?: TurnTimelineCounter) {
+    constructor(protected readonly props: TurnIdHandlerProps, turnTimelineCounter?: TurnTimelineCounter) {
         this.turnTimelineCounter = turnTimelineCounter ?? new TurnTimelineCounter(props.durations);
     }
 
-    registerEvents = () => {
+    registerEvents() {
         this.shouldRunWhenFirstLoad = true;
         this.roundRemainingTime = 0;
         this.turnCounter = 0;
@@ -36,7 +36,7 @@ export class TurnIdHandler {
         this.props.gameMessageHandler.register(messageEventType.ROUND_ID, this.handleRoundId.bind(this));
         this.props.gameMessageHandler.register(messageEventType.DRAW_ID, this.handleDrawId.bind(this));
         this.props.gameMessageHandler.register(messageEventType.ROUND_STATE, this.handleRoundState.bind(this));
-    };
+    }
 
     handleRemainingTime = ({ remainingTime }) => {
         if (this.shouldRunWhenFirstLoad) {
@@ -113,7 +113,7 @@ export class TurnIdHandler {
 
     dispatchClientSeed = (drawId) => {
         this.props.gameMessageHandler.broadcastGameEvent({
-            [messageEventType.SAVE_PF_SETTING_FROM_TURN_ID_HANLDER]: {drawId}
+            [messageEventType.SAVE_PF_SETTING_FROM_TURN_ID_HANLDER]: { drawId },
         });
     };
 

@@ -13,7 +13,6 @@ import GameBase from "../../components/game-base/";
 import { GameMessageHandler, TurnIdHandler } from "../../components/game-base/handlers";
 import { GameBaseHandlers, GameBaseProps, Round } from "../../components/game-base/type";
 import { DrawIdBlock } from "../../components/game-components/draw-id";
-import { TurnGameStateHandler } from "../../components/turn-base/turn-game-state-handler";
 import { TurnStateHandler } from "../../components/turn-base/turn-state-handler";
 import { BacBallGameRoundDataHandler } from "./bac-ball-game-round-data-handler";
 import BacBallResultBlock from "./bac-ball-result-block";
@@ -31,11 +30,10 @@ class BacBall extends GameBase<GameBaseProps> {
     constructor(props: GameBaseProps) {
         const gameMessageHandler = new GameMessageHandler(props.dispatch);
         const gameBaseHandlers: GameBaseHandlers = {
-            roundStateHandler :new TurnStateHandler(),
-            gameStateHandler:new TurnGameStateHandler(),
-            gameMessageHandler:gameMessageHandler,
-            gameRoundDataHandler: new BacBallGameRoundDataHandler()
-        }
+            roundStateHandler: new TurnStateHandler(),
+            gameMessageHandler: gameMessageHandler,
+            gameRoundDataHandler: new BacBallGameRoundDataHandler(),
+        };
         super(props, gameBaseHandlers);
 
         this.turnIdHandler = new TurnIdHandler({
@@ -127,7 +125,7 @@ const BacBallFC = (props) => {
     return (
         <BacBall
             {...props}
-            {...{ 
+            {...{
                 dispatch: useGameStatesDispatch(),
                 gameStateContextModel: useGameStateContext(),
                 systemContextModel: useSystemContext(),

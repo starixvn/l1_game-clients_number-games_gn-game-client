@@ -43,7 +43,7 @@ import {
     messageEventType,
 } from "./handlers";
 import { GameRoundDataHandler } from "./handlers/game-round-data-handler";
-import { IGameStateHandler } from "./handlers/game-state-handler";
+import { GameStateHandler, IGameStateHandler } from "./handlers/game-state-handler";
 import { PFWrapper } from "./handlers/pf-wrapper/pf-wrapper";
 import { PlaceBetHandlerWrapper } from "./handlers/place-bet-wrapper/place-bet-handler-wrapper";
 import { GameBaseHandlers, GameBaseProps, RoundState } from "./type";
@@ -87,9 +87,9 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         } = handlers;
 
         this.roundStateHandler = roundStateHandler;
-        this.gameStateHandler = gameStateHandler;
         this.gameMessageHandler = gameMessageHandler;
         this.gameRoundDataHandler = gameRoundDataHandler ?? new GameRoundDataHandler();
+        this.gameStateHandler = gameStateHandler ?? new GameStateHandler();
         this.gameErrorHandler =
             gameErrorHandler ??
             new GameErrorHandler({
@@ -288,8 +288,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         const { event, data } = message[messageEventType.SEND_SOCKET_MESSAGE];
         this.socket.emit(event, data);
     };
-
-
 
     handleUM(gameMessage) {
         this.gameDisabledHandler.handleUM(gameMessage, this.timeCounter);

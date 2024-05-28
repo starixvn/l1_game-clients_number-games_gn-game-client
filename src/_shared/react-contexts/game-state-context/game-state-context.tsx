@@ -287,6 +287,13 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
             };
         }
 
+        case GameEventActionType.ROUND_ID: {
+            return {
+                ...state,
+                roundId,
+            };
+        }
+
         default: {
             console.warn(JSON.stringify(action));
 

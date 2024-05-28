@@ -1,9 +1,4 @@
-import {
-    DrawInfo,
-    GameConfigs,
-    GameDurations,
-    RoundState,
-} from "../../../components/game-base/type";
+import { DrawInfo, GameConfigs, GameDurations, RoundState } from "../../../components/game-base/type";
 
 export enum GameEventActionType {
     CONNECT = "CONNECT",
@@ -34,6 +29,7 @@ export enum GameEventActionType {
     UPDATE_BET_DETAIL = "UPDATE_BET_DETAIL",
     TOGGLE_GAME_GUIDE = "TOGGLE_GAME_GUIDE",
     START_NEW_ROUND_ANIM = "START_NEW_ROUND_ANIM",
+    ROUND_ID = "ROUND_ID",
 }
 
 export interface GameEventPayload {

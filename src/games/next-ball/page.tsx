@@ -13,7 +13,6 @@ import { tolgee } from "../../_shared/tolgee";
 import GameBase from "../../components/game-base/";
 import { GameMessageHandler, TurnIdHandler } from "../../components/game-base/handlers";
 import { GameBaseHandlers, GameBaseProps, Round } from "../../components/game-base/type";
-import { TurnGameStateHandler } from "../../components/turn-base/turn-game-state-handler";
 import { TurnStateHandler } from "../../components/turn-base/turn-state-handler";
 import { NextBallBetOptions } from "./next-ball-constants";
 import { NextGameRoundDataHandler } from "./next-ball-game-round-data-handler";
@@ -40,7 +39,6 @@ class NextBall extends GameBase<GameBaseProps> {
         const gameMessageHandler = new GameMessageHandler(props.dispatch);
         const gameBaseHandlers: GameBaseHandlers = {
             roundStateHandler: new TurnStateHandler(),
-            gameStateHandler: new TurnGameStateHandler(),
             gameMessageHandler: gameMessageHandler,
             gameRoundDataHandler: new NextGameRoundDataHandler(),
         };

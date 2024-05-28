@@ -241,9 +241,9 @@ export interface IUserStakeLevel {
 
 export type GameBaseHandlers = {
     roundStateHandler: IRoundStateHandler;
-    gameStateHandler: IGameStateHandler;
     gameMessageHandler: GameMessageHandler;
     gameRoundDataHandler: GameRoundDataHandler;
+    gameStateHandler?: IGameStateHandler;
     gameErrorHandler?: GameErrorHandler;
     playerHandler?: PlayerHandler;
     placeBetHandler?: PlaceBetHandler;

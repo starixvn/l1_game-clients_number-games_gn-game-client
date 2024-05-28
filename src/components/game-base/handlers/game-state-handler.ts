@@ -22,10 +22,6 @@ export interface IGameStateHandler {
 }
 
 export class GameStateHandler implements IGameStateHandler {
-    protected shouldIncreaseRoundId({ nextRoundState, durations }: { nextRoundState: RoundState; durations: GameDurations }): boolean {
-        return false;
-    }
-
     getNextRoundState({
         gameStateContextModel,
         nextRoundState,
@@ -35,7 +31,7 @@ export class GameStateHandler implements IGameStateHandler {
         remainingTime,
     }: GameStateHandlerProps) {
         if (gameStateContextModel) {
-            const { result, settlementResult, roundId } = gameStateContextModel;
+            const { result, settlementResult } = gameStateContextModel;
 
             const newStateDetector = [
                 {
@@ -54,10 +50,6 @@ export class GameStateHandler implements IGameStateHandler {
                 {
                     condition: [RoundState.SwitchRound].includes(nextRoundState),
                     state: { roundData: {} },
-                },
-                {
-                    condition: this.shouldIncreaseRoundId({ nextRoundState, durations }),
-                    state: { roundId: roundId + 1 },
                 },
                 {
                     condition: nextRoundState === RoundState.LockingBet,
