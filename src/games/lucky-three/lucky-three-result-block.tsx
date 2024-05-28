@@ -20,7 +20,11 @@ const LuckyThreeResultBlock: FC<LuckyThreeResultBlockProps> = (props: LuckyThree
 
     let zoomClass = "zoom-in";
 
-    if (roundState === RoundState.Disabled || (roundState === RoundState.DisplayResult && playResultAnimation)) {
+    if (
+        roundState === RoundState.Disabled ||
+        roundState === RoundState.BeforePlaceBet ||
+        (roundState === RoundState.DisplayResult && playResultAnimation)
+    ) {
         zoomClass = Style["zoom-out"];
     }
 

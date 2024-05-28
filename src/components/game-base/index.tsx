@@ -2,6 +2,7 @@ import React from "react";
 import { createPortal } from "react-dom";
 import { Socket } from "socket.io-client";
 
+import { getGameSettings } from "../../_shared/app-settings";
 import { SwiperNoSwiping } from "../../_shared/constants";
 import { InitSocketIO, writeDebugLog } from "../../_shared/helpers";
 import { AnalyticsHelper } from "../../_shared/helpers/analytic-helper";
@@ -38,9 +39,9 @@ import {
     GameFinishHandler,
     GameMessageHandler,
     GameRoundHistoryHandler,
+    messageEventType,
     PlaceBetHandler,
     PlayerHandler,
-    messageEventType,
 } from "./handlers";
 import { GameRoundDataHandler } from "./handlers/game-round-data-handler";
 import { GameStateHandler, IGameStateHandler } from "./handlers/game-state-handler";
@@ -535,7 +536,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     renderNewRoundTransition() {
-        return <NewRoundTransition />;
+        return <NewRoundTransition totalTurns={getGameSettings(this.props.id).totalTurns} />;
     }
 
     getRenderTemplate() {
