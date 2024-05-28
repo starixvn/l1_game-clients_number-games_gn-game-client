@@ -131,10 +131,6 @@ class LuckyThree extends GameBase<GameBaseProps> {
         );
     }
 
-    renderGameStatus() {
-        return GameStatusMap.RoundBaseStatus;
-    }
-
     renderScoreboards() {
         const { roundHistory, isShowBlink } = this.props.gameStateContextModel;
         const { statisticGroup } = this.state;
@@ -149,7 +145,7 @@ class LuckyThree extends GameBase<GameBaseProps> {
     }
 
     renderRoundIdSection(): JSX.Element {
-        return <DrawIdBlock showRoundId={true} />;
+        return <DrawIdBlock />;
     }
 }
 
