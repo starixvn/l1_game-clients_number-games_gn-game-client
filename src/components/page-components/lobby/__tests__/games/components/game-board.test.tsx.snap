@@ -7,7 +7,7 @@ exports[`GameBoard should not render countdown timer & scoreboard when showData 
     id="icon-gamea"
   >
     <div
-      class="d-flex"
+      class="d-flex gap-2"
     >
       GameIcon
     </div>
@@ -23,7 +23,7 @@ exports[`GameBoard should render match the snapshot 1`] = `
     id="icon-gamea"
   >
     <div
-      class="d-flex"
+      class="d-flex gap-2"
     >
       GameIcon
       <div

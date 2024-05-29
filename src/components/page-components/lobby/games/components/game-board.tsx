@@ -103,7 +103,7 @@ export const GameBoard: React.FC<Props> = ({ gameSettings, openGame, gameTransmi
             className={`${Styles["game-board-detail"]} ${!isShow ? "" : Styles["pointer"]}`}
             id={`icon-${gameSettings.gameName.toLowerCase()}`}
         >
-            <div onClick={handleClickGameBoard} className="d-flex">
+            <div onClick={handleClickGameBoard} className="d-flex gap-2">
                 <GameIcon gameSettings={gameSettings} transmitter={transmitter} />
                 {isLoading && <LoadingSpinner />}
                 {isShow && (
