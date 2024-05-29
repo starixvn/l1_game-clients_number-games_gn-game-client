@@ -4,7 +4,7 @@ import { useCommonTranslate, useTranslator } from "../../../_shared/react-hooks"
 import Styles from "./history.module.scss";
 import SmallBall from "../../../components/game-components/small-ball";
 import { DrawInfo, PFResult } from "../../../components/game-base/type";
-import { SeBallBetOptions } from "../lucky-three-constants";
+import { LuckyThreeBetOptions } from "../lucky-three-constants";
 
 export interface RoundInfoSeBall extends DrawInfo {
     drawId: number;
@@ -76,10 +76,10 @@ export const BetChoice: FC<{ choice: string }> = ({ choice }) => {
 
     return (
         <span className="font-text">
-            {choice === SeBallBetOptions.ODD || choice === SeBallBetOptions.EVEN ? (
+            {choice === LuckyThreeBetOptions.OVER || choice === LuckyThreeBetOptions.UNDER ? (
                 translateSeBall(`glossary_${choice}`)
             ) : (
-                <img src={`/static/images/se-ball/bet-detail-${choice}.svg`} alt="" />
+                <img src={`/static/images/lucky-three/bet-detail-${choice}.svg`} alt="" />
             )}
         </span>
     );

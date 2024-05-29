@@ -1,8 +1,7 @@
 .betting-zone {
     position: relative;
     width: 35.8rem;
-
-    margin: 1rem auto auto;
+    margin: 0 auto;
     z-index: 2;
 }
 
@@ -83,10 +82,6 @@
     --bgBetChoice: url("/static/images/lucky-three/1x/bg-blue.png?v=#{$version-image}");
     --bgBetChoice-2x: url("/static/images/lucky-three/2x/bg-blue.png?v=#{$version-image}");
     --border-radius: 3rem 1.2rem 1.2rem 1.2rem;
-    --borderTopLeft: 3rem;
-    --borderTopRight: 1.2rem;
-    --borderBottomLeft: 1.2rem;
-    --borderBottomRight: 1.2rem;
 }
 
 .under {
@@ -144,8 +139,8 @@
         position: absolute;
         top: var(--top, 0);
         background: var(--bg-disable-layer);
-        width: var(--disable-layer-width);
-        height: var(--disable-layer-height);
+        width: var(--disable-layer-width, 8.5rem);
+        height: var(--disable-layer-height, 10.4rem);
         background-size: cover;
         opacity: 0;
         animation: show-disabled-layer 0.3s ease-in forwards;
@@ -156,10 +151,7 @@
 .red3 {
     --bg: url("/static/images/lucky-three/1x/bg-side-bet-left.png");
     --bg-2x: url("/static/images/lucky-three/2x/bg-side-bet-left.png");
-
-    --bg-disable-layer: url("/static/images/se-ball/disabled-layer-blue3.png") no-repeat;
-    --disable-layer-width: 13.6rem;
-    --disable-layer-height: 6.6rem;
+    --bg-disable-layer: url("/static/images/lucky-three/lockbet-left.png") no-repeat;
 }
 
 .blue3 {
@@ -172,6 +164,10 @@
     &::before {
         transform: scaleX(-1);
     }
+
+    .disable-layer {
+        transform: scaleX(-1);
+    }
 }
 
 .red2,
@@ -179,10 +175,7 @@
     --bg: url("/static/images/lucky-three/1x/bg-side-bet-center.png");
     --bg-2x: url("/static/images/lucky-three/2x/bg-side-bet-center.png");
     --border-radius: 1.2rem;
-
-    --bg-disable-layer: url("/static/images/se-ball/disabled-layer-red2.png") no-repeat;
-    --disable-layer-width: 7.7rem;
-    --disable-layer-height: 14.8rem;
+    --bg-disable-layer: url("/static/images/lucky-three/lockbet-center.png") no-repeat;
 }
 
 //-------------- DOT RED BLUE INSIDE BET CHOICE -----------------//
@@ -256,21 +249,8 @@
 .winning-light-anim {
     position: relative;
 
-    &.anim-odd {
-        left: -0.3rem;
-        top: -0.5rem;
-    }
-
-    &.anim-even {
-        left: -0.4rem;
-        top: -0.5rem;
-        transform: scaleX(-1);
-    }
-
     &.anim-blue3,
-    &.anim-red3,
-    &.anim-red4,
-    &.anim-blue4 {
+    &.anim-red3 {
         top: -0.4rem;
         left: 0;
     }
@@ -279,21 +259,6 @@
         top: -0.3rem;
         left: 0;
     }
-
-    &.anim-red4 {
-        transform: scaleX(-1);
-    }
-}
-
-.highlight-winning-bg-odd,
-.highlight-winning-bg-even {
-    width: 17.8rem;
-    height: 9.4rem;
-    background: url("/static/images/se-ball/highlight-winning-bg-even.png") no-repeat;
-}
-
-.highlight-winning-bg-even {
-    transform: scaleX(-1);
 }
 
 .highlight-winning-bg-red2 {
@@ -311,14 +276,6 @@
     background: url("/static/images/se-ball/highlight-winning-bg-blue3.png") no-repeat;
     left: 0.5rem;
     top: 0rem;
-}
-
-.highlight-winning-bg-blue4,
-.highlight-winning-bg-red4 {
-    width: 14.6rem;
-    height: 7.4rem;
-    background: url("/static/images/se-ball/highlight-winning-bg-blue4.png") no-repeat;
-    left: 0.5rem;
 }
 
 // ----------------- HIGHLIGHT PREVIOUS RESULT -----------------//
@@ -396,27 +353,22 @@
 
 .statistic-red2 {
     @extend %statistic-icon;
-    background: url("/static/images/se-ball/statistic-icon-red2.svg") no-repeat;
+    background: url("/static/images/lucky-three/statistics-icon-red2.svg") no-repeat;
 }
 
 .statistic-red3 {
     @extend %statistic-icon;
-    background: url("/static/images/se-ball/statistic-icon-red3.svg") no-repeat;
+    background: url("/static/images/lucky-three/statistics-icon-red3.svg") no-repeat;
 }
 
-.statistic-red4 {
+.statistic-blue2 {
     @extend %statistic-icon;
-    background: url("/static/images/se-ball/statistic-icon-red4.svg") no-repeat;
+    background: url("/static/images/lucky-three/statistics-icon-blue2.svg") no-repeat;
 }
 
 .statistic-blue3 {
     @extend %statistic-icon;
-    background: url("/static/images/se-ball/statistic-icon-blue3.svg") no-repeat;
-}
-
-.statistic-blue4 {
-    @extend %statistic-icon;
-    background: url("/static/images/se-ball/statistic-icon-blue4.svg") no-repeat;
+    background: url("/static/images/lucky-three/statistics-icon-blue3.svg") no-repeat;
 }
 
 .choice-odds-area {
