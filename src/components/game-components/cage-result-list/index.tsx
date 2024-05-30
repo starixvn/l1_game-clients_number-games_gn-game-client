@@ -20,6 +20,8 @@ export type CageResultListProps = {
     highlightBallSize: { width: number; height: number };
     initialBallDelayTime?: number;
     ballFPS?: number;
+    hightlightBallSteps?: number;
+    showTotalCallback?: Function;
 } & Partial<GameStateContextModel>;
 
 const CageResultList: React.FC<CageResultListProps> = ({
@@ -34,9 +36,12 @@ const CageResultList: React.FC<CageResultListProps> = ({
     initialBallDelayTime,
     gameFolder,
     highlightBallSize,
+    hightlightBallSteps,
+    showTotalCallback,
 }) => {
     const [showBalls, setShowBalls] = useState(false);
     const [totalPoint, setTotalPoint] = useState(0);
+    const [needStartDrawAnim, setNeedStartDrawAnim] = useState(false);
 
     const showBallDelayTime = 1000;
 
@@ -59,12 +64,19 @@ const CageResultList: React.FC<CageResultListProps> = ({
 
     useEffect(() => {
         if (roundState === RoundState.InRound) {
-            setTotalPoint(0);
             setShowBalls(false);
+            setNeedStartDrawAnim(false);
+        }
+
+        if (roundState === RoundState.BeforePlaceBet) {
+            setTotalPoint(0);
+            showTotalCallback && showTotalCallback(false);
+            setNeedStartDrawAnim(true);
         }
     }, [roundState]);
 
     const incrementTotalPoint = useCallback((point: number) => {
+        showTotalCallback && showTotalCallback(!!point);
         setTotalPoint((currentTotalPoint) => currentTotalPoint + point);
     }, []);
 
@@ -94,7 +106,7 @@ const CageResultList: React.FC<CageResultListProps> = ({
             </div>
             {showBalls && totalPoint > 0 && <div className={`${Styles["total-point"]} fade-in`}>{totalPoint}</div>}
 
-            <div id="show-ball-anim" className={Styles["show-ball-anim"]}>
+            <div id="show-ball-anim" className={`${Styles["show-ball-anim"]} ${needStartDrawAnim ? "fade-out" : ""}`}>
                 {showBalls && (
                     <ResultGroup
                         listResult={listResult}
@@ -111,7 +123,7 @@ const CageResultList: React.FC<CageResultListProps> = ({
                         widthFrame={highlightBallSize.width}
                         isResponsive
                         heightFrame={highlightBallSize.height}
-                        steps={6}
+                        steps={hightlightBallSteps ?? 6}
                         autoplay
                         fps={ballFPS ?? 32}
                     />

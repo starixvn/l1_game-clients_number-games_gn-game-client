@@ -7,29 +7,91 @@
 
 .result-container {
     position: relative;
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 4rem;
     justify-content: center;
     align-items: center;
-    grid-gap: 4rem;
-    margin-top: 0.5rem;
-    height: 13.5rem;
+    margin-top: -1rem;
+    transform: scale(0.9);
 
-    &.zoom-in {
-        transform: scale(1);
+    &.zoom-in-anim {
+        opacity: 0.3;
+        transform: scale(0.5) translateY(-5.5rem);
+
+        // delay 0.3s to waiting for result hide
+        animation: zoom-in-cage 0.7s 0.3s cubic-bezier(0.38, 0.12, 0.75, 0.72) forwards;
     }
 
-    &.zoom-out {
-        animation: zoom-out 1s cubic-bezier(0.47, 0, 0.745, 0.715) forwards;
+    &.zoom-out-anim {
+        animation: zoom-out-cage 1s cubic-bezier(0.47, 0, 0.745, 0.715) forwards;
+
+        .slot-container {
+            animation: move-up-result-slot 0.5s 0.5s cubic-bezier(0.47, 0, 0.745, 0.715) forwards;
+        }
     }
 
-    &.zoom-out-no-animation {
+    &.zoom-out-no-anim {
         transform: scale(0.5) translateY(-5.5rem);
     }
 }
 
-@keyframes zoom-out {
+.group-3 {
+    gap: 0.4rem !important;
+
+    div:nth-of-type(3),
+    div:nth-of-type(6) {
+        margin-right: 2rem;
+    }
+
+    .delay-show-ball {
+        // delay 4s: 3 ball show result
+        animation: fade-in 0.5s 4s linear forwards !important;
+    }
+
+    @keyframes fade-in {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+}
+
+@keyframes move-up-result-slot {
     0% {
         transform: scale(1) translateY(0);
+    }
+    100% {
+        transform: scale(0.3) translateY(-8rem);
+    }
+}
+
+@keyframes move-down-result-slot {
+    0% {
+        transform: scale(0.3) translateY(-8rem);
+    }
+    100% {
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes zoom-in-cage {
+    0% {
+        opacity: 0.3;
+        transform: scale(0.5) translateY(-5.5rem);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(0.9) translateY(0);
+    }
+}
+
+@keyframes zoom-out-cage {
+    0% {
+        transform: scale(0.9) translateY(0);
     }
     100% {
         transform: scale(0.5) translateY(-5.5rem);

@@ -1,40 +1,57 @@
-import { FC, memo } from "react";
+import { FC, memo, useCallback, useEffect, useState } from "react";
 
 import { GameStateContextModel } from "../../_shared/react-contexts/game-state-context/game-state-context-model";
 import useResult from "../../_shared/react-hooks/use-result";
 import { RoundState } from "../../components/game-base/type";
 import { CageColor, CagePosition } from "../../components/game-components/cage";
 import CageResultList from "../../components/game-components/cage-result-list";
+import { TurnBaseResultSlotContainer } from "../../components/game-components/turn-base-result-container/turn-base-result-container";
+import { defaultRoundData } from "./lucky-three-constants";
 import Style from "./lucky-three.module.scss";
 import { LuckyThreeResult } from "./types";
 
 export type LuckyThreeResultBlockProps = Partial<GameStateContextModel>;
 
 const LuckyThreeResultBlock: FC<LuckyThreeResultBlockProps> = (props: LuckyThreeResultBlockProps) => {
-    const { result, roundState, roundHistory, playResultAnimation, isPlayStartRoundAnimation } = props;
+    const { result, roundState, roundHistory, playResultAnimation, isPlayStartRoundAnimation, turnCounter } = props;
     const currentResult = useResult<LuckyThreeResult>({ result, roundState, roundHistory });
+
+    const [resultStyle, setResultStyle] = useState("");
+    const [showTotalPoint, setShowTotalPoint] = useState(false);
+
+    const showTotalCallback = useCallback((isShow: boolean) => {
+        setShowTotalPoint(isShow);
+    }, []);
+
+    useEffect(() => {
+        if (roundState === RoundState.InRound || roundState === RoundState.LockingBet) {
+            return setResultStyle("");
+        }
+
+        if (roundState === RoundState.BeforePlaceBet && turnCounter !== 3) {
+            return setResultStyle(`${Style["zoom-in-anim"]}`);
+        }
+
+        if (roundState === RoundState.Disabled || (roundState === RoundState.DisplayResult && playResultAnimation)) {
+            return setResultStyle(`${Style["zoom-out-anim"]}`);
+        }
+
+        if (roundState === RoundState.DisplayResult && !playResultAnimation) {
+            return setResultStyle(`${Style["zoom-out-no-anim"]}`);
+        }
+
+        if (roundState === RoundState.SwitchRound) {
+            return setResultStyle("");
+        }
+    }, [roundState, turnCounter, playResultAnimation]);
 
     if (roundState === RoundState.SwitchRound && !isPlayStartRoundAnimation) {
         return <></>;
     }
 
-    let zoomClass = "zoom-in";
-
-    if (
-        roundState === RoundState.Disabled ||
-        roundState === RoundState.BeforePlaceBet ||
-        (roundState === RoundState.DisplayResult && playResultAnimation)
-    ) {
-        zoomClass = Style["zoom-out"];
-    }
-
-    if (roundState === RoundState.DisplayResult && !playResultAnimation) {
-        zoomClass = Style["zoom-out-no-animation"];
-    }
-
     return (
         <div
-            className={`${Style["result-container"]} ${zoomClass} ${
+            className={`${Style["result-container"]} ${resultStyle} ${
                 roundState === RoundState.BeforePlaceBet && isPlayStartRoundAnimation ? `showResultContainer ` : ""
             }`}
         >
@@ -45,10 +62,26 @@ const LuckyThreeResultBlock: FC<LuckyThreeResultBlockProps> = (props: LuckyThree
                 listResult={currentResult?.balls}
                 playResultAnimation={playResultAnimation}
                 gameFolder="lucky-three"
-                highlightBallSize={{ width: 478, height: 246 }}
+                highlightBallSize={{ width: 478, height: 260 }}
                 roundState={roundState}
                 ballFPS={25}
+                showTotalCallback={showTotalCallback}
             />
+
+            <div className={Style["slot-container"]}>
+                {!showTotalPoint && (
+                    <TurnBaseResultSlotContainer
+                        defaultRoundData={defaultRoundData}
+                        delayTime={4500}
+                        betChoice={""}
+                        className={Style["group-3"]}
+                        betChoiceBalls="balls"
+                        groupType={3}
+                        delayClassName={Style["delay-show-ball"]}
+                        {...props}
+                    />
+                )}
+            </div>
         </div>
     );
 };

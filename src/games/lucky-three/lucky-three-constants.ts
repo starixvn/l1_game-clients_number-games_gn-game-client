@@ -19,6 +19,11 @@ export const defaultRoundData = [
     { number: 0, status: BallStatus.NONE, delayTime: 0 },
     { number: 0, status: BallStatus.NONE, delayTime: 0 },
     { number: 0, status: BallStatus.NONE, delayTime: 0 },
+    { number: 0, status: BallStatus.NONE, delayTime: 0 },
+    { number: 0, status: BallStatus.NONE, delayTime: 0 },
+    { number: 0, status: BallStatus.NONE, delayTime: 0 },
+    { number: 0, status: BallStatus.NONE, delayTime: 0 },
+    { number: 0, status: BallStatus.NONE, delayTime: 0 },
 ];
 
 export const DotColorMapper = {

@@ -21,11 +21,14 @@
     position: absolute;
     height: 15.3rem;
     width: 15.3rem;
-    bottom: var(--bottom);
+    bottom: var(--ball-bottom);
 }
 
 .type-4 {
-    --bottom: -3.4rem;
+    --total-point-top-mobile: -0.2rem;
+    --total-point-top-others: -0.8rem;
+
+    --ball-bottom: -3.4rem;
 
     .show-ball-anim {
         position: absolute;
@@ -57,37 +60,40 @@
 }
 
 .type-3 {
-    --bottom: -62px;
+    --total-point-top-mobile: 0.6rem;
+    --total-point-top-others: 1.2rem;
+
+    --ball-bottom: -8.2rem;
 
     .show-ball-anim {
         position: absolute;
         height: 18rem;
         width: 47.8rem;
-        bottom: -10.6rem;
-        left: -150px;
+        bottom: -11.6rem;
+        left: -4rem;
     }
 
     .ball-rotation-1 {
         @extend %ball;
-        left: 8px;
+        left: 0.6rem;
     }
 
     .ball-rotation-2 {
         @extend %ball;
-        left: 159px;
+        left: 15.9rem;
     }
 
     .ball-rotation-3 {
         @extend %ball;
-        right: 14px;
+        right: 1.4rem;
     }
 }
 
 .number {
     position: absolute;
-    width: 153px;
+    width: 15.3rem;
     text-align: center;
-    left: -3px;
+    left: -0.3rem;
     top: -0.3rem !important;
 }
 
@@ -101,7 +107,7 @@
     position: absolute;
     z-index: 2;
     left: -1.2rem;
-    top: -0.2px;
+    top: 0;
 }
 
 @keyframes fade-in {
@@ -116,7 +122,7 @@
 
 .total-point {
     position: absolute;
-    top: -0.2rem;
+    top: var(--total-point-top-mobile);
     font-size: 9.2rem;
     font-weight: 500;
     color: #fff;
@@ -124,14 +130,14 @@
     font-variant-numeric: tabular-nums;
 
     @media screen and (min-width: 1600px) {
-        top: -0.8rem;
+        top: var(--total-point-top-others);
     }
 
     @media (min-aspect-ratio: 3/4) {
-        top: -0.8rem;
+        top: var(--total-point-top-others);
     }
 
     @media screen and (min-width: 500px) and (orientation: portrait) {
-        top: -0.8rem;
+        top: var(--total-point-top-others);
     }
 }

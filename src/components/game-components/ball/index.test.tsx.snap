@@ -14,7 +14,7 @@ exports[`Ball render when delayShowResult equal to true and number is greater th
     class="ball active "
   >
     <div
-      class="ball-bg red "
+      class="ball-bg red  undefined"
     >
       <span
         class="ball-number ball-index-NaN"

@@ -16,11 +16,12 @@ export interface IBall {
     index?: number;
     isRoundBase?: boolean;
     roundState?: RoundState;
-    incrementTotalPoint?: Function
+    incrementTotalPoint?: Function;
+    delayClassName?: string;
 }
 
 const Ball: FC<IBall> = (props) => {
-    const { number, delayTime, status, index, isRoundBase, roundState, incrementTotalPoint } = props;
+    const { number, delayTime, status, index, isRoundBase, roundState, incrementTotalPoint, delayClassName } = props;
 
     const color = getBallColor(number);
     const ballStyleName = `${Styles["ball-bg"]} ${Styles[color]} ${status === BallStatus.SHOW ? Styles["display-right-now"] : ""}`;
@@ -48,7 +49,9 @@ const Ball: FC<IBall> = (props) => {
     return (
         <div className={`${Styles.ball} ${blurStyle} ${isRoundBase ? "" : delayStyle}`}>
             {isDelayShowResult && number > 0 && (
-                <div className={ballStyleName}>{<span className={`${Styles["ball-number"]} ball-index-${index + 1}`}>{number}</span>}</div>
+                <div className={`${ballStyleName} ${delayClassName}`}>
+                    {<span className={`${Styles["ball-number"]} ball-index-${index + 1}`}>{number}</span>}
+                </div>
             )}
         </div>
     );

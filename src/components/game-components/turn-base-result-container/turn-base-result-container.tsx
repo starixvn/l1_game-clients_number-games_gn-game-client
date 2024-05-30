@@ -11,11 +11,24 @@ export type IResultSlotContainer = {
     className?: string;
     defaultRoundData: IBall[];
     betChoiceBalls: string;
+    groupType?: number;
+    delayClassName?: string;
 } & Partial<GameStateContextModel>;
 
 export const TurnBaseResultSlotContainer: React.FC<IResultSlotContainer> = (props) => {
-    const { delayTime, betChoice, className, roundState, roundData, turnCounter, defaultRoundData, betChoiceBalls, playResultAnimation } =
-        props;
+    const {
+        delayTime,
+        betChoice,
+        className,
+        roundState,
+        roundData,
+        turnCounter,
+        defaultRoundData,
+        betChoiceBalls,
+        playResultAnimation,
+        groupType,
+        delayClassName,
+    } = props;
 
     const [ballsData, setBallsData] = useState<IBall[]>([]);
 
@@ -40,7 +53,11 @@ export const TurnBaseResultSlotContainer: React.FC<IResultSlotContainer> = (prop
                     const number = roundData[betChoiceBalls][i];
                     if (number) {
                         clonedData[i].number = number;
-                        if (playResultAnimation && i === turnCounter - 1) {
+
+                        if (
+                            playResultAnimation &&
+                            ((!groupType && i === turnCounter - 1) || (groupType && Math.floor(i / groupType) + 1 === turnCounter))
+                        ) {
                             clonedData[i].status = BallStatus.LOADING;
                             clonedData[i].delayTime = playResultAnimation ? delayTime : 0;
                         } else {
@@ -77,7 +94,7 @@ export const TurnBaseResultSlotContainer: React.FC<IResultSlotContainer> = (prop
     return (
         <div className={`${Style["ball-container"]} ${className}`}>
             {ballsData.map((result, index) => {
-                return <Ball key={index} index={index} {...result} />;
+                return <Ball key={index} index={index} {...result} delayClassName={delayClassName} />;
             })}
         </div>
     );
