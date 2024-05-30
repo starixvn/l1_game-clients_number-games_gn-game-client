@@ -2,7 +2,7 @@ import useSound from "use-sound";
 import { buildVersion } from "../constants";
 import { StorageHelper, localStorageKeys, objectMap } from "../helpers";
 export const path = "./static/sounds/";
-
+import * as Sentry from "@sentry/nextjs";
 const mp3File = {
     placeBet: `place-bet`,
     click: `click`,
@@ -17,9 +17,12 @@ const resourceMp3 = objectMap(mp3File, (v) => `${path}${v}.mp3?v=${buildVersion}
 
 export const usePlaySound = (resource: string) => {
     const [playSound] = useSound(resource, {});
+
     return () => {
+        Sentry.captureMessage(`document.visibilityState: ${document.visibilityState}`);
         if (document.visibilityState === "visible") {
-            const enable = StorageHelper.get(localStorageKeys.enableSound) ?? true;
+            Sentry.captureMessage(`StorageHelper.get(localStorageKeys.enableSound): ${StorageHelper.get(localStorageKeys.enableSound)}`);
+            const enable = StorageHelper.get<boolean>(localStorageKeys.enableSound) ?? true;
             enable && playSound();
         }
     };
