@@ -341,6 +341,24 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.handleGamePlay(remainingTime);
     }
 
+    updatePlaceBetContext = (newRoundState: RoundState) => {
+        if ([RoundState.SwitchRound, RoundState.BeforePlaceBet, RoundState.InRound].includes(newRoundState)) {
+            this.placeBetHandler.getPlaceBetDispatch()({
+                type: PlaceBetEventActionType.RESET_OWN_BETS_AND_SUGGEST_BET,
+                payload: {},
+            });
+
+            this.gameMessageHandler.broadcastGameEvent({ [messageEventType.SYNC_OWN_BETS_TO_PF]: {} });
+        }
+
+        if (newRoundState === RoundState.LockingBet) {
+            this.placeBetHandler.getPlaceBetDispatch()({
+                type: PlaceBetEventActionType.CLOSE_ALL_DIALOGS,
+                payload: {},
+            });
+        }
+    }
+
     handleGamePlay(remainingTime: number) {
         const { durations, dispatch, gameStateContextModel } = this.props;
 
@@ -388,14 +406,8 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 payload: { newGameState },
             });
 
-            if ([RoundState.SwitchRound, RoundState.BeforePlaceBet, RoundState.InRound].includes(newRoundState)) {
-                this.placeBetHandler.getPlaceBetDispatch()({
-                    type: PlaceBetEventActionType.SET_NEW_GAME_STATE,
-                    payload: {},
-                });
+            this.updatePlaceBetContext(newRoundState);
 
-                this.gameMessageHandler.broadcastGameEvent({ [messageEventType.SYNC_OWN_BETS_TO_PF]: {} });
-            }
             const isContinuePlaying = gameStateContextModel.roundState !== RoundState.None;
             if (isContinuePlaying) {
                 this.gameSoundHandler.handleSound(newRoundState);

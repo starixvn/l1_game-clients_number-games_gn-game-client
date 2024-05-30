@@ -42,11 +42,20 @@ function placeBetReducer(state: PlaceBetContextModel, action: PlaceBetEventActio
             };
         }
 
-        case PlaceBetEventActionType.SET_NEW_GAME_STATE: {
+        case PlaceBetEventActionType.RESET_OWN_BETS_AND_SUGGEST_BET: {
             return {
                 ...state,
                 ownBets: {},
                 suggestBet: {},
+            };
+        }
+
+        case PlaceBetEventActionType.CLOSE_ALL_DIALOGS: {
+            return {
+                ...state,
+                notConfirmOwnBets: {},
+                showConfirmBet: false,
+                showConfirmDialog: false
             };
         }
 

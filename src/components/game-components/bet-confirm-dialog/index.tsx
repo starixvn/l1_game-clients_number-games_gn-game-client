@@ -18,7 +18,7 @@ const BetConfirmDialog = () => {
     const { t } = useTranslator();
 
     if (!placeBetContext.showConfirmDialog) {
-        return null;
+        return <></>;
     }
 
     const removeSuggestBet = () => {
