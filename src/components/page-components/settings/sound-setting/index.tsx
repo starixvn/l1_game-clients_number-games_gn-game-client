@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { AnalyticsHelper, localStorageKeys, StorageHelper, TrackingAction, TrackingFunction } from "../../../../_shared/helpers";
 import { useClickSound, useTranslator } from "../../../../_shared/react-hooks";
 import Styles from "../settings.module.scss";
+import * as Sentry from "@sentry/nextjs";
 
 const SoundSetting = () => {
     const [enabledSound, setEnabledSound] = useState(StorageHelper.get(localStorageKeys.enableSound) ?? true);
@@ -14,6 +15,8 @@ const SoundSetting = () => {
         clickSound();
         setEnabledSound(updateSoundSetting);
         StorageHelper.set(localStorageKeys.enableSound, updateSoundSetting);
+        Sentry.captureMessage(`SoundSetting updateSoundSetting: ${updateSoundSetting}`);
+
         AnalyticsHelper.trackFunction({
             function: TrackingFunction.Sound,
             action: updateSoundSetting ? TrackingAction.ToggleOn : TrackingAction.ToggleOff,
