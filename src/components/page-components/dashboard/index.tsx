@@ -32,6 +32,7 @@ import Styles from "./dashboard.module.scss";
 import { DashboardHandler } from "./handlers/dash-board-handler";
 import { NotificationHandler } from "./handlers/notification-handler";
 import { DashboardProps, DashboardState } from "./type";
+import ErrorBoundary from "../../../_shared/helpers/error-boundary";
 
 const Games = dynamic(() => import("../../../games/games"));
 const BaseDialog = dynamic(() => import("../../game-components/base-dialog"));
@@ -319,7 +320,7 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
             return <LandscapeMode />;
         }
 
-        return this.renderDashBoard();
+        return <ErrorBoundary>{this.renderDashBoard()}</ErrorBoundary>;
     }
 }
 

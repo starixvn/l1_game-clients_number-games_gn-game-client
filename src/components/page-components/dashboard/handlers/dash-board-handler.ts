@@ -22,8 +22,8 @@ export class DashboardHandler {
 
     shouldRenderGames = (offerGames: number[], openGameId: number) => {
         const urlContextModel = StorageHelper.get<URLContextModel>(localStorageKeys.url);
-        const backToLobby = urlContextModel.backToLobby || false;
-        const ssoRedirectGameId = urlContextModel.gameId || 0;
+        const backToLobby = urlContextModel?.backToLobby || false;
+        const ssoRedirectGameId = urlContextModel?.gameId || 0;
 
         return (offerGames.includes(openGameId) && !backToLobby) || ssoRedirectGameId > 0;
     };
