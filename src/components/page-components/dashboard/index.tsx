@@ -91,11 +91,8 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
         this.dashboardHandler = dashboardHandler ?? new DashboardHandler(this.props, this.updateGameTransmitters);
 
         this.notificationHandler =
-            notificationHandler ?? new NotificationHandler(
-                this.props.session,
-                this.props.setIsUm, this.updateUserBalance,
-                this.showApiErrorMessage,
-                this.signOut);
+            notificationHandler ??
+            new NotificationHandler(this.props.session, this.props.setIsUm, this.updateUserBalance, this.showApiErrorMessage, this.signOut);
 
         GlobalMessageTransmitter.broadcast({ [GlobalTransmitterEvent.USER_INFO_RED]: this.props.authorizeResponse.user.red });
     }
@@ -108,7 +105,7 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
             this.isUpdatingBalance = setBalanceByPlaceBet;
             this.setState({ authorizeInfo });
         }
-    }
+    };
 
     onVisibilityChange() {
         if (!document["hidden"]) {
@@ -140,7 +137,6 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
 
         return true;
     }
-
 
     async componentDidMount() {
         document.addEventListener("visibilitychange", this.onVisibilityChange);
@@ -251,9 +247,8 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
 
     renderDashBoard() {
         window.history.pushState(null, null, "/");
-        this.isUpdatingBalance = true;
 
-        const { isShowErrorModal, authorizeInfo, isBlockUI, isChangedGame, isChangePrevGame, openGameId, } = this.state;
+        const { isShowErrorModal, authorizeInfo, isBlockUI, isChangedGame, isChangePrevGame, openGameId } = this.state;
         const offerGames = this.dashboardHandler.getOfferGamesIds();
         const isRenderGames = this.dashboardHandler.shouldRenderGames(offerGames, openGameId);
         const allowSwipeGameOndDesktop = !this.props.directMode && !isMobileOnly && isRenderGames;
@@ -269,7 +264,7 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
             setBalance: this.updateUserBalance,
             signOut: this.signOut,
             fractionalOddsFormat: authorizeInfo.user?.fractionalOddsFormat ?? false,
-            enableQuickBet: true
+            enableQuickBet: true,
         };
 
         return (
@@ -277,8 +272,9 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
                 <SettingContextProvider>
                     {allowSwipeGameOndDesktop && <ButtonSwipe isPrev={true} swiper={this.swiperRef} />}
                     <div
-                        className={`${Styles["dashboard"]} ${changeGameStyle} ${!isRenderGames ? "no-scroll" : ""} ${isMobileOnly ? Styles["hidden-scrollbar"] : ""
-                            }`}
+                        className={`${Styles["dashboard"]} ${changeGameStyle} ${!isRenderGames ? "no-scroll" : ""} ${
+                            isMobileOnly ? Styles["hidden-scrollbar"] : ""
+                        }`}
                         id={"dashboard"}
                     >
                         <Header />
