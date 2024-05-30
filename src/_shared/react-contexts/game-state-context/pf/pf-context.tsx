@@ -41,13 +41,13 @@ function pfReducer(state: PFContextModel, action: PFEventAction) {
     let newState = null;
     switch (type) {
         case PFEventActionType.UPDATE_PF_CLIENT_SEED_SETTING:
-            newState = {
-                pfClientSeedSetting: {
-                    ...state.pfClientSeedSetting,
-                    ...pfClientSeedSetting,
-                }
+            const newPfClientSeedSetting = {
+                ...state.pfClientSeedSetting,
+                ...pfClientSeedSetting,
             };
-            StorageHelper.set(`${localStorageKeys.pfSetting}-${state.uid}-${state.gameId}`, newState);
+
+            StorageHelper.set(`${localStorageKeys.pfSetting}-${state.uid}-${state.gameId}`, newPfClientSeedSetting);
+            newState = { pfClientSeedSetting: newPfClientSeedSetting };
             break;
 
         case PFEventActionType.TOGGLE_PF_VERIFY:
