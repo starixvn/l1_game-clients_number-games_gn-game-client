@@ -5,8 +5,8 @@ import { Round } from "../../components/game-base/type";
 import { BeadRoadElement, BigRoadElement, BigRoadRound } from "../../components/game-components/round-history/scoreboard/elements";
 import { registerBigRoadElement } from "../../components/page-components/lobby/games/components/scoreboard";
 import { withTranslator } from "../../components/page-components/translator";
-import styles from "./scoreboard-elements.module.scss";
 import { LuckyThreeBetOptions } from "./lucky-three-constants";
+import styles from "./scoreboard-elements.module.scss";
 import { LuckyThreeResult, LuckyThreeSettlementResult } from "./types";
 
 export const ODD_EVEN_AS_DEFAULT_SCOREBOARD = true;
@@ -82,4 +82,4 @@ export class LuckyThreeBigRoadElement extends BigRoadElement<LuckyThreeSettlemen
     }
 }
 
-registerBigRoadElement(LuckyThreeBigRoadElement, LuckyThreeBigRoadConverter, 1005);
+registerBigRoadElement(LuckyThreeBigRoadElement, LuckyThreeBigRoadConverter, 1006);
