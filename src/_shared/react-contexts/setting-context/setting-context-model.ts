@@ -11,7 +11,7 @@ export interface SettingContextModel {
 export const initialSettingContextModel = (): SettingContextModel => {
     return {
         isShowedSetting: false,
-        enabledMusic: StorageHelper.get(localStorageKeys.enableMusic) ?? true,
+        enabledMusic: StorageHelper.get<boolean>(localStorageKeys.enableMusic) ?? true,
         isShowAvatarGallery: false,
         chipSettings: [],
     };

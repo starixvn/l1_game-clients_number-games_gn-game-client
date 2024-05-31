@@ -8,7 +8,7 @@ import Styles from "../settings.module.scss";
 const MusicSetting = () => {
     const settingDispatch = useSettingDispatch();
     const clickSound = useClickSound();
-    const [enabledMusic, setEnabledMusic] = useState(StorageHelper.get(localStorageKeys.enableMusic) ?? true);
+    const [enabledMusic, setEnabledMusic] = useState(StorageHelper.get<boolean>(localStorageKeys.enableMusic) ?? true);
     const { t } = useTranslator();
 
     const toggle = () => {
