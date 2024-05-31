@@ -17,20 +17,17 @@ class ErrorBoundary extends Component<Props, State> {
     }
 
     static getDerivedStateFromError(error: Error): State {
-        // Update state so the next render will show the fallback UI.
         return { hasError: true, error, errorInfo: null };
     }
 
     componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-        // You can also log the error to an error reporting service
         this.setState({ error, errorInfo });
         console.error("Error Boundary caught an error", error, errorInfo);
     }
 
     render() {
         if (this.state.hasError) {
-            // You can render any custom fallback UI
-            return <h1>Something went wrong.</h1>;
+            return <h1>Something went wrong - {JSON.stringify(this.state.error, null, 2)}</h1>;
         }
 
         return this.props.children;
