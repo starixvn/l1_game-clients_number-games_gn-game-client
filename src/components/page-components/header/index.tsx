@@ -25,7 +25,7 @@ const Header = () => {
                     <HeaderTitle isRenderGames={isRenderGames} openingGameId={openingGameId} />
                     <div className={Styles["header-right"]}>
                         <UserInfo isLobby={!isRenderGames} />
-                        {!isRenderGames && <Setting />}
+                        <Setting />
                     </div>
                 </div>
             </div>

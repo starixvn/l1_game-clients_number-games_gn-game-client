@@ -7,7 +7,7 @@ import MusicSetting from "./music-setting";
 import Styles from "./settings.module.scss";
 import SoundSetting from "./sound-setting";
 
-const Settings = () => {
+const SoundSettings = () => {
     const settingContext = useSettingContext();
     const settingDispatch = useSettingDispatch();
     const clickSound = useClickSound();
@@ -46,4 +46,4 @@ const Settings = () => {
     );
 };
 
-export default Settings;
+export default SoundSettings;

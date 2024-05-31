@@ -11,7 +11,7 @@ import Styles from "./lobby.module.scss";
 import { GlobalMessageTransmitter, GlobalTransmitterEvent } from "../../../_shared/helpers/message-transmitter/global-transmitter";
 import { localStorageKeys, StorageHelper } from "../../../_shared/helpers";
 
-const Settings = dynamic(() => import("../settings"));
+const SoundSettings = dynamic(() => import("../settings"));
 const ChangeAvatar = dynamic(() => import("../header/change-avatar"));
 const ToolbarGuide = dynamic(() => import("../hide-toolbar-guide"));
 
@@ -36,7 +36,7 @@ export const Lobby: React.FC<Props> = ({ openGame, lobbyConfigs, gameTransmitter
             </div>
             <div>
                 <LobbyLayout lobbyConfigs={lobbyConfigs} openGame={openGame} gameTransmitters={gameTransmitters} />
-                <Settings />
+                <SoundSettings />
                 <ChangeAvatar />
             </div>
 

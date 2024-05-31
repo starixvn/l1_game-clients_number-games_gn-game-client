@@ -290,9 +290,8 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
                 <SettingContextProvider>
                     {allowSwipeGameOndDesktop && <ButtonSwipe isPrev={true} swiper={this.swiperRef} />}
                     <div
-                        className={`${Styles["dashboard"]} ${changeGameStyle} ${!isRenderGames ? "no-scroll" : ""} ${
-                            isMobileOnly ? Styles["hidden-scrollbar"] : ""
-                        }`}
+                        className={`${Styles["dashboard"]} ${changeGameStyle} ${!isRenderGames ? "no-scroll" : ""} ${isMobileOnly ? Styles["hidden-scrollbar"] : ""
+                            }`}
                         id={"dashboard"}
                         style={this.setDashBoardStyle(isRenderGames)}
                     >
@@ -335,7 +334,7 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
             return <LandscapeMode />;
         }
 
-        return <ErrorBoundary>{this.renderDashBoard()}</ErrorBoundary>;
+        return this.renderDashBoard();
     }
 }
 

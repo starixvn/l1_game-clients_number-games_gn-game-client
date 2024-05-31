@@ -48,6 +48,7 @@ import { GameStateHandler, IGameStateHandler } from "./handlers/game-state-handl
 import { PFWrapper } from "./handlers/pf-wrapper/pf-wrapper";
 import { PlaceBetHandlerWrapper } from "./handlers/place-bet-wrapper/place-bet-handler-wrapper";
 import { GameBaseHandlers, GameBaseProps, RoundState } from "./type";
+import SoundSettings from "../page-components/settings";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
     protected socket: Socket;
@@ -561,6 +562,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                                 {this.renderConfirmBet()}
                             </PlaceBetHandlerWrapper>
                         </PlaceBetProvider>
+                        <SoundSettings />
                         <div className={SwiperNoSwiping}> {this.renderSlidingChips()}</div>
                         <div>{this.renderStatistic()}</div>
                         <div className={SwiperNoSwiping}> {this.renderScoreboards()}</div>
