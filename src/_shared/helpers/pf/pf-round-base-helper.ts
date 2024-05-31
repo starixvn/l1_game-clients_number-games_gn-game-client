@@ -24,12 +24,14 @@ export default class PfRoundBaseHelper {
         const rawDigits = combinedHash.match(/.{2}/g);
         const convertNumber = Array.from(Array(ballsEachRound), (_, index) => finalHashToNumbers(combinedHash, index));
         const ballIndexes = randomNumbers.map((x, index) => ((x + convertNumber[index]) % (totalBalls - index)) + 1);
+        const severSeedRemain = (serverSeed?.remain || "2;2").split(";");
 
         return {
             randomNumbers,
             rawDigits,
             convertNumber,
             ballIndexes,
+            severSeedRemain,
             ...this.buildRemainingBalls({ ballIndexes, totalBalls }),
         };
     }

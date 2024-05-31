@@ -21,7 +21,7 @@ const PFVerification: FC = () => {
     const { t: translateInGame } = useTranslator([tolgeeNamespace]);
     const [combinedHash, setCombinedHash] = useState(pfResult.finalHash);
 
-    const BALLS_EACH_ROUND = 4;
+    const BALLS_EACH_ROUND = 3;
     const TOTAL_BALLS = 60;
 
     const verifyInfo = useMemo(
@@ -34,6 +34,10 @@ const PFVerification: FC = () => {
             }),
         [combinedHash]
     );
+
+    const serverSeedRemain = verifyInfo.severSeedRemain[0].split(":");
+    const remainingBallsNumber = serverSeedRemain.length;
+    console.log(serverSeedRemain);
 
     const handleChangeMergeClientSeed = (event: React.ChangeEvent<HTMLInputElement>) => {
         const input = event.target as HTMLInputElement;
@@ -49,8 +53,8 @@ const PFVerification: FC = () => {
 
             const line = `<span style="color: #ffbc11; font-weight: 600">${ballIndexText} - ${t(
                 `${ResourceTypes.SABA_NUMBER}.pf_index`
-            )} (1-${TOTAL_BALLS - index})</span> = ((${randomNumbers[index]}+${convertNumber[index]}) mod ${
-                TOTAL_BALLS - index
+            )} (1-${remainingBallsNumber - index})</span> = ((${randomNumbers[index]}+${convertNumber[index]}) mod ${
+                remainingBallsNumber - index
             }) + 1 = <span style="color: #ffbc11; font-weight: 600">${ballIndexes[index]}</span>`;
 
             return (

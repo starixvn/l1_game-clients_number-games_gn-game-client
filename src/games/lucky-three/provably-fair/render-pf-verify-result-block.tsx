@@ -30,7 +30,7 @@ const PFVerifyResultBlock: FC<{ pfResult: PFResult }> = ({ pfResult }) => {
     return (
         <>
             <div className="text-white font-weight-medium mb-2">
-                {t(`${ResourceTypes.COMMON}.round`).capitalizeFirstLetter()}: {drawResult?.drawID}
+                {t(`${ResourceTypes.COMMON}.round`).capitalizeFirstLetter()}: {drawResult?.drawID} ({drawResult?.order})
             </div>
             <div className="flex justify-center">
                 <div className={Styles["balls-container"]}>
