@@ -13,13 +13,11 @@ import { tolgee } from "../../_shared/tolgee";
 import GameBase from "../../components/game-base";
 import { GameMessageHandler, TurnIdHandler } from "../../components/game-base/handlers";
 import { GameBaseHandlers, GameBaseProps, Round } from "../../components/game-base/type";
-import { GameStatusMap } from "../../components/game-components/countdown-timer/countdown-timer";
 import { LuckyThreeBetOptions } from "./lucky-three-constants";
 import Styles from "./lucky-three.module.scss";
 import { LuckyThreeResult, LuckyThreeSettlementResult } from "./types";
 import { NextGameRoundDataHandler } from "./lucky-three-game-round-data-handler";
 import { TurnStateHandler } from "../../components/turn-base/turn-state-handler";
-import { TurnGameStateHandler } from "../../components/turn-base/turn-game-state-handler";
 
 const DrawIdBlock = dynamic(() => import("../../components/game-components/draw-id"));
 const LuckyThreeBettingBlock = dynamic(() => import("./lucky-three-betting-block"));
@@ -39,7 +37,6 @@ class LuckyThree extends GameBase<GameBaseProps> {
         const gameMessageHandler = new GameMessageHandler(props.dispatch);
         const gameBaseHandlers: GameBaseHandlers = {
             roundStateHandler: new TurnStateHandler(),
-            gameStateHandler: new TurnGameStateHandler(),
             gameMessageHandler: gameMessageHandler,
             gameRoundDataHandler: new NextGameRoundDataHandler(),
         };
