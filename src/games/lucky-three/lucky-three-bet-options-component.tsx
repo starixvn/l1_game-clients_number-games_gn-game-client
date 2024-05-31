@@ -103,7 +103,7 @@ const LuckyThreeBetOptionsComponent = () => {
         switch (choice) {
             case LuckyThreeBetOptions.OVER:
             case LuckyThreeBetOptions.UNDER:
-                resourceName = LuckyThreeBetOptions.UNDER;
+                resourceName = LuckyThreeBetOptions.OVER;
                 break;
 
             case LuckyThreeBetOptions.BLUE3:
@@ -113,7 +113,7 @@ const LuckyThreeBetOptionsComponent = () => {
 
             case LuckyThreeBetOptions.BLUE2:
             case LuckyThreeBetOptions.RED2:
-                resourceName = LuckyThreeBetOptions.RED2;
+                resourceName = LuckyThreeBetOptions.BLUE2;
                 break;
         }
 

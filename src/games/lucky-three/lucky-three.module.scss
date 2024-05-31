@@ -105,8 +105,8 @@
 
     position: relative;
     overflow: hidden;
-    width: 17.7rem;
-    height: 9.4rem;
+    width: 17.8rem;
+    height: 10.4rem;
     border: none;
 
     &::before {
@@ -119,7 +119,7 @@
         height: 100%;
         background-image: var(--bgBetChoice);
         background-image: image-set(var(--bgBetChoice) 1x, var(--bgBetChoice-2x) 2x);
-        background-size: 17.7rem 9.4rem;
+        background-size: 17.8rem 10.4rem;
     }
 
     .btn-ripple {
@@ -130,9 +130,9 @@
     .disable-layer {
         position: absolute;
         top: 0;
-        background: url("/static/images/next-ball/lockbet.png?v=#{$version-image}") no-repeat;
-        width: 17.7rem;
-        height: 9.6rem;
+        background: url("/static/images/lucky-three/lockbet.png?v=#{$version-image}") no-repeat;
+        width: 17.8rem;
+        height: 10.4rem;
         opacity: 0;
         animation: show-disabled-layer 0.3s ease-in forwards;
     }
@@ -158,7 +158,7 @@
     }
 }
 
-//-------------- CHOICE BLUE3 BLUE4 RED2 RED3 RED4 -----------------//
+//-------------- CHOICE BLUE3 BLUE2 RED2 RED3 -----------------//
 
 .sub-betting-zone {
     width: 35.8rem;
@@ -211,9 +211,9 @@
 
 .blue3,
 .red3 {
-    --bg: url("/static/images/lucky-three/1x/bg-side-bet-left.png");
-    --bg-2x: url("/static/images/lucky-three/2x/bg-side-bet-left.png");
-    --bg-disable-layer: url("/static/images/lucky-three/lockbet-left.png") no-repeat;
+    --bg: url("/static/images/lucky-three/1x/bg-side-bet-left.png?v=#{$version-image}");
+    --bg-2x: url("/static/images/lucky-three/2x/bg-side-bet-left.png?v=#{$version-image}");
+    --bg-disable-layer: url("/static/images/lucky-three/lockbet-left.png?v=#{$version-image}") no-repeat;
 }
 
 .blue3 {
@@ -234,10 +234,10 @@
 
 .red2,
 .blue2 {
-    --bg: url("/static/images/lucky-three/1x/bg-side-bet-center.png");
-    --bg-2x: url("/static/images/lucky-three/2x/bg-side-bet-center.png");
+    --bg: url("/static/images/lucky-three/1x/bg-side-bet-center.png?v=#{$version-image}");
+    --bg-2x: url("/static/images/lucky-three/2x/bg-side-bet-center.png?v=#{$version-image}");
     --border-radius: 1.2rem;
-    --bg-disable-layer: url("/static/images/lucky-three/lockbet-center.png") no-repeat;
+    --bg-disable-layer: url("/static/images/lucky-three/lockbet-center.png?v=#{$version-image}") no-repeat;
 }
 
 //-------------- DOT RED BLUE INSIDE BET CHOICE -----------------//
@@ -266,14 +266,14 @@
 
 .dot-red {
     @extend %dot;
-    --bg: url("/static/images/se-ball/1x/dot-red.png");
-    --bg-2x: url("/static/images/se-ball/2x/dot-red.png");
+    --bg: url("/static/images/se-ball/1x/dot-red.png?v=#{$version-image}");
+    --bg-2x: url("/static/images/se-ball/2x/dot-red.png?v=#{$version-image}");
 }
 
 .dot-blue {
     @extend %dot;
-    --bg: url("/static/images/se-ball/1x/dot-blue.png");
-    --bg-2x: url("/static/images/se-ball/2x/dot-blue.png");
+    --bg: url("/static/images/se-ball/1x/dot-blue.png?v=#{$version-image}");
+    --bg-2x: url("/static/images/se-ball/2x/dot-blue.png?v=#{$version-image}");
 }
 
 .bet-option-row {
@@ -310,55 +310,84 @@
 
 .winning-light-anim {
     position: relative;
+    top: -0.5rem;
+
+    &.anim-over {
+        left: -0.5rem;
+    }
+
+    &.anim-under {
+        right: 0.5rem;
+        transform: scaleX(-1);
+    }
 
     &.anim-blue3,
-    &.anim-red3 {
-        top: -0.4rem;
+    &.anim-red3,
+    &.anim-red2,
+    &.anim-blue2 {
         left: 0;
     }
 
-    &.anim-red2 {
-        top: -0.3rem;
-        left: 0;
+    &.anim-red3 {
+        transform: scaleX(-1);
     }
 }
 
+.highlight-winning-bg-over,
+.highlight-winning-bg-under {
+    width: 17.8rem;
+    height: 10.4rem;
+    background: url("/static/images/lucky-three/highlight-winning-bg-over.png?v=#{$version-image}") no-repeat;
+    left: 0;
+    top: 0;
+}
+
+.highlight-winning-bg-under {
+    transform: scaleX(-1);
+}
+
+.highlight-winning-bg-blue2,
 .highlight-winning-bg-red2 {
-    width: 7.7rem;
-    height: 14.8rem;
-    background: url("/static/images/se-ball/highlight-winning-bg-red2.png") no-repeat;
+    width: 8.5rem;
+    height: 10.4rem;
+    background: url("/static/images/lucky-three/highlight-winning-bg-blue2.png?v=#{$version-image}") no-repeat;
     left: 0.5rem;
-    top: 0.1rem;
+    top: 0;
 }
 
 .highlight-winning-bg-blue3,
 .highlight-winning-bg-red3 {
-    width: 14.6rem;
-    height: 7.4rem;
-    background: url("/static/images/se-ball/highlight-winning-bg-blue3.png") no-repeat;
+    width: 8.4rem;
+    height: 10.4rem;
+    background: url("/static/images/lucky-three/highlight-winning-bg-blue3.png?v=#{$version-image}") no-repeat;
     left: 0.5rem;
-    top: 0rem;
+    top: 0;
+}
+
+.highlight-winning-bg-red3 {
+    transform: scaleX(-1);
 }
 
 // ----------------- HIGHLIGHT PREVIOUS RESULT -----------------//
 
 .highlight-prev-result-over,
 .highlight-prev-result-under {
-    height: 9.4rem;
-    width: 17.7rem;
+    height: 10.4rem;
+    width: 18.7rem;
     position: absolute;
     top: 0;
-
-    background-image: url("/static/images/lucky-three/winning-previous.png");
+    left: -0.5rem;
+    background-image: url("/static/images/lucky-three/winning-previous.png?v=#{$version-image}");
     background-image: image-set(
-        url("/static/images/lucky-three/1x/winning-previous.png") 1x,
-        url("/static/images/lucky-three/2x/winning-previous.png") 2x
+        url("/static/images/lucky-three/1x/winning-previous.png?v=#{$version-image}") 1x,
+        url("/static/images/lucky-three/2x/winning-previous.png?v=#{$version-image}") 2x
     );
     background-repeat: no-repeat;
 }
 
 .highlight-prev-result-under {
     transform: scaleX(-1);
+    right: -0.5rem;
 }
 
 .highlight-prev-result-blue3,
@@ -367,10 +396,10 @@
     width: 8.4rem;
     position: absolute;
 
-    background-image: url("/static/images/lucky-three/winning-prev-side-bet-left.png");
+    background-image: url("/static/images/lucky-three/winning-prev-side-bet-left.png?v=#{$version-image}");
     background-image: image-set(
-        url("/static/images/lucky-three/1x/winning-prev-side-bet-left.png") 1x,
-        url("/static/images/lucky-three/2x/winning-prev-side-bet-left.png") 2x
+        url("/static/images/lucky-three/1x/winning-prev-side-bet-left.png?v=#{$version-image}") 1x,
+        url("/static/images/lucky-three/2x/winning-prev-side-bet-left.png?v=#{$version-image}") 2x
     );
 }
 
@@ -385,10 +414,10 @@
     position: absolute;
     left: 0;
     top: 0;
-    background-image: url("/static/images/lucky-three/winning-prev-side-bet-center.png");
+    background-image: url("/static/images/lucky-three/winning-prev-side-bet-center.png?v=#{$version-image}");
     background-image: image-set(
-        url("/static/images/lucky-three/1x/winning-prev-side-bet-center.png") 1x,
-        url("/static/images/lucky-three/2x/winning-prev-side-bet-center.png") 2x
+        url("/static/images/lucky-three/1x/winning-prev-side-bet-center.png?v=#{$version-image}") 1x,
+        url("/static/images/lucky-three/2x/winning-prev-side-bet-center.png?v=#{$version-image}") 2x
     );
 }
 
@@ -415,22 +444,22 @@
 
 .statistic-red2 {
     @extend %statistic-icon;
-    background: url("/static/images/lucky-three/statistics-icon-red2.svg") no-repeat;
+    background: url("/static/images/lucky-three/statistics-icon-red2.svg?v=#{$version-image}") no-repeat;
 }
 
 .statistic-red3 {
     @extend %statistic-icon;
-    background: url("/static/images/lucky-three/statistics-icon-red3.svg") no-repeat;
+    background: url("/static/images/lucky-three/statistics-icon-red3.svg?v=#{$version-image}") no-repeat;
 }
 
 .statistic-blue2 {
     @extend %statistic-icon;
-    background: url("/static/images/lucky-three/statistics-icon-blue2.svg") no-repeat;
+    background: url("/static/images/lucky-three/statistics-icon-blue2.svg?v=#{$version-image}") no-repeat;
 }
 
 .statistic-blue3 {
     @extend %statistic-icon;
-    background: url("/static/images/lucky-three/statistics-icon-blue3.svg") no-repeat;
+    background: url("/static/images/lucky-three/statistics-icon-blue3.svg?v=#{$version-image}") no-repeat;
 }
 
 .choice-odds-area {

@@ -1,3 +1,4 @@
+import { buildVersion } from "../../_shared/constants";
 import { isHighLightWinningResult } from "../../_shared/react-hooks/use-high-light";
 import { RoundState } from "../../components/game-base/type";
 import { Spritesheet } from "../../components/game-components/sprites-sheet";
@@ -14,12 +15,12 @@ type Props = {
 };
 
 const ChoiceWinningSize = {
-    [LuckyThreeBetOptions.OVER]: [186, 104],
-    [LuckyThreeBetOptions.UNDER]: [186, 104],
-    [LuckyThreeBetOptions.BLUE2]: [146, 74],
-    [LuckyThreeBetOptions.BLUE3]: [146, 74],
-    [LuckyThreeBetOptions.RED2]: [87, 158],
-    [LuckyThreeBetOptions.RED3]: [146, 74],
+    [LuckyThreeBetOptions.OVER]: [188, 114],
+    [LuckyThreeBetOptions.UNDER]: [188, 114],
+    [LuckyThreeBetOptions.BLUE2]: [94, 114],
+    [LuckyThreeBetOptions.BLUE3]: [94, 114],
+    [LuckyThreeBetOptions.RED2]: [94, 114],
+    [LuckyThreeBetOptions.RED3]: [94, 114],
 };
 
 const LuckyThreeWinningAnimation: React.FC<Props> = ({ choice, resourceName, roundState, settlementResult, showResultInfo }) => {
@@ -31,11 +32,11 @@ const LuckyThreeWinningAnimation: React.FC<Props> = ({ choice, resourceName, rou
             <div className="d-grid">
                 <Spritesheet
                     className={`${Styles["winning-light-anim"]} ${Styles["anim-" + choice]}`}
-                    image={`/static/images/se-ball/highlight-winning-${resourceName}.png?v=4`}
+                    image={`/static/images/lucky-three/highlight-winning-${resourceName}.png?v=${buildVersion}`}
                     widthFrame={width}
                     isResponsive
                     heightFrame={height}
-                    steps={10}
+                    steps={15}
                     autoplay={true}
                     loop={true}
                     fps={20}
