@@ -11,6 +11,7 @@ import { LobbyLayout } from "./games/lobby-layout";
 import { LobbyGameTransmitter } from "./lobby-socket-connection";
 import Styles from "./lobby.module.scss";
 
+const SoundSettings = dynamic(() => import("../settings"));
 const ChangeAvatar = dynamic(() => import("../header/change-avatar"));
 const ToolbarGuide = dynamic(() => import("../hide-toolbar-guide"));
 
@@ -35,6 +36,7 @@ export const Lobby: React.FC<Props> = ({ openGame, lobbyConfigs, gameTransmitter
             </div>
             <div>
                 <LobbyLayout lobbyConfigs={lobbyConfigs} openGame={openGame} gameTransmitters={gameTransmitters} />
+                <SoundSettings />
                 <ChangeAvatar />
             </div>
 
