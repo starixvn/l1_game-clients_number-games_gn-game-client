@@ -1,4 +1,3 @@
-import React from "react";
 import { SettingEventActionType, useSettingContext, useSettingDispatch } from "../../../_shared/react-contexts";
 import { useClickSound, useTranslator } from "../../../_shared/react-hooks";
 import BaseDialog from "../../game-components/base-dialog";

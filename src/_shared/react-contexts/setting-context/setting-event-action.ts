@@ -5,6 +5,8 @@ export enum SettingEventActionType {
     TOGGLE_MUSIC = "TOGGLE_MUSIC",
     SHOW_AVATAR_GALLERY = "SHOW_AVATAR_GALLERY",
     UPDATE_CHIPS = "UPDATE_CHIPS",
+    UPDATE_VOLUME_MUSIC = "UPDATE_VOLUME_MUSIC",
+    UPDATE_VOLUME_SFX = "UPDATE_VOLUME_SFX"
 }
 
 export interface SettingEventAction {

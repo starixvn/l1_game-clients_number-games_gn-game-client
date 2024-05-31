@@ -34,4 +34,8 @@ const initIntegerArray = (from: number, to: number) => {
     return integerArray;
 };
 
-export { numberRoundDownWithCommas, numberWithCommas, randomInteger, sumArray, formatOdds, randomNumberSeries, initIntegerArray };
+const formatVolume = (value: number): number => {
+    return +value / 100;
+};
+
+export { formatOdds, formatVolume, initIntegerArray, numberRoundDownWithCommas, numberWithCommas, randomInteger, randomNumberSeries, sumArray };

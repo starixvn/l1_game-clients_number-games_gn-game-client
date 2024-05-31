@@ -1,6 +1,7 @@
 import useSound from "use-sound";
 import { buildVersion } from "../constants";
-import { StorageHelper, localStorageKeys, objectMap } from "../helpers";
+import { StorageHelper, formatVolume, localStorageKeys, objectMap } from "../helpers";
+import { useSettingContext } from "../react-contexts";
 export const path = "./static/sounds/";
 
 const mp3File = {
@@ -16,11 +17,14 @@ const mp3File = {
 const resourceMp3 = objectMap(mp3File, (v) => `${path}${v}.mp3?v=${buildVersion}`);
 
 export const usePlaySound = (resource: string) => {
-    const [playSound] = useSound(resource, {});
+    const [playSound, { sound: ctx }] = useSound(resource, {});
+    const settingContext = useSettingContext();
 
     return () => {
         if (document.visibilityState === "visible") {
+            ctx?.volume(formatVolume(settingContext.volumeSFX));
             const enable = StorageHelper.get<boolean>(localStorageKeys.enableSound) ?? true;
+
             enable && playSound();
         }
     };

@@ -6,6 +6,8 @@ export interface SettingContextModel {
     enabledMusic: boolean;
     isShowAvatarGallery: boolean;
     chipSettings: ChipInfo[];
+    volumeMusic: number;
+    volumeSFX: number;
 }
 
 export const initialSettingContextModel = (): SettingContextModel => {
@@ -14,5 +16,7 @@ export const initialSettingContextModel = (): SettingContextModel => {
         enabledMusic: StorageHelper.get<boolean>(localStorageKeys.enableMusic) ?? true,
         isShowAvatarGallery: false,
         chipSettings: [],
+        volumeMusic: StorageHelper.get<number>(localStorageKeys.volumeMusic) ?? 50,
+        volumeSFX: StorageHelper.get<number>(localStorageKeys.volumeSFX) ?? 50,
     };
 };
