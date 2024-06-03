@@ -1,16 +1,17 @@
 import { createHash } from "crypto";
+import { Markup } from "interweave";
 import { FC, useEffect, useMemo, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { useTranslator } from "../../../_shared/react-hooks";
-import { PFVerificationHeaderBlockBase, DefaultPFStyles as Styles } from "../../../components/game-components/provably-fair";
-import SmallBall from "../../../components/game-components/small-ball";
-import { Section } from "../../../components/game-components/provably-fair/pf-form-components";
-import { usePFContext, usePFDispatch } from "../../../_shared/react-contexts/game-state-context/pf/pf-context";
-import { PFEventActionType } from "../../../_shared/react-contexts/game-state-context/pf/pf-action";
-import { Markup } from "interweave";
-import PfRoundBaseHelper from "../../../_shared/helpers/pf/pf-round-base-helper";
-import { ResourceTypes } from "../../../_shared/resources";
+
+import PfDrawBaseHelper from "../../../_shared/helpers/pf/pf-draw-base-helper";
 import { useGameContext } from "../../../_shared/react-contexts";
+import { PFEventActionType } from "../../../_shared/react-contexts/game-state-context/pf/pf-action";
+import { usePFContext, usePFDispatch } from "../../../_shared/react-contexts/game-state-context/pf/pf-context";
+import { useTranslator } from "../../../_shared/react-hooks";
+import { ResourceTypes } from "../../../_shared/resources";
+import { DefaultPFStyles as Styles, PFVerificationHeaderBlockBase } from "../../../components/game-components/provably-fair";
+import { Section } from "../../../components/game-components/provably-fair/pf-form-components";
+import SmallBall from "../../../components/game-components/small-ball";
 
 const PFVerification: FC = () => {
     const { tolgeeNamespace } = useGameContext();
@@ -22,22 +23,18 @@ const PFVerification: FC = () => {
     const [combinedHash, setCombinedHash] = useState(pfResult.finalHash);
 
     const BALLS_EACH_ROUND = 3;
-    const TOTAL_BALLS = 60;
 
     const verifyInfo = useMemo(
         () =>
-            PfRoundBaseHelper.buildVerifyInfo({
+            PfDrawBaseHelper.buildVerifyInfo({
                 pfResult,
                 combinedHash,
-                totalBalls: TOTAL_BALLS,
                 ballsEachRound: BALLS_EACH_ROUND,
             }),
         [combinedHash]
     );
 
-    const serverSeedRemain = verifyInfo.severSeedRemain[0].split(":");
-    const remainingBallsNumber = serverSeedRemain.length;
-    console.log(serverSeedRemain);
+    const remainingBallsNumber = verifyInfo.remainingBalls?.length || 0;
 
     const handleChangeMergeClientSeed = (event: React.ChangeEvent<HTMLInputElement>) => {
         const input = event.target as HTMLInputElement;
