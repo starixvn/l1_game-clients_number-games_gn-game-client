@@ -34,8 +34,6 @@ const PFVerification: FC = () => {
         [combinedHash]
     );
 
-    const remainingBallsNumber = verifyInfo.remainingBalls?.length || 0;
-
     const handleChangeMergeClientSeed = (event: React.ChangeEvent<HTMLInputElement>) => {
         const input = event.target as HTMLInputElement;
         setMergeClientSeed(input.value);
@@ -43,16 +41,18 @@ const PFVerification: FC = () => {
 
     const ballIndexRender = () => {
         return Array.from(Array(BALLS_EACH_ROUND), (_, index) => {
-            const { randomNumbers, convertNumber, ballIndexes } = verifyInfo;
+            const { randomNumbers, convertNumber, ballIndexes, remainingBalls } = verifyInfo;
+            const remainingBallsNumber = remainingBalls[index].length;
+
             const ballIndexText = t(`${ResourceTypes.SABA_NUMBER}.pf_verifier_tool_ball`, {
                 value: index + 1,
             });
 
             const line = `<span style="color: #ffbc11; font-weight: 600">${ballIndexText} - ${t(
                 `${ResourceTypes.SABA_NUMBER}.pf_index`
-            )} (1-${remainingBallsNumber - index})</span> = ((${randomNumbers[index]}+${convertNumber[index]}) mod ${
-                remainingBallsNumber - index
-            }) + 1 = <span style="color: #ffbc11; font-weight: 600">${ballIndexes[index]}</span>`;
+            )} (1-${remainingBallsNumber})</span> = ((${randomNumbers[index]}+${
+                convertNumber[index]
+            }) mod ${remainingBallsNumber}) + 1 = <span style="color: #ffbc11; font-weight: 600">${ballIndexes[index]}</span>`;
 
             return (
                 <p key={index}>
