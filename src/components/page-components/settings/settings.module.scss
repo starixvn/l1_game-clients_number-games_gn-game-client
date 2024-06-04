@@ -19,9 +19,18 @@
         background-color: #242c32;
         border-radius: 1.6rem !important;
         color: #e6e6e6;
-        padding: 5px;
-        top: 25%;
+        padding: 0.5rem;
+        top: 23%;
         min-width: 36rem;
+
+        .row {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .text {
+            line-height: 3rem;
+        }
 
         .settings-header {
             border-bottom: none;
@@ -31,102 +40,31 @@
             justify-content: center;
             align-items: center;
             height: 3.8rem;
-            padding-top: 10px;
+            padding-top: 1rem;
         }
 
         .icon-close:before {
             color: #6c737b;
         }
+    }
 
-        .settings-content {
-            .settings-group {
-                display: flex;
-                flex-direction: column;
-                gap: 1.6rem;
-                padding: 1.6rem;
+    .settings-content {
+        .settings-group {
+            display: flex;
+            flex-direction: column;
+            padding: 1rem 1.5rem 1rem 0.5rem;
+            text-align: left;
 
-                .row {
-                    position: relative;
-                    display: grid;
-                    grid-template-columns: 1fr 15rem;
-                    justify-content: space-between;
-                    align-items: center;
-                    height: 3rem;
+            .setting-item-container {
+                display: grid;
+                grid-template-columns: 3rem 1fr;
+                grid-template-rows: 3.6rem;
+                grid-gap: 1rem;
+                align-items: center;
 
-                    .text {
-                        text-align: left;
-                    }
-
-                    .setting-item-container {
-                        .icon {
-                            display: flex;
-                            justify-content: flex-end;
-                        }
-
-                        .icon-on {
-                            background: url(/static/images/settings/toggle-on.png?v=#{$version-image}) no-repeat;
-                            background-size: 31px 18px;
-                            width: 31px;
-                            margin-left: auto;
-                            cursor: pointer;
-                            padding: 5px 15px;
-                        }
-
-                        .icon-off {
-                            background: url(/static/images/settings/toggle-off.png?v=#{$version-image}) no-repeat;
-                            background-size: 31px 18px;
-                            width: 31px;
-                            margin-left: auto;
-                            cursor: pointer;
-                            padding: 5px 15px;
-                        }
-                    }
-                }
-
-                .switch {
-                    display: inline-block;
-                }
-
-                .switch input {
-                    display: none;
-                }
-
-                .switch label {
-                    display: block;
-                    width: 3.1rem;
-                    height: 1.8rem;
-                    padding: 3px;
-                    border-radius: 15px;
-                    border: 1px solid #fff;
-                    cursor: pointer;
-                    transition: 0.3s;
-                }
-
-                .switch label::after {
-                    position: relative;
-                    top: -0.2rem;
-                    left: -0.1rem;
-                    content: "";
-                    display: inherit;
-                    width: 1.4rem;
-                    height: 1.4rem;
-                    border-radius: 50%;
-                    background: #ffffff;
-                    transition: 0.3s;
-                }
-
-                .switch input:checked ~ label {
-                    border-color: #33aa33;
-                }
-
-                .switch input:checked ~ label::after {
-                    translate: 1.1rem 0;
-                    background: #33aa33;
-                }
-
-                .switch input:disabled ~ label {
-                    opacity: 0.5;
-                    cursor: not-allowed;
+                .icon {
+                    display: flex;
+                    justify-content: center;
                 }
             }
         }

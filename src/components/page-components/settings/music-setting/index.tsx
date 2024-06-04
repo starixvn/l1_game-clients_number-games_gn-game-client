@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { AnalyticsHelper, localStorageKeys, StorageHelper, TrackingAction, TrackingFunction } from "../../../../_shared/helpers";
+
+import { AnalyticsHelper, localStorageKeys, StorageHelper, TrackingFunction } from "../../../../_shared/helpers";
 import { SettingEventActionType, useSettingDispatch } from "../../../../_shared/react-contexts";
 import { useClickSound, useTranslator } from "../../../../_shared/react-hooks";
-
 import VolumeSetting from "../../header/settings-icon/settings-popup/volume-setting";
 import Styles from "../settings.module.scss";
 
@@ -14,16 +14,6 @@ const MusicSetting = () => {
     const volumeMusic = StorageHelper.get(localStorageKeys.volumeMusic) ?? 50;
 
     const { t } = useTranslator();
-
-    const toggle = () => {
-        clickSound();
-        toggleValue();
-
-        AnalyticsHelper.trackFunction({
-            function: TrackingFunction.Music,
-            action: !enabledMusic ? TrackingAction.ToggleOn : TrackingAction.ToggleOff,
-        });
-    };
 
     const onChangeVolume = (value) => {
         StorageHelper.set(localStorageKeys.volumeMusic, value);
@@ -65,12 +55,11 @@ const MusicSetting = () => {
 
     return (
         <div className={`${Styles["row"]} `}>
-            <label className={`${Styles["text"]} `}>{t("lobby_background_music")}</label>
-            <div className="setting-item-container">
-                <span className={`${Styles["icon"]} ${Styles["switch"]}`}>
-                    <input id="switch-music" type="checkbox" checked={enabledMusic} onChange={toggle} />
-                    <label htmlFor="switch-music"></label>
-                </span>
+            <div className={Styles["text"]}>{t("lobby_background_music")}</div>
+            <div className={Styles["setting-item-container"]}>
+                <div className={`${Styles["icon"]} ${Styles["switch"]}`}>
+                    <span className={`icon-music-${enabledMusic ? "on" : "off"}`}></span>
+                </div>
 
                 <VolumeSetting onChangeVolume={onChangeVolume} defaultValue={volumeMusic} />
             </div>
