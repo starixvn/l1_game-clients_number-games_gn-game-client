@@ -15,7 +15,7 @@ const buildVersion = new Date().getTime();
  */
 const nextConfig = withSentryConfig({
     publicRuntimeConfig: appSettings,
-    productionBrowserSourceMaps: configs.enableSourceMap,
+    productionBrowserSourceMaps: false,
     sentry: {
         disableServerWebpackPlugin: true,
         disableClientWebpackPlugin: true,
