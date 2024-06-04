@@ -8,7 +8,7 @@ window.envConfig = {
         dsn: "https://707edaf283cc4eed88a563bc734b975f@sentry.sabagame.com/174",
         environment: "PROD",
     },
-    enableSourceMap: true,
+    enableSourceMap: false,
     subGuideDomain: "guides",
     enableMsgpackParser: true,
     system: "GN",

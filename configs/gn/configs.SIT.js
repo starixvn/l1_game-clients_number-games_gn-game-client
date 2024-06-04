@@ -8,7 +8,7 @@ window.envConfig = {
         dsn: "https://937e616976cf45c581d1f39e07c133ab@scsentry.sgamesuat.com/284",
         environment: "SIT",
     },
-    enableSourceMap: true,
+    enableSourceMap: false,
     subGuideDomain: "gnsitguides",
     enableMsgpackParser: true,
     system: "GN",
