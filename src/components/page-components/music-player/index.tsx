@@ -50,19 +50,18 @@ const BGMPlayer = ({ isUserGesture }) => {
 
     useEffect(() => {
         settingContext.enabledMusic && settingContext.volumeMusic && play();
-        ctx?.volume(formatVolume(settingContext.volumeMusic));
-
+        sound?.volume(formatVolume(settingContext.volumeMusic));
         return () => {
             stop();
         };
     }, [play]);
 
     useEffect(() => {
-        if (ctx) {
-            const audioContext: AudioContext = ctx._sounds[0]._node.context;
+        if (sound) {
+            const audioContext: AudioContext = global.Howler.ctx;
             if (settingContext.enabledMusic) {
                 if (settingContext.volumeMusic) {
-                    ctx.volume(formatVolume(settingContext.volumeMusic));
+                    sound.volume(formatVolume(settingContext.volumeMusic));
                     audioContext.state != "running" &&
                         audioContext
                             .resume()
@@ -103,7 +102,7 @@ const MusicPlayer = () => {
     const [isUserGesture, setIsUserGesture] = useState(null);
 
     const onVisibilityChange = () => {
-        (setIsUserGesture(!document.hidden));
+        setIsUserGesture(!document.hidden);
     };
 
     useEffect(() => {
