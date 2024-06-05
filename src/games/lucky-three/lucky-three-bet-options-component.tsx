@@ -57,8 +57,8 @@ const LuckyThreeBetOptionsComponent = () => {
 
     const renderBetInfo = (choice) => {
         const betInfoText = {
-            [LuckyThreeBetOptions.OVER]: "[137 - 267]",
-            [LuckyThreeBetOptions.UNDER]: "[6 -136]",
+            [LuckyThreeBetOptions.OVER]: "[92 - 177]",
+            [LuckyThreeBetOptions.UNDER]: "[6 - 91]",
         };
 
         const betInfoClassName = Style["bet-info"];
