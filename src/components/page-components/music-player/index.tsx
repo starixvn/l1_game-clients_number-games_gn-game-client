@@ -3,7 +3,7 @@ import { isMobile } from "react-device-detect";
 import useSound from "use-sound";
 import { useSettingContext } from "../../../_shared/react-contexts";
 import { getRandomSong } from "../../../_shared/react-hooks";
-
+import * as Sentry from "@sentry/nextjs";
 const BGMPlayer = ({ isUserGesture }) => {
     const settingContext = useSettingContext();
     const [song, setSong] = useState(getRandomSong(""));
@@ -33,7 +33,7 @@ const BGMPlayer = ({ isUserGesture }) => {
                 const timeSinceLastInteraction = Date.now() - lastInteractionTime;
                 console.log('Page is visible again');
 
-                if (timeSinceLastInteraction > 60000) {
+                if (timeSinceLastInteraction > 50000) {
                     console.log('Possibly autosleep due to inactivity');
                 } else {
                     console.log('Possibly manual sleep');
@@ -47,10 +47,11 @@ const BGMPlayer = ({ isUserGesture }) => {
         document.addEventListener('visibilitychange', handleVisibilityChange);
 
 
-        setInterval(() => {
+        const intervalId = setInterval(() => {
             if (isPageHidden) {
                 const timeSinceLastInteraction = Date.now() - lastInteractionTime;
                 if (timeSinceLastInteraction > 50000) {
+                    Sentry.captureMessage(`David teset : ${JSON.stringify(ctx._sounds?.length)}`);
 
                     const audioContext: AudioContext = ctx._sounds[0]._node.context;
                     audioContext.close();
@@ -65,6 +66,7 @@ const BGMPlayer = ({ isUserGesture }) => {
             document.removeEventListener('keydown', resetInteractionTimer);
             document.removeEventListener('touchstart', resetInteractionTimer);
             document.removeEventListener('visibilitychange', handleVisibilityChange);
+            clearInterval(intervalId);
         }
     }, []);
 
