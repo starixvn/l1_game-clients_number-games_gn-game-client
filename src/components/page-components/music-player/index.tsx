@@ -18,11 +18,11 @@ const BGMPlayer = ({ isUserGesture }) => {
     });
 
 
-    useEffect(() => {
-        return () => {
-            global.Howler && global.Howler.unload();
-        }
-    }, []);
+    // useEffect(() => {
+    //     return () => {
+    //         global.Howler && global.Howler.unload();
+    //     }
+    // }, []);
 
     useEffect(() => {
         if (!sound) {
