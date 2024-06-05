@@ -123,6 +123,9 @@ exports[`UserInfo render With isLobby = true and login on Phone should match the
         style="color: transparent;"
         width="30"
       />
+      <span
+        class="icon-pencil icon-edit"
+      />
     </div>
   </div>
 </div>
@@ -187,6 +190,9 @@ exports[`UserInfo render With isLobby = true and login on Phone should match the
         style="color: transparent;"
         width="30"
       />
+      <span
+        class="icon-pencil icon-edit"
+      />
     </div>
   </div>
 </div>
@@ -250,6 +256,9 @@ exports[`UserInfo render With isLobby = true should match the snapshot 1`] = `
         srcset="/_next/image?url=%2Fstatic%2Fimages%2Favatar%2F1.jpg%3Fv%3D111&w=32&q=75 1x, /_next/image?url=%2Fstatic%2Fimages%2Favatar%2F1.jpg%3Fv%3D111&w=64&q=75 2x"
         style="color: transparent;"
         width="30"
+      />
+      <span
+        class="icon-pencil icon-edit"
       />
     </div>
   </div>
