@@ -1,15 +1,19 @@
 import Image from "next/image";
 import React, { useEffect, useMemo, useState } from "react";
 import { isIOS, isMobileOnly } from "react-device-detect";
+import { User } from "sc-user-service-client/dist/auth";
 
 import { buildVersion } from "../../../../_shared/constants";
+import {
+    GlobalTransmitterEvent,
+    registerGlobalMessageEvent,
+    unsubscribeGlobalMessageEvent,
+} from "../../../../_shared/helpers/message-transmitter/global-transmitter";
 import { numberRoundDownWithCommas } from "../../../../_shared/helpers/number-helper";
 import { SettingEventActionType, usePlayerContext, useSettingDispatch } from "../../../../_shared/react-contexts";
 import { useClickSound } from "../../../../_shared/react-hooks";
 import { MAX_AVATAR_ID } from "../../dashboard/register/avatar-gallery";
 import Styles from "./user-info.module.scss";
-import { User } from "sc-user-service-client/dist/auth";
-import { GlobalTransmitterEvent, registerGlobalMessageEvent, unsubscribeGlobalMessageEvent } from "../../../../_shared/helpers/message-transmitter/global-transmitter";
 
 export const UserInfo: React.FC<{
     customizeClass?: string;
@@ -38,39 +42,38 @@ export const UserInfo: React.FC<{
         }
     };
 
-
     useEffect(() => {
         const userInfoRedHandlerId = registerGlobalMessageEvent(GlobalTransmitterEvent.USER_INFO_RED, ({ userInfoRed }) => {
             setUserInfo({
                 ...userInfo,
-                red: userInfoRed
+                red: userInfoRed,
             });
         });
 
         return () => {
             unsubscribeGlobalMessageEvent(userInfoRedHandlerId as any);
-        }
+        };
     }, []);
 
     useEffect(() => {
         const userInfoRedHandlerId = registerGlobalMessageEvent(GlobalTransmitterEvent.USER_INFO_RED, ({ userInfoRed }) => {
             setUserInfo({
                 ...userInfo,
-                red: userInfoRed
+                red: userInfoRed,
             });
         });
 
         const avatarIdHandlerId = registerGlobalMessageEvent(GlobalTransmitterEvent.CHANGE_AVATAR_ID, ({ avatarId }) => {
             setUserInfo({
                 ...userInfo,
-                avatarId: avatarId
+                avatarId: avatarId,
             });
         });
 
         return () => {
             unsubscribeGlobalMessageEvent(userInfoRedHandlerId as any);
             unsubscribeGlobalMessageEvent(avatarIdHandlerId as any);
-        }
+        };
     }, []);
 
     useEffect(() => {
@@ -147,6 +150,8 @@ const UserAvatar: React.FC<{ avatarId: number; classCursor: string; handleClickA
             ) : (
                 <span className={`icon-user ${Styles["icon-user"]}`} data-testid="icon-user"></span>
             )}
+
+            {classCursor !== "" && <span className={`icon-pencil ${Styles["icon-edit"]}`}></span>}
         </div>
     );
 };
