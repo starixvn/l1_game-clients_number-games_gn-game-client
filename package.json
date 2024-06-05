@@ -24,6 +24,7 @@
         "@sentry/nextjs": "6.19.6",
         "@tolgee/format-icu": "^5.23.3",
         "@tolgee/react": "^5.23.3",
+        "@types/howler": "^2.2.11",
         "autoprefixer": "^10.4.16",
         "axios": "^1.6.8",
         "base64-string": "^1.1.2",

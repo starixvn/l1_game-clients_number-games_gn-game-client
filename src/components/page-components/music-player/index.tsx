@@ -3,11 +3,13 @@ import { isMobile } from "react-device-detect";
 import useSound from "use-sound";
 import { useSettingContext } from "../../../_shared/react-contexts";
 import { getRandomSong } from "../../../_shared/react-hooks";
-import * as Sentry from "@sentry/nextjs";
+// import * as Sentry from "@sentry/nextjs";
+// import { Howl, HowlCallback, HowlErrorCallback, HowlOptions } from "howler";
+
 const BGMPlayer = ({ isUserGesture }) => {
     const settingContext = useSettingContext();
     const [song, setSong] = useState(getRandomSong(""));
-    const [play, { stop, pause, sound: ctx }] = useSound(song, {
+    const [play, { stop, pause, sound }] = useSound(song, {
         interrupt: false,
 
         onend: () => {
@@ -17,68 +19,20 @@ const BGMPlayer = ({ isUserGesture }) => {
 
 
     useEffect(() => {
-        let lastInteractionTime = Date.now();
-        let isPageHidden = false;
-
-        function resetInteractionTimer() {
-            lastInteractionTime = Date.now();
-        }
-
-        function handleVisibilityChange() {
-            if (document.visibilityState === 'hidden') {
-                isPageHidden = true;
-                console.log('Page is hidden');
-            } else {
-                isPageHidden = false;
-                const timeSinceLastInteraction = Date.now() - lastInteractionTime;
-                console.log('Page is visible again');
-
-                if (timeSinceLastInteraction > 50000) {
-                    console.log('Possibly autosleep due to inactivity');
-                } else {
-                    console.log('Possibly manual sleep');
-                }
-            }
-        }
-
-        document.addEventListener('mousemove', resetInteractionTimer);
-        document.addEventListener('keydown', resetInteractionTimer);
-        document.addEventListener('touchstart', resetInteractionTimer);
-        document.addEventListener('visibilitychange', handleVisibilityChange);
-
-
-        const intervalId = setInterval(() => {
-            if (isPageHidden) {
-                const timeSinceLastInteraction = Date.now() - lastInteractionTime;
-                if (timeSinceLastInteraction > 50000) {
-                    Sentry.captureMessage(`David teset : ${JSON.stringify(ctx._sounds?.length)}`);
-
-                    const audioContext: AudioContext = ctx._sounds[0]._node.context;
-                    audioContext.close();
-                    stop();
-                    console.log('Page is hidden for a while with no interaction, possibly autosleep');
-                }
-            }
-        }, 10000);
-
         return () => {
-            document.removeEventListener('mousemove', resetInteractionTimer);
-            document.removeEventListener('keydown', resetInteractionTimer);
-            document.removeEventListener('touchstart', resetInteractionTimer);
-            document.removeEventListener('visibilitychange', handleVisibilityChange);
-            clearInterval(intervalId);
+            global.Howler && global.Howler.unload();
         }
     }, []);
 
     useEffect(() => {
-        if (!ctx) {
+        if (!sound) {
             return;
         }
 
         //Work around handle iOS lost sound with Audio Context using use-sound lib
         //https://github.com/joshwcomeau/use-sound/issues/15
         //https://github.com/goldfire/howler.js/issues/1234
-        const audioContext: AudioContext = ctx._sounds[0]._node.context;
+        const audioContext: AudioContext = global.Howler.ctx;
 
         if (isUserGesture) {
             audioContext
