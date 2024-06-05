@@ -62,7 +62,7 @@ class LuckyThree extends GameBase<GameBaseProps> {
     }
 
     renderResultBlock() {
-        const { roundHistory, result, roundState, roundData, turnCounter, drawId, playResultAnimation, isPlayStartRoundAnimation } =
+        const { roundHistory, result, roundState, prevRoundState, roundData, drawId, playResultAnimation, isPlayStartRoundAnimation } =
             this.props.gameStateContextModel;
 
         return (
@@ -71,10 +71,10 @@ class LuckyThree extends GameBase<GameBaseProps> {
                 result={result}
                 roundState={roundState}
                 roundData={roundData}
-                turnCounter={turnCounter}
                 drawId={drawId}
                 playResultAnimation={playResultAnimation}
                 isPlayStartRoundAnimation={isPlayStartRoundAnimation}
+                prevRoundState={prevRoundState}
             />
         );
     }

@@ -67,6 +67,7 @@ export interface GameEventPayload {
     newGameState?: any;
     showResultInfo?: boolean;
     isShowBlink?: boolean;
+    prevRoundState?: RoundState,
     roundState?: RoundState;
     turnCounter?: number;
     isUMInFirstLoad?: boolean;

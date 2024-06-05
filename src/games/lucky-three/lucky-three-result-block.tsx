@@ -13,7 +13,7 @@ import { LuckyThreeResult } from "./types";
 export type LuckyThreeResultBlockProps = Partial<GameStateContextModel>;
 
 const LuckyThreeResultBlock: FC<LuckyThreeResultBlockProps> = (props: LuckyThreeResultBlockProps) => {
-    const { result, roundState, roundHistory, playResultAnimation, isPlayStartRoundAnimation, turnCounter } = props;
+    const { result, roundState, roundHistory, playResultAnimation, isPlayStartRoundAnimation, prevRoundState } = props;
     const currentResult = useResult<LuckyThreeResult>({ result, roundState, roundHistory });
 
     const [resultStyle, setResultStyle] = useState("");
@@ -28,7 +28,7 @@ const LuckyThreeResultBlock: FC<LuckyThreeResultBlockProps> = (props: LuckyThree
             return setResultStyle("");
         }
 
-        if (roundState === RoundState.BeforePlaceBet && turnCounter !== 3) {
+        if (roundState === RoundState.BeforePlaceBet && ![RoundState.None, RoundState.SwitchRound].includes(prevRoundState)) {
             return setResultStyle(`${Style["zoom-in-anim"]}`);
         }
 
@@ -43,7 +43,7 @@ const LuckyThreeResultBlock: FC<LuckyThreeResultBlockProps> = (props: LuckyThree
         if (roundState === RoundState.SwitchRound) {
             return setResultStyle("");
         }
-    }, [roundState, turnCounter, playResultAnimation]);
+    }, [roundState, playResultAnimation]);
 
     if (roundState === RoundState.SwitchRound && !isPlayStartRoundAnimation) {
         return <></>;
@@ -51,9 +51,8 @@ const LuckyThreeResultBlock: FC<LuckyThreeResultBlockProps> = (props: LuckyThree
 
     return (
         <div
-            className={`${Style["result-container"]} ${resultStyle} ${
-                roundState === RoundState.BeforePlaceBet && isPlayStartRoundAnimation ? `showResultContainer ` : ""
-            }`}
+            className={`${Style["result-container"]} ${resultStyle} ${roundState === RoundState.BeforePlaceBet && isPlayStartRoundAnimation ? `showResultContainer ` : ""
+                }`}
         >
             <CageResultList
                 color={CageColor.PURPLE}

@@ -384,6 +384,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         if (gameStateContextModel.roundState !== newRoundState) {
             const isStartNewRound = gameStateContextModel.roundState === RoundState.SwitchRound && newRoundState === RoundState.InRound;
             const newGameState = {
+                prevRoundState: gameStateContextModel.roundState,
                 roundState: newRoundState,
                 isPlayStartRoundAnimation: isStartNewRound,
                 ...this.gameStateHandler.getNextRoundState({
@@ -398,7 +399,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
             writeDebugLog({
                 name: "change-round-state",
-                currentRoundState: RoundState[gameStateContextModel.roundState],
+                prevRoundState: RoundState[gameStateContextModel.roundState],
                 newRoundState: RoundState[newRoundState],
                 ...newGameState,
             });

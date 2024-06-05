@@ -9,6 +9,7 @@ import {
 export interface GameStateContextModel {
     isConnect: boolean;
     signedIn: boolean;
+    prevRoundState: RoundState;
     roundState: RoundState;
     gameConfigs: GameConfigs;
     roundData: any;
@@ -46,6 +47,7 @@ export const initialGameStateContextModel = () => {
     return {
         isConnect: false,
         signedIn: false,
+        prevRoundState: RoundState.None,
         roundState: RoundState.None,
         roundData: {},
         roundHistory: [],
