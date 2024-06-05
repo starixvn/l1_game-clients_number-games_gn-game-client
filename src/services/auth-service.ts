@@ -57,57 +57,58 @@ export const getBalance = async (userSession: SSOResponse) => {
 };
 
 export const getLobbyConfigs = async (userSession: SSOResponse) => {
-    let result = lobbyService?.getLobbyConfigs(userSession.ss, userSession.username);
+    const result = lobbyService?.getLobbyConfigs(userSession.ss, userSession.username);
 
     // TO DO: Must be remove hard code for dev Lucky Three
     return {
-        ...result, ...{
+        ...result,
+        ...{
             lobbyConfigs: {
-                "categories": [
+                categories: [
                     {
-                        "name": {
+                        name: {
                             "en-US": "Games",
                             "vi-VN": "Games",
                             "id-ID": "Games",
                             "th-TH": "Games",
                             "zh-CN": "Games",
-                            "zh-TW": "Games"
+                            "zh-TW": "Games",
                         },
-                        "gameSettings": [
+                        gameSettings: [
                             {
-                                "gameId": 1001,
-                                "bigSize": false,
-                                "newTag": true
+                                gameId: 1001,
+                                bigSize: false,
+                                newTag: true,
                             },
                             {
-                                "gameId": 1002,
-                                "bigSize": false,
-                                "newTag": true
+                                gameId: 1002,
+                                bigSize: false,
+                                newTag: true,
                             },
                             {
-                                "gameId": 1003,
-                                "bigSize": false,
-                                "newTag": true
+                                gameId: 1003,
+                                bigSize: false,
+                                newTag: true,
                             },
                             {
-                                "gameId": 1004,
-                                "bigSize": false,
-                                "newTag": true
+                                gameId: 1004,
+                                bigSize: false,
+                                newTag: true,
                             },
                             {
-                                "gameId": 1005,
-                                "bigSize": false,
-                                "newTag": true
+                                gameId: 1005,
+                                bigSize: false,
+                                newTag: true,
                             },
                             {
-                                "gameId": 1006,
-                                "bigSize": false,
-                                "newTag": true
-                            }
-                        ]
-                    }
+                                gameId: 1006,
+                                bigSize: false,
+                                newTag: true,
+                            },
+                        ],
+                    },
                 ],
-            }
-        }
+            },
+        },
     };
 };

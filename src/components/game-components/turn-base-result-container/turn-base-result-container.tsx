@@ -94,7 +94,7 @@ export const TurnBaseResultSlotContainer: React.FC<IResultSlotContainer> = (prop
     return (
         <div className={`${Style["ball-container"]} ${className}`}>
             {ballsData.map((result, index) => {
-                return <Ball key={index} index={index} {...result} delayClassName={delayClassName} />;
+                return <Ball key={index} index={index} {...result} delayClassName={result.delayTime > 0 ? delayClassName : ""} />;
             })}
         </div>
     );

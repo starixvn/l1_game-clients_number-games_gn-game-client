@@ -13,11 +13,11 @@ import { tolgee } from "../../_shared/tolgee";
 import GameBase from "../../components/game-base";
 import { GameMessageHandler, TurnIdHandler } from "../../components/game-base/handlers";
 import { GameBaseHandlers, GameBaseProps, Round } from "../../components/game-base/type";
+import { TurnStateHandler } from "../../components/turn-base/turn-state-handler";
 import { LuckyThreeBetOptions } from "./lucky-three-constants";
+import { NextGameRoundDataHandler } from "./lucky-three-game-round-data-handler";
 import Styles from "./lucky-three.module.scss";
 import { LuckyThreeResult, LuckyThreeSettlementResult } from "./types";
-import { NextGameRoundDataHandler } from "./lucky-three-game-round-data-handler";
-import { TurnStateHandler } from "../../components/turn-base/turn-state-handler";
 
 const DrawIdBlock = dynamic(() => import("../../components/game-components/draw-id"));
 const LuckyThreeBettingBlock = dynamic(() => import("./lucky-three-betting-block"));
@@ -62,8 +62,17 @@ class LuckyThree extends GameBase<GameBaseProps> {
     }
 
     renderResultBlock() {
-        const { roundHistory, result, roundState, prevRoundState, roundData, drawId, playResultAnimation, isPlayStartRoundAnimation } =
-            this.props.gameStateContextModel;
+        const {
+            roundHistory,
+            result,
+            roundState,
+            prevRoundState,
+            roundData,
+            turnCounter,
+            drawId,
+            playResultAnimation,
+            isPlayStartRoundAnimation,
+        } = this.props.gameStateContextModel;
 
         return (
             <LuckyThreeResultBlock
@@ -75,6 +84,7 @@ class LuckyThree extends GameBase<GameBaseProps> {
                 playResultAnimation={playResultAnimation}
                 isPlayStartRoundAnimation={isPlayStartRoundAnimation}
                 prevRoundState={prevRoundState}
+                turnCounter={turnCounter}
             />
         );
     }

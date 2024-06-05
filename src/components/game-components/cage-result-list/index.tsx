@@ -20,7 +20,7 @@ export type CageResultListProps = {
     highlightBallSize: { width: number; height: number };
     initialBallDelayTime?: number;
     ballFPS?: number;
-    hightlightBallSteps?: number;
+    highlightBallSteps?: number;
     showTotalCallback?: Function;
 } & Partial<GameStateContextModel>;
 
@@ -36,12 +36,13 @@ const CageResultList: React.FC<CageResultListProps> = ({
     initialBallDelayTime,
     gameFolder,
     highlightBallSize,
-    hightlightBallSteps,
+    highlightBallSteps,
     showTotalCallback,
 }) => {
     const [showBalls, setShowBalls] = useState(false);
     const [totalPoint, setTotalPoint] = useState(0);
     const [needStartDrawAnim, setNeedStartDrawAnim] = useState(false);
+    const [customCageClass, setCustomCageClass] = useState("");
 
     const showBallDelayTime = 1000;
 
@@ -70,6 +71,7 @@ const CageResultList: React.FC<CageResultListProps> = ({
 
         if (roundState === RoundState.BeforePlaceBet) {
             setTotalPoint(0);
+            setCustomCageClass("");
             showTotalCallback && showTotalCallback(false);
             setNeedStartDrawAnim(true);
         }
@@ -78,6 +80,7 @@ const CageResultList: React.FC<CageResultListProps> = ({
     const incrementTotalPoint = useCallback((point: number) => {
         showTotalCallback && showTotalCallback(!!point);
         setTotalPoint((currentTotalPoint) => currentTotalPoint + point);
+        setCustomCageClass(`${playResultAnimation ? Styles["hide-ball"] : Styles["hide-ball-no-anim"]}`);
     }, []);
 
     return (
@@ -86,7 +89,7 @@ const CageResultList: React.FC<CageResultListProps> = ({
                 Styles[`type-${listResult?.length}`]
             }`}
         >
-            <div className={`${Styles["ball"]} ${totalPoint > 0 ? Styles["hide-ball"] : ""}`}>
+            <div className={`${Styles["ball"]} ${customCageClass}`}>
                 <div id="cage-bg" className={CageStyles["cage-bg"]}></div>
                 <BallLoops isPlayStartRoundAnimation={isPlayStartRoundAnimation} />
                 <div id="cage-cover" className={CageStyles["cage-cover"]}></div>
@@ -123,7 +126,7 @@ const CageResultList: React.FC<CageResultListProps> = ({
                         widthFrame={highlightBallSize.width}
                         isResponsive
                         heightFrame={highlightBallSize.height}
-                        steps={hightlightBallSteps ?? 6}
+                        steps={highlightBallSteps ?? 6}
                         autoplay
                         fps={ballFPS ?? 32}
                     />

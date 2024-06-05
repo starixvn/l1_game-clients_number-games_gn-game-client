@@ -16,7 +16,7 @@
     transform: scale(0.9);
 
     &.zoom-out-no-anim {
-        transform: scale(0.5) translateY(-7.5rem);
+        transform: scale(0.5) translateY(-6rem);
     }
 
     &.zoom-in-anim {
@@ -45,6 +45,7 @@
     }
 
     .delay-show-ball {
+        opacity: 0;
         // delay 4s: 3 ball show result
         animation: fade-in 0.5s 4s linear forwards !important;
     }
@@ -72,7 +73,7 @@
 @keyframes zoom-in-cage {
     0% {
         opacity: 0.3;
-        transform: scale(0.5) translateY(-7.5rem);
+        transform: scale(0.5) translateY(-6rem);
     }
     100% {
         opacity: 1;
@@ -85,7 +86,7 @@
         transform: scale(0.9) translateY(0);
     }
     100% {
-        transform: scale(0.5) translateY(-7.5rem);
+        transform: scale(0.5) translateY(-6rem);
     }
 }
 

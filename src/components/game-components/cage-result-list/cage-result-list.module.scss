@@ -9,6 +9,10 @@
     &.hide-ball {
         animation: fade-out 0.2s ease-in forwards;
     }
+
+    &.hide-ball-no-anim {
+        opacity: 0;
+    }
 }
 
 @keyframes fade-out {

@@ -17,15 +17,15 @@ const LuckyThreeResultBlock: FC<LuckyThreeResultBlockProps> = (props: LuckyThree
     const currentResult = useResult<LuckyThreeResult>({ result, roundState, roundHistory });
 
     const [resultStyle, setResultStyle] = useState("");
-    const [showTotalPoint, setShowTotalPoint] = useState(false);
+    // const [showTotalPoint, setShowTotalPoint] = useState(false);
 
     const showTotalCallback = useCallback((isShow: boolean) => {
-        setShowTotalPoint(isShow);
+        // setShowTotalPoint(isShow);
     }, []);
 
     useEffect(() => {
         if (roundState === RoundState.InRound || roundState === RoundState.LockingBet) {
-            return setResultStyle("");
+            return setResultStyle(``);
         }
 
         if (roundState === RoundState.BeforePlaceBet && ![RoundState.None, RoundState.SwitchRound].includes(prevRoundState)) {
@@ -41,7 +41,7 @@ const LuckyThreeResultBlock: FC<LuckyThreeResultBlockProps> = (props: LuckyThree
         }
 
         if (roundState === RoundState.SwitchRound) {
-            return setResultStyle("");
+            return setResultStyle(``);
         }
     }, [roundState, playResultAnimation]);
 
@@ -49,11 +49,10 @@ const LuckyThreeResultBlock: FC<LuckyThreeResultBlockProps> = (props: LuckyThree
         return <></>;
     }
 
+    const showResultClass = roundState === RoundState.BeforePlaceBet && isPlayStartRoundAnimation ? `showResultContainer ` : "";
+
     return (
-        <div
-            className={`${Style["result-container"]} ${resultStyle} ${roundState === RoundState.BeforePlaceBet && isPlayStartRoundAnimation ? `showResultContainer ` : ""
-                }`}
-        >
+        <div className={`${Style["result-container"]} ${resultStyle} ${showResultClass}`}>
             <CageResultList
                 color={CageColor.PURPLE}
                 position={CagePosition.LEFT}
@@ -68,18 +67,16 @@ const LuckyThreeResultBlock: FC<LuckyThreeResultBlockProps> = (props: LuckyThree
             />
 
             <div className={Style["slot-container"]}>
-                {!showTotalPoint && (
-                    <TurnBaseResultSlotContainer
-                        defaultRoundData={defaultRoundData}
-                        delayTime={4500}
-                        betChoice={""}
-                        className={Style["group-3"]}
-                        betChoiceBalls="balls"
-                        groupType={3}
-                        delayClassName={Style["delay-show-ball"]}
-                        {...props}
-                    />
-                )}
+                <TurnBaseResultSlotContainer
+                    defaultRoundData={defaultRoundData}
+                    delayTime={4500}
+                    betChoice={""}
+                    className={Style["group-3"]}
+                    betChoiceBalls="balls"
+                    groupType={3}
+                    delayClassName={Style["delay-show-ball"]}
+                    {...props}
+                />
             </div>
         </div>
     );
