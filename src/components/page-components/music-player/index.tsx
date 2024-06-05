@@ -3,8 +3,6 @@ import { isMobile } from "react-device-detect";
 import useSound from "use-sound";
 import { useSettingContext } from "../../../_shared/react-contexts";
 import { getRandomSong } from "../../../_shared/react-hooks";
-// import * as Sentry from "@sentry/nextjs";
-// import { Howl, HowlCallback, HowlErrorCallback, HowlOptions } from "howler";
 
 const BGMPlayer = ({ isUserGesture }) => {
     const settingContext = useSettingContext();
@@ -17,21 +15,11 @@ const BGMPlayer = ({ isUserGesture }) => {
         },
     });
 
-
-    // useEffect(() => {
-    //     return () => {
-    //         global.Howler && global.Howler.unload();
-    //     }
-    // }, []);
-
     useEffect(() => {
         if (!sound) {
             return;
         }
 
-        //Work around handle iOS lost sound with Audio Context using use-sound lib
-        //https://github.com/joshwcomeau/use-sound/issues/15
-        //https://github.com/goldfire/howler.js/issues/1234
         const audioContext: AudioContext = global.Howler.ctx;
 
         if (isUserGesture) {
