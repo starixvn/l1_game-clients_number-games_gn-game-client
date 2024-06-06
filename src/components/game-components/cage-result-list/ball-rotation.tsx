@@ -10,20 +10,20 @@ import Styles from "./cage-result-list.module.scss";
 const BallRotation: React.FC<{
     ballPos: number;
     number: number;
-    isShowResultAnim: boolean;
+    playResultAnimation: boolean;
     delayTime: number;
     color: string;
     incrementTotalPoint: Function;
-}> = ({ ballPos, number, isShowResultAnim, delayTime, color, incrementTotalPoint }) => {
+}> = ({ ballPos, number, playResultAnimation, delayTime, color, incrementTotalPoint }) => {
     const [showBall, setShowBall] = useState(false);
-    const playShowBallResult = useShowBallResultSound();
+    const playShowBallResultSound = useShowBallResultSound();
 
     useEffect(() => {
         const timeOut = setTimeout(() => {
             setShowBall(true);
         }, delayTime);
 
-        const ballRotationTime = 1000;
+        const ballRotationTime = playResultAnimation ? 1000 : 0;
         const timeOutTotalPoint = setTimeout(() => {
             incrementTotalPoint(number);
         }, delayTime + ballRotationTime);
@@ -35,7 +35,7 @@ const BallRotation: React.FC<{
     }, [ballPos]);
 
     return useMemo(() => {
-        isShowResultAnim && playShowBallResult();
+        playResultAnimation && playShowBallResultSound();
 
         if (!showBall) {
             return <></>;
@@ -51,14 +51,14 @@ const BallRotation: React.FC<{
                     steps={8}
                     autoplay
                     fps={30}
-                    startAt={isShowResultAnim ? 0 : 31}
+                    startAt={playResultAnimation ? 0 : 31}
                     endAt={31}
                 />
                 <ResultNumber
                     className={Styles["number"]}
                     isDelayShowResult={true}
                     number={number.toString()}
-                    isShowResultAnim={isShowResultAnim}
+                    isShowResultAnim={playResultAnimation}
                     fps={30}
                 />
             </div>

@@ -17,6 +17,10 @@
 
     &.zoom-out-no-anim {
         transform: scale(0.5) translateY(-6rem);
+
+        .slot-container {
+            transform: scale(0.3) translateY(-4rem);
+        }
     }
 
     &.zoom-in-anim {
@@ -45,7 +49,6 @@
     }
 
     .delay-show-ball {
-        opacity: 0;
         // delay 4s: 3 ball show result
         animation: fade-in 0.5s 4s linear forwards !important;
     }

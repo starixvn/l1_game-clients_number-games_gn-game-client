@@ -26,7 +26,7 @@ const ResultGroup: React.FC<{
                 <BallRotation
                     key={uuidv4()}
                     ballPos={ballPos}
-                    isShowResultAnim={playResultAnimation}
+                    playResultAnimation={playResultAnimation}
                     color={color}
                     number={result}
                     delayTime={delayTime}
