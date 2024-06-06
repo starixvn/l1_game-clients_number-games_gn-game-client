@@ -1,10 +1,11 @@
 import { FC, useMemo } from "react";
 import { v4 as uuidv4 } from "uuid";
+
 import { useTranslator } from "../../../_shared/react-hooks";
-import { PFResult } from "../../../components/game-base/type";
-import Styles from "./pf-se-ball.module.scss";
-import SmallBall from "../../../components/game-components/small-ball";
 import { ResourceTypes } from "../../../_shared/resources";
+import { PFResult } from "../../../components/game-base/type";
+import SmallBall from "../../../components/game-components/small-ball";
+import Styles from "./pf-se-ball.module.scss";
 
 const PFVerifyResultBlock: FC<{ pfResult: PFResult }> = ({ pfResult }) => {
     const { t } = useTranslator();
@@ -30,7 +31,7 @@ const PFVerifyResultBlock: FC<{ pfResult: PFResult }> = ({ pfResult }) => {
     return (
         <>
             <div className="text-white font-weight-medium mb-2">
-                {t(`${ResourceTypes.COMMON}.round`).capitalizeFirstLetter()}: {drawResult?.drawID} ({drawResult?.order})
+                {t(`${ResourceTypes.SABA_NUMBER}.glossary_draw_id`).capitalizeFirstLetter()}: {drawResult?.drawID} ({drawResult?.order})
             </div>
             <div className="flex justify-center">
                 <div className={Styles["balls-container"]}>

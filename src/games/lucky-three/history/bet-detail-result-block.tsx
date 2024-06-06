@@ -1,10 +1,11 @@
 import { FC } from "react";
+
 import { useGameContext } from "../../../_shared/react-contexts";
-import { useCommonTranslate, useTranslator } from "../../../_shared/react-hooks";
-import Styles from "./history.module.scss";
-import SmallBall from "../../../components/game-components/small-ball";
+import { useSNTranslate, useTranslator } from "../../../_shared/react-hooks";
 import { DrawInfo, PFResult } from "../../../components/game-base/type";
+import SmallBall from "../../../components/game-components/small-ball";
 import { LuckyThreeBetOptions } from "../lucky-three-constants";
+import Styles from "./history.module.scss";
 
 export interface RoundInfoSeBall extends DrawInfo {
     drawId: number;
@@ -33,14 +34,14 @@ export interface RoundInfoSeBall extends DrawInfo {
 }
 
 export const BetDetailResultBlock: FC<{ roundInfo: RoundInfoSeBall }> = ({ roundInfo: drawInfo }) => {
-    const { t: translateCommon } = useCommonTranslate();
+    const { t: translateSNGames } = useSNTranslate();
     const { drawId, result } = drawInfo;
     let totalPoint = 0;
 
     return (
         <div className={Styles["draw-info"]}>
             <div className={`${Styles["info-item"]} font-weight-500`}>
-                {translateCommon("round").capitalizeFirstLetter()}: <span>{drawId}</span>
+                {translateSNGames("glossary_draw_id").capitalizeFirstLetter()}: <span>{drawId}</span>
             </div>
             <div className={Styles["info-item"]}>
                 {result.balls.map((ball, index) => {
