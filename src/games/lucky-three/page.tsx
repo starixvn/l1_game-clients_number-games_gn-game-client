@@ -2,6 +2,7 @@ import dynamic from "next/dynamic";
 import { withRouter } from "next/router";
 import { JSX } from "react";
 
+import { getGameSettings } from "../../_shared/app-settings";
 import { useSystemContext, useSystemDispatch } from "../../_shared/react-contexts";
 import {
     GameStateProvider,
@@ -13,6 +14,7 @@ import { tolgee } from "../../_shared/tolgee";
 import GameBase from "../../components/game-base";
 import { GameMessageHandler, TurnIdHandler } from "../../components/game-base/handlers";
 import { GameBaseHandlers, GameBaseProps, Round } from "../../components/game-base/type";
+import NewRoundTransition from "../../components/game-components/new-round-transition";
 import { TurnStateHandler } from "../../components/turn-base/turn-state-handler";
 import { LuckyThreeBetOptions } from "./lucky-three-constants";
 import { NextGameRoundDataHandler } from "./lucky-three-game-round-data-handler";
@@ -95,6 +97,16 @@ class LuckyThree extends GameBase<GameBaseProps> {
 
     renderBetHistoryModal() {
         return <LuckyThreeBetHistoryModal />;
+    }
+
+    renderNewRoundTransition() {
+        return (
+            <NewRoundTransition
+                totalTurns={getGameSettings(this.props.id).totalTurns}
+                isExtraOneSecond={true}
+                prevRoundState={this.props.gameStateContextModel.prevRoundState}
+            />
+        );
     }
 
     renderStatistic() {
