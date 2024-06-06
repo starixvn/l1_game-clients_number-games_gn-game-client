@@ -184,7 +184,7 @@
     align-items: center;
     justify-content: center;
     row-gap: 0.5rem;
-    height: 10.4rem;
+    height: 10.5rem;
     width: 8.5rem;
 
     &::before {
@@ -197,7 +197,7 @@
         top: 0;
         left: 0;
         width: 100%;
-        height: var(--height, 10.4rem);
+        height: var(--height, 10.5rem);
     }
 
     .btn-ripple {
@@ -210,7 +210,7 @@
         top: var(--top, 0);
         background: var(--bg-disable-layer);
         width: var(--disable-layer-width, 8.5rem);
-        height: var(--disable-layer-height, 10.4rem);
+        height: var(--disable-layer-height, 10.3rem);
         background-size: cover;
         opacity: 0;
         animation: show-disabled-layer 0.3s ease-in forwards;
