@@ -29,6 +29,10 @@
 
         // delay 0.3s to waiting for result hide
         animation: zoom-in-cage 0.7s 0.3s cubic-bezier(0.38, 0.12, 0.75, 0.72) forwards;
+
+        .slot-container {
+            animation: move-down-result-slot 0.5s 0.5s cubic-bezier(0.38, 0.12, 0.75, 0.72) forwards;
+        }
     }
 
     &.zoom-out-anim {
@@ -70,6 +74,15 @@
     }
     100% {
         transform: scale(0.3) translateY(-4rem);
+    }
+}
+
+@keyframes move-down-result-slot {
+    0% {
+        transform: scale(0.3) translateY(-4rem);
+    }
+    100% {
+        transform: scale(1) translateY(0);
     }
 }
 

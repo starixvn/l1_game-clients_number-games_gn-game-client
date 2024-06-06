@@ -17,10 +17,10 @@ const LuckyThreeResultBlock: FC<LuckyThreeResultBlockProps> = (props: LuckyThree
     const currentResult = useResult<LuckyThreeResult>({ result, roundState, roundHistory });
 
     const [resultStyle, setResultStyle] = useState("");
-    // const [showTotalPoint, setShowTotalPoint] = useState(false);
+    const [showTotalPoint, setShowTotalPoint] = useState(false);
 
     const showTotalCallback = useCallback((isShow: boolean) => {
-        // setShowTotalPoint(isShow);
+        setShowTotalPoint(isShow);
     }, []);
 
     useEffect(() => {
@@ -67,16 +67,18 @@ const LuckyThreeResultBlock: FC<LuckyThreeResultBlockProps> = (props: LuckyThree
             />
 
             <div className={Style["slot-container"]}>
-                <TurnBaseResultSlotContainer
-                    defaultRoundData={defaultRoundData}
-                    delayTime={4500}
-                    betChoice={""}
-                    className={Style["group-3"]}
-                    betChoiceBalls="balls"
-                    groupType={3}
-                    delayClassName={Style["delay-show-ball"]}
-                    {...props}
-                />
+                {!showTotalPoint && (
+                    <TurnBaseResultSlotContainer
+                        defaultRoundData={defaultRoundData}
+                        delayTime={4500}
+                        betChoice={""}
+                        className={Style["group-3"]}
+                        betChoiceBalls="balls"
+                        groupType={3}
+                        delayClassName={Style["delay-show-ball"]}
+                        {...props}
+                    />
+                )}
             </div>
         </div>
     );
