@@ -25,7 +25,7 @@ const BGMPlayer = ({ isUserGesture }) => {
 
         if (isUserGesture) {
             if (settingContext.enabledMusic) {
-                audioContext.state != "running" &&
+                audioContext.state !== "running" &&
                     audioContext
                         .resume()
                         .then(() => {
@@ -36,7 +36,7 @@ const BGMPlayer = ({ isUserGesture }) => {
                         });
             }
         } else {
-            audioContext.state != "suspended" &&
+            audioContext.state !== "suspended" &&
                 audioContext
                     .suspend()
                     .then(() => {
@@ -62,7 +62,7 @@ const BGMPlayer = ({ isUserGesture }) => {
             if (settingContext.enabledMusic) {
                 if (settingContext.volumeMusic) {
                     sound.volume(formatVolume(settingContext.volumeMusic));
-                    audioContext.state != "running" &&
+                    audioContext.state !== "running" &&
                         audioContext
                             .resume()
                             .then(() => {
@@ -72,7 +72,7 @@ const BGMPlayer = ({ isUserGesture }) => {
                                 play();
                             });
                 } else {
-                    audioContext.state != "suspended" &&
+                    audioContext.state !== "suspended" &&
                         audioContext
                             .suspend()
                             .then(() => {
@@ -83,7 +83,7 @@ const BGMPlayer = ({ isUserGesture }) => {
                             });
                 }
             } else {
-                audioContext.state != "suspended" &&
+                audioContext.state !== "suspended" &&
                     audioContext
                         .suspend()
                         .then(() => {
