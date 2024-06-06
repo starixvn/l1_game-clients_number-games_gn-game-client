@@ -24,10 +24,6 @@ const LuckyThreeResultBlock: FC<LuckyThreeResultBlockProps> = (props: LuckyThree
     }, []);
 
     useEffect(() => {
-        if (roundState === RoundState.InRound || roundState === RoundState.LockingBet) {
-            return setResultStyle(``);
-        }
-
         if (roundState === RoundState.BeforePlaceBet && ![RoundState.None, RoundState.SwitchRound].includes(prevRoundState)) {
             return setResultStyle(`${Style["zoom-in-anim"]}`);
         }
@@ -40,9 +36,7 @@ const LuckyThreeResultBlock: FC<LuckyThreeResultBlockProps> = (props: LuckyThree
             return setResultStyle(`${Style["zoom-out-no-anim"]}`);
         }
 
-        if (roundState === RoundState.SwitchRound) {
-            return setResultStyle(``);
-        }
+        return setResultStyle("");
     }, [roundState, playResultAnimation]);
 
     if (roundState === RoundState.SwitchRound && !isPlayStartRoundAnimation) {
