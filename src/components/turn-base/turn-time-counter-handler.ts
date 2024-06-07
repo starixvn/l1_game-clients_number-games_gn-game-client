@@ -45,17 +45,18 @@ export class TurnTimelineCounter {
     calculateTurnTimeline = () => {
         const wholeRoundWithoutSwitchRoundAmimation = this.durations.wholeRound - this.durations.switchRoundAnimation;
         this.totalTurn = wholeRoundWithoutSwitchRoundAmimation / this.durations.wholeTurn;
-        let allTurnRemainingTime = wholeRoundWithoutSwitchRoundAmimation - this.durations.showResult;
+        const showResult = this.durations.showResult + this.durations.beforePlaceBet;
+        let allTurnRemainingTime = wholeRoundWithoutSwitchRoundAmimation - showResult;
         for (let turnIndex = 1; turnIndex <= this.totalTurn; turnIndex++) {
             const startPlacingBet = allTurnRemainingTime;
             const endPlacingBet = (allTurnRemainingTime -= this.durations.placingBets);
             let startDisplayResult = allTurnRemainingTime;
-            let endDisplayResult = (allTurnRemainingTime -= this.durations.showResult);
+            let endDisplayResult = (allTurnRemainingTime -= showResult);
             endDisplayResult += 1;
 
             if (startDisplayResult <= 0) {
                 startDisplayResult = this.durations.wholeRound;
-                endDisplayResult = startDisplayResult - this.durations.switchRoundAnimation - this.durations.showResult + 1;
+                endDisplayResult = startDisplayResult - this.durations.switchRoundAnimation - showResult + 1;
             }
 
             const turnTimeline: TurnTimeline = new TurnTimeline(
