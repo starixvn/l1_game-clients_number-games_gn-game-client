@@ -34,6 +34,7 @@ export type PlaceBetHandlerProps = {
     getPlayerBalance: Function;
     gameId: number;
     signOut?: Function;
+    gameStateContextModel(): GameStateContextModel;
 };
 
 export class PlaceBetHandler {
@@ -86,9 +87,10 @@ export class PlaceBetHandler {
     };
 
     handleOwnBets = ({ ownBets }) => {
-        this.placeBetDispatch({ type: PlaceBetEventActionType.OWN_BETS, payload: { ownBets } });
-
-        this.props.gameMessageHandler.broadcastGameEvent({ [messageEventType.SYNC_OWN_BETS_TO_PF]: ownBets });
+        if (![RoundState.SwitchRound, RoundState.BeforePlaceBet, RoundState.InRound, RoundState.None].includes(this.props.gameStateContextModel().roundState)) {
+            this.placeBetDispatch({ type: PlaceBetEventActionType.OWN_BETS, payload: { ownBets } });
+            this.props.gameMessageHandler.broadcastGameEvent({ [messageEventType.SYNC_OWN_BETS_TO_PF]: ownBets });
+        }
     };
 
     handleBetFailed = ({ notice, kickedOut }, signOut: () => void) => {
@@ -131,6 +133,7 @@ export class PlaceBetHandler {
             !apiError && this.handleBetFailed({ notice, kickedOut }, signOut);
         } else {
             enableSound && playPlaceBetSound();
+            console.log(`handleEndBet`)
             this.placeBetDispatch({
                 type: PlaceBetEventActionType.OWN_BETS,
                 payload: { ownBets },

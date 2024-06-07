@@ -121,6 +121,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                     this.props.gameSound.playPlaceBetSound();
                 },
                 gameId: this.props.id,
+                gameStateContextModel: this.getGameStateContext.bind(this),
             });
 
         this.gameFinishHandler =
@@ -344,7 +345,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     updatePlaceBetContext = (newRoundState: RoundState) => {
-        if ([RoundState.SwitchRound, RoundState.BeforePlaceBet, RoundState.InRound].includes(newRoundState)) {
+        if ([RoundState.SwitchRound, RoundState.BeforePlaceBet, RoundState.None].includes(newRoundState)) {
             this.placeBetHandler.getPlaceBetDispatch()({
                 type: PlaceBetEventActionType.RESET_OWN_BETS_AND_SUGGEST_BET,
                 payload: {},
