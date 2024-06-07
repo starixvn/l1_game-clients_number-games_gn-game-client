@@ -73,7 +73,7 @@ const MusicSetting = () => {
                     </button>
                 </div>
 
-                <VolumeSetting onChangeVolume={onChangeVolume} defaultValue={volumeMusic} />
+                <VolumeSetting onChangeVolume={onChangeVolume} defaultValue={volumeMusic} isTurnOn={enabledMusic} />
             </div>
         </div>
     );
