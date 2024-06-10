@@ -1,11 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-
-import { useClickSound } from "../../../../../../_shared/react-hooks";
 import Style from "./volume-setting.module.scss";
 
 const VolumeSetting = ({ onChangeVolume, defaultValue, isTurnOn }) => {
     const [volume, setVolume] = useState(defaultValue);
-    const clickSound = useClickSound();
     const volumeRef = useRef(null);
     const minValue = 0;
     const maxValue = 100;
@@ -32,7 +29,6 @@ const VolumeSetting = ({ onChangeVolume, defaultValue, isTurnOn }) => {
                 setVolume(+event.target.value);
                 onChangeVolume(event.target.value);
             }}
-            onClick={clickSound}
         />
     );
 };
