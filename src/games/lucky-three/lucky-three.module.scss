@@ -15,33 +15,33 @@
     margin-top: -1rem;
     transform: scale(0.9);
 
-    // &.zoom-out-no-anim {
-    //     transform: scale(0.5) translateY(-6rem);
+    &.zoom-out-no-anim {
+        transform: scale(0.5) translateY(-6rem);
 
-    //     .slot-container {
-    //         transform: scale(0.3) translateY(-4rem);
-    //     }
-    // }
+        .slot-container {
+            transform: scale(0.3) translateY(-4rem);
+        }
+    }
 
-    // &.zoom-in-anim {
-    //     opacity: 0.3;
-    //     @extend .zoom-out-no-anim;
+    &.zoom-in-anim {
+        opacity: 0.3;
+        @extend .zoom-out-no-anim;
 
-    //     // delay 0.3s to waiting for result hide
-    //     animation: zoom-in-cage 0.7s 0.3s cubic-bezier(0.38, 0.12, 0.75, 0.72) forwards;
+        // delay 0.3s to waiting for result hide
+        animation: zoom-in-cage 0.7s 0.3s cubic-bezier(0.38, 0.12, 0.75, 0.72) forwards;
 
-    //     .slot-container {
-    //         animation: move-down-result-slot 0.5s 0.5s cubic-bezier(0.38, 0.12, 0.75, 0.72) forwards;
-    //     }
-    // }
+        // .slot-container {
+        //     animation: move-down-result-slot 0.5s 0.5s cubic-bezier(0.38, 0.12, 0.75, 0.72) forwards;
+        // }
+    }
 
-    // &.zoom-out-anim {
-    //     animation: zoom-out-cage 1s cubic-bezier(0.47, 0, 0.745, 0.715) forwards;
+    &.zoom-out-anim {
+        animation: zoom-out-cage 1s cubic-bezier(0.47, 0, 0.745, 0.715) forwards;
 
-    //     .slot-container {
-    //         animation: move-up-result-slot 0.5s 0.5s cubic-bezier(0.47, 0, 0.745, 0.715) forwards;
-    //     }
-    // }
+        // .slot-container {
+        //     animation: move-up-result-slot 0.5s 0.5s cubic-bezier(0.47, 0, 0.745, 0.715) forwards;
+        // }
+    }
 }
 
 .group-3 {
