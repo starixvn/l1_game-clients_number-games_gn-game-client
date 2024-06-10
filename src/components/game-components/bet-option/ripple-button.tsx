@@ -57,10 +57,11 @@ const RippleButton: React.FC<RippleButtonProps> = ({ choice, className, id }) =>
         let timerId: NodeJS.Timeout | undefined;
         const setPosition = (event) => {
             const item = rippleButton.current as any;
+
             if (item) {
                 const pos = item.getBoundingClientRect();
                 const x = event.pageX - pos.left;
-                const y = event.pageY - pos.top;
+                const y = event.pageY - pos.top - window.scrollY;
                 setRipplePosX(x);
                 setRipplePosY(y);
                 item?.firstChild?.classList.add("ripple-effect", "active");
