@@ -38,4 +38,16 @@ const formatVolume = (value: number): number => {
     return +value / 100;
 };
 
-export { formatOdds, formatVolume, initIntegerArray, numberRoundDownWithCommas, numberWithCommas, randomInteger, randomNumberSeries, sumArray };
+const calculateWinAmount = (isWin: boolean, amount: number, odds: number) => (isWin ? amount * odds : 0);
+
+export {
+    formatOdds,
+    formatVolume,
+    initIntegerArray,
+    numberRoundDownWithCommas,
+    numberWithCommas,
+    randomInteger,
+    randomNumberSeries,
+    sumArray,
+    calculateWinAmount,
+};

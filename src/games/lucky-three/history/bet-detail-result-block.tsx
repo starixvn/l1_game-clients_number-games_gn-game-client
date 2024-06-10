@@ -6,6 +6,7 @@ import { DrawInfo, PFResult } from "../../../components/game-base/type";
 import SmallBall from "../../../components/game-components/small-ball";
 import { LuckyThreeBetOptions } from "../lucky-three-constants";
 import Styles from "./history.module.scss";
+import { calculateWinAmount } from "../../../_shared/helpers/number-helper";
 
 export interface RoundInfoSeBall extends DrawInfo {
     drawId: number;
@@ -54,12 +55,8 @@ export const BetDetailResultBlock: FC<{ roundInfo: RoundInfoSeBall }> = ({ round
     );
 };
 
-const calculateWin = (isWin: boolean, amount: number, odds: number) => {
-    return isWin ? amount * odds : 0;
-};
-
 export const produceDataBetDetailRow = (item: any, drawInfo: RoundInfoSeBall) => {
-    const win = calculateWin(drawInfo.settlementResult?.[item.choice], item.amount, drawInfo.odds[item.choice]);
+    const win = calculateWinAmount(drawInfo.settlementResult?.[item.choice], item.amount, drawInfo.odds[item.choice]);
 
     return {
         rawTime: item.time,

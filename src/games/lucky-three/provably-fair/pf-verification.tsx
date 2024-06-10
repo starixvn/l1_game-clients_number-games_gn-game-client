@@ -18,8 +18,7 @@ const PFVerification: FC = () => {
     const { pfVerifyModalData: pfResult } = usePFContext();
     const [mergeClientSeed, setMergeClientSeed] = useState(pfResult?.editedMergeClientSeed || pfResult?.mergeClientSeed || "");
     const dispatch = usePFDispatch();
-    const { t } = useTranslator();
-    const { t: translateInGame } = useTranslator([tolgeeNamespace]);
+    const { t } = useTranslator([tolgeeNamespace]);
     const [combinedHash, setCombinedHash] = useState(pfResult.finalHash);
 
     const BALLS_EACH_ROUND = 3;
@@ -138,7 +137,7 @@ const PFVerification: FC = () => {
                     <p className="text-wrap">{combinedHash}</p>
                 </Section>
 
-                <Section title={translateInGame("pf_verifier_tool_para_24")}>
+                <Section title={t(`${ResourceTypes.SABA_NUMBER}.pf_verifier_tool_para_27`)}>
                     <p className="font-weight-medium">
                         {verifyInfo.convertNumber.map((item, index) => {
                             const rawDigit = verifyInfo.rawDigits[index];
