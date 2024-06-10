@@ -44,7 +44,10 @@ export class PlaceBetHandler {
     private endBetHandlerId: any;
     private ownBetsHandlerId: any;
     private finishHandlerId: string;
-    private isProcessingBet;
+    private roundStateHandlerId: any;
+    private isProcessingBet: boolean;
+    private roundState: RoundState = RoundState.None;
+    private isFirstOwnBetHandler = false;
 
     constructor(public readonly props: PlaceBetHandlerProps) {
         this.isProcessingBet = false;
@@ -60,6 +63,9 @@ export class PlaceBetHandler {
 
     registerEvents = (signOut: () => void, placeBetContext: PlaceBetContextModel) => {
         this.placeBetContext = placeBetContext;
+        this.isFirstOwnBetHandler = true;
+        this.roundState = RoundState.None;
+
         this.endBetHandlerId = this.props.gameMessageHandler.register(messageEventType.END_BET, (gameMessage) => {
             this.handleEndBet(gameMessage, signOut, placeBetContext);
         });
@@ -69,12 +75,19 @@ export class PlaceBetHandler {
             this.clearRetryInterval();
             this.isProcessingBet = false;
         });
+
+        this.roundStateHandlerId = this.props.gameMessageHandler.register(messageEventType.ROUND_STATE, this.handleRoundState.bind(this));
+    };
+
+    handleRoundState = ({ roundState }) => {
+        this.roundState = roundState;
     };
 
     unregisterEvents = () => {
         this.props.gameMessageHandler.removeHandler(this.endBetHandlerId);
         this.props.gameMessageHandler.removeHandler(this.ownBetsHandlerId);
         this.props.gameMessageHandler.removeHandler(this.finishHandlerId);
+        this.props.gameMessageHandler.removeHandler(this.roundStateHandlerId);
     };
 
     broadcastNotice = (notice: object) => {
@@ -86,9 +99,14 @@ export class PlaceBetHandler {
     };
 
     handleOwnBets = ({ ownBets }) => {
-        this.placeBetDispatch({ type: PlaceBetEventActionType.OWN_BETS, payload: { ownBets } });
-
         this.props.gameMessageHandler.broadcastGameEvent({ [messageEventType.SYNC_OWN_BETS_TO_PF]: ownBets });
+
+        if (this.isFirstOwnBetHandler && [RoundState.None, RoundState.SwitchRound, RoundState.BeforePlaceBet].includes(this.roundState)) {
+            this.isFirstOwnBetHandler = false;
+            return;
+        }
+
+        this.placeBetDispatch({ type: PlaceBetEventActionType.OWN_BETS, payload: { ownBets } });
     };
 
     handleBetFailed = ({ notice, kickedOut }, signOut: () => void) => {
