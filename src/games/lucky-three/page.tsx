@@ -122,21 +122,21 @@ class LuckyThree extends GameBase<GameBaseProps> {
         };
 
         const otherCalculator = {
+            [LuckyThreeBetOptions.BLUE3]: (countResult: object, total: number) =>
+                Math.round((countResult[LuckyThreeBetOptions.BLUE3] * 100) / total) || 0,
+            [LuckyThreeBetOptions.BLUE2]: (countResult: object, total: number) =>
+                Math.round((countResult[LuckyThreeBetOptions.BLUE2] * 100) / total) || 0,
             [LuckyThreeBetOptions.RED2]: (countResult: object, total: number) =>
                 Math.round((countResult[LuckyThreeBetOptions.RED2] * 100) / total) || 0,
             [LuckyThreeBetOptions.RED3]: (countResult: object, total: number) =>
                 Math.round((countResult[LuckyThreeBetOptions.RED3] * 100) / total) || 0,
-            [LuckyThreeBetOptions.BLUE2]: (countResult: object, total: number) =>
-                Math.round((countResult[LuckyThreeBetOptions.BLUE2] * 100) / total) || 0,
-            [LuckyThreeBetOptions.BLUE3]: (countResult: object, total: number) =>
-                Math.round((countResult[LuckyThreeBetOptions.BLUE3] * 100) / total) || 0,
         };
 
         const subBetOptionClass = {
+            [LuckyThreeBetOptions.BLUE3]: Styles["statistic-blue3"],
+            [LuckyThreeBetOptions.BLUE2]: Styles["statistic-blue2"],
             [LuckyThreeBetOptions.RED2]: Styles["statistic-red2"],
             [LuckyThreeBetOptions.RED3]: Styles["statistic-red3"],
-            [LuckyThreeBetOptions.BLUE2]: Styles["statistic-blue2"],
-            [LuckyThreeBetOptions.BLUE3]: Styles["statistic-blue3"],
         };
 
         return (
