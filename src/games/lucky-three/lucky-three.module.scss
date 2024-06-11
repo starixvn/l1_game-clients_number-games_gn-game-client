@@ -15,8 +15,13 @@
     margin-top: -1rem;
     transform: scale(0.9);
 
+    --move-up-y: -6rem;
+    --mup-up-scale: 0.5;
+    --default-scale: 0.9;
+    --default-y: 0;
+
     &.zoom-out-no-anim {
-        transform: scale(0.5) translateY(-6rem);
+        transform: scale(var(--mup-up-scale)) translateY(var(--move-up-y));
 
         .slot-container {
             opacity: 0;
@@ -31,7 +36,6 @@
         animation: zoom-in-cage 0.7s 0.3s cubic-bezier(0.38, 0.12, 0.75, 0.72) forwards;
 
         .slot-container {
-            // animation: move-down-result-slot 0.5s 0.5s cubic-bezier(0.38, 0.12, 0.75, 0.72) forwards;
             animation: fade-in 0.5s 0.5s ease-in forwards;
         }
     }
@@ -40,7 +44,6 @@
         animation: zoom-out-cage 1s cubic-bezier(0.47, 0, 0.745, 0.715) forwards;
 
         .slot-container {
-            // animation: move-up-result-slot 0.5s 0.5s cubic-bezier(0.47, 0, 0.745, 0.715) forwards;
             animation: fade-out 0.3s 0.5s ease-in forwards;
         }
     }
@@ -80,41 +83,23 @@
     }
 }
 
-@keyframes move-up-result-slot {
-    0% {
-        transform: scale(1) translateY(0);
-    }
-    100% {
-        transform: scale(0.3) translateY(-4rem);
-    }
-}
-
-@keyframes move-down-result-slot {
-    // 0% {
-    //     transform: scale(0.3) translateY(-4rem);
-    // }
-    // 100% {
-    //     transform: scale(1) translateY(0);
-    // }
-}
-
 @keyframes zoom-in-cage {
     0% {
         opacity: 0.3;
-        transform: scale(0.5) translateY(-6rem);
+        transform: scale(var(--mup-up-scale)) translateY(var(--move-up-y));
     }
     100% {
         opacity: 1;
-        transform: scale(0.9) translateY(0);
+        transform: scale(var(--default-scale)) translateY(var(--default-y));
     }
 }
 
 @keyframes zoom-out-cage {
     0% {
-        transform: scale(0.9) translateY(0);
+        transform: scale(var(--default-scale)) translateY(var(--default-y));
     }
     100% {
-        transform: scale(0.5) translateY(-6rem);
+        transform: scale(var(--mup-up-scale)) translateY(var(--move-up-y));
     }
 }
 
