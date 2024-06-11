@@ -25,7 +25,7 @@ const BGMPlayer = ({ isUserGesture }) => {
 
         if (isUserGesture) {
             if (settingContext.enabledMusic) {
-                audioContext.state !== "running" &&
+                if (audioContext.state !== "running") {
                     audioContext
                         .resume()
                         .then(() => {
@@ -34,6 +34,9 @@ const BGMPlayer = ({ isUserGesture }) => {
                         .catch(() => {
                             settingContext.volumeMusic && play();
                         });
+                } else {
+                    play();
+                }
             }
         } else {
             audioContext.state !== "suspended" &&
@@ -60,27 +63,17 @@ const BGMPlayer = ({ isUserGesture }) => {
         if (sound) {
             const audioContext: AudioContext = global.Howler.ctx;
             if (settingContext.enabledMusic) {
-                if (settingContext.volumeMusic) {
-                    sound.volume(formatVolume(settingContext.volumeMusic));
-                    audioContext.state !== "running" &&
-                        audioContext
-                            .resume()
-                            .then(() => {
-                                play();
-                            })
-                            .catch(() => {
-                                play();
-                            });
+                if (audioContext.state !== "running") {
+                    audioContext
+                        .resume()
+                        .then(() => {
+                            play();
+                        })
+                        .catch(() => {
+                            play();
+                        });
                 } else {
-                    audioContext.state !== "suspended" &&
-                        audioContext
-                            .suspend()
-                            .then(() => {
-                                pause();
-                            })
-                            .catch(() => {
-                                pause();
-                            });
+                    play();
                 }
             } else {
                 audioContext.state !== "suspended" &&
@@ -94,7 +87,36 @@ const BGMPlayer = ({ isUserGesture }) => {
                         });
             }
         }
-    }, [settingContext.volumeMusic, settingContext.enabledMusic]);
+    }, [settingContext.enabledMusic]);
+
+    useEffect(() => {
+        if (sound) {
+            const audioContext: AudioContext = global.Howler.ctx;
+
+            if (settingContext.volumeMusic) {
+                audioContext.state !== "running" &&
+                    audioContext
+                        .resume()
+                        .then(() => {
+                            play();
+                        })
+                        .catch(() => {
+                            play();
+                        });
+            } else {
+                audioContext.state !== "suspended" &&
+                    audioContext
+                        .suspend()
+                        .then(() => {
+                            pause();
+                        })
+                        .catch(() => {
+                            pause();
+                        });
+            }
+            sound.volume(formatVolume(settingContext.volumeMusic));
+        }
+    }, [settingContext.volumeMusic]);
     return <></>;
 };
 
