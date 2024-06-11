@@ -2,7 +2,6 @@ import React from "react";
 import { createPortal } from "react-dom";
 import { Socket } from "socket.io-client";
 
-import { getGameSettings } from "../../_shared/app-settings";
 import { SwiperNoSwiping } from "../../_shared/constants";
 import { InitSocketIO, writeDebugLog } from "../../_shared/helpers";
 import { AnalyticsHelper } from "../../_shared/helpers/analytic-helper";
@@ -25,7 +24,7 @@ import GameContainer from "../game-components/game-container";
 import GameGuideModal from "../game-components/game-guide";
 import GameLoading from "../game-components/game-loading";
 import { LoadingSpinner } from "../game-components/game-loading/loading-spinner";
-import NewRoundTransition from "../game-components/new-round-transition";
+import { NewRoundTransitionWithoutExtraSeconds } from "../game-components/new-round-transition";
 import { NoticeDialog } from "../game-components/notice";
 import { PFSettingModal } from "../game-components/provably-fair";
 import { Settings } from "../game-components/settings";
@@ -537,7 +536,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     renderNewRoundTransition() {
-        return <NewRoundTransition totalTurns={getGameSettings(this.props.id).totalTurns} />;
+        return <NewRoundTransitionWithoutExtraSeconds />;
     }
 
     getRenderTemplate() {
