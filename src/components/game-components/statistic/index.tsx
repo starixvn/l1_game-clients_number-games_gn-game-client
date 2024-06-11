@@ -22,33 +22,37 @@ export const countSettlementResult = (roundHistory: Round<any, any>[]) => {
     }, {});
 };
 
-export const calculatePercent = (
-    statisticRuleEntries: [string, (countResult: object, total: number) => number][],
-    countResult: object,
-    total: number
-) => {
-    return statisticRuleEntries.reduce((result, [choice, rule]) => {
-        result[choice] = rule(countResult, total);
+export const getPercentage = (keys: string[], countResult: object, total: number) => {
+    const sortedCounter = keys.map((key) => ({ name: key, value: countResult[key] || 0 })).sort((a, b) => a.value - b.value);
+    const calculatePercentage = (value: number) => {
+        return total > 0 ? Math.round((value * 100) / total) : 0;
+    };
+    let totalPercentage = 0;
+    return sortedCounter.reduce((result, counter, index) => {
+        if (index === sortedCounter.length - 1) {
+            result[counter.name] = counter.value > 0 ? 100 - totalPercentage : 0;
+        } else {
+            const percentage = calculatePercentage(counter.value);
+            result[counter.name] = percentage;
+            totalPercentage += percentage;
+        }
         return result;
     }, {});
 };
 
 export const PercentageStatistic: React.FC<PercentageStatisticProps> = (props: PercentageStatisticProps) => {
-    const { statisticRuleEntries, roundHistory, onSelectGroup, selectedGroup } = props;
+    const { roundHistory, onSelectGroup, selectedGroup, mainChoices, choicesInGroups } = props;
     const counted = countSettlementResult(roundHistory);
-    const statisticResult = calculatePercent(statisticRuleEntries, counted, roundHistory.length);
     const { tolgeeNamespace } = useGameContext();
     const { t } = useTranslator([tolgeeNamespace]);
 
-    if (props.group) {
-        const choices = Object.keys(statisticResult);
+    if (choicesInGroups) {
         const groups = [];
 
-        while (choices.length) {
-            const choicesInGroup = choices.splice(0, props.group);
-
+        choicesInGroups.forEach((group) => {
+            const statisticResult = getPercentage(group, counted, roundHistory.length);
             groups.push(
-                choicesInGroup.map((choice) => (
+                group.map((choice) => (
                     <StatisticItem key={choice} value={`${statisticResult[choice]}%`}>
                         <span className={`${Styles[choice]} ${Styles["statistic-choice-icon"]} ${props.className}`}>
                             {t(`beadboard_${choice}`)}
@@ -56,7 +60,7 @@ export const PercentageStatistic: React.FC<PercentageStatisticProps> = (props: P
                     </StatisticItem>
                 ))
             );
-        }
+        });
 
         return (
             <div className={`${Styles["statistic-container"]} flex ${Styles["statistic-tab-container"]}`} id="bar-statistic">
@@ -72,9 +76,10 @@ export const PercentageStatistic: React.FC<PercentageStatisticProps> = (props: P
             </div>
         );
     } else {
+        const statisticResult = getPercentage(mainChoices, counted, roundHistory.length);
         return (
             <div className={`${Styles["statistic-container"]} flex`} id="bar-statistic">
-                {Object.keys(statisticResult).map((choice) => (
+                {mainChoices.map((choice) => (
                     <StatisticItem key={choice} value={`${statisticResult[choice]}%`} className={props.className}>
                         <span className={`${Styles[choice]} ${Styles["statistic-choice-icon"]}`}>{t(`beadboard_${choice}`)}</span>
                     </StatisticItem>

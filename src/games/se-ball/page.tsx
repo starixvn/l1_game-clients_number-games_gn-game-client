@@ -96,30 +96,6 @@ class SeBall extends GameBase<GameBaseProps> {
         const locale = tolgee.getLanguage() ?? "en";
         const classNameIndo = locale === "id" ? Styles["statistic-indo"] : "";
 
-        const mainChoicesCalculators = {
-            [SeBallBetOptions.ODD]: (countResult: object, total: number) =>
-                Math.round((countResult[SeBallBetOptions.ODD] * 100) / total) || 0,
-            [SeBallBetOptions.EVEN]: (countResult: object, total: number) =>
-                100 - Math.round((countResult[SeBallBetOptions.ODD] * 100) / total) || 0,
-        };
-
-        const subChoicesCalculator = {
-            [SeBallBetOptions.BLUE3]: (countResult: object, total: number) =>
-                Math.round((countResult[SeBallBetOptions.BLUE3] * 100) / total) || 0,
-            [SeBallBetOptions.RED2]: (countResult: object, total: number) =>
-                Math.round((countResult[SeBallBetOptions.RED2] * 100) / total) || 0,
-            [SeBallBetOptions.RED3]: (countResult: object, total: number) =>
-                Math.round((countResult[SeBallBetOptions.RED3] * 100) / total) || 0,
-            [SeBallBetOptions.RED4]: (countResult: object, total: number) =>
-                Math.round((countResult[SeBallBetOptions.RED4] * 100) / total) || 0,
-            [SeBallBetOptions.BLUE4]: (countResult: object, total: number) =>
-                100 -
-                    (Math.round(((countResult[SeBallBetOptions.BLUE3] ?? 0) * 100) / total) +
-                        Math.round(((countResult[SeBallBetOptions.RED2] ?? 0) * 100) / total) +
-                        Math.round(((countResult[SeBallBetOptions.RED3] ?? 0) * 100) / total) +
-                        Math.round(((countResult[SeBallBetOptions.RED4] ?? 0) * 100) / total)) || 0,
-        };
-
         const subChoicesClass = {
             [SeBallBetOptions.BLUE3]: Styles[`statistic-${SeBallBetOptions.BLUE3}`],
             [SeBallBetOptions.RED2]: Styles[`statistic-${SeBallBetOptions.RED2}`],
@@ -131,9 +107,15 @@ class SeBall extends GameBase<GameBaseProps> {
         return (
             <RedAndBlueStatistic
                 roundHistory={roundHistory}
-                statisticRuleEntries={Object.entries(mainChoicesCalculators)}
+                mainChoices={[SeBallBetOptions.ODD, SeBallBetOptions.EVEN]}
                 className={classNameIndo}
-                subChoicesStatisticRuleEntries={Object.entries(subChoicesCalculator)}
+                subChoices={[
+                    SeBallBetOptions.BLUE3,
+                    SeBallBetOptions.RED2,
+                    SeBallBetOptions.RED3,
+                    SeBallBetOptions.RED4,
+                    SeBallBetOptions.BLUE4,
+                ]}
                 subChoicesClass={subChoicesClass}
             />
         );

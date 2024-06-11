@@ -96,22 +96,14 @@ class NextBall extends GameBase<GameBaseProps> {
         const locale = tolgee.getLanguage() ?? "en";
         const classNameIndo = locale === "id" ? Styles["statistic-indo"] : "";
 
-        const calculators = {
-            [NextBallBetOptions.OVER]: (countResult: object, total: number) =>
-                Math.round((countResult[NextBallBetOptions.OVER] * 100) / total) || 0,
-            [NextBallBetOptions.UNDER]: (countResult: object, total: number) =>
-                100 - Math.round((countResult[NextBallBetOptions.OVER] * 100) / total) || 0,
-            [NextBallBetOptions.ODD]: (countResult: object, total: number) =>
-                Math.round((countResult[NextBallBetOptions.ODD] * 100) / total) || 0,
-            [NextBallBetOptions.EVEN]: (countResult: object, total: number) =>
-                100 - Math.round((countResult[NextBallBetOptions.ODD] * 100) / total) || 0,
-        };
-
         return (
             <PercentageStatistic
                 roundHistory={roundHistory}
-                statisticRuleEntries={Object.entries(calculators)}
-                group={2}
+                mainChoices={[NextBallBetOptions.OVER, NextBallBetOptions.UNDER, NextBallBetOptions.ODD, NextBallBetOptions.EVEN]}
+                choicesInGroups={[
+                    [NextBallBetOptions.OVER, NextBallBetOptions.UNDER],
+                    [NextBallBetOptions.ODD, NextBallBetOptions.EVEN],
+                ]}
                 selectedGroup={statisticGroup}
                 onSelectGroup={(index: number) => this.setState({ statisticGroup: index })}
                 className={classNameIndo}

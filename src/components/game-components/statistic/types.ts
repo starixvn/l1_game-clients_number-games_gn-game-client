@@ -8,12 +8,12 @@ export type Props = {
 
 export type PercentageStatisticProps = {
     roundHistory: Round<any, any>[];
-    statisticRuleEntries: [string, (countResult: object, total: number) => number][];
+    mainChoices: string[];
     activeScoreboardTab?: number;
-    group?: number;
+    choicesInGroups?: string[][];
     selectedGroup?: number;
     onSelectGroup?: Function;
     className?: string;
-    subChoicesStatisticRuleEntries?: [string, (countResult: object, total: number) => number][];
+    subChoices?: string[];
     subChoicesClass?: {};
 };

@@ -16,7 +16,7 @@ import { DrawIdBlock } from "../../components/game-components/draw-id";
 import { TurnStateHandler } from "../../components/turn-base/turn-state-handler";
 import { BacBallGameRoundDataHandler } from "./bac-ball-game-round-data-handler";
 import BacBallResultBlock from "./bac-ball-result-block";
-import { BacBallBetOptions, StatisticRuleEntries } from "./constants";
+import { BacBallBetOptions } from "./constants";
 import Scoreboard from "./scoreboard";
 import { BacBallResult, BacBallSettlementResult } from "./types";
 
@@ -96,7 +96,12 @@ class BacBall extends GameBase<GameBaseProps> {
     renderStatistic() {
         const { roundHistory } = this.props.gameStateContextModel;
 
-        return <PercentageStatistic roundHistory={roundHistory} statisticRuleEntries={StatisticRuleEntries} />;
+        return (
+            <PercentageStatistic
+                roundHistory={roundHistory}
+                mainChoices={[BacBallBetOptions.PLAYER, BacBallBetOptions.BANKER, BacBallBetOptions.TIE]}
+            />
+        );
     }
 
     renderScoreboards() {
