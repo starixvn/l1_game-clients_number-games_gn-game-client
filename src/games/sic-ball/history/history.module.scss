@@ -1,0 +1,35 @@
+@import "./../../../styles/components/pages/history";
+
+.bet-detail-total {
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+.bet-detail-specific1 {
+    background: url("/static/images/se-ball/bet-detail-specific1.svg") no-repeat;
+}
+
+.bet-detail-specific2 {
+    display: flex;
+    background: url("/static/images/se-ball/bet-detail-specific2.svg") no-repeat;
+}
+
+.bet-detail-specific3 {
+    background: url("/static/images/se-ball/bet-detail-specific3.svg") no-repeat;
+}
+
+.bet-detail-specific4 {
+    background: url("/static/images/se-ball/bet-detail-specific4.svg") no-repeat;
+}
+
+.bet-detail-specific5 {
+    background: url("/static/images/se-ball/bet-detail-icon-specific5.svg") no-repeat;
+}
+
+.bet-detail-specific6 {
+    background: url("/static/images/se-ball/bet-detail-icon-specific6.svg") no-repeat;
+}
+
+.result-container {
+    gap: 0.2rem;
+}

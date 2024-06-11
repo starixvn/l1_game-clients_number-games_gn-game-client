@@ -113,6 +113,7 @@ export const GameIds = {
     NextBall2: 1004,
     SeBall1: 1005,
     LuckyThree: 1006,
+    SicBall: 1007,
 };
 
 export const LobbyGameId = 0;

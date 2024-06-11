@@ -152,9 +152,28 @@
         "totalTurns": 3,
         "numberOfRoundHistory": 100,
         "gamePath": "lucky-three",
-        "gameResourceConfigs": {
-            "path": "lucky-three",
-            "optionalPaths": ["lucky-three/result-ball"]
-        }
+    },
+    "1007": {
+        "id": 1007,
+        "gameName": "SicBall",
+        "tolgeeNamespace": "SicBall",
+        "socketInfo": {
+            "namespace": "sicball",
+            "path": "sicball"
+        },
+        "durations": {
+            "wholeRound": 21,
+            "wholeTurn": 21,
+            "placingBets": 15,
+            "lockingBet": 3,
+            "showResult": 6,
+            "resultAnimation": 4,
+            "beforePlaceBet": 1,
+            "switchRoundAnimation": 0,
+            "startNewRoundAnim": 16
+        },
+        "totalTurns": 1,
+        "numberOfRoundHistory": 100,
+        "gamePath": "sic-ball"
     }
 }
