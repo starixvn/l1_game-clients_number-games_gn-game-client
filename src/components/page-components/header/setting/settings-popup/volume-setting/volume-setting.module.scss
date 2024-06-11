@@ -43,10 +43,3 @@
 
     @extend %range;
 }
-
-.range-input-disabled {
-    --background: #6c737b;
-    --slider-thumb: #8e8e93;
-
-    @extend %range;
-}

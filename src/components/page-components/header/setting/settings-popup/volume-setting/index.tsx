@@ -1,25 +1,22 @@
 import { useEffect, useRef, useState } from "react";
 import Style from "./volume-setting.module.scss";
 
-const VolumeSetting = ({ onChangeVolume, defaultValue, isTurnOn }) => {
+const VolumeSetting = ({ onChangeVolume, defaultValue }) => {
     const [volume, setVolume] = useState(defaultValue);
     const volumeRef = useRef(null);
     const minValue = 0;
     const maxValue = 100;
     const enableColor = "rgb(96, 218, 0)";
-    const disabledColor = "rgb(108, 125, 113)";
 
     useEffect(() => {
         const progress = (volume / maxValue) * 100;
-        volumeRef.current.style.background = `linear-gradient(to right, ${
-            isTurnOn ? enableColor : disabledColor
-        } ${progress}%, rgb(108, 125, 113) ${progress}%)`;
-    }, [volume, isTurnOn]);
+        volumeRef.current.style.background = `linear-gradient(to right, ${enableColor} ${progress}%, rgb(108, 125, 113) ${progress}%)`;
+    }, [volume]);
 
     return (
         <input
             ref={volumeRef}
-            className={`${volume > 0 && isTurnOn ? Style["range-input"] : Style["range-input-disabled"]}`}
+            className={`${Style["range-input"]}`}
             type="range"
             min={minValue}
             max={maxValue}

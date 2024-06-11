@@ -60,7 +60,7 @@ const SoundSetting = () => {
                         <span className={`icon-sound-${enabledSound ? "on" : "off"}`}></span>
                     </button>
                 </div>
-                <VolumeSetting onChangeVolume={onChangeVolume} defaultValue={volumeSFX} isTurnOn={enabledSound} />
+                <VolumeSetting onChangeVolume={onChangeVolume} defaultValue={volumeSFX} />
             </div>
         </div>
     );
