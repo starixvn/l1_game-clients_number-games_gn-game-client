@@ -4,9 +4,10 @@ import { numberWithCommas } from "../../../_shared/helpers";
 import Styles from "./bet-option.module.scss";
 import { BaseProps } from "./types";
 import { usePlaceBetContext } from "../../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-context";
-import { useGameBettingZoneContext } from "../../../_shared/react-contexts";
+import { useGameBettingZoneContext, usePlayerContext } from "../../../_shared/react-contexts";
 
 export const OwnBet: React.FC<BaseProps> = ({ tolgeeNamespace, choice, className }) => {
+    const { enableQuickBet } = usePlayerContext();
     const { notConfirmOwnBets, ownBets } = usePlaceBetContext();
     const { acceptedBets } = useGameBettingZoneContext();
     const [isShowBetAnim, setIsShowBetAnim] = useState(false);
@@ -41,7 +42,7 @@ export const OwnBet: React.FC<BaseProps> = ({ tolgeeNamespace, choice, className
         );
     };
 
-    const ownBetValue = ownBet + (notConfirmOwnBets?.[choice] ?? 0);
+    const ownBetValue = ownBet + (enableQuickBet ? 0 : notConfirmOwnBets?.[choice] ?? 0);
     return (
         <>
             {ownBetValue > 0 && ownBetUI(numberWithCommas(ownBetValue, 1))}
