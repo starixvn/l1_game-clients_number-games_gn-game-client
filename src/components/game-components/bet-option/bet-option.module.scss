@@ -30,11 +30,11 @@
     }
 
     &.up:after {
-        background-image: url("/static/images/arrow-up.svg?v=#{$version-image}");
+        background-image: url("/static/images/arrow-up.png?v=#{$version-image}");
     }
 
     &.down:after {
-        background-image: url("/static/images/arrow-down.svg?v=#{$version-image}");
+        background-image: url("/static/images/arrow-down.png?v=#{$version-image}");
     }
 
     &.show-odds-icon {
