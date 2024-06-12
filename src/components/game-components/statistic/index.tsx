@@ -20,6 +20,15 @@ export const countSettlementResult = (roundHistory: Round<any, any>[]) => {
     }, {});
 };
 
+export const countResult = (roundHistory: Round<any, any>[]) => {
+    return roundHistory.reduce((resultCount, { result }) => {
+        Object.values(result.balls).forEach((choice: number) => {
+            resultCount[choice] = (resultCount[choice] ?? 0) + 1;
+        });
+        return resultCount;
+    }, {});
+};
+
 export const getPercentage = (keys: string[], countResult: object, total: number) => {
     const sortedCounter = keys.map((key) => ({ name: key, value: countResult[key] || 0 })).sort((a, b) => a.value - b.value);
     const calculatePercentage = (value: number) => {
