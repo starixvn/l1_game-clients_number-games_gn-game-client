@@ -24,7 +24,7 @@ import { RoundIdHandler } from "../../components/round-base/round-id-handler";
 
 const DrawIdBlock = dynamic(() => import("../../components/game-components/draw-id"));
 const SicBallBettingBlock = dynamic(() => import("./sic-ball-betting-block"));
-const RedAndBlueStatistic = dynamic(() => import("../../components/game-components/statistic/red-blue-statistic"));
+const RedAndBlueStatisticSubRoundCounter = dynamic(() => import("../../components/game-components/statistic/red-blue-statistic-sub-round-counter"));
 const SicBallBetHistoryModal = dynamic(() => import("./history"));
 const ScoreboardSeBall = dynamic(() => import("./scoreboard"));
 const SicBallResultBlock = dynamic(() => import("./sic-ball-result-block"));
@@ -106,7 +106,7 @@ class SicBall extends GameBase<GameBaseProps> {
         };
 
         return (
-            <RedAndBlueStatistic
+            <RedAndBlueStatisticSubRoundCounter
                 roundHistory={roundHistory}
                 mainChoices={[SicBallBetOptions.BIG, SicBallBetOptions.SMALL]}
                 className={classNameIndo}
