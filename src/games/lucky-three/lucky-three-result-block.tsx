@@ -56,7 +56,7 @@ const LuckyThreeResultBlock: FC<LuckyThreeResultBlockProps> = (props: LuckyThree
                 gameFolder="lucky-three"
                 highlightBallSize={{ width: 478, height: 260 }}
                 roundState={roundState}
-                ballFPS={25}
+                ballFPS={30}
                 showTotalCallback={showTotalCallback}
             />
 

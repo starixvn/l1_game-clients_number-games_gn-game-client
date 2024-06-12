@@ -94,7 +94,7 @@ const CageResultList: React.FC<CageResultListProps> = ({
                 <BallLoops isPlayStartRoundAnimation={isPlayStartRoundAnimation} />
                 <div id="cage-cover" className={CageStyles["cage-cover"]}></div>
                 <div id="cage-border" className={`${CageStyles["cage-border"]} ${CageStyles[color]}`}>
-                    {!playResultAnimation && <div id="cage-lid" className={CageStyles["cage-lid"]} />}
+                    {!showBalls && <div id="cage-lid" className={CageStyles["cage-lid"]} />}
                 </div>
 
                 {playResultAnimation && (
