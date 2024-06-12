@@ -107,24 +107,6 @@ class LuckyThree extends GameBase<GameBaseProps> {
         const locale = tolgee.getLanguage() ?? "en";
         const classNameIndo = locale === "id" ? Styles["statistic-indo"] : "";
 
-        const calculators = {
-            [LuckyThreeBetOptions.OVER]: (countResult: object, total: number) =>
-                Math.round((countResult[LuckyThreeBetOptions.OVER] * 100) / total) || 0,
-            [LuckyThreeBetOptions.UNDER]: (countResult: object, total: number) =>
-                100 - Math.round((countResult[LuckyThreeBetOptions.OVER] * 100) / total) || 0,
-        };
-
-        const otherCalculator = {
-            [LuckyThreeBetOptions.BLUE3]: (countResult: object, total: number) =>
-                Math.round((countResult[LuckyThreeBetOptions.BLUE3] * 100) / total) || 0,
-            [LuckyThreeBetOptions.BLUE2]: (countResult: object, total: number) =>
-                Math.round((countResult[LuckyThreeBetOptions.BLUE2] * 100) / total) || 0,
-            [LuckyThreeBetOptions.RED2]: (countResult: object, total: number) =>
-                Math.round((countResult[LuckyThreeBetOptions.RED2] * 100) / total) || 0,
-            [LuckyThreeBetOptions.RED3]: (countResult: object, total: number) =>
-                Math.round((countResult[LuckyThreeBetOptions.RED3] * 100) / total) || 0,
-        };
-
         const subBetOptionClass = {
             [LuckyThreeBetOptions.BLUE3]: Styles["statistic-blue3"],
             [LuckyThreeBetOptions.BLUE2]: Styles["statistic-blue2"],
@@ -135,9 +117,9 @@ class LuckyThree extends GameBase<GameBaseProps> {
         return (
             <RedAndBlueStatistic
                 roundHistory={roundHistory}
-                statisticRuleEntries={Object.entries(calculators)}
+                mainChoices={[LuckyThreeBetOptions.OVER, LuckyThreeBetOptions.UNDER]}
                 className={classNameIndo}
-                subChoicesStatisticRuleEntries={Object.entries(otherCalculator)}
+                subChoices={[LuckyThreeBetOptions.BLUE3, LuckyThreeBetOptions.BLUE2, LuckyThreeBetOptions.RED2, LuckyThreeBetOptions.RED3]}
                 subChoicesClass={subBetOptionClass}
             />
         );
@@ -160,7 +142,6 @@ class LuckyThree extends GameBase<GameBaseProps> {
         return <DrawIdBlock />;
     }
 }
-
 
 const LuckyThreeWrapper = (props) => {
     return (
