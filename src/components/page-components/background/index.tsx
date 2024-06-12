@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { memo } from "react";
+import { FC, memo } from "react";
 
 import { buildVersion, GameIds } from "../../../_shared/constants";
 import { memo } from "react";
@@ -19,14 +19,29 @@ const getGameName = (gameId) => {
 
 const GamesNotPlayStarsAnimation = [GameIds.LuckyThree];
 
-export const BackgroundGalaxy: React.FC<Props> = ({ gameId }) => {
+const StarField: FC<{ gameId: number }> = ({ gameId }) => {
     const isLowPerformanceDevice = useLowPerformanceDevice();
-    const gameName = getGameName(gameId);
-    const imageUrls = `/static/images/bg-galaxy/bg-${gameName.toLowerCase()}.webp?v=${buildVersion}`;
 
     const isShouldNotPlayStarsAnimation = () => {
-        return GamesNotPlayStarsAnimation.find((id) => id === gameId) && isLowPerformanceDevice;
+        return !!GamesNotPlayStarsAnimation.find((id) => id === gameId) && isLowPerformanceDevice;
     };
+
+    if (isShouldNotPlayStarsAnimation()) {
+        return <></>;
+    }
+
+    return (
+        <div className="star-field">
+            <div className="layer"></div>
+            <div className="layer"></div>
+            <div className="layer"></div>
+        </div>
+    );
+};
+
+export const BackgroundGalaxy: React.FC<Props> = ({ gameId }) => {
+    const gameName = getGameName(gameId);
+    const imageUrls = `/static/images/bg-galaxy/bg-${gameName.toLowerCase()}.webp?v=${buildVersion}`;
 
     return (
         <>
@@ -37,13 +52,7 @@ export const BackgroundGalaxy: React.FC<Props> = ({ gameId }) => {
                     <Image className="galaxy-1" width={580} height={850} src={imageUrls} alt="galaxy" />
                 </div>
             </div>
-            {!isShouldNotPlayStarsAnimation() && (
-                <div className="star-field">
-                    <div className="layer"></div>
-                    <div className="layer"></div>
-                    <div className="layer"></div>
-                </div>
-            )}
+            <StarField gameId={gameId} />
         </>
     );
 };
