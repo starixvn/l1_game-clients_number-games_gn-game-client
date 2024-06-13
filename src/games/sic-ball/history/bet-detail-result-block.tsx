@@ -35,14 +35,6 @@ export interface RoundInfoSeBall extends DrawInfo {
 
 export const mainChoices = [SicBallBetOptions.BIG, SicBallBetOptions.SMALL];
 
-export enum BetResult {
-    specific1,
-    specific2,
-    specific3,
-    specific4,
-    specific5,
-    specific6,
-}
 
 export const BetDetailResultBlock: FC<{ roundInfo: RoundInfoSeBall }> = ({ roundInfo: drawInfo }) => {
     const { t: translateCommon } = useCommonTranslate();
@@ -66,26 +58,30 @@ export const BetDetailResultBlock: FC<{ roundInfo: RoundInfoSeBall }> = ({ round
 };
 
 
-const calculateSubChoiceOdd = (choice: string, odds: Odd, balls: any) => {
+const getSubChoiceOdd = (choice: string, odds: Odd, balls: any) => {
     const subChoiceCounterArray = {};
 
     Object.values(balls).forEach((value) => {
         subChoiceCounterArray[+value] = (subChoiceCounterArray[+value] || 0) + 1;
     });
 
-    Object.keys(subChoiceCounterArray).forEach((subChoice) => {
-        if (+BetResult[choice] === +subChoice) {
-            if (+subChoiceCounterArray[subChoice] === 2) {
-                return odds[SicBallSideBetOdds.DOUBLE];
+    let result = odds[SicBallSideBetOdds.SINGLE];
+
+    Object.entries(subChoiceCounterArray).forEach(([subChoice, counter]) => {
+        if (sicBallChoicesMapper[choice] === parseInt(subChoice)) {
+            if (counter === 2) {
+                result = odds[SicBallSideBetOdds.DOUBLE];
+                return;
             }
 
-            if (+subChoiceCounterArray[subChoice] === 3) {
-                return odds[SicBallSideBetOdds.TRIPLE];
+            if (counter === 3) {
+                result = odds[SicBallSideBetOdds.TRIPLE];
+                return;
             }
         }
     });
 
-    return odds[SicBallSideBetOdds.SINGLE];
+    return result;
 };
 
 export const produceDataBetDetailRow = (item: any, drawInfo: RoundInfoSeBall) => {
@@ -94,10 +90,9 @@ export const produceDataBetDetailRow = (item: any, drawInfo: RoundInfoSeBall) =>
 
     const odd = isMainChoice ?
         drawInfo.odds[item.choice] :
-        calculateSubChoiceOdd(item.choice, drawInfo.odds, drawInfo.result.balls);
+        getSubChoiceOdd(item.choice, drawInfo.odds, drawInfo.result.balls);
 
-    console.log({ item })
-    console.log({ isMainChoice })
+
     return {
         rawTime: item.time,
         amount: item.amount,
