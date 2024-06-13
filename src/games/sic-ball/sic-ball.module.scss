@@ -16,6 +16,7 @@
 
 .result-container {
     @extend %layout-result;
+    top: -0.5rem;
 
     .cage-container {
         position: relative;

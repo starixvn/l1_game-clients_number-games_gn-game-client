@@ -8,7 +8,7 @@ const SicBallResultCage: FC<any> = () => {
     return (
         <div className={Style["cage-container"]}>
             <Spritesheet
-                className={"bottom-effect"}
+                className={Style["cage-effect"]}
                 image={`/static/images/sic-ball/hub-interface.webp?v=${buildVersion}`}
                 widthFrame={124}
                 isResponsive
@@ -31,17 +31,6 @@ const SicBallResultCage: FC<any> = () => {
                 loop={true}
                 fps={20}
             />
-            {/* {playResultAnimation && (
-                <BallRotation
-                    ballPos={1}
-                    number={ballNumber}
-                    playResultAnimation={playResultAnimation}
-                    delayTime={showBallDelayTime}
-                    color={BallColor.BLUE}
-                    incrementTotalPoint={() => {}}
-                    customClassName={Style["ball-rotation"]}
-                />
-            )} */}
         </div>
     );
 };

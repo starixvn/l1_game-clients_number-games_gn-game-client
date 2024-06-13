@@ -3,7 +3,7 @@ import { FC, memo, useEffect, useState } from "react";
 import { GameStateContextModel } from "../../_shared/react-contexts/game-state-context/game-state-context-model";
 import useResult from "../../_shared/react-hooks/use-result";
 import { RoundState } from "../../components/game-base/type";
-import SicBallResultItem from "./sic-ball-result-cage";
+import SicBallResultCage from "./sic-ball-result-cage";
 import SicBallResultTotalPoint from "./sic-ball-result-total-point";
 import Style from "./sic-ball.module.scss";
 import { SicBallResult } from "./types";
@@ -24,11 +24,11 @@ const SicBallResultBlock: FC<SicBallResultBlockProps> = (props: SicBallResultBlo
                 roundState === RoundState.BeforePlaceBet && isPlayStartRoundAnimation ? "showResultContainer " : ""
             }`}
         >
-            <SicBallResultItem />
-            <SicBallResultItem />
-            <SicBallResultItem />
+            <SicBallResultCage />
+            <SicBallResultCage />
+            <SicBallResultCage />
             {roundState === RoundState.DisplayResult && (
-                <SicBallResultTotalPoint roundState={roundState} playResultAnimation={playResultAnimation} results={currentResult?.balls} />
+                <SicBallResultTotalPoint playResultAnimation={playResultAnimation} results={currentResult?.balls} />
             )}
         </div>
     );

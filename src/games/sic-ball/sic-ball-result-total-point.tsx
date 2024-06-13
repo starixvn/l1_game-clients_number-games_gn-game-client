@@ -1,25 +1,30 @@
 import { FC, useEffect, useState } from "react";
 
-import { BallColor, RoundState } from "../../components/game-base/type";
+import { getBallColor, getGlossaryTranslate } from "../../_shared/helpers";
+import { useGameContext } from "../../_shared/react-contexts";
+import { useTranslator } from "../../_shared/react-hooks";
 import BallRotation from "../../components/game-components/cage-result-list/ball-rotation";
+import { SicBallBetOptions } from "./sic-ball-constants";
 import Style from "./sic-ball.module.scss";
 
-const SicBallResultTotalPoint: FC<{ roundState: RoundState; playResultAnimation: boolean; results: any }> = ({
-    roundState,
-    playResultAnimation,
-    results,
-}) => {
-    const [showTotal, setShowTotal] = useState(false);
-    console.log("results.balls", results);
+const SicBallResultTotalPoint: FC<{ playResultAnimation: boolean; results: any }> = ({ playResultAnimation, results }) => {
+    const { tolgeeNamespace } = useGameContext();
+    const { t } = useTranslator([tolgeeNamespace]);
 
     const totalPoint = results ? results.reduce((prevTotal, current) => prevTotal + current) : 0;
+    const choice = totalPoint >= 11 ? SicBallBetOptions.BIG : SicBallBetOptions.SMALL;
+    const result = `${totalPoint} - ${t(getGlossaryTranslate(tolgeeNamespace, choice)) || choice}`;
+
+    const [showTotal, setShowTotal] = useState(false);
+
+    const showAllBallsDelayTime = 2500;
 
     useEffect(() => {
         const timeout = setTimeout(
             () => {
                 setShowTotal(true);
             },
-            playResultAnimation ? 2500 : 0
+            playResultAnimation ? showAllBallsDelayTime : 0
         );
 
         return () => {
@@ -38,7 +43,7 @@ const SicBallResultTotalPoint: FC<{ roundState: RoundState; playResultAnimation:
                             number={result}
                             playResultAnimation={playResultAnimation}
                             delayTime={index * 800}
-                            color={BallColor.BLUE}
+                            color={getBallColor(result)}
                             incrementTotalPoint={() => {}}
                             customClassName={Style["ball-rotation"]}
                         />
@@ -49,7 +54,7 @@ const SicBallResultTotalPoint: FC<{ roundState: RoundState; playResultAnimation:
             {showTotal && (
                 <div>
                     <div className={`fade-in ${Style["total-point-bg-blur"]}`}></div>
-                    <span className={Style["total-point"]}>{totalPoint} - small</span>
+                    <span className={Style["total-point"]}>{result}</span>
                 </div>
             )}
         </div>
