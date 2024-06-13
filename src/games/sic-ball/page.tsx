@@ -143,6 +143,10 @@ class SicBall extends GameBase<GameBaseProps> {
     renderRoundIdSection(): JSX.Element {
         return <DrawIdBlock showRoundId={true} />;
     }
+
+    renderStatisticContent() {
+        return <></>;
+    }
 }
 
 const SicBallWrapper = (props) => {
