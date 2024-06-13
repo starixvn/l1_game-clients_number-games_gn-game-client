@@ -1,7 +1,7 @@
 .betting-zone {
     position: relative;
     width: 35.2rem;
-    margin: 1rem auto auto;
+    margin: 0 auto;
     z-index: 2;
 }
 
@@ -142,17 +142,39 @@
 }
 
 //-------------- CHOICE BLUE3 BLUE4 RED2 RED3 RED4 -----------------//
-
-.sub-betting-zone {
-    width: 35.2rem;
-    margin-left: auto;
-    margin-right: auto;
+.sub-betting-container {
     margin-top: 0.5rem;
+    background: linear-gradient(180deg, rgba(20, 42, 60, 0.8) 0%, rgba(1, 11, 17, 0.8) 100%);
+    border-radius: 1rem;
+    padding: 0.2rem;
+}
+
+.side-bet-odds {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 500;
+    display: flex;
+    justify-content: center;
+    gap: 1.6rem;
+
+    .odds-item {
+        display: flex;
+        gap: 0.4rem;
+        align-items: center;
+    }
+
+    .odds-value {
+        --font-bet-odd: 1.1rem;
+        color: rgba(255, 255, 255, 0.6);
+    }
+}
+
+.sub-betting {
     display: grid;
     grid-template-columns: repeat(3, 11.3rem);
     grid-template-rows: 6.1rem 6.1rem;
     justify-content: space-between;
-    row-gap: 0.5rem;
+    row-gap: 0.4rem;
 }
 
 .bet-choice {
@@ -190,7 +212,7 @@
         background: var(--bg-disable-layer);
         width: var(--disable-layer-width, 11.3rem);
         height: var(--disable-layer-height, 6.1rem);
-        background-size: cover;
+        background-size: contain;
         opacity: 0;
         animation: show-disabled-layer 0.3s ease-in forwards;
     }

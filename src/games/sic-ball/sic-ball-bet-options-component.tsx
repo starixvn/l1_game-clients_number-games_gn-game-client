@@ -4,9 +4,10 @@ import { useGameContext } from "../../_shared/react-contexts";
 import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
 import { isShowHighlightPrevResult } from "../../_shared/react-hooks/use-high-light";
 import { RoundState } from "../../components/game-base/type";
-import { SicBallBetOptions, SicBallBetOptionsPercentageColor } from "./sic-ball-constants";
+import { SicBallBetOptions, SicBallBetOptionsPercentageColor, SicBallSideBetOdds } from "./sic-ball-constants";
 import Style from "./sic-ball.module.scss";
 import { buildVersion } from "../../_shared/constants";
+import { useTranslator } from "../../_shared/react-hooks/use-translator";
 
 const BetChoice = dynamic(() => import("../../components/game-components/bet-option/bet-choice"));
 const RippleButton = dynamic(() => import("../../components/game-components/bet-option/ripple-button"));
@@ -18,7 +19,7 @@ const TotalBet = dynamic(() => import("../../components/game-components/bet-opti
 const SicBallWinningAnimation = dynamic(() => import("./sic-ball-winning-animation"));
 
 const SicBallBetOptionsComponent = () => {
-    const { roundState, settlementResult, showResultInfo, roundHistory, turnCounter } = useGameStateContext();
+    const { roundState, settlementResult, showResultInfo, roundHistory, turnCounter, gameConfigs } = useGameStateContext();
     const { tolgeeNamespace } = useGameContext();
 
     const isShowDisabledLayer = roundState === RoundState.LockingBet;
@@ -63,7 +64,7 @@ const SicBallBetOptionsComponent = () => {
         return <BetChoice choice={choice} className={Style[`bet-name-${choice}`]} tolgeeNamespace={tolgeeNamespace} />;
     };
 
-    const renderOdds = (choice: string) => {
+    const renderOdds = (choice: string, className?: string) => {
         return (
             <Odds
                 turnCounter={turnCounter}
@@ -71,12 +72,24 @@ const SicBallBetOptionsComponent = () => {
                 tolgeeNamespace={tolgeeNamespace}
                 animationDuration={6}
                 isFormatOddsAuto={true}
+                className={className}
             />
         );
     };
 
     const renderOwnBet = (choice: string) => {
         return <OwnBet choice={choice} tolgeeNamespace={tolgeeNamespace} className={Style["own-bet"]} />;
+    };
+
+    const renderSideBetOdds = (sideBetOdds: string) => {
+        const { t } = useTranslator([tolgeeNamespace]);
+
+        return (
+            <div className={Style["odds-item"]}>
+                <div>{t(`odds_${sideBetOdds}`)}</div>
+                {renderOdds(sideBetOdds, Style["odds-value"])}
+            </div>
+        );
     };
 
     const renderHighlightWinningPrevResult = (choice: string) => {
@@ -180,7 +193,7 @@ const SicBallBetOptionsComponent = () => {
                     alt={`icon-${choice.toLowerCase()}`}
                     className={Style["specific-icon-number"]}
                 />
-                {renderOdds(choice)}
+
                 <div className={Style["own-bet-container"]}>{renderOwnBet(choice)}</div>
                 <div className={Style["winning-effect"]}>{renderHighlightWinningResult(choice)}</div>
 
@@ -198,13 +211,21 @@ const SicBallBetOptionsComponent = () => {
                 <div className={Style["bet-option-row"]}>{renderMainOption(SicBallBetOptions.SMALL)}</div>
             </div>
 
-            <div className={Style["sub-betting-zone"]}>
-                {renderSubOptions(SicBallBetOptions.SPECIFIC1)}
-                {renderSubOptions(SicBallBetOptions.SPECIFIC2)}
-                {renderSubOptions(SicBallBetOptions.SPECIFIC3)}
-                {renderSubOptions(SicBallBetOptions.SPECIFIC4)}
-                {renderSubOptions(SicBallBetOptions.SPECIFIC5)}
-                {renderSubOptions(SicBallBetOptions.SPECIFIC6)}
+            <div className={Style["sub-betting-container"]}>
+                <div className={Style["side-bet-odds"]}>
+                    {renderSideBetOdds(SicBallSideBetOdds.SINGLE)}
+                    {renderSideBetOdds(SicBallSideBetOdds.DOUBLE)}
+                    {renderSideBetOdds(SicBallSideBetOdds.TRIPLE)}
+                </div>
+
+                <div className={Style["sub-betting"]}>
+                    {renderSubOptions(SicBallBetOptions.SPECIFIC1)}
+                    {renderSubOptions(SicBallBetOptions.SPECIFIC2)}
+                    {renderSubOptions(SicBallBetOptions.SPECIFIC3)}
+                    {renderSubOptions(SicBallBetOptions.SPECIFIC4)}
+                    {renderSubOptions(SicBallBetOptions.SPECIFIC5)}
+                    {renderSubOptions(SicBallBetOptions.SPECIFIC6)}
+                </div>
             </div>
         </>
     );

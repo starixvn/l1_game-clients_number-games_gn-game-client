@@ -146,8 +146,8 @@
     }
 }
 
-$red_choices: under, even, banker;
-$blue_choices: over, odd, player;
+$red_choices: under, even, banker, small;
+$blue_choices: over, odd, player, big;
 $green_choices: tie;
 
 @each $choice in $red_choices {

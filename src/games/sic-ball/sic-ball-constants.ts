@@ -11,6 +11,12 @@ export enum SicBallBetOptions {
     SPECIFIC6 = "specific6",
 }
 
+export enum SicBallSideBetOdds {
+    SINGLE = "single",
+    DOUBLE = "double",
+    TRIPLE = "triple",
+}
+
 export const SicBallBetOptionsPercentageColor = {
     big: "#84C6FF",
     small: "#FF9090",
@@ -22,12 +28,3 @@ export const defaultRoundData = [
     { number: 0, status: BallStatus.NONE, delayTime: 0 },
     { number: 0, status: BallStatus.NONE, delayTime: 0 },
 ];
-
-export const DotColorMapper = {
-    [SicBallBetOptions.SPECIFIC1]: [true, true, true, false],
-    [SicBallBetOptions.SPECIFIC2]: [true, true, true, true],
-    [SicBallBetOptions.SPECIFIC3]: [true, false, false, false],
-    [SicBallBetOptions.SPECIFIC4]: [false, false, false, false],
-    [SicBallBetOptions.SPECIFIC5]: [true, true, false, false],
-    [SicBallBetOptions.SPECIFIC6]: [true, true, false, false],
-};
