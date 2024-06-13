@@ -4,7 +4,7 @@ import { useCommonTranslate, useTranslator } from "../../../_shared/react-hooks"
 import Styles from "./history.module.scss";
 import SmallBall from "../../../components/game-components/small-ball";
 import { DrawInfo, PFResult } from "../../../components/game-base/type";
-import { SicBallBetOptions } from "../sic-ball-constants";
+import { SicBallBetOptions, SicBallSideBetOdds } from "../sic-ball-constants";
 import { Odd, sicBallChoicesMapper } from "../types";
 
 export interface RoundInfoSeBall extends DrawInfo {
@@ -32,11 +32,6 @@ export interface RoundInfoSeBall extends DrawInfo {
     pfResult: PFResult;
 }
 
-export const SubChoiceOddNames = {
-    single: "single",
-    double: "double",
-    triple: "triple",
-};
 
 export const mainChoices = [SicBallBetOptions.BIG, SicBallBetOptions.SMALL];
 
@@ -81,16 +76,16 @@ const calculateSubChoiceOdd = (choice: string, odds: Odd, balls: any) => {
     Object.keys(subChoiceCounterArray).forEach((subChoice) => {
         if (+BetResult[choice] === +subChoice) {
             if (+subChoiceCounterArray[subChoice] === 2) {
-                return odds[SubChoiceOddNames.double];
+                return odds[SicBallSideBetOdds.DOUBLE];
             }
 
             if (+subChoiceCounterArray[subChoice] === 3) {
-                return odds[SubChoiceOddNames.triple];
+                return odds[SicBallSideBetOdds.TRIPLE];
             }
         }
     });
 
-    return odds[SubChoiceOddNames.single];
+    return odds[SicBallSideBetOdds.SINGLE];
 };
 
 export const produceDataBetDetailRow = (item: any, drawInfo: RoundInfoSeBall) => {
