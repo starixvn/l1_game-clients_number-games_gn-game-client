@@ -299,37 +299,31 @@
 .winning-effect {
     position: absolute;
     top: 0;
+    left: 0;
 }
 
 .winning-light-anim {
     position: relative;
 
-    &.anim-odd {
-        left: -0.3rem;
-        top: -0.5rem;
+    &.anim-big {
+        left: -0.8rem;
+        top: -0.7rem;
     }
 
-    &.anim-even {
-        left: -0.4rem;
-        top: -0.5rem;
+    &.anim-small {
+        left: -0.8rem;
+        top: -0.7rem;
         transform: scaleX(-1);
     }
 
-    &.anim-blue3,
-    &.anim-red3,
-    &.anim-red4,
-    &.anim-blue4 {
-        top: -0.4rem;
-        left: 0;
-    }
-
-    &.anim-red2 {
-        top: -0.3rem;
-        left: 0;
-    }
-
-    &.anim-red4 {
-        transform: scaleX(-1);
+    &.anim-specific1,
+    &.anim-specific2,
+    &.anim-specific3,
+    &.anim-specific4,
+    &.anim-specific5,
+    &.anim-specific6 {
+        left: -0.5rem;
+        top: -0.6rem;
     }
 }
 
@@ -416,31 +410,50 @@
     display: flex;
     width: 1.6rem;
     height: 1.6rem;
+    color: var(--color);
+
+    &::before {
+        width: 100%;
+        text-align: center;
+        font-size: 1.1rem;
+    }
 }
 
-.statistic-red2 {
+.statistic-specific1,
+.statistic-specific3,
+.statistic-specific5 {
+    --color: #1c7bdf;
     @extend %statistic-icon;
-    background: url("/static/images/se-ball/statistic-icon-red2.svg") no-repeat;
+    background: url("/static/images/dot/dot-blue-medium.svg?v=#{$version-image}") no-repeat;
+    background-size: contain;
 }
 
-.statistic-red3 {
+.statistic-specific2,
+.statistic-specific4,
+.statistic-specific6 {
+    --color: #ff5e5e;
     @extend %statistic-icon;
-    background: url("/static/images/se-ball/statistic-icon-red3.svg") no-repeat;
+    background: url("/static/images/dot/dot-red-medium.svg?v=#{$version-image}") no-repeat;
+    background-size: contain;
 }
 
-.statistic-red4 {
-    @extend %statistic-icon;
-    background: url("/static/images/se-ball/statistic-icon-red4.svg") no-repeat;
+.statistic-specific1::before {
+    content: "1";
 }
-
-.statistic-blue3 {
-    @extend %statistic-icon;
-    background: url("/static/images/se-ball/statistic-icon-blue3.svg") no-repeat;
+.statistic-specific2::before {
+    content: "2";
 }
-
-.statistic-blue4 {
-    @extend %statistic-icon;
-    background: url("/static/images/se-ball/statistic-icon-blue4.svg") no-repeat;
+.statistic-specific3::before {
+    content: "3";
+}
+.statistic-specific4::before {
+    content: "4";
+}
+.statistic-specific5::before {
+    content: "5";
+}
+.statistic-specific6::before {
+    content: "6";
 }
 
 .choice-odds-area {
