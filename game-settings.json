@@ -152,6 +152,9 @@
         "totalTurns": 3,
         "numberOfRoundHistory": 100,
         "gamePath": "lucky-three",
+        "gameResourceConfigs": {
+            "path": "lucky-three"
+        }
     },
     "1007": {
         "id": 1007,
@@ -174,6 +177,9 @@
         },
         "totalTurns": 1,
         "numberOfRoundHistory": 100,
-        "gamePath": "sic-ball"
+        "gamePath": "sic-ball",
+        "gameResourceConfigs": {
+            "path": "sic-ball"
+        }
     }
 }
