@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useState } from "react";
-import { isMobile } from "react-device-detect";
+import { isIOS, isMobile } from "react-device-detect";
 import useSound from "use-sound";
 import { formatVolume } from "../../../_shared/helpers";
 import { useSettingContext } from "../../../_shared/react-contexts";
@@ -25,7 +25,14 @@ const BGMPlayer = ({ isUserGesture }) => {
 
         if (isUserGesture) {
             if (settingContext.enabledMusic) {
-                if (audioContext.state !== "running") {
+                if (isIOS) {
+                    const localAudioContext: AudioContext = (sound as any)._sounds[0]._node.context;
+
+                    (async () => {
+                        await localAudioContext.resume();
+                        settingContext.volumeMusic && play();
+                    })();
+                } else if (audioContext.state !== "running") {
                     audioContext
                         .resume()
                         .then(() => {
