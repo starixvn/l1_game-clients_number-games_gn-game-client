@@ -5,6 +5,7 @@ import Styles from "./history.module.scss";
 import SmallBall from "../../../components/game-components/small-ball";
 import { DrawInfo, PFResult } from "../../../components/game-base/type";
 import { SicBallBetOptions } from "../sic-ball-constants";
+import { Odd, sicBallChoicesMapper } from "../types";
 
 export interface RoundInfoSeBall extends DrawInfo {
     drawId: number;
@@ -14,12 +15,9 @@ export interface RoundInfoSeBall extends DrawInfo {
     odds: {
         big: number;
         small: number;
-        specific1: number;
-        specific2: number;
-        specific3: number;
-        specific4: number;
-        specific5: number;
-        specific6: number;
+        single: number;
+        double: number;
+        triple: number;
     };
     settlementResult: {
         big: boolean;
@@ -32,6 +30,23 @@ export interface RoundInfoSeBall extends DrawInfo {
         specific6: boolean;
     };
     pfResult: PFResult;
+}
+
+export const SubChoiceOddNames = {
+    single: "single",
+    double: "double",
+    triple: "triple",
+};
+
+export const mainChoices = [SicBallBetOptions.BIG, SicBallBetOptions.SMALL];
+
+export enum BetResult {
+    specific1,
+    specific2,
+    specific3,
+    specific4,
+    specific5,
+    specific6,
 }
 
 export const BetDetailResultBlock: FC<{ roundInfo: RoundInfoSeBall }> = ({ roundInfo: drawInfo }) => {
@@ -55,20 +70,46 @@ export const BetDetailResultBlock: FC<{ roundInfo: RoundInfoSeBall }> = ({ round
     );
 };
 
-const calculateWin = (isWin: boolean, amount: number, odds: number) => {
-    return isWin ? amount * odds : 0;
+
+const calculateSubChoiceOdd = (choice: string, odds: Odd, balls: any) => {
+    const subChoiceCounterArray = {};
+
+    Object.values(balls).forEach((value) => {
+        subChoiceCounterArray[+value] = (subChoiceCounterArray[+value] || 0) + 1;
+    });
+
+    Object.keys(subChoiceCounterArray).forEach((subChoice) => {
+        if (+BetResult[choice] === +subChoice) {
+            if (+subChoiceCounterArray[subChoice] === 2) {
+                return odds[SubChoiceOddNames.double];
+            }
+
+            if (+subChoiceCounterArray[subChoice] === 3) {
+                return odds[SubChoiceOddNames.triple];
+            }
+        }
+    });
+
+    return odds[SubChoiceOddNames.single];
 };
 
 export const produceDataBetDetailRow = (item: any, drawInfo: RoundInfoSeBall) => {
-    const win = calculateWin(drawInfo.settlementResult?.[item.choice], item.amount, drawInfo.odds[item.choice]);
+    const isMainChoice = mainChoices.includes(item.choice);
+    const isWin = drawInfo.settlementResult?.[item.choice];
 
+    const odd = isMainChoice ?
+        drawInfo.odds[item.choice] :
+        calculateSubChoiceOdd(item.choice, drawInfo.odds, drawInfo.result.balls);
+
+    console.log({ item })
+    console.log({ isMainChoice })
     return {
         rawTime: item.time,
         amount: item.amount,
-        choice: item.choice,
-        odds: drawInfo.odds[item.choice],
-        win: win,
-        hightlight: drawInfo.settlementResult?.[item.choice],
+        choice: isMainChoice ? item.choice : sicBallChoicesMapper[item.choice],
+        odds: isWin ? odd : "-",
+        win: isWin ? item.amount * odd : 0,
+        hightlight: isWin,
     };
 };
 
@@ -81,7 +122,7 @@ export const BetChoice: FC<{ choice: string }> = ({ choice }) => {
             {choice === SicBallBetOptions.BIG || choice === SicBallBetOptions.SMALL ? (
                 translateSeBall(`glossary_${choice}`)
             ) : (
-                <img src={`/static/images/se-ball/bet-detail-${choice}.svg`} alt="" />
+                <div className={Styles["bet-detail-ball"]}><SmallBall number={parseInt(choice)} /></div>
             )}
         </span>
     );

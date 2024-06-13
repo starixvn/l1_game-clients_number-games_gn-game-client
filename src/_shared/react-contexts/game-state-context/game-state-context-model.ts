@@ -41,6 +41,7 @@ export interface GameStateContextModel {
         betLogDetails: any[];
     };
     isPlayStartRoundAnimation?: boolean;
+    isScoreboardTab?: boolean;
 }
 
 export const initialGameStateContextModel = () => {

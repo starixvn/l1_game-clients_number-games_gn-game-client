@@ -16,6 +16,11 @@ export type SicBallResult = {
     time: string;
 };
 
-export const sicBallChoicesMapper = { specific1: 1, specific2: 2, specific3: 3, specific4: 4, specific5: 5, specific6: 6 };
+export type Odd = {
+    single: number;
+    double: number;
+    triple: number;
+};
 
-export type Odd = {};
+export const sicBallChoicesMapper = { "specific1": 1, "specific2": 2, "specific3": 3, "specific4": 4, "specific5": 5, "specific6": 6 };
+

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { countResult } from ".";
 import { useGameContext } from "../../../_shared/react-contexts";
 import { useTranslator } from "../../../_shared/react-hooks";
@@ -13,11 +14,13 @@ export const RedAndBlueStatisticSubRoundCounter: React.FC<PercentageStatisticPro
     const { tolgeeNamespace } = useGameContext();
     const { t } = useTranslator([tolgeeNamespace]);
 
+    const [activeScoreboardTab, setActiveScoreboardTab] = useState(true);
+
     return (
         <div className={`flex ${Styles["statistic-container"]} ${Styles["other"]}`} id="bar-statistic">
-            <StatisticMainChoices {...props} />
+            <div onClick={() => setActiveScoreboardTab(true)} ><StatisticMainChoices {...props} /></div>
 
-            <div className={Styles["other-wrapper"]}>
+            <div className={Styles["other-wrapper"]} onClick={() => setActiveScoreboardTab(false)}>
                 {subChoices.map((choice) => (
                     <StatisticItem key={choice} value={`${countedSubChoices[sicBallChoicesMapper[choice]] ?? 0}`}>
                         <span className={subChoicesClass[choice]}></span>
