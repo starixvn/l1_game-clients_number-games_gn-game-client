@@ -121,18 +121,12 @@ const SicBallBetOptionsComponent = () => {
                 break;
 
             case SicBallBetOptions.SPECIFIC1:
-            case SicBallBetOptions.SPECIFIC3:
-                resourceName = SicBallBetOptions.SPECIFIC3;
-                break;
-
             case SicBallBetOptions.SPECIFIC2:
+            case SicBallBetOptions.SPECIFIC3:
             case SicBallBetOptions.SPECIFIC4:
-                resourceName = SicBallBetOptions.SPECIFIC4;
-                break;
-
             case SicBallBetOptions.SPECIFIC5:
             case SicBallBetOptions.SPECIFIC6:
-                resourceName = SicBallBetOptions.SPECIFIC5;
+                resourceName = SicBallBetOptions.SPECIFIC1;
                 break;
         }
 
@@ -176,7 +170,6 @@ const SicBallBetOptionsComponent = () => {
     };
 
     const renderSubOptions = (choice: string) => {
-        console.log("renderSubOptions", choice);
         return (
             <div className={`${Style[choice]} ${Style["bet-choice"]}`}>
                 {renderTotalBet(choice, Style["side-bet-total-bet"])}

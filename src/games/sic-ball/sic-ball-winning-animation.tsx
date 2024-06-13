@@ -14,14 +14,14 @@ type Props = {
 };
 
 const ChoiceWinningSize = {
-    [SicBallBetOptions.BIG]: [174, 104],
-    [SicBallBetOptions.SMALL]: [174, 104],
-    [SicBallBetOptions.SPECIFIC1]: [113, 60],
-    [SicBallBetOptions.SPECIFIC2]: [113, 60],
-    [SicBallBetOptions.SPECIFIC3]: [113, 60],
-    [SicBallBetOptions.SPECIFIC4]: [113, 60],
-    [SicBallBetOptions.SPECIFIC5]: [113, 60],
-    [SicBallBetOptions.SPECIFIC6]: [113, 60],
+    [SicBallBetOptions.BIG]: [188, 118],
+    [SicBallBetOptions.SMALL]: [188, 118],
+    [SicBallBetOptions.SPECIFIC1]: [124, 72],
+    [SicBallBetOptions.SPECIFIC2]: [124, 72],
+    [SicBallBetOptions.SPECIFIC3]: [124, 72],
+    [SicBallBetOptions.SPECIFIC4]: [124, 72],
+    [SicBallBetOptions.SPECIFIC5]: [124, 72],
+    [SicBallBetOptions.SPECIFIC6]: [124, 72],
 };
 
 const SicBallWinningAnimation: React.FC<Props> = ({ choice, resourceName, roundState, settlementResult, showResultInfo }) => {
@@ -33,11 +33,11 @@ const SicBallWinningAnimation: React.FC<Props> = ({ choice, resourceName, roundS
             <div className="d-grid">
                 <Spritesheet
                     className={`${Styles["winning-light-anim"]} ${Styles["anim-" + choice]}`}
-                    image={`/static/images/se-ball/highlight-winning-${resourceName}.png?v=4`}
+                    image={`/static/images/sic-ball/winning-effect-${resourceName}.png?v=4`}
                     widthFrame={width}
                     isResponsive
                     heightFrame={height}
-                    steps={10}
+                    steps={resourceName === "small" ? 15 : 29}
                     autoplay={true}
                     loop={true}
                     fps={20}

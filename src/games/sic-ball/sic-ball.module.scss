@@ -167,7 +167,8 @@
         content: "";
         background-image: var(--bg);
         background-image: image-set(var(--bg) 1x, var(--bg-2x) 2x);
-        background-size: cover;
+        background-size: contain;
+        background-repeat: no-repeat;
         display: block;
         position: absolute;
         top: 0;
@@ -248,37 +249,31 @@
 .winning-effect {
     position: absolute;
     top: 0;
+    left: 0;
 }
 
 .winning-light-anim {
     position: relative;
 
-    &.anim-odd {
-        left: -0.3rem;
-        top: -0.5rem;
+    &.anim-big {
+        left: -0.8rem;
+        top: -0.7rem;
     }
 
-    &.anim-even {
-        left: -0.4rem;
-        top: -0.5rem;
+    &.anim-small {
+        left: -0.8rem;
+        top: -0.7rem;
         transform: scaleX(-1);
     }
 
-    &.anim-blue3,
-    &.anim-red3,
-    &.anim-red4,
-    &.anim-blue4 {
-        top: -0.4rem;
-        left: 0;
-    }
-
-    &.anim-red2 {
-        top: -0.3rem;
-        left: 0;
-    }
-
-    &.anim-red4 {
-        transform: scaleX(-1);
+    &.anim-specific1,
+    &.anim-specific2,
+    &.anim-specific3,
+    &.anim-specific4,
+    &.anim-specific5,
+    &.anim-specific6 {
+        left: -0.5rem;
+        top: -0.6rem;
     }
 }
 
