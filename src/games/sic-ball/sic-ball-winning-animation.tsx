@@ -14,14 +14,14 @@ type Props = {
 };
 
 const ChoiceWinningSize = {
-    [SicBallBetOptions.BIG]: [186, 104],
-    [SicBallBetOptions.SMALL]: [186, 104],
-    [SicBallBetOptions.SPECIFIC1]: [146, 74],
-    [SicBallBetOptions.SPECIFIC2]: [146, 74],
-    [SicBallBetOptions.SPECIFIC3]: [146, 74],
-    [SicBallBetOptions.SPECIFIC4]: [146, 74],
-    [SicBallBetOptions.SPECIFIC5]: [87, 158],
-    [SicBallBetOptions.SPECIFIC6]: [87, 158],
+    [SicBallBetOptions.BIG]: [174, 104],
+    [SicBallBetOptions.SMALL]: [174, 104],
+    [SicBallBetOptions.SPECIFIC1]: [113, 60],
+    [SicBallBetOptions.SPECIFIC2]: [113, 60],
+    [SicBallBetOptions.SPECIFIC3]: [113, 60],
+    [SicBallBetOptions.SPECIFIC4]: [113, 60],
+    [SicBallBetOptions.SPECIFIC5]: [113, 60],
+    [SicBallBetOptions.SPECIFIC6]: [113, 60],
 };
 
 const SicBallWinningAnimation: React.FC<Props> = ({ choice, resourceName, roundState, settlementResult, showResultInfo }) => {

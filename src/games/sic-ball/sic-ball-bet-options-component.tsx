@@ -1,11 +1,12 @@
 import dynamic from "next/dynamic";
-
+import Image from "next/image";
 import { useGameContext } from "../../_shared/react-contexts";
 import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
 import { isShowHighlightPrevResult } from "../../_shared/react-hooks/use-high-light";
 import { RoundState } from "../../components/game-base/type";
-import { DotColorMapper, SicBallBetOptions, SicBallBetOptionsPercentageColor } from "./sic-ball-constants";
+import { SicBallBetOptions, SicBallBetOptionsPercentageColor } from "./sic-ball-constants";
 import Style from "./sic-ball.module.scss";
+import { buildVersion } from "../../_shared/constants";
 
 const BetChoice = dynamic(() => import("../../components/game-components/bet-option/bet-choice"));
 const RippleButton = dynamic(() => import("../../components/game-components/bet-option/ripple-button"));
@@ -35,6 +36,21 @@ const SicBallBetOptionsComponent = () => {
                 percentageColor={SicBallBetOptionsPercentageColor[choice]}
             />
         );
+    };
+
+    const renderBetInfo = (choice) => {
+        const betInfoText = {
+            [SicBallBetOptions.BIG]: "[11 - 18]",
+            [SicBallBetOptions.SMALL]: "[3 - 10]",
+        };
+
+        const betInfoClassName = Style["bet-info"];
+
+        if (betInfoText.hasOwnProperty(choice)) {
+            return <div className={betInfoClassName}>{betInfoText[choice]}</div>;
+        }
+
+        return null;
     };
 
     const renderPlayerBetCount = (choice: string, className?: string) => {
@@ -106,7 +122,6 @@ const SicBallBetOptionsComponent = () => {
 
             case SicBallBetOptions.SPECIFIC1:
             case SicBallBetOptions.SPECIFIC3:
-
                 resourceName = SicBallBetOptions.SPECIFIC3;
                 break;
 
@@ -145,6 +160,7 @@ const SicBallBetOptionsComponent = () => {
                 </div>
                 <div className={`${Style["choice-odds-area"]}`}>
                     {renderBetChoice(choice)}
+                    {renderBetInfo(choice)}
                     {renderOdds(choice)}
                 </div>
 
@@ -159,20 +175,18 @@ const SicBallBetOptionsComponent = () => {
         );
     };
 
-    const renderDot = (choice: string) => {
-        const dots = DotColorMapper[choice];
-
-        if (dots) {
-            return dots.map((dot, index) => <div key={index} className={`${dot ? Style["dot-red"] : Style["dot-blue"]}`}></div>);
-        }
-
-        return null;
-    };
-
     const renderSubOptions = (choice: string) => {
+        console.log("renderSubOptions", choice);
         return (
             <div className={`${Style[choice]} ${Style["bet-choice"]}`}>
-                <div className={`${Style["dot-wrapper"]} ${choice === "red2" ? Style["two-lines"] : ""}`}>{renderDot(choice)}</div>
+                {renderTotalBet(choice, Style["side-bet-total-bet"])}
+                <Image
+                    src={`/static/images/sic-ball/${choice.toLowerCase()}.png?v=${buildVersion}`}
+                    width={32}
+                    height={32}
+                    alt={`icon-${choice.toLowerCase()}`}
+                    className={Style["specific-icon-number"]}
+                />
                 {renderOdds(choice)}
                 <div className={Style["own-bet-container"]}>{renderOwnBet(choice)}</div>
                 <div className={Style["winning-effect"]}>{renderHighlightWinningResult(choice)}</div>
