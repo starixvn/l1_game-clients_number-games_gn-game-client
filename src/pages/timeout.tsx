@@ -1,9 +1,9 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useCommonTranslate } from "../_shared/react-hooks/use-translator";
+import BackgroundComet from "../components/page-components/background-error";
 import ButtonReturnToURL from "../components/page-components/button-return-to-url";
 import { clearSession } from "../services/auth-service";
-import BackgroundComet from "../components/page-components/background-error";
 
 const TimeOut = () => {
     const { t } = useCommonTranslate();
@@ -13,6 +13,11 @@ const TimeOut = () => {
     useEffect(() => {
         setIsLoading(false);
         clearSession();
+
+        (async () => {
+            const audioContext: AudioContext = global.Howler.ctx;
+            await audioContext.close();
+        })();
     }, [router.isReady]);
 
     if (isLoading) {
