@@ -3,7 +3,7 @@ import { GameRoundDataHandler } from "../../components/game-base/handlers/game-r
 export class NextGameRoundDataHandler extends GameRoundDataHandler {
     buildGameRoundDataAfterReceiveFinishEvent(previousRoundData: any, result: any, drawId: number) {
         const resultRoundData = {
-            balls: [result.ball],
+            balls: [result.balls],
         };
 
         return {

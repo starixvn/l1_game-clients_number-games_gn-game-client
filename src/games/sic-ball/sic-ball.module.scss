@@ -5,13 +5,17 @@
     z-index: 2;
 }
 
-.result-container {
+%layout-result {
     position: relative;
     display: grid;
     grid-template-columns: repeat(3, 11.7rem);
     grid-template-rows: 13.3rem;
     justify-content: center;
     align-items: center;
+}
+
+.result-container {
+    @extend %layout-result;
 
     .cage-container {
         position: relative;
@@ -41,8 +45,8 @@
 
     .ball-rotation {
         transform: scale(0.63);
-        position: absolute;
-        top: 5px;
+        position: relative;
+        top: -9px;
         left: 7px;
         height: 105px;
         width: 110px;
@@ -56,7 +60,7 @@
 
     %bottom {
         position: absolute;
-        bottom: -10px;
+        bottom: -1rem;
         left: 0;
         width: 100%;
         height: 4.2rem;
@@ -76,6 +80,30 @@
         font-size: 3.2rem;
         font-weight: 600;
         color: #fff;
+        text-shadow: 0.1rem 0.1rem 2rem rgba(255, 255, 255, 0.6);
+        animation: show 0.5s ease-in-out forwards;
+    }
+
+    .result {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+    }
+
+    .balls-container {
+        @extend %layout-result;
+    }
+
+    @keyframes show {
+        from {
+            opacity: 0;
+            transform: scale(0);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
     }
 }
 
@@ -189,8 +217,7 @@
         content: "";
         background-image: var(--bg);
         background-image: image-set(var(--bg) 1x, var(--bg-2x) 2x);
-        background-size: contain;
-        background-repeat: no-repeat;
+        background-size: cover;
         display: block;
         position: absolute;
         top: 0;
@@ -271,31 +298,37 @@
 .winning-effect {
     position: absolute;
     top: 0;
-    left: 0;
 }
 
 .winning-light-anim {
     position: relative;
 
-    &.anim-big {
-        left: -0.8rem;
-        top: -0.7rem;
+    &.anim-odd {
+        left: -0.3rem;
+        top: -0.5rem;
     }
 
-    &.anim-small {
-        left: -0.8rem;
-        top: -0.7rem;
+    &.anim-even {
+        left: -0.4rem;
+        top: -0.5rem;
         transform: scaleX(-1);
     }
 
-    &.anim-specific1,
-    &.anim-specific2,
-    &.anim-specific3,
-    &.anim-specific4,
-    &.anim-specific5,
-    &.anim-specific6 {
-        left: -0.5rem;
-        top: -0.6rem;
+    &.anim-blue3,
+    &.anim-red3,
+    &.anim-red4,
+    &.anim-blue4 {
+        top: -0.4rem;
+        left: 0;
+    }
+
+    &.anim-red2 {
+        top: -0.3rem;
+        left: 0;
+    }
+
+    &.anim-red4 {
+        transform: scaleX(-1);
     }
 }
 
