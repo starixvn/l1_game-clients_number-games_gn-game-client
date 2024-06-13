@@ -35,7 +35,47 @@
     .ball-loop {
         position: absolute;
         top: 2.4rem;
-        left: 2.9rem;
+        left: 2.8rem;
+        transform: scale(0.95);
+    }
+
+    .ball-rotation {
+        transform: scale(0.63);
+        position: absolute;
+        top: 5px;
+        left: 7px;
+        height: 105px;
+        width: 110px;
+
+        div:nth-child(2) {
+            left: -2.1rem;
+            top: -1.2rem !important;
+            transform: scale(0.64);
+        }
+    }
+
+    %bottom {
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        width: 100%;
+        height: 4.2rem;
+    }
+
+    .total-point-bg-blur {
+        @extend %bottom;
+        background: rgba(0, 0, 0, 0.6);
+        filter: blur(8px);
+    }
+
+    .total-point {
+        @extend %bottom;
+        text-transform: uppercase;
+        text-align: center;
+        line-height: 4.2rem;
+        font-size: 3.2rem;
+        font-weight: 600;
+        color: #fff;
     }
 }
 

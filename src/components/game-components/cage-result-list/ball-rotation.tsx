@@ -14,7 +14,8 @@ const BallRotation: React.FC<{
     delayTime: number;
     color: string;
     incrementTotalPoint: Function;
-}> = ({ ballPos, number, playResultAnimation, delayTime, color, incrementTotalPoint }) => {
+    customClassName?: string;
+}> = ({ ballPos, number, playResultAnimation, delayTime, color, incrementTotalPoint, customClassName }) => {
     const [showBall, setShowBall] = useState(false);
     const playShowBallResultSound = useShowBallResultSound();
 
@@ -42,7 +43,7 @@ const BallRotation: React.FC<{
         }
 
         return (
-            <div key={uuidv4()} className={Styles[`ball-rotation-${ballPos}`]}>
+            <div key={uuidv4()} className={`${Styles[`ball-rotation-${ballPos}`]} ${customClassName}`}>
                 <Spritesheet
                     image={`/static/images/cage/ball-${color}-middle-light.webp?v=${buildVersion}`}
                     widthFrame={153}
