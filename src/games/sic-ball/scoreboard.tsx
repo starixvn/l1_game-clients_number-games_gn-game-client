@@ -10,7 +10,7 @@ import { tolgee } from "../../_shared/tolgee";
 export type ScoreboardComponentProps = {
     roundHistory: Round<SicBallResult, SicBallSettlementResult>[];
     isShowBlink: boolean;
-    isOddEven: boolean;
+    isBigSmall: boolean;
 };
 
 class ScoreboardSeBall extends Component<ScoreboardComponentProps> {
@@ -51,7 +51,7 @@ class ScoreboardSeBall extends Component<ScoreboardComponentProps> {
                     type="switch"
                     scoreboards={[
                         {
-                            element: createBeadRoadElement(this.props.isOddEven),
+                            element: createBeadRoadElement(this.props.isBigSmall),
                             arrange: BeadRoadElement.arrange,
                             column: 18,
                             row: 6,

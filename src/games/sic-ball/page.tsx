@@ -135,7 +135,7 @@ class SicBall extends GameBase<GameBaseProps> {
             <ScoreboardSeBall
                 isShowBlink={isShowBlink}
                 roundHistory={roundHistory as Round<SicBallResult, SicBallSettlementResult>[]}
-                isOddEven={statisticGroup === 1}
+                isBigSmall={statisticGroup === 1}
             />
         );
     }
