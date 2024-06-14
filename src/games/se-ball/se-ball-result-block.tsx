@@ -1,4 +1,4 @@
-import { FC, memo } from "react";
+import { FC, memo, useEffect, useState } from "react";
 
 import { GameStateContextModel } from "../../_shared/react-contexts/game-state-context/game-state-context-model";
 import useResult from "../../_shared/react-hooks/use-result";
@@ -13,19 +13,24 @@ export type SeBallResultBlockProps = Partial<GameStateContextModel>;
 const SeBallResultBlock: FC<SeBallResultBlockProps> = (props: SeBallResultBlockProps) => {
     const { result, roundState, roundHistory, playResultAnimation, isPlayStartRoundAnimation } = props;
     const currentResult = useResult<SeBallResult>({ result, roundState, roundHistory });
+    const [zoomClass, setZoomClass] = useState(`${Style["zoom-out-no-animation"]}`);
+
+    useEffect(() => {
+        if (roundState === RoundState.Disabled || (roundState === RoundState.DisplayResult && playResultAnimation)) {
+            setZoomClass(`${Style["zoom-out"]}`);
+        }
+
+        if (roundState === RoundState.InRound || roundState === RoundState.LockingBet) {
+            setZoomClass(`${Style["zoom-in"]}`);
+        }
+
+        if (roundState === RoundState.DisplayResult && !playResultAnimation) {
+            setZoomClass(`${Style["zoom-out-no-animation"]}`);
+        }
+    }, [roundState, playResultAnimation]);
 
     if (roundState === RoundState.BeforePlaceBet && !isPlayStartRoundAnimation) {
         return <></>;
-    }
-
-    let zoomClass = "zoom-in";
-
-    if (roundState === RoundState.Disabled || (roundState === RoundState.DisplayResult && playResultAnimation)) {
-        zoomClass = Style["zoom-out"];
-    }
-
-    if (roundState === RoundState.DisplayResult && !playResultAnimation) {
-        zoomClass = Style["zoom-out-no-animation"];
     }
 
     return (
