@@ -30,8 +30,9 @@ const SeBallResultBlock: FC<SeBallResultBlockProps> = (props: SeBallResultBlockP
 
     return (
         <div
-            className={`${Style["result-container"]} ${zoomClass} ${roundState === RoundState.BeforePlaceBet && isPlayStartRoundAnimation ? "showResultContainer " : ""
-                }`}
+            className={`${Style["result-container"]} ${zoomClass} ${
+                roundState === RoundState.BeforePlaceBet && isPlayStartRoundAnimation ? "showResultContainer " : ""
+            }`}
         >
             <CageResultList
                 color={CageColor.PURPLE}
