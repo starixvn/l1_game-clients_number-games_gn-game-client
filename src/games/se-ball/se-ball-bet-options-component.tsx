@@ -1,5 +1,7 @@
 import dynamic from "next/dynamic";
+import Image from "next/image";
 
+import { buildVersion } from "../../_shared/constants";
 import { useGameContext } from "../../_shared/react-contexts";
 import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
 import { isShowHighlightPrevResult } from "../../_shared/react-hooks/use-high-light";
@@ -129,8 +131,18 @@ const SeBallBetOptionsComponent = () => {
 
     const renderMainOption = (choice: string) => {
         const className = Style[`choice-${choice}`];
+
         return (
             <div className={`${Style[choice]} text-white relative`}>
+                <Image
+                    className={Style["bg-bet-option"]}
+                    width={178}
+                    height={94}
+                    src={`/static/images/se-ball/2x/bg-${choice}.webp?v=${buildVersion}`}
+                    alt={choice}
+                    priority={true}
+                />
+
                 <div className={`${Style["choice-info"]} ${className}`}>
                     <div className={Style.stake}>
                         {renderTotalBet(choice, choice === SeBallBetOptions.ODD ? "justify-end" : "")}
@@ -164,9 +176,42 @@ const SeBallBetOptionsComponent = () => {
         return null;
     };
 
+    const getSubOptionsBackgroundName = (choice) => {
+        let backgroundName = "";
+
+        switch (choice) {
+            case SeBallBetOptions.BLUE3:
+            case SeBallBetOptions.RED3:
+                backgroundName = SeBallBetOptions.BLUE3;
+                break;
+
+            case SeBallBetOptions.BLUE4:
+            case SeBallBetOptions.RED4:
+                backgroundName = SeBallBetOptions.RED4;
+                break;
+
+            case SeBallBetOptions.RED2:
+                backgroundName = SeBallBetOptions.RED2;
+                break;
+        }
+
+        return backgroundName;
+    };
+
     const renderSubOptions = (choice: string) => {
+        const backgroundName = getSubOptionsBackgroundName(choice);
+
         return (
             <div className={`${Style[choice]} ${Style["bet-choice"]}`}>
+                <Image
+                    className={Style["bg-bet-option"]}
+                    width={choice === SeBallBetOptions.RED2 ? 77 : 136}
+                    height={choice === SeBallBetOptions.RED2 ? 149 : 66}
+                    src={`/static/images/se-ball/2x/bg-${backgroundName}.webp?v=${buildVersion}`}
+                    alt={choice}
+                    priority={true}
+                />
+
                 <div className={`${Style["dot-wrapper"]} ${choice === "red2" ? Style["two-lines"] : ""}`}>{renderDot(choice)}</div>
                 {renderOdds(choice)}
                 <div className={Style["own-bet-container"]}>{renderOwnBet(choice)}</div>

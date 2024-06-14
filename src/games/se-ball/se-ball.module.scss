@@ -52,6 +52,12 @@
 
 //-------------- CHOICE ODD EVEN -----------------//
 
+.bg-bet-option {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
 %main-option {
     --font-bet-name: 1.6rem;
 
@@ -89,8 +95,6 @@
 .even {
     @extend %main-option;
     --color: #ff9090;
-    --bgBetChoice: url("/static/images/se-ball/1x/bg-big-red.png?v=#{$version-image}");
-    --bgBetChoice-2x: url("/static/images/se-ball/2x/bg-big-red.png?v=#{$version-image}");
 
     .btn-ripple {
         z-index: 2;
@@ -105,8 +109,6 @@
 .odd {
     @extend %main-option;
     --color: #84c6ff;
-    --bgBetChoice: url("/static/images/se-ball/1x/bg-big-blue.png?v=#{$version-image}");
-    --bgBetChoice-2x: url("/static/images/se-ball/2x/bg-big-blue.png?v=#{$version-image}");
 
     .btn-ripple {
         z-index: 2;
@@ -136,19 +138,6 @@
     row-gap: 0.3rem;
     padding-top: 1.2rem;
 
-    &::before {
-        content: "";
-        background-image: var(--bg);
-        background-image: image-set(var(--bg) 1x, var(--bg-2x) 2x);
-        background-size: cover;
-        display: block;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: var(--height, 6.6rem);
-    }
-
     .btn-ripple {
         border-radius: var(--border-radius);
         z-index: 1;
@@ -167,8 +156,6 @@
 }
 
 .blue3 {
-    --bg: url("/static/images/se-ball/1x/bg-small-red.png?v=#{$version-image}");
-    --bg-2x: url("/static/images/se-ball/2x/bg-small-red.png?v=#{$version-image}");
     --border-radius: 1.2rem;
 
     --bg-disable-layer: url("/static/images/se-ball/disabled-layer-blue3.png?v=#{$version-image}") no-repeat;
@@ -180,8 +167,6 @@
 }
 
 .blue4 {
-    --bg: url("/static/images/se-ball/1x/bg-small-blue.png?v=#{$version-image}");
-    --bg-2x: url("/static/images/se-ball/2x/bg-small-blue.png?v=#{$version-image}");
     --border-radius: 1.2rem 1.2rem 1.2rem 3rem;
 
     --bg-disable-layer: url("/static/images/se-ball/disabled-layer-blue4.png?v=#{$version-image}") no-repeat;
@@ -191,14 +176,12 @@
     grid-column: 1;
     grid-row: 2;
 
-    &::before {
+    .bg-bet-option {
         transform: scaleX(-1);
     }
 }
 
 .red2 {
-    --bg: url("/static/images/se-ball/1x/bg-medium-blue.png?v=#{$version-image}");
-    --bg-2x: url("/static/images/se-ball/2x/bg-medium-blue.png?v=#{$version-image}");
     --height: 149px;
 
     --bg-disable-layer: url("/static/images/se-ball/disabled-layer-red2.png?v=#{$version-image}") no-repeat;
@@ -217,8 +200,6 @@
 }
 
 .red3 {
-    --bg: url("/static/images/se-ball/1x/bg-small-red.png?v=#{$version-image}");
-    --bg-2x: url("/static/images/se-ball/2x/bg-small-red.png?v=#{$version-image}");
     --border-radius: 1.2rem;
 
     --bg-disable-layer: url("/static/images/se-ball/disabled-layer-blue3.png?v=#{$version-image}") no-repeat;
@@ -230,8 +211,6 @@
 }
 
 .red4 {
-    --bg: url("/static/images/se-ball/1x/bg-small-blue.png?v=#{$version-image}");
-    --bg-2x: url("/static/images/se-ball/2x/bg-small-blue.png?v=#{$version-image}");
     --border-radius: 1.2rem 1.2rem 3rem 1.2rem;
 
     --bg-disable-layer: url("/static/images/se-ball/disabled-layer-blue4.png?v=#{$version-image}") no-repeat;

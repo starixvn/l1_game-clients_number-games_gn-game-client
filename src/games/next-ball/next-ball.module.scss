@@ -20,6 +20,12 @@
     grid-template-rows: 15.3rem 1fr;
 }
 
+.bg-bet-option {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
 %main-option {
     --font-bet-name: 1.6rem;
 
@@ -28,19 +34,6 @@
     width: 17.7rem;
     height: 9.4rem;
     border: none;
-
-    &::before {
-        content: "";
-        display: block;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-image: var(--bgBetChoice);
-        background-image: image-set(var(--bgBetChoice) 1x, var(--bgBetChoice-2x) 2x);
-        background-size: 17.7rem 9.4rem;
-    }
 
     .btn-ripple {
         border-radius: var(--border-radius);
@@ -62,16 +55,12 @@
 .odd {
     @extend %main-option;
     --color: #98cdff;
-    --bgBetChoice: url("/static/images/next-ball/1x/bg-blue.png?v=#{$version-image}");
-    --bgBetChoice-2x: url("/static/images/next-ball/2x/bg-blue.png?v=#{$version-image}");
 }
 
 .under,
 .even {
     @extend %main-option;
     --color: #f9bcb9;
-    --bgBetChoice: url("/static/images/next-ball/1x/bg-red.png?v=#{$version-image}");
-    --bgBetChoice-2x: url("/static/images/next-ball/2x/bg-red.png?v=#{$version-image}");
 }
 
 .over {
@@ -93,7 +82,7 @@
 .odd {
     --border-radius: 1.2rem 1.2rem 1.2rem 3rem;
 
-    &::before {
+    .bg-bet-option {
         transform: scaleY(-1);
     }
 
@@ -105,7 +94,7 @@
 .even {
     --border-radius: 1.2rem 1.2rem 3rem 1.2rem;
 
-    &::before {
+    .bg-bet-option {
         transform: scaleY(-1);
     }
 

@@ -1,5 +1,7 @@
 import dynamic from "next/dynamic";
+import Image from "next/image";
 
+import { buildVersion } from "../../_shared/constants";
 import { useGameContext } from "../../_shared/react-contexts";
 import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
 import { isShowHighlightPrevResult } from "../../_shared/react-hooks/use-high-light";
@@ -96,6 +98,24 @@ const NextBallBetOptionsComponent = () => {
         return <div className={className}></div>;
     };
 
+    const getBackgroundName = (choice) => {
+        let backgroundName = "";
+
+        switch (choice) {
+            case NextBallBetOptions.OVER:
+            case NextBallBetOptions.ODD:
+                backgroundName = NextBallBetOptions.OVER;
+                break;
+
+            case NextBallBetOptions.UNDER:
+            case NextBallBetOptions.EVEN:
+                backgroundName = NextBallBetOptions.ODD;
+                break;
+        }
+
+        return backgroundName;
+    };
+
     const renderMainOption = (choice: string) => {
         let resourceName = "";
 
@@ -111,6 +131,8 @@ const NextBallBetOptionsComponent = () => {
                 break;
         }
 
+        let backgroundName = getBackgroundName(choice);
+
         const winningResult = (
             <NextBallWinningAnimation
                 showResultInfo={showResultInfo}
@@ -124,6 +146,15 @@ const NextBallBetOptionsComponent = () => {
         const oddsClassName = Style[`choice-${choice}`];
         return (
             <div className={`${Style[choice]} text-white relative`}>
+                <Image
+                    className={Style["bg-bet-option"]}
+                    width={176}
+                    height={94}
+                    src={`/static/images/next-ball/2x/bg-${backgroundName}.webp?v=${buildVersion}`}
+                    alt={choice}
+                    priority={true}
+                />
+
                 <div className={`${Style["choice-info"]} ${choiceClassName}`}>
                     <div className={Style.stake}>
                         {renderTotalBet(choice, Style["stake-style"])}
