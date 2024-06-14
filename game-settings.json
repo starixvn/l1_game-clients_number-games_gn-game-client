@@ -124,7 +124,11 @@
         },
         "totalTurns": 1,
         "numberOfRoundHistory": 100,
-        "gamePath": "se-ball"
+        "gamePath": "se-ball",
+        "gameResourceConfigs": {
+            "path": "se-ball",
+            "optionalPaths": ["se-ball/result-ball"]
+        }
     },
     "1006": {
         "id": 1006,
@@ -147,6 +151,10 @@
         },
         "totalTurns": 3,
         "numberOfRoundHistory": 100,
-        "gamePath": "lucky-three"
+        "gamePath": "lucky-three",
+        "gameResourceConfigs": {
+            "path": "lucky-three",
+            "optionalPaths": ["lucky-three/result-ball"]
+        }
     }
 }
