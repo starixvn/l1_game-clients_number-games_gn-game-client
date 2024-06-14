@@ -142,12 +142,12 @@ class SicBall extends GameBase<GameBaseProps> {
         );
     }
 
-    renderRoundIdSection(): JSX.Element {
-        return <DrawIdBlock showRoundId={true} />;
-    }
-
     renderStatisticContent() {
         return <></>;
+    }
+
+    renderRoundIdSection(): JSX.Element {
+        return <DrawIdBlock showRoundId={true} />;
     }
 }
 

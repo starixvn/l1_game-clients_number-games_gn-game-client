@@ -153,7 +153,10 @@
         "numberOfRoundHistory": 100,
         "gamePath": "lucky-three",
         "gameResourceConfigs": {
-            "path": "lucky-three"
+            "path": "lucky-three",
+            "optionalPaths": [
+                "lucky-three/result-ball"
+            ]
         }
     },
     "1007": {
@@ -179,7 +182,10 @@
         "numberOfRoundHistory": 100,
         "gamePath": "sic-ball",
         "gameResourceConfigs": {
-            "path": "sic-ball"
+            "path": "sic-ball",
+            "optionalPaths": [
+                "sic-ball/result-ball"
+            ]
         }
     }
 }
