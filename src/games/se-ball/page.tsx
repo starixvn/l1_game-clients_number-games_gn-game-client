@@ -14,20 +14,20 @@ import GameBase from "../../components/game-base/";
 import { GameMessageHandler } from "../../components/game-base/handlers";
 import { GameBaseHandlers, GameBaseProps, Round } from "../../components/game-base/type";
 import { GameStatusMap } from "../../components/game-components/countdown-timer/countdown-timer";
+import RedAndBlueStatistic from "../../components/game-components/statistic/red-blue-statistic";
 import { RoundGameSoundHandler } from "../../components/round-base/round-game-sound-handler";
+import { RoundIdHandler } from "../../components/round-base/round-id-handler";
 import { RoundStateHandler } from "../../components/round-base/round-state-handler";
+import ScoreboardSeBall from "./scoreboard";
+import SeBallBettingBlock from "./se-ball-betting-block";
 import { SeBallBetOptions } from "./se-ball-constants";
 import { NextGameRoundDataHandler } from "./se-ball-game-round-data-handler";
+import SeBallResultBlock from "./se-ball-result-block";
 import Styles from "./se-ball.module.scss";
 import { SeBallResult, SeBallSettlementResult } from "./types";
-import { RoundIdHandler } from "../../components/round-base/round-id-handler";
 
 const DrawIdBlock = dynamic(() => import("../../components/game-components/draw-id"));
-const SeBallBettingBlock = dynamic(() => import("./se-ball-betting-block"));
-const RedAndBlueStatistic = dynamic(() => import("../../components/game-components/statistic/red-blue-statistic"));
 const SeBallBetHistoryModal = dynamic(() => import("./history"));
-const ScoreboardSeBall = dynamic(() => import("./scoreboard"));
-const SeBallResultBlock = dynamic(() => import("./se-ball-result-block"));
 
 export type SeBallState = {
     statisticGroup?: number;

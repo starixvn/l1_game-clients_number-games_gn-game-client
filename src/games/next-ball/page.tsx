@@ -13,7 +13,9 @@ import { tolgee } from "../../_shared/tolgee";
 import GameBase from "../../components/game-base/";
 import { GameMessageHandler, TurnIdHandler } from "../../components/game-base/handlers";
 import { GameBaseHandlers, GameBaseProps, Round } from "../../components/game-base/type";
+import { PercentageStatistic } from "../../components/game-components/statistic";
 import { TurnStateHandler } from "../../components/turn-base/turn-state-handler";
+import NextBallBettingBlock from "./next-ball-betting-block";
 import { NextBallBetOptions } from "./next-ball-constants";
 import { NextGameRoundDataHandler } from "./next-ball-game-round-data-handler";
 import NextBallResultBlock from "./next-ball-result-block";
@@ -22,8 +24,6 @@ import Scoreboard from "./scoreboard";
 import { NextBallResult, NextBallSettlementResult } from "./types";
 
 const DrawIdBlock = dynamic(() => import("../../components/game-components/draw-id"));
-const NextBallBettingBlock = dynamic(() => import("./next-ball-betting-block"));
-const PercentageStatistic = dynamic(() => import("../../components/game-components/statistic"));
 const NextBallBetHistoryModal = dynamic(() => import("./history"));
 
 export type NextBallState = {
