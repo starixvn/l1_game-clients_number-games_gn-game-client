@@ -32,6 +32,7 @@ export const UserInfo: React.FC<{
 
     const handleClickAvatar = () => {
         if (isLobby) {
+            document.body.classList.add("no-scroll");
             clickSound();
             settingDispatch({
                 type: SettingEventActionType.SHOW_AVATAR_GALLERY,

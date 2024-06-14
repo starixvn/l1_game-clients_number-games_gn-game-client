@@ -13,6 +13,7 @@ const SoundSettings = () => {
     const { t } = useTranslator();
 
     const closePopup = () => {
+        document.body.classList.remove("no-scroll");
         clickSound();
         settingDispatch({
             type: SettingEventActionType.TOGGLE_SETTING,

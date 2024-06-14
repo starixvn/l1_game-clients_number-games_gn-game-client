@@ -23,6 +23,7 @@ const ChangeAvatar: React.FC = () => {
     }, [user]);
 
     const onClose = () => {
+        document.body.classList.remove("no-scroll");
         clickSound();
         settingDispatch({
             type: SettingEventActionType.SHOW_AVATAR_GALLERY,

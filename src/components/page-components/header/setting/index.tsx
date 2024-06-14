@@ -7,6 +7,7 @@ const Setting = () => {
 
     const settingDispatch = useSettingDispatch();
     const openSetting = () => {
+        document.body.classList.add("no-scroll");
         clickSound();
         settingDispatch({
             type: SettingEventActionType.TOGGLE_SETTING,
