@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useState } from "react";
-import { isIOS, isMobile } from "react-device-detect";
+import { isMobile } from "react-device-detect";
 import useSound from "use-sound";
 import { formatVolume } from "../../../_shared/helpers";
 import { useSettingContext } from "../../../_shared/react-contexts";
@@ -21,20 +21,11 @@ const BGMPlayer = ({ isUserGesture }) => {
             return;
         }
 
-        const audioContext: AudioContext = global.Howler.ctx;
+        const audioContext: AudioContext = (sound as any)._sounds[0]._node.context;
 
         if (isUserGesture) {
             if (settingContext.enabledMusic) {
-                if (isIOS) {
-                    const localAudioContext: AudioContext = (sound as any)._sounds[0]._node.context;
-
-                    (async () => {
-                        if (localAudioContext.state !== "running") {
-                            await localAudioContext.resume();
-                        }
-                        settingContext.volumeMusic && play();
-                    })();
-                } else if (audioContext.state !== "running") {
+                if (audioContext.state !== "running") {
                     audioContext
                         .resume()
                         .then(() => {
@@ -70,7 +61,7 @@ const BGMPlayer = ({ isUserGesture }) => {
 
     useEffect(() => {
         if (sound) {
-            const audioContext: AudioContext = global.Howler.ctx;
+            const audioContext: AudioContext = (sound as any)._sounds[0]._node.context;
             if (settingContext.enabledMusic) {
                 if (audioContext.state !== "running") {
                     audioContext
@@ -100,7 +91,7 @@ const BGMPlayer = ({ isUserGesture }) => {
 
     useEffect(() => {
         if (sound) {
-            const audioContext: AudioContext = global.Howler.ctx;
+            const audioContext: AudioContext = (sound as any)._sounds[0]._node.context;
 
             if (settingContext.volumeMusic) {
                 audioContext.state !== "running" &&
