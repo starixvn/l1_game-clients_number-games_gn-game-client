@@ -32,10 +32,16 @@
     grid-template-rows: 15.3rem 1fr;
 }
 
+.bg-bet-option {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
 %main-option {
+    position: relative;
     width: 17.8rem;
     height: 18.8rem;
-    background-size: 17.8rem 18.8rem;
     border: none;
 
     .btn-ripple {
@@ -58,9 +64,6 @@
     --color: #98cdff;
 
     @extend %main-option;
-    background-image: url("/static/images/bac-number/1x/bg-player.png?v=#{$version-image}");
-    background-image: image-set(url("/static/images/bac-number/1x/bg-player.png?v=#{$version-image}") 1x, url("/static/images/bac-number/2x/bg-player.png?v=#{$version-image}") 2x);
-    background-size: 17.8rem 18.8rem;
     border-bottom-left-radius: 6.6rem;
     border-top-left-radius: 3.8rem;
     padding-left: 1.2rem;
@@ -117,8 +120,6 @@
     --color: #f9bcb9;
 
     @extend %main-option;
-    background-image: url("/static/images/bac-number/1x/bg-banker.png?v=#{$version-image}");
-    background-image: image-set(url("/static/images/bac-number/1x/bg-banker.png?v=#{$version-image}") 1x, url("/static/images/bac-number/2x/bg-banker.png?v=#{$version-image}") 2x);
 
     border-bottom-right-radius: 6.6rem;
     border-top-right-radius: 3.8rem;
@@ -181,14 +182,11 @@
 .tie {
     --color: #2fc856;
 
-    background-image: url("/static/images/bac-number/1x/bg-tie.png?v=#{$version-image}");
-    background-image: image-set(url("/static/images/bac-number/1x/bg-tie.png?v=#{$version-image}") 1x, url("/static/images/bac-number/2x/bg-tie.png?v=#{$version-image}") 2x);
-    width: 9.5rem;
-    height: 17.2rem;
-    background-size: 9.5rem 17.2rem;
     position: absolute;
     left: 13.2rem;
     top: -0.5rem;
+    width: 9.5rem;
+    height: 17.2rem;
     border: none;
     border-bottom-left-radius: 6.6rem;
     border-bottom-right-radius: 6.6rem;

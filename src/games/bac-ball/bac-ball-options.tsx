@@ -1,4 +1,7 @@
 import dynamic from "next/dynamic";
+import Image from "next/image";
+
+import { buildVersion } from "../../_shared/constants";
 import { useGameContext } from "../../_shared/react-contexts";
 import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
 import { isShowHighlightPrevResult } from "../../_shared/react-hooks/use-high-light";
@@ -100,6 +103,14 @@ const BacBallBetOptionsComponent = () => {
         const ownBet = renderOwnBet(choice);
         return (
             <div className={`${Style[choice]} text-white relative`}>
+                <Image
+                    className={Style["bg-bet-option"]}
+                    width={178}
+                    height={188}
+                    src={`/static/images/bac-number/2x/bg-${choice}.webp?v=${buildVersion}`}
+                    alt={choice}
+                    priority={true}
+                />
                 <div className={`${Style["choice-info"]} ${Style[`choice-${choice}`]}`}>
                     <div className={Style.stake}>
                         {totalBetComponent}
@@ -144,6 +155,14 @@ const BacBallBetOptionsComponent = () => {
         const ownBet = renderOwnBet(BacBallBetOptions.TIE);
         return (
             <div className={`${Style[BacBallBetOptions.TIE]} text-white flex flex-col items-center pt-2`}>
+                <Image
+                    className={Style["bg-bet-option"]}
+                    width={95}
+                    height={172}
+                    src={`/static/images/bac-number/2x/bg-tie.webp?v=${buildVersion}`}
+                    alt="tie"
+                    priority={true}
+                />
                 {betPercentage}
                 <div className={Style.stake}>
                     {totalBetComponent}
