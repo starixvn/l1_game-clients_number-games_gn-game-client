@@ -29,7 +29,7 @@ const BGMPlayer = ({ isUserGesture }) => {
                     const localAudioContext: AudioContext = (sound as any)._sounds[0]._node.context;
 
                     (async () => {
-                        if (audioContext.state !== "running") {
+                        if (localAudioContext.state !== "running") {
                             await localAudioContext.resume();
                         }
                         settingContext.volumeMusic && play();
