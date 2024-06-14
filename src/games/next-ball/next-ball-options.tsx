@@ -131,7 +131,7 @@ const NextBallBetOptionsComponent = () => {
                 break;
         }
 
-        let backgroundName = getBackgroundName(choice);
+        const backgroundName = getBackgroundName(choice);
 
         const winningResult = (
             <NextBallWinningAnimation
