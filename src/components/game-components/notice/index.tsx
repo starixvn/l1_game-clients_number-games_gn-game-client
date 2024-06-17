@@ -41,7 +41,6 @@ const BaseNotice: React.FC<{
                     }}
                     data-testid="close-btn"
                 ></span>
-
                 {children}
             </div>
         </BaseDialog>

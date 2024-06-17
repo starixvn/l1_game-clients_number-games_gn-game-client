@@ -6,7 +6,7 @@ exports[`AvatarGallery render should match the snapshot 1`] = `
     class="gallery-wrapper "
   >
     <div
-      class="popup modal-center   "
+      class="popup modal-center    modal-open"
     >
       <h1
         class="gallery-title"

@@ -92,8 +92,7 @@ const BaseDialog: React.FC<Props> = ({
                 ref={wrapperRef}
                 className={`${Styles.popup} ${Styles[classModal]} ${isMobileOnly ? Styles["isMobile"] : ""} ${getClassFollowDevice()} ${
                     isIpad ? Styles["ipad"] : ""
-                }
-                ${isOpen ? "modal-open" : ""}`}
+                } ${isOpen ? "modal-open" : ""}`}
             >
                 {children}
             </div>
