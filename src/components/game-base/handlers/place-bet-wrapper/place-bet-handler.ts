@@ -261,7 +261,7 @@ export class PlaceBetHandler {
     };
 
     handleProcessingBet = () => {
-        this.broadcastNotice({ message: "Common.message_processing_action", duration: 2 });
+        this.broadcastNotice({ message: "Common.message_processing_action", duration: 2, isProccessingBet: true });
     };
 
     sendConfirmBet(notConfirmOwnBets: object) {

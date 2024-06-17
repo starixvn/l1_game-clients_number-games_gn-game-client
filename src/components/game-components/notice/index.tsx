@@ -7,42 +7,46 @@ import BaseDialog from "../base-dialog";
 import { ModalType } from "../base-dialog/type";
 import Styles from "./notice.module.scss";
 import { NoticeModel } from "../../game-base/type";
-import { GlobalTransmitterEvent, registerGlobalMessageEvent, unsubscribeGlobalMessageEvent } from "../../../_shared/helpers/message-transmitter/global-transmitter";
+import {
+    GlobalTransmitterEvent,
+    registerGlobalMessageEvent,
+    unsubscribeGlobalMessageEvent,
+} from "../../../_shared/helpers/message-transmitter/global-transmitter";
 
 const BaseNotice: React.FC<{
     onClose: () => void;
     duration: number;
     isOpen?: boolean;
     isWarning: boolean;
-    children: React.ReactNode
-}> = ({
-    children,
-    onClose,
-    duration = 3,
-}) => {
-        useEffect(() => {
-            const timer = setTimeout(onClose, duration * 1000);
+    children: React.ReactNode;
+    isProccessingBet: boolean;
+}> = ({ children, onClose, duration = 3, isProccessingBet }) => {
+    useEffect(() => {
+        const timer = setTimeout(onClose, duration * 1000);
 
-            return () => clearTimeout(timer);
-        }, []);
-        const clickSound = useClickSound();
+        return () => clearTimeout(timer);
+    }, []);
+    const clickSound = useClickSound();
 
-        return (
-            <BaseDialog type={ModalType.Center} isOpen={true} onCloseModal={onClose}>
-                <div className={`modal-center red-color`}>
-                    <span
-                        className={`icon-close ${Styles["icon-close"]}`}
-                        onClick={() => {
-                            clickSound();
-                            onClose();
-                        }}
-                        data-testid="close-btn"
-                    ></span>
-                    {children}
-                </div>
-            </BaseDialog>
-        );
-    };
+    const isProccessingBetClass = isProccessingBet ? "modal-center is-processing" : "modal-center";
+
+    return (
+        <BaseDialog type={ModalType.Center} isOpen={true} onCloseModal={onClose}>
+            <div className={`${isProccessingBetClass} red-color`}>
+                <span
+                    className={`icon-close ${Styles["icon-close"]}`}
+                    onClick={() => {
+                        clickSound();
+                        onClose();
+                    }}
+                    data-testid="close-btn"
+                ></span>
+
+                {children}
+            </div>
+        </BaseDialog>
+    );
+};
 
 export const NoticeDialog = () => {
     const { t } = useTranslator();
@@ -56,7 +60,7 @@ export const NoticeDialog = () => {
 
         return () => {
             unsubscribeGlobalMessageEvent(noticeHandlerId as any);
-        }
+        };
     }, []);
 
     if (notice) {
@@ -73,9 +77,12 @@ export const NoticeDialog = () => {
             betChoice2,
             onClose,
             hedgeBetGroup,
+            isProccessingBet,
         } = notice;
 
-        const closeNotice = () => { setNotice(null) };
+        const closeNotice = () => {
+            setNotice(null);
+        };
 
         const onCloseNotice = onClose || (() => closeNotice());
         let hedgeBet = {};
@@ -96,7 +103,7 @@ export const NoticeDialog = () => {
         };
 
         return (
-            <BaseNotice {...{ onClose: onCloseNotice, duration, isWarning }}>
+            <BaseNotice {...{ onClose: onCloseNotice, duration, isWarning, isProccessingBet }}>
                 <div className={Styles["notice-content"]}>
                     {t(`${message}`, params, { noWrap: true }).replaceTolgeeFormat()}
                     {getExtendMessageByErrorCode(errorCode)}
