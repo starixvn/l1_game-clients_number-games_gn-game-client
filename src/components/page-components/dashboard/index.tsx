@@ -1,25 +1,27 @@
+import "../../../games/scoreboards";
+
 import dynamic from "next/dynamic";
 import { withRouter } from "next/router";
 import React from "react";
-import { isMobile, isMobileOnly } from "react-device-detect";
-import { GetLocalizedErrorMessage, StorageHelper, localStorageKeys } from "../../../_shared/helpers";
-import {
-    LobbyConnectionContextProvider,
-    PlayerContextProvider,
-    SettingContextProvider,
-    loadURLContext,
-    updateURLContext,
-} from "../../../_shared/react-contexts";
-
+import { isDesktop, isMobile, isMobileOnly } from "react-device-detect";
 import SwiperCore from "swiper";
+
 import { ErrorNoGameOffer } from "../../../_shared/constants/error-code-dictionary";
+import { GetLocalizedErrorMessage, localStorageKeys, StorageHelper } from "../../../_shared/helpers";
+import ErrorBoundary from "../../../_shared/helpers/error-boundary";
 import {
     GlobalMessageTransmitter,
     GlobalTransmitterEvent,
     registerGlobalMessageEvent,
     unsubscribeGlobalMessageEvent,
 } from "../../../_shared/helpers/message-transmitter/global-transmitter";
-import "../../../games/scoreboards";
+import {
+    loadURLContext,
+    LobbyConnectionContextProvider,
+    PlayerContextProvider,
+    SettingContextProvider,
+    updateURLContext,
+} from "../../../_shared/react-contexts";
 import { UserStakeLevel } from "../../game-base/type";
 import { ModalType } from "../../game-components/base-dialog/type";
 import { ErrorApiText } from "../../game-components/error-api-text";
@@ -32,7 +34,6 @@ import Styles from "./dashboard.module.scss";
 import { DashboardHandler } from "./handlers/dash-board-handler";
 import { NotificationHandler } from "./handlers/notification-handler";
 import { DashboardProps, DashboardState } from "./type";
-import ErrorBoundary from "../../../_shared/helpers/error-boundary";
 
 const Games = dynamic(() => import("../../../games/games"));
 const BaseDialog = dynamic(() => import("../../game-components/base-dialog"));
@@ -67,6 +68,7 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
             isChangedGame: false,
             isChangePrevGame: false,
             gameTransmitters: {},
+            dashBoardHeight: 0,
         };
 
         this.closeDialog = this.closeDialog.bind(this);
@@ -139,6 +141,12 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
     }
 
     async componentDidMount() {
+        const { dashBoardHeight } = this.state;
+        const zoomGame = getComputedStyle(document.getElementById("dashboard")).getPropertyValue("--zoom-game");
+        if (isDesktop && dashBoardHeight !== window.innerHeight) {
+            this.setState({ dashBoardHeight: window.innerHeight * (1 - +zoomGame + 1) });
+        }
+
         document.addEventListener("visibilitychange", this.onVisibilityChange);
         this.backToLobbyEventId = registerGlobalMessageEvent(GlobalTransmitterEvent.BACK_TO_LOBBY, async () =>
             this.resetGameIdDashboardEvent()
@@ -248,7 +256,7 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
     renderDashBoard() {
         window.history.pushState(null, null, "/");
 
-        const { isShowErrorModal, authorizeInfo, isBlockUI, isChangedGame, isChangePrevGame, openGameId } = this.state;
+        const { isShowErrorModal, authorizeInfo, isBlockUI, isChangedGame, isChangePrevGame, openGameId, dashBoardHeight } = this.state;
         const offerGames = this.dashboardHandler.getOfferGamesIds();
         const isRenderGames = this.dashboardHandler.shouldRenderGames(offerGames, openGameId);
         const allowSwipeGameOndDesktop = !this.props.directMode && !isMobileOnly && isRenderGames;
@@ -276,6 +284,7 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
                             isMobileOnly ? Styles["hidden-scrollbar"] : ""
                         }`}
                         id={"dashboard"}
+                        style={isDesktop && isRenderGames ? { height: this.state.dashBoardHeight } : {}}
                     >
                         <Header />
 

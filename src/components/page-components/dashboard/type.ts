@@ -33,6 +33,7 @@ export type DashboardState = {
     isChangedGame: boolean;
     isChangePrevGame: boolean;
     gameTransmitters: Record<number, LobbyGameTransmitter>;
+    dashBoardHeight: number;
 };
 
 export type GameOffer = {

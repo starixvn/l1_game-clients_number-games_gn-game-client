@@ -17,12 +17,13 @@
         background-size: 37.5rem;
     }
 
-    @media screen and (min-width: 1600px) {
+    @media (min-aspect-ratio: 3/4) and (max-height: 800px) {
+        --zoom-game: 0.9;
         transform: scale(var(--zoom-game));
         transform-origin: top;
     }
 
-    @media (min-aspect-ratio: 3/4) {
+    @media screen and (min-width: 768px) and (min-height: 850px) {
         transform: scale(var(--zoom-game));
         transform-origin: top;
     }
