@@ -21,7 +21,7 @@ const BGMPlayer = ({ isUserGesture }) => {
             return;
         }
 
-        const audioContext: AudioContext = (sound as any)._sounds[0]._node.context;
+        const audioContext: AudioContext = global.Howler.ctx;
 
         if (isUserGesture) {
             if (settingContext.enabledMusic) {
@@ -61,7 +61,7 @@ const BGMPlayer = ({ isUserGesture }) => {
 
     useEffect(() => {
         if (sound) {
-            const audioContext: AudioContext = (sound as any)._sounds[0]._node.context;
+            const audioContext: AudioContext = global.Howler.ctx;
             if (settingContext.enabledMusic) {
                 if (audioContext.state !== "running") {
                     audioContext
@@ -91,7 +91,7 @@ const BGMPlayer = ({ isUserGesture }) => {
 
     useEffect(() => {
         if (sound) {
-            const audioContext: AudioContext = (sound as any)._sounds[0]._node.context;
+            const audioContext: AudioContext = global.Howler.ctx;
 
             if (settingContext.volumeMusic) {
                 audioContext.state !== "running" &&
