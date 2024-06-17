@@ -142,9 +142,14 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
 
     async componentDidMount() {
         const { dashBoardHeight } = this.state;
-        const zoomGame = getComputedStyle(document.getElementById("dashboard")).getPropertyValue("--zoom-game");
+
+        const zoomGame = +getComputedStyle(document.getElementById("dashboard")).getPropertyValue("--zoom-game");
+
         if (isDesktop && dashBoardHeight !== window.innerHeight) {
-            this.setState({ dashBoardHeight: window.innerHeight * (1 - +zoomGame + 1) });
+            const scaleHeight = document.getElementById("dashboard").clientHeight * zoomGame;
+            this.setState({
+                dashBoardHeight: window.innerHeight + (window.innerHeight - scaleHeight) * (window.innerHeight / scaleHeight),
+            });
         }
 
         document.addEventListener("visibilitychange", this.onVisibilityChange);
@@ -253,10 +258,14 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
         );
     }
 
+    setDashBoardStyle(isRenderGames: boolean) {
+        return isDesktop && isRenderGames ? { height: this.state.dashBoardHeight } : {};
+    }
+
     renderDashBoard() {
         window.history.pushState(null, null, "/");
 
-        const { isShowErrorModal, authorizeInfo, isBlockUI, isChangedGame, isChangePrevGame, openGameId, dashBoardHeight } = this.state;
+        const { isShowErrorModal, authorizeInfo, isBlockUI, isChangedGame, isChangePrevGame, openGameId } = this.state;
         const offerGames = this.dashboardHandler.getOfferGamesIds();
         const isRenderGames = this.dashboardHandler.shouldRenderGames(offerGames, openGameId);
         const allowSwipeGameOndDesktop = !this.props.directMode && !isMobileOnly && isRenderGames;
@@ -284,7 +293,7 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
                             isMobileOnly ? Styles["hidden-scrollbar"] : ""
                         }`}
                         id={"dashboard"}
-                        style={isDesktop && isRenderGames ? { height: this.state.dashBoardHeight } : {}}
+                        style={this.setDashBoardStyle(isRenderGames)}
                     >
                         <Header />
 
