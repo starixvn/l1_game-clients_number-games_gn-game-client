@@ -10,10 +10,10 @@ exports[`BacBallBeadRoadCharacterElement render when the round result is banker 
         data-nimg="1"
         decoding="async"
         fetchpriority="high"
-        height="16"
+        height="14"
         src="/static/images/scoreboard-icons/banker_vi.svg"
         style="color: transparent;"
-        width="16"
+        width="14"
       />
     </div>
   </body>,
@@ -23,10 +23,10 @@ exports[`BacBallBeadRoadCharacterElement render when the round result is banker 
       data-nimg="1"
       decoding="async"
       fetchpriority="high"
-      height="16"
+      height="14"
       src="/static/images/scoreboard-icons/banker_vi.svg"
       style="color: transparent;"
-      width="16"
+      width="14"
     />
   </div>,
   "debug": [Function],
@@ -162,10 +162,10 @@ exports[`BacBallBeadRoadCharacterElement render when the round result is player 
         data-nimg="1"
         decoding="async"
         fetchpriority="high"
-        height="16"
+        height="14"
         src="/static/images/scoreboard-icons/player_vi.svg"
         style="color: transparent;"
-        width="16"
+        width="14"
       />
     </div>
   </body>,
@@ -175,10 +175,10 @@ exports[`BacBallBeadRoadCharacterElement render when the round result is player 
       data-nimg="1"
       decoding="async"
       fetchpriority="high"
-      height="16"
+      height="14"
       src="/static/images/scoreboard-icons/player_vi.svg"
       style="color: transparent;"
-      width="16"
+      width="14"
     />
   </div>,
   "debug": [Function],
@@ -245,10 +245,10 @@ exports[`BacBallBeadRoadCharacterElement render when the round result is tie sho
         data-nimg="1"
         decoding="async"
         fetchpriority="high"
-        height="16"
+        height="14"
         src="/static/images/scoreboard-icons/tie_vi.svg"
         style="color: transparent;"
-        width="16"
+        width="14"
       />
     </div>
   </body>,
@@ -258,10 +258,10 @@ exports[`BacBallBeadRoadCharacterElement render when the round result is tie sho
       data-nimg="1"
       decoding="async"
       fetchpriority="high"
-      height="16"
+      height="14"
       src="/static/images/scoreboard-icons/tie_vi.svg"
       style="color: transparent;"
-      width="16"
+      width="14"
     />
   </div>,
   "debug": [Function],

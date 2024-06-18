@@ -16,7 +16,7 @@ import BeadBoardIcon from "../../components/game-components/statistic/beadboard-
 
 export class BacBallBeadRoadCharacterElement extends BeadRoadElement<Round<BacBallResult, BacBallSettlementResult>> {
     renderElement(round: Round<BacBallResult, BacBallSettlementResult>, t?: (key: string) => string): ReactNode {
-        const character = (betChoice) => <BeadBoardIcon choice={betChoice} size={16} />;
+        const character = (betChoice) => <BeadBoardIcon choice={betChoice} size={14} />;
         if (!round.settlementResult) {
             return <span className={`${styles.blink}`}></span>;
         } else if (round.settlementResult.tie) {
