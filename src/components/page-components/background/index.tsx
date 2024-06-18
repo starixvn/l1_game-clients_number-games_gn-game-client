@@ -1,7 +1,7 @@
 import Image from "next/image";
+import { memo } from "react";
 
 import { buildVersion, GameIds } from "../../../_shared/constants";
-import { memo } from "react";
 
 type Props = {
     gameId: number;
@@ -23,7 +23,7 @@ export const BackgroundGalaxy: React.FC<Props> = ({ gameId }) => {
     return (
         <>
             <div className="background-galaxy">
-                <Image className="galaxy-2" width={580} height={850} src={imageUrls} alt="galaxy" priority={true} />
+                <Image className="galaxy-2" width={580} height={850} src={imageUrls} alt="galaxy" />
 
                 <div className="galaxy-1-container">
                     <Image className="galaxy-1" width={580} height={850} src={imageUrls} alt="galaxy" />
