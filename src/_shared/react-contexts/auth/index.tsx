@@ -13,7 +13,7 @@ export type PlayerContextModel = {
 };
 
 export const PlayerContext = React.createContext<PlayerContextModel>({
-    locale: locales.vi,
+    locale: locales.en,
     enableQuickBet: true
 });
 PlayerContext.displayName = "AuthContext";

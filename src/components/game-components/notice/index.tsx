@@ -24,8 +24,16 @@ const BaseNotice: React.FC<{
     useEffect(() => {
         const timer = setTimeout(onClose, duration * 1000);
 
-        return () => clearTimeout(timer);
+        const onCloseHandlerId = registerGlobalMessageEvent(GlobalTransmitterEvent.CLOSE_DIALOG, () => {
+            onClose();
+        });
+
+        return () => {
+            clearTimeout(timer);
+            unsubscribeGlobalMessageEvent(onCloseHandlerId as any);
+        }
     }, []);
+
     const clickSound = useClickSound();
 
     const isProccessingBetClass = isProccessingBet ? "modal-center is-processing" : "modal-center";

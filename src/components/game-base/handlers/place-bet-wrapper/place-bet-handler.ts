@@ -126,7 +126,7 @@ export class PlaceBetHandler {
         this.clearNotice();
 
         this.clearRetryInterval();
-
+        GlobalMessageTransmitter.broadcast({ [GlobalTransmitterEvent.CLOSE_DIALOG]: {} });
         if (endBet === -1) {
             !apiError && this.handleBetFailed({ notice, kickedOut }, signOut);
         } else {
@@ -136,6 +136,7 @@ export class PlaceBetHandler {
                 payload: { ownBets },
             });
             gameMessageHandler.broadcastGameEvent({ [messageEventType.UPDATE_PLAYER_BALANCE]: {} });
+
         }
 
         this.placeBetDispatch({
