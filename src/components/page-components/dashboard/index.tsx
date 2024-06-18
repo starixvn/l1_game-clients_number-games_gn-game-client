@@ -282,6 +282,7 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
             signOut: this.signOut,
             fractionalOddsFormat: authorizeInfo.user?.fractionalOddsFormat ?? false,
             enableQuickBet: true,
+            locale: this.props.tolgee.getLanguage(),
         };
 
         return (

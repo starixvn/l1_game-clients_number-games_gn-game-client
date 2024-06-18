@@ -1,11 +1,9 @@
 import React, { memo } from "react";
-
-import { useGameContext } from "../../../_shared/react-contexts";
-import { useTranslator } from "../../../_shared/react-hooks";
 import { Round } from "../../game-base/type";
 import StatisticItem from "./statistic-item";
 import Styles from "./statistic.module.scss";
 import { PercentageStatisticProps } from "./types";
+import BeadBoardIcon from "./beadboard-icon";
 
 export const countSettlementResult = (roundHistory: Round<any, any>[]) => {
     return roundHistory.reduce((result, { settlementResult }) => {
@@ -43,8 +41,6 @@ export const getPercentage = (keys: string[], countResult: object, total: number
 export const PercentageStatistic: React.FC<PercentageStatisticProps> = (props: PercentageStatisticProps) => {
     const { roundHistory, onSelectGroup, selectedGroup, mainChoices, choicesInGroups } = props;
     const counted = countSettlementResult(roundHistory);
-    const { tolgeeNamespace } = useGameContext();
-    const { t } = useTranslator([tolgeeNamespace]);
 
     if (choicesInGroups) {
         const groups = [];
@@ -54,9 +50,7 @@ export const PercentageStatistic: React.FC<PercentageStatisticProps> = (props: P
             groups.push(
                 group.map((choice) => (
                     <StatisticItem key={choice} value={`${statisticResult[choice]}%`}>
-                        <span className={`${Styles[choice]} ${Styles["statistic-choice-icon"]} ${props.className}`}>
-                            {t(`beadboard_${choice}`)}
-                        </span>
+                        <BeadBoardIcon choice={choice} size={16} />
                     </StatisticItem>
                 ))
             );
@@ -77,11 +71,12 @@ export const PercentageStatistic: React.FC<PercentageStatisticProps> = (props: P
         );
     } else {
         const statisticResult = getPercentage(mainChoices, counted, roundHistory.length);
+
         return (
             <div className={`${Styles["statistic-container"]} flex`} id="bar-statistic">
                 {mainChoices.map((choice) => (
                     <StatisticItem key={choice} value={`${statisticResult[choice]}%`} className={props.className}>
-                        <span className={`${Styles[choice]} ${Styles["statistic-choice-icon"]}`}>{t(`beadboard_${choice}`)}</span>
+                        <BeadBoardIcon choice={choice} size={16} />
                     </StatisticItem>
                 ))}
             </div>

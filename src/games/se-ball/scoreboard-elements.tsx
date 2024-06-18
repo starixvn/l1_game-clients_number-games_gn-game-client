@@ -8,20 +8,21 @@ import { withTranslator } from "../../components/page-components/translator";
 import styles from "./scoreboard-elements.module.scss";
 import { SeBallBetOptions } from "./se-ball-constants";
 import { SeBallResult, SeBallSettlementResult } from "./types";
+import BeadBoardIcon from "../../components/game-components/statistic/beadboard-icon";
 
 export const ODD_EVEN_AS_DEFAULT_SCOREBOARD = true;
 
 export function createBeadRoadElement(isOddEven: boolean = ODD_EVEN_AS_DEFAULT_SCOREBOARD) {
     class Element extends BeadRoadElement<Round<SeBallResult, SeBallSettlementResult>> {
         renderElement(round: Round<SeBallResult, SeBallSettlementResult>, t?: (key: string) => string): ReactNode {
-            const character = (betChoice: string) => t(`SeBall.beadboard_${betChoice}`);
+            const character = (betChoice: string) => <BeadBoardIcon choice={betChoice} size={16} />;
 
             if (!round.settlementResult) {
                 return <span className={`${styles.blink}`}></span>;
             } else if (round.settlementResult.odd) {
-                return <span className={styles[SeBallBetOptions.ODD]}>{character(SeBallBetOptions.ODD)}</span>;
+                return character(SeBallBetOptions.ODD);
             } else if (round.settlementResult.even) {
-                return <span className={styles[SeBallBetOptions.EVEN]}>{character(SeBallBetOptions.EVEN)}</span>;
+                return character(SeBallBetOptions.EVEN);
             }
             return <></>;
         }

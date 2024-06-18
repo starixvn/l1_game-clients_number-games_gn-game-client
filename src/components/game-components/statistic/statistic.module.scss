@@ -164,16 +164,6 @@ $green_choices: tie;
     }
 }
 
-.over,
-.under,
-.even,
-.odd {
-    display: flex;
-    padding-top: 0.1rem;
-    padding-left: 0.1rem;
-    font-size: 0.9rem;
-}
-
 .other-wrapper {
     display: flex;
     gap: 0.6rem;
@@ -181,4 +171,12 @@ $green_choices: tie;
     .statistic-group {
         gap: 0.2rem;
     }
+}
+
+.player_id {
+    color: red;
+}
+
+.player_zh_cn {
+    color: blue;
 }

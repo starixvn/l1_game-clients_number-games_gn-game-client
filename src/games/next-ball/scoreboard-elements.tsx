@@ -7,30 +7,23 @@ import { withTranslator } from "../../components/page-components/translator";
 import { NextBallBetOptions } from "./next-ball-constants";
 import styles from "./scoreboard-elements.module.scss";
 import { NextBallResult, NextBallSettlementResult } from "./types";
+import BeadBoardIcon from "../../components/game-components/statistic/beadboard-icon";
 
 export const ODD_EVEN_AS_DEFAULT_SCOREBOARD = false;
 
 export function createBeadRoadElement(isOddEven: boolean = ODD_EVEN_AS_DEFAULT_SCOREBOARD) {
     class Element extends BeadRoadElement<Round<NextBallResult, NextBallSettlementResult>> {
         renderElement(round: Round<NextBallResult, NextBallSettlementResult>, t?: (key: string) => string): ReactNode {
-            const character = (betChoice: string) => t(`NextBall.beadboard_${betChoice}`);
+            const character = (betChoice: string) => <BeadBoardIcon choice={betChoice} size={16} />;
 
             if (!round.settlementResult) {
                 return <span className={`${styles.blink}`}></span>;
             }
 
             if (isOddEven) {
-                return round.settlementResult.odd ? (
-                    <span className={styles[NextBallBetOptions.ODD]}>{character(NextBallBetOptions.ODD)}</span>
-                ) : (
-                    <span className={styles[NextBallBetOptions.EVEN]}>{character(NextBallBetOptions.EVEN)}</span>
-                );
+                return round.settlementResult.odd ? character(NextBallBetOptions.ODD) : character(NextBallBetOptions.EVEN);
             } else {
-                return round.settlementResult.over ? (
-                    <span className={styles[NextBallBetOptions.OVER]}>{character(NextBallBetOptions.OVER)}</span>
-                ) : (
-                    <span className={styles[NextBallBetOptions.UNDER]}>{character(NextBallBetOptions.UNDER)}</span>
-                );
+                return round.settlementResult.over ? character(NextBallBetOptions.OVER) : character(NextBallBetOptions.UNDER);
             }
         }
 

@@ -5,19 +5,29 @@ exports[`BacBallBeadRoadCharacterElement render when the round result is banker 
   "asFragment": [Function],
   "baseElement": <body>
     <div>
-      <span
-        class="banker"
-      >
-        T
-      </span>
+      <img
+        alt="banker"
+        data-nimg="1"
+        decoding="async"
+        fetchpriority="high"
+        height="16"
+        src="/static/images/scoreboard-icons/banker_vi.svg"
+        style="color: transparent;"
+        width="16"
+      />
     </div>
   </body>,
   "container": <div>
-    <span
-      class="banker"
-    >
-      T
-    </span>
+    <img
+      alt="banker"
+      data-nimg="1"
+      decoding="async"
+      fetchpriority="high"
+      height="16"
+      src="/static/images/scoreboard-icons/banker_vi.svg"
+      style="color: transparent;"
+      width="16"
+    />
   </div>,
   "debug": [Function],
   "findAllByAltText": [Function],
@@ -147,19 +157,29 @@ exports[`BacBallBeadRoadCharacterElement render when the round result is player 
   "asFragment": [Function],
   "baseElement": <body>
     <div>
-      <span
-        class="player"
-      >
-        T
-      </span>
+      <img
+        alt="player"
+        data-nimg="1"
+        decoding="async"
+        fetchpriority="high"
+        height="16"
+        src="/static/images/scoreboard-icons/player_vi.svg"
+        style="color: transparent;"
+        width="16"
+      />
     </div>
   </body>,
   "container": <div>
-    <span
-      class="player"
-    >
-      T
-    </span>
+    <img
+      alt="player"
+      data-nimg="1"
+      decoding="async"
+      fetchpriority="high"
+      height="16"
+      src="/static/images/scoreboard-icons/player_vi.svg"
+      style="color: transparent;"
+      width="16"
+    />
   </div>,
   "debug": [Function],
   "findAllByAltText": [Function],
@@ -220,19 +240,29 @@ exports[`BacBallBeadRoadCharacterElement render when the round result is tie sho
   "asFragment": [Function],
   "baseElement": <body>
     <div>
-      <span
-        class="tie"
-      >
-        T
-      </span>
+      <img
+        alt="tie"
+        data-nimg="1"
+        decoding="async"
+        fetchpriority="high"
+        height="16"
+        src="/static/images/scoreboard-icons/tie_vi.svg"
+        style="color: transparent;"
+        width="16"
+      />
     </div>
   </body>,
   "container": <div>
-    <span
-      class="tie"
-    >
-      T
-    </span>
+    <img
+      alt="tie"
+      data-nimg="1"
+      decoding="async"
+      fetchpriority="high"
+      height="16"
+      src="/static/images/scoreboard-icons/tie_vi.svg"
+      style="color: transparent;"
+      width="16"
+    />
   </div>,
   "debug": [Function],
   "findAllByAltText": [Function],

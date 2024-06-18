@@ -12,18 +12,19 @@ import { withTranslator } from "../../components/page-components/translator";
 import { BacBallBetOptions } from "./constants";
 import styles from "./scoreboard-elements.module.scss";
 import { BacBallResult, BacBallSettlementResult } from "./types";
+import BeadBoardIcon from "../../components/game-components/statistic/beadboard-icon";
 
 export class BacBallBeadRoadCharacterElement extends BeadRoadElement<Round<BacBallResult, BacBallSettlementResult>> {
     renderElement(round: Round<BacBallResult, BacBallSettlementResult>, t?: (key: string) => string): ReactNode {
-        const character = (betChoice) => t(`BacBall.beadboard_${betChoice}`);
+        const character = (betChoice) => <BeadBoardIcon choice={betChoice} size={16} />;
         if (!round.settlementResult) {
             return <span className={`${styles.blink}`}></span>;
         } else if (round.settlementResult.tie) {
-            return <span className={`${styles.tie}`}>{character(BacBallBetOptions.TIE)}</span>;
+            return character(BacBallBetOptions.TIE);
         } else if (round.settlementResult.banker) {
-            return <span className={`${styles.banker}`}>{character(BacBallBetOptions.BANKER)}</span>;
+            return character(BacBallBetOptions.BANKER);
         } else {
-            return <span className={`${styles.player}`}>{character(BacBallBetOptions.PLAYER)}</span>;
+            return character(BacBallBetOptions.PLAYER);
         }
     }
 

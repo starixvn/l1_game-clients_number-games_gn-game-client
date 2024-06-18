@@ -17,3 +17,8 @@ export type PercentageStatisticProps = {
     subChoices?: string[];
     subChoicesClass?: {};
 };
+
+export type BeadBoardIconProps = {
+    choice: string;
+    size: number;
+};
