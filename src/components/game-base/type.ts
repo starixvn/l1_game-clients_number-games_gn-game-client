@@ -100,7 +100,7 @@ export interface NoticeModel {
     betChoice2?: string;
     onClose?: () => void;
     hedgeBetGroup?: string[];
-    isProccessingBet?: boolean;
+    isBetNotice?: boolean;
 }
 
 export interface APIError extends NoticeModel {

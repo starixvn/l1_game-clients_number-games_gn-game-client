@@ -262,7 +262,7 @@ export class PlaceBetHandler {
     };
 
     handleProcessingBet = () => {
-        this.broadcastNotice({ message: "Common.message_processing_action", duration: 2, isProccessingBet: true });
+        this.broadcastNotice({ message: "Common.message_processing_action", duration: 2, isBetNotice: true });
     };
 
     sendConfirmBet(notConfirmOwnBets: object) {
@@ -320,6 +320,7 @@ export class PlaceBetHandler {
     protected getNotice = (errorCode: string, betChoice?: string, args?: object): NoticeModel => {
         let betChoice1 = "";
         let betChoice2 = "";
+
         const hedgeBetGroup = this.props.hedgeBetGroups.find((group) => group.includes(betChoice));
         if (betChoice && hedgeBetGroup) {
             betChoice1 = this.props.translate(getGlossaryTranslate(this.props.tolgeeNamespace, hedgeBetGroup[0]));
@@ -335,6 +336,7 @@ export class PlaceBetHandler {
             errorCode: gameErrorCode,
             betChoice1,
             betChoice2,
+            isBetNotice: true,
             ...args,
         };
     };
