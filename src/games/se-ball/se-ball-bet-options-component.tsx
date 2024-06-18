@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic";
 import Image from "next/image";
+import { useState } from "react";
 
 import { buildVersion } from "../../_shared/constants";
 import { useGameContext } from "../../_shared/react-contexts";
@@ -21,6 +22,10 @@ const SeBallWinningAnimation = dynamic(() => import("./se-ball-winning-animation
 const SeBallBetOptionsComponent = () => {
     const { roundState, settlementResult, showResultInfo, roundHistory, turnCounter } = useGameStateContext();
     const { tolgeeNamespace } = useGameContext();
+    const rgbDataURL = () =>
+        `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALIAAABeCAYAAACHDE6RAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAVSSURBVHgB7dzNThtXGMbx95z5NJ+GQJSgSpmuuvUd1CzaWt2UXgEQqZGyansFJFeQZFUpaWt6BU03KVUXmCuocwOVkSra8hEbbDwztmdOzhlCQggQDBg8J89vg2c8iVj8OXp9ZoDRJSn84HvM4jnB4qw89AjgBIJEjcWsvPRNpnSa6xn1QL4osm4nyAnT+IoLkZffVK7d6VAQdiiKY1KvAU5icE6ObdFgxpGVskXqxL+cFPWFhlx44ufJ5LNCiJmmH2YbzUDG26ag1aZYBgzQLcs0aMB1aHJ8hCzLXKQgvr90N1M5fN2FhFz4yZ+TPzWzu36YV/HW6k2ECxduYmyEJseGK1Gn8/Wfd4bKB987V8hqBWYGf9Dwg9xmtU7NICSAXhoeyNDN69maXCmnD8Z8ppDVDJyJw2IrimbW1qsIGC6VivmjG+MVCsX0/pjBqUtqFXZF+NfWTmPm73/WETFcunrTpxfbux45rLh/rquQvygG37ZFvLy6tun9v7WNORiuzGZ1R+5+Rflkg4G6CLlQDBfCoP1wdW0DqzBcObWN+2K7Iffp2II6PtWMLCMuBkFrbvXfTazC0DfUXvMn3lTNZ/bH5vsuVisxIoZ+pFZluWOWHbTj3ImjhYq43e7cQ8TQr+ScrAZk79iQ1RCdRCxnYkQM/erV4w5Hh1wo+p4cootqjzgpHqDPHbMi8wV5p87D7gSkxTshf/7j7owcKeY25D4dQFq8EzLnxgNEDGnzVsjqKbamH3rb9SYBpMnbKzJjCxvVOgGkzeuQk+22ToQPeJBKb1Zkk89iNoa0eh3yq19PIoA0SkJWW26+H2Zx8wPSKgnZ4CyvHlYGSKsk5Jj4p+pX9QHSKgmZEeWwWwFpxj973MqFYZsA0owbLMpGeEwTUo6rh5Jb2K2AlFMzsoe/xQZp1/XftQDoRwgZtICQQQsIGbSAkEELCBm0gJBBCwgZtICQQQsIGbSAkEELCBm0gJBBCwgZtICQQQsIGbSAkEELCBm0gJBBCwgZtICQQQsIGbSAkEELCBm0gJBBCwgZtICQQQsIGbSAkEELCBm0gJBBCwgZtICQQQsIGbSAkEELCBm0gJBBCwgZtICQQQsIGbSAkEELCBm0gJBBCwgZtICQQQsIGbSAkCHVXNumWMRlhAyp5joWCUNUTAJIKUeuxpZpVJbmXazIkF7XRgeJCXqkXiNkSCXLNGl0eKAiWuKpOkbIkEq3piaS1XjpbqaijtWMXFF1A6TF1GSWLMtc/H3eebh/zqSYKrZpEEC/45zTjWsjcqQYLAVkf3/wPTMwg3LGyNTkRdk4jgmgHw24Nk1dHyfTNB4t3Xa/O/w+L82P1RhROTucIYB+4tgmjY8O0a2bE3ImnixZjE//cUTEyt5wHIn746PD+VrdJ6zKcBXU2ODKcAczjlx9HXmjw5bnWEUQ/cYi8VSuwqWT/j3bf1H4OViubjfy/21tE0CvyRsZybigglXhOo6VTAYy3OcijkotY6BUmme10/5/b7YrmJgfGx1abvih12gGBHBR9lfbvWhtueq6yWpLjJVktM+NKC49u+2W6RzYwYMvHzdybc6X19arWcQMZ6XC3QtWjgi2lQTMOFOhrjAhytSi0v7+70Vhh0+omGPT/HWzuuNtVOsE8D5OMtu68qslv9pyZ8GscUGlmOIVFrNyYLrlbsaEs2BHnSwUfY8E3Wt34tmN6g41/Ra1Ox0COO5DmRoT5E7BSi9W29NgJ71ZeOLnyaA5edls0w8paLUpwq7GB0nd/VVjwnk/lPUKO+2FKmrBRY4RyxJ8iCo8isrP7gyd60NZr7wEkYoPp81n8RkAAAAASUVORK5CYII=`;
+
+    const [src, setSRC] = useState(rgbDataURL());
 
     const isShowDisabledLayer = roundState === RoundState.LockingBet;
 
@@ -131,25 +136,17 @@ const SeBallBetOptionsComponent = () => {
 
     const renderMainOption = (choice: string) => {
         const className = Style[`choice-${choice}`];
-        const keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 
-        const triplet = (e1: number, e2: number, e3: number) =>
-            keyStr.charAt(e1 >> 2) +
-            keyStr.charAt(((e1 & 3) << 4) | (e2 >> 4)) +
-            keyStr.charAt(((e2 & 15) << 2) | (e3 >> 6)) +
-            keyStr.charAt(e3 & 63);
-
-        const rgbDataURL = (r: number, g: number, b: number) =>
-            `data:image/gif;base64,R0lGODlhAQABAPAA${triplet(0, r, g) + triplet(b, 255, 255)}/yH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==`;
         return (
             <div className={`${Style[choice]} text-white relative`}>
                 <Image
                     className={Style["bg-bet-option"]}
                     width={178}
                     height={94}
-                    placeholder="blur"
-                    blurDataURL={rgbDataURL(237, 181, 6)}
-                    src={`/static/images/se-ball/2x/bg-${choice}.webp?v=${buildVersion}`}
+                    src={src}
+                    onLoadingComplete={() => {
+                        setSRC(`/static/images/se-ball/2x/bg-${choice}.webp?v=${buildVersion}`);
+                    }}
                     alt={choice}
                     priority={true}
                 />
