@@ -107,6 +107,7 @@ const BacBallBetOptionsComponent = () => {
                     className={Style["bg-bet-option"]}
                     width={178}
                     height={188}
+                    blurDataURL={`/static/images/bac-number/divide-4x/bg-${choice}.png?v=${buildVersion}`}
                     src={`/static/images/bac-number/2x/bg-${choice}.webp?v=${buildVersion}`}
                     alt={choice}
                     priority={true}
@@ -159,6 +160,7 @@ const BacBallBetOptionsComponent = () => {
                     className={Style["bg-bet-option"]}
                     width={95}
                     height={172}
+                    blurDataURL={`/static/images/bac-number/divide-4x/bg-tie.png?v=${buildVersion}`}
                     src={`/static/images/bac-number/2x/bg-tie.webp?v=${buildVersion}`}
                     alt="tie"
                     priority={true}

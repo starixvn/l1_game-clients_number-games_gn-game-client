@@ -150,6 +150,7 @@ const NextBallBetOptionsComponent = () => {
                     className={Style["bg-bet-option"]}
                     width={176}
                     height={94}
+                    blurDataURL={`/static/images/next-ball/divide-4x/bg-${backgroundName}.png?v=${buildVersion}`}
                     src={`/static/images/next-ball/2x/bg-${backgroundName}.webp?v=${buildVersion}`}
                     alt={choice}
                     priority={true}
