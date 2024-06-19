@@ -46,7 +46,8 @@
     overflow: hidden;
 
     &.adjusted-bet-notice {
-        top: 39rem;
+        top: auto;
+        bottom: 23rem;
     }
 
     .modal-icon-warning {
