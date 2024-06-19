@@ -1,8 +1,9 @@
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 
 import { systemName } from "../../../_shared/constants";
 import { useSystemContext } from "../../../_shared/react-contexts";
+import { DefaultChipBase64 } from "./chip-constant";
 import Styles from "./chip-slider.module.scss";
 
 export const Chip: React.FC<{ value: number; onClickChip: Function; text: string; image: string }> = ({
@@ -14,6 +15,8 @@ export const Chip: React.FC<{ value: number; onClickChip: Function; text: string
     const systemContext = useSystemContext();
 
     const { selectedChip } = systemContext;
+
+    const [loadingComplete, setLoadingComplete] = useState(false);
 
     const getChipClassName = () => {
         return `${Styles["chip-container"]} ${selectedChip === value ? Styles["selected"] : ""}`;
@@ -27,11 +30,13 @@ export const Chip: React.FC<{ value: number; onClickChip: Function; text: string
         <div id={`chip-${value}`} key={value} className={getChipClassName()} onClick={() => onClickChip(value)}>
             {image && (
                 <Image
-                    src={`/static/images/chips/${systemName}/${image.replace("#", "")}.svg`}
+                    src={loadingComplete ? `/static/images/chips/${systemName}/${image.replace("#", "")}.svg` : DefaultChipBase64}
+                    onLoadingComplete={() => setLoadingComplete(true)}
                     className={`img-fluid ${Styles["chip"]}`}
                     width={65}
                     height={66}
                     alt="Chip"
+                    priority={true}
                 />
             )}
             <span className={Styles["value"]}>{text || getDefaultChipText()}</span>
