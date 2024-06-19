@@ -1,17 +1,19 @@
 import "swiper/css";
 import "swiper/css/pagination";
 
+import Image from "next/image";
 import React, { useEffect, useState } from "react";
+import { AuthorizeResponse } from "sc-user-service-client/dist/auth";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { v4 as uuidv4 } from "uuid";
 
-import { AuthorizeResponse } from "sc-user-service-client/dist/auth";
 import { buildVersion } from "../../../../../_shared/constants";
 import { getBannerIds, getBanners, getOfferGamesIds } from "../../../../../_shared/helpers";
 import { usePlayerContext } from "../../../../../_shared/react-contexts";
 import { tolgee } from "../../../../../_shared/tolgee";
 import { BannerSwiper, DEFAULT_DELAY_SLIDER } from "../../../../game-components/banner-swiper/banner-swiper";
 import { IBanner, ILobbyConfigs } from "../../../dashboard/type";
+import { LobbyImagesData } from "./lobby-constant";
 
 const DEFAULT_BANNER_PATH = "/static/images/lobby/banners";
 
@@ -29,6 +31,8 @@ export const getGameIdOfferBanner = (authorizeInfo: AuthorizeResponse, lobbyConf
 };
 
 const DefaultBanner = () => {
+    const [loadingComplete, setLoadingComplete] = useState(false);
+
     return (
         <Swiper
             slidesPerView={"auto"}
@@ -42,12 +46,14 @@ const DefaultBanner = () => {
             roundLengths={true}
         >
             <SwiperSlide key={uuidv4}>
-                <img
+                <Image
                     className="banner-img"
-                    src={`/static/images/lobby/banners/banner-blur.jpg?v=${buildVersion}`}
-                    alt={"banner-blur"}
+                    src={loadingComplete ? `/static/images/lobby/banners/banner-blur.jpg?v=${buildVersion}` : LobbyImagesData["banner"]}
+                    onLoadingComplete={() => setLoadingComplete(true)}
                     width={734}
-                    height={248}
+                    height={734}
+                    alt={"banner-blur"}
+                    priority={true}
                 />
             </SwiperSlide>
         </Swiper>

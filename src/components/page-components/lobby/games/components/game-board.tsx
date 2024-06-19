@@ -1,14 +1,17 @@
 import dynamic from "next/dynamic";
+import Image from "next/image";
 import { useEffect, useState } from "react";
+
 import { getAppSettings } from "../../../../../_shared/app-settings";
-import { LobbyGameId } from "../../../../../_shared/constants";
+import { buildVersion, LobbyGameId } from "../../../../../_shared/constants";
 import PreloadResources from "../../../../../_shared/helpers/preload-resources";
 import { useLobbyConnectionContext } from "../../../../../_shared/react-contexts";
 import { GameSettings } from "../../../../game-base/type";
 import { LoadingSpinner } from "../../../../game-components/game-loading/loading-spinner";
-import { LobbyGameTransmitter, LobbyMessageEvents, getLobbyData } from "../../lobby-socket-connection";
+import { getLobbyData, LobbyGameTransmitter, LobbyMessageEvents } from "../../lobby-socket-connection";
 import Styles from "../../lobby.module.scss";
 import { GameIcon } from "./game-icon";
+import { LobbyImagesData } from "./lobby-constant";
 
 const DisabledGameBlock = dynamic(() => import("./disable-game-block"));
 const CountdownTimer = dynamic(() => import("./countdown-timer"));
@@ -30,6 +33,7 @@ export const GameBoard: React.FC<Props> = ({ gameSettings, openGame, gameTransmi
     const [clickGameId, setClickGameId] = useState<number>(0);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [cancelPreloadResource, setCancelPreloadResource] = useState<boolean>(false);
+    const [loadingComplete, setLoadingComplete] = useState(false);
 
     useEffect(() => {
         document.addEventListener("visibilitychange", onVisibilityChange);
@@ -103,6 +107,20 @@ export const GameBoard: React.FC<Props> = ({ gameSettings, openGame, gameTransmi
             className={`${Styles["game-board-detail"]} ${!isShow ? "" : Styles["pointer"]}`}
             id={`icon-${gameSettings.gameName.toLowerCase()}`}
         >
+            <Image
+                src={
+                    loadingComplete
+                        ? `/static/images/lobby/game-board-detail/bg-game-board-2x.webp?v=${buildVersion}`
+                        : LobbyImagesData["game-block"]
+                }
+                onLoadingComplete={() => setLoadingComplete(true)}
+                className={Styles["background"]}
+                width={360}
+                height={139}
+                alt="game-board-detail"
+                priority={true}
+            />
+
             <div onClick={handleClickGameBoard} className="d-flex gap-2">
                 <GameIcon gameSettings={gameSettings} transmitter={transmitter} />
                 {isLoading && <LoadingSpinner />}
