@@ -15,7 +15,7 @@ export const ODD_EVEN_AS_DEFAULT_SCOREBOARD = true;
 export function createBeadRoadElement(isOddEven: boolean = ODD_EVEN_AS_DEFAULT_SCOREBOARD) {
     class Element extends BeadRoadElement<Round<SeBallResult, SeBallSettlementResult>> {
         renderElement(round: Round<SeBallResult, SeBallSettlementResult>, t?: (key: string) => string): ReactNode {
-            const character = (betChoice: string) => <BeadBoardIcon choice={betChoice} size={14} />;
+            const character = (betChoice: string) => <BeadBoardIcon choice={betChoice} />;
 
             if (!round.settlementResult) {
                 return <span className={`${styles.blink}`}></span>;

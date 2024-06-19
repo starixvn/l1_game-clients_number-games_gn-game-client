@@ -5,29 +5,35 @@ exports[`BacBallBeadRoadCharacterElement render when the round result is banker 
   "asFragment": [Function],
   "baseElement": <body>
     <div>
-      <img
-        alt="banker"
-        data-nimg="1"
-        decoding="async"
-        fetchpriority="high"
-        height="14"
-        src="/static/images/scoreboard-icons/banker_vi.svg"
-        style="color: transparent;"
-        width="14"
-      />
+      <span
+        class="icon-banker_vi"
+      >
+        <span
+          class="path1"
+        />
+        <span
+          class="path2"
+        />
+        <span
+          class="path3"
+        />
+      </span>
     </div>
   </body>,
   "container": <div>
-    <img
-      alt="banker"
-      data-nimg="1"
-      decoding="async"
-      fetchpriority="high"
-      height="14"
-      src="/static/images/scoreboard-icons/banker_vi.svg"
-      style="color: transparent;"
-      width="14"
-    />
+    <span
+      class="icon-banker_vi"
+    >
+      <span
+        class="path1"
+      />
+      <span
+        class="path2"
+      />
+      <span
+        class="path3"
+      />
+    </span>
   </div>,
   "debug": [Function],
   "findAllByAltText": [Function],
@@ -157,29 +163,35 @@ exports[`BacBallBeadRoadCharacterElement render when the round result is player 
   "asFragment": [Function],
   "baseElement": <body>
     <div>
-      <img
-        alt="player"
-        data-nimg="1"
-        decoding="async"
-        fetchpriority="high"
-        height="14"
-        src="/static/images/scoreboard-icons/player_vi.svg"
-        style="color: transparent;"
-        width="14"
-      />
+      <span
+        class="icon-player_vi"
+      >
+        <span
+          class="path1"
+        />
+        <span
+          class="path2"
+        />
+        <span
+          class="path3"
+        />
+      </span>
     </div>
   </body>,
   "container": <div>
-    <img
-      alt="player"
-      data-nimg="1"
-      decoding="async"
-      fetchpriority="high"
-      height="14"
-      src="/static/images/scoreboard-icons/player_vi.svg"
-      style="color: transparent;"
-      width="14"
-    />
+    <span
+      class="icon-player_vi"
+    >
+      <span
+        class="path1"
+      />
+      <span
+        class="path2"
+      />
+      <span
+        class="path3"
+      />
+    </span>
   </div>,
   "debug": [Function],
   "findAllByAltText": [Function],
@@ -240,29 +252,35 @@ exports[`BacBallBeadRoadCharacterElement render when the round result is tie sho
   "asFragment": [Function],
   "baseElement": <body>
     <div>
-      <img
-        alt="tie"
-        data-nimg="1"
-        decoding="async"
-        fetchpriority="high"
-        height="14"
-        src="/static/images/scoreboard-icons/tie_vi.svg"
-        style="color: transparent;"
-        width="14"
-      />
+      <span
+        class="icon-tie_vi"
+      >
+        <span
+          class="path1"
+        />
+        <span
+          class="path2"
+        />
+        <span
+          class="path3"
+        />
+      </span>
     </div>
   </body>,
   "container": <div>
-    <img
-      alt="tie"
-      data-nimg="1"
-      decoding="async"
-      fetchpriority="high"
-      height="14"
-      src="/static/images/scoreboard-icons/tie_vi.svg"
-      style="color: transparent;"
-      width="14"
-    />
+    <span
+      class="icon-tie_vi"
+    >
+      <span
+        class="path1"
+      />
+      <span
+        class="path2"
+      />
+      <span
+        class="path3"
+      />
+    </span>
   </div>,
   "debug": [Function],
   "findAllByAltText": [Function],

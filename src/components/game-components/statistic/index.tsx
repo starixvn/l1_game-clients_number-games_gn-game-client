@@ -50,7 +50,7 @@ export const PercentageStatistic: React.FC<PercentageStatisticProps> = (props: P
             groups.push(
                 group.map((choice) => (
                     <StatisticItem key={choice} value={`${statisticResult[choice]}%`}>
-                        <BeadBoardIcon choice={choice} size={16} />
+                        <BeadBoardIcon choice={choice} />
                     </StatisticItem>
                 ))
             );
@@ -76,7 +76,7 @@ export const PercentageStatistic: React.FC<PercentageStatisticProps> = (props: P
             <div className={`${Styles["statistic-container"]} flex`} id="bar-statistic">
                 {mainChoices.map((choice) => (
                     <StatisticItem key={choice} value={`${statisticResult[choice]}%`} className={props.className}>
-                        <BeadBoardIcon choice={choice} size={16} />
+                        <BeadBoardIcon choice={choice} />
                     </StatisticItem>
                 ))}
             </div>

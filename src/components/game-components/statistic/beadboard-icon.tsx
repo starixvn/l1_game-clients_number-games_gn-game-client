@@ -1,19 +1,15 @@
 import { usePlayerContext } from "../../../_shared/react-contexts";
 import { BeadBoardIconProps } from "./types";
-import Image from "next/image";
 
-const DEFAULT_ICONS_PATH = "/static/images/scoreboard-icons";
 const BeadBoardIcon: React.FC<BeadBoardIconProps> = (props) => {
     const { locale } = usePlayerContext();
 
     return (
-        <Image
-            src={`${DEFAULT_ICONS_PATH}/${props.choice}_${locale}.svg`}
-            alt={props.choice}
-            priority={true}
-            width={props.size}
-            height={props.size}
-        />
+        <span className={`icon-${props.choice}_${locale}`}>
+            <span className="path1"></span>
+            <span className="path2"></span>
+            <span className="path3"></span>
+        </span>
     );
 };
 

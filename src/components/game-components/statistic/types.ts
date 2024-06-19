@@ -20,5 +20,4 @@ export type PercentageStatisticProps = {
 
 export type BeadBoardIconProps = {
     choice: string;
-    size: number;
 };

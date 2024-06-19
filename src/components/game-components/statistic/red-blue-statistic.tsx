@@ -15,7 +15,7 @@ export const RedAndBlueStatistic: React.FC<PercentageStatisticProps> = (props: P
             <div className={Styles["other-wrapper"]}>
                 {mainChoices.map((choice) => (
                     <StatisticItem key={choice} value={`${mainChoicesStatistic[choice]}%`}>
-                        <BeadBoardIcon choice={choice} size={16} />
+                        <BeadBoardIcon choice={choice} />
                     </StatisticItem>
                 ))}
             </div>

@@ -59,6 +59,10 @@
     .number {
         font-variant-numeric: tabular-nums;
     }
+
+    [class^="icon-"] {
+        font-size: 1.6rem;
+    }
 }
 
 .statistic-choices {
@@ -171,12 +175,4 @@ $green_choices: tie;
     .statistic-group {
         gap: 0.2rem;
     }
-}
-
-.player_id {
-    color: red;
-}
-
-.player_zh_cn {
-    color: blue;
 }
