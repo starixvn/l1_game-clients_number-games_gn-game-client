@@ -25,7 +25,7 @@ describe("placeBet", () => {
 
     const updatePlaceBetContext = (state) => {
         placeBetContext = stub<PlaceBetContextModel>(state);
-        placeBetHandler.registerEvents(() => {}, placeBetContext);
+        placeBetHandler.registerEvents(() => { }, placeBetContext);
     };
 
     beforeEach(() => {
@@ -47,13 +47,13 @@ describe("placeBet", () => {
             getPlayerBalance: jest.fn(),
             tolgeeNamespace: "test",
             gameId: 1,
-            signOut: () => {},
+            signOut: () => { },
         };
 
         placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
         placeBetHandler.setPlaceBetDispatch(placeBetDispatch);
 
-        placeBetHandler.registerEvents(() => {}, placeBetContext);
+        placeBetHandler.registerEvents(() => { }, placeBetContext);
     });
 
     afterEach(() => {
@@ -162,6 +162,7 @@ describe("placeBet", () => {
                 errorCode: "SB1907",
                 betChoice1: "",
                 betChoice2: "",
+                adjustBetNoticePosition: false
             };
 
             // Act
@@ -191,6 +192,7 @@ describe("placeBet", () => {
                 errorCode: "SB1907",
                 betChoice1: "",
                 betChoice2: "",
+                adjustBetNoticePosition: false
             };
 
             // Act
@@ -229,6 +231,7 @@ describe("placeBet", () => {
                 errorCode: "SB1907",
                 betChoice1: "",
                 betChoice2: "",
+                adjustBetNoticePosition: false
             };
 
             // Act
@@ -263,6 +266,7 @@ describe("placeBet", () => {
                 errorCode: "SB1907",
                 betChoice1: "",
                 betChoice2: "",
+                adjustBetNoticePosition: false
             };
 
             // Act
@@ -335,6 +339,7 @@ describe("placeBet", () => {
                 errorCode: "SB1939",
                 betChoice1: undefined,
                 betChoice2: undefined,
+                adjustBetNoticePosition: true
             };
 
             // Act
@@ -444,6 +449,7 @@ describe("placeBet", () => {
                 betChoice1: undefined,
                 betChoice2: undefined,
                 maxBet: 200,
+                adjustBetNoticePosition: false
             };
 
             // Act
@@ -478,6 +484,7 @@ describe("placeBet", () => {
                 betChoice1: undefined,
                 betChoice2: undefined,
                 maxBet: 200,
+                adjustBetNoticePosition: false
             };
 
             // Act
@@ -514,6 +521,7 @@ describe("placeBet", () => {
                 betChoice1: undefined,
                 betChoice2: undefined,
                 maxBet: 150,
+                adjustBetNoticePosition: false
             };
 
             // Act
@@ -550,6 +558,7 @@ describe("placeBet", () => {
                 betChoice1: undefined,
                 betChoice2: undefined,
                 maxBet: 150,
+                adjustBetNoticePosition: false
             };
 
             // Act
@@ -588,6 +597,7 @@ describe("placeBet", () => {
                 betChoice1: undefined,
                 betChoice2: undefined,
                 maxBet: 150,
+                adjustBetNoticePosition: false
             };
 
             // Act
@@ -906,6 +916,7 @@ describe("placeBet", () => {
                     errorCode: "SB1907",
                     betChoice1: "",
                     betChoice2: "",
+                    adjustBetNoticePosition: false
                 };
 
                 // Act
@@ -944,6 +955,7 @@ describe("placeBet", () => {
                     errorCode: "SB1907",
                     betChoice1: "",
                     betChoice2: "",
+                    adjustBetNoticePosition: false
                 };
 
                 // Act
