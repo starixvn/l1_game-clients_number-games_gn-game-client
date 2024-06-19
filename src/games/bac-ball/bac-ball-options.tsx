@@ -1,13 +1,14 @@
 import dynamic from "next/dynamic";
 import Image from "next/image";
+import { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
-import { buildVersion } from "../../_shared/constants";
 import { useGameContext } from "../../_shared/react-contexts";
 import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
 import { isShowHighlightPrevResult } from "../../_shared/react-hooks/use-high-light";
 import { RoundState } from "../../components/game-base/type";
 import Style from "./bac-ball.module.scss";
-import { BacBallBetOptions, BacBallBetOptionsPercentageColor } from "./constants";
+import { BacBallBetOptions, BacBallBetOptionsPercentageColor, BetChoiceImagesData } from "./constants";
 
 const BetChoice = dynamic(() => import("../../components/game-components/bet-option/bet-choice"));
 const RippleButton = dynamic(() => import("../../components/game-components/bet-option/ripple-button"));
@@ -23,6 +24,12 @@ const BacBallBetOptionsComponent = () => {
     const { tolgeeNamespace } = useGameContext();
 
     const isShowDisabledLayer = roundState === RoundState.LockingBet;
+
+    const [loadingComplete, setLoadingComplete] = useState({
+        [BacBallBetOptions.BANKER]: false,
+        [BacBallBetOptions.PLAYER]: false,
+        [BacBallBetOptions.TIE]: false,
+    });
 
     const renderTotalBet = (choice: string) => {
         const tieClassName = `justify-center mt-1`;
@@ -104,11 +111,12 @@ const BacBallBetOptionsComponent = () => {
         return (
             <div className={`${Style[choice]} text-white relative`}>
                 <Image
+                    key={uuidv4}
                     className={Style["bg-bet-option"]}
                     width={178}
                     height={188}
-                    blurDataURL={`/static/images/bac-number/divide-4x/bg-${choice}.png?v=${buildVersion}`}
-                    src={`/static/images/bac-number/2x/bg-${choice}.webp?v=${buildVersion}`}
+                    src={loadingComplete[choice] ? BetChoiceImagesData[choice]?.src : BetChoiceImagesData[choice]?.blur}
+                    onLoadingComplete={() => setLoadingComplete((prevState) => ({ ...prevState, [choice]: true }))}
                     alt={choice}
                     priority={true}
                 />
@@ -160,8 +168,12 @@ const BacBallBetOptionsComponent = () => {
                     className={Style["bg-bet-option"]}
                     width={95}
                     height={172}
-                    blurDataURL={`/static/images/bac-number/divide-4x/bg-tie.png?v=${buildVersion}`}
-                    src={`/static/images/bac-number/2x/bg-tie.webp?v=${buildVersion}`}
+                    src={
+                        loadingComplete[BacBallBetOptions.TIE]
+                            ? BetChoiceImagesData[BacBallBetOptions.TIE]?.src
+                            : BetChoiceImagesData[BacBallBetOptions.TIE]?.blur
+                    }
+                    onLoadingComplete={() => setLoadingComplete((prevState) => ({ ...prevState, [BacBallBetOptions.TIE]: true }))}
                     alt="tie"
                     priority={true}
                 />

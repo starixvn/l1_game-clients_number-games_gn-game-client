@@ -13,9 +13,8 @@ export const getPathImageGameId = (gameId: number) => {
         return [];
     }
 
-    const divide4xSuffix = "/divide-4x";
     const devicePixelRatioSuffix = getDevicePixelRatio() > 1 ? "/2x" : "/1x";
-    return [`${gameImagePath}${divide4xSuffix}`, gameImagePath, `${gameImagePath}${devicePixelRatioSuffix}`, ...optionalGamePaths];
+    return [gameImagePath, `${gameImagePath}${devicePixelRatioSuffix}`, ...optionalGamePaths];
 };
 
 export const getPathBanner = (locale: string, gameId: number) => {

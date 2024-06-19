@@ -23,6 +23,7 @@ const SeBallBetOptionsComponent = () => {
     const { tolgeeNamespace } = useGameContext();
 
     const isShowDisabledLayer = roundState === RoundState.LockingBet;
+
     const [loadingComplete, setLoadingComplete] = useState({
         [SeBallBetOptions.ODD]: false,
         [SeBallBetOptions.EVEN]: false,
@@ -32,6 +33,7 @@ const SeBallBetOptionsComponent = () => {
         [SeBallBetOptions.RED4]: false,
         [SeBallBetOptions.BLUE4]: false,
     });
+
     const renderTotalBet = (choice: string, className?: string) => {
         return <TotalBet choice={choice} className={className} tolgeeNamespace={tolgeeNamespace} />;
     };
@@ -147,9 +149,7 @@ const SeBallBetOptionsComponent = () => {
                     width={178}
                     height={94}
                     src={loadingComplete[choice] ? BetChoiceImagesData[choice]?.src : BetChoiceImagesData[choice]?.blur}
-                    onLoadingComplete={() => {
-                        setLoadingComplete({ ...loadingComplete, [choice]: true });
-                    }}
+                    onLoadingComplete={() => setLoadingComplete((prevState) => ({ ...prevState, [choice]: true }))}
                     alt={choice}
                     priority={true}
                 />
@@ -219,10 +219,7 @@ const SeBallBetOptionsComponent = () => {
                     width={choice === SeBallBetOptions.RED2 ? 77 : 136}
                     height={choice === SeBallBetOptions.RED2 ? 149 : 66}
                     src={loadingComplete[choice] ? BetChoiceImagesData[backgroundName]?.src : BetChoiceImagesData[backgroundName]?.blur}
-                    onLoadingComplete={() => {
-                        setLoadingComplete({ ...loadingComplete, [choice]: true });
-                        console.log("------loadingComplete", loadingComplete);
-                    }}
+                    onLoadingComplete={() => setLoadingComplete((prevState) => ({ ...prevState, [choice]: true }))}
                     alt={choice}
                     priority={true}
                 />
