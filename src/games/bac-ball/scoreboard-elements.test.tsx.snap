@@ -6,7 +6,7 @@ exports[`BacBallBeadRoadCharacterElement render when the round result is banker 
   "baseElement": <body>
     <div>
       <span
-        class="icon-banker_vi"
+        class="icon-banker_en"
       >
         <span
           class="path1"
@@ -22,7 +22,7 @@ exports[`BacBallBeadRoadCharacterElement render when the round result is banker 
   </body>,
   "container": <div>
     <span
-      class="icon-banker_vi"
+      class="icon-banker_en"
     >
       <span
         class="path1"
@@ -164,7 +164,7 @@ exports[`BacBallBeadRoadCharacterElement render when the round result is player 
   "baseElement": <body>
     <div>
       <span
-        class="icon-player_vi"
+        class="icon-player_en"
       >
         <span
           class="path1"
@@ -180,7 +180,7 @@ exports[`BacBallBeadRoadCharacterElement render when the round result is player 
   </body>,
   "container": <div>
     <span
-      class="icon-player_vi"
+      class="icon-player_en"
     >
       <span
         class="path1"
@@ -253,7 +253,7 @@ exports[`BacBallBeadRoadCharacterElement render when the round result is tie sho
   "baseElement": <body>
     <div>
       <span
-        class="icon-tie_vi"
+        class="icon-tie_en"
       >
         <span
           class="path1"
@@ -269,7 +269,7 @@ exports[`BacBallBeadRoadCharacterElement render when the round result is tie sho
   </body>,
   "container": <div>
     <span
-      class="icon-tie_vi"
+      class="icon-tie_en"
     >
       <span
         class="path1"
