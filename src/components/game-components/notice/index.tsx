@@ -19,8 +19,8 @@ const BaseNotice: React.FC<{
     isOpen?: boolean;
     isWarning: boolean;
     children: React.ReactNode;
-    isBetNotice: boolean;
-}> = ({ children, onClose, duration = 3, isBetNotice }) => {
+    adjustBetNoticePosition: boolean;
+}> = ({ children, onClose, duration = 3, adjustBetNoticePosition }) => {
     useEffect(() => {
         const timer = setTimeout(onClose, duration * 1000);
 
@@ -36,11 +36,11 @@ const BaseNotice: React.FC<{
 
     const clickSound = useClickSound();
 
-    const isBetNoticeClass = isBetNotice ? "modal-center is-processing" : "modal-center";
+    const adjustBetNoticePositionClass = adjustBetNoticePosition ? "modal-center adjusted-bet-notice" : "modal-center";
 
     return (
         <BaseDialog type={ModalType.Center} isOpen={true} onCloseModal={onClose}>
-            <div className={`${isBetNoticeClass} red-color`}>
+            <div className={`${adjustBetNoticePositionClass} red-color`}>
                 <span
                     className={`icon-close ${Styles["icon-close"]}`}
                     onClick={() => {
@@ -84,7 +84,7 @@ export const NoticeDialog = () => {
             betChoice2,
             onClose,
             hedgeBetGroup,
-            isBetNotice,
+            adjustBetNoticePosition,
         } = notice;
 
         const closeNotice = () => {
@@ -110,7 +110,7 @@ export const NoticeDialog = () => {
         };
 
         return (
-            <BaseNotice {...{ onClose: onCloseNotice, duration, isWarning, isBetNotice }}>
+            <BaseNotice {...{ onClose: onCloseNotice, duration, isWarning, adjustBetNoticePosition }}>
                 <div className={Styles["notice-content"]}>
                     {t(`${message}`, params, { noWrap: true }).replaceTolgeeFormat()}
                     {getExtendMessageByErrorCode(errorCode)}

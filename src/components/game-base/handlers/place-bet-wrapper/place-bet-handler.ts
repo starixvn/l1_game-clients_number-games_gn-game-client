@@ -262,7 +262,7 @@ export class PlaceBetHandler {
     };
 
     handleProcessingBet = () => {
-        this.broadcastNotice({ message: "Common.message_processing_action", duration: 2, isBetNotice: true });
+        this.broadcastNotice({ message: "Common.message_processing_action", duration: 2, adjustBetNoticePosition: true });
     };
 
     sendConfirmBet(notConfirmOwnBets: object) {
@@ -317,7 +317,7 @@ export class PlaceBetHandler {
         }
     }
 
-    protected getNotice = (errorCode: string, isBetNotice = false, betChoice?: string, args?: object): NoticeModel => {
+    protected getNotice = (errorCode: string, adjustBetNoticePosition = false, betChoice?: string, args?: object): NoticeModel => {
         let betChoice1 = "";
         let betChoice2 = "";
 
@@ -336,7 +336,7 @@ export class PlaceBetHandler {
             errorCode: gameErrorCode,
             betChoice1,
             betChoice2,
-            isBetNotice,
+            adjustBetNoticePosition,
             ...args,
         };
     };
