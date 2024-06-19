@@ -37,11 +37,10 @@ export const AppTilte = () => {
 };
 SabaNumberApp.getInitialProps = async (context: AppContext) => {
     const initialProps = await App.getInitialProps(context);
-
     const { lang, token } = context.router.query;
     return {
         ...initialProps,
-        language: token ? languageMapper[lang as string] || "en" : tolgee.getLanguage(),
+        language: token ? languageMapper[lang as string] || "en" : "en",
     };
 };
 

@@ -128,6 +128,9 @@ const SplashScreen: React.FC = () => {
         let authorizeInfo;
         const handleInitialization = async () => {
             const session = await getSession(token);
+            const locale = languageMapper[session?.language] || languageMapper[language];
+            await tolgee.changeLanguage(locale);
+
             if (!session || isTimeoutSession(session)) {
                 signOut();
                 return;
