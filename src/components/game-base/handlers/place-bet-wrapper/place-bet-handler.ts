@@ -116,7 +116,7 @@ export class PlaceBetHandler {
         const hedgeBetGroup = notice?.hedgeBetGroup;
         const betChoice = hedgeBetGroup ? hedgeBetGroup[0] : undefined;
 
-        return this.getNotice(errorCode, betChoice, notice);
+        return this.getNotice(errorCode, false, betChoice, notice);
     };
 
     handleEndBet = ({ endBet, ownBets, notice, kickedOut, apiError }, signOut: () => void, placeBetContext: PlaceBetContextModel) => {
@@ -181,7 +181,7 @@ export class PlaceBetHandler {
         }
 
         if (isHedgeBet(findHedgeBetGroup(this.props?.hedgeBetGroups, betChoice), betChoice, amount, this.placeBetContext?.ownBets)) {
-            this.broadcastNotice(this.getNotice(NoticeErrorCode.hedgeBet, betChoice));
+            this.broadcastNotice(this.getNotice(NoticeErrorCode.hedgeBet, true, betChoice));
             return;
         }
 
@@ -215,7 +215,7 @@ export class PlaceBetHandler {
             return;
         }
 
-        this.broadcastNotice(this.getNotice(criteriaValidateBet?.errorCode, betChoice, criteriaValidateBet?.args));
+        this.broadcastNotice(this.getNotice(criteriaValidateBet?.errorCode, false, betChoice, criteriaValidateBet?.args));
     };
 
     suggestBetAmount = (betChoice: string, availableSuggestBet: IAvailableSuggestBetAmount) => {
@@ -290,7 +290,7 @@ export class PlaceBetHandler {
         const gameSettings = Object.values(getAppSettings().gameSettings)?.find((setting) => setting.id === +gameId);
         const totalTurns = gameSettings?.totalTurns;
         const errorCodeDuringSettlement = totalTurns > 1 ? NoticeErrorCode.placeBetNextDraw : NoticeErrorCode.placeBetNextRound;
-        const notice = isStartingRound ? this.getNotice(NoticeErrorCode.cannotBet) : this.getNotice(errorCodeDuringSettlement);
+        const notice = isStartingRound ? this.getNotice(NoticeErrorCode.cannotBet, true) : this.getNotice(errorCodeDuringSettlement, true);
 
         this.broadcastNotice(notice);
     };
@@ -317,7 +317,7 @@ export class PlaceBetHandler {
         }
     }
 
-    protected getNotice = (errorCode: string, betChoice?: string, args?: object): NoticeModel => {
+    protected getNotice = (errorCode: string, isBetNotice = false, betChoice?: string, args?: object): NoticeModel => {
         let betChoice1 = "";
         let betChoice2 = "";
 
@@ -336,7 +336,7 @@ export class PlaceBetHandler {
             errorCode: gameErrorCode,
             betChoice1,
             betChoice2,
-            isBetNotice: true,
+            isBetNotice,
             ...args,
         };
     };
