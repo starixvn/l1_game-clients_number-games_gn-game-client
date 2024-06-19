@@ -2,12 +2,11 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useState } from "react";
 
-import { buildVersion } from "../../_shared/constants";
 import { useGameContext } from "../../_shared/react-contexts";
 import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
 import { isShowHighlightPrevResult } from "../../_shared/react-hooks/use-high-light";
 import { RoundState } from "../../components/game-base/type";
-import { DotColorMapper, imageData, SeBallBetOptions, SeBallBetOptionsPercentageColor } from "./se-ball-constants";
+import { BetChoiceImagesData, DotColorMapper, SeBallBetOptions, SeBallBetOptionsPercentageColor } from "./se-ball-constants";
 import Style from "./se-ball.module.scss";
 
 const BetChoice = dynamic(() => import("../../components/game-components/bet-option/bet-choice"));
@@ -25,8 +24,13 @@ const SeBallBetOptionsComponent = () => {
 
     const isShowDisabledLayer = roundState === RoundState.LockingBet;
     const [loadingComplete, setLoadingComplete] = useState({
-        odd: false,
-        even: false
+        [SeBallBetOptions.ODD]: false,
+        [SeBallBetOptions.EVEN]: false,
+        [SeBallBetOptions.BLUE3]: false,
+        [SeBallBetOptions.RED3]: false,
+        [SeBallBetOptions.RED2]: false,
+        [SeBallBetOptions.RED4]: false,
+        [SeBallBetOptions.BLUE4]: false,
     });
     const renderTotalBet = (choice: string, className?: string) => {
         return <TotalBet choice={choice} className={className} tolgeeNamespace={tolgeeNamespace} />;
@@ -133,65 +137,19 @@ const SeBallBetOptionsComponent = () => {
         );
     };
 
-    // const loadBetOptionBackground = (choice: string) => {
-    //     let src = "";
-    //     let completedFC;
-
-    //     switch (choice) {
-    //         case SeBallBetOptions.ODD:
-    //             src = oddSRC;
-    //             completedFC = setOddSRC(`/static/images/se-ball/2x/bg-${choice}.webp?v=${buildVersion}`);
-    //             break;
-    //         case SeBallBetOptions.EVEN:
-    //             src = evenSRC;
-    //             completedFC = setEvenSRC(`/static/images/se-ball/2x/bg-${choice}.webp?v=${buildVersion}`);
-    //             break;
-    //         // case SeBallBetOptions.BLUE3:
-    //         // case SeBallBetOptions.RED3:
-    //         //     src = blue3SRC;
-    //         //     completedFC = setBlue3SRC(`/static/images/se-ball/2x/bg-${choice}.webp?v=${buildVersion}`);
-    //         //     break;
-
-    //         // case SeBallBetOptions.BLUE4:
-    //         // case SeBallBetOptions.RED4:
-    //         //     src = red4SRC;
-    //         //     completedFC = setRed4SRC(`/static/images/se-ball/2x/bg-${choice}.webp?v=${buildVersion}`);
-    //         //     break;
-
-    //         // case SeBallBetOptions.RED2:
-    //         //     src = red2SRC;
-    //         //     completedFC = setRed2SRC(`/static/images/se-ball/2x/bg-${choice}.webp?v=${buildVersion}`);
-    //         //     break;
-    //     }
-
-    //     return (
-    //         <Image
-    //             className={Style["bg-bet-option"]}
-    //             width={178}
-    //             height={94}
-    //             src={src}
-    //             onLoadingComplete={() => completedFC}
-    //             alt={choice}
-    //             priority={true}
-    //         />
-    //     );
-    // };
-
     const renderMainOption = (choice: string) => {
         const className = Style[`choice-${choice}`];
 
         return (
             <div className={`${Style[choice]} text-white relative`}>
-                {/* {loadBetOptionBackground(choice)} */}
                 <Image
                     className={Style["bg-bet-option"]}
                     width={178}
                     height={94}
-                    src={loadingComplete[choice] ? imageData[choice]?.src : imageData[choice]?.blur}
+                    src={loadingComplete[choice] ? BetChoiceImagesData[choice]?.src : BetChoiceImagesData[choice]?.blur}
                     onLoadingComplete={() => {
                         setLoadingComplete({ ...loadingComplete, [choice]: true });
-                    }
-                    }
+                    }}
                     alt={choice}
                     priority={true}
                 />
@@ -229,81 +187,57 @@ const SeBallBetOptionsComponent = () => {
         return null;
     };
 
-    // const getSubOptionsName = (choice) => {
-    //     let backgroundName = "";
-    //     let dataSRC = "";
-    //     let completedFC;
+    const getSubOptionsName = (choice) => {
+        let backgroundName = "";
 
-    //     switch (choice) {
-    //         case SeBallBetOptions.BLUE3:
-    //         case SeBallBetOptions.RED3:
-    //             backgroundName = SeBallBetOptions.BLUE3;
-    //             dataSRC = blue3SRC;
-    //             completedFC = setBlue3SRC(`/static/images/se-ball/2x/bg-${backgroundName}.webp?v=${buildVersion}`);
-    //             break;
+        switch (choice) {
+            case SeBallBetOptions.BLUE3:
+            case SeBallBetOptions.RED3:
+                backgroundName = SeBallBetOptions.BLUE3;
+                break;
 
-    //         case SeBallBetOptions.BLUE4:
-    //         case SeBallBetOptions.RED4:
-    //             backgroundName = SeBallBetOptions.RED4;
-    //             dataSRC = red4SRC;
-    //             completedFC = setRed4SRC(`/static/images/se-ball/2x/bg-${backgroundName}.webp?v=${buildVersion}`);
+            case SeBallBetOptions.BLUE4:
+            case SeBallBetOptions.RED4:
+                backgroundName = SeBallBetOptions.RED4;
 
-    //             break;
+                break;
 
-    //         case SeBallBetOptions.RED2:
-    //             backgroundName = SeBallBetOptions.RED2;
-    //             dataSRC = red2SRC;
-    //             completedFC = setRed2SRC(`/static/images/se-ball/2x/bg-${backgroundName}.webp?v=${buildVersion}`);
+            case SeBallBetOptions.RED2:
+                backgroundName = SeBallBetOptions.RED2;
+                break;
+        }
 
-    //             break;
-    //     }
+        return backgroundName;
+    };
 
-    //     return { backgroundName, dataSRC, completedFC };
-    // };
+    const renderSubOptions = (choice: string) => {
+        const backgroundName = getSubOptionsName(choice);
+        return (
+            <div className={`${Style[choice]} ${Style["bet-choice"]}`}>
+                <Image
+                    className={Style["bg-bet-option"]}
+                    width={choice === SeBallBetOptions.RED2 ? 77 : 136}
+                    height={choice === SeBallBetOptions.RED2 ? 149 : 66}
+                    src={loadingComplete[choice] ? BetChoiceImagesData[backgroundName]?.src : BetChoiceImagesData[backgroundName]?.blur}
+                    onLoadingComplete={() => {
+                        setLoadingComplete({ ...loadingComplete, [choice]: true });
+                        console.log("------loadingComplete", loadingComplete);
+                    }}
+                    alt={choice}
+                    priority={true}
+                />
 
-    // const renderSubOptions = (choice: string) => {
-    //     // const backgroundName = getSubOptionsName(choice)["backgroundName"];
+                <div className={`${Style["dot-wrapper"]} ${choice === "red2" ? Style["two-lines"] : ""}`}>{renderDot(choice)}</div>
+                {renderOdds(choice)}
+                <div className={Style["own-bet-container"]}>{renderOwnBet(choice)}</div>
+                <div className={Style["winning-effect"]}>{renderHighlightWinningResult(choice)}</div>
 
-    //     return (
-    //         <div className={`${Style[choice]} ${Style["bet-choice"]}`}>
-    //             <Image
-    //                 className={Style["bg-bet-option"]}
-    //                 width={choice === SeBallBetOptions.RED2 ? 77 : 136}
-    //                 height={choice === SeBallBetOptions.RED2 ? 149 : 66}
-    //                 src={getSubOptionsName(choice)["dataSRC"]}
-    //                 onLoadingComplete={() => {
-    //                     getSubOptionsName(choice)["completedFC"];
-    //                     // switch (choice) {
-    //                     //     case SeBallBetOptions.BLUE3:
-    //                     //     case SeBallBetOptions.RED3:
-    //                     //         setBlue3SRC(`/static/images/se-ball/2x/bg-${backgroundName}.webp?v=${buildVersion}`);
-    //                     //         break;
-
-    //                     //     case SeBallBetOptions.BLUE4:
-    //                     //     case SeBallBetOptions.RED4:
-    //                     //         setRed4SRC(`/static/images/se-ball/2x/bg-${backgroundName}.webp?v=${buildVersion}`);
-    //                     //         break;
-
-    //                     //     case SeBallBetOptions.RED2:
-    //                     //         setRed2SRC(`/static/images/se-ball/2x/bg-${backgroundName}.webp?v=${buildVersion}`);
-    //                     //         break;
-    //                     // }
-    //                 }}
-    //                 alt={choice}
-    //                 priority={true}
-    //             />
-
-    //             <div className={`${Style["dot-wrapper"]} ${choice === "red2" ? Style["two-lines"] : ""}`}>{renderDot(choice)}</div>
-    //             {renderOdds(choice)}
-    //             <div className={Style["own-bet-container"]}>{renderOwnBet(choice)}</div>
-    //             <div className={Style["winning-effect"]}>{renderHighlightWinningResult(choice)}</div>
-
-    //             <RippleButton className={`${Style["btn-ripple"]}`} id={`${tolgeeNamespace}-choice-${choice}`} choice={choice} />
-    //             {isShowDisabledLayer && <div className={Style["disable-layer"]}></div>}
-    //             {isShowHighlightPrevResult({ betChoice: choice, roundState, roundHistory }) && renderHighlightWinningPrevResult(choice)}
-    //         </div>
-    //     );
-    // };
+                <RippleButton className={`${Style["btn-ripple"]}`} id={`${tolgeeNamespace}-choice-${choice}`} choice={choice} />
+                {isShowDisabledLayer && <div className={Style["disable-layer"]}></div>}
+                {isShowHighlightPrevResult({ betChoice: choice, roundState, roundHistory }) && renderHighlightWinningPrevResult(choice)}
+            </div>
+        );
+    };
 
     return (
         <>
@@ -312,13 +246,13 @@ const SeBallBetOptionsComponent = () => {
                 <div className={Style["bet-option-row"]}>{renderMainOption(SeBallBetOptions.EVEN)}</div>
             </div>
 
-            {/* <div className={Style["sub-betting-zone"]}>
+            <div className={Style["sub-betting-zone"]}>
                 {renderSubOptions(SeBallBetOptions.BLUE3)}
                 {renderSubOptions(SeBallBetOptions.BLUE4)}
                 {renderSubOptions(SeBallBetOptions.RED2)}
                 {renderSubOptions(SeBallBetOptions.RED3)}
                 {renderSubOptions(SeBallBetOptions.RED4)}
-            </div> */}
+            </div>
         </>
     );
 };
