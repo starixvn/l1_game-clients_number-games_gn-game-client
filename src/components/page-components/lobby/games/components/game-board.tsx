@@ -108,15 +108,15 @@ export const GameBoard: React.FC<Props> = ({ gameSettings, openGame, gameTransmi
             id={`icon-${gameSettings.gameName.toLowerCase()}`}
         >
             <Image
+                className={Styles["background"]}
+                width={360}
+                height={139}
                 src={
                     loadingComplete
                         ? `/static/images/lobby/game-board-detail/bg-game-board-2x.webp?v=${buildVersion}`
                         : LobbyImagesData["game-block"]
                 }
                 onLoadingComplete={() => setLoadingComplete(true)}
-                className={Styles["background"]}
-                width={360}
-                height={139}
                 alt="game-board-detail"
                 priority={true}
             />

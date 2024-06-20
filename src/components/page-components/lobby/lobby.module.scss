@@ -20,12 +20,15 @@
     margin: 0 auto;
     position: relative;
     display: flex;
+    align-items: center;
     gap: 1rem;
     margin-bottom: 1.2rem;
 
     .background {
         position: absolute;
         z-index: 0;
+        width: 100%;
+        left: 0;
     }
 
     &.pointer {

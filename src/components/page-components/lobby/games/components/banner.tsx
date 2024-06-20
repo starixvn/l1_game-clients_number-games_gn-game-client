@@ -1,13 +1,11 @@
 import "swiper/css";
 import "swiper/css/pagination";
 
-import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { AuthorizeResponse } from "sc-user-service-client/dist/auth";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { v4 as uuidv4 } from "uuid";
 
-import { buildVersion } from "../../../../../_shared/constants";
 import { getBannerIds, getBanners, getOfferGamesIds } from "../../../../../_shared/helpers";
 import { usePlayerContext } from "../../../../../_shared/react-contexts";
 import { tolgee } from "../../../../../_shared/tolgee";
@@ -31,8 +29,6 @@ export const getGameIdOfferBanner = (authorizeInfo: AuthorizeResponse, lobbyConf
 };
 
 const DefaultBanner = () => {
-    const [loadingComplete, setLoadingComplete] = useState(false);
-
     return (
         <Swiper
             slidesPerView={"auto"}
@@ -46,15 +42,7 @@ const DefaultBanner = () => {
             roundLengths={true}
         >
             <SwiperSlide key={uuidv4}>
-                <Image
-                    className="banner-img"
-                    src={loadingComplete ? `/static/images/lobby/banners/banner-blur.jpg?v=${buildVersion}` : LobbyImagesData["banner"]}
-                    onLoadingComplete={() => setLoadingComplete(true)}
-                    width={734}
-                    height={734}
-                    alt={"banner-blur"}
-                    priority={true}
-                />
+                <img className="banner-img" src={LobbyImagesData["banner"]} alt={"banner-blur"} width={734} height={248} />
             </SwiperSlide>
         </Swiper>
     );
