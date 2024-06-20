@@ -9,6 +9,7 @@ exports[`GameIcon should render match with snapshot 1`] = `
       alt="icon-gamea"
       data-nimg="1"
       decoding="async"
+      fetchpriority="high"
       height="138"
       src=""
       style="color: transparent;"
