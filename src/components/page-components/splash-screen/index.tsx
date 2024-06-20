@@ -128,8 +128,9 @@ const SplashScreen: React.FC = () => {
         let authorizeInfo;
         const handleInitialization = async () => {
             const session = await getSession(token);
-            const locale = languageMapper[session?.language] || languageMapper[language];
-            await tolgee.changeLanguage(locale);
+            const lang = getLocaleFromSession(session, language);
+            await tolgee.changeLanguage(lang);
+            setLocale(lang);
 
             if (!session || isTimeoutSession(session)) {
                 signOut();
@@ -142,7 +143,6 @@ const SplashScreen: React.FC = () => {
             }
 
             setCurrentSession(session);
-            setLocale(getLocaleFromSession(session, language));
             authorizeInfo = await authorize(session);
 
             if (authorizeInfo.errorCode === "SB0002") {
@@ -237,14 +237,14 @@ const SplashScreen: React.FC = () => {
                         />
                     </div>
 
-                    <div className={Styles["slogan"]}>{t("SabaNumber.splashscreen_slogan")}</div>
+                    <div className={Styles["slogan"]}>{locale && t("SabaNumber.splashscreen_slogan")}</div>
                 </div>
 
                 <div className={"loading"}>
                     <div className={"progress"}>
                         <div className={"progress-bar"} id="progress-bar"></div>
                     </div>
-                    <p className={"text-first-download"}>{t("Common.message_download_first_visit")}</p>
+                    <p className={"text-first-download"}>{locale && t("Common.message_download_first_visit")}</p>
                 </div>
             </div>
 
