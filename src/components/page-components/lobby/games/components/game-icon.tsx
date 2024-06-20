@@ -34,6 +34,7 @@ export const GameIcon: React.FC<Props> = ({ gameSettings, transmitter }) => {
                 onLoad={() => {
                     setIsLoading(false);
                 }}
+                priority={true}
             />
 
             <OnlinePlayer transmitter={transmitter} />
