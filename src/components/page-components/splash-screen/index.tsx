@@ -8,7 +8,7 @@ import Image from "next/image";
 import { AuthorizeResponse, SSOResponse } from "sc-user-service-client/dist/auth";
 import { getAppSettings } from "../../../_shared/app-settings";
 import { Themes, buildVersion, languageMapper, locales } from "../../../_shared/constants";
-import { AnalyticsHelper, StorageHelper, localStorageKeys, randomInteger } from "../../../_shared/helpers";
+import { AnalyticsHelper, StorageHelper, getAvailableGameSetting, localStorageKeys, randomInteger } from "../../../_shared/helpers";
 import PreloadResources, {
     DURATION_HOLD_SPLASH_SCREEN,
     getAndHandleGameOfferIds,
@@ -159,14 +159,23 @@ const SplashScreen: React.FC = () => {
                 return;
             }
 
-            setCurrentGameId(gameId);
-
             const lobby = await getLobbyConfigs(session);
 
             if (lobby?.lobbyConfigs) {
                 setLobbyConfigs(lobby?.lobbyConfigs);
                 handleBannerOffer(authorizeInfo, lobby.lobbyConfigs, setBannerId);
                 getAndHandleGameOfferIds(authorizeInfo, lobby.lobbyConfigs, setGameOfferIds);
+            }
+
+            if (gameId === 0) {
+                let firstGameId = 0;
+                const availableGameSetting = getAvailableGameSetting(lobby?.lobbyConfigs, gameOfferIds);
+                if (availableGameSetting.length > 0) {
+                    firstGameId = availableGameSetting[0].id;
+                }
+                setCurrentGameId(firstGameId);
+            } else {
+                setCurrentGameId(gameId);
             }
 
             authorizeInfo && setAuthorizeResponse(authorizeInfo);
@@ -202,11 +211,21 @@ const SplashScreen: React.FC = () => {
     }
 
     if (isRenderDashboard) {
+        let toLoadGameId = 0;
+        if (gameId === 0) {
+            const availableGameSetting = getAvailableGameSetting(lobbyConfigs, gameOfferIds);
+            if (availableGameSetting.length > 0) {
+                toLoadGameId = availableGameSetting[0].id;
+            }
+        } else {
+            toLoadGameId = gameId;
+        }
+
         document.body.classList.add("galaxy-bg");
         return (
             <Dashboard
                 session={player?.session}
-                queryGame={gameId}
+                queryGame={toLoadGameId}
                 setIsUm={setIsUm}
                 directMode={isDirectMode}
                 tolgee={tolgee}

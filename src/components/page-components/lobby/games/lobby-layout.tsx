@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { getAppSettings } from "../../../../_shared/app-settings";
-import { getLobbyGameIds, getOfferGamesIds } from "../../../../_shared/helpers";
+import { getAvailableGameSetting, getOfferGamesIds } from "../../../../_shared/helpers";
 import { usePlayerContext } from "../../../../_shared/react-contexts";
 import { ILobbyConfigs } from "../../dashboard/type";
 import { LobbyGameTransmitter } from "../lobby-socket-connection";
@@ -18,12 +18,7 @@ export const LobbyLayout: React.FC<Props> = ({ lobbyConfigs, openGame, gameTrans
 
     const gamesSettings = useMemo(() => {
         const offerGamesIds = getOfferGamesIds(authorizeInfo);
-        if (lobbyConfigs && offerGamesIds) {
-            const { gameSettings: allGamesSettings } = getAppSettings();
-            const lobbyGameIds = getLobbyGameIds(lobbyConfigs)?.filter((gameId) => offerGamesIds.includes(gameId));
-            return lobbyGameIds?.map((gameId) => allGamesSettings[gameId]).filter((settings) => settings && !settings.isComingSoon);
-        }
-        return [];
+        return getAvailableGameSetting(lobbyConfigs, offerGamesIds);
     }, [lobbyConfigs, authorizeInfo]);
 
     const comingSoonGameSettings = useMemo(() => {
