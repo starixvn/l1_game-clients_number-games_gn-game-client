@@ -21,13 +21,13 @@ export function Settings() {
             <div className={styles["setting-right"]}>
                 {isDirectMode && redirectUrl && (
                     <button className={styles[ButtonSettingClassName]} onClick={() => handleBackToLobbyOnclick()}>
-                        <span id="icon-home" className="icon-back" />
+                        <span id="icon-home" className="icon-home" />
                     </button>
                 )}
 
                 {!isDirectMode && (
                     <button className={styles[ButtonSettingClassName]} onClick={() => handleBackToLobbyOnclick()}>
-                        <span id="icon-home" className="icon-home" />
+                        <span id="icon-list-game" className="icon-list-game" />
                     </button>
                 )}
 

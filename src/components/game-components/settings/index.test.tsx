@@ -1,13 +1,13 @@
-import { fireEvent, render } from '@testing-library/react';
-import { useContext } from 'react';
-import { Settings } from '.';
-import { useGameStateContext, useGameStatesDispatch } from '../../../_shared/react-contexts/game-state-context/game-state-context';
-import { GameStateContextModel } from '../../../_shared/react-contexts/game-state-context/game-state-context-model';
-import { PFEventActionType } from '../../../_shared/react-contexts/game-state-context/pf/pf-action';
-import { usePFDispatch } from '../../../_shared/react-contexts/game-state-context/pf/pf-context';
-import { updateURLContext } from '../../../_shared/react-contexts/url-context';
-import { useClickSound } from '../../../_shared/react-hooks/use-sound';
-import { RoundState } from '../../game-base/type';
+import { fireEvent, render } from "@testing-library/react";
+import { useContext } from "react";
+import { Settings } from ".";
+import { useGameStateContext, useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
+import { GameStateContextModel } from "../../../_shared/react-contexts/game-state-context/game-state-context-model";
+import { PFEventActionType } from "../../../_shared/react-contexts/game-state-context/pf/pf-action";
+import { usePFDispatch } from "../../../_shared/react-contexts/game-state-context/pf/pf-context";
+import { updateURLContext } from "../../../_shared/react-contexts/url-context";
+import { useClickSound } from "../../../_shared/react-hooks/use-sound";
+import { RoundState } from "../../game-base/type";
 
 const mockUseGameStateContext = useGameStateContext as jest.Mock;
 const mockUseGameStatesDispatch = useGameStatesDispatch as jest.Mock;
@@ -17,7 +17,7 @@ const mockUseContext = useContext as jest.Mock;
 
 jest.mock("react", () => ({
     ...jest.requireActual("react"),
-    useContext: jest.fn()
+    useContext: jest.fn(),
 }));
 
 jest.mock("../../../_shared/react-contexts/game-state-context/game-state-context", () => ({
@@ -29,15 +29,15 @@ jest.mock("../../../_shared/react-contexts/game-state-context/pf/pf-context", ()
     usePFDispatch: jest.fn(),
 }));
 
-jest.mock('../../../_shared/react-hooks/use-sound', () => ({
+jest.mock("../../../_shared/react-hooks/use-sound", () => ({
     useClickSound: jest.fn(),
 }));
 
-jest.mock('../../../_shared/react-contexts/url-context', () => ({
+jest.mock("../../../_shared/react-contexts/url-context", () => ({
     updateURLContext: jest.fn(),
 }));
 
-describe('Settings Component', () => {
+describe("Settings Component", () => {
     const mockBackToRedirectUrl = jest.fn();
     const mockDispatch = jest.fn();
     const mockPFDispatch = jest.fn();
@@ -54,38 +54,56 @@ describe('Settings Component', () => {
 
         mockUseContext.mockReturnValue({
             backToRedirectUrl: mockBackToRedirectUrl,
-            isDirectMode: false,
-            redirectUrl: 'test-url',
+            isDirectMode: true,
+            redirectUrl: "test-url",
         });
     });
 
-    test('renders without errors', () => {
+    test("renders without errors", () => {
         render(<Settings />);
     });
 
-    test('should navigate back to lobby on back button click and update  game Id on URLContext to 0 ', () => {
+    test("should navigate back to lobby on back button click and update  game Id on URLContext to 0 ", () => {
         render(<Settings />);
-        fireEvent.click(document.getElementById('icon-home'));
-        expect(mockBackToRedirectUrl).toHaveBeenCalledWith('test-url');
+        fireEvent.click(document.getElementById("icon-home"));
+        expect(mockBackToRedirectUrl).toHaveBeenCalledWith("test-url");
         expect(updateURLContext).toHaveBeenCalledWith({ gameId: 0 });
     });
 
-    test.each([[false, "test-url"], [false, ""], [true, "test-url"]])(
-        "should render Home and PF button when it is direct mode or redirect url is not empty",
-        (isDirectMode: boolean, redirectUrl: string) => {
-            mockUseContext.mockReturnValue({
-                backToRedirectUrl: mockBackToRedirectUrl,
-                isDirectMode,
-                redirectUrl,
-            });
+    test("should render home and PF button when it is direct mode and return url not empty", () => {
+        mockUseContext.mockReturnValue({
+            backToRedirectUrl: mockBackToRedirectUrl,
+            isDirectMode: true,
+            redirectUrl: "test-url",
+        });
 
-            const { container } = render(<Settings />);
-            expect(container.querySelector(".icon-home")).toBeInTheDocument();
-            expect(container.querySelector(".icon-pf")).toBeInTheDocument();
-        }
-    );
+        const { container } = render(<Settings />);
+        expect(container.querySelector(".icon-home")).toBeInTheDocument();
+        expect(container.querySelector(".icon-pf")).toBeInTheDocument();
+    });
 
-    test('should render only PF button when it is direct mode and redirect url is empty', () => {
+    test("should render list game and PF button when it is not direct mode", () => {
+        mockUseContext.mockReturnValue({
+            backToRedirectUrl: mockBackToRedirectUrl,
+            isDirectMode: false,
+        });
+
+        const { container } = render(<Settings />);
+        expect(container.querySelector(".icon-list-game")).toBeInTheDocument();
+        expect(container.querySelector(".icon-pf")).toBeInTheDocument();
+    });
+
+    test.each([[true]])("should not render list game when it is direct mode", (isDirectMode: boolean) => {
+        mockUseContext.mockReturnValue({
+            backToRedirectUrl: mockBackToRedirectUrl,
+            isDirectMode,
+        });
+
+        const { container } = render(<Settings />);
+        expect(container.querySelector(".icon-list-game")).not.toBeInTheDocument();
+    });
+
+    test("should render only PF button when it is direct mode but redirect url is empty", () => {
         mockUseContext.mockReturnValue({
             backToRedirectUrl: mockBackToRedirectUrl,
             isDirectMode: true,
@@ -94,12 +112,13 @@ describe('Settings Component', () => {
 
         const { container } = render(<Settings />);
         expect(container.querySelector(".icon-home")).not.toBeInTheDocument();
+        expect(container.querySelector(".icon-list-game")).not.toBeInTheDocument();
         expect(container.querySelector(".icon-pf")).toBeInTheDocument();
     });
 
-    test('should dispatch the correct action on PF settings button click', () => {
+    test("should dispatch the correct action on PF settings button click", () => {
         render(<Settings />);
-        fireEvent.click(document.getElementById('icon-pf'));
+        fireEvent.click(document.getElementById("icon-pf"));
         expect(mockPFDispatch).toHaveBeenCalledWith({
             type: PFEventActionType.TOGGLE_PF_SETTING,
             payload: { isShowPFSetting: true },
@@ -107,11 +126,11 @@ describe('Settings Component', () => {
         expect(mockClickSound).toHaveBeenCalled();
     });
 
-    test('should not dispatch the correct action on PF settings button click when disable game', () => {
+    test("should not dispatch the correct action on PF settings button click when disable game", () => {
         mockUseGameStateContext.mockReturnValue({ roundState: RoundState.Disabled } as GameStateContextModel);
         render(<Settings />);
-        fireEvent.click(document.getElementById('icon-pf'));
+        fireEvent.click(document.getElementById("icon-pf"));
         expect(mockDispatch).not.toHaveBeenCalled();
         expect(mockClickSound).not.toHaveBeenCalled();
-    })
+    });
 });
