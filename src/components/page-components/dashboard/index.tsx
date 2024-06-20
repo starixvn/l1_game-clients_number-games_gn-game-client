@@ -8,7 +8,6 @@ import SwiperCore from "swiper";
 
 import { ErrorNoGameOffer } from "../../../_shared/constants/error-code-dictionary";
 import { GetLocalizedErrorMessage, localStorageKeys, StorageHelper } from "../../../_shared/helpers";
-import ErrorBoundary from "../../../_shared/helpers/error-boundary";
 import {
     GlobalMessageTransmitter,
     GlobalTransmitterEvent,
@@ -291,8 +290,9 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
                 <SettingContextProvider>
                     {allowSwipeGameOndDesktop && <ButtonSwipe isPrev={true} swiper={this.swiperRef} />}
                     <div
-                        className={`${Styles["dashboard"]} ${changeGameStyle} ${!isRenderGames ? "no-scroll" : ""} ${isMobileOnly ? Styles["hidden-scrollbar"] : ""
-                            }`}
+                        className={`${Styles["dashboard"]} ${changeGameStyle} ${!isRenderGames ? "no-scroll" : ""} ${
+                            isMobileOnly ? Styles["hidden-scrollbar"] : ""
+                        }`}
                         id={"dashboard"}
                         style={this.setDashBoardStyle(isRenderGames)}
                     >
