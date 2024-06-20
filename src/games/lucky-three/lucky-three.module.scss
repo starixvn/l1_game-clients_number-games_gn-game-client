@@ -105,6 +105,11 @@
 }
 
 //-------------- CHOICE ODD EVEN -----------------//
+.bg-bet-option {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
 
 %main-option {
     --font-bet-name: 1.6rem;
@@ -114,19 +119,6 @@
     width: 17.8rem;
     height: 10.4rem;
     border: none;
-
-    &::before {
-        content: "";
-        display: block;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-image: var(--bgBetChoice);
-        background-image: image-set(var(--bgBetChoice) 1x, var(--bgBetChoice-2x) 2x);
-        background-size: 17.8rem 10.4rem;
-    }
 
     .btn-ripple {
         border-radius: var(--border-radius);
@@ -147,16 +139,12 @@
 .over {
     @extend %main-option;
     --color: #98cdff;
-    --bgBetChoice: url("/static/images/lucky-three/1x/bg-blue.png?v=#{$version-image}");
-    --bgBetChoice-2x: url("/static/images/lucky-three/2x/bg-blue.png?v=#{$version-image}");
     --border-radius: 3rem 1.2rem 1.2rem 1.2rem;
 }
 
 .under {
     @extend %main-option;
     --color: #f9bcb9;
-    --bgBetChoice: url("/static/images/lucky-three/1x/bg-red.png?v=#{$version-image}");
-    --bgBetChoice-2x: url("/static/images/lucky-three/2x/bg-red.png?v=#{$version-image}");
     --border-radius: 1.2rem 3rem 1.2rem 1.2rem;
 
     .disable-layer {
@@ -185,19 +173,6 @@
     height: 10.5rem;
     width: 8.5rem;
 
-    &::before {
-        content: "";
-        background-image: var(--bg);
-        background-image: image-set(var(--bg) 1x, var(--bg-2x) 2x);
-        background-size: cover;
-        display: block;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: var(--height, 10.5rem);
-    }
-
     .btn-ripple {
         border-radius: var(--border-radius);
         z-index: 1;
@@ -217,8 +192,6 @@
 
 .blue3,
 .red3 {
-    --bg: url("/static/images/lucky-three/1x/bg-side-bet-left.png?v=#{$version-image}");
-    --bg-2x: url("/static/images/lucky-three/2x/bg-side-bet-left.png?v=#{$version-image}");
     --bg-disable-layer: url("/static/images/lucky-three/lockbet-left.png?v=#{$version-image}") no-repeat;
 }
 
@@ -229,7 +202,7 @@
 .red3 {
     --border-radius: 1.2rem 1.2rem 3rem 1.2rem;
 
-    &::before {
+    .bg-bet-option {
         transform: scaleX(-1);
     }
 
@@ -240,8 +213,6 @@
 
 .red2,
 .blue2 {
-    --bg: url("/static/images/lucky-three/1x/bg-side-bet-center.png?v=#{$version-image}");
-    --bg-2x: url("/static/images/lucky-three/2x/bg-side-bet-center.png?v=#{$version-image}");
     --border-radius: 1.2rem;
     --bg-disable-layer: url("/static/images/lucky-three/lockbet-center.png?v=#{$version-image}") no-repeat;
 }

@@ -8,20 +8,21 @@ import { withTranslator } from "../../components/page-components/translator";
 import { LuckyThreeBetOptions } from "./lucky-three-constants";
 import styles from "./scoreboard-elements.module.scss";
 import { LuckyThreeResult, LuckyThreeSettlementResult } from "./types";
+import BeadBoardIcon from "../../components/game-components/statistic/beadboard-icon";
 
 export const ODD_EVEN_AS_DEFAULT_SCOREBOARD = true;
 
 export function createBeadRoadElement(isOddEven: boolean = ODD_EVEN_AS_DEFAULT_SCOREBOARD) {
     class Element extends BeadRoadElement<Round<LuckyThreeResult, LuckyThreeSettlementResult>> {
         renderElement(round: Round<LuckyThreeResult, LuckyThreeSettlementResult>, t?: (key: string) => string): ReactNode {
-            const character = (betChoice: string) => t(`LuckyThree.beadboard_${betChoice}`);
+            const character = (betChoice: string) => <BeadBoardIcon choice={betChoice} />;
 
             if (!round.settlementResult) {
                 return <span className={`${styles.blink}`}></span>;
             } else if (round.settlementResult.over) {
-                return <span className={styles[LuckyThreeBetOptions.OVER]}>{character(LuckyThreeBetOptions.OVER)}</span>;
+                return character(LuckyThreeBetOptions.OVER);
             } else if (round.settlementResult.under) {
-                return <span className={styles[LuckyThreeBetOptions.UNDER]}>{character(LuckyThreeBetOptions.UNDER)}</span>;
+                return character(LuckyThreeBetOptions.UNDER);
             }
             return <></>;
         }

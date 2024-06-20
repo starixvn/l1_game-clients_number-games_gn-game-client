@@ -1,8 +1,7 @@
 import Image from "next/image";
 import { FC, memo } from "react";
-
 import { buildVersion, GameIds } from "../../../_shared/constants";
-import { memo } from "react";
+import { useLowPerformanceDevice } from "../../../_shared/react-hooks";
 
 type Props = {
     gameId: number;

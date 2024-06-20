@@ -1,11 +1,14 @@
 import dynamic from "next/dynamic";
+import Image from "next/image";
 
 import { useGameContext } from "../../_shared/react-contexts";
 import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
 import { isShowHighlightPrevResult } from "../../_shared/react-hooks/use-high-light";
 import { RoundState } from "../../components/game-base/type";
-import { DotColorMapper, LuckyThreeBetOptions, LuckyThreeBetOptionsPercentageColor } from "./lucky-three-constants";
+import { BetChoiceImagesData, DotColorMapper, LuckyThreeBetOptions, LuckyThreeBetOptionsPercentageColor } from "./lucky-three-constants";
 import Style from "./lucky-three.module.scss";
+import { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 const BetChoice = dynamic(() => import("../../components/game-components/bet-option/bet-choice"));
 const RippleButton = dynamic(() => import("../../components/game-components/bet-option/ripple-button"));
@@ -21,6 +24,15 @@ const LuckyThreeBetOptionsComponent = () => {
     const { tolgeeNamespace } = useGameContext();
 
     const isShowDisabledLayer = roundState === RoundState.LockingBet;
+
+    const [loadingComplete, setLoadingComplete] = useState({
+        [LuckyThreeBetOptions.OVER]: false,
+        [LuckyThreeBetOptions.UNDER]: false,
+        [LuckyThreeBetOptions.BLUE3]: false,
+        [LuckyThreeBetOptions.BLUE2]: false,
+        [LuckyThreeBetOptions.RED2]: false,
+        [LuckyThreeBetOptions.RED3]: false,
+    });
 
     const renderTotalBet = (choice: string, className?: string) => {
         return <TotalBet choice={choice} className={className} tolgeeNamespace={tolgeeNamespace} />;
@@ -133,6 +145,15 @@ const LuckyThreeBetOptionsComponent = () => {
 
         return (
             <div className={`${Style[choice]} text-white relative`}>
+                <Image
+                    className={Style["bg-bet-option"]}
+                    width={178}
+                    height={104}
+                    src={loadingComplete[choice] ? BetChoiceImagesData[choice]?.src : BetChoiceImagesData[choice]?.blur}
+                    onLoad={() => setLoadingComplete((prevState) => ({ ...prevState, [choice]: true }))}
+                    alt={choice}
+                    priority={true}
+                />
                 <div className={`${Style["choice-info"]} ${className}`}>
                     <div className={Style.stake}>
                         {renderTotalBet(choice, choice === LuckyThreeBetOptions.OVER ? "justify-end" : "")}
@@ -161,15 +182,45 @@ const LuckyThreeBetOptionsComponent = () => {
         const dots = DotColorMapper[choice];
 
         if (dots) {
-            return dots.map((dot, index) => <div key={index} className={`${dot ? Style["dot-red"] : Style["dot-blue"]}`}></div>);
+            return dots.map((dot, index) => <div key={uuidv4()} className={`${dot ? Style["dot-red"] : Style["dot-blue"]}`}></div>);
         }
 
         return null;
     };
 
+    const getSubOptionsName = (choice: string) => {
+        let backgroundName = "";
+
+        switch (choice) {
+            case LuckyThreeBetOptions.BLUE3:
+            case LuckyThreeBetOptions.RED3:
+                backgroundName = LuckyThreeBetOptions.BLUE3;
+                break;
+
+            case LuckyThreeBetOptions.BLUE2:
+            case LuckyThreeBetOptions.RED2:
+                backgroundName = LuckyThreeBetOptions.BLUE2;
+                break;
+        }
+
+        return backgroundName;
+    };
+
     const renderSubOptions = (choice: string) => {
+        const backgroundName = getSubOptionsName(choice);
+
         return (
             <div className={`${Style[choice]} ${Style["bet-choice"]}`}>
+                <Image
+                    className={Style["bg-bet-option"]}
+                    width={85}
+                    height={105}
+                    src={loadingComplete[choice] ? BetChoiceImagesData[backgroundName]?.src : BetChoiceImagesData[backgroundName]?.blur}
+                    onLoad={() => setLoadingComplete((prevState) => ({ ...prevState, [choice]: true }))}
+                    alt={choice}
+                    priority={true}
+                />
+
                 <div className={`${Style["dot-wrapper"]}`}>{renderDot(choice)}</div>
                 {renderOdds(choice)}
                 <div className={Style["own-bet-container"]}>{renderOwnBet(choice)}</div>

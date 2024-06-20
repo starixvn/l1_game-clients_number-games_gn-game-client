@@ -19,13 +19,14 @@ import { LuckyThreeBetOptions } from "./lucky-three-constants";
 import { NextGameRoundDataHandler } from "./lucky-three-game-round-data-handler";
 import Styles from "./lucky-three.module.scss";
 import { LuckyThreeResult, LuckyThreeSettlementResult } from "./types";
+import LuckyThreeResultBlock from "./lucky-three-result-block";
+import LuckyThreeBettingBlock from "./lucky-three-betting-block";
 
 const DrawIdBlock = dynamic(() => import("../../components/game-components/draw-id"));
-const LuckyThreeBettingBlock = dynamic(() => import("./lucky-three-betting-block"));
+
 const RedAndBlueStatistic = dynamic(() => import("../../components/game-components/statistic/red-blue-statistic"));
 const LuckyThreeBetHistoryModal = dynamic(() => import("./history"));
 const ScoreboardLuckyThree = dynamic(() => import("./scoreboard"));
-const LuckyThreeResultBlock = dynamic(() => import("./lucky-three-result-block"));
 
 export type LuckyThreeState = {
     statisticGroup?: number;
