@@ -12,6 +12,8 @@ import { tolgee } from "../../../../../_shared/tolgee";
 import { BannerSwiper, DEFAULT_DELAY_SLIDER } from "../../../../game-components/banner-swiper/banner-swiper";
 import { IBanner, ILobbyConfigs } from "../../../dashboard/type";
 import { LobbyImagesData } from "./lobby-constant";
+import axios from "axios";
+import { downloadAndCacheImage } from "../../../../../_shared/helpers/image-cache-controller";
 
 const DEFAULT_BANNER_PATH = "/static/images/lobby/banners";
 
@@ -97,7 +99,7 @@ export const Banner: React.FC<{ openGame: Function; lobbyConfigs: ILobbyConfigs 
 
         for (const path of paths) {
             try {
-                const result = await createImagePromise(path);
+                const result = await downloadAndCacheImage(path);
                 if (result.valid) {
                     validPath = result.path;
                     break;
@@ -108,18 +110,6 @@ export const Banner: React.FC<{ openGame: Function; lobbyConfigs: ILobbyConfigs 
         }
 
         return validPath;
-    };
-
-    const createImagePromise = (path: string): Promise<{ path: string; valid: boolean }> => {
-        return new Promise((resolve, reject) => {
-            const img = new Image();
-            img.onload = () => resolve({ path, valid: true });
-            img.onerror = (event: Event | string) => {
-                reject(event);
-            };
-
-            img.src = path;
-        });
     };
 
     if (banners.length === 0) {

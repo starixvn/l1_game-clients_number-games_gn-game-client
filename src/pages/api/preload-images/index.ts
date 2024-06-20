@@ -66,7 +66,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any[]>
 
 const getPathsImg = (gameId: number, currentLocale: string, bannerId: number, gameIdsIcon: number[]) => {
     if (gameId === LobbyGameId) {
-        return [...pathImageMapping.lobby, ...getPathBanner(currentLocale, bannerId), ...getPathIconGames(gameIdsIcon)];
+        return [...pathImageMapping.lobby, ...getPathIconGames(gameIdsIcon)];
     }
 
     if (gameId > 0) {

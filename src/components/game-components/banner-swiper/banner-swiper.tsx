@@ -1,13 +1,13 @@
 import "swiper/css";
 import "swiper/css/pagination";
 
-import Image from "next/image";
 import { useEffect, useRef } from "react";
 import { Autoplay, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import { AnalyticsHelper, TrackingAction, TrackingFunction } from "../../../_shared/helpers";
 import { IBanner } from "../../page-components/dashboard/type";
+import { imageCache } from "../../../_shared/helpers/image-cache-controller";
 
 export const DEFAULT_DELAY_SLIDER = 5000;
 export const BannerSwiper: React.FC<{ banners: IBanner[]; openGame: Function }> = ({ banners, openGame }) => {
@@ -51,7 +51,6 @@ export const BannerSwiper: React.FC<{ banners: IBanner[]; openGame: Function }> 
                 if (!banner?.path) {
                     return <></>;
                 }
-
                 return (
                     <SwiperSlide
                         key={banner.gameId}
@@ -60,14 +59,7 @@ export const BannerSwiper: React.FC<{ banners: IBanner[]; openGame: Function }> 
                             AnalyticsHelper.trackFunction({ function: TrackingFunction.Banner, action: TrackingAction.Open });
                         }}
                     >
-                        <Image
-                            className="banner-img"
-                            src={banner.path}
-                            alt={banner.gameId.toString()}
-                            width={348}
-                            height={124}
-                            priority={index !== 0 ? false : true}
-                        />
+                        <img className="banner-img" src={imageCache[banner.path]} alt={"banner-blur"} width={734} height={248} />
                     </SwiperSlide>
                 );
             })}
