@@ -3,7 +3,7 @@ import { FormEvent, PureComponent, ReactNode } from "react";
 import { AuthorizeResponse, SSOResponse } from "sc-user-service-client/dist/auth";
 
 import { LobbyGameId, Themes } from "../../../../_shared/constants";
-import { AnalyticsHelper, TrackingAction, TrackingFunction } from "../../../../_shared/helpers";
+import { AnalyticsHelper, TrackingAction, TrackingFunction, getAvailableGameSetting, getOfferGamesIds } from "../../../../_shared/helpers";
 import { GetLocalizedErrorMessage } from "../../../../_shared/helpers/notice-helper";
 import { randomInteger } from "../../../../_shared/helpers/number-helper";
 import { tolgee } from "../../../../_shared/tolgee";
@@ -165,11 +165,20 @@ export class Register extends PureComponent<RegisterProps, RegisterState> {
 
         if (isDonePreloadResource) {
             document.body.classList.remove("register");
+            let toLoadGameId = 0;
+            if (gameId === 0) {
+                const availableGameSetting = getAvailableGameSetting(lobbyConfigs, getOfferGamesIds(authorizeResponse));
+                if (availableGameSetting.length > 0) {
+                    toLoadGameId = availableGameSetting[0].id;
+                }
+            } else {
+                toLoadGameId = gameId;
+            }
 
             return (
                 <Dashboard
                     session={session}
-                    queryGame={gameId}
+                    queryGame={toLoadGameId}
                     setIsUm={this.setIsUM.bind(this)}
                     directMode={isDirectMode}
                     tolgee={tolgee}

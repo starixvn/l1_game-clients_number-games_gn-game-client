@@ -19,7 +19,13 @@ export function Settings() {
     return (
         <div className={styles["settings-container"]}>
             <div className={styles["setting-right"]}>
-                {(!isDirectMode || redirectUrl) && (
+                {isDirectMode && redirectUrl && (
+                    <button className={styles[ButtonSettingClassName]} onClick={() => handleBackToLobbyOnclick()}>
+                        <span id="icon-home" className="icon-back" />
+                    </button>
+                )}
+
+                {!isDirectMode && (
                     <button className={styles[ButtonSettingClassName]} onClick={() => handleBackToLobbyOnclick()}>
                         <span id="icon-home" className="icon-home" />
                     </button>
