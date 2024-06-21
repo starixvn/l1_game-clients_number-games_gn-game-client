@@ -34,5 +34,5 @@ export const getPathIconGames = (gameIds: number[]): string[] => {
 
 export const pathImageMapping = {
     lobby: ["bg-galaxy.webp", "bg.webp", "dot", "hide-toolbar-guide"],
-    game: ["cage", "cage/number", "ball", "chips/gn", "countdown-timer", "dot", "switch-games-guide", "coin-outline.svg", "icons"],
+    game: ["cage", "cage/number", "ball", "countdown-timer", "dot", "switch-games-guide", "coin-outline.svg", "icons"],
 };
