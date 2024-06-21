@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import path from "path";
 
 import { buildVersion, LobbyGameId } from "../../../_shared/constants";
-import { getPathBanner, getPathIconGames, getPathImageGameId, pathImageMapping } from "../../../_shared/constants/resource-image-mapping";
+import { getPathIconGames, getPathImageGameId, pathImageMapping } from "../../../_shared/constants/resource-image-mapping";
 
 const cacheImages = new Map();
 

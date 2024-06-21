@@ -3,10 +3,13 @@ import { render, screen } from "@testing-library/react";
 import { IBanner } from "../../dashboard/type";
 import { BannerSwiper } from "./banner-swiper";
 
-jest.mock("../../../_shared/helpers", () => ({
+jest.mock("../../../../_shared/helpers", () => ({
     AnalyticsHelper: { trackFunction: jest.fn() },
     TrackingFunction: jest.fn(),
     TrackingAction: jest.fn(),
+}));
+jest.mock("../../../game-components/cached-image", () => ({
+    CachedImage: jest.fn().mockReturnValue("cachedImage"),
 }));
 
 describe(BannerSwiper.name, () => {
