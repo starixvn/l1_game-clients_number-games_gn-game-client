@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 
-import { IBanner } from "../../page-components/dashboard/type";
+import { IBanner } from "../../dashboard/type";
 import { BannerSwiper } from "./banner-swiper";
 
 jest.mock("../../../_shared/helpers", () => ({

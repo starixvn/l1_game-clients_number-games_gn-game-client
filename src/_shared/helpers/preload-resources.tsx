@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { AuthorizeResponse } from "sc-user-service-client/dist/auth";
 import { LobbyConfigs } from "sc-user-service-client/dist/lobby";
 import { v4 as uuidv4 } from "uuid";
-import { getGameIdOfferBanner } from "../../components/page-components/lobby/games/components/banner";
+import { getGameIdOfferBanner } from "../../components/page-components/lobby/banners/banner";
 import { getLobbyGamesIds } from "./lobby-helper";
 
 const MAX_DELAY_TIME = 5000;

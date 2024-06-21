@@ -5,15 +5,14 @@ import React, { useEffect, useState } from "react";
 import { AuthorizeResponse } from "sc-user-service-client/dist/auth";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { v4 as uuidv4 } from "uuid";
-
-import { getBannerIds, getBanners, getOfferGamesIds } from "../../../../../_shared/helpers";
-import { usePlayerContext } from "../../../../../_shared/react-contexts";
-import { tolgee } from "../../../../../_shared/tolgee";
-import { BannerSwiper, DEFAULT_DELAY_SLIDER } from "../../../../game-components/banner-swiper/banner-swiper";
-import { IBanner, ILobbyConfigs } from "../../../dashboard/type";
-import { LobbyImagesData } from "./lobby-constant";
-import axios from "axios";
-import { downloadAndCacheImage } from "../../../../../_shared/helpers/image-cache-controller";
+import { getBannerIds, getBanners, getOfferGamesIds } from "../../../../_shared/helpers";
+import { usePlayerContext } from "../../../../_shared/react-contexts";
+import { tolgee } from "../../../../_shared/tolgee";
+import { IBanner, ILobbyConfigs } from "../../dashboard/type";
+import { LobbyImagesData } from "../games/components/lobby-constant";
+import { BannerSwiper, DEFAULT_DELAY_SLIDER } from "./banner-swiper";
+import { downloadAndCacheImage } from "../../../../_shared/helpers/image-cache-controller";
+import { buildVersion } from "../../../../_shared/constants";
 
 const DEFAULT_BANNER_PATH = "/static/images/lobby/banners";
 
@@ -53,7 +52,6 @@ const DefaultBanner = () => {
 export const Banner: React.FC<{ openGame: Function; lobbyConfigs: ILobbyConfigs }> = ({ openGame, lobbyConfigs }) => {
     const { authorizeInfo } = usePlayerContext();
     const locale = tolgee.getLanguage() ?? "en";
-    const [filterBanners, setFilterBanners] = useState<IBanner[]>([]);
     const [banners, setBanners] = useState<IBanner[]>([]);
 
     useEffect(() => {
@@ -63,18 +61,12 @@ export const Banner: React.FC<{ openGame: Function; lobbyConfigs: ILobbyConfigs 
                 const banners = getBanners(lobbyConfigs);
 
                 const filterBanners = banners.filter((banner) => gameIdsOfferBanner.includes(banner.gameId));
-                setFilterBanners(filterBanners);
+                updateBannersWithPath(filterBanners);
             }
         }
     }, [lobbyConfigs, authorizeInfo]);
 
-    useEffect(() => {
-        if (filterBanners.length > 0) {
-            updateBannersWithPath();
-        }
-    }, [filterBanners]);
-
-    const updateBannersWithPath = async () => {
+    const updateBannersWithPath = async (filterBanners: IBanner[]) => {
         const updatedBanners = [];
         for (const banner of filterBanners) {
             try {
@@ -92,8 +84,8 @@ export const Banner: React.FC<{ openGame: Function; lobbyConfigs: ILobbyConfigs 
 
     const getImageValidPath = async (banner: IBanner): Promise<string> => {
         const paths = [
-            `${DEFAULT_BANNER_PATH}/${banner.gameId}/${banner.gameId}_${locale}.gif`,
-            `${DEFAULT_BANNER_PATH}/${banner.gameId}/${banner.gameId}_en.gif`,
+            `${DEFAULT_BANNER_PATH}/${banner.gameId}/${banner.gameId}_${locale}.gif?v=${buildVersion}`,
+            `${DEFAULT_BANNER_PATH}/${banner.gameId}/${banner.gameId}_en.gif?v=${buildVersion}`,
         ];
         let validPath = "";
 

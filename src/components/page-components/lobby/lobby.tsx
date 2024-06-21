@@ -4,7 +4,7 @@ import { isMobileOnly, isSafari } from "react-device-detect";
 import { useEffect } from "react";
 import { AnalyticsHelper } from "../../../_shared/helpers/analytic-helper";
 import { ILobbyConfigs } from "../dashboard/type";
-import { Banner } from "./games/components/banner";
+import { Banner } from "./banners/banner";
 import { LobbyLayout } from "./games/lobby-layout";
 import { LobbyGameTransmitter } from "./lobby-socket-connection";
 import Styles from "./lobby.module.scss";

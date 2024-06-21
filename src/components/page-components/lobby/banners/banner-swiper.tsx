@@ -4,10 +4,10 @@ import "swiper/css/pagination";
 import { useEffect, useRef } from "react";
 import { Autoplay, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-
-import { AnalyticsHelper, TrackingAction, TrackingFunction } from "../../../_shared/helpers";
-import { IBanner } from "../../page-components/dashboard/type";
-import { imageCache } from "../../../_shared/helpers/image-cache-controller";
+import { AnalyticsHelper, TrackingAction, TrackingFunction } from "../../../../_shared/helpers";
+import { IBanner } from "../../dashboard/type";
+import { LobbyImagesData } from "../games/components/lobby-constant";
+import { CachedImage } from "../../../game-components/cached-image";
 
 export const DEFAULT_DELAY_SLIDER = 5000;
 export const BannerSwiper: React.FC<{ banners: IBanner[]; openGame: Function }> = ({ banners, openGame }) => {
@@ -59,7 +59,14 @@ export const BannerSwiper: React.FC<{ banners: IBanner[]; openGame: Function }> 
                             AnalyticsHelper.trackFunction({ function: TrackingFunction.Banner, action: TrackingAction.Open });
                         }}
                     >
-                        <img className="banner-img" src={imageCache[banner.path]} alt={"banner-blur"} width={734} height={248} />
+                        <CachedImage
+                            className="banner-img"
+                            src={banner.path}
+                            blurSrc={LobbyImagesData["banner"]}
+                            alt={"banner-blur"}
+                            width={734}
+                            height={248}
+                        />
                     </SwiperSlide>
                 );
             })}

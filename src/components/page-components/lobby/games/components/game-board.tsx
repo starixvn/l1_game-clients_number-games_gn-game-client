@@ -1,5 +1,4 @@
 import dynamic from "next/dynamic";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 
 import { getAppSettings } from "../../../../../_shared/app-settings";
@@ -12,6 +11,7 @@ import { getLobbyData, LobbyGameTransmitter, LobbyMessageEvents } from "../../lo
 import Styles from "../../lobby.module.scss";
 import { GameIcon } from "./game-icon";
 import { LobbyImagesData } from "./lobby-constant";
+import { CachedImage } from "../../../../game-components/cached-image";
 
 const DisabledGameBlock = dynamic(() => import("./disable-game-block"));
 const CountdownTimer = dynamic(() => import("./countdown-timer"));
@@ -33,7 +33,6 @@ export const GameBoard: React.FC<Props> = ({ gameSettings, openGame, gameTransmi
     const [clickGameId, setClickGameId] = useState<number>(0);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [cancelPreloadResource, setCancelPreloadResource] = useState<boolean>(false);
-    const [loadingComplete, setLoadingComplete] = useState(false);
 
     useEffect(() => {
         document.addEventListener("visibilitychange", onVisibilityChange);
@@ -107,16 +106,12 @@ export const GameBoard: React.FC<Props> = ({ gameSettings, openGame, gameTransmi
             className={`${Styles["game-board-detail"]} ${!isShow ? "" : Styles["pointer"]}`}
             id={`icon-${gameSettings.gameName.toLowerCase()}`}
         >
-            <Image
+            <CachedImage
+                src={`/static/images/lobby/game-board-detail/bg-game-board-2x.webp?v=${buildVersion}`}
+                blurSrc={LobbyImagesData["game-block"]}
                 className={Styles["background"]}
                 width={360}
                 height={139}
-                src={
-                    loadingComplete
-                        ? `/static/images/lobby/game-board-detail/bg-game-board-2x.webp?v=${buildVersion}`
-                        : LobbyImagesData["game-block"]
-                }
-                onLoadingComplete={() => setLoadingComplete(true)}
                 alt="game-board-detail"
                 priority={true}
             />
