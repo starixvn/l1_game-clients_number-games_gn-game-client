@@ -161,7 +161,7 @@ const NextBallBetOptionsComponent = () => {
                     width={176}
                     height={94}
                     src={loadingComplete[choice] ? BetChoiceImagesData[backgroundName]?.src : BetChoiceImagesData[backgroundName]?.blur}
-                    onLoadingComplete={() => setLoadingComplete((prevState) => ({ ...prevState, [choice]: true }))}
+                    onLoad={() => setLoadingComplete((prevState) => ({ ...prevState, [choice]: true }))}
                     alt={choice}
                     priority={true}
                 />

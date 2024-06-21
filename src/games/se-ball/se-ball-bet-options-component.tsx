@@ -149,7 +149,7 @@ const SeBallBetOptionsComponent = () => {
                     width={178}
                     height={94}
                     src={loadingComplete[choice] ? BetChoiceImagesData[choice]?.src : BetChoiceImagesData[choice]?.blur}
-                    onLoadingComplete={() => setLoadingComplete((prevState) => ({ ...prevState, [choice]: true }))}
+                    onLoad={() => setLoadingComplete((prevState) => ({ ...prevState, [choice]: true }))}
                     alt={choice}
                     priority={true}
                 />
@@ -219,7 +219,7 @@ const SeBallBetOptionsComponent = () => {
                     width={choice === SeBallBetOptions.RED2 ? 77 : 136}
                     height={choice === SeBallBetOptions.RED2 ? 149 : 66}
                     src={loadingComplete[choice] ? BetChoiceImagesData[backgroundName]?.src : BetChoiceImagesData[backgroundName]?.blur}
-                    onLoadingComplete={() => setLoadingComplete((prevState) => ({ ...prevState, [choice]: true }))}
+                    onLoad={() => setLoadingComplete((prevState) => ({ ...prevState, [choice]: true }))}
                     alt={choice}
                     priority={true}
                 />

@@ -31,7 +31,7 @@ export const Chip: React.FC<{ value: number; onClickChip: Function; text: string
             {image && (
                 <Image
                     src={loadingComplete ? `/static/images/chips/${systemName}/${image.replace("#", "")}.svg` : DefaultChipBase64}
-                    onLoadingComplete={() => setLoadingComplete(true)}
+                    onLoad={() => setLoadingComplete(true)}
                     className={`img-fluid ${Styles["chip"]}`}
                     width={65}
                     height={66}

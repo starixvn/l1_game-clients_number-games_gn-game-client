@@ -116,7 +116,7 @@ const BacBallBetOptionsComponent = () => {
                     width={178}
                     height={188}
                     src={loadingComplete[choice] ? BetChoiceImagesData[choice]?.src : BetChoiceImagesData[choice]?.blur}
-                    onLoadingComplete={() => setLoadingComplete((prevState) => ({ ...prevState, [choice]: true }))}
+                    onLoad={() => setLoadingComplete((prevState) => ({ ...prevState, [choice]: true }))}
                     alt={choice}
                     priority={true}
                 />
@@ -173,7 +173,7 @@ const BacBallBetOptionsComponent = () => {
                             ? BetChoiceImagesData[BacBallBetOptions.TIE]?.src
                             : BetChoiceImagesData[BacBallBetOptions.TIE]?.blur
                     }
-                    onLoadingComplete={() => setLoadingComplete((prevState) => ({ ...prevState, [BacBallBetOptions.TIE]: true }))}
+                    onLoad={() => setLoadingComplete((prevState) => ({ ...prevState, [BacBallBetOptions.TIE]: true }))}
                     alt="tie"
                     priority={true}
                 />
