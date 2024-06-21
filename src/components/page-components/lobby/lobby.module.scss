@@ -7,7 +7,6 @@
     position: relative;
     padding-top: 4rem;
     background-image: var(--game-background-image);
-    background-image: image-set(var(--game-small-background-image) 1x, var(--game-background-image) 2x);
     background-size: cover;
     background-repeat: no-repeat;
     display: grid;

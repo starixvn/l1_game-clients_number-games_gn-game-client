@@ -28,11 +28,11 @@ export const getPathIconGames = (gameIds: number[]): string[] => {
     if (gameIds?.length < 0) {
         return [];
     }
-    const bgIcons = ["lobby/game-board-detail/bg-game-board-2x.webp", "lobby/game-board-detail/bg-game-board.webp"];
+    const bgIcons = ["lobby/game-board-detail/bg-game-board-2x.webp"];
     return [...gameIds.map((gameId) => `lobby/game-board-detail/${gameId}`), ...bgIcons];
 };
 
 export const pathImageMapping = {
-    lobby: ["bg-galaxy.webp", "bg.webp", "bg-galaxy-small.webp", "dot", "hide-toolbar-guide"],
+    lobby: ["bg-galaxy.webp", "bg.webp", "dot", "hide-toolbar-guide"],
     game: ["cage", "cage/number", "ball", "chips/gn", "countdown-timer", "dot", "switch-games-guide", "coin-outline.svg", "icons"],
 };

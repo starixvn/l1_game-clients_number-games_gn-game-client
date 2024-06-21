@@ -1,5 +1,6 @@
 import { memo, useEffect, useState } from "react";
 
+import { buildVersion } from "../../../_shared/constants";
 import { useLowPerformanceDevice } from "../../../_shared/react-hooks";
 import { Spritesheet } from "../sprites-sheet";
 import Styles from "./cage.module.scss";
@@ -26,7 +27,7 @@ const BallLoops: React.FC<{ isPlayStartRoundAnimation?: boolean }> = ({ isPlaySt
     const renderBalls = () => (
         <Spritesheet
             className={`fade-in ${Styles["balls-loop"]}`}
-            image="/static/images/cage/cage-loop-anim.webp"
+            image={`/static/images/cage/cage-loop-anim.webp?v=${buildVersion}`}
             widthFrame={130}
             isResponsive
             heightFrame={130}

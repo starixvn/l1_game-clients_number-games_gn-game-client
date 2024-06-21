@@ -75,7 +75,6 @@ html {
 [data-theme="light"] {
     --page-background-color: #000;
     --game-background-image: url("/static/images/bg-galaxy.webp?v=#{$version-image}");
-    --game-small-background-image: url("/static/images/bg-galaxy-small.webp?v=#{$version-image}");
     --background-image: url("/static/images/bg.webp?v=#{$version-image}");
     --text-color: #2c2f3e;
 
