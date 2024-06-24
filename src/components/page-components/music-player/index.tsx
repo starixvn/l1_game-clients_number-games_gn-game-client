@@ -1,7 +1,6 @@
 import { useEffect, useLayoutEffect, useState } from "react";
 import { isMobile } from "react-device-detect";
 import useSound from "use-sound";
-import { formatVolume } from "../../../_shared/helpers";
 import { useSettingContext } from "../../../_shared/react-contexts";
 import { getRandomSong } from "../../../_shared/react-hooks";
 
@@ -24,99 +23,42 @@ const BGMPlayer = ({ isUserGesture }) => {
         const audioContext: AudioContext = global.Howler.ctx;
 
         if (isUserGesture) {
-            if (settingContext.enabledMusic) {
-                if (audioContext.state !== "running") {
-                    audioContext
-                        .resume()
-                        .then(() => {
-                            settingContext.volumeMusic && play();
-                        })
-                        .catch(() => {
-                            settingContext.volumeMusic && play();
-                        });
-                } else {
-                    play();
-                }
-            }
+            audioContext
+                .resume()
+                .then(() => {
+                    settingContext.enabledMusic && play();
+                })
+                .catch(() => {
+                    settingContext.enabledMusic && play();
+                });
         } else {
-            audioContext.state !== "suspended" &&
-                audioContext
-                    .suspend()
-                    .then(() => {
-                        pause();
-                    })
-                    .catch(() => {
-                        pause();
-                    });
+            audioContext
+                .suspend()
+                .then(() => {
+                    pause();
+                })
+                .catch(() => {
+                    pause();
+                });
         }
     }, [isUserGesture]);
 
     useEffect(() => {
-        settingContext.enabledMusic && settingContext.volumeMusic && play();
-        sound?.volume(formatVolume(settingContext.volumeMusic));
+        settingContext.enabledMusic && play();
+
         return () => {
             stop();
         };
     }, [play]);
 
     useEffect(() => {
-        if (sound) {
-            const audioContext: AudioContext = global.Howler.ctx;
-            if (settingContext.enabledMusic) {
-                if (audioContext.state !== "running") {
-                    audioContext
-                        .resume()
-                        .then(() => {
-                            play();
-                        })
-                        .catch(() => {
-                            play();
-                        });
-                } else {
-                    play();
-                }
-            } else {
-                audioContext.state !== "suspended" &&
-                    audioContext
-                        .suspend()
-                        .then(() => {
-                            pause();
-                        })
-                        .catch(() => {
-                            pause();
-                        });
-            }
+        if (settingContext.enabledMusic) {
+            play();
+        } else {
+            stop();
+            setSong(getRandomSong(song));
         }
     }, [settingContext.enabledMusic]);
-
-    useEffect(() => {
-        if (sound) {
-            const audioContext: AudioContext = global.Howler.ctx;
-
-            if (settingContext.volumeMusic) {
-                audioContext.state !== "running" &&
-                    audioContext
-                        .resume()
-                        .then(() => {
-                            play();
-                        })
-                        .catch(() => {
-                            play();
-                        });
-            } else {
-                audioContext.state !== "suspended" &&
-                    audioContext
-                        .suspend()
-                        .then(() => {
-                            pause();
-                        })
-                        .catch(() => {
-                            pause();
-                        });
-            }
-            sound.volume(formatVolume(settingContext.volumeMusic));
-        }
-    }, [settingContext.volumeMusic]);
     return <></>;
 };
 

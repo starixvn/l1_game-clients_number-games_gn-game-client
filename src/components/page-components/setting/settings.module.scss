@@ -1,0 +1,132 @@
+.settings {
+    position: fixed;
+    top: 0px;
+    width: 100%;
+    z-index: 2;
+
+    .setting-title {
+        font-weight: 500;
+        font-size: 1.6rem;
+    }
+
+    .settings-bg {
+        background: var(--opacity-background);
+        height: 100vh;
+        width: 100%;
+    }
+
+    .settings-popup {
+        background-color: #242c32;
+        border-radius: 1.6rem !important;
+        color: #e6e6e6;
+        padding: 5px;
+        top: 25%;
+        min-width: 36rem;
+
+        .settings-header {
+            border-bottom: none;
+            position: relative;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            height: 3.8rem;
+            padding-top: 10px;
+        }
+
+        .icon-close:before {
+            color: #6c737b;
+        }
+
+        .settings-content {
+            .settings-group {
+                display: flex;
+                flex-direction: column;
+                gap: 1.6rem;
+                padding: 1.6rem;
+
+                .row {
+                    position: relative;
+                    display: grid;
+                    grid-template-columns: 1fr 5rem;
+                    justify-content: space-between;
+                    align-items: center;
+                    height: 3rem;
+
+                    .text {
+                        text-align: left;
+                    }
+
+                    .icon {
+                        display: flex;
+                        justify-content: flex-end;
+                    }
+
+                    .icon-on {
+                        background: url(/static/images/settings/toggle-on.png?v=#{$version-image}) no-repeat;
+                        background-size: 31px 18px;
+                        width: 31px;
+                        margin-left: auto;
+                        cursor: pointer;
+                        padding: 5px 15px;
+                    }
+
+                    .icon-off {
+                        background: url(/static/images/settings/toggle-off.png?v=#{$version-image}) no-repeat;
+                        background-size: 31px 18px;
+                        width: 31px;
+                        margin-left: auto;
+                        cursor: pointer;
+                        padding: 5px 15px;
+                    }
+                }
+            }
+
+            .switch {
+                display: inline-block;
+            }
+
+            .switch input {
+                display: none;
+            }
+
+            .switch label {
+                display: block;
+                width: 3.1rem;
+                height: 1.8rem;
+                padding: 3px;
+                border-radius: 15px;
+                border: 1px solid #fff;
+                cursor: pointer;
+                transition: 0.3s;
+            }
+
+            .switch label::after {
+                position: relative;
+                top: -0.2rem;
+                left: -0.1rem;
+                content: "";
+                display: inherit;
+                width: 1.4rem;
+                height: 1.4rem;
+                border-radius: 50%;
+                background: #ffffff;
+                transition: 0.3s;
+            }
+
+            .switch input:checked ~ label {
+                border-color: #33aa33;
+            }
+
+            .switch input:checked ~ label::after {
+                translate: 1.1rem 0;
+                background: #33aa33;
+            }
+
+            .switch input:disabled ~ label {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+        }
+    }
+}
