@@ -8,20 +8,21 @@ import { withTranslator } from "../../components/page-components/translator";
 import styles from "./scoreboard-elements.module.scss";
 import { SicBallBetOptions } from "./sic-ball-constants";
 import { SicBallResult, SicBallSettlementResult } from "./types";
+import BeadBoardIcon from "../../components/game-components/statistic/beadboard-icon";
 
 export const ODD_EVEN_AS_DEFAULT_SCOREBOARD = true;
 
 export function createBeadRoadElement(isOddEven: boolean = ODD_EVEN_AS_DEFAULT_SCOREBOARD) {
     class Element extends BeadRoadElement<Round<SicBallResult, SicBallSettlementResult>> {
         renderElement(round: Round<SicBallResult, SicBallSettlementResult>, t?: (key: string) => string): ReactNode {
-            const character = (betChoice: string) => t(`SicBall.beadboard_${betChoice}`);
+            const character = (betChoice: string) => <BeadBoardIcon choice={betChoice} />;
 
             if (!round.settlementResult) {
                 return <span className={`${styles.blink}`}></span>;
             } else if (round.settlementResult.big) {
-                return <span className={styles[SicBallBetOptions.BIG]}>{character(SicBallBetOptions.BIG)}</span>;
+                return character(SicBallBetOptions.BIG);
             } else if (round.settlementResult.small) {
-                return <span className={styles[SicBallBetOptions.SMALL]}>{character(SicBallBetOptions.SMALL)}</span>;
+                return character(SicBallBetOptions.SMALL);
             }
             return <></>;
         }

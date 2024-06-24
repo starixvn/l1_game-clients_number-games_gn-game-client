@@ -9,7 +9,6 @@ import {
     useGameStatesDispatch,
 } from "../../_shared/react-contexts/game-state-context/game-state-context";
 import { useTranslator } from "../../_shared/react-hooks";
-import { tolgee } from "../../_shared/tolgee";
 import GameBase from "../../components/game-base/";
 import { GameMessageHandler } from "../../components/game-base/handlers";
 import { GameBaseHandlers, GameBaseProps, Round } from "../../components/game-base/type";
@@ -21,15 +20,13 @@ import { NextGameRoundDataHandler } from "./sic-ball-game-round-data-handler";
 import Styles from "./sic-ball.module.scss";
 import { SicBallResult, SicBallSettlementResult } from "./types";
 import { RoundIdHandler } from "../../components/round-base/round-id-handler";
+import SicBallResultBlock from "./sic-ball-result-block";
+import ScoreboardSicBall from "./scoreboard";
+import SicBallBettingBlock from "./sic-ball-betting-block";
+import RedAndBlueStatisticSubRoundCounter from "../../components/game-components/statistic/red-blue-statistic-sub-round-counter";
 
 const DrawIdBlock = dynamic(() => import("../../components/game-components/draw-id"));
-const SicBallBettingBlock = dynamic(() => import("./sic-ball-betting-block"));
-const RedAndBlueStatisticSubRoundCounter = dynamic(
-    () => import("../../components/game-components/statistic/red-blue-statistic-sub-round-counter")
-);
 const SicBallBetHistoryModal = dynamic(() => import("./history"));
-const ScoreboardSeBall = dynamic(() => import("./scoreboard"));
-const SicBallResultBlock = dynamic(() => import("./sic-ball-result-block"));
 
 export type SicBallState = {
     statisticGroup?: number;
@@ -95,8 +92,6 @@ class SicBall extends GameBase<GameBaseProps> {
 
     renderStatistic() {
         const { roundHistory } = this.props.gameStateContextModel;
-        const locale = tolgee.getLanguage() ?? "en";
-        const classNameIndo = locale === "id" ? Styles["statistic-indo"] : "";
 
         const subChoicesClass = {
             [SicBallBetOptions.SPECIFIC1]: Styles[`statistic-${SicBallBetOptions.SPECIFIC1}`],
@@ -111,7 +106,6 @@ class SicBall extends GameBase<GameBaseProps> {
             <RedAndBlueStatisticSubRoundCounter
                 roundHistory={roundHistory}
                 mainChoices={[SicBallBetOptions.BIG, SicBallBetOptions.SMALL]}
-                className={classNameIndo}
                 subChoices={[
                     SicBallBetOptions.SPECIFIC1,
                     SicBallBetOptions.SPECIFIC2,
@@ -134,7 +128,7 @@ class SicBall extends GameBase<GameBaseProps> {
         const { statisticGroup } = this.state;
 
         return (
-            <ScoreboardSeBall
+            <ScoreboardSicBall
                 isShowBlink={isShowBlink}
                 roundHistory={roundHistory as Round<SicBallResult, SicBallSettlementResult>[]}
                 isBigSmall={statisticGroup === 1}

@@ -17,11 +17,11 @@
 .game-board-detail {
     width: 100%;
     max-width: 35.9rem;
-    margin: 0 auto;
     position: relative;
+    display: flex;
     align-items: center;
     gap: 1rem;
-    margin-bottom: 1.2rem;
+    margin: 0 auto 1.2rem;
 
     .background {
         position: absolute;

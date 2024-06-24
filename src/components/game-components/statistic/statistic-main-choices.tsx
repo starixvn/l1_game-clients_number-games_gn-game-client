@@ -1,6 +1,7 @@
 import { countSettlementResult, getPercentage } from ".";
 import { useGameContext } from "../../../_shared/react-contexts";
 import { useTranslator } from "../../../_shared/react-hooks";
+import BeadBoardIcon from "./beadboard-icon";
 import StatisticItem from "./statistic-item";
 import Styles from "./statistic.module.scss";
 import { PercentageStatisticProps } from "./types";
@@ -17,12 +18,11 @@ const StatisticMainChoices: React.FC<PercentageStatisticProps> = (props: Percent
             {mainChoices.map((choice) => (
                 <StatisticItem key={choice} value={`${mainChoicesStatistic[choice]}%`}>
                     <span className={`${Styles[choice]} ${Styles["statistic-choice-icon"]}  ${props.className}`}>
-                        {t(`beadboard_${choice}`)}
+                        <BeadBoardIcon choice={choice} />
                     </span>
                 </StatisticItem>
             ))}
         </div>
-
     );
 };
 

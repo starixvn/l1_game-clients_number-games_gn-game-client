@@ -109,6 +109,11 @@
 }
 
 //-------------- CHOICE BIG SMALL -----------------//
+.bg-bet-option {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
 
 %main-option {
     --font-bet-name: 1.6rem;
@@ -119,19 +124,6 @@
     height: 10.4rem;
     border: none;
     border-radius: var(--border-radius);
-
-    &::before {
-        content: "";
-        display: block;
-        position: absolute;
-        top: 0;
-        left: -0.1rem;
-        width: 100%;
-        height: 100%;
-        background-image: var(--bgBetChoice);
-        background-image: image-set(var(--bgBetChoice) 1x, var(--bgBetChoice-2x) 2x);
-        background-size: 17.4rem 10.4rem;
-    }
 
     .disable-layer {
         position: absolute;
@@ -153,8 +145,6 @@
 .small {
     @extend %main-option;
     --color: #ff9090;
-    --bgBetChoice: url("/static/images/sic-ball/1x/bg-red.png?v=#{$version-image}");
-    --bgBetChoice-2x: url("/static/images/sic-ball/2x/bg-red.png?v=#{$version-image}");
     --border-radius: 1.2rem 3rem 1.2rem 1.2rem;
 
     .disable-layer {
@@ -165,8 +155,6 @@
 .big {
     @extend %main-option;
     --color: #84c6ff;
-    --bgBetChoice: url("/static/images/sic-ball/1x/bg-blue.png?v=#{$version-image}");
-    --bgBetChoice-2x: url("/static/images/sic-ball/2x/bg-blue.png?v=#{$version-image}");
     --border-radius: 3rem 1.2rem 1.2rem 1.2rem;
 }
 
@@ -201,7 +189,7 @@
 .sub-betting {
     display: grid;
     grid-template-columns: repeat(3, 11.3rem);
-    grid-template-rows: 6.1rem 6.1rem;
+    grid-template-rows: 6rem 6rem;
     justify-content: space-between;
     row-gap: 0.4rem;
 }
@@ -213,19 +201,6 @@
     align-items: center;
     row-gap: 0.3rem;
     padding-top: 0.2rem;
-
-    &::before {
-        content: "";
-        background-image: var(--bg);
-        background-image: image-set(var(--bg) 1x, var(--bg-2x) 2x);
-        background-size: cover;
-        display: block;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: var(--height, 6.1rem);
-    }
 
     .btn-ripple {
         border-radius: var(--border-radius, 1.2rem);
@@ -239,30 +214,16 @@
         top: var(--top, 0);
         background: var(--bg-disable-layer);
         width: var(--disable-layer-width, 11.3rem);
-        height: var(--disable-layer-height, 6.1rem);
+        height: var(--disable-layer-height, 6rem);
         background-size: contain;
         opacity: 0;
         animation: show-disabled-layer 0.3s ease-in forwards;
     }
 }
 
-.specific1,
-.specific2,
-.specific3 {
-    --bg: url("/static/images/sic-ball/1x/bg-small-red.png?v=#{$version-image}");
-    --bg-2x: url("/static/images/sic-ball/2x/bg-small-red.png?v=#{$version-image}");
-}
-
-.specific4,
-.specific5,
-.specific6 {
-    --bg: url("/static/images/sic-ball/1x/bg-small-blue.png?v=#{$version-image}");
-    --bg-2x: url("/static/images/sic-ball/2x/bg-small-blue.png?v=#{$version-image}");
-}
-
 .specific-icon-number {
     position: absolute;
-    bottom: 1.1rem;
+    bottom: 1rem;
 }
 
 .side-bet-total-bet {

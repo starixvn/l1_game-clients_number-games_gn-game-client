@@ -238,7 +238,7 @@ img {
 }
 
 .gap-2 {
-    gap: var(--spacing-size-2);
+    gap: var(--spacing-size-2) !important;
 }
 
 .gap-4 {

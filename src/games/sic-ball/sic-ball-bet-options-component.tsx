@@ -4,10 +4,11 @@ import { useGameContext } from "../../_shared/react-contexts";
 import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
 import { isShowHighlightPrevResult } from "../../_shared/react-hooks/use-high-light";
 import { RoundState } from "../../components/game-base/type";
-import { SicBallBetOptions, SicBallBetOptionsPercentageColor, SicBallSideBetOdds } from "./sic-ball-constants";
+import { BetChoiceImagesData, SicBallBetOptions, SicBallBetOptionsPercentageColor, SicBallSideBetOdds } from "./sic-ball-constants";
 import Style from "./sic-ball.module.scss";
 import { buildVersion } from "../../_shared/constants";
 import { useTranslator } from "../../_shared/react-hooks/use-translator";
+import { useState } from "react";
 
 const BetChoice = dynamic(() => import("../../components/game-components/bet-option/bet-choice"));
 const RippleButton = dynamic(() => import("../../components/game-components/bet-option/ripple-button"));
@@ -23,6 +24,17 @@ const SicBallBetOptionsComponent = () => {
     const { tolgeeNamespace } = useGameContext();
 
     const isShowDisabledLayer = roundState === RoundState.LockingBet;
+
+    const [loadingComplete, setLoadingComplete] = useState({
+        [SicBallBetOptions.BIG]: false,
+        [SicBallBetOptions.SMALL]: false,
+        [SicBallBetOptions.SPECIFIC1]: false,
+        [SicBallBetOptions.SPECIFIC2]: false,
+        [SicBallBetOptions.SPECIFIC3]: false,
+        [SicBallBetOptions.SPECIFIC4]: false,
+        [SicBallBetOptions.SPECIFIC5]: false,
+        [SicBallBetOptions.SPECIFIC6]: false,
+    });
 
     const renderTotalBet = (choice: string, className?: string) => {
         return <TotalBet choice={choice} className={className} tolgeeNamespace={tolgeeNamespace} />;
@@ -158,6 +170,15 @@ const SicBallBetOptionsComponent = () => {
         const className = Style[`choice-${choice}`];
         return (
             <div className={`${Style[choice]} text-white relative`}>
+                <Image
+                    className={Style["bg-bet-option"]}
+                    width={173}
+                    height={104}
+                    src={loadingComplete[choice] ? BetChoiceImagesData[choice]?.src : BetChoiceImagesData[choice]?.blur}
+                    onLoad={() => setLoadingComplete((prevState) => ({ ...prevState, [choice]: true }))}
+                    alt={choice}
+                    priority={true}
+                />
                 <div className={`${Style["choice-info"]} ${className}`}>
                     <div className={Style.stake}>
                         {renderTotalBet(choice, choice === SicBallBetOptions.BIG ? "justify-end" : "")}
@@ -182,9 +203,40 @@ const SicBallBetOptionsComponent = () => {
         );
     };
 
+    const getSubOptionsName = (choice: string) => {
+        let backgroundName = "";
+
+        switch (choice) {
+            case SicBallBetOptions.SPECIFIC1:
+            case SicBallBetOptions.SPECIFIC2:
+            case SicBallBetOptions.SPECIFIC3:
+                backgroundName = SicBallBetOptions.SPECIFIC1;
+                break;
+
+            case SicBallBetOptions.SPECIFIC4:
+            case SicBallBetOptions.SPECIFIC5:
+            case SicBallBetOptions.SPECIFIC6:
+                backgroundName = SicBallBetOptions.SPECIFIC4;
+                break;
+        }
+
+        return backgroundName;
+    };
+
     const renderSubOptions = (choice: string) => {
+        const backgroundName = getSubOptionsName(choice);
+
         return (
             <div className={`${Style[choice]} ${Style["bet-choice"]}`}>
+                <Image
+                    className={Style["bg-bet-option"]}
+                    width={113}
+                    height={60}
+                    src={loadingComplete[choice] ? BetChoiceImagesData[backgroundName]?.src : BetChoiceImagesData[backgroundName]?.blur}
+                    onLoad={() => setLoadingComplete((prevState) => ({ ...prevState, [choice]: true }))}
+                    alt={choice}
+                    priority={true}
+                />
                 {renderTotalBet(choice, Style["side-bet-total-bet"])}
                 <Image
                     src={`/static/images/sic-ball/${choice.toLowerCase()}.png?v=${buildVersion}`}
