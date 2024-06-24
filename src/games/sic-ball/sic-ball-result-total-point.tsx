@@ -52,8 +52,8 @@ const SicBallResultTotalPoint: FC<{ playResultAnimation: boolean; results: any }
             </div>
 
             {showTotal && (
-                <div>
-                    <div className={`fade-in ${Style["total-point-bg-blur"]}`}></div>
+                <div className={Style["total-point-container"]}>
+                    <div className={`${Style["total-point-bg-blur"]}`}></div>
                     <span className={Style["total-point"]}>{result}</span>
                 </div>
             )}

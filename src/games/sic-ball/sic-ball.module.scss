@@ -59,22 +59,28 @@
         }
     }
 
-    %bottom {
+    .total-point-container {
         position: absolute;
         bottom: -1rem;
         left: 0;
         width: 100%;
-        height: 4.2rem;
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 4.2rem;
+        animation: 0.8s show-total-point ease-in-out forwards;
     }
 
     .total-point-bg-blur {
-        @extend %bottom;
+        grid-area: 1/1;
         background: rgba(0, 0, 0, 0.6);
         filter: blur(8px);
     }
 
     .total-point {
-        @extend %bottom;
+        position: relative;
+        z-index: 1;
+        grid-area: 1/1;
+        display: block;
         text-transform: uppercase;
         text-align: center;
         line-height: 4.2rem;
@@ -82,7 +88,6 @@
         font-weight: 600;
         color: #fff;
         text-shadow: 0.1rem 0.1rem 2rem rgba(255, 255, 255, 0.6);
-        animation: show 0.5s ease-in-out forwards;
     }
 
     .result {
@@ -96,14 +101,15 @@
         @extend %layout-result;
     }
 
-    @keyframes show {
+    @keyframes show-total-point {
         from {
             opacity: 0;
-            transform: scale(0);
+            transform: translateY(-20px);
         }
+
         to {
             opacity: 1;
-            transform: scale(1);
+            transform: translateY(0);
         }
     }
 }
