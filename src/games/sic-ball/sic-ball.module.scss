@@ -228,8 +228,13 @@
 }
 
 .specific-icon-number {
+    --ballSmall-width: 3.2rem;
+    --ballSmall-height: 3.2rem;
+
     position: absolute;
     bottom: 1rem;
+    background-size: 3.2rem 3.2rem !important;
+    font-size: 1.3rem !important;
 }
 
 .side-bet-total-bet {

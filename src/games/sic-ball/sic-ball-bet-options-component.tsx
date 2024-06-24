@@ -9,6 +9,7 @@ import Style from "./sic-ball.module.scss";
 import { buildVersion } from "../../_shared/constants";
 import { useTranslator } from "../../_shared/react-hooks/use-translator";
 import { useState } from "react";
+import SmallBall from "../../components/game-components/small-ball";
 
 const BetChoice = dynamic(() => import("../../components/game-components/bet-option/bet-choice"));
 const RippleButton = dynamic(() => import("../../components/game-components/bet-option/ripple-button"));
@@ -223,8 +224,22 @@ const SicBallBetOptionsComponent = () => {
         return backgroundName;
     };
 
+    const getBallNumber = (choice: string): number => {
+        const sicBallBetOptions = {
+            specific1: 1,
+            specific2: 2,
+            specific3: 3,
+            specific4: 4,
+            specific5: 5,
+            specific6: 6,
+        };
+
+        return sicBallBetOptions[choice] || null;
+    };
+
     const renderSubOptions = (choice: string) => {
         const backgroundName = getSubOptionsName(choice);
+        console.log("renderSubOptions", choice);
 
         return (
             <div className={`${Style[choice]} ${Style["bet-choice"]}`}>
@@ -238,13 +253,8 @@ const SicBallBetOptionsComponent = () => {
                     priority={true}
                 />
                 {renderTotalBet(choice, Style["side-bet-total-bet"])}
-                <Image
-                    src={`/static/images/sic-ball/${choice.toLowerCase()}.png?v=${buildVersion}`}
-                    width={32}
-                    height={32}
-                    alt={`icon-${choice.toLowerCase()}`}
-                    className={Style["specific-icon-number"]}
-                />
+
+                <SmallBall number={getBallNumber(choice)} customClass={Style["specific-icon-number"]} />
 
                 <div className={Style["own-bet-container"]}>{renderOwnBet(choice)}</div>
                 <div className={Style["winning-effect"]}>{renderHighlightWinningResult(choice)}</div>
