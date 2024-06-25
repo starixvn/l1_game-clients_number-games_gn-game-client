@@ -7,245 +7,197 @@ Responsive: <div class="yourspritesname"></div>
 */
 
 
-.hub-interface-00 {max-width:124px; max-height:155px; }
-.hub-interface-00::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 0% 0%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-00::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-01 {max-width:124px; max-height:155px; }
-.hub-interface-01::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 5.2631578947368425% 0%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-01::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-02 {max-width:124px; max-height:155px; }
-.hub-interface-02::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 10.526315789473685% 0%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-02::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-03 {max-width:124px; max-height:155px; }
-.hub-interface-03::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 15.789473684210526% 0%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-03::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-04 {max-width:124px; max-height:155px; }
-.hub-interface-04::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 21.05263157894737% 0%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-04::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-05 {max-width:124px; max-height:155px; }
-.hub-interface-05::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 26.31578947368421% 0%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-05::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-06 {max-width:124px; max-height:155px; }
-.hub-interface-06::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 31.57894736842105% 0%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-06::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-07 {max-width:124px; max-height:155px; }
-.hub-interface-07::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 36.8421052631579% 0%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-07::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-08 {max-width:124px; max-height:155px; }
-.hub-interface-08::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 42.10526315789474% 0%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-08::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-09 {max-width:124px; max-height:155px; }
-.hub-interface-09::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 47.36842105263158% 0%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-09::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-10 {max-width:124px; max-height:155px; }
-.hub-interface-10::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 52.63157894736842% 0%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-10::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-11 {max-width:124px; max-height:155px; }
-.hub-interface-11::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 57.89473684210526% 0%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-11::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-12 {max-width:124px; max-height:155px; }
-.hub-interface-12::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 63.1578947368421% 0%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-12::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-13 {max-width:124px; max-height:155px; }
-.hub-interface-13::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 68.42105263157895% 0%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-13::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-14 {max-width:124px; max-height:155px; }
-.hub-interface-14::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 73.6842105263158% 0%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-14::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-15 {max-width:124px; max-height:155px; }
-.hub-interface-15::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 78.94736842105263% 0%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-15::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-16 {max-width:124px; max-height:155px; }
-.hub-interface-16::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 84.21052631578948% 0%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-16::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-17 {max-width:124px; max-height:155px; }
-.hub-interface-17::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 89.47368421052632% 0%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-17::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-18 {max-width:124px; max-height:155px; }
-.hub-interface-18::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 94.73684210526316% 0%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-18::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-19 {max-width:124px; max-height:155px; }
-.hub-interface-19::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 100% 0%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-19::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-20 {max-width:124px; max-height:155px; }
-.hub-interface-20::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 0% 33.333333333333336%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-20::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-21 {max-width:124px; max-height:155px; }
-.hub-interface-21::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 5.2631578947368425% 33.333333333333336%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-21::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-22 {max-width:124px; max-height:155px; }
-.hub-interface-22::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 10.526315789473685% 33.333333333333336%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-22::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-23 {max-width:124px; max-height:155px; }
-.hub-interface-23::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 15.789473684210526% 33.333333333333336%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-23::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-24 {max-width:124px; max-height:155px; }
-.hub-interface-24::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 21.05263157894737% 33.333333333333336%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-24::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-25 {max-width:124px; max-height:155px; }
-.hub-interface-25::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 26.31578947368421% 33.333333333333336%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-25::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-26 {max-width:124px; max-height:155px; }
-.hub-interface-26::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 31.57894736842105% 33.333333333333336%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-26::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-27 {max-width:124px; max-height:155px; }
-.hub-interface-27::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 36.8421052631579% 33.333333333333336%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-27::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-28 {max-width:124px; max-height:155px; }
-.hub-interface-28::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 42.10526315789474% 33.333333333333336%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-28::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-29 {max-width:124px; max-height:155px; }
-.hub-interface-29::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 47.36842105263158% 33.333333333333336%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-29::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-30 {max-width:124px; max-height:155px; }
-.hub-interface-30::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 52.63157894736842% 33.333333333333336%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-30::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-31 {max-width:124px; max-height:155px; }
-.hub-interface-31::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 57.89473684210526% 33.333333333333336%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-31::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-32 {max-width:124px; max-height:155px; }
-.hub-interface-32::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 63.1578947368421% 33.333333333333336%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-32::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-33 {max-width:124px; max-height:155px; }
-.hub-interface-33::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 68.42105263157895% 33.333333333333336%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-33::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-34 {max-width:124px; max-height:155px; }
-.hub-interface-34::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 73.6842105263158% 33.333333333333336%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-34::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-35 {max-width:124px; max-height:155px; }
-.hub-interface-35::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 78.94736842105263% 33.333333333333336%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-35::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-36 {max-width:124px; max-height:155px; }
-.hub-interface-36::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 84.21052631578948% 33.333333333333336%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-36::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-37 {max-width:124px; max-height:155px; }
-.hub-interface-37::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 89.47368421052632% 33.333333333333336%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-37::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-38 {max-width:124px; max-height:155px; }
-.hub-interface-38::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 94.73684210526316% 33.333333333333336%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-38::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-39 {max-width:124px; max-height:155px; }
-.hub-interface-39::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 100% 33.333333333333336%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-39::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-40 {max-width:124px; max-height:155px; }
-.hub-interface-40::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 0% 66.66666666666667%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-40::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-41 {max-width:124px; max-height:155px; }
-.hub-interface-41::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 5.2631578947368425% 66.66666666666667%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-41::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-42 {max-width:124px; max-height:155px; }
-.hub-interface-42::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 10.526315789473685% 66.66666666666667%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-42::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-43 {max-width:124px; max-height:155px; }
-.hub-interface-43::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 15.789473684210526% 66.66666666666667%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-43::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-44 {max-width:124px; max-height:155px; }
-.hub-interface-44::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 21.05263157894737% 66.66666666666667%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-44::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-45 {max-width:124px; max-height:155px; }
-.hub-interface-45::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 26.31578947368421% 66.66666666666667%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-45::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-46 {max-width:124px; max-height:155px; }
-.hub-interface-46::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 31.57894736842105% 66.66666666666667%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-46::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-47 {max-width:124px; max-height:155px; }
-.hub-interface-47::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 36.8421052631579% 66.66666666666667%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-47::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-48 {max-width:124px; max-height:155px; }
-.hub-interface-48::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 42.10526315789474% 66.66666666666667%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-48::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-49 {max-width:124px; max-height:155px; }
-.hub-interface-49::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 47.36842105263158% 66.66666666666667%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-49::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-50 {max-width:124px; max-height:155px; }
-.hub-interface-50::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 52.63157894736842% 66.66666666666667%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-50::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-51 {max-width:124px; max-height:155px; }
-.hub-interface-51::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 57.89473684210526% 66.66666666666667%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-51::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-52 {max-width:124px; max-height:155px; }
-.hub-interface-52::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 63.1578947368421% 66.66666666666667%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-52::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-53 {max-width:124px; max-height:155px; }
-.hub-interface-53::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 68.42105263157895% 66.66666666666667%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-53::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-54 {max-width:124px; max-height:155px; }
-.hub-interface-54::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 73.6842105263158% 66.66666666666667%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-54::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-55 {max-width:124px; max-height:155px; }
-.hub-interface-55::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 78.94736842105263% 66.66666666666667%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-55::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-56 {max-width:124px; max-height:155px; }
-.hub-interface-56::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 84.21052631578948% 66.66666666666667%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-56::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-57 {max-width:124px; max-height:155px; }
-.hub-interface-57::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 89.47368421052632% 66.66666666666667%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-57::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-58 {max-width:124px; max-height:155px; }
-.hub-interface-58::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 94.73684210526316% 66.66666666666667%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-58::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-59 {max-width:124px; max-height:155px; }
-.hub-interface-59::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 100% 66.66666666666667%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-59::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-60 {max-width:124px; max-height:155px; }
-.hub-interface-60::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 0% 100%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-60::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-61 {max-width:124px; max-height:155px; }
-.hub-interface-61::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 5.2631578947368425% 100%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-61::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-62 {max-width:124px; max-height:155px; }
-.hub-interface-62::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 10.526315789473685% 100%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-62::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-63 {max-width:124px; max-height:155px; }
-.hub-interface-63::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 15.789473684210526% 100%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-63::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-64 {max-width:124px; max-height:155px; }
-.hub-interface-64::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 21.05263157894737% 100%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-64::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-65 {max-width:124px; max-height:155px; }
-.hub-interface-65::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 26.31578947368421% 100%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-65::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-66 {max-width:124px; max-height:155px; }
-.hub-interface-66::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 31.57894736842105% 100%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-66::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-67 {max-width:124px; max-height:155px; }
-.hub-interface-67::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 36.8421052631579% 100%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-67::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-68 {max-width:124px; max-height:155px; }
-.hub-interface-68::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 42.10526315789474% 100%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-68::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-69 {max-width:124px; max-height:155px; }
-.hub-interface-69::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 47.36842105263158% 100%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-69::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-70 {max-width:124px; max-height:155px; }
-.hub-interface-70::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 52.63157894736842% 100%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-70::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-71 {max-width:124px; max-height:155px; }
-.hub-interface-71::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 57.89473684210526% 100%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-71::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-72 {max-width:124px; max-height:155px; }
-.hub-interface-72::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 63.1578947368421% 100%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-72::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-73 {max-width:124px; max-height:155px; }
-.hub-interface-73::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 68.42105263157895% 100%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-73::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-74 {max-width:124px; max-height:155px; }
-.hub-interface-74::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 73.6842105263158% 100%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-74::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-75 {max-width:124px; max-height:155px; }
-.hub-interface-75::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 78.94736842105263% 100%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-75::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-76 {max-width:124px; max-height:155px; }
-.hub-interface-76::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 84.21052631578948% 100%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-76::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-77 {max-width:124px; max-height:155px; }
-.hub-interface-77::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 89.47368421052632% 100%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-77::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-78 {max-width:124px; max-height:155px; }
-.hub-interface-78::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 94.73684210526316% 100%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-78::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
-.hub-interface-79 {max-width:124px; max-height:155px; }
-.hub-interface-79::after {content: '\00a0';display: inline-block; width:124px; height:155px; background-position: 100% 100%;background-size: 2000% 400%;background-image: url(hub-interface.png);padding: 0; }
-div.hub-interface-79::after {max-width:124px; width:100%;height:0;padding: 0 0 125% 0;}
+.hub-00 {max-width:162px; max-height:130px; }
+.hub-00::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 0% 0%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-00::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-01 {max-width:162px; max-height:130px; }
+.hub-01::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 6.666666666666667% 0%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-01::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-02 {max-width:162px; max-height:130px; }
+.hub-02::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 13.333333333333334% 0%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-02::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-03 {max-width:162px; max-height:130px; }
+.hub-03::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 20% 0%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-03::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-04 {max-width:162px; max-height:130px; }
+.hub-04::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 26.666666666666668% 0%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-04::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-05 {max-width:162px; max-height:130px; }
+.hub-05::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 33.333333333333336% 0%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-05::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-06 {max-width:162px; max-height:130px; }
+.hub-06::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 40% 0%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-06::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-07 {max-width:162px; max-height:130px; }
+.hub-07::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 46.666666666666664% 0%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-07::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-08 {max-width:162px; max-height:130px; }
+.hub-08::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 53.333333333333336% 0%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-08::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-09 {max-width:162px; max-height:130px; }
+.hub-09::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 60% 0%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-09::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-10 {max-width:162px; max-height:130px; }
+.hub-10::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 66.66666666666667% 0%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-10::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-11 {max-width:162px; max-height:130px; }
+.hub-11::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 73.33333333333333% 0%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-11::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-12 {max-width:162px; max-height:130px; }
+.hub-12::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 80% 0%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-12::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-13 {max-width:162px; max-height:130px; }
+.hub-13::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 86.66666666666667% 0%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-13::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-14 {max-width:162px; max-height:130px; }
+.hub-14::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 93.33333333333333% 0%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-14::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-15 {max-width:162px; max-height:130px; }
+.hub-15::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 100% 0%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-15::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-16 {max-width:162px; max-height:130px; }
+.hub-16::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 0% 33.333333333333336%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-16::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-17 {max-width:162px; max-height:130px; }
+.hub-17::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 6.666666666666667% 33.333333333333336%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-17::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-18 {max-width:162px; max-height:130px; }
+.hub-18::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 13.333333333333334% 33.333333333333336%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-18::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-19 {max-width:162px; max-height:130px; }
+.hub-19::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 20% 33.333333333333336%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-19::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-20 {max-width:162px; max-height:130px; }
+.hub-20::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 26.666666666666668% 33.333333333333336%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-20::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-21 {max-width:162px; max-height:130px; }
+.hub-21::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 33.333333333333336% 33.333333333333336%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-21::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-22 {max-width:162px; max-height:130px; }
+.hub-22::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 40% 33.333333333333336%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-22::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-23 {max-width:162px; max-height:130px; }
+.hub-23::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 46.666666666666664% 33.333333333333336%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-23::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-24 {max-width:162px; max-height:130px; }
+.hub-24::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 53.333333333333336% 33.333333333333336%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-24::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-25 {max-width:162px; max-height:130px; }
+.hub-25::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 60% 33.333333333333336%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-25::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-26 {max-width:162px; max-height:130px; }
+.hub-26::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 66.66666666666667% 33.333333333333336%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-26::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-27 {max-width:162px; max-height:130px; }
+.hub-27::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 73.33333333333333% 33.333333333333336%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-27::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-28 {max-width:162px; max-height:130px; }
+.hub-28::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 80% 33.333333333333336%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-28::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-29 {max-width:162px; max-height:130px; }
+.hub-29::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 86.66666666666667% 33.333333333333336%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-29::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-30 {max-width:162px; max-height:130px; }
+.hub-30::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 93.33333333333333% 33.333333333333336%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-30::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-31 {max-width:162px; max-height:130px; }
+.hub-31::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 100% 33.333333333333336%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-31::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-32 {max-width:162px; max-height:130px; }
+.hub-32::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 0% 66.66666666666667%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-32::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-33 {max-width:162px; max-height:130px; }
+.hub-33::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 6.666666666666667% 66.66666666666667%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-33::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-34 {max-width:162px; max-height:130px; }
+.hub-34::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 13.333333333333334% 66.66666666666667%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-34::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-35 {max-width:162px; max-height:130px; }
+.hub-35::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 20% 66.66666666666667%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-35::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-36 {max-width:162px; max-height:130px; }
+.hub-36::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 26.666666666666668% 66.66666666666667%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-36::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-37 {max-width:162px; max-height:130px; }
+.hub-37::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 33.333333333333336% 66.66666666666667%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-37::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-38 {max-width:162px; max-height:130px; }
+.hub-38::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 40% 66.66666666666667%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-38::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-39 {max-width:162px; max-height:130px; }
+.hub-39::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 46.666666666666664% 66.66666666666667%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-39::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-40 {max-width:162px; max-height:130px; }
+.hub-40::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 53.333333333333336% 66.66666666666667%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-40::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-41 {max-width:162px; max-height:130px; }
+.hub-41::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 60% 66.66666666666667%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-41::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-42 {max-width:162px; max-height:130px; }
+.hub-42::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 66.66666666666667% 66.66666666666667%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-42::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-43 {max-width:162px; max-height:130px; }
+.hub-43::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 73.33333333333333% 66.66666666666667%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-43::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-44 {max-width:162px; max-height:130px; }
+.hub-44::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 80% 66.66666666666667%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-44::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-45 {max-width:162px; max-height:130px; }
+.hub-45::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 86.66666666666667% 66.66666666666667%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-45::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-46 {max-width:162px; max-height:130px; }
+.hub-46::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 93.33333333333333% 66.66666666666667%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-46::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-47 {max-width:162px; max-height:130px; }
+.hub-47::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 100% 66.66666666666667%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-47::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-48 {max-width:162px; max-height:130px; }
+.hub-48::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 0% 100%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-48::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-49 {max-width:162px; max-height:130px; }
+.hub-49::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 6.666666666666667% 100%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-49::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-50 {max-width:162px; max-height:130px; }
+.hub-50::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 13.333333333333334% 100%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-50::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-51 {max-width:162px; max-height:130px; }
+.hub-51::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 20% 100%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-51::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-52 {max-width:162px; max-height:130px; }
+.hub-52::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 26.666666666666668% 100%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-52::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-53 {max-width:162px; max-height:130px; }
+.hub-53::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 33.333333333333336% 100%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-53::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-54 {max-width:162px; max-height:130px; }
+.hub-54::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 40% 100%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-54::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-55 {max-width:162px; max-height:130px; }
+.hub-55::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 46.666666666666664% 100%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-55::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-56 {max-width:162px; max-height:130px; }
+.hub-56::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 53.333333333333336% 100%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-56::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-57 {max-width:162px; max-height:130px; }
+.hub-57::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 60% 100%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-57::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-58 {max-width:162px; max-height:130px; }
+.hub-58::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 66.66666666666667% 100%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-58::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-59 {max-width:162px; max-height:130px; }
+.hub-59::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 73.33333333333333% 100%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-59::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-60 {max-width:162px; max-height:130px; }
+.hub-60::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 80% 100%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-60::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-61 {max-width:162px; max-height:130px; }
+.hub-61::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 86.66666666666667% 100%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-61::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-62 {max-width:162px; max-height:130px; }
+.hub-62::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 93.33333333333333% 100%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-62::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
+.hub-63 {max-width:162px; max-height:130px; }
+.hub-63::after {content: '\00a0';display: inline-block; width:162px; height:130px; background-position: 100% 100%;background-size: 1600% 400%;background-image: url(hub-interface.png);padding: 0; }
+div.hub-63::after {max-width:162px; width:100%;height:0;padding: 0 0 80.24691358024691% 0;}
 
-/* $TexturePacker:SmartUpdate:a730979b92ac80b145c018c5fd68e294:6aaa90e75677c5a2755ce6ecfb5f4c66:c75854650607a3a8198aeab96e669741$ */
+/* $TexturePacker:SmartUpdate:ba7fc0fc03da7395b62c5b80bebfd380:db8c3b8f926d50273a57211c8d0520e5:c75854650607a3a8198aeab96e669741$ */

@@ -24,6 +24,12 @@
         width: 100%;
     }
 
+    .cage-effect {
+        position: absolute;
+        bottom: -7.5rem;
+        left: -2rem;
+    }
+
     .cage {
         position: absolute;
         top: 0;
@@ -39,9 +45,8 @@
 
     .ball-loop {
         position: absolute;
-        top: 2.4rem;
+        top: 2.5rem;
         left: 2.8rem;
-        transform: scale(0.95);
     }
 
     .ball-rotation {

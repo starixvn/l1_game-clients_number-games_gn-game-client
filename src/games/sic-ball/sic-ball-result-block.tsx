@@ -24,9 +24,9 @@ const SicBallResultBlock: FC<SicBallResultBlockProps> = (props: SicBallResultBlo
                 roundState === RoundState.BeforePlaceBet && isPlayStartRoundAnimation ? "showResultContainer " : ""
             }`}
         >
-            <SicBallResultCage />
-            <SicBallResultCage />
-            <SicBallResultCage />
+            <SicBallResultCage startFrame={0} />
+            <SicBallResultCage startFrame={5} />
+            <SicBallResultCage startFrame={10} />
             {roundState === RoundState.DisplayResult && (
                 <SicBallResultTotalPoint playResultAnimation={playResultAnimation} results={currentResult?.balls} />
             )}

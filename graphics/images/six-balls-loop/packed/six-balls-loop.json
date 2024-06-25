@@ -236,4 +236,4 @@ div.6_ball_rolling_8::after {max-width:65px; width:100%;height:0;padding: 0 0 10
 .6_ball_rolling_9::after {content: '\00a0';display: inline-block; width:65px; height:65px; background-position: 24.324324324324323% 0%;background-size: 3800% 200%;background-image: url(six-balls-loop.png);padding: 0; }
 div.6_ball_rolling_9::after {max-width:65px; width:100%;height:0;padding: 0 0 100% 0;}
 
-/* $TexturePacker:SmartUpdate:8f1817578272fe69f2e35c14dad35597:54db57d22512d825933315e17c6375db:b51c413d4f28d2f0b9fba696085a3dcd$ */
+/* $TexturePacker:SmartUpdate:865739535f43a82494af1780b050b172:6c3bf5f00956a2bd3f941125f994575b:b51c413d4f28d2f0b9fba696085a3dcd$ */
