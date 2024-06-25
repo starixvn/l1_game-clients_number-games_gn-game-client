@@ -16,7 +16,6 @@
 
 .result-container {
     @extend %layout-result;
-    top: -0.5rem;
 
     .cage-container {
         position: relative;
@@ -26,7 +25,7 @@
 
     .cage-effect {
         position: absolute;
-        bottom: -7.5rem;
+        bottom: -6.5rem;
         left: -2rem;
     }
 
@@ -66,7 +65,7 @@
 
     .total-point-container {
         position: absolute;
-        bottom: -1rem;
+        bottom: -0.5rem;
         left: 0;
         width: 100%;
         display: grid;
