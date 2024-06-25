@@ -22,7 +22,7 @@ const SicBallResultCage: FC<any> = () => {
             <div className={Style["cage"]}></div>
             <Spritesheet
                 className={Style["ball-loop"]}
-                image={`/static/images/cage/six-balls-loop.webp?v=${buildVersion}`}
+                image={`/static/images//sic-ball/six-balls-loop.webp?v=${buildVersion}`}
                 widthFrame={65}
                 isResponsive
                 heightFrame={65}
