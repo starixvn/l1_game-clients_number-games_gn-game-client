@@ -24,8 +24,8 @@ export const usePlaySound = (resource: string) => {
         if (document.visibilityState === "visible") {
             ctx?.volume(formatVolume(settingContext.volumeSFX));
             const enable = StorageHelper.get<boolean>(localStorageKeys.enableSound) ?? true;
-            const audioContext: AudioContext = global.Howler.ctx;
-            if (audioContext.state !== "running") {
+            const audioContext: AudioContext = global.Howler?.ctx;
+            if (audioContext && audioContext.state !== "running") {
                 audioContext
                     .resume()
                     .then(() => {

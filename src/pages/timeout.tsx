@@ -15,8 +15,8 @@ const TimeOut = () => {
         clearSession();
 
         (async () => {
-            const audioContext: AudioContext = global.Howler.ctx;
-            await audioContext.close();
+            const audioContext: AudioContext = global.Howler?.ctx;
+            audioContext && await audioContext.close();
         })();
     }, [router.isReady]);
 

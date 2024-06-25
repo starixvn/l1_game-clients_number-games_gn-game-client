@@ -17,33 +17,38 @@ const BGMPlayer = ({ isUserGesture }) => {
     });
 
     useEffect(() => {
-        if (!ctx) {
-            return;
+        return () => {
+            ctx?.stop();
+            ctx?.unload();
+            global.Howler?.unload();
+            global.Howler?.stop();
         }
+    }, []);
 
+    useEffect(() => {
         let delayResumeId = null;
         const audioContext: AudioContext = global.Howler?.ctx;
-
-        if (isUserGesture) {
-            if (settingContext.enabledMusic) {
+        if (audioContext && settingContext.enabledMusic) {
+            if (isUserGesture) {
                 if (audioContext.state !== "running") {
                     delayResumeId = setTimeout(() => {
                         audioContext
                             .resume()
                             .then(() => {
-                                settingContext.volumeMusic && play();
+                                if (settingContext.volumeMusic) {
+                                    play();
+                                }
                             })
                             .catch(() => {
-                                settingContext.volumeMusic && play();
+                                if (settingContext.volumeMusic) {
+                                    play();
+                                }
                             });
-                    }, 500)
-
-                } else {
+                    }, 500);
+                } else if (settingContext.volumeMusic) {
                     play();
                 }
-            }
-        } else {
-            audioContext.state !== "suspended" &&
+            } else if (audioContext.state !== "suspended") {
                 audioContext
                     .suspend()
                     .then(() => {
@@ -52,10 +57,11 @@ const BGMPlayer = ({ isUserGesture }) => {
                     .catch(() => {
                         pause();
                     });
+            }
         }
 
         return () => {
-            delayResumeId && clearTimeout(delayResumeId);
+            clearTimeout(delayResumeId);
         }
     }, [isUserGesture]);
 
