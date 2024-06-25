@@ -3,11 +3,11 @@ import { isMobile } from "react-device-detect";
 import useSound from "use-sound";
 import { formatVolume } from "../../../_shared/helpers";
 import { useSettingContext } from "../../../_shared/react-contexts";
-import { getRandomSong } from "../../../_shared/react-hooks";
+import { getRandomSong, songList } from "../../../_shared/react-hooks";
 
 const BGMPlayer = ({ isUserGesture }) => {
     const settingContext = useSettingContext();
-    const [song, setSong] = useState(getRandomSong(""));
+    const [song, setSong] = useState(getRandomSong(songList[0]));
     const [play, { stop, pause, sound }] = useSound(song, {
         interrupt: false,
 
@@ -15,6 +15,16 @@ const BGMPlayer = ({ isUserGesture }) => {
             setSong(getRandomSong(song));
         },
     });
+
+    useEffect(() => {
+        var AudioContext = window.AudioContext || (window as any).webkitAudioContext;
+        global.Howler.ctx = new AudioContext();
+        play && play();
+
+        return () => {
+            stop && stop();
+        };
+    }, []);
 
     useEffect(() => {
         if (!sound) {
@@ -25,29 +35,24 @@ const BGMPlayer = ({ isUserGesture }) => {
 
         if (isUserGesture) {
             if (settingContext.enabledMusic) {
-                if (audioContext.state !== "running") {
-                    audioContext
-                        .resume()
-                        .then(() => {
-                            settingContext.volumeMusic && play();
-                        })
-                        .catch(() => {
-                            settingContext.volumeMusic && play();
-                        });
-                } else {
-                    play();
-                }
-            }
-        } else {
-            audioContext.state !== "suspended" &&
                 audioContext
-                    .suspend()
+                    .resume()
                     .then(() => {
-                        pause();
+                        settingContext.volumeMusic && play();
                     })
                     .catch(() => {
-                        pause();
+                        settingContext.volumeMusic && play();
                     });
+            }
+        } else {
+            audioContext
+                .suspend()
+                .then(() => {
+                    pause();
+                })
+                .catch(() => {
+                    pause();
+                });
         }
     }, [isUserGesture]);
 
@@ -62,29 +67,25 @@ const BGMPlayer = ({ isUserGesture }) => {
     useEffect(() => {
         if (sound) {
             const audioContext: AudioContext = global.Howler.ctx;
-            if (settingContext.enabledMusic) {
-                if (audioContext.state !== "running") {
-                    audioContext
-                        .resume()
-                        .then(() => {
-                            play();
-                        })
-                        .catch(() => {
-                            play();
-                        });
-                } else {
-                    play();
-                }
+            if (audioContext.state !== "running") {
+                audioContext
+                    .resume()
+                    .then(() => {
+                        play();
+                    })
+                    .catch(() => {
+                        play();
+                    });
             } else {
-                audioContext.state !== "suspended" &&
-                    audioContext
-                        .suspend()
-                        .then(() => {
-                            pause();
-                        })
-                        .catch(() => {
-                            pause();
-                        });
+                audioContext
+                    .suspend()
+                    .then(() => {
+                        pause();
+                    })
+                    .catch(() => {
+                        pause();
+                    });
+
             }
         }
     }, [settingContext.enabledMusic]);
@@ -94,25 +95,24 @@ const BGMPlayer = ({ isUserGesture }) => {
             const audioContext: AudioContext = global.Howler.ctx;
 
             if (settingContext.volumeMusic) {
-                audioContext.state !== "running" &&
-                    audioContext
-                        .resume()
-                        .then(() => {
-                            play();
-                        })
-                        .catch(() => {
-                            play();
-                        });
+                audioContext
+                    .resume()
+                    .then(() => {
+                        play();
+                    })
+                    .catch(() => {
+                        play();
+                    });
             } else {
-                audioContext.state !== "suspended" &&
-                    audioContext
-                        .suspend()
-                        .then(() => {
-                            pause();
-                        })
-                        .catch(() => {
-                            pause();
-                        });
+                audioContext
+                    .suspend()
+                    .then(() => {
+                        pause();
+                    })
+                    .catch(() => {
+                        pause();
+                    });
+
             }
             sound.volume(formatVolume(settingContext.volumeMusic));
         }
