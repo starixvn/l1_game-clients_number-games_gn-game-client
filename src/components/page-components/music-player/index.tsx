@@ -3,12 +3,12 @@ import { isMobile } from "react-device-detect";
 import useSound from "use-sound";
 import { formatVolume } from "../../../_shared/helpers";
 import { useSettingContext } from "../../../_shared/react-contexts";
-import { getRandomSong, songList } from "../../../_shared/react-hooks";
+import { getRandomSong } from "../../../_shared/react-hooks";
 
 const BGMPlayer = ({ isUserGesture }) => {
     const settingContext = useSettingContext();
-    const [song, setSong] = useState(getRandomSong(songList[0]));
-    const [play, { stop, pause, sound }] = useSound(song, {
+    const [song, setSong] = useState(getRandomSong(""));
+    const [play, { stop, pause, sound: ctx }] = useSound(song, {
         interrupt: false,
 
         onend: () => {
@@ -17,104 +17,112 @@ const BGMPlayer = ({ isUserGesture }) => {
     });
 
     useEffect(() => {
-        var AudioContext = window.AudioContext || (window as any).webkitAudioContext;
-        global.Howler.ctx = new AudioContext();
-        play && play();
-
-        return () => {
-            stop && stop();
-        };
-    }, []);
-
-    useEffect(() => {
-        if (!sound) {
+        if (!ctx) {
             return;
         }
 
-        const audioContext: AudioContext = global.Howler.ctx;
+        let delayResumeId = null;
+        const audioContext: AudioContext = global.Howler?.ctx;
 
         if (isUserGesture) {
             if (settingContext.enabledMusic) {
-                audioContext
-                    .resume()
-                    .then(() => {
-                        settingContext.volumeMusic && play();
-                    })
-                    .catch(() => {
-                        settingContext.volumeMusic && play();
-                    });
+                if (audioContext.state !== "running") {
+                    delayResumeId = setTimeout(() => {
+                        audioContext
+                            .resume()
+                            .then(() => {
+                                settingContext.volumeMusic && play();
+                            })
+                            .catch(() => {
+                                settingContext.volumeMusic && play();
+                            });
+                    }, 500)
+
+                } else {
+                    play();
+                }
             }
         } else {
-            audioContext
-                .suspend()
-                .then(() => {
-                    pause();
-                })
-                .catch(() => {
-                    pause();
-                });
+            audioContext.state !== "suspended" &&
+                audioContext
+                    .suspend()
+                    .then(() => {
+                        pause();
+                    })
+                    .catch(() => {
+                        pause();
+                    });
+        }
+
+        return () => {
+            delayResumeId && clearTimeout(delayResumeId);
         }
     }, [isUserGesture]);
 
     useEffect(() => {
         settingContext.enabledMusic && settingContext.volumeMusic && play();
-        sound?.volume(formatVolume(settingContext.volumeMusic));
+        ctx?.volume(formatVolume(settingContext.volumeMusic));
         return () => {
             stop();
         };
     }, [play]);
 
     useEffect(() => {
-        if (sound) {
-            const audioContext: AudioContext = global.Howler.ctx;
-            if (audioContext.state !== "running") {
-                audioContext
-                    .resume()
-                    .then(() => {
-                        play();
-                    })
-                    .catch(() => {
-                        play();
-                    });
+        if (ctx) {
+            const audioContext: AudioContext = global.Howler?.ctx;
+            if (settingContext.enabledMusic) {
+                if (audioContext.state !== "running") {
+                    audioContext
+                        .resume()
+                        .then(() => {
+                            play();
+                        })
+                        .catch(() => {
+                            play();
+                        });
+                } else {
+                    play();
+                }
             } else {
-                audioContext
-                    .suspend()
-                    .then(() => {
-                        pause();
-                    })
-                    .catch(() => {
-                        pause();
-                    });
-
+                audioContext.state !== "suspended" &&
+                    audioContext
+                        .suspend()
+                        .then(() => {
+                            pause();
+                        })
+                        .catch(() => {
+                            pause();
+                        });
             }
         }
     }, [settingContext.enabledMusic]);
 
     useEffect(() => {
-        if (sound) {
-            const audioContext: AudioContext = global.Howler.ctx;
+        if (ctx) {
+            const audioContext: AudioContext = global.Howler?.ctx;
 
             if (settingContext.volumeMusic) {
-                audioContext
-                    .resume()
-                    .then(() => {
-                        play();
-                    })
-                    .catch(() => {
-                        play();
-                    });
+                audioContext.state !== "running" &&
+                    audioContext
+                        .resume()
+                        .then(() => {
+                            play();
+                        })
+                        .catch(() => {
+                            play();
+                        });
             } else {
-                audioContext
-                    .suspend()
-                    .then(() => {
-                        pause();
-                    })
-                    .catch(() => {
-                        pause();
-                    });
-
+                audioContext.state !== "suspended" &&
+                    audioContext
+                        .suspend()
+                        .then(() => {
+                            pause();
+                        })
+                        .catch(() => {
+                            pause();
+                        });
             }
-            sound.volume(formatVolume(settingContext.volumeMusic));
+            ctx?.volume(formatVolume(settingContext.volumeMusic));
         }
     }, [settingContext.volumeMusic]);
     return <></>;
