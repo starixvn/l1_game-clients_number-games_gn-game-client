@@ -1,7 +1,6 @@
 import useSound from "use-sound";
 import { buildVersion } from "../constants";
-import { StorageHelper, formatVolume, localStorageKeys, objectMap } from "../helpers";
-import { useSettingContext } from "../react-contexts";
+import { StorageHelper, localStorageKeys, objectMap } from "../helpers";
 export const path = "./static/sounds/";
 
 const mp3File = {
@@ -17,26 +16,12 @@ const mp3File = {
 const resourceMp3 = objectMap(mp3File, (v) => `${path}${v}.mp3?v=${buildVersion}`);
 
 export const usePlaySound = (resource: string) => {
-    const [playSound, { sound: ctx }] = useSound(resource, {});
-    const settingContext = useSettingContext();
+    const [playSound] = useSound(resource, {});
 
     return () => {
         if (document.visibilityState === "visible") {
-            ctx?.volume(formatVolume(settingContext.volumeSFX));
             const enable = StorageHelper.get<boolean>(localStorageKeys.enableSound) ?? true;
-            const audioContext: AudioContext = global.Howler.ctx;
-            if (audioContext.state !== "running") {
-                audioContext
-                    .resume()
-                    .then(() => {
-                        enable && playSound();
-                    })
-                    .catch(() => {
-                        enable && playSound();
-                    });
-            } else {
-                enable && playSound();
-            }
+            enable && playSound();
         }
     };
 };

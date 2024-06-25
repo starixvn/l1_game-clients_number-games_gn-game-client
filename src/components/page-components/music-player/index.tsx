@@ -14,24 +14,33 @@ const BGMPlayer = ({ isUserGesture }) => {
             setSong(getRandomSong(song));
         },
     });
-
     useEffect(() => {
         if (!sound) {
             return;
         }
-
+        let timeOut;
         const audioContext: AudioContext = global.Howler.ctx;
 
         if (isUserGesture) {
-            audioContext
-                .resume()
-                .then(() => {
-                    settingContext.enabledMusic && play();
-                })
-                .catch(() => {
-                    settingContext.enabledMusic && play();
-                });
+            if (audioContext.state !== "running") {
+                timeOut = setTimeout(() => {
+                    audioContext
+                        .resume()
+                        .then(() => {
+                            settingContext.enabledMusic && play();
+                        })
+                        .catch(() => {
+                            settingContext.enabledMusic && play();
+                        });
+                }, 100);
+            } else {
+                settingContext.enabledMusic && play();
+            }
         } else {
+            if (timeOut) {
+                clearTimeout(timeOut);
+            }
+
             audioContext
                 .suspend()
                 .then(() => {
@@ -65,9 +74,7 @@ const BGMPlayer = ({ isUserGesture }) => {
 const MusicPlayer = () => {
     const [isUserGesture, setIsUserGesture] = useState(null);
 
-    const onVisibilityChange = () => {
-        setIsUserGesture(!document.hidden);
-    };
+    const onVisibilityChange = () => (document.visibilityState === "visible" ? setIsUserGesture(true) : setIsUserGesture(false));
 
     useEffect(() => {
         handleUserGesture();

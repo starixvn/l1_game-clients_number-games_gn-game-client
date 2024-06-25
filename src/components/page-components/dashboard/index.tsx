@@ -297,6 +297,7 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
                         style={this.setDashBoardStyle(isRenderGames)}
                     >
                         <Header />
+
                         <SoundSettings />
 
                         {isNoGameOffer ? <></> : renderOfferGameContainer()}
