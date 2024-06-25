@@ -21,22 +21,10 @@ export const usePlaySound = (resource: string) => {
     const settingContext = useSettingContext();
 
     return () => {
-        if (document.visibilityState === "visible") {
-            ctx?.volume(formatVolume(settingContext.volumeSFX));
+        if (document.visibilityState === "visible" && ctx) {
+            ctx.volume(formatVolume(settingContext.volumeSFX));
             const enable = StorageHelper.get<boolean>(localStorageKeys.enableSound) ?? true;
-            const audioContext: AudioContext = global.Howler?.ctx;
-            if (audioContext && audioContext.state !== "running") {
-                audioContext
-                    .resume()
-                    .then(() => {
-                        enable && playSound();
-                    })
-                    .catch(() => {
-                        enable && playSound();
-                    });
-            } else {
-                enable && playSound();
-            }
+            enable && playSound();
         }
     };
 };

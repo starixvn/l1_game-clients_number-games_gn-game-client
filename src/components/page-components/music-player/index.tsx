@@ -17,18 +17,41 @@ const BGMPlayer = ({ isUserGesture }) => {
     });
 
     useEffect(() => {
+        let lastInteractionTime = Date.now();
+
+        const resetInteractionTimer = () => {
+            lastInteractionTime = Date.now();
+        }
+
+        document.addEventListener('mousemove', resetInteractionTimer);
+        document.addEventListener('keydown', resetInteractionTimer);
+        document.addEventListener('touchstart', resetInteractionTimer);
+
+        const intervalId = setInterval(() => {
+            if (!isUserGesture) {
+                const timeSinceLastInteraction = Date.now() - lastInteractionTime;
+                if (timeSinceLastInteraction > 20000) {
+                    global.Howler.ctx.close();
+                }
+            }
+        }, 10000);
+
         return () => {
             ctx?.stop();
             ctx?.unload();
-            global.Howler?.unload();
-            global.Howler?.stop();
+            document.removeEventListener('mousemove', resetInteractionTimer);
+            document.removeEventListener('keydown', resetInteractionTimer);
+            document.removeEventListener('touchstart', resetInteractionTimer);
+            clearInterval(intervalId);
         }
     }, []);
 
+
     useEffect(() => {
         let delayResumeId = null;
-        const audioContext: AudioContext = global.Howler?.ctx;
-        if (audioContext && settingContext.enabledMusic) {
+
+        if (ctx && settingContext.enabledMusic) {
+            const audioContext: AudioContext = (ctx as any)._sounds[0]._node.context;
             if (isUserGesture) {
                 if (audioContext.state !== "running") {
                     delayResumeId = setTimeout(() => {
@@ -49,6 +72,7 @@ const BGMPlayer = ({ isUserGesture }) => {
                     play();
                 }
             } else if (audioContext.state !== "suspended") {
+                clearTimeout(delayResumeId);
                 audioContext
                     .suspend()
                     .then(() => {
@@ -57,6 +81,9 @@ const BGMPlayer = ({ isUserGesture }) => {
                     .catch(() => {
                         pause();
                     });
+            }
+            else {
+                clearTimeout(delayResumeId);
             }
         }
 
@@ -75,7 +102,7 @@ const BGMPlayer = ({ isUserGesture }) => {
 
     useEffect(() => {
         if (ctx) {
-            const audioContext: AudioContext = global.Howler?.ctx;
+            const audioContext: AudioContext = (ctx as any)._sounds[0]._node.context;
             if (settingContext.enabledMusic) {
                 if (audioContext.state !== "running") {
                     audioContext
@@ -105,7 +132,7 @@ const BGMPlayer = ({ isUserGesture }) => {
 
     useEffect(() => {
         if (ctx) {
-            const audioContext: AudioContext = global.Howler?.ctx;
+            const audioContext: AudioContext = (ctx as any)._sounds[0]._node.context;
 
             if (settingContext.volumeMusic) {
                 audioContext.state !== "running" &&
