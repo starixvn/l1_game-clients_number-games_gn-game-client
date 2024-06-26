@@ -1,13 +1,17 @@
 import { FC, useEffect, useState } from "react";
 
-import { getBallColor, getGlossaryTranslate } from "../../_shared/helpers";
+import { getGlossaryTranslate } from "../../_shared/helpers";
 import { useGameContext } from "../../_shared/react-contexts";
 import { useTranslator } from "../../_shared/react-hooks";
-import BallRotation from "../../components/game-components/cage-result-list/ball-rotation";
+import { RoundState } from "../../components/game-base/type";
 import { SicBallBetOptions } from "./sic-ball-constants";
 import Style from "./sic-ball.module.scss";
 
-const SicBallResultTotalPoint: FC<{ playResultAnimation: boolean; results: any }> = ({ playResultAnimation, results }) => {
+const SicBallResultTotalPoint: FC<{ roundState: RoundState; playResultAnimation: boolean; results: any }> = ({
+    roundState,
+    playResultAnimation,
+    results,
+}) => {
     const { tolgeeNamespace } = useGameContext();
     const { t } = useTranslator([tolgeeNamespace]);
 
@@ -20,43 +24,28 @@ const SicBallResultTotalPoint: FC<{ playResultAnimation: boolean; results: any }
     const showAllBallsDelayTime = 2500;
 
     useEffect(() => {
-        const timeout = setTimeout(
-            () => {
-                setShowTotal(true);
-            },
-            playResultAnimation ? showAllBallsDelayTime : 0
-        );
+        if (roundState === RoundState.DisplayResult) {
+            const timeout = setTimeout(
+                () => {
+                    setShowTotal(true);
+                },
+                playResultAnimation ? showAllBallsDelayTime : 0
+            );
 
-        return () => {
-            clearTimeout(timeout);
-        };
-    }, []);
+            return () => {
+                clearTimeout(timeout);
+            };
+        }
+    }, [roundState]);
+
+    if (!showTotal) {
+        return <></>;
+    }
 
     return (
-        <div className={Style["result"]}>
-            <div className={Style["balls-container"]}>
-                {results?.map((result, index) => {
-                    return (
-                        <BallRotation
-                            key={index}
-                            ballPos={1}
-                            number={result}
-                            playResultAnimation={playResultAnimation}
-                            delayTime={index * 800}
-                            color={getBallColor(result)}
-                            incrementTotalPoint={() => {}}
-                            customClassName={`${Style["ball-rotation"]} fade-in`}
-                        />
-                    );
-                })}
-            </div>
-
-            {showTotal && (
-                <div className={Style["total-point-container"]}>
-                    <div className={`${Style["total-point-bg-blur"]}`}></div>
-                    <span className={Style["total-point"]}>{result}</span>
-                </div>
-            )}
+        <div className={`${Style["total-point-container"]} ${playResultAnimation ? Style["has-anim"] : ""}`}>
+            <div className={`${Style["total-point-bg-blur"]}`}></div>
+            <span className={Style["total-point"]}>{result}</span>
         </div>
     );
 };

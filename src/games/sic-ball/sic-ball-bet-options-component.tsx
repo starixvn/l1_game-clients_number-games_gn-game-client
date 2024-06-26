@@ -1,15 +1,15 @@
 import dynamic from "next/dynamic";
 import Image from "next/image";
+import { useState } from "react";
+
 import { useGameContext } from "../../_shared/react-contexts";
 import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
 import { isShowHighlightPrevResult } from "../../_shared/react-hooks/use-high-light";
+import { useTranslator } from "../../_shared/react-hooks/use-translator";
 import { RoundState } from "../../components/game-base/type";
+import SmallBall from "../../components/game-components/small-ball";
 import { BetChoiceImagesData, SicBallBetOptions, SicBallBetOptionsPercentageColor, SicBallSideBetOdds } from "./sic-ball-constants";
 import Style from "./sic-ball.module.scss";
-import { buildVersion } from "../../_shared/constants";
-import { useTranslator } from "../../_shared/react-hooks/use-translator";
-import { useState } from "react";
-import SmallBall from "../../components/game-components/small-ball";
 
 const BetChoice = dynamic(() => import("../../components/game-components/bet-option/bet-choice"));
 const RippleButton = dynamic(() => import("../../components/game-components/bet-option/ripple-button"));
@@ -239,7 +239,6 @@ const SicBallBetOptionsComponent = () => {
 
     const renderSubOptions = (choice: string) => {
         const backgroundName = getSubOptionsName(choice);
-        console.log("renderSubOptions", choice);
 
         return (
             <div className={`${Style[choice]} ${Style["bet-choice"]}`}>
