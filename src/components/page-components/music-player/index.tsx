@@ -5,90 +5,47 @@ import { formatVolume } from "../../../_shared/helpers";
 import { useSettingContext } from "../../../_shared/react-contexts";
 import { getRandomSong } from "../../../_shared/react-hooks";
 
+const playMusic = ({ audioContext, play }) => {
+    if (audioContext.state !== "running") {
+        audioContext
+            .resume()
+            .then(() => {
+                play();
+            })
+            .catch(() => {
+                play();
+            });
+    } else {
+        play();
+    }
+}
+
+const suspendMusic = ({ audioContext, pause }) => {
+    audioContext.state !== "suspended" &&
+        audioContext
+            .suspend()
+            .then(() => {
+                pause();
+            })
+            .catch(() => {
+                pause();
+            });
+}
+
 const BGMPlayer = ({ isUserGesture }) => {
     const settingContext = useSettingContext();
     const [song, setSong] = useState(getRandomSong(""));
     const [play, { stop, pause, sound: ctx }] = useSound(song, {
         interrupt: false,
-
         onend: () => {
             setSong(getRandomSong(song));
         },
     });
 
     useEffect(() => {
-        let lastInteractionTime = Date.now();
-
-        const resetInteractionTimer = () => {
-            lastInteractionTime = Date.now();
-        }
-
-        document.addEventListener('mousemove', resetInteractionTimer);
-        document.addEventListener('keydown', resetInteractionTimer);
-        document.addEventListener('touchstart', resetInteractionTimer);
-
-        const intervalId = setInterval(() => {
-            if (!isUserGesture) {
-                const timeSinceLastInteraction = Date.now() - lastInteractionTime;
-                if (timeSinceLastInteraction > 20000) {
-                    global.Howler.ctx.close();
-                }
-            }
-        }, 10000);
-
-        return () => {
-            ctx?.stop();
-            ctx?.unload();
-            document.removeEventListener('mousemove', resetInteractionTimer);
-            document.removeEventListener('keydown', resetInteractionTimer);
-            document.removeEventListener('touchstart', resetInteractionTimer);
-            clearInterval(intervalId);
-        }
-    }, []);
-
-
-    useEffect(() => {
-        let delayResumeId = null;
-
         if (ctx && settingContext.enabledMusic) {
             const audioContext: AudioContext = (ctx as any)._sounds[0]._node.context;
-            if (isUserGesture) {
-                if (audioContext.state !== "running") {
-                    delayResumeId = setTimeout(() => {
-                        audioContext
-                            .resume()
-                            .then(() => {
-                                if (settingContext.volumeMusic) {
-                                    play();
-                                }
-                            })
-                            .catch(() => {
-                                if (settingContext.volumeMusic) {
-                                    play();
-                                }
-                            });
-                    }, 500);
-                } else if (settingContext.volumeMusic) {
-                    play();
-                }
-            } else if (audioContext.state !== "suspended") {
-                clearTimeout(delayResumeId);
-                audioContext
-                    .suspend()
-                    .then(() => {
-                        pause();
-                    })
-                    .catch(() => {
-                        pause();
-                    });
-            }
-            else {
-                clearTimeout(delayResumeId);
-            }
-        }
-
-        return () => {
-            clearTimeout(delayResumeId);
+            isUserGesture ? playMusic({ audioContext, play }) : suspendMusic({ audioContext, pause });
         }
     }, [isUserGesture]);
 
@@ -103,61 +60,18 @@ const BGMPlayer = ({ isUserGesture }) => {
     useEffect(() => {
         if (ctx) {
             const audioContext: AudioContext = (ctx as any)._sounds[0]._node.context;
-            if (settingContext.enabledMusic) {
-                if (audioContext.state !== "running") {
-                    audioContext
-                        .resume()
-                        .then(() => {
-                            play();
-                        })
-                        .catch(() => {
-                            play();
-                        });
-                } else {
-                    play();
-                }
-            } else {
-                audioContext.state !== "suspended" &&
-                    audioContext
-                        .suspend()
-                        .then(() => {
-                            pause();
-                        })
-                        .catch(() => {
-                            pause();
-                        });
-            }
+            settingContext.enabledMusic ? playMusic({ audioContext, play }) : suspendMusic({ audioContext, pause });
         }
     }, [settingContext.enabledMusic]);
 
     useEffect(() => {
         if (ctx) {
             const audioContext: AudioContext = (ctx as any)._sounds[0]._node.context;
-
-            if (settingContext.volumeMusic) {
-                audioContext.state !== "running" &&
-                    audioContext
-                        .resume()
-                        .then(() => {
-                            play();
-                        })
-                        .catch(() => {
-                            play();
-                        });
-            } else {
-                audioContext.state !== "suspended" &&
-                    audioContext
-                        .suspend()
-                        .then(() => {
-                            pause();
-                        })
-                        .catch(() => {
-                            pause();
-                        });
-            }
-            ctx?.volume(formatVolume(settingContext.volumeMusic));
+            settingContext.volumeMusic ? playMusic({ audioContext, play }) : suspendMusic({ audioContext, pause });
+            ctx.volume(formatVolume(settingContext.volumeMusic));
         }
     }, [settingContext.volumeMusic]);
+
     return <></>;
 };
 
