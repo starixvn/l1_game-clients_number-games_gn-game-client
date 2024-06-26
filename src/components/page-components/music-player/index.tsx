@@ -1,38 +1,12 @@
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { isMobile } from "react-device-detect";
 import useSound from "use-sound";
 import { formatVolume } from "../../../_shared/helpers";
 import { useSettingContext } from "../../../_shared/react-contexts";
 import { getRandomSong } from "../../../_shared/react-hooks";
+import * as Sentry from "@sentry/nextjs";
 
-const playMusic = ({ audioContext, play }) => {
-    if (audioContext.state !== "running") {
-        audioContext
-            .resume()
-            .then(() => {
-                play();
-            })
-            .catch(() => {
-                play();
-            });
-    } else {
-        play();
-    }
-}
-
-const suspendMusic = ({ audioContext, pause }) => {
-    audioContext.state !== "suspended" &&
-        audioContext
-            .suspend()
-            .then(() => {
-                pause();
-            })
-            .catch(() => {
-                pause();
-            });
-}
-
-const BGMPlayer = ({ isUserGesture }) => {
+const MusicPlayer = () => {
     const settingContext = useSettingContext();
     const [song, setSong] = useState(getRandomSong(""));
     const [play, { stop, pause, sound: ctx }] = useSound(song, {
@@ -42,48 +16,87 @@ const BGMPlayer = ({ isUserGesture }) => {
         },
     });
 
-    useEffect(() => {
-        if (ctx && settingContext.enabledMusic) {
-            const audioContext: AudioContext = (ctx as any)._sounds[0]._node.context;
-            isUserGesture ? playMusic({ audioContext, play }) : suspendMusic({ audioContext, pause });
-        }
-    }, [isUserGesture]);
+    const [isUserGesture, setIsUserGesture] = useState(null);
 
     useEffect(() => {
-        settingContext.enabledMusic && settingContext.volumeMusic && play();
-        ctx?.volume(formatVolume(settingContext.volumeMusic));
+        const playMusic = ({ audioContext, play }) => {
+            if (audioContext?.state !== "running") {
+                setTimeout(() => {
+                    audioContext
+                        .resume()
+                        .then(() => {
+                            play();
+                        })
+                        .catch(() => {
+                            play();
+                        });
+                }, 1000)
+
+            } else {
+                play();
+            }
+        }
+        const pauseMusic = ({ audioContext, pause }) => {
+            if (typeof pause == 'function') {
+                audioContext?.state !== "suspended" &&
+                    audioContext
+                        .suspend()
+                        .then(() => {
+                            pause();
+                        })
+                        .catch(() => {
+                            pause();
+                        });
+            }
+        }
+
+        Sentry.captureMessage((isUserGesture ? " by user gesture" : "") + " --- Music: " + (settingContext?.enabledMusic ? "Enabled" : "Disabled" +
+            (settingContext?.volumeMusic ? "--- with volume " + settingContext?.volumeMusic : "") +
+            (ctx ? "--- with sound" : "--- no sound") + " Date: " + Date.now()));
+
+        const audioContext: AudioContext = (ctx as any)._sounds[0]._node.context;
+        if (audioContext) {
+            isUserGesture && settingContext.enabledMusic
+                && settingContext.volumeMusic && audioContext
+                ? playMusic({ audioContext, play })
+                : pauseMusic({ audioContext, pause });
+            ctx.volume(formatVolume(settingContext.volumeMusic));
+        }
+
         return () => {
             stop();
         };
-    }, [play]);
+    }, [ctx, isUserGesture, settingContext?.enabledMusic, settingContext?.volumeMusic, play]);
+
 
     useEffect(() => {
-        if (ctx) {
-            const audioContext: AudioContext = (ctx as any)._sounds[0]._node.context;
-            settingContext.enabledMusic ? playMusic({ audioContext, play }) : suspendMusic({ audioContext, pause });
-        }
-    }, [settingContext.enabledMusic]);
 
-    useEffect(() => {
-        if (ctx) {
-            const audioContext: AudioContext = (ctx as any)._sounds[0]._node.context;
-            settingContext.volumeMusic ? playMusic({ audioContext, play }) : suspendMusic({ audioContext, pause });
-            ctx.volume(formatVolume(settingContext.volumeMusic));
-        }
-    }, [settingContext.volumeMusic]);
+        const handleUserGesture = () => {
+            const timeoutId = setTimeout(() => {
+                !isUserGesture && setIsUserGesture(true);
+            }, 10 * 1000);
 
-    return <></>;
-};
+            isMobile
+                ? window.addEventListener("touchstart", () => enableUserGesture(timeoutId))
+                : window.addEventListener("click", () => enableUserGesture(timeoutId));
+        };
 
-const MusicPlayer = () => {
-    const [isUserGesture, setIsUserGesture] = useState(null);
+        const enableUserGesture = (timeoutId: NodeJS.Timeout) => {
+            if (!isUserGesture) {
+                setIsUserGesture(true);
+                if (timeoutId) {
+                    clearTimeout(timeoutId);
+                }
 
-    const onVisibilityChange = () => {
-        setIsUserGesture(!document.hidden);
-    };
+            }
+        };
 
-    useEffect(() => {
         handleUserGesture();
+        const onVisibilityChange = () => {
+            setIsUserGesture(!document.hidden);
+        };
+
+        document.addEventListener("visibilitychange", onVisibilityChange);
         return () => {
             isMobile
                 ? document.removeEventListener("touchstart", onVisibilityChange)
@@ -91,31 +104,7 @@ const MusicPlayer = () => {
         };
     }, []);
 
-    const handleUserGesture = () => {
-        const timeoutId = setTimeout(() => {
-            !isUserGesture && setIsUserGesture(true);
-        }, 10 * 1000);
-
-        isMobile
-            ? window.addEventListener("touchstart", () => enableUserGesture(timeoutId))
-            : window.addEventListener("click", () => enableUserGesture(timeoutId));
-    };
-
-    const enableUserGesture = (timeoutId: NodeJS.Timeout) => {
-        if (!isUserGesture) {
-            setIsUserGesture(true);
-            if (timeoutId) {
-                clearTimeout(timeoutId);
-            }
-        }
-    };
-
-    useLayoutEffect(() => {
-        document.addEventListener("visibilitychange", onVisibilityChange);
-        return () => document.removeEventListener("visibilitychange", onVisibilityChange);
-    }, []);
-
-    return isUserGesture !== null ? <BGMPlayer isUserGesture={isUserGesture} /> : <></>;
+    return <></>;
 };
 
 export default MusicPlayer;
