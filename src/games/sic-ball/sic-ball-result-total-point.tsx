@@ -45,7 +45,7 @@ const SicBallResultTotalPoint: FC<{ playResultAnimation: boolean; results: any }
                             delayTime={index * 800}
                             color={getBallColor(result)}
                             incrementTotalPoint={() => {}}
-                            customClassName={Style["ball-rotation"]}
+                            customClassName={`${Style["ball-rotation"]} fade-in`}
                         />
                     );
                 })}
