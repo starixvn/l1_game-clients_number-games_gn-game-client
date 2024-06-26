@@ -18,12 +18,12 @@ const BGMPlayer = ({ isUserGesture }) => {
         if (!sound) {
             return;
         }
-        let timeOut;
+
         const audioContext: AudioContext = global.Howler.ctx;
 
         if (isUserGesture) {
             if (audioContext.state !== "running") {
-                timeOut = setTimeout(() => {
+                setTimeout(() => {
                     audioContext
                         .resume()
                         .then(() => {
@@ -37,10 +37,6 @@ const BGMPlayer = ({ isUserGesture }) => {
                 settingContext.enabledMusic && play();
             }
         } else {
-            if (timeOut) {
-                clearTimeout(timeOut);
-            }
-
             audioContext
                 .suspend()
                 .then(() => {
