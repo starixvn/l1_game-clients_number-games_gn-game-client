@@ -30,6 +30,7 @@ export enum GameEventActionType {
     TOGGLE_GAME_GUIDE = "TOGGLE_GAME_GUIDE",
     START_NEW_ROUND_ANIM = "START_NEW_ROUND_ANIM",
     ROUND_ID = "ROUND_ID",
+    ACTIVE_SCORE_BOARD_TAB = "ACTIVE_SCORE_BOARD_TAB",
 }
 
 export interface GameEventPayload {
@@ -67,7 +68,7 @@ export interface GameEventPayload {
     newGameState?: any;
     showResultInfo?: boolean;
     isShowBlink?: boolean;
-    prevRoundState?: RoundState,
+    prevRoundState?: RoundState;
     roundState?: RoundState;
     turnCounter?: number;
     isUMInFirstLoad?: boolean;
@@ -79,6 +80,7 @@ export interface GameEventPayload {
         betLogDetails: any[];
     };
     isPlayStartRoundAnimation?: boolean;
+    isScoreboardTab?: boolean;
 }
 
 export interface GameEventAction {

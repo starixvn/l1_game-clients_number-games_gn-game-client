@@ -357,7 +357,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 payload: {},
             });
         }
-    }
+    };
 
     handleGamePlay(remainingTime: number) {
         const { durations, dispatch, gameStateContextModel } = this.props;
@@ -567,8 +567,9 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                         </PlaceBetProvider>
                         <div className={SwiperNoSwiping}> {this.renderSlidingChips()}</div>
                         <div>{this.renderStatistic()}</div>
-                        {this.renderStatisticContent()}
-                        <div className={SwiperNoSwiping}> {this.renderScoreboards()}</div>
+                        <div className={SwiperNoSwiping}>
+                            {this.props.gameStateContextModel.isScoreboardTab ? this.renderScoreboards() : this.renderStatisticContent()}
+                        </div>
                         <Footer />
                     </div>
                     {this.renderGameGuideModal()}

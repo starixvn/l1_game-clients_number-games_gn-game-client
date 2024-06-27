@@ -177,3 +177,58 @@ $green_choices: tie;
         gap: 0.2rem;
     }
 }
+.scoreboard-side-bet {
+    position: relative;
+    display: inline-flex;
+    justify-content: left;
+    overflow-y: auto;
+    width: 36.7rem;
+    margin: 0 auto;
+    border-radius: 0.3rem;
+    border: 1px solid #172d41;
+    background-color: #021520;
+    padding: 0.2rem 0.5rem;
+}
+
+.scoreboard-side-bet-icon {
+    --blur: 1.75rem;
+    --box-blur: calc(0.5 * var(--blur));
+    --glow: var(--color);
+    --size: 12rem;
+
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid #0e1d26;
+    border-top: 1px solid #0e1d26;
+
+    [class^="icon-"],
+    [class*=" icon-"] {
+        position: relative;
+        font-size: 2.6rem;
+        border-bottom: 1px solid #0e1d26;
+        width: 3.5rem;
+        height: 3.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    &:last-child {
+        border-right: 1px solid #0e1d26;
+
+        [class^="icon-"],
+        [class*=" icon-"] {
+            &::after {
+                content: "";
+                display: block;
+                position: absolute;
+                right: 0.4rem;
+                top: 0.3rem;
+                width: 2.5rem;
+                height: 2.5rem;
+                box-shadow: 0 0 0.7rem #fff;
+                border-radius: 50%;
+            }
+        }
+    }
+}

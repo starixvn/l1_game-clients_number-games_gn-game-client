@@ -21,3 +21,7 @@ export type PercentageStatisticProps = {
 export type BeadBoardIconProps = {
     choice: string;
 };
+
+export type SideBetScoreboardProps = {
+    roundHistory: Round<any, any>[];
+};

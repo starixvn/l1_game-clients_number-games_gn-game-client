@@ -62,6 +62,7 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
         isShowBetDetail,
         betDetailModalData,
         isPlayStartRoundAnimation,
+        isScoreboardTab,
     } = payload;
 
     switch (type) {
@@ -291,6 +292,13 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
             return {
                 ...state,
                 roundId,
+            };
+        }
+
+        case GameEventActionType.ACTIVE_SCORE_BOARD_TAB: {
+            return {
+                ...state,
+                isScoreboardTab,
             };
         }
 

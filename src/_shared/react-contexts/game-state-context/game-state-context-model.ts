@@ -1,10 +1,4 @@
-import {
-    DrawInfo,
-    GameConfigs,
-    IUserStakeLevel,
-    Round,
-    RoundState,
-} from "../../../components/game-base/type";
+import { DrawInfo, GameConfigs, IUserStakeLevel, Round, RoundState } from "../../../components/game-base/type";
 
 export interface GameStateContextModel {
     isConnect: boolean;
@@ -83,5 +77,6 @@ export const initialGameStateContextModel = () => {
         isShowBetHistory: false,
         isShowGameGuide: false,
         isPlayStartRoundAnimation: false,
+        isScoreboardTab: true,
     };
 };
