@@ -10,6 +10,10 @@ const SicBallResultBalls: FC<{ roundState: RoundState; playResultAnimation: bool
     playResultAnimation,
     results,
 }) => {
+    if (roundState !== RoundState.DisplayResult) {
+        return <></>;
+    }
+
     return (
         <div className={Style["result-balls"]}>
             {results?.map((result, index) => {
