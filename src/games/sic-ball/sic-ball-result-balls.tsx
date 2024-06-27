@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC } from "react";
 
 import { getBallColor } from "../../_shared/helpers";
 import { RoundState } from "../../components/game-base/type";
@@ -10,10 +10,6 @@ const SicBallResultBalls: FC<{ roundState: RoundState; playResultAnimation: bool
     playResultAnimation,
     results,
 }) => {
-    if (roundState !== RoundState.DisplayResult) {
-        return <></>;
-    }
-
     return (
         <div className={Style["result-balls"]}>
             {results?.map((result, index) => {
