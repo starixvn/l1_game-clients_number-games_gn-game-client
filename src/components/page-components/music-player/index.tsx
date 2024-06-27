@@ -1,17 +1,16 @@
 import { useEffect, useState } from "react";
-import { isMobile } from "react-device-detect";
 import useSound from "use-sound";
 import { formatVolume } from "../../../_shared/helpers";
 import { useSettingContext } from "../../../_shared/react-contexts";
 import { getRandomSong } from "../../../_shared/react-hooks";
-import * as Sentry from "@sentry/nextjs";
-import { controlMusic } from "./music-player-helper";
+import { controlMusic } from "./music-player-utility";
+import { addMultipleEventListeners } from "../../../_shared/helpers/event-listener-helper";
 
 const MusicPlayer = () => {
     const [isUserGesture, setIsUserGesture] = useState(null);
-
-    const settingContext = useSettingContext()
     const [song, setSong] = useState(getRandomSong(""));
+
+    const settingContext = useSettingContext();
     const [play, { stop, pause, sound: ctx }] = useSound(song, {
         interrupt: false,
         onend: () => {
@@ -20,51 +19,43 @@ const MusicPlayer = () => {
     });
 
     useEffect(() => {
-        controlMusic(ctx, isUserGesture, play, pause);
-    }, [isUserGesture]);
+        if (ctx) {
+            settingContext.enabledMusic && settingContext.volumeMusic > 0 && play();
+            ctx.volume(formatVolume(settingContext.volumeMusic));
+        }
 
-    useEffect(() => {
-        settingContext.enabledMusic && settingContext.volumeMusic && play();
-        ctx?.volume(formatVolume(settingContext.volumeMusic));
         return () => {
             stop();
         };
     }, [play]);
 
     useEffect(() => {
-        controlMusic(ctx, settingContext.enabledMusic, play, pause);
-    }, [settingContext.enabledMusic]);
+        if (ctx) {
+            const audioContext: AudioContext = (ctx as any)?._sounds[0]._node.context;
+            const isPlaying = isUserGesture && settingContext.enabledMusic && settingContext.volumeMusic > 0;
+            controlMusic(audioContext, isPlaying, play, pause);
+        }
+    }, [ctx, isUserGesture, settingContext.enabledMusic, settingContext.volumeMusic]);
 
     useEffect(() => {
-        controlMusic(ctx, settingContext.volumeMusic > 0, play, pause);
         ctx?.volume(formatVolume(settingContext.volumeMusic));
     }, [settingContext.volumeMusic]);
 
-    const onChangeGesture = () => {
-        setIsUserGesture(!document.hidden);
-    };
-
-    const onChangeGestureScroll = () => {
-        Sentry.captureMessage("onChangeGestureScroll ---");
-        setIsUserGesture(true);
-    };
-
     useEffect(() => {
-        document.addEventListener("scroll", onChangeGestureScroll);
+        const onChangeGesture = () => {
+            setIsUserGesture(!document.hidden);
+        };
+
+        const onAllowGesture = () => {
+            setIsUserGesture(true);
+        };
+
+        const events = ['scroll', 'touchstart', 'click'];
+        const removeEventListeners = addMultipleEventListeners(document, events, onAllowGesture, { passive: true });
+
         document.addEventListener("visibilitychange", onChangeGesture);
 
-        isMobile
-            ? document.addEventListener("touchstart", onChangeGestureScroll)
-            : document.addEventListener("click", onChangeGestureScroll);
-
-        return () => {
-            document.removeEventListener("scroll", onChangeGestureScroll);
-            document.removeEventListener("visibilitychange", onChangeGesture);
-
-            isMobile
-                ? document.removeEventListener("touchstart", onChangeGestureScroll)
-                : document.removeEventListener("click", onChangeGestureScroll);
-        };
+        return removeEventListeners;
     }, []);
 
     return <></>;

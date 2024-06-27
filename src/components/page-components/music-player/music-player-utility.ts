@@ -1,5 +1,5 @@
-export const controlMusic = (ctx: Howl, isPlaying: boolean, play: Function, pause: Function) => {
-    const playMusic = (audioContext: AudioContext) => {
+export const controlMusic = (audioContext: AudioContext, isPlaying: boolean, play: Function, pause: Function) => {
+    const playMusic = () => {
         if (typeof play == 'function') {
             if (audioContext?.state !== "running") {
                 setTimeout(() => {
@@ -11,15 +11,14 @@ export const controlMusic = (ctx: Howl, isPlaying: boolean, play: Function, paus
                         .catch(() => {
                             play();
                         });
-                }, 100)
-
+                }, 100); // Wait a little bit to update audio context state on Safari
             } else {
                 play();
             }
         }
     }
 
-    const pauseMusic = (audioContext: AudioContext) => {
+    const pauseMusic = () => {
         if (typeof pause == 'function') {
             audioContext?.state !== "suspended" &&
                 audioContext
@@ -33,8 +32,7 @@ export const controlMusic = (ctx: Howl, isPlaying: boolean, play: Function, paus
         }
     }
 
-    if (ctx) {
-        const audioContext: AudioContext = (ctx as any)._sounds[0]._node.context;
-        isPlaying ? playMusic(audioContext) : pauseMusic(audioContext);
+    if (audioContext) {
+        isPlaying ? playMusic() : pauseMusic();
     }
 }

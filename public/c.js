@@ -12,8 +12,8 @@ window.envConfig = {
         path: "",
     },
     sentry: {
-        dsn: "",
-        environment: "LOCAL",
+        dsn: "https://c65e9ef4f6c64d928f7b31ba355a44c2@sentry.lumigame.com/84",
+        environment: "DEV",
     },
     enableSourceMap: true,
     subGuideDomain: "gn-guide",
