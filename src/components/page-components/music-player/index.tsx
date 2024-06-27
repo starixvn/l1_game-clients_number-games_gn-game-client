@@ -50,12 +50,13 @@ const MusicPlayer = () => {
             }
         }
 
-        Sentry.captureMessage((isUserGesture ? " by user gesture" : "") + " --- Music: " + (settingContext?.enabledMusic ? "Enabled" : "Disabled" +
-            (settingContext?.volumeMusic ? "--- with volume " + settingContext?.volumeMusic : "") +
-            (ctx ? "--- with sound" : "--- no sound") + " Date: " + Date.now()));
+        // Sentry.captureMessage((isUserGesture ? " by user gesture" : "") + " --- Music: " + (settingContext?.enabledMusic ? "Enabled" : "Disabled" +
+        //     (settingContext?.volumeMusic ? "--- with volume " + settingContext?.volumeMusic : "") +
+        //     (ctx ? "--- with sound" : "--- no sound") + " Date: " + Date.now()));
 
-        const audioContext: AudioContext = (ctx as any)._sounds[0]._node.context;
-        if (audioContext) {
+
+        if (ctx) {
+            const audioContext: AudioContext = (ctx as any)._sounds[0]._node.context;
             isUserGesture && settingContext.enabledMusic
                 && settingContext.volumeMusic && audioContext
                 ? playMusic({ audioContext, play })
