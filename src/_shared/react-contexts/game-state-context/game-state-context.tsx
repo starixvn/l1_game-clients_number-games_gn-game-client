@@ -1,5 +1,6 @@
 import { useTranslate } from "@tolgee/react";
 import { createContext, useContext, useReducer } from "react";
+
 import { RoundState } from "../../../components/game-base/type";
 import { LanguageLocaleMapper } from "../../constants";
 import { tolgee } from "../../tolgee";
@@ -80,6 +81,7 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
             return {
                 ...state,
                 isConnect: false,
+                playResultAnimation: false,
             };
         }
 
