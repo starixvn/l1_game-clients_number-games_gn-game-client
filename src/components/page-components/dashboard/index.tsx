@@ -34,7 +34,7 @@ import { DashboardHandler } from "./handlers/dash-board-handler";
 import { NotificationHandler } from "./handlers/notification-handler";
 import { DashboardProps, DashboardState } from "./type";
 
-const SoundSettings = dynamic(() => import("../../../components/page-components/setting"));
+const SoundSettings = dynamic(() => import("../header/setting/settings-popup"));
 const Games = dynamic(() => import("../../../games/games"));
 const BaseDialog = dynamic(() => import("../../game-components/base-dialog"));
 const MusicPlayer = dynamic(() => import("../music-player"));
@@ -297,7 +297,6 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
                         style={this.setDashBoardStyle(isRenderGames)}
                     >
                         <Header />
-
                         <SoundSettings />
 
                         {isNoGameOffer ? <></> : renderOfferGameContainer()}

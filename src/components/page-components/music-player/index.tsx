@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useState } from "react";
 import { isMobile } from "react-device-detect";
 import useSound from "use-sound";
+import { formatVolume } from "../../../_shared/helpers";
 import { useSettingContext } from "../../../_shared/react-contexts";
 import { getRandomSong } from "../../../_shared/react-hooks";
 
@@ -14,6 +15,7 @@ const BGMPlayer = ({ isUserGesture }) => {
             setSong(getRandomSong(song));
         },
     });
+
     useEffect(() => {
         if (!sound) {
             return;
@@ -22,55 +24,108 @@ const BGMPlayer = ({ isUserGesture }) => {
         const audioContext: AudioContext = global.Howler.ctx;
 
         if (isUserGesture) {
-            if (audioContext.state !== "running") {
-                setTimeout(() => {
+            if (settingContext.enabledMusic) {
+                if (audioContext.state !== "running") {
                     audioContext
                         .resume()
                         .then(() => {
-                            settingContext.enabledMusic && play();
+                            settingContext.volumeMusic && play();
                         })
                         .catch(() => {
-                            settingContext.enabledMusic && play();
+                            settingContext.volumeMusic && play();
                         });
-                }, 100);
-            } else {
-                settingContext.enabledMusic && play();
+                } else {
+                    play();
+                }
             }
         } else {
-            audioContext
-                .suspend()
-                .then(() => {
-                    pause();
-                })
-                .catch(() => {
-                    pause();
-                });
+            audioContext.state !== "suspended" &&
+                audioContext
+                    .suspend()
+                    .then(() => {
+                        pause();
+                    })
+                    .catch(() => {
+                        pause();
+                    });
         }
     }, [isUserGesture]);
 
     useEffect(() => {
-        settingContext.enabledMusic && play();
-
+        settingContext.enabledMusic && settingContext.volumeMusic && play();
+        sound?.volume(formatVolume(settingContext.volumeMusic));
         return () => {
             stop();
         };
     }, [play]);
 
     useEffect(() => {
-        if (settingContext.enabledMusic) {
-            play();
-        } else {
-            stop();
-            setSong(getRandomSong(song));
+        if (sound) {
+            const audioContext: AudioContext = global.Howler.ctx;
+            if (settingContext.enabledMusic) {
+                if (audioContext.state !== "running") {
+                    audioContext
+                        .resume()
+                        .then(() => {
+                            play();
+                        })
+                        .catch(() => {
+                            play();
+                        });
+                } else {
+                    play();
+                }
+            } else {
+                audioContext.state !== "suspended" &&
+                    audioContext
+                        .suspend()
+                        .then(() => {
+                            pause();
+                        })
+                        .catch(() => {
+                            pause();
+                        });
+            }
         }
     }, [settingContext.enabledMusic]);
+
+    useEffect(() => {
+        if (sound) {
+            const audioContext: AudioContext = global.Howler.ctx;
+
+            if (settingContext.volumeMusic) {
+                audioContext.state !== "running" &&
+                    audioContext
+                        .resume()
+                        .then(() => {
+                            play();
+                        })
+                        .catch(() => {
+                            play();
+                        });
+            } else {
+                audioContext.state !== "suspended" &&
+                    audioContext
+                        .suspend()
+                        .then(() => {
+                            pause();
+                        })
+                        .catch(() => {
+                            pause();
+                        });
+            }
+            sound.volume(formatVolume(settingContext.volumeMusic));
+        }
+    }, [settingContext.volumeMusic]);
     return <></>;
 };
 
 const MusicPlayer = () => {
     const [isUserGesture, setIsUserGesture] = useState(null);
 
-    const onVisibilityChange = () => (document.visibilityState === "visible" ? setIsUserGesture(true) : setIsUserGesture(false));
+    const onVisibilityChange = () => {
+        setIsUserGesture(!document.hidden);
+    };
 
     useEffect(() => {
         handleUserGesture();
