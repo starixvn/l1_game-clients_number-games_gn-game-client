@@ -75,7 +75,13 @@ const MusicPlayer = () => {
 
     useEffect(() => {
         handleUserGesture();
+        document.addEventListener("visibilitychange", onVisibilityChange);
+        document.addEventListener("scroll", onVisibilityChange);
+
         return () => {
+            document.removeEventListener("visibilitychange", onVisibilityChange);
+            document.removeEventListener("scroll", onVisibilityChange);
+
             isMobile
                 ? document.removeEventListener("touchstart", onVisibilityChange)
                 : document.removeEventListener("click", onVisibilityChange);
@@ -100,11 +106,6 @@ const MusicPlayer = () => {
             }
         }
     };
-
-    useLayoutEffect(() => {
-        document.addEventListener("visibilitychange", onVisibilityChange);
-        return () => document.removeEventListener("visibilitychange", onVisibilityChange);
-    }, []);
 
     return isUserGesture !== null ? <BGMPlayer isUserGesture={isUserGesture} /> : <></>;
 };
