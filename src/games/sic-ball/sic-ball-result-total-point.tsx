@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, useEffect, useState } from "react";
 
 import { getGlossaryTranslate } from "../../_shared/helpers";
 import { useGameContext } from "../../_shared/react-contexts";
@@ -24,18 +24,19 @@ const SicBallResultTotalPoint: FC<{ roundState: RoundState; playResultAnimation:
     const showAllBallsDelayTime = 2500;
 
     useEffect(() => {
+        let timeout: NodeJS.Timeout;
         if (roundState === RoundState.DisplayResult) {
-            const timeout = setTimeout(
+            timeout = setTimeout(
                 () => {
                     setShowTotal(true);
                 },
                 playResultAnimation ? showAllBallsDelayTime : 0
             );
-
-            return () => {
-                clearTimeout(timeout);
-            };
         }
+
+        return () => {
+            timeout && clearTimeout(timeout);
+        };
     }, [roundState, playResultAnimation]);
 
     if (!showTotal || totalPoint === 0) {
