@@ -1,4 +1,4 @@
-import { FC, memo, useEffect, useState } from "react";
+import { FC, memo, useEffect, useMemo, useState } from "react";
 
 import { GameStateContextModel } from "../../_shared/react-contexts/game-state-context/game-state-context-model";
 import useResult from "../../_shared/react-hooks/use-result";
@@ -21,7 +21,7 @@ const SicBallResultBlock: FC<SicBallResultBlockProps> = (props: SicBallResultBlo
 
     let zoomClass = "";
 
-    if (roundState === RoundState.DisplayResult && playResultAnimation) {
+    if (roundState === RoundState.DisplayResult) {
         zoomClass = `${Style["zoom-out-anim"]}`;
     }
 

@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 
 import { getBallColor } from "../../_shared/helpers";
 import { RoundState } from "../../components/game-base/type";
@@ -17,7 +17,7 @@ const SicBallResultBalls: FC<{ roundState: RoundState; playResultAnimation: bool
     return (
         <div className={Style["result-balls"]}>
             {results?.map((result, index) => {
-                const delayTime = playResultAnimation ? index * 800 : 0;
+                const delayTime = playResultAnimation ? 800 * index : 0;
 
                 return (
                     <BallRotation

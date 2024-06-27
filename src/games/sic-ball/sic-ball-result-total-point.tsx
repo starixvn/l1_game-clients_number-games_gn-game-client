@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 
 import { getGlossaryTranslate } from "../../_shared/helpers";
 import { useGameContext } from "../../_shared/react-contexts";
@@ -36,9 +36,9 @@ const SicBallResultTotalPoint: FC<{ roundState: RoundState; playResultAnimation:
                 clearTimeout(timeout);
             };
         }
-    }, [roundState]);
+    }, [roundState, playResultAnimation]);
 
-    if (!showTotal) {
+    if (!showTotal || totalPoint === 0) {
         return <></>;
     }
 
