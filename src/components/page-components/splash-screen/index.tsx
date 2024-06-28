@@ -7,7 +7,7 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import { AuthorizeResponse, SSOResponse } from "sc-user-service-client/dist/auth";
 import { getAppSettings } from "../../../_shared/app-settings";
-import { Themes, buildVersion, languageMapper } from "../../../_shared/constants";
+import { Themes, buildVersion, languageMapper, locales } from "../../../_shared/constants";
 import { AnalyticsHelper, StorageHelper, localStorageKeys, randomInteger } from "../../../_shared/helpers";
 import PreloadResources, {
     DURATION_HOLD_SPLASH_SCREEN,
@@ -76,7 +76,7 @@ const getSession = async (token: string) => {
 };
 
 const getLocaleFromSession = (session: SSOResponse, language: string) => {
-    return languageMapper[session?.language] || languageMapper[language] || "en";
+    return languageMapper[session?.language] || languageMapper[language] || locales.en;
 };
 
 const autoCreateNickname = async (session: SSOResponse, signOut: Function) => {
