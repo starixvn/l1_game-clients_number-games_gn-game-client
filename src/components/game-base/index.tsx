@@ -47,6 +47,7 @@ import { GameStateHandler, IGameStateHandler } from "./handlers/game-state-handl
 import { PFWrapper } from "./handlers/pf-wrapper/pf-wrapper";
 import { PlaceBetHandlerWrapper } from "./handlers/place-bet-wrapper/place-bet-handler-wrapper";
 import { GameBaseHandlers, GameBaseProps, RoundState } from "./type";
+import SideBetScoreboard from "../game-components/round-history/side-bet-scoreboard";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
     protected socket: Socket;
@@ -568,7 +569,11 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                         <div className={SwiperNoSwiping}> {this.renderSlidingChips()}</div>
                         <div>{this.renderStatistic()}</div>
                         <div className={SwiperNoSwiping}>
-                            {this.props.gameStateContextModel.isScoreboardTab ? this.renderScoreboards() : this.renderStatisticContent()}
+                            {this.props.gameStateContextModel.isScoreboardTab ? (
+                                this.renderScoreboards()
+                            ) : (
+                                <SideBetScoreboard>{this.renderStatisticContent()}</SideBetScoreboard>
+                            )}
                         </div>
                         <Footer />
                     </div>

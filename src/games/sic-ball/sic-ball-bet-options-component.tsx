@@ -20,8 +20,34 @@ const PlayerBetCount = dynamic(() => import("../../components/game-components/be
 const TotalBet = dynamic(() => import("../../components/game-components/bet-option/total-bet"));
 const SicBallWinningAnimation = dynamic(() => import("./sic-ball-winning-animation"));
 
+const getSubOptionsName = (choice: string) => {
+    const subOptionsNameMap: Record<string, string> = {
+        [SicBallBetOptions.SPECIFIC1]: SicBallBetOptions.SPECIFIC1,
+        [SicBallBetOptions.SPECIFIC2]: SicBallBetOptions.SPECIFIC1,
+        [SicBallBetOptions.SPECIFIC3]: SicBallBetOptions.SPECIFIC1,
+        [SicBallBetOptions.SPECIFIC4]: SicBallBetOptions.SPECIFIC4,
+        [SicBallBetOptions.SPECIFIC5]: SicBallBetOptions.SPECIFIC4,
+        [SicBallBetOptions.SPECIFIC6]: SicBallBetOptions.SPECIFIC4,
+    };
+
+    return subOptionsNameMap[choice] || "";
+};
+
+const getBallNumber = (choice: string): number => {
+    const sicBallBetOptions = {
+        specific1: 1,
+        specific2: 2,
+        specific3: 3,
+        specific4: 4,
+        specific5: 5,
+        specific6: 6,
+    };
+
+    return sicBallBetOptions[choice] || null;
+};
+
 const SicBallBetOptionsComponent = () => {
-    const { roundState, settlementResult, showResultInfo, roundHistory, turnCounter, gameConfigs } = useGameStateContext();
+    const { roundState, settlementResult, showResultInfo, roundHistory, turnCounter } = useGameStateContext();
     const { tolgeeNamespace } = useGameContext();
 
     const isShowDisabledLayer = roundState === RoundState.LockingBet;
@@ -106,55 +132,31 @@ const SicBallBetOptionsComponent = () => {
     };
 
     const renderHighlightWinningPrevResult = (choice: string) => {
-        let className = "";
-        switch (choice) {
-            case SicBallBetOptions.BIG:
-                className = `${Style["highlight-prev-result-big"]} fade-in`;
-                break;
-            case SicBallBetOptions.SMALL:
-                className = `${Style["highlight-prev-result-small"]} fade-in`;
-                break;
-            case SicBallBetOptions.SPECIFIC1:
-                className = `${Style["highlight-prev-result-specific1"]} fade-in`;
-                break;
-            case SicBallBetOptions.SPECIFIC2:
-                className = `${Style["highlight-prev-result-specific2"]} fade-in`;
-                break;
-            case SicBallBetOptions.SPECIFIC3:
-                className = `${Style["highlight-prev-result-specific3"]} fade-in`;
-                break;
-            case SicBallBetOptions.SPECIFIC4:
-                className = `${Style["highlight-prev-result-specific4"]} fade-in`;
-                break;
-            case SicBallBetOptions.SPECIFIC5:
-                className = `${Style["highlight-prev-result-specific5"]} fade-in`;
-                break;
-            case SicBallBetOptions.SPECIFIC6:
-                className = `${Style["highlight-prev-result-specific6"]} fade-in`;
-                break;
-            default:
-        }
-        return <div className={className}></div>;
+        const highlightClassNameMap: Record<string, string> = {
+            [SicBallBetOptions.BIG]: `${Style["highlight-prev-result-big"]} fade-in`,
+            [SicBallBetOptions.SMALL]: `${Style["highlight-prev-result-small"]} fade-in`,
+            [SicBallBetOptions.SPECIFIC1]: `${Style["highlight-prev-result-specific1"]} fade-in`,
+            [SicBallBetOptions.SPECIFIC2]: `${Style["highlight-prev-result-specific2"]} fade-in`,
+            [SicBallBetOptions.SPECIFIC3]: `${Style["highlight-prev-result-specific3"]} fade-in`,
+            [SicBallBetOptions.SPECIFIC4]: `${Style["highlight-prev-result-specific4"]} fade-in`,
+            [SicBallBetOptions.SPECIFIC5]: `${Style["highlight-prev-result-specific5"]} fade-in`,
+            [SicBallBetOptions.SPECIFIC6]: `${Style["highlight-prev-result-specific6"]} fade-in`,
+        };
+
+        return <div className={highlightClassNameMap[choice] || ""}></div>;
     };
 
     const renderHighlightWinningResult = (choice: string) => {
-        let resourceName = "";
-
-        switch (choice) {
-            case SicBallBetOptions.BIG:
-            case SicBallBetOptions.SMALL:
-                resourceName = SicBallBetOptions.SMALL;
-                break;
-
-            case SicBallBetOptions.SPECIFIC1:
-            case SicBallBetOptions.SPECIFIC2:
-            case SicBallBetOptions.SPECIFIC3:
-            case SicBallBetOptions.SPECIFIC4:
-            case SicBallBetOptions.SPECIFIC5:
-            case SicBallBetOptions.SPECIFIC6:
-                resourceName = SicBallBetOptions.SPECIFIC1;
-                break;
-        }
+        const resourceNameMap: Record<string, string> = {
+            [SicBallBetOptions.BIG]: SicBallBetOptions.SMALL,
+            [SicBallBetOptions.SMALL]: SicBallBetOptions.SMALL,
+            [SicBallBetOptions.SPECIFIC1]: SicBallBetOptions.SPECIFIC1,
+            [SicBallBetOptions.SPECIFIC2]: SicBallBetOptions.SPECIFIC1,
+            [SicBallBetOptions.SPECIFIC3]: SicBallBetOptions.SPECIFIC1,
+            [SicBallBetOptions.SPECIFIC4]: SicBallBetOptions.SPECIFIC1,
+            [SicBallBetOptions.SPECIFIC5]: SicBallBetOptions.SPECIFIC1,
+            [SicBallBetOptions.SPECIFIC6]: SicBallBetOptions.SPECIFIC1,
+        };
 
         return (
             <SicBallWinningAnimation
@@ -162,7 +164,7 @@ const SicBallBetOptionsComponent = () => {
                 roundState={roundState}
                 settlementResult={settlementResult}
                 choice={choice}
-                resourceName={resourceName}
+                resourceName={resourceNameMap[choice] || ""}
             />
         );
     };
@@ -202,39 +204,6 @@ const SicBallBetOptionsComponent = () => {
                 {isShowHighlightPrevResult({ betChoice: choice, roundState, roundHistory }) && renderHighlightWinningPrevResult(choice)}
             </div>
         );
-    };
-
-    const getSubOptionsName = (choice: string) => {
-        let backgroundName = "";
-
-        switch (choice) {
-            case SicBallBetOptions.SPECIFIC1:
-            case SicBallBetOptions.SPECIFIC2:
-            case SicBallBetOptions.SPECIFIC3:
-                backgroundName = SicBallBetOptions.SPECIFIC1;
-                break;
-
-            case SicBallBetOptions.SPECIFIC4:
-            case SicBallBetOptions.SPECIFIC5:
-            case SicBallBetOptions.SPECIFIC6:
-                backgroundName = SicBallBetOptions.SPECIFIC4;
-                break;
-        }
-
-        return backgroundName;
-    };
-
-    const getBallNumber = (choice: string): number => {
-        const sicBallBetOptions = {
-            specific1: 1,
-            specific2: 2,
-            specific3: 3,
-            specific4: 4,
-            specific5: 5,
-            specific6: 6,
-        };
-
-        return sicBallBetOptions[choice] || null;
     };
 
     const renderSubOptions = (choice: string) => {

@@ -24,4 +24,5 @@ export type BeadBoardIconProps = {
 
 export type SideBetScoreboardProps = {
     roundHistory: Round<any, any>[];
+    getDotDetails: Function;
 };

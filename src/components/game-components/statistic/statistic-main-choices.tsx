@@ -1,6 +1,6 @@
 import { countSettlementResult, getPercentage } from ".";
 import { useGameContext } from "../../../_shared/react-contexts";
-import { useTranslator } from "../../../_shared/react-hooks";
+
 import BeadBoardIcon from "./beadboard-icon";
 import StatisticItem from "./statistic-item";
 import Styles from "./statistic.module.scss";
@@ -10,8 +10,6 @@ const StatisticMainChoices: React.FC<PercentageStatisticProps> = (props: Percent
     const { roundHistory, mainChoices } = props;
     const counted = countSettlementResult(roundHistory);
     const mainChoicesStatistic = getPercentage(mainChoices, counted, roundHistory.length);
-    const { tolgeeNamespace } = useGameContext();
-    const { t } = useTranslator([tolgeeNamespace]);
 
     return (
         <div className={Styles["other-wrapper"]}>

@@ -1,7 +1,5 @@
 import { useState } from "react";
 import { countResult } from ".";
-import { useGameContext } from "../../../_shared/react-contexts";
-import { useTranslator } from "../../../_shared/react-hooks";
 import { sicBallChoicesMapper } from "../../../games/sic-ball/types";
 import StatisticItem from "./statistic-item";
 import StatisticMainChoices from "./statistic-main-choices";
@@ -14,26 +12,32 @@ import { GameEventActionType } from "../../../_shared/react-contexts/game-state-
 export const RedAndBlueStatisticSubRoundCounter: React.FC<PercentageStatisticProps> = (props: PercentageStatisticProps) => {
     const { roundHistory, subChoices } = props;
     const countedSubChoices = countResult(roundHistory.slice(-30));
-    const { tolgeeNamespace } = useGameContext();
-    const { t } = useTranslator([tolgeeNamespace]);
     const dispatch = useGameStatesDispatch();
-    const [activeScoreboardTab, setActiveScoreboardTab] = useState(true);
+
+    const [selectedTab, setSelectedTab] = useState(true);
 
     const activeScoreboardTabFc = (isScoreboardTab: boolean) => {
-        setActiveScoreboardTab(isScoreboardTab);
         dispatch({
             type: GameEventActionType.ACTIVE_SCORE_BOARD_TAB,
             payload: { isScoreboardTab },
         });
     };
 
+    const handleTabClick = (isMainTab: boolean) => {
+        setSelectedTab(isMainTab);
+        activeScoreboardTabFc(isMainTab);
+    };
+
     return (
         <div className={`flex items-center gap-2 ${Styles["statistic-container"]} ${Styles["other"]}`} id="bar-statistic">
-            <div onClick={() => activeScoreboardTabFc(true)} className={Styles["statistic-choices"]}>
+            <div onClick={() => handleTabClick(true)} className={`${Styles["statistic-choices"]} ${selectedTab ? Styles["selected"] : ""}`}>
                 <StatisticMainChoices {...props} />
             </div>
 
-            <div className={`${Styles["statistic-choices"]} ${Styles["other-wrapper"]}`} onClick={() => activeScoreboardTabFc(false)}>
+            <div
+                className={`${Styles["statistic-choices"]} ${Styles["other-wrapper"]} ${!selectedTab ? Styles["selected"] : ""}`}
+                onClick={() => handleTabClick(false)}
+            >
                 {subChoices.map((choice) => (
                     <StatisticItem key={choice} value={`${countedSubChoices[sicBallChoicesMapper[choice]] ?? 0}`}>
                         <BeadBoardIcon choice={choice} />

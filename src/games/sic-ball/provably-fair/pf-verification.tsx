@@ -9,7 +9,7 @@ import { usePFContext, usePFDispatch } from "../../../_shared/react-contexts/gam
 import { PFEventActionType } from "../../../_shared/react-contexts/game-state-context/pf/pf-action";
 import { Markup } from "interweave";
 import { ResourceTypes } from "../../../_shared/resources";
-import PfSicBallHelper from "./pf-helper";
+import PfSicBallHelper from "./pf-sic-ball-helper";
 
 const PFVerification: FC = () => {
     const { pfVerifyModalData: pfResult } = usePFContext();
