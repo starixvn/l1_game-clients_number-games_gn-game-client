@@ -76,7 +76,7 @@ const getSession = async (token: string) => {
 };
 
 const getLocaleFromSession = (session: SSOResponse, language: string) => {
-    return languageMapper[session?.language] || languageMapper[language];
+    return languageMapper[session?.language] || languageMapper[language] || "en";
 };
 
 const autoCreateNickname = async (session: SSOResponse, signOut: Function) => {
