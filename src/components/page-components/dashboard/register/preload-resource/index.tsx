@@ -5,12 +5,13 @@ import PreloadResources, { getAndHandleBannerOffer, getAndHandleGameOfferIds } f
 import { getLobbyConfigs } from "../../../../../services/auth-service";
 
 const PreloadResourceRegister: React.FC<{
+    isDirectMode?: boolean;
     gameId: number;
     updateStatePreloadResource: Function;
     updateLobbyConfigs: Function;
     session: SSOResponse;
     authorizeResponse: AuthorizeResponse;
-}> = ({ gameId, updateStatePreloadResource, updateLobbyConfigs, session, authorizeResponse }) => {
+}> = ({ isDirectMode, gameId, updateStatePreloadResource, updateLobbyConfigs, session, authorizeResponse }) => {
     const [bannerId, setBannerId] = useState<number>(0);
     const [gameOfferIds, setGameOfferIds] = useState<number[]>([]);
 
@@ -28,7 +29,20 @@ const PreloadResourceRegister: React.FC<{
     }, []);
 
     return useMemo(() => {
-        return (
+        if (!isDirectMode && gameId > 0) {
+            return (
+                <PreloadResources
+                    gameId={gameId}
+                    setIsDonePreload={updateStatePreloadResource}
+                    enablePreload={getAppSettings()?.enablePreloadResource || true}
+                    bannerId={bannerId}
+                    gameIdsIcon={gameOfferIds}
+                    progressBarId="register-progress-bar"
+                />
+            );
+        }
+        
+        return isDirectMode ? (
             <PreloadResources
                 gameId={gameId}
                 setIsDonePreload={updateStatePreloadResource}
@@ -37,6 +51,8 @@ const PreloadResourceRegister: React.FC<{
                 gameIdsIcon={gameOfferIds}
                 progressBarId="register-progress-bar"
             />
+        ) : (
+            <></>
         );
     }, [gameId]);
 };

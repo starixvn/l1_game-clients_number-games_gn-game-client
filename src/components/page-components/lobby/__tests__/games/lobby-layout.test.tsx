@@ -11,7 +11,7 @@ jest.mock("../../../../../_shared/app-settings", () => ({
 jest.mock("../../../../../_shared/helpers", () => ({
     getLobbyGameIds: jest.fn().mockReturnValue([1001, 1002]),
     getOfferGamesIds: jest.fn().mockReturnValue([1000, 1001, 1002]),
-    getAvailableGameSetting: jest.fn().mockReturnValue([
+    getAvailableGameSettings: jest.fn().mockReturnValue([
         { id: 1001, gameName: "game1" },
         { id: 1002, gameName: "game2" },
     ]),

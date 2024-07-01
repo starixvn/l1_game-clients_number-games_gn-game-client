@@ -12,6 +12,7 @@ export type URLContextModel = {
     redirectUrl?: string;
     backToLobby?: boolean;
     backToRedirectUrl?: Function;
+    firstSSOToLobby?: boolean;
 };
 
 export function parseContextFromURL(): URLContextModel | undefined {
@@ -26,7 +27,7 @@ export function parseContextFromURL(): URLContextModel | undefined {
     const gameId = Number(params.get("gameId") || 0);
     const isDirectMode = !!params.get("ref");
     const redirectUrl = isDirectMode ? params.get("rurl") : "";
-    return { token, language, gameId, isDirectMode, redirectUrl };
+    return { token, language, gameId, isDirectMode, redirectUrl, firstSSOToLobby: true };
 }
 
 export function loadURLContext(): URLContextModel {
@@ -63,7 +64,8 @@ export const useURLContext = () => useContext(URLContext);
 export function updateURLContext(context: Partial<URLContextModel>) {
     const contextFromLocalStorage = StorageHelper.get<URLContextModel>(localStorageKeys.url) || {};
 
-    StorageHelper.set(localStorageKeys.url, { ...contextFromLocalStorage, ...context });
+    StorageHelper.set(localStorageKeys.latestGameId,  context.gameId );
+    StorageHelper.set(localStorageKeys.url, { ...contextFromLocalStorage, ...context, firstSSOToLobby: false });
 }
 
 export function getURLContext() {

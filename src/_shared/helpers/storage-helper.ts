@@ -127,7 +127,8 @@ export const localStorageKeys = {
     showPFSetting: buildLocalStorageKey("show-pf-setting"),
     isSleepMode: buildLocalStorageKey("is-sleep-mode"),
     volumeMusic: buildLocalStorageKey("volume-music"),
-    volumeSFX: buildLocalStorageKey("volume-SFX")
+    volumeSFX: buildLocalStorageKey("volume-SFX"),
+    latestGameId: buildLocalStorageKey("latest-game-id"),
 };
 
 export function buildLocalStorageKey(key: string) {

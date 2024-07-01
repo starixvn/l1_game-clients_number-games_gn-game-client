@@ -8966,10 +8966,10 @@ sc-scoreboards@1.0.6:
   resolved "http://npm.lumigame.com/sc-scoreboards/-/sc-scoreboards-1.0.6.tgz#16ca7911e023d8048c9d6dc759fded675184d264"
   integrity sha512-T7PmqNI03oK4RHm1y9xi59f79NAoSYOOYRfaCNfSJv6f6aPB9v8SG5xtG05fxLCwosyhhDrBtjvZW44EkTY40Q==
 
-sc-user-service-client@1.6.1-beta.7:
-  version "1.6.1-beta.7"
-  resolved "http://npm.lumigame.com/sc-user-service-client/-/sc-user-service-client-1.6.1-beta.7.tgz#a8692a6df5b09add8528e4c63bb1d63e6764a0c9"
-  integrity sha512-IU9TWfT+ouWYlqYzOJ/BNbwL8zs56vjJ1xIWdj6V+OZaGGagSbIM0msL/sN6RqqORj6IBl1ZuUo+5J9x2oRZsg==
+sc-user-service-client@1.6.3-beta.0:
+  version "1.6.3-beta.0"
+  resolved "http://npm.lumigame.com/sc-user-service-client/-/sc-user-service-client-1.6.3-beta.0.tgz#9393dfd54acffc3ac38ae123c37ea39a337506a2"
+  integrity sha512-JKVvUR0+cWiUrjO5t2f8oU8YTMtLt8wSziI84DvaACW0JyCQ5VvenB43kb2f/SGH9FUlLJ28U6Ax4/VeO8LLiA==
   dependencies:
     axios "^0.28.1"
 

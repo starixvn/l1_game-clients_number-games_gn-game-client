@@ -8,7 +8,16 @@ import Image from "next/image";
 import { AuthorizeResponse, SSOResponse } from "sc-user-service-client/dist/auth";
 import { getAppSettings } from "../../../_shared/app-settings";
 import { Themes, buildVersion, languageMapper, locales } from "../../../_shared/constants";
-import { AnalyticsHelper, StorageHelper, getAvailableGameSetting, localStorageKeys, randomInteger } from "../../../_shared/helpers";
+import {
+    AnalyticsHelper,
+    StorageHelper,
+    getAvailableGameSettings,
+    getEnabledAvailableGameSettings,
+    getLobbyGamesIds,
+    getServiceStatus,
+    localStorageKeys,
+    randomInteger,
+} from "../../../_shared/helpers";
 import PreloadResources, {
     DURATION_HOLD_SPLASH_SCREEN,
     getAndHandleGameOfferIds,
@@ -96,7 +105,9 @@ const autoCreateNickname = async (session: SSOResponse, signOut: Function) => {
 };
 
 const SplashScreen: React.FC = () => {
-    const { gameId, isDirectMode, token, language } = useContext(URLContext);
+    const { gameId, isDirectMode, token, language, firstSSOToLobby } = useContext(URLContext);
+    const latestGameId = StorageHelper.get<number>(localStorageKeys.latestGameId) || 0;
+
     const router = useRouter();
     const player = usePlayerContext();
     const { t } = useTranslator();
@@ -165,17 +176,41 @@ const SplashScreen: React.FC = () => {
                 setLobbyConfigs(lobby?.lobbyConfigs);
                 handleBannerOffer(authorizeInfo, lobby.lobbyConfigs, setBannerId);
                 getAndHandleGameOfferIds(authorizeInfo, lobby.lobbyConfigs, setGameOfferIds);
-            }
 
-            if (gameId === 0) {
-                let firstGameId = 0;
-                const availableGameSetting = getAvailableGameSetting(lobby?.lobbyConfigs, gameOfferIds);
-                if (availableGameSetting.length > 0) {
-                    firstGameId = availableGameSetting[0].id;
+                let toLoadGameId = gameId;
+                if (!isDirectMode) {
+                    toLoadGameId = latestGameId;
+
+                    const gameOfferIds = getLobbyGamesIds(lobby.lobbyConfigs, authorizeInfo);
+                    if (firstSSOToLobby && gameOfferIds.length > 0) {
+                        const availableGameSetting = getAvailableGameSettings(lobby.lobbyConfigs, gameOfferIds);
+                        const enabledGames = (authorizeInfo as AuthorizeResponse).user.enabledGames;
+                        const enabledAvailableGameSettings = getEnabledAvailableGameSettings(availableGameSetting, enabledGames);
+
+                        if (enabledAvailableGameSettings.length > 0) {
+                            let isFoundToLoadGame = false;
+
+                            if (toLoadGameId !== 0) {
+                                const gameSetting = enabledAvailableGameSettings.find((gameSetting) => gameSetting.id == toLoadGameId);
+                                const isServiceAvailable = await getServiceStatus(gameSetting);
+                                if (isServiceAvailable) {
+                                    isFoundToLoadGame = true;
+                                }
+                            }
+
+                            if (!isFoundToLoadGame) {
+                                for (const gameSetting of enabledAvailableGameSettings) {
+                                    const isServiceAvailable = await getServiceStatus(gameSetting);
+                                    if (isServiceAvailable) {
+                                        toLoadGameId = gameSetting.id;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
-                setCurrentGameId(firstGameId);
-            } else {
-                setCurrentGameId(gameId);
+                setCurrentGameId(toLoadGameId);
             }
 
             authorizeInfo && setAuthorizeResponse(authorizeInfo);
@@ -211,21 +246,11 @@ const SplashScreen: React.FC = () => {
     }
 
     if (isRenderDashboard) {
-        let toLoadGameId = 0;
-        if (gameId === 0) {
-            const availableGameSetting = getAvailableGameSetting(lobbyConfigs, gameOfferIds);
-            if (availableGameSetting.length > 0) {
-                toLoadGameId = availableGameSetting[0].id;
-            }
-        } else {
-            toLoadGameId = gameId;
-        }
-
         document.body.classList.add("galaxy-bg");
         return (
             <Dashboard
                 session={player?.session}
-                queryGame={toLoadGameId}
+                queryGame={currentGameId < 0 ? gameId : currentGameId}
                 setIsUm={setIsUm}
                 directMode={isDirectMode}
                 tolgee={tolgee}

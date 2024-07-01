@@ -2,12 +2,20 @@ import dynamic from "next/dynamic";
 import { FormEvent, PureComponent, ReactNode } from "react";
 import { AuthorizeResponse, SSOResponse } from "sc-user-service-client/dist/auth";
 
-import { LobbyGameId, Themes } from "../../../../_shared/constants";
-import { AnalyticsHelper, TrackingAction, TrackingFunction, getAvailableGameSetting, getOfferGamesIds } from "../../../../_shared/helpers";
+import { Themes } from "../../../../_shared/constants";
+import {
+    AnalyticsHelper,
+    TrackingAction,
+    TrackingFunction,
+    getAvailableGameSettings,
+    getEnabledAvailableGameSettings,
+    getLobbyGamesIds,
+    getServiceStatus,
+} from "../../../../_shared/helpers";
 import { GetLocalizedErrorMessage } from "../../../../_shared/helpers/notice-helper";
 import { randomInteger } from "../../../../_shared/helpers/number-helper";
 import { tolgee } from "../../../../_shared/tolgee";
-import { createNickname } from "../../../../services/auth-service";
+import { createNickname, getLobbyConfigs } from "../../../../services/auth-service";
 import BaseDialog from "../../../game-components/base-dialog";
 import { ModalType } from "../../../game-components/base-dialog/type";
 import FirstLoginContainer from "../../../page-components/dashboard/container";
@@ -41,6 +49,7 @@ export type RegisterState = {
     lobbyConfigs: ILobbyConfigs;
     isUm: boolean;
     isClickRegister: boolean;
+    toLoadGameId: number;
 };
 
 export class Register extends PureComponent<RegisterProps, RegisterState> {
@@ -56,12 +65,13 @@ export class Register extends PureComponent<RegisterProps, RegisterState> {
         lobbyConfigs: null,
         isUm: false,
         isClickRegister: false,
+        toLoadGameId: 0,
     };
 
     constructor(props: RegisterProps) {
         super(props);
 
-        this.state = Register.defaultState;
+        this.state = { ...Register.defaultState, toLoadGameId: props.gameId };
     }
 
     toggleAvatarGallery() {
@@ -119,6 +129,27 @@ export class Register extends PureComponent<RegisterProps, RegisterState> {
         if (this.isAuthorizeResponse(authorizeResponse)) {
             Object.assign(authorizeResponse.user, { settings: { theme: Themes.light } });
             this.setState({ authorizeResponse: authorizeResponse, isTriggerPreloadResources: true });
+
+            if (!this.props.isDirectMode) {
+                const lobby = await getLobbyConfigs(session);
+
+                const gameOfferIds = getLobbyGamesIds(lobby.lobbyConfigs, authorizeResponse);
+                if (gameOfferIds.length > 0) {
+                    const availableGameSetting = getAvailableGameSettings(lobby.lobbyConfigs, gameOfferIds);
+                    const enabledGames = authorizeResponse.user.enabledGames;
+                    const enabledAvailableGameSettings = getEnabledAvailableGameSettings(availableGameSetting, enabledGames);
+
+                    if (enabledAvailableGameSettings.length > 0) {
+                        for (const gameSetting of enabledAvailableGameSettings) {
+                            const isServiceAvailable = await getServiceStatus(gameSetting);
+                            if (isServiceAvailable) {
+                                this.setState({ toLoadGameId: gameSetting.id });
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
         } else {
             this.setState({
                 formValidity: t(GetLocalizedErrorMessage(authorizeResponse.errorCode)),
@@ -155,7 +186,7 @@ export class Register extends PureComponent<RegisterProps, RegisterState> {
             isUm,
             isClickRegister,
         } = this.state;
-        const { t, session, isDirectMode, gameId } = this.props;
+        const { t, session, isDirectMode } = this.props;
 
         document.body.classList.add("galaxy-bg", "register");
 
@@ -165,20 +196,11 @@ export class Register extends PureComponent<RegisterProps, RegisterState> {
 
         if (isDonePreloadResource) {
             document.body.classList.remove("register");
-            let toLoadGameId = 0;
-            if (gameId === 0) {
-                const availableGameSetting = getAvailableGameSetting(lobbyConfigs, getOfferGamesIds(authorizeResponse));
-                if (availableGameSetting.length > 0) {
-                    toLoadGameId = availableGameSetting[0].id;
-                }
-            } else {
-                toLoadGameId = gameId;
-            }
 
             return (
                 <Dashboard
                     session={session}
-                    queryGame={toLoadGameId}
+                    queryGame={this.state.toLoadGameId}
                     setIsUm={this.setIsUM.bind(this)}
                     directMode={isDirectMode}
                     tolgee={tolgee}
@@ -258,7 +280,8 @@ export class Register extends PureComponent<RegisterProps, RegisterState> {
 
                 {isTriggerPreloadResources && (
                     <PreloadResourceRegister
-                        gameId={LobbyGameId}
+                        isDirectMode={isDirectMode}
+                        gameId={this.state.toLoadGameId}
                         updateStatePreloadResource={this.updateStatePreloadResource.bind(this)}
                         updateLobbyConfigs={this.updateLobbyConfigs.bind(this)}
                         session={session}
