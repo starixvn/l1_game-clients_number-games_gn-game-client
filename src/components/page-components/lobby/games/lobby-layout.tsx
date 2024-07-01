@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { getAppSettings } from "../../../../_shared/app-settings";
-import { getAvailableGameSetting, getOfferGamesIds } from "../../../../_shared/helpers";
+import { getAvailableGameSettings, getOfferGamesIds } from "../../../../_shared/helpers";
 import { usePlayerContext } from "../../../../_shared/react-contexts";
 import { ILobbyConfigs } from "../../dashboard/type";
 import { LobbyGameTransmitter } from "../lobby-socket-connection";
@@ -18,7 +18,7 @@ export const LobbyLayout: React.FC<Props> = ({ lobbyConfigs, openGame, gameTrans
 
     const gamesSettings = useMemo(() => {
         const offerGamesIds = getOfferGamesIds(authorizeInfo);
-        return getAvailableGameSetting(lobbyConfigs, offerGamesIds);
+        return getAvailableGameSettings(lobbyConfigs, offerGamesIds);
     }, [lobbyConfigs, authorizeInfo]);
 
     const comingSoonGameSettings = useMemo(() => {
