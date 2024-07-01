@@ -14,7 +14,7 @@
         .board-icon {
             animation: double-bounce 2s ease-in-out infinite;
 
-            ::after {
+            &::after {
                 content: "";
                 position: absolute;
                 top: 0.1rem;
@@ -22,7 +22,8 @@
                 width: 2.3rem;
                 height: 2.3rem;
                 border-radius: 50%;
-                box-shadow: 0 0 0.7rem rgba($color: #fff, $alpha: 0.4);
+                box-shadow: 0 0 0.7rem #fff;
+                z-index: -1;
             }
         }
     }

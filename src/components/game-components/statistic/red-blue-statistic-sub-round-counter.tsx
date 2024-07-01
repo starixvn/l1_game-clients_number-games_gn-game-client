@@ -13,7 +13,6 @@ export const RedAndBlueStatisticSubRoundCounter: React.FC<PercentageStatisticPro
     const { roundHistory, subChoices } = props;
     const countedSubChoices = countResult(roundHistory.slice(-30));
     const dispatch = useGameStatesDispatch();
-
     const [selectedTab, setSelectedTab] = useState(true);
 
     const activeScoreboardTabFc = (isScoreboardTab: boolean) => {

@@ -1,6 +1,4 @@
 import { countSettlementResult, getPercentage } from ".";
-import { useGameContext } from "../../../_shared/react-contexts";
-
 import BeadBoardIcon from "./beadboard-icon";
 import StatisticItem from "./statistic-item";
 import Styles from "./statistic.module.scss";

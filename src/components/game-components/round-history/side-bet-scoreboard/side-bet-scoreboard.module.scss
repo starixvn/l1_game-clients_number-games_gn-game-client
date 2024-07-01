@@ -4,9 +4,9 @@
     --scrollbar-background: #172d41;
 
     position: relative;
-    width: 36.3rem;
+    width: 100%;
     margin: 0 auto;
-    padding: 0.2rem 0.5rem;
+    padding: 0.2rem;
     border-radius: 0.3rem;
     background-color: var(--scoreboard-background);
     border: 1px solid var(--scoreboard-border);
@@ -23,6 +23,12 @@
     &:hover,
     &:active,
     &:focus {
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding-right: 1px;
+    }
+
+    @media (max-width: 991.99px) {
         overflow-x: auto;
         overflow-y: hidden;
         padding-right: 1px;
