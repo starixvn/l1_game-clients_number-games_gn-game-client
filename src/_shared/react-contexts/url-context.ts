@@ -51,7 +51,7 @@ export const initialURLContextData = {
         if (!isEmpty(redirectUrl)) {
             globalThis.location.href = GameUtils.base64Decode(redirectUrl);
         } else {
-            updateURLContext({ backToLobby: true });
+            updateURLContext({ backToLobby: true, gameId: 0 });
             GlobalMessageTransmitter.broadcast({ [GlobalTransmitterEvent.BACK_TO_LOBBY]: {} });
         }
     },
