@@ -8,6 +8,7 @@ import SmallBall from "../../../components/game-components/small-ball";
 import { isShowHighlightPrevResult } from "../../../_shared/react-hooks/use-high-light";
 import Image from 'next/image';
 import { useTranslator } from "../../../_shared/react-hooks";
+import { useState } from "react";
 
 const BetChoice = dynamic(() => import("../../../components/game-components/bet-option/bet-choice"));
 const BetPercentage = dynamic(() => import("../../../components/game-components/bet-option/bet-percentage"));
@@ -50,27 +51,11 @@ export const SicBallBetInfo = ({ choice }) => {
         [SicBallBetOptions.SMALL]: "[3 - 10]",
     };
 
-    const betInfoClassName = Style["bet-info"];
-
     if (betInfoText.hasOwnProperty(choice)) {
-        return <div className={betInfoClassName}>{betInfoText[choice]}</div>;
+        return <div className={Style["bet-info"]}>{betInfoText[choice]}</div>;
     }
 
     return null;
-};
-
-
-export const SicBallOdds = ({ choice, className = "" }) => {
-    return (
-        <Odds
-            turnCounter={useGameStateContext()?.turnCounter}
-            choice={choice}
-            tolgeeNamespace={useGameContext()?.tolgeeNamespace}
-            animationDuration={6}
-            isFormatOddsAuto={true}
-            className={className}
-        />
-    );
 };
 
 export const SideBetOdds = ({ sideBetOdds }) => {
@@ -80,7 +65,14 @@ export const SideBetOdds = ({ sideBetOdds }) => {
     return (
         <div className={Style["odds-item"]}>
             <div>{t(`odds_${sideBetOdds}`)}</div>
-            <SicBallOdds choice={sideBetOdds} className={Style["odds-value"]} />
+            <Odds
+                turnCounter={useGameStateContext()?.turnCounter}
+                choice={sideBetOdds}
+                tolgeeNamespace={tolgeeNamespace}
+                animationDuration={6}
+                isFormatOddsAuto={true}
+                className={Style["odds-value"]}
+            />
         </div>
     );
 };
@@ -124,9 +116,11 @@ export const HighlightWinningResult = ({ choice }) => {
     );
 };
 
-export const SicBallMainOption = ({ choice, loadingComplete, setLoadingComplete }) => {
+export const SicBallMainOption = ({ choice }) => {
     const { roundState, roundHistory, turnCounter } = useGameStateContext();
     const { tolgeeNamespace } = useGameContext();
+    const [loadingComplete, setLoadingComplete] = useState(false);
+
     const isShowDisabledLayer = roundState === RoundState.LockingBet;
 
     const className = Style[`choice-${choice}`];
@@ -137,8 +131,8 @@ export const SicBallMainOption = ({ choice, loadingComplete, setLoadingComplete 
                 className={Style["bg-bet-option"]}
                 width={173}
                 height={104}
-                src={loadingComplete[choice] ? BetChoiceImagesData[choice]?.src : BetChoiceImagesData[choice]?.blur}
-                onLoad={() => setLoadingComplete((prevState) => ({ ...prevState, [choice]: true }))}
+                src={loadingComplete ? BetChoiceImagesData[choice]?.src : BetChoiceImagesData[choice]?.blur}
+                onLoad={() => setLoadingComplete(true)}
                 alt={choice}
                 priority={true}
             />
@@ -155,7 +149,7 @@ export const SicBallMainOption = ({ choice, loadingComplete, setLoadingComplete 
                 />
             </div>
             <div className={`${Style["choice-odds-area"]}`}>
-                <BetChoice choice={choice} className={Style[`bet-name-${choice}`]} tolgeeNamespace={tolgeeNamespace} />;
+                <BetChoice choice={choice} className={Style[`bet-name-${choice}`]} tolgeeNamespace={tolgeeNamespace} />
                 <SicBallBetInfo choice={choice} />
                 <Odds
                     turnCounter={turnCounter}
@@ -179,11 +173,13 @@ export const SicBallMainOption = ({ choice, loadingComplete, setLoadingComplete 
     );
 };
 
-export const SicBallSubOptions = ({ choice, loadingComplete, setLoadingComplete }) => {
-    const backgroundName = getSubOptionsName(choice);
+export const SicBallSubOptions = ({ choice }) => {
     const { roundState, roundHistory } = useGameStateContext();
     const { tolgeeNamespace } = useGameContext();
+    const [loadingComplete, setLoadingComplete] = useState(false);
+
     const isShowDisabledLayer = roundState === RoundState.LockingBet;
+    const backgroundName = getSubOptionsName(choice);
 
     return (
         <div className={`${Style[choice]} ${Style["bet-choice"]}`}>
@@ -191,8 +187,8 @@ export const SicBallSubOptions = ({ choice, loadingComplete, setLoadingComplete 
                 className={Style["bg-bet-option"]}
                 width={113}
                 height={60}
-                src={loadingComplete[choice] ? BetChoiceImagesData[backgroundName]?.src : BetChoiceImagesData[backgroundName]?.blur}
-                onLoad={() => setLoadingComplete((prevState) => ({ ...prevState, [choice]: true }))}
+                src={loadingComplete ? BetChoiceImagesData[backgroundName]?.src : BetChoiceImagesData[backgroundName]?.blur}
+                onLoad={() => setLoadingComplete(true)}
                 alt={choice}
                 priority={true}
             />
