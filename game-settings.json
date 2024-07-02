@@ -112,15 +112,15 @@
             "path": "seball1"
         },
         "durations": {
-            "wholeRound": 26,
-            "wholeTurn": 26,
-            "placingBets": 15,
+            "wholeRound": 31,
+            "wholeTurn": 31,
+            "placingBets": 20,
             "lockingBet": 3,
             "showResult": 7,
             "resultAnimation": 4,
             "beforePlaceBet": 4,
             "switchRoundAnimation": 0,
-            "startNewRoundAnim": 16
+            "startNewRoundAnim": 21
         },
         "totalTurns": 1,
         "numberOfRoundHistory": 100,
@@ -139,15 +139,15 @@
             "path": "luckythree"
         },
         "durations": {
-            "wholeRound": 67,
-            "wholeTurn": 21,
-            "placingBets": 15,
+            "wholeRound": 82,
+            "wholeTurn": 26,
+            "placingBets": 20,
             "lockingBet": 3,
             "showResult": 5,
             "resultAnimation": 4,
             "beforePlaceBet": 1,
             "switchRoundAnimation": 4,
-            "startNewRoundAnim": 58
+            "startNewRoundAnim": 73
         },
         "totalTurns": 3,
         "numberOfRoundHistory": 100,
