@@ -44,7 +44,7 @@ const SicBallResultTotalPoint: FC<{ roundState: RoundState; playResultAnimation:
     }
 
     return (
-        <div className={`${Style["total-point-container"]} ${playResultAnimation ? Style["has-anim"] : ""}`}>
+        <div className={`${Style["total-point-container"]} ${playResultAnimation ? Style["has-anim"] : Style["no-anim"]}`}>
             <div className={`${Style["total-point-bg-blur"]}`}></div>
             <span className={Style["total-point"]}>{result}</span>
         </div>

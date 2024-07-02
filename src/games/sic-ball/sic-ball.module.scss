@@ -112,6 +112,11 @@
         display: grid;
         grid-template-columns: 1fr;
         grid-template-rows: 4.2rem;
+        opacity: 0;
+
+        &.no-anim {
+            opacity: 1;
+        }
 
         &.has-anim {
             opacity: 0;
