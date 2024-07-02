@@ -2,7 +2,7 @@ import dynamic from "next/dynamic";
 import { FC } from "react";
 import Style from "./sic-ball.module.scss";
 import BettingBlock from "../../components/game-components/bet-option/betting-block";
-import SicBallBetOptionsComponent from "./sic-ball-bet-options-component";
+import SicBallBetOptionsComponent from "./sic-ball-bet-option/sic-ball-bet-options-component";
 
 const WinningResultEffect = dynamic(() => import("../../components/game-components/winning-result-effect"));
 

@@ -342,8 +342,9 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     updatePlaceBetContext = (newRoundState: RoundState) => {
-        if ([RoundState.SwitchRound, RoundState.BeforePlaceBet, RoundState.InRound].includes(newRoundState)) {
-            this.placeBetHandler.getPlaceBetDispatch()({
+        if ([RoundState.SwitchRound, RoundState.BeforePlaceBet, RoundState.InRound].includes(newRoundState)
+            && typeof this.placeBetHandler?.getPlaceBetDispatch() === 'function') {
+            this.placeBetHandler?.getPlaceBetDispatch()({
                 type: PlaceBetEventActionType.RESET_OWN_BETS_AND_SUGGEST_BET,
                 payload: {},
             });
@@ -351,8 +352,10 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             this.gameMessageHandler.broadcastGameEvent({ [messageEventType.SYNC_OWN_BETS_TO_PF]: {} });
         }
 
-        if (newRoundState === RoundState.LockingBet) {
-            this.placeBetHandler.getPlaceBetDispatch()({
+        if (newRoundState === RoundState.LockingBet
+            && typeof this.placeBetHandler?.getPlaceBetDispatch() === 'function'
+        ) {
+            this.placeBetHandler?.getPlaceBetDispatch()({
                 type: PlaceBetEventActionType.CLOSE_ALL_DIALOGS,
                 payload: {},
             });

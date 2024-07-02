@@ -10,7 +10,7 @@ export const getOfferGamesIds = (authorizeInfo: AuthorizeResponse): number[] => 
 };
 
 export const getLobbyGameIds = (lobbyConfigs: ILobbyConfigs): number[] => {
-    return lobbyConfigs.categories?.[0]?.gameSettings?.map((setting) => setting.gameId);
+    return lobbyConfigs?.categories?.[0]?.gameSettings?.map((setting) => setting.gameId);
 };
 
 export const getBannerIds = (lobbyConfigs: ILobbyConfigs) => {
