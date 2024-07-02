@@ -9,6 +9,7 @@ import Styles from "./disabled-modal.module.scss";
 const DisabledModal: React.FC<{ disableMessage: string }> = ({ disableMessage }) => {
     const { t } = useCommonTranslate();
     const { backToRedirectUrl, redirectUrl, isDirectMode } = useContext(URLContext);
+    const showOkButton = !isDirectMode || (isDirectMode && redirectUrl);
 
     return (
         <BaseDialog type={ModalType.Center} isOpen={true} enableBackdrop={true}>
@@ -27,7 +28,7 @@ const DisabledModal: React.FC<{ disableMessage: string }> = ({ disableMessage })
                 </div>
                 <div className={Styles.message}>{disableMessage || t({ key: "message_disabled_game" })}</div>
                 <div className={Styles["list-action"]}>
-                    {(!isDirectMode || (isDirectMode && redirectUrl)) && (
+                    {showOkButton && (
                         <button onClick={() => backToRedirectUrl(redirectUrl)} className={`btn-yellow ${Styles["ok"]}`}>
                             {t({ key: "ok" })}
                         </button>
