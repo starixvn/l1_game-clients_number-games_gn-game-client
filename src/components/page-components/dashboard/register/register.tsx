@@ -8,7 +8,7 @@ import {
     TrackingAction,
     TrackingFunction,
     getEnabledRenderGameSettings,
-    getServiceStatus,
+    getServiceStatusIsAvailable,
 } from "../../../../_shared/helpers";
 import { GetLocalizedErrorMessage } from "../../../../_shared/helpers/notice-helper";
 import { randomInteger } from "../../../../_shared/helpers/number-helper";
@@ -128,21 +128,7 @@ export class Register extends PureComponent<RegisterProps, RegisterState> {
             Object.assign(authorizeResponse.user, { settings: { theme: Themes.light } });
             this.setState({ authorizeResponse: authorizeResponse, isTriggerPreloadResources: true });
 
-            if (!this.props.isDirectMode) {
-                const lobby = await getLobbyConfigs(session);
-
-                const enabledRenderGameSettings = getEnabledRenderGameSettings(lobby.lobbyConfigs, authorizeResponse);
-
-                if (enabledRenderGameSettings.length > 0) {
-                    for (const gameSetting of enabledRenderGameSettings) {
-                        const isServiceAvailable = await getServiceStatus(gameSetting);
-                        if (isServiceAvailable) {
-                            this.setState({ toLoadGameId: gameSetting.id });
-                            break;
-                        }
-                    }
-                }
-            }
+            !this.props.isDirectMode && (await this.updateToLoadGameId(authorizeResponse));
         } else {
             this.setState({
                 formValidity: t(GetLocalizedErrorMessage(authorizeResponse.errorCode)),
@@ -152,6 +138,24 @@ export class Register extends PureComponent<RegisterProps, RegisterState> {
 
         AnalyticsHelper.trackFunction({ function: TrackingFunction.Avatar, action: TrackingAction.Create });
     }
+
+    updateToLoadGameId = async (authorizeResponse: AuthorizeResponse) => {
+        const { session } = this.props;
+
+        const lobby = await getLobbyConfigs(session);
+
+        const enabledRenderGameSettings = getEnabledRenderGameSettings(lobby.lobbyConfigs, authorizeResponse);
+
+        if (enabledRenderGameSettings.length > 0) {
+            for (const gameSetting of enabledRenderGameSettings) {
+                const isServiceAvailable = await getServiceStatusIsAvailable(gameSetting);
+                if (isServiceAvailable) {
+                    this.setState({ toLoadGameId: gameSetting.id });
+                    break;
+                }
+            }
+        }
+    };
 
     isAuthorizeResponse = (response): response is AuthorizeResponse => {
         return response?.authorized;
