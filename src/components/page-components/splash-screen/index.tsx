@@ -11,9 +11,7 @@ import { Themes, buildVersion, languageMapper, locales } from "../../../_shared/
 import {
     AnalyticsHelper,
     StorageHelper,
-    getAvailableGameSettings,
-    getEnabledAvailableGameSettings,
-    getLobbyGamesIds,
+    getEnabledRenderGameSettings,
     getServiceStatus,
     localStorageKeys,
     randomInteger,
@@ -181,17 +179,14 @@ const SplashScreen: React.FC = () => {
                 if (!isDirectMode) {
                     toLoadGameId = latestGameId;
 
-                    const gameOfferIds = getLobbyGamesIds(lobby.lobbyConfigs, authorizeInfo);
-                    if (firstSSOToLobby && gameOfferIds.length > 0) {
-                        const availableGameSetting = getAvailableGameSettings(lobby.lobbyConfigs, gameOfferIds);
-                        const enabledGames = (authorizeInfo as AuthorizeResponse).user.enabledGames;
-                        const enabledAvailableGameSettings = getEnabledAvailableGameSettings(availableGameSetting, enabledGames);
+                    if (firstSSOToLobby) {
+                        const enabledRenderGameSettings = getEnabledRenderGameSettings(lobby.lobbyConfigs, authorizeInfo);
 
-                        if (enabledAvailableGameSettings.length > 0) {
+                        if (enabledRenderGameSettings.length > 0) {
                             let isFoundToLoadGame = false;
 
                             if (toLoadGameId !== 0) {
-                                const gameSetting = enabledAvailableGameSettings.find((gameSetting) => gameSetting.id == toLoadGameId);
+                                const gameSetting = enabledRenderGameSettings.find((gameSetting) => gameSetting.id === toLoadGameId);
                                 const isServiceAvailable = await getServiceStatus(gameSetting);
                                 if (isServiceAvailable) {
                                     isFoundToLoadGame = true;
@@ -199,7 +194,7 @@ const SplashScreen: React.FC = () => {
                             }
 
                             if (!isFoundToLoadGame) {
-                                for (const gameSetting of enabledAvailableGameSettings) {
+                                for (const gameSetting of enabledRenderGameSettings) {
                                     const isServiceAvailable = await getServiceStatus(gameSetting);
                                     if (isServiceAvailable) {
                                         toLoadGameId = gameSetting.id;
