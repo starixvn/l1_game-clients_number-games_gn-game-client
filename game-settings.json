@@ -168,15 +168,15 @@
             "path": "sicball"
         },
         "durations": {
-            "wholeRound": 25,
-            "wholeTurn": 21,
-            "placingBets": 15,
+            "wholeRound": 30,
+            "wholeTurn": 26,
+            "placingBets": 20,
             "lockingBet": 3,
             "showResult": 6,
             "resultAnimation": 3,
             "beforePlaceBet": 4,
             "switchRoundAnimation": 0,
-            "startNewRoundAnim": 16
+            "startNewRoundAnim": 21
         },
         "totalTurns": 1,
         "numberOfRoundHistory": 100,
