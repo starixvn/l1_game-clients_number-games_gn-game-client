@@ -12,7 +12,7 @@ import {
     AnalyticsHelper,
     StorageHelper,
     getEnabledRenderGameSettings,
-    getServiceStatus,
+    getServiceStatusIsAvailable,
     localStorageKeys,
     randomInteger,
 } from "../../../_shared/helpers";
@@ -28,6 +28,7 @@ import { setSentryUser } from "../../../_shared/sentry";
 import { tolgee } from "../../../_shared/tolgee";
 import { authorize, createNickname, getLobbyConfigs, sso, verifySession } from "../../../services/auth-service";
 import { updateSignInSMStatus } from "../../../services/user-setting-service";
+import { GameSettings } from "../../game-base/type";
 import { MAX_AVATAR_ID } from "../dashboard/register/avatar-gallery";
 import NameGenerator from "../dashboard/register/name-generator";
 import { ILobbyConfigs } from "../dashboard/type";
@@ -177,33 +178,7 @@ const SplashScreen: React.FC = () => {
 
                 let toLoadGameId = gameId;
                 if (!isDirectMode) {
-                    toLoadGameId = latestGameId;
-
-                    if (firstSSOToLobby) {
-                        const enabledRenderGameSettings = getEnabledRenderGameSettings(lobby.lobbyConfigs, authorizeInfo);
-
-                        if (enabledRenderGameSettings.length > 0) {
-                            let isFoundToLoadGame = false;
-
-                            if (toLoadGameId !== 0) {
-                                const gameSetting = enabledRenderGameSettings.find((gameSetting) => gameSetting.id === toLoadGameId);
-                                const isServiceAvailable = await getServiceStatus(gameSetting);
-                                if (isServiceAvailable) {
-                                    isFoundToLoadGame = true;
-                                }
-                            }
-
-                            if (!isFoundToLoadGame) {
-                                for (const gameSetting of enabledRenderGameSettings) {
-                                    const isServiceAvailable = await getServiceStatus(gameSetting);
-                                    if (isServiceAvailable) {
-                                        toLoadGameId = gameSetting.id;
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    toLoadGameId = await getRedirectToGameId(lobby.lobbyConfigs, authorizeInfo);
                 }
                 setCurrentGameId(toLoadGameId);
             }
@@ -213,6 +188,37 @@ const SplashScreen: React.FC = () => {
 
         handleInitialization();
     }, []);
+
+    const getRedirectToGameId = async (lobbyConfigs: ILobbyConfigs, authorizeInfo: AuthorizeResponse) => {
+        let toLoadGameId = latestGameId;
+        if (firstSSOToLobby) {
+            const enabledRenderGameSettings = getEnabledRenderGameSettings(lobbyConfigs, authorizeInfo);
+
+            if (enabledRenderGameSettings.length > 0) {
+                let isFoundToLoadGame = await isFoundToLoadGameId(enabledRenderGameSettings,toLoadGameId);
+                if (!isFoundToLoadGame) {
+                    for (const gameSetting of enabledRenderGameSettings) {
+                        const isServiceAvailable = await getServiceStatusIsAvailable(gameSetting);
+                        if (isServiceAvailable) {
+                            toLoadGameId = gameSetting.id;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return toLoadGameId;
+    };
+
+    const isFoundToLoadGameId = async (enabledRenderGameSettings: GameSettings[], toLoadGameId: number) => {
+        let isFoundToLoadGameId = false;
+        const gameSetting = enabledRenderGameSettings.find((gameSetting) => gameSetting.id === toLoadGameId);
+        const isServiceAvailable = await getServiceStatusIsAvailable(gameSetting);
+        if (isServiceAvailable) {
+            isFoundToLoadGameId = true;
+        }
+        return isFoundToLoadGameId;
+    };
 
     useEffect(() => {
         if (router?.isReady && isDonePreloadResources && authorizeResponse) {

@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/nextjs";
 import { AuthorizeResponse } from "sc-user-service-client/dist/auth";
 import { GameSettings } from "../../components/game-base/type";
 import { IBanner, ILobbyConfigs } from "../../components/page-components/dashboard/type";
@@ -46,13 +47,15 @@ export const getEnabledRenderGameSettings = (lobbyConfigs: ILobbyConfigs, author
     return [];
 };
 
-export const getServiceStatus = async (gameSetting: GameSettings) => {
+export const getServiceStatusIsAvailable = async (gameSetting: GameSettings) => {
     let statusCode = 0;
     const serviceUrl = buildUrlWithPath(`/${gameSetting.socketInfo.namespace}/`);
     try {
         const response = await fetch(serviceUrl);
         statusCode = response.status;
-    } catch (error) {}
+    } catch (error) {
+        Sentry.captureException(new Error(`${gameSetting.gameName} service is unavailable`));
+    }
 
     return statusCode === 200;
 };
