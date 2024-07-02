@@ -49,6 +49,7 @@ const getBallNumber = (choice: string): number => {
 const SicBallBetOptionsComponent = () => {
     const { roundState, settlementResult, showResultInfo, roundHistory, turnCounter } = useGameStateContext();
     const { tolgeeNamespace } = useGameContext();
+    const { t } = useTranslator([tolgeeNamespace]);
 
     const isShowDisabledLayer = roundState === RoundState.LockingBet;
 
@@ -121,8 +122,6 @@ const SicBallBetOptionsComponent = () => {
     };
 
     const renderSideBetOdds = (sideBetOdds: string) => {
-        const { t } = useTranslator([tolgeeNamespace]);
-
         return (
             <div className={Style["odds-item"]}>
                 <div>{t(`odds_${sideBetOdds}`)}</div>
