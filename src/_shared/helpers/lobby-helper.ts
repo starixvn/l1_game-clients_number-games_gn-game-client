@@ -1,4 +1,4 @@
-import { AuthorizeResponse, EnabledGame } from "sc-user-service-client/dist/auth";
+import { AuthorizeResponse } from "sc-user-service-client/dist/auth";
 import { GameSettings } from "../../components/game-base/type";
 import { IBanner, ILobbyConfigs } from "../../components/page-components/dashboard/type";
 import { getAppSettings } from "../app-settings";
@@ -27,7 +27,7 @@ export const getLobbyGamesIds = (lobbyConfigs: ILobbyConfigs, authorizeInfo: Aut
     return getLobbyGameIds(lobbyConfigs)?.filter((gameId) => offerGamesIds.includes(gameId));
 };
 
-export const getAvailableGameSettings = (lobbyConfigs: ILobbyConfigs, offerGamesIds: number[]) => {
+export const getRenderGameSettings = (lobbyConfigs: ILobbyConfigs, offerGamesIds: number[]) => {
     if (lobbyConfigs && offerGamesIds) {
         const { gameSettings: allGamesSettings } = getAppSettings();
         const lobbyGameIds = getLobbyGameIds(lobbyConfigs)?.filter((gameId) => offerGamesIds.includes(gameId));
@@ -36,8 +36,15 @@ export const getAvailableGameSettings = (lobbyConfigs: ILobbyConfigs, offerGames
     return [];
 };
 
-export const getEnabledAvailableGameSettings = (availableGameSetting: GameSettings[], enabledGames: EnabledGame[]) =>
-    availableGameSetting.filter((gameSetting) => enabledGames.find((enableGame) => enableGame.gameId === gameSetting.id));
+export const getEnabledRenderGameSettings = (lobbyConfigs: ILobbyConfigs, authorizeInfo: AuthorizeResponse): GameSettings[] => {
+    const gameOfferIds = getLobbyGamesIds(lobbyConfigs, authorizeInfo);
+    if (gameOfferIds.length > 0) {
+        const renderGameSetting = getRenderGameSettings(lobbyConfigs, gameOfferIds);
+        const enabledGames = authorizeInfo.user.enabledGameIds;
+        return renderGameSetting.filter((gameSetting) => enabledGames.find((gameId) => gameId === gameSetting.id));
+    }
+    return [];
+};
 
 export const getServiceStatus = async (gameSetting: GameSettings) => {
     let statusCode = 0;

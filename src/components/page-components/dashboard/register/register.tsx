@@ -7,9 +7,7 @@ import {
     AnalyticsHelper,
     TrackingAction,
     TrackingFunction,
-    getAvailableGameSettings,
-    getEnabledAvailableGameSettings,
-    getLobbyGamesIds,
+    getEnabledRenderGameSettings,
     getServiceStatus,
 } from "../../../../_shared/helpers";
 import { GetLocalizedErrorMessage } from "../../../../_shared/helpers/notice-helper";
@@ -133,19 +131,14 @@ export class Register extends PureComponent<RegisterProps, RegisterState> {
             if (!this.props.isDirectMode) {
                 const lobby = await getLobbyConfigs(session);
 
-                const gameOfferIds = getLobbyGamesIds(lobby.lobbyConfigs, authorizeResponse);
-                if (gameOfferIds.length > 0) {
-                    const availableGameSetting = getAvailableGameSettings(lobby.lobbyConfigs, gameOfferIds);
-                    const enabledGames = authorizeResponse.user.enabledGames;
-                    const enabledAvailableGameSettings = getEnabledAvailableGameSettings(availableGameSetting, enabledGames);
+                const enabledRenderGameSettings = getEnabledRenderGameSettings(lobby.lobbyConfigs, authorizeResponse);
 
-                    if (enabledAvailableGameSettings.length > 0) {
-                        for (const gameSetting of enabledAvailableGameSettings) {
-                            const isServiceAvailable = await getServiceStatus(gameSetting);
-                            if (isServiceAvailable) {
-                                this.setState({ toLoadGameId: gameSetting.id });
-                                break;
-                            }
+                if (enabledRenderGameSettings.length > 0) {
+                    for (const gameSetting of enabledRenderGameSettings) {
+                        const isServiceAvailable = await getServiceStatus(gameSetting);
+                        if (isServiceAvailable) {
+                            this.setState({ toLoadGameId: gameSetting.id });
+                            break;
                         }
                     }
                 }
