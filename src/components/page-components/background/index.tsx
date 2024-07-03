@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { FC, memo } from "react";
+
 import { buildVersion, GameIds } from "../../../_shared/constants";
 import { useLowPerformanceDevice } from "../../../_shared/react-hooks";
 
@@ -16,7 +17,7 @@ const getGameName = (gameId) => {
     return null;
 };
 
-const GamesNotPlayStarsAnimation = [GameIds.LuckyThree];
+const GamesNotPlayStarsAnimation = [GameIds.LuckyThree, GameIds.SicBall];
 
 const StarField: FC<{ gameId: number }> = ({ gameId }) => {
     const isLowPerformanceDevice = useLowPerformanceDevice();
