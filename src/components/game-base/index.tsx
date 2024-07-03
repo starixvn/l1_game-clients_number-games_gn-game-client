@@ -475,11 +475,12 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     renderHeaderBlock() {
+        const { availableInGameData } = this.props.gameStateContextModel;
         return (
             <div className="game-header">
                 {this.renderRoundIdSection()}
                 <div id="countdown-timer" className="countdown-timer">
-                    <CountdownTimer GameStatusProp={this.renderGameStatus()} />
+                    {availableInGameData && <CountdownTimer GameStatusProp={this.renderGameStatus()} />}
                 </div>
                 <Settings />
             </div>
@@ -541,6 +542,8 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
     getRenderTemplate() {
         const uid = (this.context as PlayerContextModel).authorizeInfo?.user?.UID;
+        const { availableInGameData } = this.props.gameStateContextModel;
+
         return (
             <>
                 <BackgroundGalaxy gameId={this.props.id} />
@@ -553,7 +556,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                                 {this.renderBetHistoryModal()}
                             </PFWrapper>
                         </PFProvider>
-                        <div>{this.renderResultBlock()}</div>
+                        <div>{availableInGameData && this.renderResultBlock()}</div>
                         <PlaceBetProvider>
                             <PlaceBetHandlerWrapper handler={this.placeBetHandler} signOut={(this.context as PlayerContextModel)?.signOut}>
                                 {this.renderBettingBlock()}
