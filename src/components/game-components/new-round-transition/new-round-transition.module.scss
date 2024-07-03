@@ -7,23 +7,17 @@
     z-index: 1;
 
     --anim-part-1-duration: 0.6s;
-    --anim-delay: 3.4s;
     --anim-part-2-duration: 0.8s;
 
     --anim-light-duration: 3.2s;
     --anim-light-delay: 0.5s;
-    --anim-hide-light-duration: 0.3s;
-    --anim-hide-light-delay: 3.3s;
 
     &.extra-one-second {
         --anim-part-1-duration: 0.8s;
-        --anim-delay: 4.2s;
         --anim-part-2-duration: 1s;
 
         --anim-light-duration: 4s;
         --anim-light-delay: 0.7s;
-        --anim-hide-light-duration: 0.5s;
-        --anim-hide-light-delay: 3.9s;
     }
 
     .transition-layer {
@@ -48,16 +42,14 @@
         &:before {
             top: -3.1rem;
             background-size: cover;
-            animation: top-part-slide-down var(--anim-part-1-duration) forwards,
-                top-part-slide-up var(--anim-part-2-duration) var(--anim-delay) forwards;
+            animation: top-part-slide-down var(--anim-part-1-duration) forwards;
         }
 
         &:after {
             bottom: -3.4rem;
             background-size: cover;
             transform: scaleY(-1);
-            animation: bottom-part-slide-up var(--anim-part-1-duration) forwards,
-                bottom-part-slide-down var(--anim-part-2-duration) var(--anim-delay) forwards;
+            animation: bottom-part-slide-up var(--anim-part-1-duration) forwards;
         }
     }
 
@@ -69,8 +61,22 @@
         opacity: 0;
         z-index: 3;
         background: url("/static/images/new-round-transition-light.png?v=#{$version-image}") no-repeat;
-        animation: show-light var(--anim-light-duration) var(--anim-light-delay) forwards cubic-bezier(0.8, 0.33, 0.58, 1),
-            hide-light var(--anim-hide-light-duration) var(--anim-hide-light-delay) forwards;
+        animation: show-light var(--anim-light-duration) var(--anim-light-delay) cubic-bezier(0.8, 0.33, 0.58, 1) forwards;
+    }
+}
+
+.hide .transition-layer {
+    &:before {
+        animation: top-part-slide-up var(--anim-part-2-duration) forwards;
+    }
+
+    &:after {
+        animation: bottom-part-slide-down var(--anim-part-2-duration) forwards;
+    }
+
+    .light {
+        opacity: 0;
+        animation: none;
     }
 }
 
@@ -150,18 +156,6 @@
 
     100% {
         opacity: 1;
-        transform: scaleX(1.1);
-    }
-}
-
-@keyframes hide-light {
-    from {
-        opacity: 1;
-        transform: scaleX(1.1);
-    }
-
-    to {
-        opacity: 0;
         transform: scaleX(1.1);
     }
 }
