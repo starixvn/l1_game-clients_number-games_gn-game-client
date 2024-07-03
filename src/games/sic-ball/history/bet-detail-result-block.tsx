@@ -1,11 +1,12 @@
 import { FC } from "react";
+
 import { useGameContext } from "../../../_shared/react-contexts";
 import { useCommonTranslate, useTranslator } from "../../../_shared/react-hooks";
-import Styles from "./history.module.scss";
-import SmallBall from "../../../components/game-components/small-ball";
 import { DrawInfo, PFResult } from "../../../components/game-base/type";
+import SmallBall from "../../../components/game-components/small-ball";
 import { SicBallBetOptions, SicBallSideBetOdds } from "../sic-ball-constants";
 import { Odd, sicBallChoicesMapper } from "../types";
+import Styles from "./history.module.scss";
 
 export interface RoundInfoSeBall extends DrawInfo {
     drawId: number;
@@ -32,9 +33,7 @@ export interface RoundInfoSeBall extends DrawInfo {
     pfResult: PFResult;
 }
 
-
 export const mainChoices = [SicBallBetOptions.BIG, SicBallBetOptions.SMALL];
-
 
 export const BetDetailResultBlock: FC<{ roundInfo: RoundInfoSeBall }> = ({ roundInfo: drawInfo }) => {
     const { t: translateCommon } = useCommonTranslate();
@@ -56,7 +55,6 @@ export const BetDetailResultBlock: FC<{ roundInfo: RoundInfoSeBall }> = ({ round
         </div>
     );
 };
-
 
 const getSubChoiceOdd = (choice: string, odds: Odd, balls: any) => {
     const subChoiceCounterArray = {};
@@ -88,18 +86,16 @@ export const produceDataBetDetailRow = (item: any, drawInfo: RoundInfoSeBall) =>
     const isMainChoice = mainChoices.includes(item.choice);
     const isWin = drawInfo.settlementResult?.[item.choice];
 
-    const odd = isMainChoice ?
-        drawInfo.odds[item.choice] :
-        getSubChoiceOdd(item.choice, drawInfo.odds, drawInfo.result.balls);
-
+    const odd = isMainChoice ? drawInfo.odds[item.choice] : getSubChoiceOdd(item.choice, drawInfo.odds, drawInfo.result.balls);
 
     return {
         rawTime: item.time,
         amount: item.amount,
         choice: isMainChoice ? item.choice : sicBallChoicesMapper[item.choice],
-        odds: isWin ? odd : "-",
+        odds: odd,
         win: isWin ? item.amount * odd : 0,
         hightlight: isWin,
+        hideOdd: !isMainChoice && !isWin,
     };
 };
 
@@ -112,7 +108,9 @@ export const BetChoice: FC<{ choice: string }> = ({ choice }) => {
             {choice === SicBallBetOptions.BIG || choice === SicBallBetOptions.SMALL ? (
                 translateSeBall(`glossary_${choice}`)
             ) : (
-                <div className={Styles["bet-detail-ball"]}><SmallBall number={parseInt(choice)} /></div>
+                <div className={Styles["bet-detail-ball"]}>
+                    <SmallBall number={parseInt(choice)} />
+                </div>
             )}
         </span>
     );

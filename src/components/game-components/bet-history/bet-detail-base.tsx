@@ -1,13 +1,14 @@
 import { FC, ReactNode } from "react";
-import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
-import { useClickSound, useCommonTranslate } from "../../../_shared/react-hooks";
-import { usePlayerContext } from "../../../_shared/react-contexts";
+
 import { numberWithCommas, separateDateTime, sortedCollectionByTime } from "../../../_shared/helpers";
+import { usePlayerContext } from "../../../_shared/react-contexts";
+import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
+import { PFEventActionType } from "../../../_shared/react-contexts/game-state-context/pf/pf-action";
+import { usePFDispatch } from "../../../_shared/react-contexts/game-state-context/pf/pf-context";
+import { useClickSound, useCommonTranslate } from "../../../_shared/react-hooks";
 import { DrawInfo } from "../../game-base/type";
 import { InfiniteTable } from "../infinite-table";
 import Styles from "./bet-history.module.scss";
-import { PFEventActionType } from "../../../_shared/react-contexts/game-state-context/pf/pf-action";
-import { usePFDispatch } from "../../../_shared/react-contexts/game-state-context/pf/pf-context";
 
 const BetDetailBase: FC<{
     isTurnBase: boolean;
@@ -22,6 +23,7 @@ const BetDetailBase: FC<{
         odds: number;
         win: number;
         hightlight: boolean;
+        hideOdd?: boolean;
     };
     renderBetChoice?: (choice: any) => ReactNode;
 }> = ({ renderBetDetailResultBlock, produceDataBetDetailRow, renderBetChoice }) => {
@@ -63,8 +65,11 @@ const BetDetailBase: FC<{
     const preprocessedBetLogDetails = sortedCollectionByTime(betLogDetails);
 
     const body = preprocessedBetLogDetails.map((betLogDetail) => {
-        const { rawTime, amount, choice, odds, win, hightlight } = produceDataBetDetailRow(betLogDetail, drawInfo);
+        const { rawTime, amount, choice, odds, win, hightlight, hideOdd } = produceDataBetDetailRow(betLogDetail, drawInfo);
         const { date, time } = separateDateTime(rawTime);
+
+        const calcOdds = hideOdd ? "-" : numberWithCommas(fractionalOddsFormat ? odds - 1 : odds);
+
         return [
             {
                 node: (
@@ -75,11 +80,9 @@ const BetDetailBase: FC<{
                     </>
                 ),
             },
-            ...[renderBetChoice(choice), numberWithCommas(fractionalOddsFormat ? odds - 1 : odds), numberWithCommas(amount) ?? 0].map(
-                (item) => {
-                    return { node: <div className={hightlight ? "highlight" : ""}>{item}</div> };
-                }
-            ),
+            ...[renderBetChoice(choice), calcOdds, numberWithCommas(amount) ?? 0].map((item) => {
+                return { node: <div className={hightlight ? "highlight" : ""}>{item}</div> };
+            }),
             {
                 node: <div className={hightlight ? "highlight" : ""}>{numberWithCommas(win)}</div>,
             },
