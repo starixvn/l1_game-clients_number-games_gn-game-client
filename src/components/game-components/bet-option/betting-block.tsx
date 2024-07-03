@@ -15,7 +15,7 @@ const BettingBlock: FC<PropsWithChildren> = ({ children }: PropsWithChildren) =>
     });
     useEffect(() => {
         const resetState = (obj: any) => {
-            for (let key in obj) {
+            for (const key in obj) {
                 if (obj.hasOwnProperty(key)) {
                     obj[key] = 0;
                 }
