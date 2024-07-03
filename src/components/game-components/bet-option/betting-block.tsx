@@ -1,15 +1,38 @@
 import { FC, PropsWithChildren, useEffect, useState } from "react";
 import { GameBettingZoneContext, GameBettingZoneContextProps, useGameContext } from "../../../_shared/react-contexts";
 import { messageEventType } from "../../game-base/handlers";
+import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
+import { RoundState } from "../../game-base/type";
 
 const BettingBlock: FC<PropsWithChildren> = ({ children }: PropsWithChildren) => {
     const { gameMessageHandler } = useGameContext();
+    const { roundState } = useGameStateContext();
 
     const [bettingZoneState, setBettingZoneState] = useState<GameBettingZoneContextProps>({
         totalBets: {},
         betPercentage: {},
         playerBetCount: {},
     });
+    useEffect(() => {
+        const resetState = (obj: any) => {
+            for (let key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                    obj[key] = 0;
+                }
+            }
+        }
+
+        if ([RoundState.SwitchRound, RoundState.BeforePlaceBet].includes(roundState)) {
+            const initialTotalBets = resetState(bettingZoneState.totalBets);
+            setBettingZoneState((prevState) => ({ ...prevState, initialTotalBets }));
+
+            const initialBetPercentage = resetState(bettingZoneState.betPercentage);
+            setBettingZoneState((prevState) => ({ ...prevState, initialBetPercentage }));
+
+            const initialPlayerBetCount = resetState(bettingZoneState.playerBetCount);
+            setBettingZoneState((prevState) => ({ ...prevState, initialPlayerBetCount }));
+        }
+    }, [roundState]);
 
     useEffect(() => {
         const handleTotalBets = ({ totalBets }) => {
