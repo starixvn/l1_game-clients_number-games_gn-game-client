@@ -598,11 +598,11 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     render() {
-        const { signedIn, roundState, disabledMessage, disconnectReason } = this.props.gameStateContextModel;
+        const { signedIn, roundState, disabledMessage, disconnectReason, availableInGameData } = this.props.gameStateContextModel;
         return (
             <GameContainer>
-                {signedIn ? this.renderGame() : <GameLoading />}
-                {roundState === RoundState.None && <LoadingSpinner />}
+                {signedIn && availableInGameData ? this.renderGame() : <GameLoading />}
+                {(roundState === RoundState.None || !availableInGameData) && <LoadingSpinner />}
                 {this.renderDisableGamePopup(roundState, disabledMessage)}
                 {this.renderConnectFailed(roundState, disconnectReason)}
             </GameContainer>

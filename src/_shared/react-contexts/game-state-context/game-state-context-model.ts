@@ -36,6 +36,7 @@ export interface GameStateContextModel {
     };
     isPlayStartRoundAnimation?: boolean;
     isScoreboardTab?: boolean;
+    availableInGameData?: boolean
 }
 
 export const initialGameStateContextModel = () => {
@@ -78,5 +79,6 @@ export const initialGameStateContextModel = () => {
         isShowGameGuide: false,
         isPlayStartRoundAnimation: false,
         isScoreboardTab: true,
+        availableInGameData: false
     };
 };

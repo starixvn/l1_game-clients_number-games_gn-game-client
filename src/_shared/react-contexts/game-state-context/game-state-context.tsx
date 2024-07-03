@@ -63,7 +63,7 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
         isShowBetDetail,
         betDetailModalData,
         isPlayStartRoundAnimation,
-        isScoreboardTab,
+        isScoreboardTab
     } = payload;
 
     switch (type) {
@@ -81,7 +81,7 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
             return {
                 ...state,
                 isConnect: false,
-                playResultAnimation: false,
+                playResultAnimation: false
             };
         }
 
@@ -89,6 +89,7 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
             return {
                 ...state,
                 signedIn: true,
+                availableInGameData: false
             };
         }
 
@@ -113,6 +114,7 @@ function gameStateReducer(state: GameStateContextModel, action: GameEventAction)
             return {
                 ...state,
                 gameConfigs: gameConfigs,
+                availableInGameData: true
             };
         }
 
