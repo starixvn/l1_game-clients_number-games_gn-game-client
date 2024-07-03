@@ -157,7 +157,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
         this.placeBet = this.placeBet.bind(this);
         this.updateUserBalance = this.updateUserBalance.bind(this);
-        this.setActiveScoreboardTab = this.setActiveScoreboardTab.bind(this);
         this.renderHeaderBlock = this.renderHeaderBlock.bind(this);
 
         AnalyticsHelper.trackPage({ page_title: this.props.gameName });
@@ -460,13 +459,6 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         clearTimeout(this.disconnectTimeout);
     };
 
-    setActiveScoreboardTab = (activeScoreboardTab: number) => {
-        this.props.dispatch({
-            type: GameEventActionType.ACTIVE_SCORE_BOARD,
-            payload: { activeScoreboardTab },
-        });
-    };
-
     renderNotice() {
         return <NoticeDialog />;
     }
@@ -588,8 +580,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
     renderGame() {
         const gameActionsContext = {
-            placeBet: this.placeBet,
-            setActiveScoreboardTab: this.setActiveScoreboardTab,
+            placeBet: this.placeBet
         };
 
         return (

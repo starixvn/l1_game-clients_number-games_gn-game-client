@@ -2,7 +2,6 @@ import React, { useContext } from "react";
 
 type GameActionsContextType = {
     placeBet: (betChoice: string, amount: number) => void;
-    setActiveScoreboardTab: Function;
 };
 const GameActionsContext = React.createContext<Partial<GameActionsContextType>>({});
 GameActionsContext.displayName = "GameActionsContext";
