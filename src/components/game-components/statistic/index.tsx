@@ -1,9 +1,10 @@
 import React, { memo } from "react";
+import { useClickSound } from "../../../_shared/react-hooks";
 import { Round } from "../../game-base/type";
+import BeadBoardIcon from "./beadboard-icon";
 import StatisticItem from "./statistic-item";
 import Styles from "./statistic.module.scss";
 import { PercentageStatisticProps } from "./types";
-import BeadBoardIcon from "./beadboard-icon";
 
 export const countSettlementResult = (roundHistory: Round<any, any>[]) => {
     return roundHistory.reduce((result, { settlementResult }) => {
@@ -50,6 +51,7 @@ export const getPercentage = (keys: string[], countResult: object, total: number
 export const PercentageStatistic: React.FC<PercentageStatisticProps> = (props: PercentageStatisticProps) => {
     const { roundHistory, onSelectGroup, selectedGroup, mainChoices, choicesInGroups } = props;
     const counted = countSettlementResult(roundHistory);
+    const clickSound = useClickSound();
 
     if (choicesInGroups) {
         const groups = [];
@@ -71,7 +73,10 @@ export const PercentageStatistic: React.FC<PercentageStatisticProps> = (props: P
                     <div
                         key={index}
                         className={`${Styles["statistic-choices"]} ${index === selectedGroup ? Styles.selected : ""}`}
-                        onClick={() => onSelectGroup && onSelectGroup(index)}
+                        onClick={() => {
+                            clickSound();
+                            onSelectGroup && onSelectGroup(index);
+                        }}
                     >
                         {choices}
                     </div>

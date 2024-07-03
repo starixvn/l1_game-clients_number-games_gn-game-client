@@ -1,19 +1,21 @@
 import { useState } from "react";
 import { countResult } from ".";
+import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
+import { useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
+import { useClickSound } from "../../../_shared/react-hooks";
 import { sicBallChoicesMapper } from "../../../games/sic-ball/types";
+import BeadBoardIcon from "./beadboard-icon";
 import StatisticItem from "./statistic-item";
 import StatisticMainChoices from "./statistic-main-choices";
 import Styles from "./statistic.module.scss";
 import { PercentageStatisticProps } from "./types";
-import BeadBoardIcon from "./beadboard-icon";
-import { useGameStatesDispatch } from "../../../_shared/react-contexts/game-state-context/game-state-context";
-import { GameEventActionType } from "../../../_shared/react-contexts/game-state-context/game-event-action";
 
 export const RedAndBlueStatisticSubRoundCounter: React.FC<PercentageStatisticProps> = (props: PercentageStatisticProps) => {
     const { roundHistory, subChoices } = props;
     const countedSubChoices = countResult(roundHistory.slice(-30));
     const dispatch = useGameStatesDispatch();
     const [selectedTab, setSelectedTab] = useState(true);
+    const clickSound = useClickSound();
 
     const activeScoreboardTabFc = (isScoreboardTab: boolean) => {
         dispatch({
@@ -23,6 +25,7 @@ export const RedAndBlueStatisticSubRoundCounter: React.FC<PercentageStatisticPro
     };
 
     const handleTabClick = (isMainTab: boolean) => {
+        clickSound();
         setSelectedTab(isMainTab);
         activeScoreboardTabFc(isMainTab);
     };
