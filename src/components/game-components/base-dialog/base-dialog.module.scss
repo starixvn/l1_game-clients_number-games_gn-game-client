@@ -12,7 +12,8 @@
     z-index: var(--popup-index);
 
     &.modal-full {
-        top: 1.8rem;
+        position: fixed;
+        top: 1.6rem;
         bottom: 0;
         left: 0;
         right: 0;
@@ -24,7 +25,7 @@
             height: calc((1 / var(--zoom-game)) * 100vh);
         }
 
-        @media (min-aspect-ratio: 3/4) {
+        @media (min-aspect-ratio: 3/4) and (max-height: 800px) {
             height: calc((1 / var(--zoom-game)) * 100vh);
         }
 
