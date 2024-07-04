@@ -6,6 +6,7 @@ import { memo, useContext, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { AuthorizeResponse, SSOResponse } from "sc-user-service-client/dist/auth";
+import { LobbyConfigs } from "sc-user-service-client/dist/lobby";
 import { getAppSettings } from "../../../_shared/app-settings";
 import { Themes, buildVersion, languageMapper, locales } from "../../../_shared/constants";
 import {
@@ -172,15 +173,7 @@ const SplashScreen: React.FC = () => {
             const lobby = await getLobbyConfigs(session);
 
             if (lobby?.lobbyConfigs) {
-                setLobbyConfigs(lobby?.lobbyConfigs);
-                handleBannerOffer(authorizeInfo, lobby.lobbyConfigs, setBannerId);
-                getAndHandleGameOfferIds(authorizeInfo, lobby.lobbyConfigs, setGameOfferIds);
-
-                let toLoadGameId = gameId;
-                if (!isDirectMode) {
-                    toLoadGameId = await getRedirectToGameId(lobby.lobbyConfigs, authorizeInfo);
-                }
-                setCurrentGameId(toLoadGameId);
+                await handleLoadLobbyByConfig(lobby?.lobbyConfigs, authorizeInfo);
             }
 
             authorizeInfo && setAuthorizeResponse(authorizeInfo);
@@ -189,13 +182,25 @@ const SplashScreen: React.FC = () => {
         handleInitialization();
     }, []);
 
+    const handleLoadLobbyByConfig = async (lobbyConfigs: LobbyConfigs, authorizeInfo: AuthorizeResponse) => {
+        setLobbyConfigs(lobbyConfigs);
+        handleBannerOffer(authorizeInfo, lobbyConfigs, setBannerId);
+        getAndHandleGameOfferIds(authorizeInfo, lobbyConfigs, setGameOfferIds);
+
+        let toLoadGameId = gameId;
+        if (!isDirectMode) {
+            toLoadGameId = await getRedirectToGameId(lobbyConfigs, authorizeInfo);
+        }
+        setCurrentGameId(toLoadGameId);
+    };
+
     const getRedirectToGameId = async (lobbyConfigs: ILobbyConfigs, authorizeInfo: AuthorizeResponse) => {
         let toLoadGameId = latestGameId;
         if (firstSSOToLobby) {
             const enabledRenderGameSettings = getEnabledRenderGameSettings(lobbyConfigs, authorizeInfo);
 
             if (enabledRenderGameSettings.length > 0) {
-                let isFoundToLoadGame = await isFoundToLoadGameId(enabledRenderGameSettings,toLoadGameId);
+                const isFoundToLoadGame = await isFoundToLoadGameId(enabledRenderGameSettings, toLoadGameId);
                 if (!isFoundToLoadGame) {
                     for (const gameSetting of enabledRenderGameSettings) {
                         const isServiceAvailable = await getServiceStatusIsAvailable(gameSetting);
