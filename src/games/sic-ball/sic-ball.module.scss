@@ -75,7 +75,7 @@
     }
 
     .ball-rotation {
-        transform: scale(0.63);
+        transform: scale(0.632);
         position: relative;
         top: -0.9rem;
         left: 0.7rem;
@@ -89,8 +89,9 @@
 
         div:nth-child(2) {
             left: -2.1rem;
-            top: -1.2rem !important;
+            top: 0.2rem !important;
             transform: scale(0.64);
+            height: 0;
         }
 
         @keyframes fade-in {
