@@ -1953,6 +1953,13 @@
   resolved "http://npm.lumigame.com/@pkgjs/parseargs/-/parseargs-0.11.0.tgz#a77ea742fab25775145434eb1d2328cf5013ac33"
   integrity sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==
 
+"@playwright/test@^1.45.1":
+  version "1.45.1"
+  resolved "https://registry.yarnpkg.com/@playwright/test/-/test-1.45.1.tgz#819b90fa43d17000fce5ebd127043fd661938b7a"
+  integrity sha512-Wo1bWTzQvGA7LyKGIZc8nFSTFf2TkthGIFBR+QVNilvwouGzFd4PYukZe3rvf5PSqjHi1+1NyKSDZKcQWETzaA==
+  dependencies:
+    playwright "1.45.1"
+
 "@remix-run/router@1.15.3":
   version "1.15.3"
   resolved "http://npm.lumigame.com/@remix-run/router/-/router-1.15.3.tgz#d2509048d69dbb72d5389a14945339f1430b2d3c"
@@ -5398,6 +5405,11 @@ fs.realpath@^1.0.0:
   resolved "http://npm.lumigame.com/fs.realpath/-/fs.realpath-1.0.0.tgz#1504ad2523158caa40db4a2787cb01411994ea4f"
   integrity sha1-FQStJSMVjKpA20onh8sBQRmU6k8=
 
+fsevents@2.3.2:
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/fsevents/-/fsevents-2.3.2.tgz#8a526f78b8fdf4623b709e0b975c52c24c02fd1a"
+  integrity sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==
+
 fsevents@^2.1.2, fsevents@^2.3.2, fsevents@~2.3.2:
   version "2.3.3"
   resolved "http://npm.lumigame.com/fsevents/-/fsevents-2.3.3.tgz#cac6407785d03675a2a5e1a5305c697b347d90d6"
@@ -8359,6 +8371,20 @@ pkg-dir@^4.2.0:
   integrity sha512-HRDzbaKjC+AOWVXxAU/x54COGeIv9eb+6CkDSQoNTt4XyWoIJvuPsXizxu/Fr23EiekbtZwmh1IcIG/l/a10GQ==
   dependencies:
     find-up "^4.0.0"
+
+playwright-core@1.45.1:
+  version "1.45.1"
+  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.45.1.tgz#549a2701556b58245cc75263f9fc2795c1158dc1"
+  integrity sha512-LF4CUUtrUu2TCpDw4mcrAIuYrEjVDfT1cHbJMfwnE2+1b8PZcFzPNgvZCvq2JfQ4aTjRCCHw5EJ2tmr2NSzdPg==
+
+playwright@1.45.1:
+  version "1.45.1"
+  resolved "https://registry.yarnpkg.com/playwright/-/playwright-1.45.1.tgz#aaa6b0d6db14796b599d80c6679e63444e942534"
+  integrity sha512-Hjrgae4kpSQBr98nhCj3IScxVeVUixqj+5oyif8TdIn2opTCPEzqAqNMeK42i3cWDCVu9MI+ZsGWw+gVR4ISBg==
+  dependencies:
+    playwright-core "1.45.1"
+  optionalDependencies:
+    fsevents "2.3.2"
 
 posix-character-classes@^0.1.0:
   version "0.1.1"

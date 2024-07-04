@@ -18,7 +18,8 @@
         "test-coverage": "jest --coverage",
         "test:mutation": "stryker run",
         "reg": "npm set registry http://npm.lumigame.com",
-        "obfuscator-config-file": "node ./configs/config-obfuscator.js"
+        "obfuscator-config-file": "node ./configs/config-obfuscator.js",
+        "test:track-resources": "playwright test track-resources.spec.ts --project chromium"
     },
     "dependencies": {
         "@sentry/nextjs": "6.19.6",
@@ -55,6 +56,7 @@
         "@babel/preset-typescript": "^7.23.3",
         "@commitlint/cli": "^18.4.4",
         "@commitlint/config-conventional": "^18.4.4",
+        "@playwright/test": "^1.45.1",
         "@stryker-mutator/core": "^8.0.0",
         "@stryker-mutator/jest-runner": "^8.0.0",
         "@testing-library/jest-dom": "^6.3.0",
