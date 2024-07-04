@@ -189,18 +189,19 @@ const SplashScreen: React.FC = () => {
 
         let toLoadGameId = gameId;
         if (!isDirectMode) {
-            toLoadGameId = await getRedirectToGameId(lobbyConfigs, authorizeInfo);
+            toLoadGameId = await getSSORedirectToGameId(lobbyConfigs, authorizeInfo);
         }
         setCurrentGameId(toLoadGameId);
     };
 
-    const getRedirectToGameId = async (lobbyConfigs: ILobbyConfigs, authorizeInfo: AuthorizeResponse) => {
+    const getSSORedirectToGameId = async (lobbyConfigs: ILobbyConfigs, authorizeInfo: AuthorizeResponse) => {
         let toLoadGameId = latestGameId;
         if (firstSSOToLobby) {
             const enabledRenderGameSettings = getEnabledRenderGameSettings(lobbyConfigs, authorizeInfo);
-
             if (enabledRenderGameSettings.length > 0) {
-                const isFoundToLoadGame = await isFoundToLoadGameId(enabledRenderGameSettings, toLoadGameId);
+                let isFoundToLoadGame = false;
+                toLoadGameId !== 0 && (isFoundToLoadGame = await isFoundToLoadGameId(enabledRenderGameSettings, toLoadGameId));
+
                 if (!isFoundToLoadGame) {
                     for (const gameSetting of enabledRenderGameSettings) {
                         const isServiceAvailable = await getServiceStatusIsAvailable(gameSetting);
@@ -218,9 +219,11 @@ const SplashScreen: React.FC = () => {
     const isFoundToLoadGameId = async (enabledRenderGameSettings: GameSettings[], toLoadGameId: number) => {
         let isFoundToLoadGameId = false;
         const gameSetting = enabledRenderGameSettings.find((gameSetting) => gameSetting.id === toLoadGameId);
-        const isServiceAvailable = await getServiceStatusIsAvailable(gameSetting);
-        if (isServiceAvailable) {
-            isFoundToLoadGameId = true;
+        if (gameSetting) {
+            const isServiceAvailable = await getServiceStatusIsAvailable(gameSetting);
+            if (isServiceAvailable) {
+                isFoundToLoadGameId = true;
+            }
         }
         return isFoundToLoadGameId;
     };
