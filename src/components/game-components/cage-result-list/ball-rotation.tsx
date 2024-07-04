@@ -47,7 +47,7 @@ const BallRotation: React.FC<{
         return (
             <div key={uuidv4()} className={`${Styles[positionClass]} ${customClassName}`}>
                 <Spritesheet
-                    image={`/static/images/cage/ball-${color}-middle-light.webp?v=${buildVersion}`}
+                    image={`/static/images/anim/ball-middle/ball-${color}-middle-light.webp?v=${buildVersion}`}
                     widthFrame={153}
                     isResponsive
                     heightFrame={153}
