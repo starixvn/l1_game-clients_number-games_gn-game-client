@@ -27,27 +27,18 @@ import { LoadingSpinner } from "../game-components/game-loading/loading-spinner"
 import { NewRoundTransitionWithoutExtraSeconds } from "../game-components/new-round-transition";
 import { NoticeDialog } from "../game-components/notice";
 import { PFSettingModal } from "../game-components/provably-fair";
+import SideBetScoreboard from "../game-components/round-history/side-bet-scoreboard";
 import { Settings } from "../game-components/settings";
 import BackgroundGalaxy from "../page-components/background";
 import BetSettings from "../page-components/bet-settings";
 import { IRoundStateHandler } from "../round-base/round-state-handler";
 import { GameSoundHandler, IGameSoundHandler } from "../turn-base/game-sound-handler";
-import {
-    GameDisableHandler,
-    GameErrorHandler,
-    GameFinishHandler,
-    GameMessageHandler,
-    GameRoundHistoryHandler,
-    PlaceBetHandler,
-    PlayerHandler,
-    messageEventType,
-} from "./handlers";
+import { GameDisableHandler, GameErrorHandler, GameFinishHandler, GameMessageHandler, GameRoundHistoryHandler, messageEventType, PlaceBetHandler, PlayerHandler } from "./handlers";
 import { GameRoundDataHandler } from "./handlers/game-round-data-handler";
 import { GameStateHandler, IGameStateHandler } from "./handlers/game-state-handler";
 import { PFWrapper } from "./handlers/pf-wrapper/pf-wrapper";
 import { PlaceBetHandlerWrapper } from "./handlers/place-bet-wrapper/place-bet-handler-wrapper";
 import { GameBaseHandlers, GameBaseProps, RoundState } from "./type";
-import SideBetScoreboard from "../game-components/round-history/side-bet-scoreboard";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
     protected socket: Socket;
@@ -342,8 +333,10 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
     }
 
     updatePlaceBetContext = (newRoundState: RoundState) => {
-        if ([RoundState.SwitchRound, RoundState.BeforePlaceBet, RoundState.InRound].includes(newRoundState)
-            && typeof this.placeBetHandler?.getPlaceBetDispatch() === 'function') {
+        if (
+            [RoundState.SwitchRound, RoundState.BeforePlaceBet, RoundState.InRound].includes(newRoundState) &&
+            typeof this.placeBetHandler?.getPlaceBetDispatch() === "function"
+        ) {
             this.placeBetHandler?.getPlaceBetDispatch()({
                 type: PlaceBetEventActionType.RESET_OWN_BETS_AND_SUGGEST_BET,
                 payload: {},
@@ -352,9 +345,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
             this.gameMessageHandler.broadcastGameEvent({ [messageEventType.SYNC_OWN_BETS_TO_PF]: {} });
         }
 
-        if (newRoundState === RoundState.LockingBet
-            && typeof this.placeBetHandler?.getPlaceBetDispatch() === 'function'
-        ) {
+        if (newRoundState === RoundState.LockingBet && typeof this.placeBetHandler?.getPlaceBetDispatch() === "function") {
             this.placeBetHandler?.getPlaceBetDispatch()({
                 type: PlaceBetEventActionType.CLOSE_ALL_DIALOGS,
                 payload: {},
@@ -575,6 +566,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                         </div>
                         <Footer />
                     </div>
+                    {!availableInGameData && <div className="game-over-layer"></div>}
                     {this.renderGameGuideModal()}
                     {this.renderMenuButtons()}
                     {this.renderNewRoundTransition()}
@@ -586,7 +578,7 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
     renderGame() {
         const gameActionsContext = {
-            placeBet: this.placeBet
+            placeBet: this.placeBet,
         };
 
         return (
