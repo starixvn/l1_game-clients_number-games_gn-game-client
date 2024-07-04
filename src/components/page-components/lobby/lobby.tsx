@@ -36,7 +36,6 @@ export const Lobby: React.FC<Props> = ({ openGame, lobbyConfigs, gameTransmitter
             </div>
             <div>
                 <LobbyLayout lobbyConfigs={lobbyConfigs} openGame={openGame} gameTransmitters={gameTransmitters} />
-                <SoundSettings />
                 <ChangeAvatar />
             </div>
 
