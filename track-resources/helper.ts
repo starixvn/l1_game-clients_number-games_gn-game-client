@@ -20,12 +20,13 @@ export const trackDownloadResources = async (page: Page) => {
                     bigFiles.push(file);
                 }
                 totalDownloadSize += resourceSize;
+                console.log(`Current total download: ${convertToMb(totalDownloadSize)} MB`);
             }
         } catch (error) {
             console.log(`Error load file ${request.url()}`);
         }
     });
 };
-const convertToMb = (size: number) => {
-    return size / 1000 / 1000;
+export const convertToMb = (size: number) => {
+    return (size / 1000 / 1000).toFixed(4);
 };
