@@ -19,7 +19,8 @@
         "test:mutation": "stryker run",
         "reg": "npm set registry http://npm.lumigame.com",
         "obfuscator-config-file": "node ./configs/config-obfuscator.js",
-        "test:track-resources": "playwright test track-resources.spec.ts --project chromium"
+        "test:track-resources": "playwright test track-resources.spec.ts --project chromium",
+        "test:track-resources-game": "playwright test track-resources-game.spec.ts --project chromium"
     },
     "dependencies": {
         "@sentry/nextjs": "6.19.6",

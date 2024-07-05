@@ -2,18 +2,15 @@ import { Page, test } from "@playwright/test";
 import { convertToMb } from "./helper";
 test.setTimeout(2 * 60 * 1000);
 
-test("should navigate to the about page", async ({ page, context }) => {
+test("track download resource splash screen, lobby", async ({ page, context }) => {
     // Start from the index page (the baseURL is set via the webServer in the playwright.config.ts)
     await page.goto("https://gn-gamelobby-simulator.lumigame.com/signin?obCustId=1&appType=1");
 
     const loginLink = await page.locator('//*[@id="link-local"]/a').getAttribute("href");
     console.log(loginLink);
     await page.goto(loginLink);
+    console.log(`start loading splash screen`);
     const startTime = Date.now();
-    console.log(`start loading ${startTime}`);
-
-    const GetLobbyBackgroundAppear = async () => (await page.locator("/html/body").getAttribute("class")) === "galaxy-bg";
-    console.log("Track download resource");
 
     let bigFiles = [];
 
@@ -24,7 +21,7 @@ test("should navigate to the about page", async ({ page, context }) => {
         const bigSize = 1000;
         page.on("websocket", (ws) => {
             if (ws.url().includes("gateway/socket")) {
-                console.log(`Start load lobby ${Date.now() - startTime}`);
+                console.log(`Loading splash screen: ${Date.now() - startTime} ms`);
 
                 console.log(`connect to socket ${ws.url()}`);
                 console.log(`Total lobby download: ${convertToMb(totalDownloadSize)} MB`);
@@ -41,8 +38,9 @@ test("should navigate to the about page", async ({ page, context }) => {
                     const contentType = response.headers()["content-type"];
                     const notTolgee = !request.url().includes("tolgee");
                     const notRequestToUserService = !request.url().includes("/user/");
+                    const notRequestToSongFile = !request.url().includes("/sounds/bg-music/");
 
-                    if (resourceSize > bigSize && notTolgee && notRequestToUserService) {
+                    if (resourceSize > bigSize && notTolgee && notRequestToUserService && notRequestToSongFile) {
                         const file = ` ${convertToMb(resourceSize)} MB - ${request.url()} - File type: ${contentType}`;
                         bigFiles.push(file);
                         totalDownloadBigFileSize += resourceSize;
@@ -60,7 +58,7 @@ test("should navigate to the about page", async ({ page, context }) => {
 
     await trackDownloadResources(page);
 
-    await page.waitForTimeout(20 * 1000);
+    await page.waitForTimeout(10 * 1000);
 
     console.log(`Current total download: ${convertToMb(totalDownloadSize)} MB`);
     console.log(`Big size total: ${convertToMb(totalDownloadBigFileSize)} MB - ${bigFiles.length} files`);
