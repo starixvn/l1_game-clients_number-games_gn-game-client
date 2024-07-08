@@ -1,12 +1,14 @@
 import { Page, test } from "@playwright/test";
-import { configNetworkThrottling, convertToMb, Network } from "./helper";
+import { configNetworkThrottling, convertToMb, Network, NetworkType } from "./helper";
 test.setTimeout(2 * 60 * 1000);
 
 test("track download resource game", async ({ page, context }) => {
+    //TODO 1: config network
     const enableThrottlingNetwork = true;
+    let network = NetworkType.Wifi;
 
     if (enableThrottlingNetwork) {
-        configNetworkThrottling(page, Network.Regular4G);
+        configNetworkThrottling(page, Network[network]);
     }
 
     // Start from the index page (the baseURL is set via the webServer in the playwright.config.ts)
@@ -36,7 +38,11 @@ test("track download resource game", async ({ page, context }) => {
         },
     };
 
+    //TODO 2: SELECT game
     const game = games.luckyThree;
+
+    //TODO 3: SELECT LOCAL
+    const LOCAL = 3;
 
     const gameName = game.gameName;
     const wsName = game.wsName;
@@ -50,7 +56,12 @@ test("track download resource game", async ({ page, context }) => {
     await page.click("input#get-token");
     await page.waitForTimeout(2 * 1000);
 
-    const loginLink = await page.locator('//*[@id="link-local"]/a').getAttribute("href");
+    let loginLink = await page.locator('//*[@id="link-local"]/a').getAttribute("href");
+
+    if (LOCAL > 0) {
+        loginLink = loginLink.replace("https://gn-game.", `https://gn-game-${LOCAL}.`);
+    }
+
     console.log(loginLink);
     await page.goto(loginLink);
     console.log(`start loading splash screen`);
@@ -65,7 +76,7 @@ test("track download resource game", async ({ page, context }) => {
         const bigSize = 1000;
         page.on("websocket", (ws) => {
             if (ws.url().includes(wsName)) {
-                console.log(`Using Regular4G`);
+                console.log(`Using ${network}`);
                 console.log(`Start to load game ${gameName} after: ${Date.now() - startTime} ms`);
                 console.log(`connect to socket ${ws.url()}`);
                 console.log(`Total lobby download: ${convertToMb(totalDownloadSize)} MB`);

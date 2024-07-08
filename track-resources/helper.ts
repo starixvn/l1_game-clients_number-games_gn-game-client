@@ -1,5 +1,4 @@
 import { Page } from "@playwright/test";
-import { propertyOf } from "lodash";
 
 export const trackDownloadResources = async (page: Page) => {
     // const bigSize = 500_000;
@@ -38,6 +37,13 @@ export type NetworkThrottling = {
     latency: number;
 };
 
+export enum NetworkType {
+    Regular3G = "Regular3G",
+    Good3G = "Good3G",
+    Regular4G = "Regular4G",
+    Wifi = "Wifi",
+}
+
 export type Network = {
     Regular3G: NetworkThrottling;
     Good3G: NetworkThrottling;
@@ -69,7 +75,6 @@ export const Network: Network = {
 };
 
 export const configNetworkThrottling = async (page: Page, networkThrottling: NetworkThrottling) => {
-
     const client = await page.context().newCDPSession(page); // enable network emulation
     await client.send("Network.enable"); // change network conditions with specific params
     await client.send("Network.emulateNetworkConditions", {

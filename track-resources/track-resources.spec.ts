@@ -12,7 +12,14 @@ test("track download resource splash screen, lobby", async ({ page, context }) =
     // Start from the index page (the baseURL is set via the webServer in the playwright.config.ts)
     await page.goto("https://gn-gamelobby-simulator.lumigame.com/signin?obCustId=1&appType=1");
 
-    const loginLink = await page.locator('//*[@id="link-local"]/a').getAttribute("href");
+    const LOCAL = 3;
+
+    let loginLink = await page.locator('//*[@id="link-local"]/a').getAttribute("href");
+
+    if (LOCAL > 0) {
+        loginLink = loginLink.replace("https://gn-game.", `https://gn-game-${LOCAL}.`);
+    }
+
     console.log(loginLink);
     await page.goto(loginLink);
     const startTime = Date.now();
