@@ -1,12 +1,12 @@
 import { Page, test } from "@playwright/test";
-import { configNetworkThrottling, convertToMb } from "./helper";
+import { configNetworkThrottling, convertToMb, Network } from "./helper";
 test.setTimeout(2 * 60 * 1000);
 
 test("track download resource game", async ({ page, context }) => {
     const enableThrottlingNetwork = true;
 
     if (enableThrottlingNetwork) {
-        configNetworkThrottling(page);
+        configNetworkThrottling(page, Network.Regular4G);
     }
 
     // Start from the index page (the baseURL is set via the webServer in the playwright.config.ts)
@@ -36,7 +36,7 @@ test("track download resource game", async ({ page, context }) => {
         },
     };
 
-    const game = games.sicBall;
+    const game = games.luckyThree;
 
     const gameName = game.gameName;
     const wsName = game.wsName;
@@ -65,7 +65,8 @@ test("track download resource game", async ({ page, context }) => {
         const bigSize = 1000;
         page.on("websocket", (ws) => {
             if (ws.url().includes(wsName)) {
-                console.log(`Start to load game ${gameName} after : ${Date.now() - startTime} ms`);
+                console.log(`Using Regular4G`);
+                console.log(`Start to load game ${gameName} after: ${Date.now() - startTime} ms`);
                 console.log(`connect to socket ${ws.url()}`);
                 console.log(`Total lobby download: ${convertToMb(totalDownloadSize)} MB`);
                 console.log(`Big size before lobby total: ${convertToMb(totalDownloadBigFileSize)} MB - ${bigFiles.length} files`);
@@ -82,8 +83,9 @@ test("track download resource game", async ({ page, context }) => {
                     const notTolgee = !request.url().includes("tolgee");
                     const notRequestToUserService = !request.url().includes("/user/");
                     const notRequestToSongFile = !request.url().includes("/sounds/bg-music/");
+                    const notRequestToClickFile = !request.url().includes("click.mp3");
 
-                    if (resourceSize > bigSize && notTolgee && notRequestToUserService && notRequestToSongFile) {
+                    if (resourceSize > bigSize && notTolgee && notRequestToUserService && notRequestToSongFile && notRequestToClickFile) {
                         const file = ` ${convertToMb(resourceSize)} MB - ${request.url()} - File type: ${contentType}`;
                         bigFiles.push(file);
                         totalDownloadBigFileSize += resourceSize;
@@ -100,7 +102,7 @@ test("track download resource game", async ({ page, context }) => {
 
     await trackDownloadResources(page);
 
-    await page.waitForTimeout(35 * 1000);
+    await page.waitForTimeout(10 * 1000);
 
     console.log(`Current total download: ${convertToMb(totalDownloadSize)} MB`);
     console.log(`Big size total: ${convertToMb(totalDownloadBigFileSize)} MB - ${bigFiles.length} files`);

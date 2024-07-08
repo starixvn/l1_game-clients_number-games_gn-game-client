@@ -1,12 +1,12 @@
 import { Page, test } from "@playwright/test";
-import { configNetworkThrottling, convertToMb } from "./helper";
+import { configNetworkThrottling, convertToMb, Network } from "./helper";
 test.setTimeout(2 * 60 * 1000);
 
 test("track download resource splash screen, lobby", async ({ page, context }) => {
     const enableThrottlingNetwork = true;
 
     if (enableThrottlingNetwork) {
-        configNetworkThrottling(page);
+        configNetworkThrottling(page, Network.Wifi);
     }
 
     // Start from the index page (the baseURL is set via the webServer in the playwright.config.ts)
@@ -15,7 +15,6 @@ test("track download resource splash screen, lobby", async ({ page, context }) =
     const loginLink = await page.locator('//*[@id="link-local"]/a').getAttribute("href");
     console.log(loginLink);
     await page.goto(loginLink);
-    console.log(`start loading splash screen`);
     const startTime = Date.now();
 
     let bigFiles = [];
@@ -27,7 +26,7 @@ test("track download resource splash screen, lobby", async ({ page, context }) =
         const bigSize = 1000;
         page.on("websocket", (ws) => {
             if (ws.url().includes("gateway/socket")) {
-                console.log(`Loading splash screen: ${Date.now() - startTime} ms`);
+                console.log(`Loading splash screen Wifi: ${Date.now() - startTime} ms`);
 
                 console.log(`connect to socket ${ws.url()}`);
                 console.log(`Total lobby download: ${convertToMb(totalDownloadSize)} MB`);
