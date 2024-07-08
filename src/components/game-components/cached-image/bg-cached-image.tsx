@@ -26,7 +26,7 @@ export const BgCachedImage: React.FC<Props> = ({ pathImage, className, backgroun
         }
     }, [pathImage]);
 
-    return (
+    return source ? (
         <div
             className={className}
             style={{
@@ -34,5 +34,7 @@ export const BgCachedImage: React.FC<Props> = ({ pathImage, className, backgroun
                 ...props,
             }}
         ></div>
+    ) : (
+        <></>
     );
 };
