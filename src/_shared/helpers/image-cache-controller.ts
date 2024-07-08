@@ -2,20 +2,11 @@ import axios from "axios";
 
 export const imageCache = {};
 
-function _arrayBufferToBase64(buffer) {
-    var binary = "";
-    var bytes = new Uint8Array(buffer);
-    var len = bytes.byteLength;
-    for (var i = 0; i < len; i++) {
-        binary += String.fromCharCode(bytes[i]);
-    }
-    return `data:image/jpg;base64,${window.btoa(binary)}`;
-}
-
-const fetchImageBuffer = async (imageUrl: string) => {
+const fetchImageBase64 = async (imageUrl: string) => {
     try {
         const response = await axios.get(imageUrl, { responseType: "arraybuffer" });
-        return response.data;
+        const image = btoa(new Uint8Array(response.data).reduce((data, byte) => data + String.fromCharCode(byte), ""));
+        return `data:${response.headers["content-type"].toLowerCase()};base64,${image}`;
     } catch (error) {
         throw new Error("Error fetching image data: " + error);
     }
@@ -27,7 +18,7 @@ export const downloadAndCacheImage = async (path: string): Promise<{ path: strin
     if (imageCache[path]) {
         imageBase64 = imageCache[path];
     } else {
-        imageBase64 = _arrayBufferToBase64(await fetchImageBuffer(path));
+        imageBase64 = await fetchImageBase64(path);
         imageCache[path] = imageBase64;
     }
 

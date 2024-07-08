@@ -34,19 +34,17 @@ const PreloadResourceRegister: React.FC<{
                 <PreloadResources
                     gameId={gameId}
                     setIsDonePreload={updateStatePreloadResource}
-                    enablePreload={getAppSettings()?.enablePreloadResource || true}
                     bannerId={bannerId}
                     gameIdsIcon={gameOfferIds}
                     progressBarId="register-progress-bar"
                 />
             );
         }
-        
+
         return isDirectMode ? (
             <PreloadResources
                 gameId={gameId}
                 setIsDonePreload={updateStatePreloadResource}
-                enablePreload={getAppSettings()?.enablePreloadResource || true}
                 bannerId={bannerId}
                 gameIdsIcon={gameOfferIds}
                 progressBarId="register-progress-bar"

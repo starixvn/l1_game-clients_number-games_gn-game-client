@@ -6,9 +6,10 @@ import { useSNTranslate } from "../../../_shared/react-hooks/use-translator";
 import { messageEventType } from "../../game-base/handlers";
 import { RoundState } from "../../game-base/type";
 import styles from "./countdown-timer.module.scss";
+import { BgCachedImage } from "../cached-image/bg-cached-image";
+import { buildVersion } from "../../../_shared/constants";
 
 export type Rotation = "clockwise" | "counterclockwise";
-
 
 export const CountdownTimer = ({ SimpleTimerProp = SimpleTimer, GameStatusProp = GameStatusMap.TurnBaseStatus }) => {
     const { roundState } = useGameStateContext();
@@ -72,13 +73,20 @@ export const SimpleTimer = ({ clientRemainingTime }) => {
             setTimeLeft(clientRemainingTime);
         }
     }, [clientRemainingTime, timeLeft]);
+    const bgImage = roundState !== RoundState.InRound ? "blockbet" : "placebet";
 
     return timeLeft <= 0 ? (
         <></>
     ) : (
         <div className={styles.timer}>
             <div className={`${styles["countdown-timer"]} ${roundState !== RoundState.InRound ? styles["lock-bet"] : ""}`}>
-                <div className={styles["countdown-timer-background"]} />
+                <BgCachedImage
+                    pathImage={`/static/images/countdown-timer/countdown-${bgImage}.png?v=${buildVersion}`}
+                    className={styles["countdown-timer-background"]}
+                    backgroundSize="3.8rem 3.8rem"
+                    backgroundRepeat="no-repeat"
+                    backgroundPosition="center"
+                />
                 <span className={styles["countdown-timer-number"]}>{(timeLeft % 60).toString().padStart(2, "0")}</span>
             </div>
         </div>
@@ -102,17 +110,12 @@ export const TurnBaseStatus = ({ children }) => {
 };
 
 export const RoundBaseStatus = ({ children }) => {
-    return (
-        <div className={`${styles["game-status"]}`}>
-            {children}
-        </div>
-    );
+    return <div className={`${styles["game-status"]}`}>{children}</div>;
 };
 
 export const GameStatusMap = {
     TurnBaseStatus: TurnBaseStatus,
     RoundBaseStatus: RoundBaseStatus,
-}
-
+};
 
 export default CountdownTimer;

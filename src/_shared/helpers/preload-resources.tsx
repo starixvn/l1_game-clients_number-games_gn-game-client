@@ -1,14 +1,13 @@
 import axios from "axios";
-import Image from "next/image";
 import { useRouter } from "next/router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { AuthorizeResponse } from "sc-user-service-client/dist/auth";
 import { LobbyConfigs } from "sc-user-service-client/dist/lobby";
-import { v4 as uuidv4 } from "uuid";
 import { getGameIdOfferBanner } from "../../components/page-components/lobby/banners/banner";
 import { getLobbyGamesIds } from "./lobby-helper";
+import { getAppSettings } from "../app-settings";
+import { downloadAndCacheImage } from "./image-cache-controller";
 
-const MAX_DELAY_TIME = 5000;
 const DEFAULT_PROGRESS_BAR_ID = "progress-bar";
 export const DURATION_HOLD_SPLASH_SCREEN = 1000;
 
@@ -35,6 +34,8 @@ export const updateProgressBar = (percentage: number, progressBarId = DEFAULT_PR
     });
 };
 
+const memoriedImages = ["/chips/", "/countdown-timer/", "/lobby/"];
+
 const PreloadResources: React.FC<{
     setIsDonePreload: Function;
     gameId: number;
@@ -44,24 +45,19 @@ const PreloadResources: React.FC<{
     gameIdsIcon?: number[];
     cancelPreload?: boolean;
     durationDelayDonePreload?: number;
-    enablePreload: boolean;
     progressBarId?: string;
-}> = ({
-    setIsDonePreload,
-    gameId,
-    bannerId,
-    gameIdsIcon,
-    locale = "en",
-    cancelPreload,
-    durationDelayDonePreload = 0,
-    enablePreload = true,
-    progressBarId,
-}) => {
+}> = ({ setIsDonePreload, gameId, bannerId, gameIdsIcon, locale = "en", cancelPreload, durationDelayDonePreload = 0, progressBarId }) => {
+    const enablePreloadResource = getAppSettings().enablePreloadResource ?? true;
     const router = useRouter();
-    const [loadedImages, setLoadedImages] = useState<any>(new Set());
-    const [startTime, setStartTime] = useState(null);
-    const [images, setImages] = useState<string[]>([]);
-    let timeoutWithoutPreloadResource: NodeJS.Timeout;
+
+    const getImage = async (path: string, cb) => {
+        try {
+            await axios.get(path);
+        } catch (err) {
+            console.log(err);
+        }
+        cb && cb();
+    };
 
     const fetchImages = async () => {
         try {
@@ -71,103 +67,87 @@ const PreloadResources: React.FC<{
                 gameIdsIcon,
                 bannerId,
             });
+            const imagesPath = (response?.data as string[]) || [];
 
-            const imagesPath = response?.data || [];
-
-            setImages(imagesPath);
+            if (imagesPath.length > 0) {
+                let loadedImages = 0;
+                imagesPath.forEach((path) => {
+                    const callBack = () => {
+                        loadedImages++;
+                        updateProgressBar(loadedImages, imagesPath.length, progressBarId);
+                        checkFinish(loadedImages, imagesPath.length);
+                    };
+                    if (memoriedImages.some((pathFolder) => path.includes(pathFolder))) {
+                        downloadAndCacheImage(path)
+                            .then(callBack)
+                            .catch((error) => {
+                                console.error(error);
+                                callBack();
+                            });
+                    } else {
+                        getImage(path, callBack);
+                    }
+                });
+            } else {
+                setIsDonePreload();
+            }
         } catch (error) {
             console.log("Error fetching images:", error);
+            setIsDonePreload();
+        }
+    };
+
+    const updateProgressBar = (loaded: number, total: number, progressBarId = DEFAULT_PROGRESS_BAR_ID) => {
+        const percentage = (loaded / total) * 100;
+        const progressBars = document.querySelectorAll(`#${progressBarId}`);
+        progressBars.forEach((progressBar) => {
+            if (progressBar instanceof HTMLElement) {
+                progressBar.style.width = `${percentage}%`;
+            }
+        });
+    };
+
+    const checkFinish = (loaded: number, total: number) => {
+        if (loaded === total) {
+            setIsDonePreload && setIsDonePreload();
         }
     };
 
     useEffect(() => {
         if (router?.isReady) {
-            if (enablePreload && gameId >= 0) {
-                setStartTime(performance.now());
+            if (enablePreloadResource && gameId >= 0) {
                 fetchImages();
             }
         }
     }, [router?.isReady, gameId]);
 
-    const handleOnLoadingComplete = (index: number) => {
-        setLoadedImages((prevLoadedImages) => new Set([...prevLoadedImages, index]));
-    };
-
     useEffect(() => {
         let timeout: NodeJS.Timeout;
 
         if (cancelPreload) {
-            setLoadedImages(new Set());
-            setImages([]);
-            setIsDonePreload(false);
+            setIsDonePreload && setIsDonePreload();
             timeout && clearTimeout(timeout);
-        } else {
-            const percentage = (loadedImages.size / images.length) * 100;
-            updateProgressBar(percentage, progressBarId);
-
-            if (loadedImages?.size > 0 && loadedImages?.size === images.length) {
-                const endTime = performance.now();
-                const duration = endTime - startTime;
-                timeout && clearTimeout(timeout);
-                timeout = setTimeout(
-                    () => {
-                        setIsDonePreload?.(true);
-                    },
-                    duration < MAX_DELAY_TIME ? durationDelayDonePreload : 0
-                );
-            }
         }
 
         return () => {
             timeout && clearTimeout(timeout);
         };
-    }, [loadedImages, cancelPreload]);
+    }, [cancelPreload]);
 
     const handleStateWithoutPreloadResource = () => {
-        timeoutWithoutPreloadResource && clearTimeout(timeoutWithoutPreloadResource);
-        const endTime = performance.now();
-        const duration = endTime - startTime;
-        timeoutWithoutPreloadResource = setTimeout(
-            () => {
-                updateProgressBar(100, progressBarId);
-                setIsDonePreload?.(true);
-            },
-            duration < MAX_DELAY_TIME ? durationDelayDonePreload : 0
-        );
+        updateProgressBar(1, 1, progressBarId);
+        setIsDonePreload && setIsDonePreload();
     };
 
     return useMemo(() => {
-        if (!enablePreload || gameId < 0) {
+        if (!enablePreloadResource || gameId < 0) {
             handleStateWithoutPreloadResource();
 
             return <></>;
         }
 
-        return (
-            <div>
-                <div id="load-img" style={{ opacity: 0, position: "absolute" }}>
-                    {images.length > 0 &&
-                        images.map((image, index) => (
-                            <Image
-                                priority={true}
-                                key={uuidv4()}
-                                src={image}
-                                width={1}
-                                height={1}
-                                alt={"preload-img"}
-                                data-src={image}
-                                unoptimized={image.includes("gif") ? false : true}
-                                quality={100}
-                                onLoad={() => handleOnLoadingComplete(index)}
-                                onError={(e) => {
-                                    console.log("Error preload image", image);
-                                }}
-                            />
-                        ))}
-                </div>
-            </div>
-        );
-    }, [images.length > 0, enablePreload, gameId]);
+        return null;
+    }, [gameId]);
 };
 
 export default PreloadResources;

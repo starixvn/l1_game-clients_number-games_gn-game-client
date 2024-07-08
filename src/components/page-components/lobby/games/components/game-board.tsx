@@ -130,8 +130,7 @@ export const GameBoard: React.FC<Props> = ({ gameSettings, openGame, gameTransmi
             {clickGameId > 0 && (
                 <PreloadResources
                     gameId={clickGameId}
-                    setIsDonePreload={setIsDonePreloadResources}
-                    enablePreload={getAppSettings()?.enablePreloadResource || true}
+                    setIsDonePreload={() => setIsDonePreloadResources(true)}
                     cancelPreload={cancelPreloadResource}
                 />
             )}
