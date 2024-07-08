@@ -1,8 +1,14 @@
 import { Page, test } from "@playwright/test";
-import { convertToMb } from "./helper";
+import { configNetworkThrottling, convertToMb } from "./helper";
 test.setTimeout(2 * 60 * 1000);
 
 test("track download resource splash screen, lobby", async ({ page, context }) => {
+    const enableThrottlingNetwork = true;
+
+    if (enableThrottlingNetwork) {
+        configNetworkThrottling(page);
+    }
+
     // Start from the index page (the baseURL is set via the webServer in the playwright.config.ts)
     await page.goto("https://gn-gamelobby-simulator.lumigame.com/signin?obCustId=1&appType=1");
 

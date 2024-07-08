@@ -30,3 +30,37 @@ export const trackDownloadResources = async (page: Page) => {
 export const convertToMb = (size: number) => {
     return (size / 1000 / 1000).toFixed(4);
 };
+
+export const configNetworkThrottling = async (page: Page) => {
+    const client = await page.context().newCDPSession(page); // enable network emulation
+    let network = {
+        Regular3G: {
+            download: 750 * 1000,
+            upload: 250 * 1000,
+            latency: 100,
+        },
+        Good3G: {
+            download: 1000 * 1000,
+            upload: 750 * 1000,
+            latency: 40,
+        },
+        Regular4G: {
+            download: 4 * 1000 * 1000,
+            upload: 3 * 1000 * 1000,
+            latency: 20,
+        },
+        Wifi: {
+            download: 30 * 1000 * 1000,
+            upload: 15 * 1000 * 1000,
+            latency: 2,
+        },
+    };
+    const throttling = network.Wifi;
+    await client.send("Network.enable"); // change network conditions with specific params
+    await client.send("Network.emulateNetworkConditions", {
+        offline: false,
+        downloadThroughput: throttling.download,
+        uploadThroughput: throttling.upload,
+        latency: throttling.latency,
+    });
+};
