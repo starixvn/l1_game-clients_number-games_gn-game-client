@@ -1,7 +1,7 @@
 import { useTheme } from "next-themes";
 import dynamic from "next/dynamic";
 import React, { useContext, useEffect } from "react";
-import { isIOS, isMobileOnly } from "react-device-detect";
+import { isIOS, isMobileOnly, isSafari } from "react-device-detect";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { getAppSettings } from "../_shared/app-settings";
@@ -160,7 +160,7 @@ export const Games: React.FC<Props> = ({
         <div className={`game-container ${styles["game-wrapper"]} ${styles["open-chips"]}`}>
             <SystemContextProvider>
                 <div className={`${styles["game-list"]} ${isMobileOnly ? styles[isIOS ? "ios-device" : "android-device"] : ""}`}>
-                    {isDirectMode && <ToolbarGuide />}
+                    {isMobileOnly && isSafari && isDirectMode && <ToolbarGuide />}
                     {directMode ? getGameComponentById(openGameId) : renderSwiper(openGameId)}
                     {!isDirectMode && isMobileOnly && <SwitchGamesGuide />}
                 </div>
