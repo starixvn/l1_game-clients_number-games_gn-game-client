@@ -14,8 +14,10 @@ const SicBallStatisticSideBetDetail = (result: SicBallResult) => {
         itemValues = Object.values(result.balls);
     }
 
+    const isLastRound = roundHistory[0].drawId === result?.drawId;
+
     return (
-        <IconColumn key={uuidv4()} isLastColumn={roundHistory[0].drawId === result.drawId}>
+        <IconColumn key={uuidv4()} isLastColumn={isLastRound}>
             {itemValues.map((value: number) => {
                 return (
                     <div className={Styles["board-item"]} key={uuidv4()}>
