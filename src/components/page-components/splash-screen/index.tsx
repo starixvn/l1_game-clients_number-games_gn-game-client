@@ -6,7 +6,6 @@ import { memo, useContext, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { AuthorizeResponse, SSOResponse } from "sc-user-service-client/dist/auth";
-import { LobbyConfigs } from "sc-user-service-client/dist/lobby";
 import { getAppSettings } from "../../../_shared/app-settings";
 import { Themes, buildVersion, languageMapper, locales } from "../../../_shared/constants";
 import {
@@ -21,7 +20,6 @@ import PreloadResources, {
     DURATION_HOLD_SPLASH_SCREEN,
     getAndHandleGameOfferIds,
     getAndHandleBannerOffer as handleBannerOffer,
-    updateProgressBar,
 } from "../../../_shared/helpers/preload-resources";
 import { PlayerContextModel, URLContext, usePlayerContext } from "../../../_shared/react-contexts";
 import { useTranslator } from "../../../_shared/react-hooks";
@@ -84,10 +82,6 @@ const getSession = async (token: string) => {
     return token ? sso(token, getAppSettings().appType) : verifySession();
 };
 
-const getLocaleFromSession = (session: SSOResponse, language: string) => {
-    return languageMapper[session?.language] || languageMapper[language] || locales.en;
-};
-
 const autoCreateNickname = async (session: SSOResponse, signOut: Function) => {
     const nickname = NameGenerator.generateName();
     const maxAvatarId = MAX_AVATAR_ID;
@@ -113,8 +107,6 @@ const SplashScreen: React.FC = () => {
     const { t } = useTranslator();
 
     const [isUm, setIsUm] = useState(player?.session?.isUM);
-    const [isDonePreloadResources, setIsDonePreloadResources] = useState<boolean>(false);
-    const [isDoneLoadLogo, setIsDoneLoadLogo] = useState<boolean>(false);
     const [bannerId, setBannerId] = useState<number>(0);
     const [locale, setLocale] = useState<string>();
     const [currentSession, setCurrentSession] = useState<SSOResponse>();
@@ -124,6 +116,7 @@ const SplashScreen: React.FC = () => {
     const [lobbyConfigs, setLobbyConfigs] = useState<ILobbyConfigs>(null);
     const [isRenderRegister, setIsRenderRegister] = useState<boolean>(false);
     const [isRenderDashboard, setIsRenderDashboard] = useState<boolean>(false);
+    const [isDoneLoadConfig, setIsDoneLoadConfig] = useState<boolean>(false);
 
     const signOut = () => {
         router.push("timeout");
@@ -135,13 +128,28 @@ const SplashScreen: React.FC = () => {
         setIsUm(true);
     };
 
+    const loadLanguage = async (session: SSOResponse) => {
+        const lang = languageMapper[session?.language] || languageMapper[language] || locales.en;
+        await tolgee.changeLanguage(lang);
+        setLocale(lang);
+        return lang;
+    };
+
+    const loadLobbyConfigs = async (session: SSOResponse, authorizeInfo: any) => {
+        const lobby = await getLobbyConfigs(session);
+        if (lobby?.lobbyConfigs) {
+            setLobbyConfigs(lobby.lobbyConfigs);
+            handleBannerOffer(authorizeInfo, lobby.lobbyConfigs, setBannerId);
+            getAndHandleGameOfferIds(authorizeInfo, lobby.lobbyConfigs, setGameOfferIds);
+        }
+        return lobby?.lobbyConfigs;
+    };
+
     useEffect(() => {
         let authorizeInfo;
         const handleInitialization = async () => {
             const session = await getSession(token);
-            const lang = getLocaleFromSession(session, language);
-            await tolgee.changeLanguage(lang);
-            setLocale(lang);
+            const lang = await loadLanguage(session);
 
             if (!session || isTimeoutSession(session)) {
                 signOut();
@@ -170,31 +178,33 @@ const SplashScreen: React.FC = () => {
                 return;
             }
 
-            const lobby = await getLobbyConfigs(session);
+            const lobbyConfigs = await loadLobbyConfigs(session, authorizeInfo);
 
-            if (lobby?.lobbyConfigs) {
-                await handleLoadLobbyByConfig(lobby?.lobbyConfigs, authorizeInfo);
+            let toLoadGameId = gameId;
+            if (!isDirectMode) {
+                toLoadGameId = await getSSORedirectToGameId(lobbyConfigs, authorizeInfo);
             }
+            setCurrentGameId(toLoadGameId);
 
-            authorizeInfo && setAuthorizeResponse(authorizeInfo);
+            if (authorizeInfo) {
+                setAuthorizeResponse(authorizeInfo);
+
+                try {
+                    await customStartup(session, lang, router, player, authorizeInfo);
+                    setIsDoneLoadConfig(true);
+                } catch (error) {
+                    onStartupError(error);
+                }
+            }
         };
 
         handleInitialization();
     }, []);
 
-    const handleLoadLobbyByConfig = async (lobbyConfigs: LobbyConfigs, authorizeInfo: AuthorizeResponse) => {
-        setLobbyConfigs(lobbyConfigs);
-        handleBannerOffer(authorizeInfo, lobbyConfigs, setBannerId);
-        getAndHandleGameOfferIds(authorizeInfo, lobbyConfigs, setGameOfferIds);
-
-        let toLoadGameId = gameId;
-        if (!isDirectMode) {
-            toLoadGameId = await getSSORedirectToGameId(lobbyConfigs, authorizeInfo);
-        }
-        setCurrentGameId(toLoadGameId);
-    };
-
     const getSSORedirectToGameId = async (lobbyConfigs: ILobbyConfigs, authorizeInfo: AuthorizeResponse) => {
+        if (!lobbyConfigs || !authorizeInfo) {
+            return;
+        }
         let toLoadGameId = latestGameId;
         const enabledRenderGameSettings = getEnabledRenderGameSettings(lobbyConfigs, authorizeInfo);
         if (firstSSOToLobby && enabledRenderGameSettings.length > 0) {
@@ -226,28 +236,6 @@ const SplashScreen: React.FC = () => {
         return isFoundToLoadGameId;
     };
 
-    useEffect(() => {
-        if (router?.isReady && isDonePreloadResources && authorizeResponse) {
-            const handleStartup = async () => {
-                try {
-                    await customStartup(currentSession, locale, router, player, authorizeResponse);
-                    setIsRenderDashboard(true);
-                } catch (error) {
-                    onStartupError(error);
-                }
-            };
-
-            handleStartup();
-        }
-    }, [isDonePreloadResources, authorizeResponse]);
-
-    useEffect(() => {
-        if (player?.session?.isAuthenticated && !player?.session?.isUM) {
-            updateProgressBar(100);
-            setIsRenderDashboard(true);
-        }
-    }, [player?.session]);
-
     if (player?.session?.isUM || isUm) {
         return <UMPage />;
     }
@@ -261,7 +249,7 @@ const SplashScreen: React.FC = () => {
                 setIsUm={setIsUm}
                 directMode={isDirectMode}
                 tolgee={tolgee}
-                authorizeResponse={player?.authorizeInfo}
+                authorizeResponse={authorizeResponse}
                 lobbyConfigs={lobbyConfigs}
             />
         );
@@ -287,9 +275,6 @@ const SplashScreen: React.FC = () => {
                             width={logoProps.width}
                             height={logoProps.height}
                             alt="logo"
-                            onLoad={() => {
-                                setIsDoneLoadLogo(true);
-                            }}
                             priority={true}
                         />
                     </div>
@@ -305,15 +290,16 @@ const SplashScreen: React.FC = () => {
                 </div>
             </div>
 
-            {isDoneLoadLogo && !!locale && (
+            {isDoneLoadConfig && currentGameId >= 0 && (
                 <PreloadResources
                     bannerId={bannerId}
-                    setIsDonePreload={setIsDonePreloadResources}
+                    setIsDonePreload={() => {
+                        setIsRenderDashboard(true);
+                    }}
                     gameId={currentGameId}
                     isDirectMode={isDirectMode}
                     locale={locale}
                     gameIdsIcon={gameOfferIds}
-                    enablePreload={getAppSettings()?.enablePreloadResource || true}
                     durationDelayDonePreload={DURATION_HOLD_SPLASH_SCREEN}
                 />
             )}

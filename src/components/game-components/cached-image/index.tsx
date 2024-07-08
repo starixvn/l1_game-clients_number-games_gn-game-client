@@ -10,20 +10,23 @@ type Props = {
     height?: number;
     priority?: boolean;
     className?: string;
+    fill?: boolean;
 };
 
 export const CachedImage: React.FC<Props> = ({ src, blurSrc, alt, width, height, priority, className }) => {
     const [source, setSource] = useState(imageCache[src]);
-
+    const props = { width, height, priority, className };
+    Object.keys(props).forEach((key) => props[key] === undefined && delete props[key]);
     useEffect(() => {
         const loadImage = async () => {
             const result = await downloadAndCacheImage(src);
             setSource(result.imageBase64);
         };
-        if (!source) {
+        if (!imageCache[src]) {
             loadImage();
+        } else {
+            setSource(imageCache[src]);
         }
-    }, []);
-
-    return <Image className={className} src={source || blurSrc} width={width} height={height} alt={alt} priority={priority} />;
+    }, [src]);
+    return (source || blurSrc) && <Image className={className} src={source || blurSrc} alt={alt} {...props} />;
 };

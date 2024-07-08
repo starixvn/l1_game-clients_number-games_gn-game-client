@@ -50,8 +50,6 @@
         position: absolute;
         width: 3.8rem;
         height: 3.8rem;
-        background: url("/static/images/countdown-timer/countdown-placebet.png?v=#{$version-image}") no-repeat center center;
-        background-size: 3.8rem 3.8rem;
         animation: spin 2s infinite linear;
     }
 
@@ -61,11 +59,6 @@
         .countdown-timer-number {
             transform: scale(0);
             animation: scale 1s infinite cubic-bezier(0.18, 0.89, 0.32, 1.28);
-        }
-
-        .countdown-timer-background {
-            background: url("/static/images/countdown-timer/countdown-blockbet.png?v=#{$version-image}") no-repeat center center;
-            background-size: 3.8rem 3.8rem;
         }
     }
 }
