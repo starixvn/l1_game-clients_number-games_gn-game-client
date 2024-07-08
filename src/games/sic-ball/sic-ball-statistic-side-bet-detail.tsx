@@ -4,8 +4,10 @@ import { v4 as uuidv4 } from "uuid";
 import IconColumn from "../../components/game-components/round-history/icon-column";
 import Styles from "../../components/game-components/round-history/icon-column/board-column.module.scss";
 import { SicBallResult } from "./types";
+import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
 
 const SicBallStatisticSideBetDetail = (result: SicBallResult) => {
+    const { roundHistory } = useGameStateContext();
     let itemValues = [0, 0, 0];
 
     if (!!result && !!result.balls) {
@@ -13,7 +15,7 @@ const SicBallStatisticSideBetDetail = (result: SicBallResult) => {
     }
 
     return (
-        <IconColumn key={uuidv4()}>
+        <IconColumn key={uuidv4()} isLastColumn={roundHistory[0].drawId === result.drawId}>
             {itemValues.map((value: number) => {
                 return (
                     <div className={Styles["board-item"]} key={uuidv4()}>

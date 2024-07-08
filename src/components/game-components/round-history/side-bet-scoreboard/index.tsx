@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Styles from "./side-bet-scoreboard.module.scss";
+import { useGameStateContext } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
 
 type Props = {
     children: React.ReactNode;
@@ -7,7 +8,8 @@ type Props = {
 
 const SideBetScoreboard = (props: Props) => {
     const wrapperRef = useRef<HTMLDivElement>(null);
-    const [isScrollEndRight, setIsScrollEndRight] = useState(true);
+    const { roundHistory } = useGameStateContext();
+    const [isScrollEndRight, setIsScrollEndRight] = useState(roundHistory.length >= 11);
     let scrollLeftWidth = 0;
 
     const handleTouchEnd = (e) => {
