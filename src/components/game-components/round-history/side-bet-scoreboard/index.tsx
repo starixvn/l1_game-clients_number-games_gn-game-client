@@ -9,7 +9,7 @@ type Props = {
 const SideBetScoreboard = (props: Props) => {
     const wrapperRef = useRef<HTMLDivElement>(null);
     const { roundHistory } = useGameStateContext();
-    const [isScrollEndRight, setIsScrollEndRight] = useState(roundHistory.length >= 11);
+    const [isScrollEndRight, setIsScrollEndRight] = useState(false);
     let scrollLeftWidth = 0;
 
     const handleTouchEnd = (e) => {
@@ -62,6 +62,10 @@ const SideBetScoreboard = (props: Props) => {
             }
         };
     }, []);
+
+    useEffect(() => {
+        setIsScrollEndRight(roundHistory.length >= 11);
+    }, [roundHistory]);
 
     useEffect(() => {
         if (isScrollEndRight && wrapperRef?.current?.children[0]) {
