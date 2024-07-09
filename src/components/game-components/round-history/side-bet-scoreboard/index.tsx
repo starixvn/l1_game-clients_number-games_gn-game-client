@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Styles from "./side-bet-scoreboard.module.scss";
 import { useGameStateContext } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
+import { COLUMN_NUMBER_MIN } from "./side-bet-scoreboard-container";
 
 type Props = {
     children: React.ReactNode;
@@ -9,7 +10,7 @@ type Props = {
 const SideBetScoreboard = (props: Props) => {
     const wrapperRef = useRef<HTMLDivElement>(null);
     const { roundHistory } = useGameStateContext();
-    const [isScrollEndRight, setIsScrollEndRight] = useState(false);
+    const [isScrollEndRight, setIsScrollEndRight] = useState(true);
     let scrollLeftWidth = 0;
 
     const handleTouchEnd = (e) => {
@@ -46,7 +47,12 @@ const SideBetScoreboard = (props: Props) => {
             }
         };
 
+
         if (wrapperRef.current) {
+            if (wrapperRef?.current?.children[0]?.scrollLeft) {
+                scrollLeftWidth = Math.max(scrollLeftWidth, wrapperRef.current.children[0].scrollLeft);
+            }
+
             wrapperRef.current.addEventListener("mousedown", startDragging);
             wrapperRef.current.addEventListener("mouseup", stopDragging);
             wrapperRef.current.addEventListener("mouseleave", stopDragging);
@@ -65,19 +71,11 @@ const SideBetScoreboard = (props: Props) => {
 
 
     useEffect(() => {
-        const isRight = roundHistory?.length >= 11;
-        if ((isScrollEndRight || isRight) && wrapperRef?.current?.children[0]) {
-            wrapperRef.current.children[0].scrollLeft = wrapperRef.current.children[0].scrollWidth;
-        }
-
-        if (wrapperRef?.current?.children[0]?.scrollLeft) {
-            scrollLeftWidth = Math.max(scrollLeftWidth, wrapperRef.current.children[0].scrollLeft);
-        }
+        wrapperRef.current.children[0].scrollLeft = !isScrollEndRight || roundHistory?.length < COLUMN_NUMBER_MIN ? 0 : wrapperRef.current.children[0].scrollWidth;
     }, [wrapperRef?.current?.children[0], roundHistory]);
 
-
     return (
-        <div ref={wrapperRef} className={Styles["board"]} onTouchEnd={handleTouchEnd} data-testid="board">
+        <div ref={wrapperRef} className={Styles["board"]} onClick={handleTouchEnd} onTouchEnd={handleTouchEnd} data-testid="board">
             {props.children}
         </div>
     );

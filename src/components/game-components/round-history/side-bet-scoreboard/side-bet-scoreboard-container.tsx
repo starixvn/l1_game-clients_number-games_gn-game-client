@@ -4,7 +4,7 @@ import { Round } from "../../../game-base/type";
 import { SideBetScoreboardProps } from "../../statistic/types";
 import Styles from "./side-bet-scoreboard.module.scss";
 
-const COLUMN_NUMBER_MIN = 11;
+export const COLUMN_NUMBER_MIN = 11;
 
 const drawHistory = (roundHistory: Round<any, any>[], getDotDetails: (round: Round<any, any>) => ReactNode) => {
     if (roundHistory.length > COLUMN_NUMBER_MIN) {
