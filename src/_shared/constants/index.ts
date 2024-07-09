@@ -119,3 +119,8 @@ export const GameIds = {
 export const LobbyGameId = 0;
 
 export const SwiperNoSwiping = "swiper-no-swiping";
+
+export const TimeOutConstants = {
+    LoadingSpinner: 3000,
+    OverlayMask: 3000
+}

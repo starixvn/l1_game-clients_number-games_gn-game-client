@@ -39,6 +39,7 @@ import { GameStateHandler, IGameStateHandler } from "./handlers/game-state-handl
 import { PFWrapper } from "./handlers/pf-wrapper/pf-wrapper";
 import { PlaceBetHandlerWrapper } from "./handlers/place-bet-wrapper/place-bet-handler-wrapper";
 import { GameBaseHandlers, GameBaseProps, RoundState } from "./type";
+import { OverlayMask } from "../game-components/overlay-mask";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
     protected socket: Socket;
@@ -533,7 +534,8 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
     getRenderTemplate() {
         const uid = (this.context as PlayerContextModel).authorizeInfo?.user?.UID;
-        const { availableInGameData } = this.props.gameStateContextModel;
+        const { availableInGameData, isScoreboardTab, roundState } = this.props.gameStateContextModel;
+        const isDisabledGame = roundState === RoundState.Disabled;
 
         return (
             <>
@@ -558,15 +560,13 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                         <div className={SwiperNoSwiping}> {this.renderSlidingChips()}</div>
                         <div>{this.renderStatistic()}</div>
                         <div className={SwiperNoSwiping}>
-                            {this.props.gameStateContextModel.isScoreboardTab ? (
-                                this.renderScoreboards()
-                            ) : (
-                                <SideBetScoreboard>{this.renderStatisticContent()}</SideBetScoreboard>
-                            )}
+                            {isScoreboardTab ?
+                                this.renderScoreboards() :
+                                <SideBetScoreboard>{this.renderStatisticContent()}</SideBetScoreboard>}
                         </div>
                         <Footer />
                     </div>
-                    {!availableInGameData && <div className="game-over-layer"></div>}
+                    {!availableInGameData && <OverlayMask removeOverlay={isDisabledGame} />}
                     {this.renderGameGuideModal()}
                     {this.renderMenuButtons()}
                     {this.renderNewRoundTransition()}
@@ -594,11 +594,13 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
     render() {
         const { signedIn, roundState, disabledMessage, disconnectReason, availableInGameData } = this.props.gameStateContextModel;
+        const isDisabledGame = roundState === RoundState.Disabled;
+
         return (
             <GameContainer>
                 {signedIn ? this.renderGame() : <GameLoading />}
-                {(roundState === RoundState.None || !availableInGameData) && <LoadingSpinner />}
-                {this.renderDisableGamePopup(roundState, disabledMessage)}
+                {(roundState === RoundState.None || !availableInGameData) && <LoadingSpinner removeSpinner={isDisabledGame} />}
+                {this.renderDisableGamePopup(isDisabledGame, disabledMessage)}
                 {this.renderConnectFailed(roundState, disconnectReason)}
             </GameContainer>
         );
@@ -620,8 +622,8 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         );
     }
 
-    private renderDisableGamePopup(roundState: RoundState, disabledMessage: string): React.ReactNode {
-        return roundState === RoundState.Disabled && <DisabledModal disableMessage={disabledMessage} />;
+    private renderDisableGamePopup(isDisabledGame: boolean, disabledMessage: string): React.ReactNode {
+        return isDisabledGame && <DisabledModal disableMessage={disabledMessage} />;
     }
 }
 
