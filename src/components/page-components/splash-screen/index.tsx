@@ -101,7 +101,7 @@ const autoCreateNickname = async (session: SSOResponse, signOut: Function) => {
 const SplashScreen: React.FC = () => {
     const { gameId, isDirectMode, token, language, firstSSOToLobby } = useContext(URLContext);
     const latestGameId = StorageHelper.get<number>(localStorageKeys.latestGameId) || 0;
-
+    globalThis.startSplashScreenTime = Date.now();
     const router = useRouter();
     const player = usePlayerContext();
     const { t } = useTranslator();

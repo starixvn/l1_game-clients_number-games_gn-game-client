@@ -55,6 +55,7 @@ export class LobbySocketConnection {
                         this.signInGame(session, gameId);
                         this.initGameTransmitter(gameId);
                     });
+                    console.log(`Connected to lobby after: ${Date.now() - globalThis.startSplashScreenTime} ms`);
                     resolve(socket);
                 });
 
