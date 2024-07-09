@@ -63,19 +63,18 @@ const SideBetScoreboard = (props: Props) => {
         };
     }, []);
 
-    useEffect(() => {
-        setIsScrollEndRight(roundHistory.length >= 11);
-    }, [roundHistory]);
 
     useEffect(() => {
-        if (isScrollEndRight && wrapperRef?.current?.children[0]) {
+        const isRight = roundHistory?.length >= 11;
+        if ((isScrollEndRight || isRight) && wrapperRef?.current?.children[0]) {
             wrapperRef.current.children[0].scrollLeft = wrapperRef.current.children[0].scrollWidth;
         }
 
         if (wrapperRef?.current?.children[0]?.scrollLeft) {
             scrollLeftWidth = Math.max(scrollLeftWidth, wrapperRef.current.children[0].scrollLeft);
         }
-    }, [wrapperRef?.current?.children[0]]);
+    }, [wrapperRef?.current?.children[0], roundHistory]);
+
 
     return (
         <div ref={wrapperRef} className={Styles["board"]} onTouchEnd={handleTouchEnd} data-testid="board">
