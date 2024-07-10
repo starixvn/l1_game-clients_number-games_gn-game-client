@@ -196,19 +196,17 @@ const SplashScreen: React.FC = () => {
 
     const getSSORedirectToGameId = async (lobbyConfigs: ILobbyConfigs, authorizeInfo: AuthorizeResponse) => {
         let toLoadGameId = latestGameId;
-        if (firstSSOToLobby) {
-            const enabledRenderGameSettings = getEnabledRenderGameSettings(lobbyConfigs, authorizeInfo);
-            if (enabledRenderGameSettings.length > 0) {
-                let isFoundToLoadGame = false;
-                toLoadGameId !== 0 && (isFoundToLoadGame = await isFoundToLoadGameId(enabledRenderGameSettings, toLoadGameId));
+        const enabledRenderGameSettings = getEnabledRenderGameSettings(lobbyConfigs, authorizeInfo);
+        if (firstSSOToLobby && enabledRenderGameSettings.length > 0) {
+            let isFoundToLoadGame = false;
+            toLoadGameId !== 0 && (isFoundToLoadGame = await isFoundToLoadGameId(enabledRenderGameSettings, toLoadGameId));
 
-                if (!isFoundToLoadGame) {
-                    for (const gameSetting of enabledRenderGameSettings) {
-                        const isServiceAvailable = await getServiceStatusIsAvailable(gameSetting);
-                        if (isServiceAvailable) {
-                            toLoadGameId = gameSetting.id;
-                            break;
-                        }
+            if (!isFoundToLoadGame) {
+                for (const gameSetting of enabledRenderGameSettings) {
+                    const isServiceAvailable = await getServiceStatusIsAvailable(gameSetting);
+                    if (isServiceAvailable) {
+                        toLoadGameId = gameSetting.id;
+                        break;
                     }
                 }
             }
