@@ -4,6 +4,16 @@ import { messageEventType } from "../../game-base/handlers";
 import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import { RoundState } from "../../game-base/type";
 
+const resetState = (obj: any) => {
+    for (const key in obj) {
+        if (obj.hasOwnProperty(key)) {
+            obj[key] = 0;
+        }
+    }
+
+    return obj;
+}
+
 const BettingBlock: FC<PropsWithChildren> = ({ children }: PropsWithChildren) => {
     const { gameMessageHandler } = useGameContext();
     const { roundState } = useGameStateContext();
@@ -14,13 +24,7 @@ const BettingBlock: FC<PropsWithChildren> = ({ children }: PropsWithChildren) =>
         playerBetCount: {},
     });
     useEffect(() => {
-        const resetState = (obj: any) => {
-            for (const key in obj) {
-                if (obj.hasOwnProperty(key)) {
-                    obj[key] = 0;
-                }
-            }
-        }
+
 
         if ([RoundState.SwitchRound, RoundState.BeforePlaceBet].includes(roundState)) {
             const initialTotalBets = resetState(bettingZoneState.totalBets);
