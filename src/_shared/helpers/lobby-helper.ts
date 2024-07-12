@@ -49,7 +49,9 @@ export const getEnabledRenderGameSettings = (lobbyConfigs: ILobbyConfigs, author
 
 export const getServiceStatusIsAvailable = async (gameSetting: GameSettings) => {
     let statusCode = 0;
-    const serviceUrl = buildUrlWithPath(`/${gameSetting.socketInfo.namespace}/`);
+    const { proxy } = getAppSettings();
+
+    const serviceUrl = buildUrlWithPath(`${proxy.path}/${gameSetting.socketInfo.namespace}/`);
     try {
         const response = await fetch(serviceUrl);
         statusCode = response.status;
