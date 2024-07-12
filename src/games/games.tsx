@@ -1,7 +1,7 @@
 import { useTheme } from "next-themes";
 import dynamic from "next/dynamic";
 import React, { useContext, useEffect } from "react";
-import { isIOS, isMobileOnly, isSafari } from "react-device-detect";
+import { isIOS, isMobileOnly } from "react-device-detect";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { getAppSettings } from "../_shared/app-settings";
@@ -24,7 +24,6 @@ import { Props } from "./type";
 
 const BacBall = dynamic(() => import("./bac-ball"));
 const NextBall = dynamic(() => import("./next-ball/page"));
-const ToolbarGuide = dynamic(() => import("../components/page-components/hide-toolbar-guide"));
 const SwitchGamesGuide = dynamic(() => import("../components/page-components/switch-games-guide"));
 const SeBall = dynamic(() => import("./se-ball/page"));
 const LuckyThree = dynamic(() => import("./lucky-three/page"));
@@ -160,7 +159,6 @@ export const Games: React.FC<Props> = ({
         <div className={`game-container ${styles["game-wrapper"]} ${styles["open-chips"]}`}>
             <SystemContextProvider>
                 <div className={`${styles["game-list"]} ${isMobileOnly ? styles[isIOS ? "ios-device" : "android-device"] : ""}`}>
-                    {isMobileOnly && isSafari && isDirectMode && <ToolbarGuide />}
                     {directMode ? getGameComponentById(openGameId) : renderSwiper(openGameId)}
                     {!isDirectMode && isMobileOnly && <SwitchGamesGuide />}
                 </div>
