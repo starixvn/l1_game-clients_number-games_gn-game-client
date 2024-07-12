@@ -26,6 +26,7 @@ import GameLoading from "../game-components/game-loading";
 import { LoadingSpinner } from "../game-components/game-loading/loading-spinner";
 import { NewRoundTransitionWithoutExtraSeconds } from "../game-components/new-round-transition";
 import { NoticeDialog } from "../game-components/notice";
+import { OverlayMask } from "../game-components/overlay-mask";
 import { PFSettingModal } from "../game-components/provably-fair";
 import SideBetScoreboard from "../game-components/round-history/side-bet-scoreboard";
 import { Settings } from "../game-components/settings";
@@ -33,13 +34,21 @@ import BackgroundGalaxy from "../page-components/background";
 import BetSettings from "../page-components/bet-settings";
 import { IRoundStateHandler } from "../round-base/round-state-handler";
 import { GameSoundHandler, IGameSoundHandler } from "../turn-base/game-sound-handler";
-import { GameDisableHandler, GameErrorHandler, GameFinishHandler, GameMessageHandler, GameRoundHistoryHandler, messageEventType, PlaceBetHandler, PlayerHandler } from "./handlers";
+import {
+    GameDisableHandler,
+    GameErrorHandler,
+    GameFinishHandler,
+    GameMessageHandler,
+    GameRoundHistoryHandler,
+    messageEventType,
+    PlaceBetHandler,
+    PlayerHandler,
+} from "./handlers";
 import { GameRoundDataHandler } from "./handlers/game-round-data-handler";
 import { GameStateHandler, IGameStateHandler } from "./handlers/game-state-handler";
 import { PFWrapper } from "./handlers/pf-wrapper/pf-wrapper";
 import { PlaceBetHandlerWrapper } from "./handlers/place-bet-wrapper/place-bet-handler-wrapper";
 import { GameBaseHandlers, GameBaseProps, RoundState } from "./type";
-import { OverlayMask } from "../game-components/overlay-mask";
 
 abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
     protected socket: Socket;
@@ -560,9 +569,11 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                         <div className={SwiperNoSwiping}> {this.renderSlidingChips()}</div>
                         <div>{this.renderStatistic()}</div>
                         <div className={SwiperNoSwiping}>
-                            {isScoreboardTab ?
-                                this.renderScoreboards() :
-                                <SideBetScoreboard>{this.renderStatisticContent()}</SideBetScoreboard>}
+                            {isScoreboardTab ? (
+                                this.renderScoreboards()
+                            ) : (
+                                <SideBetScoreboard>{this.renderStatisticContent()}</SideBetScoreboard>
+                            )}
                         </div>
                         <Footer />
                     </div>
@@ -599,8 +610,10 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         return (
             <GameContainer>
                 {signedIn ? this.renderGame() : <GameLoading />}
-                {(roundState === RoundState.None || !availableInGameData) && <LoadingSpinner removeSpinner={isDisabledGame} />}
-                {this.renderDisableGamePopup(isDisabledGame, disabledMessage)}
+                {(roundState === RoundState.None || !availableInGameData) && (
+                    <LoadingSpinner removeSpinner={isDisabledGame || !!disconnectReason} />
+                )}
+                {this.renderDisableGamePopup(isDisabledGame && !!disabledMessage, disabledMessage)}
                 {this.renderConnectFailed(roundState, disconnectReason)}
             </GameContainer>
         );
