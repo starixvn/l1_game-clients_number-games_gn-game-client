@@ -1,5 +1,4 @@
 import dynamic from "next/dynamic";
-import { isMobileOnly, isSafari } from "react-device-detect";
 
 import { useEffect } from "react";
 import { StorageHelper, localStorageKeys } from "../../../_shared/helpers";
@@ -38,8 +37,6 @@ export const Lobby: React.FC<Props> = ({ openGame, lobbyConfigs, gameTransmitter
                 <LobbyLayout lobbyConfigs={lobbyConfigs} openGame={openGame} gameTransmitters={gameTransmitters} />
                 <ChangeAvatar />
             </div>
-
-            {isMobileOnly && isSafari && <ToolbarGuide />}
         </div>
     );
 };
