@@ -29,7 +29,8 @@ export class GameDisableHandler {
             um &&
             (timeCounter <= durations.placingBets + durations.beforePlaceBet + 1 ||
                 remainingTime + 1 === wholeRound ||
-                gameStateContextModel().roundState === RoundState.None)
+                gameStateContextModel().roundState === RoundState.None ||
+                gameStateContextModel().roundState === RoundState.ConnectFailed)
         ) {
             this.props.gameMessageHandler.broadcastGameEvent({
                 [messageEventType.CLEAR_GAME_TIMEOUT_AND_INTERVAL]: true,
