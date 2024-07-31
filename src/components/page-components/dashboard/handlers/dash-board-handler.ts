@@ -18,7 +18,7 @@ export class DashboardHandler {
 
     checkIsNotOfferGame = () => {
         return this.props.authorizeResponse?.user?.offerGames && this.props.authorizeResponse?.user?.offerGames.length === 0;
-    }
+    };
 
     shouldRenderGames = (offerGames: number[], openGameId: number) => {
         const urlContextModel = StorageHelper.get<URLContextModel>(localStorageKeys.url);
@@ -56,7 +56,10 @@ export class DashboardHandler {
     };
 
     connectLobbySocket = async () => {
-        const { gameId } = loadURLContext();
+        const { gameId, isDirectMode } = loadURLContext();
+        if (isDirectMode) {
+            return;
+        }
         const offerGamesIds = getOfferGamesIds(this.props.authorizeResponse)?.filter((id) => id !== gameId);
         const { gameSettings } = getAppSettings();
         const lobbyGamesIds = getLobbyGameIds(this.props.lobbyConfigs)?.filter(
@@ -70,9 +73,9 @@ export class DashboardHandler {
 
         await this.lobbyConnection.initLobbySocket(this.props.session, lobbyGamesIds);
         this.updateGameTransmitters(this.lobbyConnection.getTransmitters());
-    }
+    };
 
     reset = () => {
         this.lobbyConnection.closeSocket();
-    }
+    };
 }
