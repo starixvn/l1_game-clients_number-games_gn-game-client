@@ -1,6 +1,6 @@
 import { FormatIcu } from "@tolgee/format-icu";
 import { BackendFetch, Tolgee } from "@tolgee/react";
-import { InContextTools } from "@tolgee/web/tools";
+// import { InContextTools } from "@tolgee/web/tools";
 import { getAppSettings } from "./app-settings";
 
 const languageCodes = ["en", "id", "th", "vi", "zh_cn", "zh_tw"];
@@ -17,14 +17,14 @@ export const tolgee = Tolgee().use(FormatIcu()).use(BackendFetch()).init({
     defaultNs: "SabaNumber",
 });
 
-if (!getAppSettings().useTolgeeStatic) {
-    tolgee.addPlugin(
-        InContextTools({
-            credentials: {
-                apiUrl: process.env.REACT_APP_TOLGEE_API_URL,
-                apiKey: process.env.REACT_APP_TOLGEE_API_KEY,
-                projectId: "5",
-            },
-        })
-    );
-}
+// if (!getAppSettings().useTolgeeStatic) {
+//     tolgee.addPlugin(
+//         InContextTools({
+//             credentials: {
+//                 apiUrl: process.env.REACT_APP_TOLGEE_API_URL,
+//                 apiKey: process.env.REACT_APP_TOLGEE_API_KEY,
+//                 projectId: "5",
+//             },
+//         })
+//     );
+// }
