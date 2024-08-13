@@ -5,14 +5,12 @@ import { StorageHelper, localStorageKeys } from "../../../_shared/helpers";
 import { AnalyticsHelper } from "../../../_shared/helpers/analytic-helper";
 import { GlobalMessageTransmitter, GlobalTransmitterEvent } from "../../../_shared/helpers/message-transmitter/global-transmitter";
 import { ILobbyConfigs } from "../dashboard/type";
-import { Banner } from "./banners/banner";
 import { LobbyLayout } from "./games/lobby-layout";
 import { LobbyGameTransmitter } from "./lobby-socket-connection";
 import Styles from "./lobby.module.scss";
+import { Banner } from "./banners/banner";
 
-const SoundSettings = dynamic(() => import("../header/setting/settings-popup"));
 const ChangeAvatar = dynamic(() => import("../header/change-avatar"));
-const ToolbarGuide = dynamic(() => import("../hide-toolbar-guide"));
 
 type Props = {
     openGame: Function;
