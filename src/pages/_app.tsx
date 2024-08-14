@@ -7,16 +7,18 @@ import { ThemeProvider } from "next-themes";
 import App, { AppContext, AppProps } from "next/app";
 import Head from "next/head";
 import { buildVersion, languageMapper, Themes } from "../_shared/constants";
+import { useURLContext } from "../_shared/react-contexts";
 import { tolgee } from "../_shared/tolgee";
 import { LoadingSpinner } from "../components/game-components/game-loading/loading-spinner";
 import { GoogleAnalytic } from "../components/page-components/google-analytics";
 
 const SabaNumberApp = ({ Component, pageProps, language }: AppProps & { language: string }) => {
     const ssrTolgee = useTolgeeSSR(tolgee, language);
+
     return (
         <ThemeProvider defaultTheme={Themes.light} forcedTheme={Themes.light}>
             <TolgeeProvider tolgee={ssrTolgee} fallback={<LoadingSpinner />}>
-                <AppTilte />
+                <AppTittle />
                 <Component {...pageProps} />
                 <GoogleAnalytic />
             </TolgeeProvider>
@@ -24,14 +26,31 @@ const SabaNumberApp = ({ Component, pageProps, language }: AppProps & { language
     );
 };
 
-export const AppTilte = () => {
+export const AppTittle = () => {
+    const { isDirectMode } = useURLContext();
+
     return (
         <Head>
             <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-            <title>SABA xD</title>
-            <link rel="shortcut icon" type="image/x-icon" href={`/favicons/favicon.ico?v=${buildVersion}`} sizes="any" />
-            <link rel="icon" type="image/png" href={`/favicons/favicon2.png?v=${buildVersion}`} sizes="16x16" />
-            <link rel="apple-touch-icon" type="image/png" href={`/favicons/favicon2.png?v=${buildVersion}`} sizes="any" />
+            <title>{isDirectMode ? "SABA Play" : "SABA xD"}</title>
+            <link
+                rel="shortcut icon"
+                type="image/x-icon"
+                href={`/favicons/favicon${isDirectMode ? "-saba-play" : ""}.ico?v=${buildVersion}`}
+                sizes="any"
+            />
+            <link
+                rel="icon"
+                type="image/png"
+                href={`/favicons/favicon2${isDirectMode ? "-saba-play" : ""}.png?v=${buildVersion}`}
+                sizes="16x16"
+            />
+            <link
+                rel="apple-touch-icon"
+                type="image/png"
+                href={`/favicons/favicon2${isDirectMode ? "-saba-play" : ""}.png?v=${buildVersion}`}
+                sizes="any"
+            />
         </Head>
     );
 };

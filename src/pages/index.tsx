@@ -1,12 +1,10 @@
-import { memo, useContext } from "react";
+import { memo } from "react";
 
 import { useRouter } from "next/router";
-import { URLContext } from "../_shared/react-contexts";
 import { usePWAWoker } from "../_shared/react-hooks/use-pwa-worker";
 import SplashScreen from "../components/page-components/splash-screen";
 
 const Home = () => {
-    useContext(URLContext);
     usePWAWoker();
     const router = useRouter();
 
