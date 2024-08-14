@@ -7,13 +7,12 @@ function writeFile(fileName: string, content: string, extension = "json") {
     const dirname = path.dirname(fileName);
 
     if (!fs.existsSync(dirname)) {
-        fs.mkdirSync(dirname, { recursive: true })
+        fs.mkdirSync(dirname, { recursive: true });
     }
-
 
     fs.writeFileSync(`${fileName}.${extension}`, content, {
         encoding: "utf8",
-        flag: "w"
+        flag: "w",
     });
 }
 
@@ -35,8 +34,8 @@ const tg = Tolgee().use(DevTools()).init({
     apiKey: "tgpak_gvpw45brha2xg3btoztxeytunvudc5dbn5twqodtonztc",
     apiUrl: "https://tolgee.sabagame.com/",
     projectId: "5",
-    defaultNs: 'SabaNumber',
-    ns: namespaces
+    defaultNs: "SabaNumber",
+    ns: namespaces,
 });
 
 tg.run();
@@ -49,30 +48,22 @@ tg.on("initialLoad", async () => {
             };
         };
     } = {};
-
-    for (let index = 0; index < languageCodes.length; index++) {
-        const languageId = languageCodes[index];
-
+    languageCodes.forEach(async (languageId) => {
         await tg.changeLanguage(languageId);
         languages[languageId] = {};
         tg.getAllRecords().forEach((record) => {
             namespaces.forEach((namespace) => {
-                if (record.namespace == namespace) {
+                if (record.namespace === namespace) {
                     languages[languageId][namespace] = {};
                     record.data.forEach((value, key) => {
                         languages[languageId][namespace][key] = value as string;
-
-
                     });
 
                     writeFile(`./public/i18n/${namespace}/` + languageId, JSON.stringify(languages[languageId][namespace], null, 4));
                 }
-            })
-
+            });
         });
-
-
-    }
+    });
 
     console.log("Generated done!");
 });

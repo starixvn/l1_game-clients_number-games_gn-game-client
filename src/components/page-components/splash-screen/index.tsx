@@ -270,15 +270,21 @@ const SplashScreen: React.FC = () => {
     if (isRenderRegister) {
         return <Register session={currentSession} isUm={isUm} isDirectMode={isDirectMode} gameId={gameId} />;
     }
+
+    const logoProps = {
+        postfix: isDirectMode ? `-saba-play` : ``,
+        width: isDirectMode ? 272 : 195,
+        height: isDirectMode ? 100 : 162,
+    };
     return (
         <>
             <div className={`${Styles.page}`}>
                 <div className={Styles["center"]}>
                     <div className={Styles["logo"]}>
                         <Image
-                            src={`/static/images/splash-screen/2x/${isDirectMode ? `saba-play-` : ``}logo.png?v=${buildVersion}`}
-                            width={isDirectMode ? 272 : 195}
-                            height={isDirectMode ? 100 : 162}
+                            src={`/static/images/splash-screen/2x/logo${logoProps.postfix}.png?v=${buildVersion}`}
+                            width={logoProps.width}
+                            height={logoProps.height}
                             alt="logo"
                             onLoad={() => {
                                 setIsDoneLoadLogo(true);

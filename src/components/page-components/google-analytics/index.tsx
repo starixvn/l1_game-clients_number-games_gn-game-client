@@ -2,7 +2,7 @@ import Script from "next/script";
 import { getAppSettings } from "../../../_shared/app-settings";
 
 export function GoogleAnalytic() {
-    if (getAppSettings().googleAnalyticId == null) {
+    if (getAppSettings().googleAnalyticId === null) {
         return <></>;
     }
 
