@@ -105,7 +105,7 @@ const autoCreateNickname = async (session: SSOResponse, signOut: Function) => {
 };
 
 const SplashScreen: React.FC = () => {
-    const { gameId, isDirectMode, token, language, firstSSOToLobby } = useContext(URLContext);
+    const { gameId, isDirectMode, token, language, firstSSOToLobby, isThirdParty } = useContext(URLContext);
     const latestGameId = StorageHelper.get<number>(localStorageKeys.latestGameId) || 0;
 
     const router = useRouter();
@@ -271,10 +271,11 @@ const SplashScreen: React.FC = () => {
         return <Register session={currentSession} isUm={isUm} isDirectMode={isDirectMode} gameId={gameId} />;
     }
 
+
     const logoProps = {
-        postfix: isDirectMode ? `-saba-play` : ``,
-        width: isDirectMode ? 272 : 195,
-        height: isDirectMode ? 100 : 162,
+        postfix: isThirdParty ? `-saba-play` : ``,
+        width: isThirdParty ? 272 : 195,
+        height: isThirdParty ? 100 : 162,
     };
     return (
         <>
