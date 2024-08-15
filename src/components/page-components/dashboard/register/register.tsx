@@ -130,6 +130,7 @@ export class Register extends PureComponent<RegisterProps, RegisterState> {
 
             !this.props.isDirectMode && (await this.updateToLoadGameId(authorizeResponse));
         } else {
+            console.log("register");
             this.setState({
                 formValidity: t(GetLocalizedErrorMessage(authorizeResponse.errorCode)),
                 isValidUsername: false,

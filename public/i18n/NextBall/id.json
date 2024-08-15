@@ -1,0 +1,14 @@
+{
+    "beadboard_even": "GE",
+    "beadboard_odd": "GA",
+    "beadboard_over": "B",
+    "beadboard_under": "K",
+    "game_icon_name_1003": "LUCKY NEXT 1",
+    "game_icon_name_1004": "LUCKY NEXT 2",
+    "game_name_1003": "Lucky Next 1",
+    "game_name_1004": "Lucky Next 2",
+    "glossary_even": "Genap",
+    "glossary_odd": "Ganjil",
+    "glossary_over": "Besar",
+    "glossary_under": "Kecil"
+}

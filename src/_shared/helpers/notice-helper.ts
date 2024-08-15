@@ -10,6 +10,7 @@ export interface INotice {
     isPlaceBetFailed?: boolean;
 }
 export const GetLocalizedErrorMessage = (errorCode: string, isPlaceBet = false) => {
+    console.log(`error code: ${errorCode}`);
     if (!ErrorCodeDictionary[errorCode]) {
         return "Common.message_error_occurred";
     }

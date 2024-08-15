@@ -1,0 +1,15 @@
+{
+    "beadboard_even": "双",
+    "beadboard_odd": "单",
+    "game_name_1005": "Se Ball",
+    "glossary_even": "双",
+    "glossary_odd": "单",
+    "pf_verifier_tool_para_24": "将 SHA512 中的每组 2 个字符转换为十进制",
+    "pf_verifier_tool_para_25": "第 1 球 - 指数 (1-60)",
+    "pf_verifier_tool_para_26": "第 2 球 - 指数 (1-59)",
+    "pf_verifier_tool_para_27": "第 3 球 - 指数 (1-58)",
+    "pf_verifier_tool_para_28": "第 4 球 - 指数 (1-57)",
+    "pf_verifier_tool_para_29": "第 1 球 - 最终结果",
+    "pf_verifier_tool_para_30": "第 2 球 - 最终结果",
+    "pf_verifier_tool_para_32": "第 4 球 - 最终结果"
+}

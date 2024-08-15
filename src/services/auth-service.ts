@@ -53,7 +53,11 @@ export const authorize = async (userSession: SSOResponse) => {
 };
 
 export const getBalance = async (userSession: SSOResponse) => {
-    return authService?.getBalance(userSession.ss, userSession.username);
+    // console.log(`userSession: ${JSON.stringify(userSession)}`);
+
+    const a = authService?.getBalance(userSession.ss, userSession.username);
+    // console.log(`getBalance: ${JSON.stringify(a)}`);
+    return a;
 };
 
 export const getLobbyConfigs = async (userSession: SSOResponse) => {

@@ -20,7 +20,8 @@
         "test-coverage": "jest --coverage",
         "test:mutation": "stryker run",
         "reg": "npm set registry http://npm.lumigame.com",
-        "obfuscator-config-file": "node ./configs/config-obfuscator.js"
+        "obfuscator-config-file": "node ./configs/config-obfuscator.js",
+        "test:integration-test": "yarn playwright test example.spec.ts --project=chromium --ui"
     },
     "dependencies": {
         "@sentry/nextjs": "6.19.6",
@@ -29,6 +30,7 @@
         "axios": "^1.6.8",
         "base64-string": "^1.1.2",
         "interweave": "^13.1.0",
+        "msw": "^2.3.5",
         "next": "^14.0.4",
         "next-themes": "^0.3.0",
         "react": "^18.2.0",
@@ -52,6 +54,7 @@
         "@commitlint/cli": "^18.4.4",
         "@commitlint/config-conventional": "^18.4.4",
         "@next/bundle-analyzer": "^14.2.5",
+        "@playwright/test": "^1.46.0",
         "@stryker-mutator/core": "^8.0.0",
         "@stryker-mutator/jest-runner": "^8.0.0",
         "@testing-library/jest-dom": "^6.3.0",
@@ -83,6 +86,7 @@
         "jest-sonar-reporter": "^2.0.0",
         "jest-util": "^29.7.0",
         "mock-socket": "^9.3.1",
+        "playwright-msw": "^3.0.1",
         "react-addons-test-utils": "^15.6.2",
         "sass": "^1.77.8",
         "socket.io-mock": "^1.3.2",

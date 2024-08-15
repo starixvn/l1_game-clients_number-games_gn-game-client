@@ -1,0 +1,15 @@
+{
+    "beadboard_even": "คู่",
+    "beadboard_odd": "คี่",
+    "game_name_1005": "Se Ball",
+    "glossary_even": "คู่",
+    "glossary_odd": "คี่",
+    "pf_verifier_tool_para_24": "แปลงอักขระ 2 ตัวแต่ละกลุ่มใน SHA512 เป็นทศนิยม",
+    "pf_verifier_tool_para_25": "บอล 1 - ดัชนี (1-60)",
+    "pf_verifier_tool_para_26": "บอล 2 - ดัชนี (1-59)",
+    "pf_verifier_tool_para_27": "บอล 3 - ดัชนี (1-58)",
+    "pf_verifier_tool_para_28": "บอล 4 - ดัชนี (1-57)",
+    "pf_verifier_tool_para_29": "บอล 1 - ผลสุดท้าย",
+    "pf_verifier_tool_para_30": "บอล 2 - ผลสุดท้าย",
+    "pf_verifier_tool_para_32": "บอล 4 - ผลสุดท้าย"
+}

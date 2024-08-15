@@ -32,4 +32,7 @@ yarn-error.log*
 
 # stryker temp files
 stryker-tmp
-/public/i18n
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

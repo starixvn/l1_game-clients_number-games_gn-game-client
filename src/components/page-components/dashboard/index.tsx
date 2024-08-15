@@ -194,6 +194,7 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
     }
 
     signOut() {
+        console.log("signOut");
         this.props.router.push("/timeout", "/timeout", { locale: this.props.tolgee.getLanguage() });
     }
 
@@ -202,6 +203,8 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
     }
 
     showApiErrorMessage(errorCode: string) {
+        console.log("showApiErrorMessage");
+
         this.setState({ isShowErrorModal: true, isBlockUI: false, apiError: { errorCode, message: GetLocalizedErrorMessage(errorCode) } });
     }
 

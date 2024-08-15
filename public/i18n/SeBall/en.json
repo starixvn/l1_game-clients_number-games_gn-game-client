@@ -1,0 +1,15 @@
+{
+    "beadboard_even": "E",
+    "beadboard_odd": "O",
+    "game_name_1005": "Se Ball",
+    "glossary_even": "Even",
+    "glossary_odd": "Odd",
+    "pf_verifier_tool_para_24": "Convert each group of 2 characters in the SHA512 to Decimal",
+    "pf_verifier_tool_para_25": "Ball 1 - Index (1-60)",
+    "pf_verifier_tool_para_26": "Ball 2 - Index (1-59)",
+    "pf_verifier_tool_para_27": "Ball 3 - Index (1-58)",
+    "pf_verifier_tool_para_28": "Ball 4 - Index (1-57)",
+    "pf_verifier_tool_para_29": "Ball 1 - Final Result",
+    "pf_verifier_tool_para_30": "Ball 2 - Final Result",
+    "pf_verifier_tool_para_32": "Ball 4 - Final Result"
+}

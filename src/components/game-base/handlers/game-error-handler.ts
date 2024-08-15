@@ -32,6 +32,8 @@ export class GameErrorHandler {
         const errorCode = apiError.errorCode;
         const isKickOut = isKickOutError(errorCode);
         const onClose = isKickOut ? signOut : null;
+        console.log("handleApiError");
+
         const message = GetLocalizedErrorMessage(errorCode, isPlaceBet);
 
         GlobalMessageTransmitter.broadcast({ [GlobalTransmitterEvent.NOTICE]: {

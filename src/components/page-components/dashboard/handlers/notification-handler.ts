@@ -1,10 +1,9 @@
-
-import { buildUrl, isKickOutError, localStorageKeys, StorageHelper } from "../../../../_shared/helpers";
-import { getAppSettings } from "../../../../_shared/app-settings";
+import { ReCheckInResponse, SSOResponse } from "sc-user-service-client/dist/auth";
 import { io, Socket } from "socket.io-client";
 import MsgpackParser from "socket.io-msgpack-parser";
+import { getAppSettings } from "../../../../_shared/app-settings";
+import { buildUrl, isKickOutError, localStorageKeys, StorageHelper } from "../../../../_shared/helpers";
 import { reCheckIn } from "../../../../services/auth-service";
-import { ReCheckInResponse, SSOResponse } from "sc-user-service-client/dist/auth";
 
 export class NotificationHandler {
     private readonly reCheckInInterval: NodeJS.Timeout;
@@ -16,8 +15,8 @@ export class NotificationHandler {
         private readonly setIsUm: Function,
         private readonly updateUserBalance: Function,
         private readonly showApiErrorMessage: Function,
-        private readonly signOut: Function) {
-
+        private readonly signOut: Function
+    ) {
         this.connectNotificationSocket();
         this.reCheckInInterval = setInterval(async () => {
             const reCheckInResponse = await reCheckIn(session);
@@ -43,17 +42,20 @@ export class NotificationHandler {
 
         this.notificationSocket = io(socketUri, socketOption);
         this.registerNotificationSocketEvent();
-    }
+    };
 
     handleRecheckInResponse = (response: ReCheckInResponse) => {
+        console.log(`handleRecheckInResponse: ${response.isSuccessful}`);
+
         if (!response || !response.isSuccessful) {
             this.signOut();
         } else if (response.apiError) {
+            console.log("handleShowApiErrorMessage");
             this.handleShowApiErrorMessage(response.apiError.errorCode, response.isDisableAccount);
         } else {
             this.updateUserBalance(response.balance, false);
         }
-    }
+    };
 
     handleShowApiErrorMessage = (errorCode: string, isDisableAccount = false) => {
         if (isDisableAccount || isKickOutError(errorCode)) {
@@ -63,20 +65,20 @@ export class NotificationHandler {
             }, 10000);
         }
 
-        this.showApiErrorMessage(errorCode)
-    }
+        this.showApiErrorMessage(errorCode);
+    };
 
     registerNotificationSocketEvent = () => {
         this.notificationSocket.on("auth", this.handleAuth);
         this.notificationSocket.on("kickedOut", this.handleKickedOut);
         this.notificationSocket.on("reload", this.handleReload);
-    }
+    };
 
     handleAuth = (data: { authorized: boolean }) => {
         if (!data.authorized) {
             this.handleKickedOut(data);
         }
-    }
+    };
 
     handleKickedOut = (data: any) => {
         const { umInfo } = data;
@@ -90,7 +92,7 @@ export class NotificationHandler {
         } else {
             this.signOut();
         }
-    }
+    };
 
     handleReload() {
         globalThis.location.reload();
@@ -99,10 +101,10 @@ export class NotificationHandler {
     handleReCheckIn = async () => {
         const reCheckInResponse = await reCheckIn(this.session);
         this.handleRecheckInResponse(reCheckInResponse);
-    }
+    };
 
     reset = () => {
         this.notificationSocket?.close();
         clearInterval(this.reCheckInInterval);
-    }
+    };
 }

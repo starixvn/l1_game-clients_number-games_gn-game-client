@@ -55,6 +55,7 @@ export const customStartup = async (
     const isTimeout = !session || (!session?.isUM && !session?.isAuthenticated);
     player.locale = locale;
     if (isTimeout) {
+        console.log("isTimeout");
         router.push("timeout");
 
         return;
@@ -126,6 +127,7 @@ const SplashScreen: React.FC = () => {
     const [isRenderDashboard, setIsRenderDashboard] = useState<boolean>(false);
 
     const signOut = () => {
+        console.log("signOut");
         router.push("timeout");
     };
 
@@ -144,6 +146,7 @@ const SplashScreen: React.FC = () => {
             setLocale(lang);
 
             if (!session || isTimeoutSession(session)) {
+                console.log("isTimeoutSession");
                 signOut();
                 return;
             }
@@ -157,6 +160,7 @@ const SplashScreen: React.FC = () => {
             authorizeInfo = await authorize(session);
 
             if (authorizeInfo.errorCode === "SB0002") {
+                console.log("SB0002");
                 signOut();
                 return;
             }
@@ -270,7 +274,6 @@ const SplashScreen: React.FC = () => {
     if (isRenderRegister) {
         return <Register session={currentSession} isUm={isUm} isDirectMode={isDirectMode} gameId={gameId} />;
     }
-
 
     const logoProps = {
         postfix: isThirdParty ? `-saba-play` : ``,
