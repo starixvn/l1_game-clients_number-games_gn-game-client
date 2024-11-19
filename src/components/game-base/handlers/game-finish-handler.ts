@@ -16,6 +16,8 @@ export type GameFinishHandlerProps = {
     gameId: number;
     gameStateContextModel(): GameStateContextModel;
     gameRoundDataHandler: GameRoundDataHandler;
+    connectSocket: Function;
+    disconnectSocket: Function;
 };
 
 export class GameFinishHandler {
@@ -25,8 +27,14 @@ export class GameFinishHandler {
     private _betWin = 0;
     private _roundHistory: Round<object, object>[];
     private _finish: Round<object, object>;
+    private _elapsedTimeFromLastedFinishEvent = 0;
+    private _intervalId: NodeJS.Timeout;
+    private _connectServiceTimeout: NodeJS.Timeout;
+    private _wholeTurn = 0;
 
-    constructor(private readonly props: GameFinishHandlerProps) {}
+    constructor(private readonly props: GameFinishHandlerProps) {
+        this._wholeTurn = this.props.roundStateHandler.getWholeRoundDuration({ durations: this.props.durations }) + this.props.durations.beforePlaceBet + this.props.durations.switchRoundAnimation;
+    }
 
     set betWin(betWin: number) {
         this._betWin = betWin;
@@ -36,6 +44,30 @@ export class GameFinishHandler {
         this.props.gameMessageHandler.register(messageEventType.FINISH, this.handleFinishHandler.bind(this));
         this.props.gameMessageHandler.register(messageEventType.STATUS, this.handleStatus);
         this.props.gameMessageHandler.register(messageEventType.ROUND_HISTORY, this.handleRoundHistoryHandler.bind(this));
+
+        this._intervalId = setInterval(() => {
+            // console.log(`_elapsedTimeFromLastedRound: ${this._elapsedTimeFromLastedRound}`);
+            // console.log(`whole turn: ${this._wholeTurn}`);
+            if (this._elapsedTimeFromLastedFinishEvent++ > this._wholeTurn + 1) {
+
+                console.log("------------------");
+                console.log("GameFinishHandler: disconnect Socket");
+                const now = new Date();
+                const hours = now.getHours().toString().padStart(2, "0");
+                const minutes = now.getMinutes().toString().padStart(2, "0");
+                const seconds = now.getSeconds().toString().padStart(2, "0");
+                const milliseconds = now.getMilliseconds().toString().padStart(3, "0");
+                console.log(`_elapsedTimeFromLastedRound: ${this._elapsedTimeFromLastedFinishEvent} ${hours}:${minutes}:${seconds}.${milliseconds}`);
+
+                this._elapsedTimeFromLastedFinishEvent = 0;
+                this.props.disconnectSocket();
+                this._connectServiceTimeout = setTimeout(() => {
+                    console.log("GameFinishHandler: connect Socket");
+                    console.log("------------------");
+                    this.props.connectSocket();
+                }, 3000)
+            }
+        }, 1000);
     };
 
     handleFinishHandler(finish) {
@@ -66,6 +98,7 @@ export class GameFinishHandler {
             return;
         }
 
+        this._elapsedTimeFromLastedFinishEvent = 0;
         const { result, settlementResult, roundId, drawId } = finish;
         const { dispatch, gameMessageHandler, gameRoundDataHandler, gameStateContextModel } = this.props;
         const durations = this.props.durations;
@@ -125,5 +158,11 @@ export class GameFinishHandler {
     clearTimeout = () => {
         this.showResultInfoTimeout && clearTimeout(this.showResultInfoTimeout);
         this.showWinningAnimationTimeout && clearTimeout(this.showWinningAnimationTimeout);
+        if (this._intervalId) {
+            clearInterval(this._intervalId);
+            this._elapsedTimeFromLastedFinishEvent = 0;
+        }
+
+        this._connectServiceTimeout && clearTimeout(this._connectServiceTimeout);
     };
 }

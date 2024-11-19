@@ -15,12 +15,12 @@ export function InitSocketIO(socketInfo: SocketInfo, session: any, gameName: str
         upgrade: false,
         parser: enableMsgpackParser ? MsgpackParser : undefined,
     };
-    console.log(socketUri);
-    console.log(JSON.stringify(socketOption));
+    // console.log(socketUri);
+    // console.log(JSON.stringify(socketOption));
     const socket = io(socketUri, socketOption);
 
     if (socket) {
-        console.log("connect to socket");
+        // console.log("connect to socket");
         gameMessageHandler.registerSocketEvents();
 
         socket.off(gameName).on(gameName, gameMessageHandler.broadcastGameEvent);
@@ -29,14 +29,14 @@ export function InitSocketIO(socketInfo: SocketInfo, session: any, gameName: str
         });
 
         socket.on(messageEventType.SOCKET_CONNECTED, () => {
-            console.log("send sign in");
+            // console.log("send sign in");
 
             socket.emit("signin", session);
             gameMessageHandler.broadcastGameEvent({ [messageEventType.SOCKET_CONNECTED]: true });
         });
 
         socket.on(messageEventType.SIGNED_IN, () => {
-            console.log("sign in response");
+            // console.log("sign in response");
 
             socket.emit("inGame", gameName);
             gameMessageHandler.broadcastGameEvent({ [messageEventType.SIGNED_IN]: true });

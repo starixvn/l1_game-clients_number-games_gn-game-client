@@ -134,6 +134,8 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 gameId: this.props.id,
                 gameStateContextModel: this.getGameStateContext.bind(this),
                 gameRoundDataHandler: this.gameRoundDataHandler,
+                connectSocket: this.connectSocket.bind(this),
+                disconnectSocket: this.disconnectSocket.bind(this),
             });
 
         this.gameDisabledHandler =
@@ -164,6 +166,13 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         GlobalMessageTransmitter.broadcast({ [GlobalTransmitterEvent.OPEN_GAME_ID]: props.id });
     }
 
+    disconnectSocket() {
+        this.socket?.disconnect();
+    }
+
+    connectSocket() {
+        this.socket?.connect();
+    }
     getGameStateContext = () => {
         return this.props.gameStateContextModel;
     };
