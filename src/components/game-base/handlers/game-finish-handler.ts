@@ -48,9 +48,9 @@ export class GameFinishHandler {
         this._intervalId = setInterval(() => {
             // console.log(`_elapsedTimeFromLastedRound: ${this._elapsedTimeFromLastedRound}`);
             // console.log(`whole turn: ${this._wholeTurn}`);
-            if (this._elapsedTimeFromLastedFinishEvent++ > this._wholeTurn + 1) {
-
+            if (this._elapsedTimeFromLastedFinishEvent++ > this._wholeTurn + 4) {
                 console.log("------------------");
+                console.log({ _elapsedTimeFromLastedFinishEvent: this._elapsedTimeFromLastedFinishEvent, maxWholeTurn: this._wholeTurn })
                 console.log("GameFinishHandler: disconnect Socket");
                 const now = new Date();
                 const hours = now.getHours().toString().padStart(2, "0");
