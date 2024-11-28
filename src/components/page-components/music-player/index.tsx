@@ -35,7 +35,7 @@ const MusicPlayer = () => {
             const isPlaying = isUserGesture && settingContext.enabledMusic && settingContext.volumeMusic > 0;
             controlMusic(audioContext, isPlaying, play, pause);
         }
-    }, [ctx, isUserGesture, settingContext.enabledMusic, settingContext.volumeMusic]);
+    }, [ctx, isUserGesture, settingContext.enabledMusic]);
 
     useEffect(() => {
         ctx?.volume(formatVolume(settingContext.volumeMusic));
