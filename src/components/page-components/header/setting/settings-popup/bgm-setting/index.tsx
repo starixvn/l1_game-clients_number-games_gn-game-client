@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { AnalyticsHelper, localStorageKeys, StorageHelper, TrackingAction, TrackingFunction } from "../../../../../../_shared/helpers";
 import { SettingEventActionType, useSettingDispatch } from "../../../../../../_shared/react-contexts";
 import { useClickSound, useTranslator } from "../../../../../../_shared/react-hooks";
 import Styles from "../settings-popup.module.scss";
 import VolumeSetting from "../volume-setting";
+import useDebounce from "../../../../../../_shared/react-hooks/use-debounce";
 
+const delaySetVolumeInMilliseconds = 100;
 const MusicSetting = () => {
     const settingDispatch = useSettingDispatch();
     const clickSound = useClickSound();
@@ -14,6 +16,16 @@ const MusicSetting = () => {
     const volumeMusic = StorageHelper.get<number>(localStorageKeys.volumeMusic) ?? 50;
 
     const { t } = useTranslator();
+
+    const [volumeMusicVal, setVolumeMusicVal] = useState(volumeMusic);
+    const [debounceVolumeMusicVal, setDebounceVolumeMusicVal] = useState(volumeMusic);
+
+    const debounceValue = useDebounce(volumeMusicVal, delaySetVolumeInMilliseconds);
+
+    useEffect(() => {
+        setDebounceVolumeMusicVal(volumeMusicVal);
+        updateVolume(volumeMusicVal);
+    }, [debounceValue]);
 
     const toggle = () => {
         clickSound();
@@ -25,7 +37,11 @@ const MusicSetting = () => {
         });
     };
 
-    const onChangeVolume = (value) => {
+    const handleChange = (value) => {
+        setVolumeMusicVal(value);
+    };
+
+    const updateVolume = (value) => {
         StorageHelper.set(localStorageKeys.volumeMusic, value);
 
         settingDispatch({
@@ -72,8 +88,7 @@ const MusicSetting = () => {
                         <span className={`icon-music-${enabledMusic ? "on" : "off"}`}></span>
                     </button>
                 </div>
-
-                <VolumeSetting onChangeVolume={onChangeVolume} defaultValue={volumeMusic} />
+                <VolumeSetting onChangeVolume={handleChange} defaultValue={debounceVolumeMusicVal} />
             </div>
         </div>
     );

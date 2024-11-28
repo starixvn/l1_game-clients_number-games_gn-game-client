@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { AnalyticsHelper, localStorageKeys, StorageHelper, TrackingAction, TrackingFunction } from "../../../../../../_shared/helpers";
 import { SettingEventActionType, useSettingDispatch } from "../../../../../../_shared/react-contexts";
 import { useClickSound, useTranslator } from "../../../../../../_shared/react-hooks";
 import Styles from "../settings-popup.module.scss";
 import VolumeSetting from "../volume-setting";
+import useDebounce from "../../../../../../_shared/react-hooks/use-debounce";
 
+const delaySetVolumeInMilliseconds = 100;
 const SoundSetting = () => {
     const [enabledSound, setEnabledSound] = useState(StorageHelper.get<boolean>(localStorageKeys.enableSound) ?? true);
     const clickSound = useClickSound();
@@ -14,6 +16,11 @@ const SoundSetting = () => {
     const volumeSFX = StorageHelper.get<number>(localStorageKeys.volumeSFX) ?? 50;
 
     const settingDispatch = useSettingDispatch();
+
+    const [volumeSFXVal, setVolumeSFXVal] = useState(volumeSFX);
+    const [debounceSFXVal, setDebounceSFXVal] = useState(volumeSFX);
+
+    const debounceValue = useDebounce(volumeSFXVal, delaySetVolumeInMilliseconds);
 
     const toggle = () => {
         clickSound();
@@ -25,9 +32,17 @@ const SoundSetting = () => {
         });
     };
 
-    const onChangeVolume = (value) => {
-        StorageHelper.set(localStorageKeys.volumeSFX, value);
+    useEffect(() => {
+        setDebounceSFXVal(volumeSFXVal);
+        updateVolume(volumeSFXVal);
+    }, [debounceValue]);
 
+    const handleChange = (value) => {
+        setVolumeSFXVal(value);
+    };
+
+    const updateVolume = (value) => {
+        StorageHelper.set(localStorageKeys.volumeSFX, value);
         settingDispatch({
             type: SettingEventActionType.UPDATE_VOLUME_SFX,
             payload: {
@@ -60,7 +75,7 @@ const SoundSetting = () => {
                         <span className={`icon-sound-${enabledSound ? "on" : "off"}`}></span>
                     </button>
                 </div>
-                <VolumeSetting onChangeVolume={onChangeVolume} defaultValue={volumeSFX} />
+                <VolumeSetting onChangeVolume={handleChange} defaultValue={debounceSFXVal} />
             </div>
         </div>
     );
