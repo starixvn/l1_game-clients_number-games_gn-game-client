@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import { AnalyticsHelper, localStorageKeys, StorageHelper, TrackingAction, TrackingFunction } from "../../../../../../_shared/helpers";
 import { SettingEventActionType, useSettingDispatch } from "../../../../../../_shared/react-contexts";
 import { useClickSound, useTranslator } from "../../../../../../_shared/react-hooks";
+import useDebounce from "../../../../../../_shared/react-hooks/use-debounce";
 import Styles from "../settings-popup.module.scss";
 import VolumeSetting from "../volume-setting";
-import useDebounce from "../../../../../../_shared/react-hooks/use-debounce";
 
 const delaySetVolumeInMilliseconds = 100;
 const MusicSetting = () => {
@@ -23,6 +23,10 @@ const MusicSetting = () => {
     const debounceValue = useDebounce(volumeMusicVal, delaySetVolumeInMilliseconds);
 
     useEffect(() => {
+        if (debounceValue == volumeMusic) {
+            return;
+        }
+
         setDebounceVolumeMusicVal(volumeMusicVal);
         updateVolume(volumeMusicVal);
     }, [debounceValue]);
