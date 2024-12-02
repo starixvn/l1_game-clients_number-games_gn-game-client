@@ -33,12 +33,25 @@ const MusicPlayer = () => {
         if (ctx) {
             const audioContext: AudioContext = (ctx as any)?._sounds[0]._node.context;
             const isPlaying = isUserGesture && settingContext.enabledMusic && settingContext.volumeMusic > 0;
-            controlMusic(audioContext, isPlaying, play, pause);
+            controlMusic({ audioContext, isPlaying, play, pause });
         }
     }, [ctx, isUserGesture, settingContext.enabledMusic]);
 
     useEffect(() => {
-        ctx?.volume(formatVolume(settingContext.volumeMusic));
+        if (!ctx) {
+            return;
+        }
+        ctx.volume(formatVolume(settingContext.volumeMusic));
+        const isBGMOn = +settingContext.volumeMusic > 0;
+        if (isBGMOn) {
+            const sounds = (ctx as any)._sounds;
+            const latestSound = sounds[sounds.length - 1];
+            const isLatestSongPaused = latestSound._paused;
+            if (isLatestSongPaused) {
+                const audioContext: AudioContext = latestSound._node.context;
+                controlMusic({ audioContext, isPlaying: true, play, pause: () => {} });
+            }
+        }
     }, [settingContext.volumeMusic]);
 
     useEffect(() => {
@@ -50,7 +63,7 @@ const MusicPlayer = () => {
             setIsUserGesture(true);
         };
 
-        const events = ['scroll', 'touchstart', 'click'];
+        const events = ["scroll", "touchstart", "click"];
         const removeEventListeners = addMultipleEventListeners(document, events, onAllowGesture, { passive: true });
 
         document.addEventListener("visibilitychange", onChangeGesture);
