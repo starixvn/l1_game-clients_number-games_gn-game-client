@@ -8,6 +8,7 @@ export interface SettingContextModel {
     chipSettings: ChipInfo[];
     volumeMusic: number;
     volumeSFX: number;
+    isUserGesture: boolean;
 }
 
 export const initialSettingContextModel = (): SettingContextModel => {
@@ -18,5 +19,6 @@ export const initialSettingContextModel = (): SettingContextModel => {
         chipSettings: [],
         volumeMusic: StorageHelper.get<number>(localStorageKeys.volumeMusic) ?? 50,
         volumeSFX: StorageHelper.get<number>(localStorageKeys.volumeSFX) ?? 50,
+        isUserGesture: false,
     };
 };

@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
 import useSound from "use-sound";
 import { formatVolume } from "../../../_shared/helpers";
-import { useSettingContext } from "../../../_shared/react-contexts";
+import { SettingEventActionType, useSettingContext, useSettingDispatch } from "../../../_shared/react-contexts";
 import { getRandomSong } from "../../../_shared/react-hooks";
 import { controlMusic } from "./music-player-utility";
 import { addMultipleEventListeners } from "../../../_shared/helpers/event-listener-helper";
 
 const MusicPlayer = () => {
-    const [isUserGesture, setIsUserGesture] = useState(null);
+    const { isUserGesture } = useSettingContext();
+    const dispatch = useSettingDispatch();
+
+    // const [isUserGesture, setIsUserGesture] = useState(null);
     const [song, setSong] = useState(getRandomSong(""));
 
     const settingContext = useSettingContext();
@@ -34,6 +37,7 @@ const MusicPlayer = () => {
             const audioContext: AudioContext = (ctx as any)?._sounds[0]._node.context;
             const isPlaying = isUserGesture && settingContext.enabledMusic && settingContext.volumeMusic > 0;
             controlMusic({ audioContext, isPlaying, play, pause });
+            console.log("isPlaying", isPlaying);
         }
     }, [ctx, isUserGesture, settingContext.enabledMusic]);
 
@@ -56,11 +60,17 @@ const MusicPlayer = () => {
 
     useEffect(() => {
         const onChangeGesture = () => {
-            setIsUserGesture(!document.hidden);
+            dispatch({
+                type: SettingEventActionType.SET_USER_GESTURE,
+                payload: { isUserGesture: !document.hidden },
+            });
         };
 
         const onAllowGesture = () => {
-            setIsUserGesture(true);
+            dispatch({
+                type: SettingEventActionType.SET_USER_GESTURE,
+                payload: { isUserGesture: true },
+            });
         };
 
         const events = ["scroll", "touchstart", "click"];

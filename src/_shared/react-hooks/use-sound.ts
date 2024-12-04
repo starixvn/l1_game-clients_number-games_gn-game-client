@@ -21,11 +21,12 @@ export const usePlaySound = (resource: string) => {
     const settingContext = useSettingContext();
 
     return () => {
-        if (document.visibilityState === "visible" && ctx) {
-            const enable = StorageHelper.get<boolean>(localStorageKeys.enableSound) ?? true;
-            ctx.volume(formatVolume(settingContext.volumeSFX));
-            settingContext.volumeSFX && enable && playSound();
+        if (document.visibilityState !== "visible" || !settingContext.isUserGesture) {
+            return;
         }
+        const enable = StorageHelper.get<boolean>(localStorageKeys.enableSound) ?? true;
+        ctx?.volume(formatVolume(settingContext.volumeSFX));
+        settingContext.volumeSFX && enable && playSound();
     };
 };
 
