@@ -27,7 +27,7 @@ export function Settings() {
 
                 {!isDirectMode && (
                     <button className={styles[ButtonSettingClassName]} onClick={() => handleBackToLobbyOnclick()}>
-                        <span id="icon-list-game" className="icon-list-game" />
+                        <span id="icon-list-game" className={`icon-list-game ${styles["icon-list-game"]}`} />
                     </button>
                 )}
 
