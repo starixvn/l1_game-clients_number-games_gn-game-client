@@ -23,7 +23,7 @@ const MusicSetting = () => {
     const debounceValue = useDebounce(volumeMusicVal, delaySetVolumeInMilliseconds);
 
     useEffect(() => {
-        if (debounceValue == volumeMusic) {
+        if (debounceValue === volumeMusic) {
             return;
         }
 

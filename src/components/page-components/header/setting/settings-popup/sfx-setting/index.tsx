@@ -33,7 +33,7 @@ const SoundSetting = () => {
     };
 
     useEffect(() => {
-        if (debounceValue == volumeSFX) {
+        if (debounceValue === volumeSFX) {
             return;
         }
         setDebounceSFXVal(volumeSFXVal);
