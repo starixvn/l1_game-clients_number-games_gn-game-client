@@ -1,6 +1,4 @@
 import dynamic from "next/dynamic";
-import Image from "next/image";
-import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 import { useGameContext } from "../../_shared/react-contexts";
@@ -25,12 +23,6 @@ const BacBallBetOptionsComponent = () => {
     const { tolgeeNamespace } = useGameContext();
 
     const isShowDisabledLayer = roundState === RoundState.LockingBet;
-
-    const [loadingComplete, setLoadingComplete] = useState({
-        [BacBallBetOptions.BANKER]: false,
-        [BacBallBetOptions.PLAYER]: false,
-        [BacBallBetOptions.TIE]: false,
-    });
 
     const renderTotalBet = (choice: string) => {
         const tieClassName = `justify-center mt-1`;
@@ -116,8 +108,8 @@ const BacBallBetOptionsComponent = () => {
                     className={Style["bg-bet-option"]}
                     width={178}
                     height={188}
-                    src={loadingComplete[choice] ? BetChoiceImagesData[choice]?.src : BetChoiceImagesData[choice]?.blur}
-                    onLoad={() => setLoadingComplete((prevState) => ({ ...prevState, [choice]: true }))}
+                    src={BetChoiceImagesData[choice]?.src}
+                    blurSrc={BetChoiceImagesData[choice]?.blur}
                     alt={choice}
                     priority={true}
                 />
@@ -169,12 +161,8 @@ const BacBallBetOptionsComponent = () => {
                     className={Style["bg-bet-option"]}
                     width={95}
                     height={172}
-                    src={
-                        loadingComplete[BacBallBetOptions.TIE]
-                            ? BetChoiceImagesData[BacBallBetOptions.TIE]?.src
-                            : BetChoiceImagesData[BacBallBetOptions.TIE]?.blur
-                    }
-                    onLoad={() => setLoadingComplete((prevState) => ({ ...prevState, [BacBallBetOptions.TIE]: true }))}
+                    src={BetChoiceImagesData[BacBallBetOptions.TIE]?.src}
+                    blurSrc={BetChoiceImagesData[BacBallBetOptions.TIE]?.blur}
                     alt="tie"
                     priority={true}
                 />

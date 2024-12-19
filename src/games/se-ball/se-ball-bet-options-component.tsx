@@ -1,6 +1,4 @@
 import dynamic from "next/dynamic";
-import Image from "next/image";
-import { useState } from "react";
 
 import { useGameContext } from "../../_shared/react-contexts";
 import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
@@ -24,16 +22,6 @@ const SeBallBetOptionsComponent = () => {
     const { tolgeeNamespace } = useGameContext();
 
     const isShowDisabledLayer = roundState === RoundState.LockingBet;
-
-    const [loadingComplete, setLoadingComplete] = useState({
-        [SeBallBetOptions.ODD]: false,
-        [SeBallBetOptions.EVEN]: false,
-        [SeBallBetOptions.BLUE3]: false,
-        [SeBallBetOptions.RED3]: false,
-        [SeBallBetOptions.RED2]: false,
-        [SeBallBetOptions.RED4]: false,
-        [SeBallBetOptions.BLUE4]: false,
-    });
 
     const renderTotalBet = (choice: string, className?: string) => {
         return <TotalBet choice={choice} className={className} tolgeeNamespace={tolgeeNamespace} />;
@@ -149,8 +137,8 @@ const SeBallBetOptionsComponent = () => {
                     className={Style["bg-bet-option"]}
                     width={178}
                     height={94}
-                    src={loadingComplete[choice] ? BetChoiceImagesData[choice]?.src : BetChoiceImagesData[choice]?.blur}
-                    onLoad={() => setLoadingComplete((prevState) => ({ ...prevState, [choice]: true }))}
+                    src={BetChoiceImagesData[choice]?.src}
+                    blurSrc={BetChoiceImagesData[choice]?.blur}
                     alt={choice}
                     priority={true}
                 />
@@ -219,8 +207,8 @@ const SeBallBetOptionsComponent = () => {
                     className={Style["bg-bet-option"]}
                     width={choice === SeBallBetOptions.RED2 ? 77 : 136}
                     height={choice === SeBallBetOptions.RED2 ? 149 : 66}
-                    src={loadingComplete[choice] ? BetChoiceImagesData[backgroundName]?.src : BetChoiceImagesData[backgroundName]?.blur}
-                    onLoad={() => setLoadingComplete((prevState) => ({ ...prevState, [choice]: true }))}
+                    src={BetChoiceImagesData[backgroundName]?.src}
+                    blurSrc={BetChoiceImagesData[backgroundName]?.blur}
                     alt={choice}
                     priority={true}
                 />

@@ -1,7 +1,5 @@
 import dynamic from "next/dynamic";
-import Image from "next/image";
 
-import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useGameContext } from "../../_shared/react-contexts";
 import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
@@ -25,15 +23,6 @@ const LuckyThreeBetOptionsComponent = () => {
     const { tolgeeNamespace } = useGameContext();
 
     const isShowDisabledLayer = roundState === RoundState.LockingBet;
-
-    const [loadingComplete, setLoadingComplete] = useState({
-        [LuckyThreeBetOptions.OVER]: false,
-        [LuckyThreeBetOptions.UNDER]: false,
-        [LuckyThreeBetOptions.BLUE3]: false,
-        [LuckyThreeBetOptions.BLUE2]: false,
-        [LuckyThreeBetOptions.RED2]: false,
-        [LuckyThreeBetOptions.RED3]: false,
-    });
 
     const renderTotalBet = (choice: string, className?: string) => {
         return <TotalBet choice={choice} className={className} tolgeeNamespace={tolgeeNamespace} />;
@@ -150,8 +139,8 @@ const LuckyThreeBetOptionsComponent = () => {
                     className={Style["bg-bet-option"]}
                     width={178}
                     height={104}
-                    src={loadingComplete[choice] ? BetChoiceImagesData[choice]?.src : BetChoiceImagesData[choice]?.blur}
-                    onLoad={() => setLoadingComplete((prevState) => ({ ...prevState, [choice]: true }))}
+                    src={BetChoiceImagesData[choice]?.src}
+                    blurSrc={BetChoiceImagesData[choice]?.blur}
                     alt={choice}
                     priority={true}
                 />
@@ -216,8 +205,8 @@ const LuckyThreeBetOptionsComponent = () => {
                     className={Style["bg-bet-option"]}
                     width={85}
                     height={105}
-                    src={loadingComplete[choice] ? BetChoiceImagesData[backgroundName]?.src : BetChoiceImagesData[backgroundName]?.blur}
-                    onLoad={() => setLoadingComplete((prevState) => ({ ...prevState, [choice]: true }))}
+                    src={BetChoiceImagesData[backgroundName]?.src}
+                    blurSrc={BetChoiceImagesData[backgroundName]?.blur}
                     alt={choice}
                     priority={true}
                 />

@@ -1,6 +1,4 @@
 import dynamic from "next/dynamic";
-import Image from 'next/image';
-import { useState } from "react";
 import { useGameContext } from "../../../_shared/react-contexts";
 import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import { useTranslator } from "../../../_shared/react-hooks";
@@ -120,8 +118,6 @@ export const HighlightWinningResult = ({ choice }) => {
 export const SicBallMainOption = ({ choice }) => {
     const { roundState, roundHistory, turnCounter } = useGameStateContext();
     const { tolgeeNamespace } = useGameContext();
-    const [loadingComplete, setLoadingComplete] = useState(false);
-
     const isShowDisabledLayer = roundState === RoundState.LockingBet;
 
     const className = Style[`choice-${choice}`];
@@ -132,15 +128,23 @@ export const SicBallMainOption = ({ choice }) => {
                 className={Style["bg-bet-option"]}
                 width={173}
                 height={104}
-                src={loadingComplete ? BetChoiceImagesData[choice]?.src : BetChoiceImagesData[choice]?.blur}
-                onLoad={() => setLoadingComplete(true)}
+                src={BetChoiceImagesData[choice]?.src}
+                blurSrc={BetChoiceImagesData[choice]?.blur}
                 alt={choice}
                 priority={true}
             />
             <div className={`${Style["choice-info"]} ${className}`}>
                 <div className={Style.stake}>
-                    <TotalBet choice={choice} className={choice === SicBallBetOptions.BIG ? "justify-end" : ""} tolgeeNamespace={tolgeeNamespace} />
-                    <PlayerBetCount choice={choice} className={`flex items-center players gap-1 ${choice === SicBallBetOptions.BIG ? "justify-end" : ""}`} tolgeeNamespace={tolgeeNamespace} />
+                    <TotalBet
+                        choice={choice}
+                        className={choice === SicBallBetOptions.BIG ? "justify-end" : ""}
+                        tolgeeNamespace={tolgeeNamespace}
+                    />
+                    <PlayerBetCount
+                        choice={choice}
+                        className={`flex items-center players gap-1 ${choice === SicBallBetOptions.BIG ? "justify-end" : ""}`}
+                        tolgeeNamespace={tolgeeNamespace}
+                    />
                 </div>
                 <BetPercentage
                     choice={choice}
@@ -163,13 +167,13 @@ export const SicBallMainOption = ({ choice }) => {
             </div>
             <OwnBet choice={choice} tolgeeNamespace={tolgeeNamespace} className={Style["own-bet"]} />
             <div className={Style["winning-effect"]}>
-                <HighlightWinningResult choice={choice} /></div>
+                <HighlightWinningResult choice={choice} />
+            </div>
 
             <RippleButton className={`${Style["btn-ripple"]}`} id={`${tolgeeNamespace}-choice-${choice}`} choice={choice} />
 
             {isShowDisabledLayer && <div className={Style["disable-layer"]}></div>}
-            {isShowHighlightPrevResult({ betChoice: choice, roundState, roundHistory }) &&
-                <HighlightWinningPrevResult choice={choice} />}
+            {isShowHighlightPrevResult({ betChoice: choice, roundState, roundHistory }) && <HighlightWinningPrevResult choice={choice} />}
         </div>
     );
 };
@@ -177,7 +181,6 @@ export const SicBallMainOption = ({ choice }) => {
 export const SicBallSubOptions = ({ choice }) => {
     const { roundState, roundHistory } = useGameStateContext();
     const { tolgeeNamespace } = useGameContext();
-    const [loadingComplete, setLoadingComplete] = useState(false);
 
     const isShowDisabledLayer = roundState === RoundState.LockingBet;
     const backgroundName = getSubOptionsName(choice);
@@ -188,8 +191,8 @@ export const SicBallSubOptions = ({ choice }) => {
                 className={Style["bg-bet-option"]}
                 width={113}
                 height={60}
-                src={loadingComplete ? BetChoiceImagesData[backgroundName]?.src : BetChoiceImagesData[backgroundName]?.blur}
-                onLoad={() => setLoadingComplete(true)}
+                src={BetChoiceImagesData[backgroundName]?.src}
+                blurSrc={BetChoiceImagesData[backgroundName]?.blur}
                 alt={choice}
                 priority={true}
             />
@@ -205,10 +208,7 @@ export const SicBallSubOptions = ({ choice }) => {
 
             <RippleButton className={`${Style["btn-ripple"]}`} id={`${tolgeeNamespace}-choice-${choice}`} choice={choice} />
             {isShowDisabledLayer && <div className={Style["disable-layer"]}></div>}
-            {
-                isShowHighlightPrevResult({ betChoice: choice, roundState, roundHistory })
-                && <HighlightWinningPrevResult choice={choice} />
-            }
+            {isShowHighlightPrevResult({ betChoice: choice, roundState, roundHistory }) && <HighlightWinningPrevResult choice={choice} />}
         </div>
     );
 };
