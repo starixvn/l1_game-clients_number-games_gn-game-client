@@ -1,4 +1,4 @@
-import { memo, useEffect, useMemo, useState } from "react";
+import { memo, useEffect, useState } from "react";
 
 import { useLowPerformanceDevice, useMemoriedImage } from "../../../_shared/react-hooks";
 import { Spritesheet } from "../sprites-sheet";

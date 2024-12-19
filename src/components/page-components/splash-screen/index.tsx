@@ -203,7 +203,7 @@ const SplashScreen: React.FC = () => {
 
     const getSSORedirectToGameId = async (lobbyConfigs: ILobbyConfigs, authorizeInfo: AuthorizeResponse) => {
         if (!lobbyConfigs || !authorizeInfo) {
-            return;
+            return 0;
         }
         let toLoadGameId = latestGameId;
         const enabledRenderGameSettings = getEnabledRenderGameSettings(lobbyConfigs, authorizeInfo);
@@ -258,7 +258,6 @@ const SplashScreen: React.FC = () => {
     if (isRenderRegister) {
         return <Register session={currentSession} isUm={isUm} isDirectMode={isDirectMode} gameId={gameId} />;
     }
-
 
     const logoProps = {
         postfix: isThirdParty ? `-saba-play` : ``,

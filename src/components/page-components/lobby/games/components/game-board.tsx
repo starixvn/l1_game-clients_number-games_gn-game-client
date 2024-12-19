@@ -1,7 +1,6 @@
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 
-import { getAppSettings } from "../../../../../_shared/app-settings";
 import { buildVersion, LobbyGameId } from "../../../../../_shared/constants";
 import PreloadResources from "../../../../../_shared/helpers/preload-resources";
 import { useLobbyConnectionContext } from "../../../../../_shared/react-contexts";

@@ -1,4 +1,3 @@
-import Image from "next/image";
 import React, { memo, useCallback, useEffect, useState } from "react";
 
 import { buildVersion } from "../../../_shared/constants";

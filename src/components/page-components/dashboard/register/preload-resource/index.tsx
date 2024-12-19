@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
 import { AuthorizeResponse, SSOResponse } from "sc-user-service-client/dist/auth";
-import { getAppSettings } from "../../../../../_shared/app-settings";
 import PreloadResources, { getAndHandleBannerOffer, getAndHandleGameOfferIds } from "../../../../../_shared/helpers/preload-resources";
 import { getLobbyConfigs } from "../../../../../services/auth-service";
 
