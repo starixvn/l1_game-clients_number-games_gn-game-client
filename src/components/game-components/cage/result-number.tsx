@@ -13,11 +13,11 @@ const ResultNumber: React.FC<{
     className?: string;
 }> = ({ isDelayShowResult, number, isShowResultAnim, fps, className }) => {
     const currentTime = Date.now();
-    const { data, isLoaded } = useMemoriedImage(`/static/images/cage/number/${number}.webp?v=${buildVersion}`);
+    const { data } = useMemoriedImage(`/static/images/cage/number/${number}.webp?v=${buildVersion}`);
 
     return useMemo(() => {
         if (isDelayShowResult) {
-            return !isLoaded ? (
+            return !data ? (
                 <></>
             ) : (
                 <div key={currentTime} id="result-text" className={`${Styles["number"]} ${className}`}>
@@ -39,7 +39,7 @@ const ResultNumber: React.FC<{
         } else {
             return <></>;
         }
-    }, [isDelayShowResult, isShowResultAnim, number, isLoaded]);
+    }, [isDelayShowResult, isShowResultAnim, number]);
 };
 
 export default ResultNumber;

@@ -16,9 +16,9 @@ type Props = {
 
 const NextBallWinningAnimation: React.FC<Props> = ({ choice, resourceName, roundState, settlementResult, showResultInfo }) => {
     const winningHighLightResult = isHighLightWinningResult;
-    const { data, isLoaded } = useMemoriedImage(`/static/images/next-ball/highlight-winning-${resourceName}.png?v=${buildVersion}`);
+    const { data } = useMemoriedImage(`/static/images/next-ball/highlight-winning-${resourceName}.png?v=${buildVersion}`);
 
-    if (!isLoaded) {
+    if (!data) {
         return <></>;
     }
 

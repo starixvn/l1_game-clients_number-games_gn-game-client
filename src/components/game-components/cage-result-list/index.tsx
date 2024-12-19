@@ -47,7 +47,7 @@ const CageResultList: React.FC<CageResultListProps> = ({
     const [customCageClass, setCustomCageClass] = useState("");
 
     const showBallDelayTime = 1000;
-    const { data, isLoaded } = useMemoriedImage(`/static/images/${gameFolder}/result-ball/ball-highlight.webp?v=${buildVersion}`);
+    const { data } = useMemoriedImage(`/static/images/${gameFolder}/result-ball/ball-highlight.webp?v=${buildVersion}`);
 
     useEffect(() => {
         let timeOut: NodeJS.Timeout;
@@ -122,7 +122,7 @@ const CageResultList: React.FC<CageResultListProps> = ({
                     />
                 )}
 
-                {showBalls && playResultAnimation && isLoaded && (
+                {showBalls && playResultAnimation && data && (
                     <Spritesheet
                         className={`${Styles["ball-result"]}`}
                         imageData={data}

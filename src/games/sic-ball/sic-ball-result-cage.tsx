@@ -6,15 +6,15 @@ import Style from "./sic-ball.module.scss";
 import { useMemoriedImage } from "../../_shared/react-hooks";
 
 const SicBallResultCage: FC<{ startFrame: number }> = ({ startFrame }) => {
-    const { data: hubInterfaceData, isLoaded: IsHubInterfaceLoaded } = useMemoriedImage(
+    const { data: hubInterfaceData } = useMemoriedImage(
         `/static/images/sic-ball/hub-interface.webp?v=${buildVersion}`
     );
 
-    const { data: sixBallsLoopData, isLoaded: IsSixBallsLoopLoaded } = useMemoriedImage(
+    const { data: sixBallsLoopData } = useMemoriedImage(
         `/static/images/sic-ball/six-balls-loop.webp?v=${buildVersion}`
     );
 
-    const isLoaded = IsHubInterfaceLoaded && IsSixBallsLoopLoaded;
+    const isLoaded = hubInterfaceData && sixBallsLoopData;
     if (!isLoaded) {
         return <></>;
     }

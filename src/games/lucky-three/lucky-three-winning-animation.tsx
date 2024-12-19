@@ -27,9 +27,9 @@ const ChoiceWinningSize = {
 const LuckyThreeWinningAnimation: React.FC<Props> = ({ choice, resourceName, roundState, settlementResult, showResultInfo }) => {
     const winningHighLightResult = isHighLightWinningResult;
     const [width, height] = ChoiceWinningSize[choice];
-    const { data, isLoaded } = useMemoriedImage(`/static/images/lucky-three/highlight-winning-${resourceName}.png?v=${buildVersion}`);
+    const { data } = useMemoriedImage(`/static/images/lucky-three/highlight-winning-${resourceName}.png?v=${buildVersion}`);
 
-    if (!isLoaded) {
+    if (!data) {
         return <></>;
     }
 

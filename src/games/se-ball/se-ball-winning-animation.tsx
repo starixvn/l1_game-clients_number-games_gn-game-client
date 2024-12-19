@@ -27,9 +27,9 @@ const ChoiceWinningSize = {
 const SeBallWinningAnimation: React.FC<Props> = ({ choice, resourceName, roundState, settlementResult, showResultInfo }) => {
     const winningHighLightResult = isHighLightWinningResult;
     const [width, height] = ChoiceWinningSize[choice];
-    const { data, isLoaded } = useMemoriedImage(`/static/images/se-ball/highlight-winning-${resourceName}.png?v=4`);
+    const { data } = useMemoriedImage(`/static/images/se-ball/highlight-winning-${resourceName}.png?v=4`);
 
-    if (!isLoaded) {
+    if (!data) {
         return <></>;
     }
 

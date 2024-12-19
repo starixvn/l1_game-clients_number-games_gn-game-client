@@ -7,7 +7,7 @@ import Styles from "./cage.module.scss";
 const BallLoops: React.FC<{ isPlayStartRoundAnimation?: boolean }> = ({ isPlayStartRoundAnimation }) => {
     const isLowPerformanceDevice = useLowPerformanceDevice();
     const [showIdleBalls, setShowIdleBalls] = useState(false);
-    const { data, isLoaded } = useMemoriedImage(`/static/images/cage/cage-loop-anim.webp`);
+    const { data } = useMemoriedImage(`/static/images/cage/cage-loop-anim.webp`);
 
     useEffect(() => {
         let timeOut: NodeJS.Timeout;
@@ -24,7 +24,7 @@ const BallLoops: React.FC<{ isPlayStartRoundAnimation?: boolean }> = ({ isPlaySt
         };
     }, [isPlayStartRoundAnimation]);
 
-    if (!isLoaded) {
+    if (!data) {
         return <></>;
     }
 

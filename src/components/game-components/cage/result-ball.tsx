@@ -15,10 +15,10 @@ const ResultBall: React.FC<{
 }> = ({ isDelayShowResult, ballColor, isShowResultAnim, fps }) => {
     const currentTime = Date.now();
     const playShowBallResult = useShowBallResultSound();
-    const { data, isLoaded } = useMemoriedImage(`/static/images/cage/${ballColor}.webp?v=${buildVersion}`);
+    const { data } = useMemoriedImage(`/static/images/cage/${ballColor}.webp?v=${buildVersion}`);
 
     return useMemo(() => {
-        if (!isDelayShowResult || !isLoaded) {
+        if (!isDelayShowResult || !data) {
             return null;
         }
         const ballImage = ballColor.includes("blue") ? "blue" : "red";
@@ -59,7 +59,7 @@ const ResultBall: React.FC<{
                 )}
             </div>
         );
-    }, [isDelayShowResult, ballColor, isShowResultAnim, isLoaded]);
+    }, [isDelayShowResult, ballColor, isShowResultAnim]);
 };
 
 export default ResultBall;

@@ -33,7 +33,7 @@ const Ball: FC<IBall> = (props) => {
 
     const [isDelayShowResult, setIsDelayShowResult] = useState<boolean>(false);
 
-    const { data, isLoaded } = useMemoriedImage(`/static/images/ball/ball-${color}.png?v=${buildVersion}`);
+    const { data } = useMemoriedImage(`/static/images/ball/ball-${color}.png?v=${buildVersion}`);
 
     useEffect(() => {
         let timeOut: NodeJS.Timeout;
@@ -50,7 +50,7 @@ const Ball: FC<IBall> = (props) => {
         };
     }, [delayTime, isDelayShowResult]);
 
-    if (!isLoaded) {
+    if (!data) {
         return <></>;
     }
 

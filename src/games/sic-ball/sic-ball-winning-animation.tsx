@@ -28,9 +28,9 @@ const ChoiceWinningSize = {
 const SicBallWinningAnimation: React.FC<Props> = ({ choice, resourceName, roundState, settlementResult, showResultInfo }) => {
     const winningHighLightResult = isHighLightWinningResult;
     const [width, height] = ChoiceWinningSize[choice];
-    const { data, isLoaded } = useMemoriedImage(`/static/images/sic-ball/winning-effect-${resourceName}.png?v=4`);
+    const { data } = useMemoriedImage(`/static/images/sic-ball/winning-effect-${resourceName}.png?v=4`);
 
-    if (!isLoaded) {
+    if (!data) {
         return <></>;
     }
 

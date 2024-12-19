@@ -6,8 +6,8 @@ import { buildVersion } from "../../../_shared/constants";
 
 const SmallBall: FC<{ number: number; customClass?: string }> = ({ number, customClass }) => {
     const ballColor = getBallColor;
-    const { data, isLoaded } = useMemoriedImage(`/static/images/ball/ball-${ballColor(number)}.png?v=${buildVersion}`);
-    if (!isLoaded) {
+    const { data } = useMemoriedImage(`/static/images/ball/ball-${ballColor(number)}.png?v=${buildVersion}`);
+    if (!data) {
         return <></>;
     }
 

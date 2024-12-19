@@ -32,7 +32,7 @@ const RippleButton: React.FC<RippleButtonProps> = ({ choice, className, id }) =>
     };
 
     const selectedChipCursor = findChipSetting(systemContext.selectedChip)?.color?.replace("#", "");
-    const { data, isLoaded } = useMemoriedImage(`${DEFAULT_CHIP_CURSOR_PATH}/${selectedChipCursor}.svg?v=${buildVersion}`);
+    const { data } = useMemoriedImage(`${DEFAULT_CHIP_CURSOR_PATH}/${selectedChipCursor}.svg?v=${buildVersion}`);
 
     const onClickBet = useCallback(
         (event, choice: string) => {
@@ -43,7 +43,7 @@ const RippleButton: React.FC<RippleButtonProps> = ({ choice, className, id }) =>
     );
 
     useEffect(() => {
-        if (!isLoaded) {
+        if (!data) {
             return;
         }
 
@@ -52,7 +52,7 @@ const RippleButton: React.FC<RippleButtonProps> = ({ choice, className, id }) =>
         } else {
             setCustomStyle({ cursor: "not-allowed" });
         }
-    }, [roundState, data, isLoaded]);
+    }, [roundState, data]);
 
     useEffect(() => {
         let timerId: NodeJS.Timeout | undefined;
@@ -120,7 +120,7 @@ const RippleButton: React.FC<RippleButtonProps> = ({ choice, className, id }) =>
                 }
             </button>
         );
-    }, [choice, ripplePosX > 0, ripplePosY > 0, customStyle, isLoaded, data]);
+    }, [choice, ripplePosX > 0, ripplePosY > 0, customStyle, data]);
 };
 
 export default RippleButton;
