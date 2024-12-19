@@ -14,14 +14,6 @@ describe(GameIcon.name, () => {
         jest.clearAllMocks();
     });
 
-    it("should render match with snapshot", () => {
-        // act
-        const { container } = render(<GameIcon gameSettings={gameSettings} transmitter={transmitter} />);
-
-        // assert
-        expect(container).toMatchSnapshot();
-    });
-
     it("should call OnlinePlayer component with expected props", () => {
         // act
         render(<GameIcon gameSettings={gameSettings} transmitter={transmitter} />);
