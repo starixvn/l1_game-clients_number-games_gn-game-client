@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { FC, memo } from "react";
 
 import { buildVersion, GameIds } from "../../../_shared/constants";
