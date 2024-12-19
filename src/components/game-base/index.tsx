@@ -19,7 +19,6 @@ import CountdownTimer, { GameStatusMap } from "../game-components/countdown-time
 import DisabledModal from "../game-components/disabled-modal";
 import { ConnectFailedMessage } from "../game-components/error-message";
 import { ConnectFailedReasonKey } from "../game-components/error-message/type";
-import Footer from "../game-components/footer";
 import GameContainer from "../game-components/game-container";
 import GameGuideModal from "../game-components/game-guide";
 import GameLoading from "../game-components/game-loading";
@@ -29,7 +28,6 @@ import { NoticeDialog } from "../game-components/notice";
 import { OverlayMask } from "../game-components/overlay-mask";
 import { PFSettingModal } from "../game-components/provably-fair";
 import SideBetScoreboard from "../game-components/round-history/side-bet-scoreboard";
-import { Settings } from "../game-components/settings";
 import BackgroundGalaxy from "../page-components/background";
 import BetSettings from "../page-components/bet-settings";
 import { IRoundStateHandler } from "../round-base/round-state-handler";
@@ -497,7 +495,6 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState> extend
                 <div id="countdown-timer" className="countdown-timer">
                     {availableInGameData && <CountdownTimer GameStatusProp={this.renderGameStatus()} />}
                 </div>
-                <Settings />
             </div>
         );
     }
@@ -589,7 +586,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState> extend
                                 <SideBetScoreboard>{this.renderStatisticContent()}</SideBetScoreboard>
                             )}
                         </div>
-                        <Footer />
+                        {/* <Footer /> */}
                     </div>
                     {!availableInGameData && <OverlayMask removeOverlay={isDisabledGame} />}
                     {this.renderGameGuideModal()}

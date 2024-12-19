@@ -1,0 +1,13 @@
+.bottom-bar {
+    position: fixed;
+    bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(180deg, hsla(208, 85%, 18%, 1) 0%, hsla(211, 74%, 9%, 1) 100%, hsla(265, 68%, 45%, 1) 100%);
+    height: 5.4rem;
+    width: 100%;
+    padding: 0 1.8rem;
+    border-radius: 16px 16px 0 0;
+    z-index: 100;
+}

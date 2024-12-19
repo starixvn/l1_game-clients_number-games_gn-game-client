@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react";
-import {
-    GlobalTransmitterEvent,
-    registerGlobalMessageEvent,
-    unsubscribeGlobalMessageEvent,
-} from "../../../_shared/helpers/message-transmitter/global-transmitter";
+
+import { GlobalTransmitterEvent, registerGlobalMessageEvent, unsubscribeGlobalMessageEvent } from "../../../_shared/helpers/message-transmitter/global-transmitter";
+import { Settings } from "../../game-components/settings";
 import HeaderTitle from "./header-title";
 import Styles from "./header.module.scss";
 import Setting from "./setting";
-import { UserInfo } from "./user-info";
+
 const Header = () => {
     const [openingGameId, setOpeningGameId] = useState(0);
 
@@ -28,7 +26,7 @@ const Header = () => {
                 <div className={Styles["header-container"]}>
                     <HeaderTitle isRenderGames={isRenderGames} openingGameId={openingGameId} />
                     <div className={Styles["header-right"]}>
-                        <UserInfo isLobby={!isRenderGames} />
+                        <Settings />
                         <Setting />
                     </div>
                 </div>

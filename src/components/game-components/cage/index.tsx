@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from "react";
+import React, { memo, useEffect, useRef, useState } from "react";
 
 import { getBallColor } from "../../../_shared/helpers/ball-color-helper";
 import { GameStateContextModel } from "../../../_shared/react-contexts/game-state-context/game-state-context-model";
@@ -30,6 +30,7 @@ export type CageProps = {
     position: string;
     highlight?: boolean;
     ballFPS?: number;
+    scale?: number;
 } & Partial<GameStateContextModel>;
 
 const Cage: React.FC<CageProps> = ({
@@ -43,11 +44,13 @@ const Cage: React.FC<CageProps> = ({
     highlight,
     ballFPS,
     isPlayStartRoundAnimation,
+    scale,
 }) => {
     const [isDelayShowResult, setIsDelayShowResult] = useState<boolean>(false);
     const [ballColor, setBallColor] = useState<string>(null);
     const { data: cageBorder } = useMemoriedImage(`/static/images/cage/cage-border-${color}.webp`);
     const { data: cageBorder2x } = useMemoriedImage(`/static/images/cage/cage-border-${color}-2x.webp`);
+    const resultRef = useRef(null);
 
     useEffect(() => {
         let timeOut: NodeJS.Timeout;
@@ -68,8 +71,13 @@ const Cage: React.FC<CageProps> = ({
         !!result && setBallColor(`ball-${getBallColor(result)}-${position === CagePosition.RIGHT ? "2" : "1"}`);
     }, [result]);
 
+    useEffect(() => {
+        console.log();
+        resultRef?.current && (resultRef.current.style.transform = `scale(${scale})`);
+    }, [scale]);
+
     return (
-        <div className={`${Styles["cage-area"]} ${isSmall ? Styles["small"] : ""} ${Styles[position]}`}>
+        <div ref={resultRef} className={`${Styles["cage-area"]} ${isSmall ? Styles["small"] : ""} ${Styles[position]}`}>
             {highlight && <div className={`${Styles["cage-bg-highlight"]}`}></div>}
             <BgCachedImage className={Styles["cage-bg"]} pathImage={`/static/images/cage/cage.webp`} />
             <BallLoops isPlayStartRoundAnimation={isPlayStartRoundAnimation} />

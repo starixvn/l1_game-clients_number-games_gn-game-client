@@ -178,12 +178,12 @@ body {
     animation: text-effect 1.3s ease-in forwards;
 }
 
-.copyright {
-    position: relative;
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: var(--color-copyright);
-}
+// .copyright {
+//     position: relative;
+//     font-size: 0.9rem;
+//     font-weight: 500;
+//     color: var(--color-copyright);
+// }
 
 @keyframes text-effect {
     0% {
@@ -207,8 +207,10 @@ body {
 
 .game-area {
     display: grid;
-    grid-template-rows: 5rem 18.5rem 20.4rem 7.8rem 3.8rem 11.3rem;
-    grid-template-columns: 37.5rem;
+    //grid-template-rows: 5rem 18.5rem 20.4rem 7.8rem 3.8rem 11.3rem;
+    // grid-template-columns: 37.5rem;
+    grid-template-rows: 3rem 12.5rem 23rem 8.2rem 3.8rem 11.3rem;
+    grid-template-columns: 100%;
     justify-content: center;
     padding-top: 1rem;
 

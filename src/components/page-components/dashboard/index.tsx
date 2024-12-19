@@ -8,26 +8,16 @@ import SwiperCore from "swiper";
 
 import { ErrorNoGameOffer } from "../../../_shared/constants/error-code-dictionary";
 import { GetLocalizedErrorMessage, localStorageKeys, StorageHelper } from "../../../_shared/helpers";
-import {
-    GlobalMessageTransmitter,
-    GlobalTransmitterEvent,
-    registerGlobalMessageEvent,
-    unsubscribeGlobalMessageEvent,
-} from "../../../_shared/helpers/message-transmitter/global-transmitter";
-import {
-    loadURLContext,
-    LobbyConnectionContextProvider,
-    PlayerContextProvider,
-    SettingContextProvider,
-    updateURLContext,
-} from "../../../_shared/react-contexts";
+import { GlobalMessageTransmitter, GlobalTransmitterEvent, registerGlobalMessageEvent, unsubscribeGlobalMessageEvent } from "../../../_shared/helpers/message-transmitter/global-transmitter";
+import { loadURLContext, LobbyConnectionContextProvider, PlayerContextProvider, SettingContextProvider, updateURLContext } from "../../../_shared/react-contexts";
 import { UserStakeLevel } from "../../game-base/type";
 import { ModalType } from "../../game-components/base-dialog/type";
 import { ErrorApiText } from "../../game-components/error-api-text";
-import Footer from "../../game-components/footer";
+import BottomBar from "../bottom-bar";
 import Header from "../header";
 import Lobby from "../lobby/lobby";
 import { LobbyGameTransmitter } from "../lobby/lobby-socket-connection";
+import PageIndicator from "../page-indicator";
 import ButtonSwipe from "./button-swipe";
 import Styles from "./dashboard.module.scss";
 import { DashboardHandler } from "./handlers/dash-board-handler";
@@ -302,7 +292,8 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
 
                         {isNoGameOffer ? <></> : renderOfferGameContainer()}
 
-                        {isNoGameOffer ? <></> : !isRenderGames && <Footer />}
+                        <PageIndicator />
+                        <BottomBar />
 
                         {<MusicPlayer />}
 

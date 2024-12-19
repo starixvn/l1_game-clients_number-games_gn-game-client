@@ -113,8 +113,8 @@ const BacBallBetOptionsComponent = () => {
                 <Image
                     key={uuidv4}
                     className={Style["bg-bet-option"]}
-                    width={178}
-                    height={188}
+                    width={204}
+                    height={215}
                     src={loadingComplete[choice] ? BetChoiceImagesData[choice]?.src : BetChoiceImagesData[choice]?.blur}
                     onLoad={() => setLoadingComplete((prevState) => ({ ...prevState, [choice]: true }))}
                     alt={choice}
@@ -166,8 +166,8 @@ const BacBallBetOptionsComponent = () => {
             <div className={`${Style[BacBallBetOptions.TIE]} text-white flex flex-col items-center pt-2`}>
                 <Image
                     className={Style["bg-bet-option"]}
-                    width={95}
-                    height={172}
+                    width={105}
+                    height={198}
                     src={
                         loadingComplete[BacBallBetOptions.TIE]
                             ? BetChoiceImagesData[BacBallBetOptions.TIE]?.src
