@@ -1,9 +1,23 @@
+.viewport-container {
+    position: absolute;
+    left: 0;
+    top: 10px;
+    z-index: 100;
+    background: black;
+}
+
+.viewport {
+    color: #fff;
+    margin: 2px;
+}
+
 .betting-zone {
     position: relative;
     display: flex;
     justify-content: space-between;
     gap: 0.2rem;
-    width: 35.9rem;
+    // width: 35.9rem;
+    width: 41.2rem;
     margin: 1rem auto auto;
     margin-bottom: 0.6rem;
     z-index: 2;
@@ -12,7 +26,8 @@
 .result-container {
     display: grid;
     justify-content: center;
-    grid-template-columns: repeat(2, 15.3rem);
+    // grid-template-columns: repeat(2, 15.3rem);
+    grid-template-columns: repeat(2, 1fr);
     grid-gap: 4rem;
     height: 18.5rem;
 }
@@ -29,7 +44,8 @@
 .result {
     position: relative;
     display: grid;
-    grid-template-rows: 15.3rem 1fr;
+    // grid-template-rows: 15.3rem 1fr;
+    grid-template-rows: 9rem 1fr;
 }
 
 .bg-bet-option {
@@ -40,8 +56,10 @@
 
 %main-option {
     position: relative;
-    width: 17.8rem;
-    height: 18.8rem;
+    // width: 17.8rem;
+    // height: 18.8rem;
+    width: 20.4rem;
+    height: 21.5rem;
     border: none;
 
     .btn-ripple {
@@ -53,8 +71,9 @@
         left: -0.2rem;
         top: 0;
         background: url("/static/images/bac-number/player-disabled-layer.png?v=#{$version-image}") no-repeat;
-        width: 18.2rem;
-        height: 19rem;
+        background-size: 20.4rem 21.5rem;
+        width: 20.4rem;
+        height: 21.5rem;
         opacity: 0;
         animation: show-disabled-layer 0.3s ease-in forwards;
     }
@@ -183,10 +202,10 @@
     --color: #2fc856;
 
     position: absolute;
-    left: 13.2rem;
-    top: -0.5rem;
-    width: 9.5rem;
-    height: 17.2rem;
+    left: 15.3rem;
+    top: -0.9rem;
+    width: 10.8rem;
+    height: 19.8rem;
     border: none;
     border-bottom-left-radius: 6.6rem;
     border-bottom-right-radius: 6.6rem;
@@ -225,10 +244,10 @@
         position: absolute;
         left: -0.1rem;
         top: -0.1rem;
-        width: 9.6rem;
-        height: 17.6rem;
+        width: 10.8rem;
+        height: 19.8rem;
         background: url("/static/images/bac-number/tie-disabled-layer.png?v=#{$version-image}") no-repeat;
-        background-size: 9.6rem 17.6rem;
+        background-size: 10.8rem 19.8rem;
         opacity: 0;
         animation: show-disabled-layer 0.3s ease-in forwards;
     }
@@ -254,17 +273,19 @@
 
 .highlight-winning-player,
 .highlight-winning-banker {
-    width: 17.8rem;
-    height: 18.8rem;
+    width: 20.4rem;
+    height: 21.5rem;
     background: url("/static/images/bac-number/highlight-winning-bg-player.png?v=#{$version-image}");
+    background-size: 20.4rem 21.5rem;
 }
 
 .highlight-winning-tie {
     left: 5.7rem;
     top: 0.4rem;
-    width: 9.5rem;
-    height: 17.2rem;
+    width: 10.5rem;
+    height: 19.8rem;
     background: url("/static/images/bac-number/highlight-winning-bg-tie.png?v=#{$version-image}");
+    background-size: 10.5rem 19.8rem;
 }
 
 .ball-svg {
@@ -279,9 +300,9 @@
         url("/static/images/bac-number/1x/winning-previous-player.png?v=#{$version-image}") 1x,
         url("/static/images/bac-number/2x/winning-previous-player.png?v=#{$version-image}") 2x
     );
-
-    height: 18.8rem;
-    width: 17.8rem;
+    background-size: 20.4rem 21.5rem;
+    width: 20.4rem;
+    height: 21.5rem;
     position: absolute;
     left: 0;
     top: 0;
@@ -297,9 +318,9 @@
         url("/static/images/bac-number/1x/winning-previous-tie.png?v=#{$version-image}") 1x,
         url("/static/images/bac-number/2x/winning-previous-tie.png?v=#{$version-image}") 2x
     );
-
-    width: 9.7rem;
-    height: 17.4rem;
+    background-size: 10.5rem 19.8rem;
+    width: 10.5rem;
+    height: 19.8rem;
     position: absolute;
     left: -0.1rem;
     top: -0.1rem;

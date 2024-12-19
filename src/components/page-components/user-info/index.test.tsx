@@ -1,8 +1,9 @@
 import { fireEvent, render } from "@testing-library/react";
 import * as reactDeviceDetect from "react-device-detect";
+
 import UserInfo from ".";
-import { SettingEventActionType, usePlayerContext, useSettingDispatch } from "../../../../_shared/react-contexts";
-import { useClickSound } from "../../../../_shared/react-hooks";
+import { SettingEventActionType, usePlayerContext, useSettingDispatch } from "../../../_shared/react-contexts";
+import { useClickSound } from "../../../_shared/react-hooks";
 
 const mockUsePlayerContext = usePlayerContext as jest.Mock;
 const mockSound = useClickSound as jest.Mock;

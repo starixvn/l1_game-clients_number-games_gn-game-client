@@ -5,7 +5,7 @@ $show-number-delay-time: 1s;
 
 $loading-duration: 2s;
 
-$ball-size: 3.2rem;
+$ball-size: 3.6rem;
 
 .ball {
     position: relative;
@@ -44,6 +44,14 @@ $ball-size: 3.2rem;
     font-weight: 600;
     color: #2c2f3e;
     text-align: center;
+}
+
+.red {
+    --bg: url("/static/images/ball/ball-red.png?v=#{$version-image}") no-repeat;
+}
+
+.blue {
+    --bg: url("/static/images/ball/ball-blue.png?v=#{$version-image}") no-repeat;
 }
 
 .ball-bg {

@@ -3,16 +3,12 @@ import React, { useEffect, useMemo, useState } from "react";
 import { isIOS, isMobileOnly } from "react-device-detect";
 import { User } from "sc-user-service-client/dist/auth";
 
-import { buildVersion } from "../../../../_shared/constants";
-import {
-    GlobalTransmitterEvent,
-    registerGlobalMessageEvent,
-    unsubscribeGlobalMessageEvent,
-} from "../../../../_shared/helpers/message-transmitter/global-transmitter";
-import { numberRoundDownWithCommas } from "../../../../_shared/helpers/number-helper";
-import { SettingEventActionType, usePlayerContext, useSettingDispatch } from "../../../../_shared/react-contexts";
-import { useClickSound } from "../../../../_shared/react-hooks";
-import { MAX_AVATAR_ID } from "../../dashboard/register/avatar-gallery";
+import { buildVersion } from "../../../_shared/constants";
+import { GlobalTransmitterEvent, registerGlobalMessageEvent, unsubscribeGlobalMessageEvent } from "../../../_shared/helpers/message-transmitter/global-transmitter";
+import { numberRoundDownWithCommas } from "../../../_shared/helpers/number-helper";
+import { SettingEventActionType, usePlayerContext, useSettingDispatch } from "../../../_shared/react-contexts";
+import { useClickSound } from "../../../_shared/react-hooks";
+import { MAX_AVATAR_ID } from "../dashboard/register/avatar-gallery";
 import Styles from "./user-info.module.scss";
 
 export const UserInfo: React.FC<{
@@ -87,6 +83,7 @@ export const UserInfo: React.FC<{
 
     return (
         <div className={`${Styles["user"]} ${customizeClass ? Styles[customizeClass] : ""} ${deviceClass}`}>
+            <UserAvatar avatarId={userInfo?.avatarId} classCursor={classCursor} handleClickAvatar={handleClickAvatar} />
             <div className={Styles["info"]}>
                 <UserName name={userInfo?.name || ""} />
                 <div className={`${Styles.balance}`} data-testid="balance">
@@ -97,7 +94,6 @@ export const UserInfo: React.FC<{
                     <Image className="img-fluid" src={`/static/images/icons/icon-coin.svg`} width={10} height={11} alt={`icon-coin`} />
                 </div>
             </div>
-            <UserAvatar avatarId={userInfo?.avatarId} classCursor={classCursor} handleClickAvatar={handleClickAvatar} />
         </div>
     );
 };
