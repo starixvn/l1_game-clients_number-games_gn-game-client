@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 import { buildVersion } from "../../../_shared/constants";
-import { useShowBallResultSound } from "../../../_shared/react-hooks";
+import { useMemoriedImage, useShowBallResultSound } from "../../../_shared/react-hooks";
 import ResultNumber from "../cage/result-number";
 import { Spritesheet } from "../sprites-sheet";
 import Styles from "./cage-result-list.module.scss";
@@ -18,6 +18,7 @@ const BallRotation: React.FC<{
 }> = ({ ballPos, number, playResultAnimation, delayTime, color, incrementTotalPoint, customClassName }) => {
     const [showBall, setShowBall] = useState(false);
     const playShowBallResultSound = useShowBallResultSound();
+    const { data, isLoaded } = useMemoriedImage(`/static/images/anim/ball-middle/ball-${color}-middle-light.webp?v=${buildVersion}`);
 
     useEffect(() => {
         const timeOut = setTimeout(() => {
@@ -37,8 +38,7 @@ const BallRotation: React.FC<{
 
     return useMemo(() => {
         playResultAnimation && playShowBallResultSound();
-
-        if (!showBall) {
+        if (!showBall || !isLoaded) {
             return <></>;
         }
 
@@ -48,6 +48,7 @@ const BallRotation: React.FC<{
             <div key={uuidv4()} className={`${Styles[positionClass]} ${customClassName}`}>
                 <Spritesheet
                     image={`/static/images/anim/ball-middle/ball-${color}-middle-light.webp?v=${buildVersion}`}
+                    imageData={data}
                     widthFrame={153}
                     isResponsive
                     heightFrame={153}
@@ -66,7 +67,7 @@ const BallRotation: React.FC<{
                 />
             </div>
         );
-    }, [number, showBall]);
+    }, [number, showBall, isLoaded]);
 };
 
 export default BallRotation;

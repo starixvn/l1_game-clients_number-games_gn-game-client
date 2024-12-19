@@ -1,14 +1,15 @@
 import dynamic from "next/dynamic";
 import Image from "next/image";
 
+import { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 import { useGameContext } from "../../_shared/react-contexts";
 import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
 import { isShowHighlightPrevResult } from "../../_shared/react-hooks/use-high-light";
 import { RoundState } from "../../components/game-base/type";
+import { CachedImage } from "../../components/game-components/cached-image";
 import { BetChoiceImagesData, DotColorMapper, LuckyThreeBetOptions, LuckyThreeBetOptionsPercentageColor } from "./lucky-three-constants";
 import Style from "./lucky-three.module.scss";
-import { useState } from "react";
-import { v4 as uuidv4 } from "uuid";
 
 const BetChoice = dynamic(() => import("../../components/game-components/bet-option/bet-choice"));
 const RippleButton = dynamic(() => import("../../components/game-components/bet-option/ripple-button"));
@@ -145,7 +146,7 @@ const LuckyThreeBetOptionsComponent = () => {
 
         return (
             <div className={`${Style[choice]} text-white relative`}>
-                <Image
+                <CachedImage
                     className={Style["bg-bet-option"]}
                     width={178}
                     height={104}
@@ -211,7 +212,7 @@ const LuckyThreeBetOptionsComponent = () => {
 
         return (
             <div className={`${Style[choice]} ${Style["bet-choice"]}`}>
-                <Image
+                <CachedImage
                     className={Style["bg-bet-option"]}
                     width={85}
                     height={105}

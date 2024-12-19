@@ -9,6 +9,8 @@ import CageStyles from "../cage/cage.module.scss";
 import { Spritesheet } from "../sprites-sheet";
 import Styles from "./cage-result-list.module.scss";
 import ResultGroup from "./result-group";
+import { useMemoriedImage } from "../../../_shared/react-hooks";
+import { CachedImage } from "../cached-image";
 
 export type CageResultListProps = {
     color: string;
@@ -45,6 +47,7 @@ const CageResultList: React.FC<CageResultListProps> = ({
     const [customCageClass, setCustomCageClass] = useState("");
 
     const showBallDelayTime = 1000;
+    const { data, isLoaded } = useMemoriedImage(`/static/images/${gameFolder}/result-ball/ball-highlight.webp?v=${buildVersion}`);
 
     useEffect(() => {
         let timeOut: NodeJS.Timeout;
@@ -98,7 +101,7 @@ const CageResultList: React.FC<CageResultListProps> = ({
                 </div>
 
                 {playResultAnimation && (
-                    <Image
+                    <CachedImage
                         width={140}
                         height={140}
                         className={`${CageStyles["ball-blur"]} ${Styles["ball-blur"]}`}
@@ -119,10 +122,10 @@ const CageResultList: React.FC<CageResultListProps> = ({
                     />
                 )}
 
-                {showBalls && playResultAnimation && (
+                {showBalls && playResultAnimation && isLoaded && (
                     <Spritesheet
                         className={`${Styles["ball-result"]}`}
-                        image={`/static/images/${gameFolder}/result-ball/ball-highlight.webp?v=${buildVersion}`}
+                        imageData={data}
                         widthFrame={highlightBallSize.width}
                         isResponsive
                         heightFrame={highlightBallSize.height}

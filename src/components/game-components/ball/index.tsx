@@ -3,6 +3,8 @@ import React, { FC, useEffect, useState } from "react";
 import { getBallColor } from "../../../_shared/helpers/ball-color-helper";
 import { RoundState } from "../../game-base/type";
 import Styles from "./ball.module.scss";
+import { useMemoriedImage } from "../../../_shared/react-hooks";
+import { buildVersion } from "../../../_shared/constants";
 
 export enum BallStatus {
     NONE = 0,
@@ -31,6 +33,8 @@ const Ball: FC<IBall> = (props) => {
 
     const [isDelayShowResult, setIsDelayShowResult] = useState<boolean>(false);
 
+    const { data, isLoaded } = useMemoriedImage(`/static/images/ball/ball-${color}.png?v=${buildVersion}`);
+
     useEffect(() => {
         let timeOut: NodeJS.Timeout;
 
@@ -46,10 +50,14 @@ const Ball: FC<IBall> = (props) => {
         };
     }, [delayTime, isDelayShowResult]);
 
+    if (!isLoaded) {
+        return <></>;
+    }
+
     return (
         <div className={`${Styles.ball} ${blurStyle} ${isRoundBase ? "" : delayStyle}`}>
             {isDelayShowResult && number > 0 && (
-                <div className={`${ballStyleName} ${delayClassName}`}>
+                <div className={`${ballStyleName} ${delayClassName}`} style={{ backgroundImage: `url(${data})` }}>
                     {<span className={`${Styles["ball-number"]} ball-index-${index + 1}`}>{number}</span>}
                 </div>
             )}

@@ -6,6 +6,7 @@ import { useGameContext } from "../../_shared/react-contexts";
 import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
 import { isShowHighlightPrevResult } from "../../_shared/react-hooks/use-high-light";
 import { RoundState } from "../../components/game-base/type";
+import { CachedImage } from "../../components/game-components/cached-image";
 import { BetChoiceImagesData, DotColorMapper, SeBallBetOptions, SeBallBetOptionsPercentageColor } from "./se-ball-constants";
 import Style from "./se-ball.module.scss";
 
@@ -144,7 +145,7 @@ const SeBallBetOptionsComponent = () => {
 
         return (
             <div className={`${Style[choice]} text-white relative`}>
-                <Image
+                <CachedImage
                     className={Style["bg-bet-option"]}
                     width={178}
                     height={94}
@@ -214,7 +215,7 @@ const SeBallBetOptionsComponent = () => {
         const backgroundName = getSubOptionsName(choice);
         return (
             <div className={`${Style[choice]} ${Style["bet-choice"]}`}>
-                <Image
+                <CachedImage
                     className={Style["bg-bet-option"]}
                     width={choice === SeBallBetOptions.RED2 ? 77 : 136}
                     height={choice === SeBallBetOptions.RED2 ? 149 : 66}

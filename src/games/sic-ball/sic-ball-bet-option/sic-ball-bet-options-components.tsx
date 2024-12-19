@@ -1,14 +1,15 @@
 import dynamic from "next/dynamic";
+import Image from 'next/image';
+import { useState } from "react";
+import { useGameContext } from "../../../_shared/react-contexts";
+import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
+import { useTranslator } from "../../../_shared/react-hooks";
+import { isShowHighlightPrevResult } from "../../../_shared/react-hooks/use-high-light";
 import { RoundState } from "../../../components/game-base/type";
+import { CachedImage } from "../../../components/game-components/cached-image";
+import SmallBall from "../../../components/game-components/small-ball";
 import { BetChoiceImagesData, SicBallBetOptions, SicBallBetOptionsPercentageColor } from "../sic-ball-constants";
 import Style from "../sic-ball.module.scss";
-import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
-import { useGameContext } from "../../../_shared/react-contexts";
-import SmallBall from "../../../components/game-components/small-ball";
-import { isShowHighlightPrevResult } from "../../../_shared/react-hooks/use-high-light";
-import Image from 'next/image';
-import { useTranslator } from "../../../_shared/react-hooks";
-import { useState } from "react";
 
 const BetChoice = dynamic(() => import("../../../components/game-components/bet-option/bet-choice"));
 const BetPercentage = dynamic(() => import("../../../components/game-components/bet-option/bet-percentage"));
@@ -127,7 +128,7 @@ export const SicBallMainOption = ({ choice }) => {
 
     return (
         <div className={`${Style[choice]} text-white relative`}>
-            <Image
+            <CachedImage
                 className={Style["bg-bet-option"]}
                 width={173}
                 height={104}
@@ -183,7 +184,7 @@ export const SicBallSubOptions = ({ choice }) => {
 
     return (
         <div className={`${Style[choice]} ${Style["bet-choice"]}`}>
-            <Image
+            <CachedImage
                 className={Style["bg-bet-option"]}
                 width={113}
                 height={60}

@@ -1,21 +1,22 @@
-import { useEffect, useState } from "react";
+import { ReactEventHandler, useEffect, useState } from "react";
 import { downloadAndCacheImage, imageCache } from "../../../_shared/helpers/image-cache-controller";
 import Image from "next/image";
 
 type Props = {
     src: string;
-    blurSrc: string;
     alt: string;
+    blurSrc?: string;
     width?: number;
     height?: number;
     priority?: boolean;
     className?: string;
     fill?: boolean;
+    onLoad?: ReactEventHandler<HTMLImageElement>;
 };
 
-export const CachedImage: React.FC<Props> = ({ src, blurSrc, alt, width, height, priority, className }) => {
+export const CachedImage: React.FC<Props> = ({ src, blurSrc, alt, width, height, priority, className, onLoad }) => {
     const [source, setSource] = useState(imageCache[src]);
-    const props = { width, height, priority, className };
+    const props = { width, height, priority, className, onLoad };
     Object.keys(props).forEach((key) => props[key] === undefined && delete props[key]);
     useEffect(() => {
         const loadImage = async () => {

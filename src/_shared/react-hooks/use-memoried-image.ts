@@ -5,6 +5,8 @@ export const useMemoriedImage = (path: string) => {
     const [data, setData] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
+    const isLoaded = !isLoading && data;
+
     useEffect(() => {
         const fetchData = async () => {
             setIsLoading(true);
@@ -25,5 +27,5 @@ export const useMemoriedImage = (path: string) => {
         return () => {};
     }, [path]);
 
-    return { data, isLoading, error };
+    return { data, isLoading, error, isLoaded };
 };

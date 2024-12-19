@@ -7,6 +7,7 @@ import { useGameContext } from "../../_shared/react-contexts";
 import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
 import { isShowHighlightPrevResult } from "../../_shared/react-hooks/use-high-light";
 import { RoundState } from "../../components/game-base/type";
+import { CachedImage } from "../../components/game-components/cached-image";
 import Style from "./bac-ball.module.scss";
 import { BacBallBetOptions, BacBallBetOptionsPercentageColor, BetChoiceImagesData } from "./constants";
 
@@ -110,7 +111,7 @@ const BacBallBetOptionsComponent = () => {
         const ownBet = renderOwnBet(choice);
         return (
             <div className={`${Style[choice]} text-white relative`}>
-                <Image
+                <CachedImage
                     key={uuidv4}
                     className={Style["bg-bet-option"]}
                     width={178}
@@ -164,7 +165,7 @@ const BacBallBetOptionsComponent = () => {
         const ownBet = renderOwnBet(BacBallBetOptions.TIE);
         return (
             <div className={`${Style[BacBallBetOptions.TIE]} text-white flex flex-col items-center pt-2`}>
-                <Image
+                <CachedImage
                     className={Style["bg-bet-option"]}
                     width={95}
                     height={172}

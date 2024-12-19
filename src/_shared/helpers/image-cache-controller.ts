@@ -12,12 +12,16 @@ const fetchImageBase64 = async (imageUrl: string) => {
     }
 };
 
-export const downloadAndCacheImage = async (path: string): Promise<{ path: string; valid: boolean; imageBase64: any }> => {
-    let imageBase64;
+export const downloadAndCacheImage = async (path: string): Promise<{ path: string; valid: boolean; imageBase64: string }> => {
+    let imageBase64: string;
 
     if (imageCache[path]) {
+        console.log("get", path);
+
         imageBase64 = imageCache[path];
     } else {
+        console.log("downloadAndCache", path);
+
         imageBase64 = await fetchImageBase64(path);
         imageCache[path] = imageBase64;
     }

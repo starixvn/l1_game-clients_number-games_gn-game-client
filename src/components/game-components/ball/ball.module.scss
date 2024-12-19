@@ -46,14 +46,6 @@ $ball-size: 3.2rem;
     text-align: center;
 }
 
-.red {
-    --bg:url("/static/images/ball/ball-red.png?v=#{$version-image}") no-repeat;
-}
-
-.blue {
-    --bg: url("/static/images/ball/ball-blue.png?v=#{$version-image}") no-repeat;
-}
-
 .ball-bg {
     position: relative;
     display: flex;
@@ -65,6 +57,7 @@ $ball-size: 3.2rem;
     transform-origin: center center;
     opacity: 0;
     animation: fade-in $show-number-duration $show-number-delay-time ease-in-out forwards;
+    background-size: 30px;
 
     &.display-right-now {
         animation: none;

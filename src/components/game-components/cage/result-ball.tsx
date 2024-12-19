@@ -2,9 +2,10 @@ import Image from "next/image";
 import React, { useMemo } from "react";
 
 import { buildVersion } from "../../../_shared/constants";
-import { useShowBallResultSound } from "../../../_shared/react-hooks";
+import { useMemoriedImage, useShowBallResultSound } from "../../../_shared/react-hooks";
 import { Spritesheet } from "../sprites-sheet";
 import Styles from "./cage.module.scss";
+import { CachedImage } from "../cached-image";
 
 const ResultBall: React.FC<{
     isDelayShowResult: boolean;
@@ -14,16 +15,17 @@ const ResultBall: React.FC<{
 }> = ({ isDelayShowResult, ballColor, isShowResultAnim, fps }) => {
     const currentTime = Date.now();
     const playShowBallResult = useShowBallResultSound();
+    const { data, isLoaded } = useMemoriedImage(`/static/images/cage/${ballColor}.webp?v=${buildVersion}`);
 
     return useMemo(() => {
-        if (!isDelayShowResult) {
+        if (!isDelayShowResult || !isLoaded) {
             return null;
         }
         const ballImage = ballColor.includes("blue") ? "blue" : "red";
         isShowResultAnim && playShowBallResult();
         return (
             <div key={currentTime} id="show-ball-anim" className={Styles["show-ball-anim"]}>
-                <Image
+                <CachedImage
                     width={120}
                     height={120}
                     className={Styles["ball-blur"]}
@@ -35,6 +37,7 @@ const ResultBall: React.FC<{
                     <Spritesheet
                         className={"sss"}
                         image={`/static/images/cage/${ballColor}.webp?v=${buildVersion}`}
+                        imageData={data}
                         widthFrame={153}
                         isResponsive
                         heightFrame={153}
@@ -46,11 +49,17 @@ const ResultBall: React.FC<{
                         endAt={31}
                     />
                 ) : (
-                    <img className={"sss"} src={`/static/images/cage/${ballImage}.webp?v=${buildVersion}`} alt="img-result" />
+                    <CachedImage
+                        className={"sss"}
+                        src={`/static/images/cage/${ballImage}.webp?v=${buildVersion}`}
+                        alt="img-result"
+                        width={153}
+                        height={153}
+                    />
                 )}
             </div>
         );
-    }, [isDelayShowResult, ballColor, isShowResultAnim]);
+    }, [isDelayShowResult, ballColor, isShowResultAnim, isLoaded]);
 };
 
 export default ResultBall;

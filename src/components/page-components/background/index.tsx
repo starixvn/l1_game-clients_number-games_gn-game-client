@@ -3,6 +3,7 @@ import { FC, memo } from "react";
 
 import { buildVersion, GameIds } from "../../../_shared/constants";
 import { useLowPerformanceDevice } from "../../../_shared/react-hooks";
+import { CachedImage } from "../../game-components/cached-image";
 
 type Props = {
     gameId: number;
@@ -46,10 +47,10 @@ export const BackgroundGalaxy: React.FC<Props> = ({ gameId }) => {
     return (
         <>
             <div className="background-galaxy">
-                <Image className="galaxy-2" width={580} height={850} src={imageUrls} alt="galaxy" />
+                <CachedImage className="galaxy-2" width={580} height={850} src={imageUrls} alt="galaxy" />
 
                 <div className="galaxy-1-container">
-                    <Image className="galaxy-1" width={580} height={850} src={imageUrls} alt="galaxy" />
+                    <CachedImage className="galaxy-1" width={580} height={850} src={imageUrls} alt="galaxy" />
                 </div>
             </div>
             <StarField gameId={gameId} />

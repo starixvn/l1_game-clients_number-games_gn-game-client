@@ -1,3 +1,4 @@
+import { useMemoriedImage } from "../../_shared/react-hooks";
 import { isHighLightWinningResult } from "../../_shared/react-hooks/use-high-light";
 import { RoundState } from "../../components/game-base/type";
 import { Spritesheet } from "../../components/game-components/sprites-sheet";
@@ -27,13 +28,18 @@ const ChoiceWinningSize = {
 const SicBallWinningAnimation: React.FC<Props> = ({ choice, resourceName, roundState, settlementResult, showResultInfo }) => {
     const winningHighLightResult = isHighLightWinningResult;
     const [width, height] = ChoiceWinningSize[choice];
+    const { data, isLoaded } = useMemoriedImage(`/static/images/sic-ball/winning-effect-${resourceName}.png?v=4`);
+
+    if (!isLoaded) {
+        return <></>;
+    }
 
     return (
         winningHighLightResult({ betChoice: choice, roundState, settlementResult, showResultInfo }) && (
             <div className="d-grid">
                 <Spritesheet
                     className={`${Styles["winning-light-anim"]} ${Styles["anim-" + choice]}`}
-                    image={`/static/images/sic-ball/winning-effect-${resourceName}.png?v=4`}
+                    imageData={data}
                     widthFrame={width}
                     isResponsive
                     heightFrame={height}

@@ -9,6 +9,7 @@ import { isShowHighlightPrevResult } from "../../_shared/react-hooks/use-high-li
 import { RoundState } from "../../components/game-base/type";
 import { BetChoiceImagesData, NextBallBetOptions, NextBallBetOptionsPercentageColor } from "./next-ball-constants";
 import Style from "./next-ball.module.scss";
+import { CachedImage } from "../../components/game-components/cached-image";
 
 const BetChoice = dynamic(() => import("../../components/game-components/bet-option/bet-choice"));
 const RippleButton = dynamic(() => import("../../components/game-components/bet-option/ripple-button"));
@@ -155,7 +156,7 @@ const NextBallBetOptionsComponent = () => {
 
         return (
             <div className={`${Style[choice]} text-white relative`}>
-                <Image
+                <CachedImage
                     key={uuidv4}
                     className={Style["bg-bet-option"]}
                     width={176}

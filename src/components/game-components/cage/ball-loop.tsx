@@ -1,12 +1,13 @@
-import { memo, useEffect, useState } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
 
-import { useLowPerformanceDevice } from "../../../_shared/react-hooks";
+import { useLowPerformanceDevice, useMemoriedImage } from "../../../_shared/react-hooks";
 import { Spritesheet } from "../sprites-sheet";
 import Styles from "./cage.module.scss";
 
 const BallLoops: React.FC<{ isPlayStartRoundAnimation?: boolean }> = ({ isPlayStartRoundAnimation }) => {
     const isLowPerformanceDevice = useLowPerformanceDevice();
     const [showIdleBalls, setShowIdleBalls] = useState(false);
+    const { data, isLoaded } = useMemoriedImage(`/static/images/cage/cage-loop-anim.webp`);
 
     useEffect(() => {
         let timeOut: NodeJS.Timeout;
@@ -23,19 +24,25 @@ const BallLoops: React.FC<{ isPlayStartRoundAnimation?: boolean }> = ({ isPlaySt
         };
     }, [isPlayStartRoundAnimation]);
 
-    const renderBalls = () => (
-        <Spritesheet
-            className={`fade-in ${Styles["balls-loop"]}`}
-            image="/static/images/cage/cage-loop-anim.webp"
-            widthFrame={130}
-            isResponsive
-            heightFrame={130}
-            steps={11}
-            autoplay
-            loop
-            fps={isLowPerformanceDevice ? 30 : 40}
-        />
-    );
+    if (!isLoaded) {
+        return <></>;
+    }
+
+    const renderBalls = () => {
+        return (
+            <Spritesheet
+                className={`fade-in ${Styles["balls-loop"]}`}
+                imageData={data}
+                widthFrame={130}
+                isResponsive
+                heightFrame={130}
+                steps={11}
+                autoplay
+                loop
+                fps={isLowPerformanceDevice ? 30 : 40}
+            />
+        );
+    };
 
     return (
         <div id="cage-balls" className={Styles["cage-balls"]}>

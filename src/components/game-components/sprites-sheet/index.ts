@@ -8,7 +8,7 @@ export interface FrameAction {
 export interface SpritesheetProps {
     className?: string;
     style?: CSSProperties;
-    image?: string;
+    imageData?: string;
     widthFrame?: number;
     heightFrame?: number;
     isResponsive?: boolean;
@@ -42,6 +42,7 @@ export interface SpritesheetProps {
     onLoopComplete?: (instance: Spritesheet) => void;
     onEachFrame?: (instance: Spritesheet) => void;
     onEnterFrame?: FrameAction[] | false;
+    image?: string;
 }
 
 const defaultProps: SpritesheetProps = {
@@ -115,7 +116,7 @@ export class Spritesheet extends Component<SpritesheetProps> {
 
     renderElements = () => {
         const {
-            image,
+            imageData,
             className,
             style,
             widthFrame,
@@ -155,7 +156,7 @@ export class Spritesheet extends Component<SpritesheetProps> {
             overflow: "hidden",
             backgroundRepeat: "no-repeat",
             display: "table-cell",
-            backgroundImage: `url(${image})`,
+            backgroundImage: `url(${imageData})`,
             width: `${widthFrame}px`,
             height: `${heightFrame}px`,
             transformOrigin: "0 50%",
@@ -197,10 +198,10 @@ export class Spritesheet extends Component<SpritesheetProps> {
     };
 
     init = () => {
-        const { image, widthFrame, heightFrame, autoplay, getInstance, onInit } = this.props;
+        const { imageData, widthFrame, heightFrame, autoplay, getInstance, onInit, image } = this.props;
 
         const imgLoadSprite = new Image();
-        imgLoadSprite.src = image;
+        imgLoadSprite.src = imageData;
         imgLoadSprite.onload = () => {
             if (document && document.querySelector(`.${this.id}`)) {
                 this.imageSprite = imgLoadSprite;
@@ -229,7 +230,7 @@ export class Spritesheet extends Component<SpritesheetProps> {
         };
 
         imgLoadSprite.onerror = () => {
-            console.error(`Failed to load image ${imgLoadSprite.src}`);
+            console.error(`Failed to load image ${image} ${imgLoadSprite.src}`);
         };
     };
 

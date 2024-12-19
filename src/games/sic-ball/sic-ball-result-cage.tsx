@@ -3,13 +3,28 @@ import { FC } from "react";
 import { buildVersion } from "../../_shared/constants";
 import { Spritesheet } from "../../components/game-components/sprites-sheet";
 import Style from "./sic-ball.module.scss";
+import { useMemoriedImage } from "../../_shared/react-hooks";
 
 const SicBallResultCage: FC<{ startFrame: number }> = ({ startFrame }) => {
+    const { data: hubInterfaceData, isLoaded: IsHubInterfaceLoaded } = useMemoriedImage(
+        `/static/images/sic-ball/hub-interface.webp?v=${buildVersion}`
+    );
+
+    const { data: sixBallsLoopData, isLoaded: IsSixBallsLoopLoaded } = useMemoriedImage(
+        `/static/images/sic-ball/six-balls-loop.webp?v=${buildVersion}`
+    );
+
+    const isLoaded = IsHubInterfaceLoaded && IsSixBallsLoopLoaded;
+    if (!isLoaded) {
+        return <></>;
+    }
+
     return (
         <div className={Style["cage-container"]}>
             <Spritesheet
                 className={Style["cage-effect"]}
                 image={`/static/images/sic-ball/hub-interface.webp?v=${buildVersion}`}
+                imageData={hubInterfaceData}
                 widthFrame={162}
                 isResponsive
                 heightFrame={130}
@@ -23,6 +38,7 @@ const SicBallResultCage: FC<{ startFrame: number }> = ({ startFrame }) => {
             <Spritesheet
                 className={Style["ball-loop"]}
                 image={`/static/images/sic-ball/six-balls-loop.webp?v=${buildVersion}`}
+                imageData={sixBallsLoopData}
                 widthFrame={65}
                 isResponsive
                 heightFrame={65}

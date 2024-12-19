@@ -3,6 +3,7 @@ import React, { useMemo } from "react";
 import { buildVersion } from "../../../_shared/constants";
 import { Spritesheet } from "../sprites-sheet";
 import Styles from "./cage.module.scss";
+import { useMemoriedImage } from "../../../_shared/react-hooks";
 
 const ResultNumber: React.FC<{
     isDelayShowResult: boolean;
@@ -12,13 +13,17 @@ const ResultNumber: React.FC<{
     className?: string;
 }> = ({ isDelayShowResult, number, isShowResultAnim, fps, className }) => {
     const currentTime = Date.now();
+    const { data, isLoaded } = useMemoriedImage(`/static/images/cage/number/${number}.webp?v=${buildVersion}`);
 
     return useMemo(() => {
         if (isDelayShowResult) {
-            return (
+            return !isLoaded ? (
+                <></>
+            ) : (
                 <div key={currentTime} id="result-text" className={`${Styles["number"]} ${className}`}>
                     <Spritesheet
                         image={`/static/images/cage/number/${number}.webp?v=${buildVersion}`}
+                        imageData={data}
                         widthFrame={153}
                         isResponsive
                         heightFrame={153}
@@ -34,7 +39,7 @@ const ResultNumber: React.FC<{
         } else {
             return <></>;
         }
-    }, [isDelayShowResult, isShowResultAnim, number]);
+    }, [isDelayShowResult, isShowResultAnim, number, isLoaded]);
 };
 
 export default ResultNumber;

@@ -3,6 +3,7 @@ import { buildVersion } from "../../../_shared/constants";
 import { useGameActionContext, useSettingContext, useSystemContext } from "../../../_shared/react-contexts";
 import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
 import { RoundState } from "../../game-base/type";
+import { useMemoriedImage } from "../../../_shared/react-hooks";
 
 interface RippleButtonProps {
     choice: string;
@@ -17,7 +18,6 @@ const RippleButton: React.FC<RippleButtonProps> = ({ choice, className, id }) =>
     const rippleButton = useRef<HTMLButtonElement>();
 
     const [customStyle, setCustomStyle] = useState<object>();
-    const [cursorImage, setCursorImage] = useState<string>("");
     const [ripplePosX, setRipplePosX] = useState<number>(0);
     const [ripplePosY, setRipplePosY] = useState<number>(0);
 
@@ -27,6 +27,13 @@ const RippleButton: React.FC<RippleButtonProps> = ({ choice, className, id }) =>
     const settingContext = useSettingContext();
     const chipSettings = settingContext.chipSettings;
 
+    const findChipSetting = (value) => {
+        return chipSettings?.find((c) => c.value === value);
+    };
+
+    const selectedChipCursor = findChipSetting(systemContext.selectedChip)?.color?.replace("#", "");
+    const { data, isLoaded } = useMemoriedImage(`${DEFAULT_CHIP_CURSOR_PATH}/${selectedChipCursor}.svg?v=${buildVersion}`);
+
     const onClickBet = useCallback(
         (event, choice: string) => {
             event.preventDefault();
@@ -35,23 +42,17 @@ const RippleButton: React.FC<RippleButtonProps> = ({ choice, className, id }) =>
         [gameActionContext, systemContext.selectedChip]
     );
 
-    const findChipSetting = (value) => {
-        return chipSettings?.find((c) => c.value === value);
-    };
-
     useEffect(() => {
-        setCursorImage(
-            `${DEFAULT_CHIP_CURSOR_PATH}/${findChipSetting(systemContext.selectedChip)?.color?.replace("#", "")}.svg?v=${buildVersion}`
-        );
-    }, [systemContext.selectedChip]);
+        if (!isLoaded) {
+            return;
+        }
 
-    useEffect(() => {
         if (roundState === RoundState.InRound) {
-            setCustomStyle({ cursor: `url(${cursorImage}), auto` });
+            setCustomStyle({ cursor: `url(${data}), auto` });
         } else {
             setCustomStyle({ cursor: "not-allowed" });
         }
-    }, [cursorImage, roundState]);
+    }, [roundState, data, isLoaded]);
 
     useEffect(() => {
         let timerId: NodeJS.Timeout | undefined;
@@ -119,7 +120,7 @@ const RippleButton: React.FC<RippleButtonProps> = ({ choice, className, id }) =>
                 }
             </button>
         );
-    }, [choice, ripplePosX > 0, ripplePosY > 0, customStyle]);
+    }, [choice, ripplePosX > 0, ripplePosY > 0, customStyle, isLoaded, data]);
 };
 
 export default RippleButton;
