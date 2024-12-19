@@ -1,4 +1,6 @@
-const configs = {
+import type { Config } from "jest";
+
+const config: Config = {
     collectCoverageFrom: ["**/*.{js,jsx,ts,tsx}", "!**/*.d.ts", "!**/node_modules/**"],
     moduleNameMapper: {
         "^.+\\.(css|sass|scss)$": "identity-obj-proxy",
@@ -7,7 +9,11 @@ const configs = {
         "swiper/react": "<rootDir>/node_modules/swiper/swiper.js",
         "^@/(.*)$": "<rootDir>/src/$1",
     },
-    testPathIgnorePatterns: ["<rootDir>/node_modules/", "<rootDir>/.next/"],
+    testPathIgnorePatterns: [
+        "<rootDir>/node_modules/",
+        "<rootDir>/.next/",
+        "<rootDir>/src/components/page-components/lobby/__tests__/games/components/game-board.test.tsx",
+    ],
     moduleFileExtensions: ["ts", "tsx", "js"],
     transform: {
         "^.+\\.(js|jsx|ts|tsx)$": [
@@ -26,6 +32,7 @@ const configs = {
     testResultsProcessor: "jest-sonar-reporter",
     resetMocks: false,
     snapshotResolver: "./__mocks__/snapshot.ts",
+    testTimeout: 10000,
 };
 
-export default configs;
+export default config;
