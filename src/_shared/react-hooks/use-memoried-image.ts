@@ -28,7 +28,6 @@ export const useMemoriedImage = (path: string) => {
         }
 
         fetchData();
-        return () => {};
     }, [path]);
 
     return { data, isLoading, error };
