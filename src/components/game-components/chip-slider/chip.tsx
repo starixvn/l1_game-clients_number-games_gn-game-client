@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 import { buildVersion, systemName } from "../../../_shared/constants";
 import { useSystemContext } from "../../../_shared/react-contexts";
