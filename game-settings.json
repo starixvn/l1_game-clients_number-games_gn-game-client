@@ -180,7 +180,8 @@
         "numberOfRoundHistory": 100,
         "gamePath": "sic-ball",
         "gameResourceConfigs": {
-            "path": "sic-ball"
+            "path": "sic-ball",
+            "cachePaths": ["hub-interface.webp", "six-balls-loop.webp", "1x/cage.png", "2x/cage.png"]
         }
     }
 }

@@ -52,6 +52,7 @@ export interface GameSettings {
     gameResourceConfigs: {
         path: string;
         optionalPaths?: string[];
+        cachePaths?: string[];
     };
 }
 

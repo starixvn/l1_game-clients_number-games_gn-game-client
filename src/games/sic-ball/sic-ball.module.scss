@@ -54,11 +54,6 @@
         height: 11.7rem;
         width: 11.7rem;
         background-size: 11.7rem 11.7rem;
-        background-image: url("/static/images/sic-ball/1x/cage.png?v=#{$version-image}");
-        background-image: image-set(
-            url("/static/images/sic-ball/1x/cage.png?v=#{$version-image}") 1x,
-            url("/static/images/sic-ball/2x/cage.png?v=#{$version-image}") 2x
-        );
     }
 
     .ball-loop {

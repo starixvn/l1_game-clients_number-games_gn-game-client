@@ -5,7 +5,7 @@ import { AuthorizeResponse } from "sc-user-service-client/dist/auth";
 import { LobbyConfigs } from "sc-user-service-client/dist/lobby";
 import { getGameIdOfferBanner } from "../../components/page-components/lobby/banners/banner";
 import { getLobbyGamesIds } from "./lobby-helper";
-import { getAppSettings } from "../app-settings";
+import { getAppSettings, getGameSettings } from "../app-settings";
 import { downloadAndCacheImage } from "./image-cache-controller";
 
 const DEFAULT_PROGRESS_BAR_ID = "progress-bar";
@@ -49,6 +49,10 @@ const PreloadResources: React.FC<{
     progressBarId?: string;
 }> = ({ setIsDonePreload, gameId, bannerId, gameIdsIcon, locale = "en", cancelPreload, durationDelayDonePreload = 0, progressBarId }) => {
     const enablePreloadResource = getAppSettings().enablePreloadResource ?? true;
+    const gameImagePath = getGameSettings(gameId)?.gameResourceConfigs?.path || "";
+    const cachePaths = getGameSettings(gameId)?.gameResourceConfigs?.cachePaths || [];
+    const preloadGameImages = [...memoriedImages, ...cachePaths.map((path) => `${gameImagePath}/${path}`)];
+
     const router = useRouter();
 
     const getImage = async (path: string, cb) => {
@@ -75,7 +79,7 @@ const PreloadResources: React.FC<{
                         updateProgressBar(loadedImages, imagesPath.length, progressBarId);
                         checkFinish(loadedImages, imagesPath.length);
                     };
-                    if (memoriedImages.some((pathFolder) => path.includes(pathFolder))) {
+                    if (preloadGameImages.some((pathFolder) => path.includes(pathFolder))) {
                         downloadAndCacheImage(path)
                             .then(callBack)
                             .catch((error) => {
