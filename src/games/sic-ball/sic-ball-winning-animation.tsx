@@ -1,3 +1,4 @@
+import { buildVersion } from "../../_shared/constants";
 import { useMemoriedImage } from "../../_shared/react-hooks";
 import { isHighLightWinningResult } from "../../_shared/react-hooks/use-high-light";
 import { RoundState } from "../../components/game-base/type";
@@ -28,7 +29,7 @@ const ChoiceWinningSize = {
 const SicBallWinningAnimation: React.FC<Props> = ({ choice, resourceName, roundState, settlementResult, showResultInfo }) => {
     const winningHighLightResult = isHighLightWinningResult;
     const [width, height] = ChoiceWinningSize[choice];
-    const { data } = useMemoriedImage(`/static/images/sic-ball/winning-effect-${resourceName}.png?v=4`);
+    const { data } = useMemoriedImage(`/static/images/sic-ball/winning-effect-${resourceName}.png?v=${buildVersion}`);
 
     if (!data) {
         return <></>;
