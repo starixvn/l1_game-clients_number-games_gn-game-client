@@ -35,6 +35,7 @@ export const updateProgressBar = (percentage: number, progressBarId = DEFAULT_PR
 };
 
 const memoriedImages = ["/chips/gn/", "/countdown-timer/", "/lobby/", "/cage/", "/anim/ball-middle/", "/ball/"];
+const loadedGames: Record<number, boolean> = {};
 
 const PreloadResources: React.FC<{
     setIsDonePreload: Function;
@@ -106,6 +107,7 @@ const PreloadResources: React.FC<{
 
     const checkFinish = (loaded: number, total: number) => {
         if (loaded === total) {
+            loadedGames[gameId] = true;
             setIsDonePreload && setIsDonePreload();
         }
     };
@@ -113,7 +115,11 @@ const PreloadResources: React.FC<{
     useEffect(() => {
         if (router?.isReady) {
             if (enablePreloadResource && gameId >= 0) {
-                fetchImages();
+                if (!loadedGames[gameId]) {
+                    fetchImages();
+                } else {
+                    setIsDonePreload && setIsDonePreload();
+                }
             }
         }
     }, [router?.isReady, gameId]);
