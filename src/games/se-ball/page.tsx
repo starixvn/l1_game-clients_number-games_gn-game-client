@@ -12,7 +12,7 @@ import { useTranslator } from "../../_shared/react-hooks";
 import { tolgee } from "../../_shared/tolgee";
 import GameBase from "../../components/game-base/";
 import { GameMessageHandler } from "../../components/game-base/handlers";
-import { GameBaseHandlers, GameBaseProps, Round } from "../../components/game-base/type";
+import { GameBaseHandlers, GameBaseProps, GameBaseState, Round } from "../../components/game-base/type";
 import { GameStatusMap } from "../../components/game-components/countdown-timer/countdown-timer";
 import RedAndBlueStatistic from "../../components/game-components/statistic/red-blue-statistic";
 import { RoundGameSoundHandler } from "../../components/round-base/round-game-sound-handler";
@@ -31,10 +31,10 @@ const SeBallBetHistoryModal = dynamic(() => import("./history"));
 
 export type SeBallState = {
     statisticGroup?: number;
-};
+} & GameBaseState;
 
-class SeBall extends GameBase<GameBaseProps> {
-    state: SeBallState = { statisticGroup: 0 };
+class SeBall extends GameBase<GameBaseProps, SeBallState> {
+    state: SeBallState = { statisticGroup: 0, isLoaded: false };
     private readonly roundIdHandler?: RoundIdHandler;
     constructor(props: GameBaseProps) {
         const gameMessageHandler = new GameMessageHandler(props.dispatch);

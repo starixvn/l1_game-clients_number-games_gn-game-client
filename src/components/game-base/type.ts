@@ -86,6 +86,10 @@ export type GameSound = {
 
 export type GameBaseProps = GamePropsContext & WithRouterProps;
 
+export type GameBaseState = {
+    isLoaded: boolean;
+};
+
 export interface NoticeModel {
     gameName?: string;
     roundId?: number;

@@ -48,9 +48,10 @@ import { GameRoundDataHandler } from "./handlers/game-round-data-handler";
 import { GameStateHandler, IGameStateHandler } from "./handlers/game-state-handler";
 import { PFWrapper } from "./handlers/pf-wrapper/pf-wrapper";
 import { PlaceBetHandlerWrapper } from "./handlers/place-bet-wrapper/place-bet-handler-wrapper";
-import { GameBaseHandlers, GameBaseProps, RoundState } from "./type";
+import { GameBaseHandlers, GameBaseProps, GameBaseState, RoundState } from "./type";
+import PreloadResources from "../../_shared/helpers/preload-resources";
 
-abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> {
+abstract class GameBase<P extends GameBaseProps, S extends GameBaseState> extends React.PureComponent<P, S> {
     protected socket: Socket;
     protected gameCronInterval: NodeJS.Timeout;
     protected roundTimeCounter: number;
@@ -156,9 +157,14 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
                 gameSound: this.getGameSound.bind(this),
             });
 
+        this.state = {
+            isLoaded: false,
+        } as S;
+
         this.placeBet = this.placeBet.bind(this);
         this.updateUserBalance = this.updateUserBalance.bind(this);
         this.renderHeaderBlock = this.renderHeaderBlock.bind(this);
+        this.onPreloadResourceDone = this.onPreloadResourceDone.bind(this);
 
         AnalyticsHelper.trackPage({ page_title: this.props.gameName });
         GlobalMessageTransmitter.broadcast({ [GlobalTransmitterEvent.OPEN_GAME_ID]: props.id });
@@ -213,6 +219,14 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
         this.connectToGameService();
         this.gameMessageHandler.broadcastGameEvent({ [messageEventType.UPDATE_PLAYER_BALANCE]: true });
     }
+
+    onPreloadResourceDone = () => {
+        this.setState({ isLoaded: true });
+    };
+
+    preloadResource = () => {
+        return <PreloadResources setIsDonePreload={this.onPreloadResourceDone} gameId={this.props.id} />;
+    };
 
     protected async connectToGameService() {
         const { session } = this.context as PlayerContextModel;
@@ -605,11 +619,13 @@ abstract class GameBase<P extends GameBaseProps> extends React.PureComponent<P> 
 
     render() {
         const { signedIn, roundState, disabledMessage, disconnectReason, availableInGameData } = this.props.gameStateContextModel;
+        const { isLoaded } = this.state;
         const isDisabledGame = roundState === RoundState.Disabled;
 
         return (
             <GameContainer>
-                {signedIn ? this.renderGame() : <GameLoading />}
+                {this.preloadResource()}
+                {signedIn && isLoaded ? this.renderGame() : <GameLoading />}
                 {(roundState === RoundState.None || !availableInGameData) && (
                     <LoadingSpinner removeSpinner={isDisabledGame || !!disconnectReason} />
                 )}

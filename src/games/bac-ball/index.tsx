@@ -11,7 +11,7 @@ import {
 import { useTranslator } from "../../_shared/react-hooks";
 import GameBase from "../../components/game-base/";
 import { GameMessageHandler, TurnIdHandler } from "../../components/game-base/handlers";
-import { GameBaseHandlers, GameBaseProps, Round } from "../../components/game-base/type";
+import { GameBaseHandlers, GameBaseProps, GameBaseState, Round } from "../../components/game-base/type";
 import { DrawIdBlock } from "../../components/game-components/draw-id";
 import { PercentageStatistic } from "../../components/game-components/statistic";
 import { TurnStateHandler } from "../../components/turn-base/turn-state-handler";
@@ -24,7 +24,7 @@ import { BacBallResult, BacBallSettlementResult } from "./types";
 
 const BacBallBetHistoryModal = dynamic(() => import("./history"));
 
-class BacBall extends GameBase<GameBaseProps> {
+class BacBall extends GameBase<GameBaseProps, GameBaseState> {
     private turnIdHandler?: TurnIdHandler;
 
     constructor(props: GameBaseProps) {

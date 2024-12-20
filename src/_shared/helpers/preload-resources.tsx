@@ -51,12 +51,10 @@ const PreloadResources: React.FC<{
     const router = useRouter();
 
     const getImage = async (path: string, cb) => {
-        try {
-            await axios.get(path);
-        } catch (err) {
-            console.log(err);
-        }
-        cb && cb();
+        const img = new Image();
+        img.src = path;
+        img.onload = () => cb && cb();
+        img.onerror = () => cb && cb();
     };
 
     const fetchImages = async () => {

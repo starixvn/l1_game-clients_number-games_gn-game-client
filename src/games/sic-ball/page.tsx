@@ -11,7 +11,7 @@ import {
 import { useTranslator } from "../../_shared/react-hooks";
 import GameBase from "../../components/game-base/";
 import { GameMessageHandler } from "../../components/game-base/handlers";
-import { GameBaseHandlers, GameBaseProps, Round } from "../../components/game-base/type";
+import { GameBaseHandlers, GameBaseProps, GameBaseState, Round } from "../../components/game-base/type";
 import { GameStatusMap } from "../../components/game-components/countdown-timer/countdown-timer";
 import { RoundGameSoundHandler } from "../../components/round-base/round-game-sound-handler";
 import { RoundStateHandler } from "../../components/round-base/round-state-handler";
@@ -32,10 +32,10 @@ const SicBallBetHistoryModal = dynamic(() => import("./history"));
 
 export type SicBallState = {
     statisticGroup?: number;
-};
+} & GameBaseState;
 
-class SicBall extends GameBase<GameBaseProps> {
-    state: SicBallState = { statisticGroup: 0 };
+class SicBall extends GameBase<GameBaseProps, SicBallState> {
+    state: SicBallState = { statisticGroup: 0, isLoaded: false };
     private readonly roundIdHandler?: RoundIdHandler;
     constructor(props: GameBaseProps) {
         const gameMessageHandler = new GameMessageHandler(props.dispatch);
