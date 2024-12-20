@@ -1,10 +1,11 @@
 import dynamic from "next/dynamic";
+import Image from "next/image";
+import { useState } from "react";
 
 import { useGameContext } from "../../_shared/react-contexts";
 import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
 import { isShowHighlightPrevResult } from "../../_shared/react-hooks/use-high-light";
 import { RoundState } from "../../components/game-base/type";
-import { CachedImage } from "../../components/game-components/cached-image";
 import { BetChoiceImagesData, DotColorMapper, SeBallBetOptions, SeBallBetOptionsPercentageColor } from "./se-ball-constants";
 import Style from "./se-ball.module.scss";
 
@@ -22,6 +23,16 @@ const SeBallBetOptionsComponent = () => {
     const { tolgeeNamespace } = useGameContext();
 
     const isShowDisabledLayer = roundState === RoundState.LockingBet;
+
+    const [loadingComplete, setLoadingComplete] = useState({
+        [SeBallBetOptions.ODD]: false,
+        [SeBallBetOptions.EVEN]: false,
+        [SeBallBetOptions.BLUE3]: false,
+        [SeBallBetOptions.RED3]: false,
+        [SeBallBetOptions.RED2]: false,
+        [SeBallBetOptions.RED4]: false,
+        [SeBallBetOptions.BLUE4]: false,
+    });
 
     const renderTotalBet = (choice: string, className?: string) => {
         return <TotalBet choice={choice} className={className} tolgeeNamespace={tolgeeNamespace} />;
@@ -133,12 +144,12 @@ const SeBallBetOptionsComponent = () => {
 
         return (
             <div className={`${Style[choice]} text-white relative`}>
-                <CachedImage
+                <Image
                     className={Style["bg-bet-option"]}
                     width={178}
                     height={94}
-                    src={BetChoiceImagesData[choice]?.src}
-                    blurSrc={BetChoiceImagesData[choice]?.blur}
+                    src={loadingComplete[choice] ? BetChoiceImagesData[choice]?.src : BetChoiceImagesData[choice]?.blur}
+                    onLoad={() => setLoadingComplete((prevState) => ({ ...prevState, [choice]: true }))}
                     alt={choice}
                     priority={true}
                 />
@@ -203,12 +214,12 @@ const SeBallBetOptionsComponent = () => {
         const backgroundName = getSubOptionsName(choice);
         return (
             <div className={`${Style[choice]} ${Style["bet-choice"]}`}>
-                <CachedImage
+                <Image
                     className={Style["bg-bet-option"]}
                     width={choice === SeBallBetOptions.RED2 ? 77 : 136}
                     height={choice === SeBallBetOptions.RED2 ? 149 : 66}
-                    src={BetChoiceImagesData[backgroundName]?.src}
-                    blurSrc={BetChoiceImagesData[backgroundName]?.blur}
+                    src={loadingComplete[choice] ? BetChoiceImagesData[backgroundName]?.src : BetChoiceImagesData[backgroundName]?.blur}
+                    onLoad={() => setLoadingComplete((prevState) => ({ ...prevState, [choice]: true }))}
                     alt={choice}
                     priority={true}
                 />

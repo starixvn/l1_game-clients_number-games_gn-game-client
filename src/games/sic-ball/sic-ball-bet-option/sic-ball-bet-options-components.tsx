@@ -1,13 +1,14 @@
 import dynamic from "next/dynamic";
-import { useGameContext } from "../../../_shared/react-contexts";
-import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
-import { useTranslator } from "../../../_shared/react-hooks";
-import { isShowHighlightPrevResult } from "../../../_shared/react-hooks/use-high-light";
 import { RoundState } from "../../../components/game-base/type";
-import { CachedImage } from "../../../components/game-components/cached-image";
-import SmallBall from "../../../components/game-components/small-ball";
 import { BetChoiceImagesData, SicBallBetOptions, SicBallBetOptionsPercentageColor } from "../sic-ball-constants";
 import Style from "../sic-ball.module.scss";
+import { useGameStateContext } from "../../../_shared/react-contexts/game-state-context/game-state-context";
+import { useGameContext } from "../../../_shared/react-contexts";
+import SmallBall from "../../../components/game-components/small-ball";
+import { isShowHighlightPrevResult } from "../../../_shared/react-hooks/use-high-light";
+import Image from 'next/image';
+import { useTranslator } from "../../../_shared/react-hooks";
+import { useState } from "react";
 
 const BetChoice = dynamic(() => import("../../../components/game-components/bet-option/bet-choice"));
 const BetPercentage = dynamic(() => import("../../../components/game-components/bet-option/bet-percentage"));
@@ -118,33 +119,27 @@ export const HighlightWinningResult = ({ choice }) => {
 export const SicBallMainOption = ({ choice }) => {
     const { roundState, roundHistory, turnCounter } = useGameStateContext();
     const { tolgeeNamespace } = useGameContext();
+    const [loadingComplete, setLoadingComplete] = useState(false);
+
     const isShowDisabledLayer = roundState === RoundState.LockingBet;
 
     const className = Style[`choice-${choice}`];
 
     return (
         <div className={`${Style[choice]} text-white relative`}>
-            <CachedImage
+            <Image
                 className={Style["bg-bet-option"]}
                 width={173}
                 height={104}
-                src={BetChoiceImagesData[choice]?.src}
-                blurSrc={BetChoiceImagesData[choice]?.blur}
+                src={loadingComplete ? BetChoiceImagesData[choice]?.src : BetChoiceImagesData[choice]?.blur}
+                onLoad={() => setLoadingComplete(true)}
                 alt={choice}
                 priority={true}
             />
             <div className={`${Style["choice-info"]} ${className}`}>
                 <div className={Style.stake}>
-                    <TotalBet
-                        choice={choice}
-                        className={choice === SicBallBetOptions.BIG ? "justify-end" : ""}
-                        tolgeeNamespace={tolgeeNamespace}
-                    />
-                    <PlayerBetCount
-                        choice={choice}
-                        className={`flex items-center players gap-1 ${choice === SicBallBetOptions.BIG ? "justify-end" : ""}`}
-                        tolgeeNamespace={tolgeeNamespace}
-                    />
+                    <TotalBet choice={choice} className={choice === SicBallBetOptions.BIG ? "justify-end" : ""} tolgeeNamespace={tolgeeNamespace} />
+                    <PlayerBetCount choice={choice} className={`flex items-center players gap-1 ${choice === SicBallBetOptions.BIG ? "justify-end" : ""}`} tolgeeNamespace={tolgeeNamespace} />
                 </div>
                 <BetPercentage
                     choice={choice}
@@ -167,13 +162,13 @@ export const SicBallMainOption = ({ choice }) => {
             </div>
             <OwnBet choice={choice} tolgeeNamespace={tolgeeNamespace} className={Style["own-bet"]} />
             <div className={Style["winning-effect"]}>
-                <HighlightWinningResult choice={choice} />
-            </div>
+                <HighlightWinningResult choice={choice} /></div>
 
             <RippleButton className={`${Style["btn-ripple"]}`} id={`${tolgeeNamespace}-choice-${choice}`} choice={choice} />
 
             {isShowDisabledLayer && <div className={Style["disable-layer"]}></div>}
-            {isShowHighlightPrevResult({ betChoice: choice, roundState, roundHistory }) && <HighlightWinningPrevResult choice={choice} />}
+            {isShowHighlightPrevResult({ betChoice: choice, roundState, roundHistory }) &&
+                <HighlightWinningPrevResult choice={choice} />}
         </div>
     );
 };
@@ -181,18 +176,19 @@ export const SicBallMainOption = ({ choice }) => {
 export const SicBallSubOptions = ({ choice }) => {
     const { roundState, roundHistory } = useGameStateContext();
     const { tolgeeNamespace } = useGameContext();
+    const [loadingComplete, setLoadingComplete] = useState(false);
 
     const isShowDisabledLayer = roundState === RoundState.LockingBet;
     const backgroundName = getSubOptionsName(choice);
 
     return (
         <div className={`${Style[choice]} ${Style["bet-choice"]}`}>
-            <CachedImage
+            <Image
                 className={Style["bg-bet-option"]}
                 width={113}
                 height={60}
-                src={BetChoiceImagesData[backgroundName]?.src}
-                blurSrc={BetChoiceImagesData[backgroundName]?.blur}
+                src={loadingComplete ? BetChoiceImagesData[backgroundName]?.src : BetChoiceImagesData[backgroundName]?.blur}
+                onLoad={() => setLoadingComplete(true)}
                 alt={choice}
                 priority={true}
             />
@@ -208,7 +204,10 @@ export const SicBallSubOptions = ({ choice }) => {
 
             <RippleButton className={`${Style["btn-ripple"]}`} id={`${tolgeeNamespace}-choice-${choice}`} choice={choice} />
             {isShowDisabledLayer && <div className={Style["disable-layer"]}></div>}
-            {isShowHighlightPrevResult({ betChoice: choice, roundState, roundHistory }) && <HighlightWinningPrevResult choice={choice} />}
+            {
+                isShowHighlightPrevResult({ betChoice: choice, roundState, roundHistory })
+                && <HighlightWinningPrevResult choice={choice} />
+            }
         </div>
     );
 };

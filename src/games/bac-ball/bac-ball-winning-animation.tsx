@@ -1,5 +1,4 @@
 import { buildVersion } from "../../_shared/constants";
-import { useMemoriedImage } from "../../_shared/react-hooks";
 import { isHighLightWinningResult } from "../../_shared/react-hooks/use-high-light";
 import { RoundState } from "../../components/game-base/type";
 import { Spritesheet } from "../../components/game-components/sprites-sheet";
@@ -16,11 +15,6 @@ type Props = {
 
 export const BacBallWinningAnimation: React.FC<Props> = ({ choice, resourceName, roundState, settlementResult, showResultInfo }) => {
     const winningHighLightResult = isHighLightWinningResult;
-    const { data } = useMemoriedImage(`/static/images/bac-number/highlight-winning-${resourceName}.png?v=${buildVersion}`);
-
-    if (!data) {
-        return <></>;
-    }
 
     return (
         resourceName &&
@@ -28,7 +22,7 @@ export const BacBallWinningAnimation: React.FC<Props> = ({ choice, resourceName,
             <div className={`d-grid`}>
                 <Spritesheet
                     className={Styles[`winning-light-anim-${choice}`]}
-                    imageData={data}
+                    imageData={`/static/images/bac-number/highlight-winning-${resourceName}.png?v=${buildVersion}`}
                     widthFrame={200}
                     isResponsive
                     heightFrame={210}

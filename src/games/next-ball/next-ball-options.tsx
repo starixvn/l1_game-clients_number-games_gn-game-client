@@ -1,11 +1,12 @@
 import dynamic from "next/dynamic";
+import Image from "next/image";
+import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 import { useGameContext } from "../../_shared/react-contexts";
 import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
 import { isShowHighlightPrevResult } from "../../_shared/react-hooks/use-high-light";
 import { RoundState } from "../../components/game-base/type";
-import { CachedImage } from "../../components/game-components/cached-image";
 import { BetChoiceImagesData, NextBallBetOptions, NextBallBetOptionsPercentageColor } from "./next-ball-constants";
 import Style from "./next-ball.module.scss";
 
@@ -23,6 +24,13 @@ const NextBallBetOptionsComponent = () => {
     const { tolgeeNamespace } = useGameContext();
 
     const isShowDisabledLayer = roundState === RoundState.LockingBet;
+
+    const [loadingComplete, setLoadingComplete] = useState({
+        [NextBallBetOptions.ODD]: false,
+        [NextBallBetOptions.EVEN]: false,
+        [NextBallBetOptions.OVER]: false,
+        [NextBallBetOptions.UNDER]: false,
+    });
 
     const renderTotalBet = (choice: string, className?: string) => {
         return <TotalBet choice={choice} className={className} tolgeeNamespace={tolgeeNamespace} />;
@@ -147,13 +155,13 @@ const NextBallBetOptionsComponent = () => {
 
         return (
             <div className={`${Style[choice]} text-white relative`}>
-                <CachedImage
+                <Image
                     key={uuidv4}
                     className={Style["bg-bet-option"]}
                     width={176}
                     height={94}
-                    src={BetChoiceImagesData[backgroundName]?.src}
-                    blurSrc={BetChoiceImagesData[backgroundName]?.blur}
+                    src={loadingComplete[choice] ? BetChoiceImagesData[backgroundName]?.src : BetChoiceImagesData[backgroundName]?.blur}
+                    onLoad={() => setLoadingComplete((prevState) => ({ ...prevState, [choice]: true }))}
                     alt={choice}
                     priority={true}
                 />
