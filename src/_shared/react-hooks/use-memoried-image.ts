@@ -1,13 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
-import { downloadAndCacheImage } from "../helpers/image-cache-controller";
+import { downloadAndCacheImage, imageCache } from "../helpers/image-cache-controller";
 
 export const useMemoriedImage = (path: string) => {
-    const [data, setData] = useState("");
+    const [data, setData] = useState(imageCache[path]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<Error | null>(null);
 
     const fetchData = useCallback(async () => {
-        setIsLoading(true);
         try {
             const { imageBase64, valid } = await downloadAndCacheImage(path);
             if (!valid) {
@@ -26,8 +25,13 @@ export const useMemoriedImage = (path: string) => {
             setError(new Error("Invalid image path"));
             return;
         }
-
-        fetchData();
+        setIsLoading(true);
+        if (imageCache[path]) {
+            setData(imageCache[path]);
+            setIsLoading(false);
+        } else {
+            fetchData();
+        }
     }, [path]);
 
     return { data, isLoading, error };

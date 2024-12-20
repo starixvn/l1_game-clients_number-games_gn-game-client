@@ -10,6 +10,7 @@ import Styles from "./cage-result-list.module.scss";
 import ResultGroup from "./result-group";
 import { useMemoriedImage } from "../../../_shared/react-hooks";
 import { CachedImage } from "../cached-image";
+import { BgCachedImage } from "../cached-image/bg-cached-image";
 
 export type CageResultListProps = {
     color: string;
@@ -47,6 +48,8 @@ const CageResultList: React.FC<CageResultListProps> = ({
 
     const showBallDelayTime = 1000;
     const { data } = useMemoriedImage(`/static/images/${gameFolder}/result-ball/ball-highlight.webp?v=${buildVersion}`);
+    const { data: cageBorder } = useMemoriedImage(`/static/images/cage/cage-border-${color}.webp?v=${buildVersion}`);
+    const { data: cageBorder2x } = useMemoriedImage(`/static/images/cage/cage-border-${color}-2x.webp?v=${buildVersion}`);
 
     useEffect(() => {
         let timeOut: NodeJS.Timeout;
@@ -95,8 +98,14 @@ const CageResultList: React.FC<CageResultListProps> = ({
                 <div id="cage-bg" className={CageStyles["cage-bg"]}></div>
                 <BallLoops isPlayStartRoundAnimation={isPlayStartRoundAnimation} />
                 <div id="cage-cover" className={CageStyles["cage-cover"]}></div>
-                <div id="cage-border" className={`${CageStyles["cage-border"]} ${CageStyles[color]}`}>
-                    {!showBalls && <div id="cage-lid" className={CageStyles["cage-lid"]} />}
+                <div
+                    id="cage-border"
+                    className={`${CageStyles["cage-border"]}`}
+                    style={{ backgroundImage: `image-set(url('${cageBorder}') 1x, url('${cageBorder2x}') 2x)` }}
+                >
+                    {!showBalls && (
+                        <BgCachedImage className={Styles["cage-lid"]} pathImage={`/static/images/cage/cage-lid.webp?v=${buildVersion}`} />
+                    )}
                 </div>
 
                 {playResultAnimation && (

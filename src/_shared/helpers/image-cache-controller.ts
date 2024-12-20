@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const imageCache = {};
+export const imageCache: Record<string, string> = {};
 
 const fetchImageBase64 = async (imageUrl: string) => {
     try {

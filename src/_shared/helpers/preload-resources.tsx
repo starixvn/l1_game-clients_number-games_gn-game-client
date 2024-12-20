@@ -34,7 +34,7 @@ export const updateProgressBar = (percentage: number, progressBarId = DEFAULT_PR
     });
 };
 
-const memoriedImages = ["/chips/", "/countdown-timer/", "/lobby/", "/cage/", "/anim/ball-middle/", "/ball/"];
+const memoriedImages = ["/chips/gn/", "/countdown-timer/", "/lobby/", "/cage/", "/anim/ball-middle/", "/ball/"];
 
 const PreloadResources: React.FC<{
     setIsDonePreload: Function;

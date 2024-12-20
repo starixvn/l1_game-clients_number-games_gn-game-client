@@ -1,6 +1,6 @@
 import { renderHook } from "@testing-library/react-hooks/dom";
 import { useMemoriedImage } from "../use-memoried-image";
-import { downloadAndCacheImage } from "../../helpers/image-cache-controller";
+import { downloadAndCacheImage, imageCache } from "../../helpers/image-cache-controller";
 import { act } from "@testing-library/react";
 
 // Mock the image cache controller
@@ -10,6 +10,8 @@ const mockedDownloadAndCacheImage = downloadAndCacheImage as jest.MockedFunction
 describe("useMemoriedImage", () => {
     beforeEach(() => {
         jest.clearAllMocks();
+        // Clear the imageCache
+        Object.keys(imageCache).forEach((key) => delete imageCache[key]);
     });
 
     test("should handle successful image loading", async () => {
@@ -27,7 +29,7 @@ describe("useMemoriedImage", () => {
 
         // Assert initial state
         expect(result.current.isLoading).toBe(true);
-        expect(result.current.data).toBe("");
+        expect(result.current.data).toBe(undefined);
         expect(result.current.error).toBeNull();
 
         // Wait for the async operation to complete
@@ -54,7 +56,7 @@ describe("useMemoriedImage", () => {
 
         // Assert initial state
         expect(result.current.isLoading).toBe(true);
-        expect(result.current.data).toBe("");
+        expect(result.current.data).toBe(undefined);
         expect(result.current.error).toBeNull();
 
         // Wait for the async operation to complete
@@ -62,7 +64,7 @@ describe("useMemoriedImage", () => {
 
         // Assert final state
         expect(result.current.isLoading).toBe(false);
-        expect(result.current.data).toBe("");
+        expect(result.current.data).toBe(undefined);
         expect(result.current.error).toBeInstanceOf(Error);
         expect(result.current.error.message).toBe("Network response was not ok");
     });
@@ -78,7 +80,7 @@ describe("useMemoriedImage", () => {
 
         // Assert initial state
         expect(result.current.isLoading).toBe(true);
-        expect(result.current.data).toBe("");
+        expect(result.current.data).toBe(undefined);
         expect(result.current.error).toBeNull();
 
         // Wait for the async operation to complete
@@ -86,8 +88,49 @@ describe("useMemoriedImage", () => {
 
         // Assert final state
         expect(result.current.isLoading).toBe(false);
-        expect(result.current.data).toBe("");
+        expect(result.current.data).toBe(undefined);
         expect(result.current.error).toBe(expectedError);
+        expect(mockedDownloadAndCacheImage).toHaveBeenCalledTimes(1);
+    });
+
+    test("should use cached image when available", () => {
+        // Arrange
+        const imagePath = "https://example.com/cached-image.jpg";
+        const cachedBase64 = "cachedBase64EncodedData";
+        imageCache[imagePath] = cachedBase64;
+
+        // Act
+        const { result } = renderHook(() => useMemoriedImage(imagePath));
+
+        // Assert
+        expect(result.current.isLoading).toBe(false);
+        expect(result.current.data).toBe(cachedBase64);
+        expect(result.current.error).toBeNull();
+        expect(mockedDownloadAndCacheImage).not.toHaveBeenCalled();
+    });
+
+    test("should handle invalid path", () => {
+        // Arrange & Act
+        const { result } = renderHook(() => useMemoriedImage(null as any));
+
+        // Assert
+        expect(result.current.isLoading).toBe(false);
+        expect(result.current.data).toBe(undefined);
+        expect(result.current.error).toBeInstanceOf(Error);
+        expect(result.current.error?.message).toBe("Invalid image path");
+        expect(mockedDownloadAndCacheImage).not.toHaveBeenCalled();
+    });
+
+    test("should handle empty path", () => {
+        // Arrange & Act
+        const { result } = renderHook(() => useMemoriedImage(""));
+
+        // Assert
+        expect(result.current.isLoading).toBe(false);
+        expect(result.current.data).toBe(undefined);
+        expect(result.current.error).toBeInstanceOf(Error);
+        expect(result.current.error?.message).toBe("Invalid image path");
+        expect(mockedDownloadAndCacheImage).not.toHaveBeenCalled();
     });
 
     test("should update when path changes", async () => {
@@ -110,7 +153,7 @@ describe("useMemoriedImage", () => {
             });
 
         // Act
-        const { result, waitForNextUpdate, rerender } = renderHook((props) => useMemoriedImage(props), { initialProps: initialPath });
+        const { result, waitForNextUpdate, rerender } = renderHook((path) => useMemoriedImage(path), { initialProps: initialPath });
 
         // Wait for first load
         await waitForNextUpdate();
@@ -118,16 +161,22 @@ describe("useMemoriedImage", () => {
 
         // Change the path
         act(() => {
+            delete imageCache[newPath];
             rerender(newPath);
         });
+
+        // Assert loading state after path change
+        expect(result.current.isLoading).toBe(true);
 
         // Wait for second load
         await waitForNextUpdate();
 
-        // Assert
+        // Assert final state
+        expect(result.current.isLoading).toBe(false);
         expect(result.current.data).toBe(newBase64);
+        expect(result.current.error).toBeNull();
         expect(mockedDownloadAndCacheImage).toHaveBeenCalledTimes(2);
-        expect(mockedDownloadAndCacheImage).toHaveBeenCalledWith(initialPath);
-        expect(mockedDownloadAndCacheImage).toHaveBeenCalledWith(newPath);
+        expect(mockedDownloadAndCacheImage).toHaveBeenNthCalledWith(1, initialPath);
+        expect(mockedDownloadAndCacheImage).toHaveBeenNthCalledWith(2, newPath);
     });
 });
