@@ -34,7 +34,7 @@ export const updateProgressBar = (percentage: number, progressBarId = DEFAULT_PR
     });
 };
 
-const memoriedImages = ["/chips/", "/countdown-timer/", "/lobby/","/cage"];
+const memoriedImages = ["/chips/", "/countdown-timer/", "/lobby/", "/cage/", "/anim/ball-middle/", "/ball/"];
 
 const PreloadResources: React.FC<{
     setIsDonePreload: Function;
@@ -68,7 +68,6 @@ const PreloadResources: React.FC<{
                 bannerId,
             });
             const imagesPath = (response?.data as string[]) || [];
-
             if (imagesPath.length > 0) {
                 let loadedImages = 0;
                 imagesPath.forEach((path) => {

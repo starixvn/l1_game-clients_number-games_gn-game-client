@@ -16,12 +16,8 @@ export const downloadAndCacheImage = async (path: string): Promise<{ path: strin
     let imageBase64: string;
 
     if (imageCache[path]) {
-        console.log("get", path);
-
         imageBase64 = imageCache[path];
     } else {
-        console.log("downloadAndCache", path);
-
         imageBase64 = await fetchImageBase64(path);
         imageCache[path] = imageBase64;
     }
