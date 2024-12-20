@@ -1,11 +1,12 @@
 import dynamic from "next/dynamic";
+import Image from "next/image";
+import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 import { useGameContext } from "../../_shared/react-contexts";
 import { useGameStateContext } from "../../_shared/react-contexts/game-state-context/game-state-context";
 import { isShowHighlightPrevResult } from "../../_shared/react-hooks/use-high-light";
 import { RoundState } from "../../components/game-base/type";
-import { CachedImage } from "../../components/game-components/cached-image";
 import Style from "./bac-ball.module.scss";
 import { BacBallBetOptions, BacBallBetOptionsPercentageColor, BetChoiceImagesData } from "./constants";
 
@@ -23,6 +24,12 @@ const BacBallBetOptionsComponent = () => {
     const { tolgeeNamespace } = useGameContext();
 
     const isShowDisabledLayer = roundState === RoundState.LockingBet;
+
+    const [loadingComplete, setLoadingComplete] = useState({
+        [BacBallBetOptions.BANKER]: false,
+        [BacBallBetOptions.PLAYER]: false,
+        [BacBallBetOptions.TIE]: false,
+    });
 
     const renderTotalBet = (choice: string) => {
         const tieClassName = `justify-center mt-1`;
@@ -103,13 +110,13 @@ const BacBallBetOptionsComponent = () => {
         const ownBet = renderOwnBet(choice);
         return (
             <div className={`${Style[choice]} text-white relative`}>
-                <CachedImage
+                <Image
                     key={uuidv4}
                     className={Style["bg-bet-option"]}
                     width={178}
                     height={188}
-                    src={BetChoiceImagesData[choice]?.src}
-                    blurSrc={BetChoiceImagesData[choice]?.blur}
+                    src={loadingComplete[choice] ? BetChoiceImagesData[choice]?.src : BetChoiceImagesData[choice]?.blur}
+                    onLoad={() => setLoadingComplete((prevState) => ({ ...prevState, [choice]: true }))}
                     alt={choice}
                     priority={true}
                 />
@@ -157,12 +164,16 @@ const BacBallBetOptionsComponent = () => {
         const ownBet = renderOwnBet(BacBallBetOptions.TIE);
         return (
             <div className={`${Style[BacBallBetOptions.TIE]} text-white flex flex-col items-center pt-2`}>
-                <CachedImage
+                <Image
                     className={Style["bg-bet-option"]}
                     width={95}
                     height={172}
-                    src={BetChoiceImagesData[BacBallBetOptions.TIE]?.src}
-                    blurSrc={BetChoiceImagesData[BacBallBetOptions.TIE]?.blur}
+                    src={
+                        loadingComplete[BacBallBetOptions.TIE]
+                            ? BetChoiceImagesData[BacBallBetOptions.TIE]?.src
+                            : BetChoiceImagesData[BacBallBetOptions.TIE]?.blur
+                    }
+                    onLoad={() => setLoadingComplete((prevState) => ({ ...prevState, [BacBallBetOptions.TIE]: true }))}
                     alt="tie"
                     priority={true}
                 />

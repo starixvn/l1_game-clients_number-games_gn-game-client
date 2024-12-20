@@ -48,7 +48,7 @@
         "numberOfRoundHistory": 100,
         "gamePath": "bac-ball",
         "gameResourceConfigs": {
-            "path": "bac-number"
+            "path": ""
         }
     },
     "1003": {
@@ -154,9 +154,7 @@
         "gamePath": "lucky-three",
         "gameResourceConfigs": {
             "path": "lucky-three",
-            "optionalPaths": [
-                "lucky-three/result-ball"
-            ]
+            "optionalPaths": ["lucky-three/result-ball"]
         }
     },
     "1007": {
