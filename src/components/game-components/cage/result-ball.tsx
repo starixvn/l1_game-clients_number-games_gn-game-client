@@ -58,7 +58,7 @@ const ResultBall: React.FC<{
                 )}
             </div>
         );
-    }, [isDelayShowResult, ballColor, isShowResultAnim]);
+    }, [isDelayShowResult, ballColor, isShowResultAnim, data]);
 };
 
 export default ResultBall;
