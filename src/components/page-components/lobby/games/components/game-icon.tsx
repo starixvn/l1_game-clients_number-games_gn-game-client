@@ -1,5 +1,4 @@
 import dynamic from "next/dynamic";
-import { buildVersion } from "../../../../../_shared/constants";
 import { GameSettings } from "../../../../game-base/type";
 import { LobbyGameTransmitter } from "../../lobby-socket-connection";
 import Styles from "../../lobby.module.scss";

@@ -1,7 +1,7 @@
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 
-import { buildVersion, LobbyGameId } from "../../../../../_shared/constants";
+import { LobbyGameId } from "../../../../../_shared/constants";
 import PreloadResources from "../../../../../_shared/helpers/preload-resources";
 import { useLobbyConnectionContext } from "../../../../../_shared/react-contexts";
 import { GameSettings } from "../../../../game-base/type";
