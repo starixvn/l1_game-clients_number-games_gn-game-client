@@ -22,7 +22,8 @@
         "numberOfRoundHistory": 100,
         "gamePath": "bac-ball",
         "gameResourceConfigs": {
-            "path": "bac-number"
+            "path": "bac-number",
+            "cachePaths": ["highlight-winning-player.png", "highlight-winning-tie.png"]
         }
     },
     "1002": {
@@ -48,7 +49,8 @@
         "numberOfRoundHistory": 100,
         "gamePath": "bac-ball",
         "gameResourceConfigs": {
-            "path": ""
+            "path": "bac-number",
+            "cachePaths": ["highlight-winning-player.png", "highlight-winning-tie.png"]
         }
     },
     "1003": {
@@ -74,7 +76,8 @@
         "numberOfRoundHistory": 100,
         "gamePath": "next-ball",
         "gameResourceConfigs": {
-            "path": "next-ball"
+            "path": "next-ball",
+            "cachePaths": ["highlight-winning-over.png", "highlight-winning-odd.png"]
         }
     },
     "1004": {
@@ -100,7 +103,8 @@
         "numberOfRoundHistory": 100,
         "gamePath": "next-ball",
         "gameResourceConfigs": {
-            "path": "next-ball"
+            "path": "next-ball",
+            "cachePaths": ["highlight-winning-over.png", "highlight-winning-odd.png"]
         }
     },
     "1005": {
@@ -127,7 +131,13 @@
         "gamePath": "se-ball",
         "gameResourceConfigs": {
             "path": "se-ball",
-            "optionalPaths": ["se-ball/result-ball"]
+            "optionalPaths": ["se-ball/result-ball"],
+            "cachePaths": [
+                "highlight-winning-even.png",
+                "highlight-winning-blue3.png",
+                "highlight-winning-blue4.png",
+                "highlight-winning-red2.png"
+            ]
         }
     },
     "1006": {
@@ -154,7 +164,13 @@
         "gamePath": "lucky-three",
         "gameResourceConfigs": {
             "path": "lucky-three",
-            "optionalPaths": ["lucky-three/result-ball"]
+            "optionalPaths": ["lucky-three/result-ball"],
+            "cachePaths": [
+                "highlight-winning-over.png",
+                "highlight-winning-under.png",
+                "highlight-winning-blue2.png",
+                "highlight-winning-blue3.png"
+            ]
         }
     },
     "1007": {
@@ -181,7 +197,15 @@
         "gamePath": "sic-ball",
         "gameResourceConfigs": {
             "path": "sic-ball",
-            "cachePaths": ["hub-interface.webp", "six-balls-loop.webp", "1x/cage.png", "2x/cage.png"]
+            "cachePaths": [
+                "hub-interface.webp",
+                "six-balls-loop.webp",
+                "1x/cage.png",
+                "2x/cage.png",
+                "winning-effect-big.png",
+                "winning-effect-small.png",
+                "winning-effect-specific1.png"
+            ]
         }
     }
 }
