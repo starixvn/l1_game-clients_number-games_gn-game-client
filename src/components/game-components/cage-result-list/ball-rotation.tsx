@@ -18,7 +18,7 @@ const BallRotation: React.FC<{
 }> = ({ ballPos, number, playResultAnimation, delayTime, color, incrementTotalPoint, customClassName }) => {
     const [showBall, setShowBall] = useState(false);
     const playShowBallResultSound = useShowBallResultSound();
-    const { data } = useMemoriedImage(`/static/images/anim/ball-middle/ball-${color}-middle-light.webp?v=${buildVersion}`);
+    const { data } = useMemoriedImage(`/static/images/anim/ball-middle/ball-${color}-middle-light.webp`);
 
     useEffect(() => {
         const timeOut = setTimeout(() => {

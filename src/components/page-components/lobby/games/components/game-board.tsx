@@ -106,7 +106,7 @@ export const GameBoard: React.FC<Props> = ({ gameSettings, openGame, gameTransmi
             id={`icon-${gameSettings.gameName.toLowerCase()}`}
         >
             <CachedImage
-                src={`/static/images/lobby/game-board-detail/bg-game-board-2x.webp?v=${buildVersion}`}
+                src={`/static/images/lobby/game-board-detail/bg-game-board-2x.webp`}
                 blurSrc={LobbyImagesData["game-block"]}
                 className={Styles["background"]}
                 width={360}

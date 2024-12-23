@@ -12,7 +12,6 @@ import { IBanner, ILobbyConfigs } from "../../dashboard/type";
 import { LobbyImagesData } from "../games/components/lobby-constant";
 import { BannerSwiper, DEFAULT_DELAY_SLIDER } from "./banner-swiper";
 import { downloadAndCacheImage } from "../../../../_shared/helpers/image-cache-controller";
-import { buildVersion } from "../../../../_shared/constants";
 
 const DEFAULT_BANNER_PATH = "/static/images/lobby/banners";
 
@@ -84,8 +83,8 @@ export const Banner: React.FC<{ openGame: Function; lobbyConfigs: ILobbyConfigs 
 
     const getImageValidPath = async (banner: IBanner): Promise<string> => {
         const paths = [
-            `${DEFAULT_BANNER_PATH}/${banner.gameId}/${banner.gameId}_${locale}.gif?v=${buildVersion}`,
-            `${DEFAULT_BANNER_PATH}/${banner.gameId}/${banner.gameId}_en.gif?v=${buildVersion}`,
+            `${DEFAULT_BANNER_PATH}/${banner.gameId}/${banner.gameId}_${locale}.gif`,
+            `${DEFAULT_BANNER_PATH}/${banner.gameId}/${banner.gameId}_en.gif`,
         ];
         let validPath = "";
 

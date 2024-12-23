@@ -8,7 +8,6 @@ import Styles from "./cage.module.scss";
 import ResultBall from "./result-ball";
 import ResultNumber from "./result-number";
 import { useMemoriedImage } from "../../../_shared/react-hooks";
-import { buildVersion } from "../../../_shared/constants";
 import { BgCachedImage } from "../cached-image/bg-cached-image";
 
 export enum CageColor {
@@ -47,8 +46,8 @@ const Cage: React.FC<CageProps> = ({
 }) => {
     const [isDelayShowResult, setIsDelayShowResult] = useState<boolean>(false);
     const [ballColor, setBallColor] = useState<string>(null);
-    const { data: cageBorder } = useMemoriedImage(`/static/images/cage/cage-border-${color}.webp?v=${buildVersion}`);
-    const { data: cageBorder2x } = useMemoriedImage(`/static/images/cage/cage-border-${color}-2x.webp?v=${buildVersion}`);
+    const { data: cageBorder } = useMemoriedImage(`/static/images/cage/cage-border-${color}.webp`);
+    const { data: cageBorder2x } = useMemoriedImage(`/static/images/cage/cage-border-${color}-2x.webp`);
 
     useEffect(() => {
         let timeOut: NodeJS.Timeout;
@@ -72,7 +71,7 @@ const Cage: React.FC<CageProps> = ({
     return (
         <div className={`${Styles["cage-area"]} ${isSmall ? Styles["small"] : ""} ${Styles[position]}`}>
             {highlight && <div className={`${Styles["cage-bg-highlight"]}`}></div>}
-            <BgCachedImage className={Styles["cage-bg"]} pathImage={`/static/images/cage/cage.webp?v=${buildVersion}`} />
+            <BgCachedImage className={Styles["cage-bg"]} pathImage={`/static/images/cage/cage.webp`} />
             <BallLoops isPlayStartRoundAnimation={isPlayStartRoundAnimation} />
             <div id="cage-cover" className={Styles["cage-cover"]}></div>
             <div
@@ -80,9 +79,7 @@ const Cage: React.FC<CageProps> = ({
                 className={`${Styles["cage-border"]}`}
                 style={{ backgroundImage: `image-set(url('${cageBorder}') 1x, url('${cageBorder2x}') 2x)` }}
             >
-                {!isDelayShowResult && (
-                    <BgCachedImage className={Styles["cage-lid"]} pathImage={`/static/images/cage/cage-lid.webp?v=${buildVersion}`} />
-                )}
+                {!isDelayShowResult && <BgCachedImage className={Styles["cage-lid"]} pathImage={`/static/images/cage/cage-lid.webp`} />}
 
                 {!!ballColor && (
                     <ResultBall

@@ -3,12 +3,11 @@ import { memo, useEffect, useState } from "react";
 import { useLowPerformanceDevice, useMemoriedImage } from "../../../_shared/react-hooks";
 import { Spritesheet } from "../sprites-sheet";
 import Styles from "./cage.module.scss";
-import { buildVersion } from "../../../_shared/constants";
 
 const BallLoops: React.FC<{ isPlayStartRoundAnimation?: boolean }> = ({ isPlayStartRoundAnimation }) => {
     const isLowPerformanceDevice = useLowPerformanceDevice();
     const [showIdleBalls, setShowIdleBalls] = useState(false);
-    const { data } = useMemoriedImage(`/static/images/cage/cage-loop-anim.webp?v=${buildVersion}`);
+    const { data } = useMemoriedImage(`/static/images/cage/cage-loop-anim.webp`);
 
     useEffect(() => {
         let timeOut: NodeJS.Timeout;

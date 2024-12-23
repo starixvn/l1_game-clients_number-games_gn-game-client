@@ -19,7 +19,7 @@ export const GameIcon: React.FC<Props> = ({ gameSettings, transmitter }) => {
     return (
         <div className={Styles["icon-game"]} key={id}>
             <CachedImage
-                src={`/static/images/lobby/game-board-detail/${id}/icon-${gameName.toLowerCase()}.png?v=${buildVersion}`}
+                src={`/static/images/lobby/game-board-detail/${id}/icon-${gameName.toLowerCase()}.png`}
                 blurSrc={LobbyImagesData[id]}
                 width={130}
                 height={138}

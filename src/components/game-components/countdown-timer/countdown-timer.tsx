@@ -7,7 +7,6 @@ import { messageEventType } from "../../game-base/handlers";
 import { RoundState } from "../../game-base/type";
 import styles from "./countdown-timer.module.scss";
 import { BgCachedImage } from "../cached-image/bg-cached-image";
-import { buildVersion } from "../../../_shared/constants";
 
 export type Rotation = "clockwise" | "counterclockwise";
 
@@ -81,7 +80,7 @@ export const SimpleTimer = ({ clientRemainingTime }) => {
         <div className={styles.timer}>
             <div className={`${styles["countdown-timer"]} ${roundState !== RoundState.InRound ? styles["lock-bet"] : ""}`}>
                 <BgCachedImage
-                    pathImage={`/static/images/countdown-timer/countdown-${bgImage}.png?v=${buildVersion}`}
+                    pathImage={`/static/images/countdown-timer/countdown-${bgImage}.png`}
                     className={styles["countdown-timer-background"]}
                     backgroundSize="3.8rem 3.8rem"
                     backgroundRepeat="no-repeat"

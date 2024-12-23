@@ -14,7 +14,7 @@ const ResultBall: React.FC<{
 }> = ({ isDelayShowResult, ballColor, isShowResultAnim, fps }) => {
     const currentTime = Date.now();
     const playShowBallResult = useShowBallResultSound();
-    const { data } = useMemoriedImage(`/static/images/cage/${ballColor}.webp?v=${buildVersion}`);
+    const { data } = useMemoriedImage(`/static/images/cage/${ballColor}.webp`);
 
     return useMemo(() => {
         if (!isDelayShowResult || !data) {
@@ -28,7 +28,7 @@ const ResultBall: React.FC<{
                     width={120}
                     height={120}
                     className={Styles["ball-blur"]}
-                    src={`/static/images/cage/ball-blur.webp?v=${buildVersion}`}
+                    src={`/static/images/cage/ball-blur.webp`}
                     alt="img-blur"
                 />
 
@@ -50,7 +50,7 @@ const ResultBall: React.FC<{
                 ) : (
                     <CachedImage
                         className={"sss"}
-                        src={`/static/images/cage/${ballImage}.webp?v=${buildVersion}`}
+                        src={`/static/images/cage/${ballImage}.webp`}
                         alt="img-result"
                         width={153}
                         height={153}

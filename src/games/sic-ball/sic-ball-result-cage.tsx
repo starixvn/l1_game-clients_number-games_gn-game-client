@@ -7,9 +7,9 @@ import { useMemoriedImage } from "../../_shared/react-hooks";
 import SicBallCage from "./sic-ball-cage";
 
 const SicBallResultCage: FC<{ startFrame: number }> = ({ startFrame }) => {
-    const { data: hubInterfaceData } = useMemoriedImage(`/static/images/sic-ball/hub-interface.webp?v=${buildVersion}`);
+    const { data: hubInterfaceData } = useMemoriedImage(`/static/images/sic-ball/hub-interface.webp`);
 
-    const { data: sixBallsLoopData } = useMemoriedImage(`/static/images/sic-ball/six-balls-loop.webp?v=${buildVersion}`);
+    const { data: sixBallsLoopData } = useMemoriedImage(`/static/images/sic-ball/six-balls-loop.webp`);
 
     const isLoaded = hubInterfaceData && sixBallsLoopData;
     if (!isLoaded) {

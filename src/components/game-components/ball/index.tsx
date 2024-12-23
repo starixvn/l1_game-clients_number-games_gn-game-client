@@ -4,7 +4,6 @@ import { getBallColor } from "../../../_shared/helpers/ball-color-helper";
 import { RoundState } from "../../game-base/type";
 import Styles from "./ball.module.scss";
 import { useMemoriedImage } from "../../../_shared/react-hooks";
-import { buildVersion } from "../../../_shared/constants";
 
 export enum BallStatus {
     NONE = 0,
@@ -33,7 +32,7 @@ const Ball: FC<IBall> = (props) => {
 
     const [isDelayShowResult, setIsDelayShowResult] = useState<boolean>(false);
 
-    const { data } = useMemoriedImage(`/static/images/ball/ball-${color}.png?v=${buildVersion}`);
+    const { data } = useMemoriedImage(`/static/images/ball/ball-${color}.png`);
 
     useEffect(() => {
         let timeOut: NodeJS.Timeout;

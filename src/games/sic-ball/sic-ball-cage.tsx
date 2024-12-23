@@ -1,13 +1,12 @@
 import { FC } from "react";
 
-import { buildVersion } from "../../_shared/constants";
 import Style from "./sic-ball.module.scss";
 import { useMemoriedImage } from "../../_shared/react-hooks";
 import { getDevicePixelRatio } from "../../_shared/constants/resource-image-mapping";
 
 const SicBallCage: FC = () => {
     const is2x = getDevicePixelRatio() > 1;
-    const { data: cage } = useMemoriedImage(`/static/images/sic-ball/${is2x ? "2" : "1"}x/cage.png?v=${buildVersion}`);
+    const { data: cage } = useMemoriedImage(`/static/images/sic-ball/${is2x ? "2" : "1"}x/cage.png`);
 
     const isLoaded = cage;
     if (!isLoaded) {

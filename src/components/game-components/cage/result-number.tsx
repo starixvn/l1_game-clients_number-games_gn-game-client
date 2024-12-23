@@ -13,7 +13,7 @@ const ResultNumber: React.FC<{
     className?: string;
 }> = ({ isDelayShowResult, number, isShowResultAnim, fps, className }) => {
     const currentTime = Date.now();
-    const { data } = useMemoriedImage(`/static/images/cage/number/${number}.webp?v=${buildVersion}`);
+    const { data } = useMemoriedImage(`/static/images/cage/number/${number}.webp`);
 
     return useMemo(() => {
         if (isDelayShowResult) {
