@@ -89,7 +89,6 @@
 
 .cage-cover {
     @extend %result;
-    background-image: url("/static/images/cage/cage-cover.webp?v=#{$version-image}");
 }
 
 .cage-lid {

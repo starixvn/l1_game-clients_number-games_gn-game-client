@@ -96,7 +96,7 @@ const CageResultList: React.FC<CageResultListProps> = ({
             <div className={`${Styles["ball"]} ${customCageClass}`}>
                 <BgCachedImage className={CageStyles["cage-bg"]} pathImage={`/static/images/cage/cage.webp`} />
                 <BallLoops isPlayStartRoundAnimation={isPlayStartRoundAnimation} />
-                <div id="cage-cover" className={CageStyles["cage-cover"]}></div>
+                <BgCachedImage className={CageStyles["cage-cover"]} pathImage={`/static/images/cage/cage-cover.webp`} />
                 <div
                     id="cage-border"
                     className={`${CageStyles["cage-border"]}`}
