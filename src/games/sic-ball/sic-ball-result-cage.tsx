@@ -4,7 +4,7 @@ import { buildVersion } from "../../_shared/constants";
 import { Spritesheet } from "../../components/game-components/sprites-sheet";
 import Style from "./sic-ball.module.scss";
 import { useMemoriedImage } from "../../_shared/react-hooks";
-import SicBallCage from "./cage";
+import SicBallCage from "./sic-ball-cage";
 
 const SicBallResultCage: FC<{ startFrame: number }> = ({ startFrame }) => {
     const { data: hubInterfaceData } = useMemoriedImage(`/static/images/sic-ball/hub-interface.webp?v=${buildVersion}`);
