@@ -1,4 +1,4 @@
-import { buildVersion } from "../../_shared/constants";
+import { useMemoriedImage } from "../../_shared/react-hooks";
 import { isHighLightWinningResult } from "../../_shared/react-hooks/use-high-light";
 import { RoundState } from "../../components/game-base/type";
 import { Spritesheet } from "../../components/game-components/sprites-sheet";
@@ -26,13 +26,18 @@ const ChoiceWinningSize = {
 const LuckyThreeWinningAnimation: React.FC<Props> = ({ choice, resourceName, roundState, settlementResult, showResultInfo }) => {
     const winningHighLightResult = isHighLightWinningResult;
     const [width, height] = ChoiceWinningSize[choice];
+    const { data } = useMemoriedImage(`/static/images/lucky-three/highlight-winning-${resourceName}.png`);
+
+    if (!data) {
+        return <></>;
+    }
 
     return (
         winningHighLightResult({ betChoice: choice, roundState, settlementResult, showResultInfo }) && (
             <div className="d-grid">
                 <Spritesheet
                     className={`${Styles["winning-light-anim"]} ${Styles["anim-" + choice]}`}
-                    imageData={`/static/images/lucky-three/highlight-winning-${resourceName}.png?v=${buildVersion}`}
+                    imageData={data}
                     widthFrame={width}
                     isResponsive
                     heightFrame={height}
