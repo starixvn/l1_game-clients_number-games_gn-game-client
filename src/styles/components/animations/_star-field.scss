@@ -69,7 +69,10 @@ $delay3: $duration + $delay2 - 1;
     height: 5px;
     width: 5px;
     border-radius: 5px;
+    will-change: transform, opacity;
+    backface-visibility: hidden;
 }
+
 .star-field .layer:nth-child(1) {
     animation: sf-fly-by-1 var(--starLayerDuration) linear infinite;
 }
@@ -82,44 +85,44 @@ $delay3: $duration + $delay2 - 1;
 
 @keyframes sf-fly-by-1 {
     from {
-        transform: translateZ(-600px);
+        transform: translateZ(-600px) translate3d(0, 0, 0);
         opacity: 0.5;
     }
     to {
-        transform: translateZ(0);
+        transform: translateZ(0) translate3d(0, 0, 0);
         opacity: 0.5;
     }
 }
 @keyframes sf-fly-by-2 {
     from {
-        transform: translateZ(-1200px);
+        transform: translateZ(-1200px) translate3d(0, 0, 0);
         opacity: 0.5;
     }
     to {
-        transform: translateZ(-600px);
+        transform: translateZ(-600px) translate3d(0, 0, 0);
         opacity: 0.5;
     }
 }
 @keyframes sf-fly-by-3 {
     from {
-        transform: translateZ(-1800px);
+        transform: translateZ(-1800px) translate3d(0, 0, 0);
         opacity: 0.5;
     }
     to {
-        transform: translateZ(-1200px);
+        transform: translateZ(-1200px) translate3d(0, 0, 0);
         opacity: 0.5;
     }
 }
 
 @keyframes galaxyFirst {
     0% {
-        transform: scale(1);
+        transform: scale(1) translate3d(0, 0, 0);
     }
     35% {
         opacity: 1;
     }
     100% {
-        transform: scale(1.1);
+        transform: scale(1.1) translate3d(0, 0, 0);
         opacity: 0;
     }
 }
