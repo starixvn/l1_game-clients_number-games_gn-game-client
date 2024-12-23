@@ -63,7 +63,6 @@
 
 .cage-bg {
     @extend %result;
-    background-image: url("/static/images/cage/cage.webp?v=#{$version-image}");
     background-size: var(--cage-width) var(--cage-height);
 }
 

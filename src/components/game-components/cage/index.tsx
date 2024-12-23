@@ -72,7 +72,7 @@ const Cage: React.FC<CageProps> = ({
     return (
         <div className={`${Styles["cage-area"]} ${isSmall ? Styles["small"] : ""} ${Styles[position]}`}>
             {highlight && <div className={`${Styles["cage-bg-highlight"]}`}></div>}
-            <div id="cage-bg" className={Styles["cage-bg"]}></div>
+            <BgCachedImage className={Styles["cage-bg"]} pathImage={`/static/images/cage/cage.webp?v=${buildVersion}`} />
             <BallLoops isPlayStartRoundAnimation={isPlayStartRoundAnimation} />
             <div id="cage-cover" className={Styles["cage-cover"]}></div>
             <div
