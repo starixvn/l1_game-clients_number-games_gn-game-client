@@ -2,7 +2,6 @@ import React from "react";
 
 import { buildVersion, systemName } from "../../../_shared/constants";
 import { useSystemContext } from "../../../_shared/react-contexts";
-import { DefaultChipBase64 } from "./chip-constant";
 import Styles from "./chip-slider.module.scss";
 import { CachedImage } from "../cached-image";
 
@@ -29,7 +28,6 @@ export const Chip: React.FC<{ value: number; onClickChip: Function; text: string
             {image && (
                 <CachedImage
                     src={`/static/images/chips/${systemName}/${image.replace("#", "")}.svg?v=${buildVersion}`}
-                    blurSrc={DefaultChipBase64}
                     className={`img-fluid ${Styles["chip"]}`}
                     width={65}
                     height={66}
