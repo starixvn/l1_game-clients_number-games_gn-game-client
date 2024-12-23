@@ -2,7 +2,6 @@ import axios from "axios";
 import "./string-helper";
 
 export const imageCache: Record<string, string> = {};
-const pendingRequests: Record<string, Promise<string>> = {};
 
 const fetchImageBase64 = async (imageUrl: string) => {
     try {
@@ -16,26 +15,15 @@ const fetchImageBase64 = async (imageUrl: string) => {
 };
 
 export const downloadAndCacheImage = async (path: string): Promise<{ path: string; valid: boolean; imageBase64: string }> => {
+    let imageBase64: string;
     path = path.removeBuildVersion();
 
     if (imageCache[path]) {
-        return { path, imageBase64: imageCache[path], valid: true };
-    }
-
-    if (path in pendingRequests) {
-        console.log("pendingRequests", path);
-        const imageBase64 = await pendingRequests[path];
-        return { path, imageBase64, valid: true };
-    }
-
-    pendingRequests[path] = fetchImageBase64(path);
-    
-    try {
-        const imageBase64 = await pendingRequests[path];
-        console.log("fetchImage done", path);
+        imageBase64 = imageCache[path];
+    } else {
+        imageBase64 = await fetchImageBase64(path);
         imageCache[path] = imageBase64;
-        return { path, imageBase64, valid: true };
-    } finally {
-        delete pendingRequests[path];
     }
+
+    return { path, imageBase64, valid: true };
 };
