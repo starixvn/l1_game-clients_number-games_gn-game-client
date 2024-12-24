@@ -17,10 +17,14 @@
     justify-content: space-between;
     gap: 0.2rem;
     // width: 35.9rem;
-    width: 41.2rem;
+    width: 43rem;
+    padding-left: 0.8rem;
+    padding-right: 0.8rem;
     margin: 1rem auto auto;
     margin-bottom: 0.6rem;
     z-index: 2;
+    transform: scale(var(--game-scale));
+    transform-origin: left bottom;
 }
 
 .result-container {
@@ -29,7 +33,7 @@
     // grid-template-columns: repeat(2, 15.3rem);
     grid-template-columns: repeat(2, 1fr);
     grid-gap: 4rem;
-    height: 18.5rem;
+    // height: 18.5rem;
 }
 
 .ball-container {
@@ -37,15 +41,14 @@
     justify-content: center;
     align-items: center;
     gap: 0.6rem;
-    height: 3.2rem;
-    margin-top: -0.4rem;
+    height: 3.6rem;
 }
 
 .result {
     position: relative;
     display: grid;
     // grid-template-rows: 15.3rem 1fr;
-    grid-template-rows: 9rem 1fr;
+    grid-template-rows: calc(var(--result-height)) 3.6rem;
 }
 
 .bg-bet-option {
@@ -202,7 +205,8 @@
     --color: #2fc856;
 
     position: absolute;
-    left: 15.3rem;
+    left: 50%;
+    transform: translateX(-50%);
     top: -0.9rem;
     width: 10.8rem;
     height: 19.8rem;
