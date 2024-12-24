@@ -21,13 +21,21 @@ import GameLoading from "../components/game-components/game-loading";
 import { getChipSettings } from "../services/user-setting-service";
 import styles from "./games.module.scss";
 import { Props } from "./type";
+import { LoadingSpinner } from "../components/game-components/game-loading/loading-spinner";
 
-const BacBall = dynamic(() => import("./bac-ball"));
-const NextBall = dynamic(() => import("./next-ball/page"));
+const LoadingGameComponent = () => (
+    <>
+        <GameLoading />
+        <LoadingSpinner />
+    </>
+);
+
 const SwitchGamesGuide = dynamic(() => import("../components/page-components/switch-games-guide"));
-const SeBall = dynamic(() => import("./se-ball/page"));
-const LuckyThree = dynamic(() => import("./lucky-three/page"));
-const SicBall = dynamic(() => import("./sic-ball/page"));
+const BacBall = dynamic(() => import("./bac-ball"), { loading: () => <LoadingGameComponent /> });
+const NextBall = dynamic(() => import("./next-ball/page"), { loading: () => <LoadingGameComponent /> });
+const SeBall = dynamic(() => import("./se-ball/page"), { loading: () => <LoadingGameComponent /> });
+const LuckyThree = dynamic(() => import("./lucky-three/page"), { loading: () => <LoadingGameComponent /> });
+const SicBall = dynamic(() => import("./sic-ball/page"), { loading: () => <LoadingGameComponent /> });
 
 export const Games: React.FC<Props> = ({
     swiperRef,

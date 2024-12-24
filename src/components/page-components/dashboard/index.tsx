@@ -33,9 +33,10 @@ import Styles from "./dashboard.module.scss";
 import { DashboardHandler } from "./handlers/dash-board-handler";
 import { NotificationHandler } from "./handlers/notification-handler";
 import { DashboardProps, DashboardState } from "./type";
+import { LoadingSpinner } from "../../game-components/game-loading/loading-spinner";
 
 const SoundSettings = dynamic(() => import("../header/setting/settings-popup"));
-const Games = dynamic(() => import("../../../games/games"));
+const Games = dynamic(() => import("../../../games/games"), { loading: () => <LoadingSpinner /> });
 const BaseDialog = dynamic(() => import("../../game-components/base-dialog"));
 const MusicPlayer = dynamic(() => import("../music-player"));
 const LandscapeMode = dynamic(() => import("./landscape-mode/landscape-mode"));

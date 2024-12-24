@@ -18,6 +18,7 @@ export default class extends Document {
             <Html>
                 <Head>
                     <meta name="apple-mobile-web-app-capable" content="yes" />
+                    <meta name="mobile-web-app-capable" content="yes" />
                     <script type="text/javascript" src={configFileWithVersion}></script>
                 </Head>
                 <body>
