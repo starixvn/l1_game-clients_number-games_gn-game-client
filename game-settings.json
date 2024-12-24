@@ -171,7 +171,7 @@
                 "lucky-three/highlight-winning-under.png",
                 "lucky-three/highlight-winning-blue2.png",
                 "lucky-three/highlight-winning-blue3.png",
-                "lucky-three/result-ball/ball-highlight.png"
+                "lucky-three/result-ball/ball-highlight.webp"
             ]
         }
     },
@@ -204,7 +204,6 @@
                 "sic-ball/six-balls-loop.webp",
                 "sic-ball/1x/cage.png",
                 "sic-ball/2x/cage.png",
-                "sic-ball/winning-effect-big.png",
                 "sic-ball/winning-effect-small.png",
                 "sic-ball/winning-effect-specific1.png"
             ]
