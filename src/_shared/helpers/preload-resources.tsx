@@ -47,11 +47,10 @@ const PreloadResources: React.FC<{
     cancelPreload?: boolean;
     durationDelayDonePreload?: number;
     progressBarId?: string;
-}> = ({ setIsDonePreload, gameId, bannerId, gameIdsIcon, locale = "en", cancelPreload, durationDelayDonePreload = 0, progressBarId }) => {
+}> = ({ setIsDonePreload, gameId, bannerId, gameIdsIcon, locale = "en", cancelPreload, progressBarId }) => {
     const enablePreloadResource = getAppSettings().enablePreloadResource ?? true;
-    const gameImagePath = getGameSettings(gameId)?.gameResourceConfigs?.path || "";
     const cachePaths = getGameSettings(gameId)?.gameResourceConfigs?.cachePaths || [];
-    const preloadGameImages = [...memoriedImages, ...cachePaths.map((path) => `${gameImagePath}/${path}`)];
+    const preloadGameImages = [...memoriedImages, ...cachePaths];
 
     const router = useRouter();
 

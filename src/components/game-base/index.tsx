@@ -624,7 +624,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState> extend
 
         return (
             <GameContainer>
-                {this.preloadResource()}
+                {!isLoaded && this.preloadResource()}
                 {signedIn && isLoaded ? this.renderGame() : <GameLoading />}
                 {(roundState === RoundState.None || !availableInGameData) && (
                     <LoadingSpinner removeSpinner={isDisabledGame || !!disconnectReason} />
