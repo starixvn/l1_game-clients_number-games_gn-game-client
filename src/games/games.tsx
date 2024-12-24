@@ -1,6 +1,6 @@
 import { useTheme } from "next-themes";
 import dynamic from "next/dynamic";
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { isIOS, isMobileOnly } from "react-device-detect";
 
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -29,6 +29,7 @@ const LoadingGameComponent = () => (
         <LoadingSpinner />
     </>
 );
+import useDetectDevice from "../_shared/react-hooks/use-detect-device";
 
 const SwitchGamesGuide = dynamic(() => import("../components/page-components/switch-games-guide"));
 const BacBall = dynamic(() => import("./bac-ball"), { loading: () => <LoadingGameComponent /> });
@@ -50,6 +51,9 @@ export const Games: React.FC<Props> = ({
     const { theme } = useTheme();
     const { session } = usePlayerContext();
     const settingDispatch = useSettingDispatch();
+    const { resultAreaHeight, resultHeight, offsetHeight, gameScale } = useDetectDevice();
+    const gameRef = useRef(null);
+
     useEffect(() => {
         (async () => {
             const chipSettings = await getChipSettings(session);
@@ -61,6 +65,13 @@ export const Games: React.FC<Props> = ({
             });
         })();
     }, []);
+
+    useEffect(() => {
+        gameRef.current.style.setProperty("--game-scale", gameScale);
+        gameRef.current.style.setProperty("--result-area-height", resultAreaHeight + "px");
+        gameRef.current.style.setProperty("--result-height", resultHeight + "px");
+        gameRef.current.style.setProperty("--offset-height", offsetHeight + "px");
+    }, [resultAreaHeight, gameScale, resultAreaHeight, resultHeight, offsetHeight]);
 
     const gameSound: GameSound = {
         playPlaceBetSound: usePlaceBetSound(),
@@ -164,7 +175,7 @@ export const Games: React.FC<Props> = ({
     };
 
     return (
-        <div className={`game-container ${styles["game-wrapper"]} ${styles["open-chips"]}`}>
+        <div ref={gameRef} className={`game-container ${styles["game-wrapper"]} ${styles["open-chips"]}`}>
             <SystemContextProvider>
                 <div className={`${styles["game-list"]} ${isMobileOnly ? styles[isIOS ? "ios-device" : "android-device"] : ""}`}>
                     {directMode ? getGameComponentById(openGameId) : renderSwiper(openGameId)}
