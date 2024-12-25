@@ -57,7 +57,6 @@ $ball-size: 3.2rem;
     transform-origin: center center;
     opacity: 0;
     animation: fade-in $show-number-duration $show-number-delay-time ease-in-out forwards;
-    background-size: 30px;
 
     &.display-right-now {
         animation: none;
@@ -72,7 +71,7 @@ $ball-size: 3.2rem;
         top: -0.2rem;
         bottom: -0.2rem;
         right: -0.2rem;
-        background: var(--bg);
+        background: var(--ball-bg);
         background-size: contain;
         border-radius: 50%;
         border: 0.1rem solid #000;

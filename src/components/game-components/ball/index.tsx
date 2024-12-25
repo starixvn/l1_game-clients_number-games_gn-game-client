@@ -56,7 +56,7 @@ const Ball: FC<IBall> = (props) => {
     return (
         <div className={`${Styles.ball} ${blurStyle} ${isRoundBase ? "" : delayStyle}`}>
             {isDelayShowResult && number > 0 && (
-                <div className={`${ballStyleName} ${delayClassName}`} style={{ backgroundImage: `url(${data})` }}>
+                <div className={`${ballStyleName} ${delayClassName}`} style={{ "--ball-bg": `url(${data})` } as React.CSSProperties}>
                     {<span className={`${Styles["ball-number"]} ball-index-${index + 1}`}>{number}</span>}
                 </div>
             )}
