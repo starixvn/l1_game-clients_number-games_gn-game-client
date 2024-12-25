@@ -1,5 +1,7 @@
 .bottom-bar {
     position: fixed;
+    left: 0;
+    right: 0;
     bottom: 0;
     display: flex;
     justify-content: space-between;
@@ -11,4 +13,8 @@
     padding: 0 1.8rem;
     border-radius: 16px 16px 0 0;
     z-index: 100;
+
+    @media screen and (min-device-width: 500px) {
+        position: absolute;
+    }
 }

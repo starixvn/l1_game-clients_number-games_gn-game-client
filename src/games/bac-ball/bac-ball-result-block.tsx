@@ -35,7 +35,7 @@ export const BacBallResultBlock: FC<BacBallResultBlockProps> = (props: BacBallRe
     const [viewportHeight, setViewportHeight] = useState(window.visualViewport?.height);
     // const [scale, setScale] = useState(0.84);
     const [distance, setDistance] = useState(0);
-    const { cageScale } = useDetectDevice();
+    const { cageScale, offsetHeight } = useDetectDevice();
 
     useEffect(() => {
         const handleResize = () => {
@@ -69,7 +69,7 @@ export const BacBallResultBlock: FC<BacBallResultBlockProps> = (props: BacBallRe
             <div className={`${Style["viewport-container"]}`}>
                 <p className={`${Style["viewport"]}`}>scale: {cageScale}</p>
                 <p className={`${Style["viewport"]}`}>Height: {viewportHeight}px</p>
-                <p className={`${Style["viewport"]}`}>Distance: {distance}</p>
+                <p className={`${Style["viewport"]}`}>Distance: {offsetHeight}</p>
             </div>
             <div className={Style["result"]}>
                 <Cage

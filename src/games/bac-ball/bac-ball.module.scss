@@ -33,6 +33,7 @@
     grid-template-columns: repeat(2, 1fr);
     grid-gap: 4rem;
     // height: 18.5rem;
+    height: var(--result-area-height);
 }
 
 .ball-container {
