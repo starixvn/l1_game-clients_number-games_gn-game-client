@@ -8,8 +8,19 @@ import SwiperCore from "swiper";
 
 import { ErrorNoGameOffer } from "../../../_shared/constants/error-code-dictionary";
 import { GetLocalizedErrorMessage, localStorageKeys, StorageHelper } from "../../../_shared/helpers";
-import { GlobalMessageTransmitter, GlobalTransmitterEvent, registerGlobalMessageEvent, unsubscribeGlobalMessageEvent } from "../../../_shared/helpers/message-transmitter/global-transmitter";
-import { loadURLContext, LobbyConnectionContextProvider, PlayerContextProvider, SettingContextProvider, updateURLContext } from "../../../_shared/react-contexts";
+import {
+    GlobalMessageTransmitter,
+    GlobalTransmitterEvent,
+    registerGlobalMessageEvent,
+    unsubscribeGlobalMessageEvent,
+} from "../../../_shared/helpers/message-transmitter/global-transmitter";
+import {
+    loadURLContext,
+    LobbyConnectionContextProvider,
+    PlayerContextProvider,
+    SettingContextProvider,
+    updateURLContext,
+} from "../../../_shared/react-contexts";
 import { UserStakeLevel } from "../../game-base/type";
 import { ModalType } from "../../game-components/base-dialog/type";
 import { ErrorApiText } from "../../game-components/error-api-text";
@@ -291,7 +302,6 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
                         <SoundSettings />
 
                         {isNoGameOffer ? <></> : renderOfferGameContainer()}
-
                         <PageIndicator />
                         <BottomBar />
 
