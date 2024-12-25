@@ -14,7 +14,20 @@ export const getOfferGamesIds = (authorizeInfo: AuthorizeResponse): number[] => 
 };
 
 export const getLobbyGameIds = (lobbyConfigs: ILobbyConfigs): number[] => {
-    return lobbyConfigs?.categories?.[0]?.gameSettings?.map((setting) => setting.gameId);
+    console.log('getLobbyGameIds - Input:', {
+        hasLobbyConfigs: !!lobbyConfigs,
+        categories: lobbyConfigs?.categories?.length || 0,
+        firstCategoryGames: lobbyConfigs?.categories?.[0]?.gameSettings?.length || 0
+    });
+
+    const gameIds = lobbyConfigs?.categories?.[0]?.gameSettings?.map((setting) => setting.gameId);
+
+    console.log('getLobbyGameIds - Output:', {
+        count: gameIds?.length || 0,
+        ids: gameIds
+    });
+
+    return gameIds;
 };
 
 export const getBannerIds = (lobbyConfigs: ILobbyConfigs) => {
@@ -25,15 +38,75 @@ export const getBannerIds = (lobbyConfigs: ILobbyConfigs) => {
 
 export const getLobbyGamesIds = (lobbyConfigs: ILobbyConfigs, authorizeInfo: AuthorizeResponse) => {
     const offerGamesIds = getOfferGamesIds(authorizeInfo);
-    return getLobbyGameIds(lobbyConfigs)?.filter((gameId) => offerGamesIds.includes(gameId));
+    console.log('getLobbyGamesIds - Offer Games:', {
+        count: offerGamesIds?.length || 0,
+        ids: offerGamesIds,
+        authorizeInfo: {
+            hasAuthorizeInfo: !!authorizeInfo,
+        }
+    });
+
+    const lobbyGameIds = getLobbyGameIds(lobbyConfigs);
+    console.log('getLobbyGamesIds - Lobby Games:', {
+        count: lobbyGameIds?.length || 0,
+        ids: lobbyGameIds,
+        lobbyConfigs: {
+            hasConfigs: !!lobbyConfigs,
+            categories: lobbyConfigs?.categories?.length || 0
+        }
+    });
+
+    const filteredGameIds = lobbyGameIds?.filter((gameId) => offerGamesIds.includes(gameId));
+    console.log('getLobbyGamesIds - Filtered Games:', {
+        count: filteredGameIds?.length || 0,
+        ids: filteredGameIds
+    });
+
+    return filteredGameIds;
 };
 
 export const getRenderGameSettings = (lobbyConfigs: ILobbyConfigs, offerGamesIds: number[]) => {
     if (lobbyConfigs && offerGamesIds) {
+        console.log('getRenderGameSettings - Input:', {
+            hasLobbyConfigs: !!lobbyConfigs,
+            offerGamesCount: offerGamesIds?.length || 0,
+            offerGameIds: offerGamesIds
+        });
+
         const { gameSettings: allGamesSettings } = getAppSettings();
+        console.log('getRenderGameSettings - All Games:', {
+            totalGames: Object.keys(allGamesSettings || {}).length,
+            gameIds: Object.keys(allGamesSettings || {})
+        });
+
         const lobbyGameIds = getLobbyGameIds(lobbyConfigs)?.filter((gameId) => offerGamesIds.includes(gameId));
-        return lobbyGameIds?.map((gameId) => allGamesSettings[gameId]).filter((settings) => settings && !settings.isComingSoon);
+        console.log('getRenderGameSettings - Filtered Lobby Games:', {
+            count: lobbyGameIds?.length || 0,
+            ids: lobbyGameIds
+        });
+
+        const mappedGames = lobbyGameIds?.map((gameId) => allGamesSettings[gameId]);
+        console.log('getRenderGameSettings - Mapped Games:', {
+            count: mappedGames?.length || 0,
+            games: mappedGames?.map(g => ({ id: g?.id, name: g?.gameName }))
+        });
+
+        const finalGames = mappedGames.filter((settings) => settings && !settings.isComingSoon);
+        console.log('getRenderGameSettings - Final Games:', {
+            count: finalGames?.length || 0,
+            games: finalGames?.map(g => ({
+                id: g.id,
+                name: g.gameName,
+                isComingSoon: g.isComingSoon
+            }))
+        });
+
+        return finalGames;
     }
+    console.log('getRenderGameSettings - No Input:', {
+        hasLobbyConfigs: !!lobbyConfigs,
+        hasOfferGames: !!offerGamesIds
+    });
     return [];
 };
 

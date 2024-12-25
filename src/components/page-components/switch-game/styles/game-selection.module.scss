@@ -1,0 +1,239 @@
+.overlay {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+.container {
+    position: fixed;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; // Prevent content from overflowing
+    z-index: 1001;
+    border-radius: 20px 20px 0 0;
+    animation: slideUp 0.3s ease-out;
+    color: white;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+.header {
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(0deg, #01050A 0%, #325DF5 100%);
+    border-radius: 20px 20px 0 0;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+
+    h1 {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 700;
+        text-align: center;
+        flex: 1;
+    }
+}
+
+.closeButton {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    line-height: 1;
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.2);
+    }
+}
+
+.closeIcon {
+    font-size: 24px;
+    display: block;
+    height: 24px;
+    line-height: 1;
+}
+
+.tabBar {
+    padding: 10px 20px;
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    background: linear-gradient(0deg, #01050A 0%, #325DF5 100%);
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+.tab {
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 8px 16px;
+    cursor: pointer;
+    white-space: nowrap;
+
+    &.active {
+        color: #FFD6F1;
+        position: relative;
+
+        &:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, #030916 0%, #FC4444 50%, #030916 100%);
+        }
+    }
+}
+
+.gameList {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    scroll-behavior: smooth;
+
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 3px;
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+    }
+}
+
+.gameCard {
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.gameHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    h2 {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 600;
+    }
+}
+
+.roundBadge {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.3);
+    border: 2px solid #70FF00;
+    color: #70FF00;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+}
+
+.resultGrid {
+    display: grid;
+    grid-template-columns: repeat(16, 1fr);
+    gap: 2px;
+    background: #021520;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+
+    &.red {
+        background: linear-gradient(180deg, #FF5757 0%, #FE1900 100%);
+    }
+
+    &.blue {
+        background: linear-gradient(180deg, #5757FF 0%, #1900FE 100%);
+    }
+}
+
+.gameFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.info {
+    display: flex;
+    gap: 20px;
+    font-size: 14px;
+}
+
+.playButton {
+    background: linear-gradient(90deg, #207C00 0%, #38B80B 56%, #41ED26 100%);
+    color: white;
+    border: none;
+    padding: 8px 24px;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s;
+
+    &:hover {
+        transform: translateY(-1px);
+    }
+}
+
+.lobbyContent {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    
+    // Ensure lobby content inherits the container's scrolling
+    height: 100%;
+    overflow-y: auto;
+} 
