@@ -1,17 +1,21 @@
 import { useEffect, useState } from "react";
+import { isIOS, isMobileOnly } from "react-device-detect";
 
 // Constants
-const VIEWPORT = {
+export const VIEWPORT = {
     MIN_HEIGHT: 739, // iPhone 14 Pro Max
     MAX_HEIGHT: 821,
     MAX_WIDTH: 430,
 } as const;
 
-const DEFAULTS = {
+export const GAME_DEFAULTS = {
     MIN_CAGE_SCALE: 0.5,
     MAX_CAGE_SCALE: 0.84,
-    RESULT_AREA_HEIGHT: 125,
-    RESULT_HEIGHT: 90,
+    MIN_RESULT_AREA_HEIGHT: 125,
+    MAX_RESULT_AREA_HEIGHT: 212,
+    MIN_RESULT_HEIGHT: 90,
+    MAX_RESULT_HEIGHT: 173,
+    GAME_SCALE: 1,
 } as const;
 
 interface ViewportDimensions {
@@ -42,6 +46,7 @@ const useDetectDevice = () => {
 
             setDimensions((prev) => {
                 const offset = newDimensions.height - prev.height;
+
                 setHeights((height) => ({
                     ...height,
                     offset: offset > 0 && offset !== newDimensions.height ? offset : 0,
@@ -64,35 +69,35 @@ const useDetectDevice = () => {
     useEffect(() => {
         const gameScale = calculateGameScale(dimensions.width);
         setScales((s) => ({ ...s, game: gameScale }));
-    }, [dimensions.width]);
+    }, [dimensions?.width]);
 
     // Update heights and cage scale
     useEffect(() => {
         const calculateDimensions = (viewportHeight: number, gameScale: number) => {
             if (viewportHeight === VIEWPORT.MIN_HEIGHT) {
                 return {
-                    cageScale: DEFAULTS.MIN_CAGE_SCALE,
-                    resultArea: DEFAULTS.RESULT_AREA_HEIGHT,
-                    result: DEFAULTS.RESULT_HEIGHT,
+                    cageScale: GAME_DEFAULTS.MIN_CAGE_SCALE,
+                    resultArea: GAME_DEFAULTS.MIN_RESULT_AREA_HEIGHT,
+                    result: GAME_DEFAULTS.MIN_RESULT_HEIGHT,
                 };
             }
 
             if (viewportHeight < VIEWPORT.MIN_HEIGHT) {
-                const cageScale = (viewportHeight * DEFAULTS.MIN_CAGE_SCALE) / VIEWPORT.MIN_HEIGHT;
+                const cageScale = (viewportHeight * GAME_DEFAULTS.MIN_CAGE_SCALE) / VIEWPORT.MIN_HEIGHT;
                 const scale = Math.min(gameScale, cageScale);
                 return {
                     cageScale,
-                    resultArea: (DEFAULTS.RESULT_AREA_HEIGHT * scale) / DEFAULTS.MIN_CAGE_SCALE,
-                    result: (DEFAULTS.RESULT_HEIGHT * scale) / DEFAULTS.MIN_CAGE_SCALE,
+                    resultArea: (GAME_DEFAULTS.MIN_RESULT_AREA_HEIGHT * scale) / GAME_DEFAULTS.MIN_CAGE_SCALE,
+                    result: (GAME_DEFAULTS.MIN_RESULT_HEIGHT * scale) / GAME_DEFAULTS.MIN_CAGE_SCALE,
                 };
             }
 
-            const cageScale = (viewportHeight * DEFAULTS.MAX_CAGE_SCALE) / VIEWPORT.MAX_HEIGHT;
+            const cageScale = (viewportHeight * GAME_DEFAULTS.MAX_CAGE_SCALE) / VIEWPORT.MAX_HEIGHT;
             const scale = Math.max(gameScale, cageScale);
             return {
                 cageScale,
-                resultArea: DEFAULTS.RESULT_AREA_HEIGHT * scale + heights.offset,
-                result: DEFAULTS.RESULT_HEIGHT * scale + heights.offset,
+                resultArea: GAME_DEFAULTS.MIN_RESULT_AREA_HEIGHT * scale + heights.offset,
+                result: GAME_DEFAULTS.MIN_RESULT_HEIGHT * scale + heights.offset,
             };
         };
 

@@ -29,7 +29,7 @@ const LoadingGameComponent = () => (
         <LoadingSpinner />
     </>
 );
-import useDetectDevice from "../_shared/react-hooks/use-detect-device";
+import useDetectDevice, { GAME_DEFAULTS } from "../_shared/react-hooks/use-detect-device";
 
 const SwitchGamesGuide = dynamic(() => import("../components/page-components/switch-games-guide"));
 const BacBall = dynamic(() => import("./bac-ball"), { loading: () => <LoadingGameComponent /> });
@@ -67,10 +67,13 @@ export const Games: React.FC<Props> = ({
     }, []);
 
     useEffect(() => {
-        gameRef.current.style.setProperty("--game-scale", gameScale);
-        gameRef.current.style.setProperty("--result-area-height", resultAreaHeight + "px");
-        gameRef.current.style.setProperty("--result-height", resultHeight + "px");
-        gameRef.current.style.setProperty("--offset-height", offsetHeight + "px");
+        gameRef.current.style.setProperty("--game-scale", isMobileOnly ? gameScale : 1);
+        gameRef.current.style.setProperty(
+            "--result-area-height",
+            isMobileOnly ? resultAreaHeight + "px" : GAME_DEFAULTS.MAX_RESULT_AREA_HEIGHT + "px"
+        );
+        gameRef.current.style.setProperty("--result-height", isMobileOnly ? resultHeight + "px" : GAME_DEFAULTS.MAX_RESULT_HEIGHT + "px");
+        gameRef.current.style.setProperty("--offset-height", isMobileOnly ? offsetHeight + "px" : 0);
     }, [gameScale, resultAreaHeight, resultHeight, offsetHeight]);
 
     const gameSound: GameSound = {
@@ -158,7 +161,7 @@ export const Games: React.FC<Props> = ({
                 spaceBetween={50}
                 slidesPerView={1}
                 loop={true}
-                autoHeight={true}
+                autoHeight={false}
                 initialSlide={gameIndex}
                 noSwiping={true}
                 noSwipingClass={SwiperNoSwiping}
