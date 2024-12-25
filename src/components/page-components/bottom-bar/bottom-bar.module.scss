@@ -4,7 +4,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: linear-gradient(180deg, hsla(208, 85%, 18%, 1) 0%, hsla(211, 74%, 9%, 1) 100%, hsla(265, 68%, 45%, 1) 100%);
+    background: rgba(2, 21, 38, 0.8) radial-gradient(69.19% 82.83% at 56.51% -36.5%, rgba(67, 159, 241, 0.8) 0%, rgba(8, 23, 36, 0) 100%);
+    backdrop-filter: blur(2px);
     height: 6rem;
     width: 100%;
     padding: 0 1.8rem;
