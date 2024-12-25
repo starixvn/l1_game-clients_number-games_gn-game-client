@@ -1,80 +1,114 @@
 import { useEffect, useState } from "react";
 
-// Using Iphone 14 pro max for default size
-const MIN_HEIGHT_VIEW_PORT = 739;
-const MAX_HEIGHT_VIEW_PORT = 821;
-const MAX_WIDTH_VIEW_PORT = 430;
+// Constants
+const VIEWPORT = {
+    MIN_HEIGHT: 739, // iPhone 14 Pro Max
+    MAX_HEIGHT: 821,
+    MAX_WIDTH: 430,
+} as const;
 
-const DEFAULT_MIN_CAGE_SCALE = 0.5;
-const DEFAULT_MAX_SCALE = 0.84;
-const DEFAULT_RESULT_AREA_HEIGHT = 120;
-const DEFAULT_RESULT_HEIGHT = 90;
+const DEFAULTS = {
+    MIN_CAGE_SCALE: 0.5,
+    MAX_SCALE: 0.84,
+    RESULT_AREA_HEIGHT: 120,
+    RESULT_HEIGHT: 90,
+} as const;
+
+interface ViewportDimensions {
+    height: number;
+    width: number;
+}
 
 const useDetectDevice = () => {
-    const [resultAreaHeight, setResultAreaHeight] = useState(0);
-    const [resultHeight, setResultHeight] = useState(0);
-    const [cageScale, setCageScale] = useState(0);
-    const [gameScale, setGameScale] = useState(1);
-    const [viewportHeight, setViewportHeight] = useState(0);
-    const [viewportWidth, setViewportWidth] = useState(0);
-    const [offsetHeight, setOffsetHeight] = useState(0);
+    // State management
+    const [dimensions, setDimensions] = useState<ViewportDimensions>({ height: 0, width: 0 });
+    const [scales, setScales] = useState({ cage: 0, game: 1 });
+    const [heights, setHeights] = useState({
+        result: 0,
+        resultArea: 0,
+        offset: 0,
+    });
 
+    // Get viewport dimensions
+    const getViewportDimensions = (): ViewportDimensions => ({
+        height: window.visualViewport?.height ?? window.innerHeight,
+        width: window.visualViewport?.width ?? window.innerWidth,
+    });
+
+    // Setup resize listener
     useEffect(() => {
         const handleResize = () => {
-            const viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-            const viewportWidth = window.visualViewport ? window.visualViewport.width : window.innerWidth;
+            const newDimensions = getViewportDimensions();
 
-            setViewportHeight((prev) => {
-                const offset = viewportHeight - prev;
-                setOffsetHeight(offset > 0 && offset !== viewportHeight ? offset : 0);
-                return viewportHeight;
+            setDimensions(prev => {
+                const offset = newDimensions.height - prev.height;
+                setHeights(height => ({
+                    ...height,
+                    offset: offset > 0 && offset !== newDimensions.height ? offset : 0,
+                }));
+                return newDimensions;
             });
-            setViewportWidth(viewportWidth);
         };
 
         handleResize();
-
-        // Attach the resize event listener to visualViewport
         window.visualViewport?.addEventListener("resize", handleResize);
-
-        // Cleanup listener on component unmount
-        return () => {
-            window.visualViewport?.removeEventListener("resize", handleResize);
-        };
+        return () => window.visualViewport?.removeEventListener("resize", handleResize);
     }, []);
 
-    useEffect(() => {
-        if (viewportWidth < MAX_WIDTH_VIEW_PORT || viewportWidth > MAX_WIDTH_VIEW_PORT) {
-            setGameScale(viewportWidth / MAX_WIDTH_VIEW_PORT);
-        } else {
-            setGameScale(1);
-        }
-    }, [viewportWidth]);
+    // Calculate game scale
+    const calculateGameScale = (width: number): number => {
+        return width < VIEWPORT.MAX_WIDTH || width > VIEWPORT.MAX_WIDTH
+            ? width / VIEWPORT.MAX_WIDTH
+            : 1;
+    };
 
+    // Update game scale
     useEffect(() => {
-        if (viewportHeight === MIN_HEIGHT_VIEW_PORT) {
-            setCageScale(DEFAULT_MIN_CAGE_SCALE);
-            setResultAreaHeight(DEFAULT_RESULT_AREA_HEIGHT);
-            setResultHeight(DEFAULT_RESULT_HEIGHT);
-        } else if (viewportHeight < MIN_HEIGHT_VIEW_PORT) {
-            const cageScale = (viewportHeight * DEFAULT_MIN_CAGE_SCALE) / MIN_HEIGHT_VIEW_PORT;
-            setCageScale(cageScale);
-            setResultAreaHeight((DEFAULT_RESULT_AREA_HEIGHT * Math.min(gameScale, cageScale)) / DEFAULT_MIN_CAGE_SCALE);
-            setResultHeight((DEFAULT_RESULT_HEIGHT * Math.min(gameScale, cageScale)) / DEFAULT_MIN_CAGE_SCALE);
-        } else {
-            const cageScale = (viewportHeight * DEFAULT_MAX_SCALE) / MAX_HEIGHT_VIEW_PORT;
-            setCageScale(cageScale);
-            setResultAreaHeight(DEFAULT_RESULT_AREA_HEIGHT * Math.max(gameScale, cageScale) + offsetHeight);
-            setResultHeight(DEFAULT_RESULT_HEIGHT * Math.max(gameScale, cageScale) + offsetHeight);
-        }
-    }, [gameScale, viewportHeight]);
+        const gameScale = calculateGameScale(dimensions.width);
+        setScales(s => ({ ...s, game: gameScale }));
+    }, [dimensions.width]);
+
+    // Update heights and cage scale
+    useEffect(() => {
+        const calculateDimensions = (viewportHeight: number, gameScale: number) => {
+            if (viewportHeight === VIEWPORT.MIN_HEIGHT) {
+                return {
+                    cageScale: DEFAULTS.MIN_CAGE_SCALE,
+                    resultArea: DEFAULTS.RESULT_AREA_HEIGHT,
+                    result: DEFAULTS.RESULT_HEIGHT,
+                };
+            }
+
+            if (viewportHeight < VIEWPORT.MIN_HEIGHT) {
+                const cageScale = (viewportHeight * DEFAULTS.MIN_CAGE_SCALE) / VIEWPORT.MIN_HEIGHT;
+                const scale = Math.min(gameScale, cageScale);
+                return {
+                    cageScale,
+                    resultArea: (DEFAULTS.RESULT_AREA_HEIGHT * scale) / DEFAULTS.MIN_CAGE_SCALE,
+                    result: (DEFAULTS.RESULT_HEIGHT * scale) / DEFAULTS.MIN_CAGE_SCALE,
+                };
+            }
+
+            const cageScale = (viewportHeight * DEFAULTS.MAX_SCALE) / VIEWPORT.MAX_HEIGHT;
+            const scale = Math.max(gameScale, cageScale);
+            return {
+                cageScale,
+                resultArea: DEFAULTS.RESULT_AREA_HEIGHT * scale + heights.offset,
+                result: DEFAULTS.RESULT_HEIGHT * scale + heights.offset,
+            };
+        };
+
+        const { cageScale, resultArea, result } = calculateDimensions(dimensions.height, scales.game);
+        setScales(scale => ({ ...scale, cage: cageScale }));
+        setHeights(height => ({ ...height, resultArea, result }));
+    }, [scales.game, dimensions.height, heights.offset]);
 
     return {
-        resultAreaHeight: resultAreaHeight,
-        resultHeight: resultHeight,
-        cageScale: cageScale,
-        gameScale: gameScale,
-        offsetHeight: offsetHeight,
+        resultAreaHeight: heights.resultArea,
+        resultHeight: heights.result,
+        cageScale: scales.cage,
+        gameScale: scales.game,
+        offsetHeight: heights.offset,
     };
 };
 
