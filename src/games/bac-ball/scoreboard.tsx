@@ -70,7 +70,11 @@ export class Scoreboard extends Component<ScoreboardComponentProps> {
     }
 
     render(): ReactNode {
-        return <SlidableScoreboard boards={[this.renderBigRoad(), this.renderBeadRoad()]} />;
+        return (
+            <div className={Styles["score-board"]}>
+                <SlidableScoreboard boards={[this.renderBigRoad(), this.renderBeadRoad()]} />
+            </div>
+        );
     }
 }
 

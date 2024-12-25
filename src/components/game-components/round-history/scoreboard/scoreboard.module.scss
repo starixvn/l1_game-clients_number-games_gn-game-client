@@ -1,11 +1,11 @@
 .scoreboard {
-    --border-scoreboard-color: #172d41;
-    --border-item-color: #0e1d26;
-    --background-color: #021520;
+    --border-scoreboard-color: #414141;
+    --border-item-color: #414141;
+    --background-color: #000e15;
 
     display: grid;
     position: relative;
-    border-radius: 0.3rem;
+    border-radius: 0.8rem;
     background: var(--background-color);
 
     &::before {

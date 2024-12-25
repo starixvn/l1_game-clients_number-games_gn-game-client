@@ -48,6 +48,7 @@ import { PFWrapper } from "./handlers/pf-wrapper/pf-wrapper";
 import { PlaceBetHandlerWrapper } from "./handlers/place-bet-wrapper/place-bet-handler-wrapper";
 import { GameBaseHandlers, GameBaseProps, GameBaseState, RoundState } from "./type";
 import PreloadResources from "../../_shared/helpers/preload-resources";
+import PageIndicator from "../page-components/page-indicator";
 
 abstract class GameBase<P extends GameBaseProps, S extends GameBaseState> extends React.PureComponent<P, S> {
     protected socket: Socket;
@@ -578,14 +579,16 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState> extend
                             </PlaceBetHandlerWrapper>
                         </PlaceBetProvider>
                         <div className={SwiperNoSwiping}> {this.renderSlidingChips()}</div>
-                        <div>{this.renderStatistic()}</div>
-                        <div className={SwiperNoSwiping}>
+
+                        <div className={`${SwiperNoSwiping} statistic-scoreboard-container`}>
+                            {this.renderStatistic()}
                             {isScoreboardTab ? (
                                 this.renderScoreboards()
                             ) : (
                                 <SideBetScoreboard>{this.renderStatisticContent()}</SideBetScoreboard>
                             )}
                         </div>
+
                         {/* <Footer /> */}
                     </div>
                     {!availableInGameData && <OverlayMask removeOverlay={isDisabledGame} />}

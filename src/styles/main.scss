@@ -209,7 +209,7 @@ body {
     display: grid;
     //grid-template-rows: 5rem 18.5rem 20.4rem 7.8rem 3.8rem 11.3rem;
     // grid-template-columns: 37.5rem;
-    grid-template-rows: 3rem var(--result-area-height) calc(22.3rem * var(--game-scale)) 8rem 3.8rem 11.3rem;
+    grid-template-rows: 3rem var(--result-area-height) calc(22.3rem * var(--game-scale)) 8.5rem 15.1rem;
     grid-template-columns: 100%;
     justify-content: center;
     align-items: center;
@@ -223,6 +223,12 @@ body {
 
     &.game-1007 {
         grid-template-rows: 5rem 14rem 24.9rem 7.8rem 3.8rem 11.3rem;
+    }
+
+    .statistic-scoreboard-container {
+        border-top-left-radius: 1.6rem;
+        border-top-right-radius: 1.6rem;
+        background: linear-gradient(0deg, #081425 0%, #173d6a 97.83%);
     }
 }
 
