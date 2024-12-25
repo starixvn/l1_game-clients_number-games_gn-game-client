@@ -24,6 +24,10 @@ import Styles from "./dashboard.module.scss";
 import { DashboardHandler } from "./handlers/dash-board-handler";
 import { NotificationHandler } from "./handlers/notification-handler";
 import { DashboardProps, DashboardState } from "./type";
+import GameSelection from "../switch-game/game-selection";
+import { mockGames } from "../switch-game/mock-data-test";
+import { getAppSettings } from "../../../_shared/app-settings";
+import GameSelectionLobby from "../switch-game/game-selection-lobby";
 
 const SoundSettings = dynamic(() => import("../header/setting/settings-popup"));
 const Games = dynamic(() => import("../../../games/games"), { loading: () => <LoadingSpinner /> });
@@ -31,10 +35,25 @@ const BaseDialog = dynamic(() => import("../../game-components/base-dialog"));
 const MusicPlayer = dynamic(() => import("../music-player"));
 const LandscapeMode = dynamic(() => import("./landscape-mode/landscape-mode"));
 
+const gameGroups = Object.values(getAppSettings().gameSettings).reduce<{ name: string, games: any[] }[]>((groups, game) => {
+    const existingGroup = groups.find(g => g.name === game.gameGroup);
+    if (existingGroup) {
+        existingGroup.games.push(game);
+    } else {
+        groups.push({
+            name: game.gameGroup,
+            games: [game]
+        });
+    }
+    return groups;
+}, []);
+
+
 class Dashboard extends React.Component<DashboardProps, DashboardState> {
     private readonly dashboardHandler: DashboardHandler;
     private readonly notificationHandler: NotificationHandler;
     private readonly swiperRef = React.createRef<SwiperCore>();
+    private readonly headerRef = React.createRef<HTMLElement>();
     private backToLobbyEventId = null;
     private isUpdatingBalance = false;
 
@@ -238,14 +257,18 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
     renderLobby() {
         updateURLContext({ backToLobby: true });
 
+        const lobbyConnectionContextValue = this.dashboardHandler.buildLobbyConnectionContextValue();
+
         return (
-            <LobbyConnectionContextProvider value={this.dashboardHandler.buildLobbyConnectionContextValue()}>
-                <Lobby
-                    openGame={(gameId: number) => this.openGameFromLobby(gameId)}
-                    lobbyConfigs={this.props.lobbyConfigs}
-                    gameTransmitters={this.state.gameTransmitters}
-                />
-            </LobbyConnectionContextProvider>
+            <GameSelectionLobby
+                lobbyConfigs={this.props.lobbyConfigs}
+                gameTransmitters={this.state.gameTransmitters}
+                openGame={this.openGameFromLobby}
+                onClose={(gameId: number) => this.openGameFromLobby(gameId)}
+                lobbyConnectionContextValue={lobbyConnectionContextValue}
+                gameGroups={gameGroups}
+                headerRef={this.headerRef}
+            />
         );
     }
 
@@ -281,18 +304,21 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
                 <SettingContextProvider>
                     {allowSwipeGameOndDesktop && <ButtonSwipe isPrev={true} swiper={this.swiperRef} />}
                     <div
-                        className={`${Styles["dashboard"]} ${changeGameStyle} ${!isRenderGames ? "no-scroll" : ""} ${
-                            isMobileOnly ? Styles["hidden-scrollbar"] : ""
-                        }`}
+                        className={`${Styles["dashboard"]} ${changeGameStyle} ${!isRenderGames ? "no-scroll" : ""} ${isMobileOnly ? Styles["hidden-scrollbar"] : ""
+                            }`}
                         id={"dashboard"}
                         // style={this.setDashBoardStyle(isRenderGames)}
                     >
-                        <Header />
+                        <Header ref={this.headerRef} />
                         <SoundSettings />
 
                         {isNoGameOffer ? <></> : renderOfferGameContainer()}
                         <PageIndicator />
-                        <BottomBar />
+                        <BottomBar
+                            lobbyConfigs={this.props.lobbyConfigs}
+                            gameTransmitters={this.state.gameTransmitters}
+                            openGame={this.openGame}
+                        />
                         {<MusicPlayer />}
 
                         {isShowErrorModal && (

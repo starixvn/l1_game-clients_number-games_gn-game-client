@@ -28,7 +28,7 @@ const HeaderTitle: React.FC<Props> = (props) => {
     );
 
     return (
-        <div key={`game-name-${openingGameId}`} id="img-game-name" className={Styles["header-left"]}>
+        <div key={`game-name-${openingGameId}`} id="img-game-name" className={Styles["header-left"]} >
             {headerTitle}
         </div>
     );

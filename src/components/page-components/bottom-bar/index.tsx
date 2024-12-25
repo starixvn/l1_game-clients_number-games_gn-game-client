@@ -4,8 +4,16 @@ import { GlobalTransmitterEvent, registerGlobalMessageEvent, unsubscribeGlobalMe
 import SwitchGame from "../switch-game";
 import UserInfo from "../user-info";
 import Styles from "./bottom-bar.module.scss";
+import { ILobbyConfigs } from "../dashboard/type";
+import { LobbyGameTransmitter } from "../lobby/lobby-socket-connection";
 
-const BottomBar = () => {
+interface BottomBarProps {
+    lobbyConfigs: ILobbyConfigs;
+    gameTransmitters: Record<number, LobbyGameTransmitter>;
+    openGame: Function;
+}
+
+const BottomBar: React.FC<BottomBarProps> = ({ lobbyConfigs, gameTransmitters, openGame }) => {
     const [openingGameId, setOpeningGameId] = useState(0);
 
     useEffect(() => {
@@ -23,7 +31,8 @@ const BottomBar = () => {
     return (
         <div className={Styles["bottom-bar"]}>
             <UserInfo isLobby={!isRenderGames} />
-            <SwitchGame />
+            <SwitchGame
+            />
         </div>
     );
 };

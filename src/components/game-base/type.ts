@@ -47,6 +47,7 @@ export interface GameSettings {
     durations?: GameDurations;
     totalTurns?: number;
     numberOfRoundHistory?: number;
+    gameGroup?: string;
     gamePath?: string;
     isComingSoon?: boolean;
     gameResourceConfigs: {
