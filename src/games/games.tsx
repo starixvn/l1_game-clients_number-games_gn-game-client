@@ -71,7 +71,7 @@ export const Games: React.FC<Props> = ({
         gameRef.current.style.setProperty("--result-area-height", resultAreaHeight + "px");
         gameRef.current.style.setProperty("--result-height", resultHeight + "px");
         gameRef.current.style.setProperty("--offset-height", offsetHeight + "px");
-    }, [resultAreaHeight, gameScale, resultAreaHeight, resultHeight, offsetHeight]);
+    }, [gameScale, resultAreaHeight, resultHeight, offsetHeight]);
 
     const gameSound: GameSound = {
         playPlaceBetSound: usePlaceBetSound(),

@@ -20,11 +20,10 @@
     width: 43rem;
     padding-left: 0.8rem;
     padding-right: 0.8rem;
-    margin: 1rem auto auto;
-    margin-bottom: 0.6rem;
+    margin-top: 1.6rem;
     z-index: 2;
     transform: scale(var(--game-scale));
-    transform-origin: left bottom;
+    transform-origin: left center;
 }
 
 .result-container {
