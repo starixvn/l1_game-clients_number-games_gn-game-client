@@ -34,7 +34,6 @@ const NextBallResultBlock: FC<NextBallResultBlockProps> = (props: NextBallResult
                     delayShowResultTime={0}
                     playResultAnimation={playResultAnimation}
                     roundState={roundState}
-                    isPlayStartRoundAnimation={isPlayStartRoundAnimation}
                 />
                 <TurnBaseResultSlotContainer
                     defaultRoundData={defaultRoundData}

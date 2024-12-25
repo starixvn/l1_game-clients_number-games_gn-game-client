@@ -51,7 +51,6 @@ export const BacBallResultBlock: FC<BacBallResultBlockProps> = (props: BacBallRe
                     playResultAnimation={playResultAnimation}
                     roundState={roundState}
                     highlight={isPlayerBallHighlight}
-                    isPlayStartRoundAnimation={isPlayStartRoundAnimation}
                 />
                 <BacBallResultSlotContainer delayTime={0} betChoice={BacBallBetOptions.PLAYER} className="player-balls" {...props} />
             </div>
@@ -65,7 +64,6 @@ export const BacBallResultBlock: FC<BacBallResultBlockProps> = (props: BacBallRe
                     playResultAnimation={playResultAnimation}
                     roundState={roundState}
                     highlight={isBankerBallHighlight}
-                    isPlayStartRoundAnimation={isPlayStartRoundAnimation}
                 />
                 <BacBallResultSlotContainer
                     delayTime={bankerDelayTime}
