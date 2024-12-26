@@ -1,6 +1,7 @@
 import { FC, useEffect, useRef, useState } from "react";
 
 import { GameStateContextModel } from "../../_shared/react-contexts/game-state-context/game-state-context-model";
+import useDetectDevice from "../../_shared/react-hooks/use-detect-device";
 import { isHighLightWinningResult } from "../../_shared/react-hooks/use-high-light";
 import useResult from "../../_shared/react-hooks/use-result";
 import { RoundState } from "../../components/game-base/type";
@@ -9,7 +10,6 @@ import { BacBallResultSlotContainer } from "./bac-ball-result-slot-container";
 import Style from "./bac-ball.module.scss";
 import { BacBallBetOptions } from "./constants";
 import { BacBallResult } from "./types";
-import useDetectDevice from "../../_shared/react-hooks/use-detect-device";
 
 export type BacBallResultBlockProps = Partial<GameStateContextModel>;
 
@@ -35,7 +35,7 @@ export const BacBallResultBlock: FC<BacBallResultBlockProps> = (props: BacBallRe
     const [viewportHeight, setViewportHeight] = useState(window.visualViewport?.height);
     // const [scale, setScale] = useState(0.84);
     const [distance, setDistance] = useState(0);
-    const { cageScale, offsetHeight } = useDetectDevice();
+    const { cageScale, offsetHeight, width, height } = useDetectDevice();
 
     useEffect(() => {
         const handleResize = () => {
@@ -67,7 +67,8 @@ export const BacBallResultBlock: FC<BacBallResultBlockProps> = (props: BacBallRe
             }`}
         >
             <div className={`${Style["viewport-container"]}`}>
-                <p className={`${Style["viewport"]}`}>scale: {cageScale}</p>
+                <p className={`${Style["viewport"]}`}>viewport height: {height}</p>
+                <p className={`${Style["viewport"]}`}>viewport width: {width}</p>
                 <p className={`${Style["viewport"]}`}>Height: {viewportHeight}px</p>
                 <p className={`${Style["viewport"]}`}>Distance: {offsetHeight}</p>
             </div>
