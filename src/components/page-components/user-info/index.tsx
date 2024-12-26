@@ -140,8 +140,8 @@ const UserAvatar: React.FC<{ avatarId: number; classCursor: string; handleClickA
                 <Image
                     src={`/static/images/avatar/${avatarId}.jpg?v=${buildVersion}`}
                     className="img-fluid circle"
-                    height={30}
-                    width={30}
+                    height={37}
+                    width={37}
                     alt="Avatar"
                 />
             ) : (
