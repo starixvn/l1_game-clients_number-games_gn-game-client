@@ -11,9 +11,9 @@ export const VIEWPORT = {
 export const GAME_DEFAULTS = {
     MIN_CAGE_SCALE: 0.5,
     MAX_CAGE_SCALE: 0.84,
-    MIN_RESULT_AREA_HEIGHT: 125,
+    MIN_RESULT_AREA_HEIGHT: 120,
     MAX_RESULT_AREA_HEIGHT: 212,
-    MIN_RESULT_HEIGHT: 90,
+    MIN_RESULT_HEIGHT: 80,
     MAX_RESULT_HEIGHT: 173,
     GAME_SCALE: 1,
 } as const;
@@ -26,6 +26,7 @@ interface ViewportDimensions {
 const useDetectDevice = () => {
     // State management
     const [dimensions, setDimensions] = useState<ViewportDimensions>({ height: 0, width: 0 });
+    const [prevDimensions, setPrevDimensions] = useState(0);
     const [scales, setScales] = useState({ cage: 0, game: 1 });
     const [heights, setHeights] = useState({
         result: 0,
@@ -41,19 +42,29 @@ const useDetectDevice = () => {
 
     // Setup resize listener
     useEffect(() => {
+        let resizeTimeout: NodeJS.Timeout;
+
         const handleResize = () => {
-            const newDimensions = getViewportDimensions();
+            // Clear any existing timeout
+            if (resizeTimeout) {
+                clearTimeout(resizeTimeout);
+            }
 
-            setDimensions((prev) => {
-                const offset = newDimensions.height - prev.height;
+            // Set new timeout to update dimensions
+            resizeTimeout = setTimeout(() => {
+                const newDimensions = getViewportDimensions();
+                setPrevDimensions(dimensions.height);
+                setDimensions((prev) => {
+                    const offset = newDimensions.height - prev.height;
 
-                // Only set offset if it's greater than 0 and hasn't been set before
-                setHeights((height) => ({
-                    ...height,
-                    offset: height.offset === 0 && offset > 0 && offset !== newDimensions.height ? offset : height.offset,
-                }));
-                return newDimensions;
-            });
+                    // Only set offset if it's greater than 0 and hasn't been set before
+                    setHeights((height) => ({
+                        ...height,
+                        offset: height.offset === 0 && offset > 0 && offset !== newDimensions.height ? offset : height.offset,
+                    }));
+                    return newDimensions;
+                });
+            }, 100); // 100ms delay to allow viewport to settle
         };
 
         handleResize();
@@ -66,6 +77,10 @@ const useDetectDevice = () => {
             window.visualViewport
                 ? window.visualViewport.removeEventListener("resize", handleResize)
                 : window.removeEventListener("resize", handleResize);
+
+            if (resizeTimeout) {
+                clearTimeout(resizeTimeout);
+            }
         };
     }, []);
 
@@ -121,11 +136,20 @@ const useDetectDevice = () => {
                 };
             }
 
+            const resultArea = GAME_DEFAULTS.MIN_RESULT_AREA_HEIGHT * scale + heights.offset;
+            const result = GAME_DEFAULTS.MIN_RESULT_HEIGHT * scale + heights.offset;
+
             return {
                 cageScale,
-                resultArea: GAME_DEFAULTS.MIN_RESULT_AREA_HEIGHT * scale + heights.offset,
-                result: GAME_DEFAULTS.MIN_RESULT_HEIGHT * scale + heights.offset,
+                resultArea: resultArea,
+                result: result,
             };
+
+            // return {
+            //     cageScale,
+            //     resultArea: resultArea > GAME_DEFAULTS.MAX_RESULT_AREA_HEIGHT ? GAME_DEFAULTS.MAX_RESULT_AREA_HEIGHT : resultArea,
+            //     result: result > GAME_DEFAULTS.MAX_RESULT_HEIGHT ? GAME_DEFAULTS.MAX_RESULT_AREA_HEIGHT : result,
+            // };
         };
 
         const { cageScale, resultArea, result } = calculateDimensions(dimensions.height, scales.game);
@@ -141,6 +165,7 @@ const useDetectDevice = () => {
         offsetHeight: heights.offset,
         height: dimensions.height,
         width: dimensions.width,
+        prevHeight: prevDimensions,
     };
 };
 
