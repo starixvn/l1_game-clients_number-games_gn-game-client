@@ -6,6 +6,7 @@ import { SwiperNoSwiping } from "../../_shared/constants";
 import { InitSocketIO, writeDebugLog } from "../../_shared/helpers";
 import { AnalyticsHelper } from "../../_shared/helpers/analytic-helper";
 import { GlobalMessageTransmitter, GlobalTransmitterEvent } from "../../_shared/helpers/message-transmitter/global-transmitter";
+import PreloadResources from "../../_shared/helpers/preload-resources";
 import { GameActionsContextProvider, GameContextProvider, PlayerContext, PlayerContextModel } from "../../_shared/react-contexts";
 import { GameEventActionType } from "../../_shared/react-contexts/game-state-context/game-event-action";
 import { PFProvider } from "../../_shared/react-contexts/game-state-context/pf/pf-context";
@@ -32,23 +33,12 @@ import BackgroundGalaxy from "../page-components/background";
 import BetSettings from "../page-components/bet-settings";
 import { IRoundStateHandler } from "../round-base/round-state-handler";
 import { GameSoundHandler, IGameSoundHandler } from "../turn-base/game-sound-handler";
-import {
-    GameDisableHandler,
-    GameErrorHandler,
-    GameFinishHandler,
-    GameMessageHandler,
-    GameRoundHistoryHandler,
-    messageEventType,
-    PlaceBetHandler,
-    PlayerHandler,
-} from "./handlers";
+import { GameDisableHandler, GameErrorHandler, GameFinishHandler, GameMessageHandler, GameRoundHistoryHandler, messageEventType, PlaceBetHandler, PlayerHandler } from "./handlers";
 import { GameRoundDataHandler } from "./handlers/game-round-data-handler";
 import { GameStateHandler, IGameStateHandler } from "./handlers/game-state-handler";
 import { PFWrapper } from "./handlers/pf-wrapper/pf-wrapper";
 import { PlaceBetHandlerWrapper } from "./handlers/place-bet-wrapper/place-bet-handler-wrapper";
 import { GameBaseHandlers, GameBaseProps, GameBaseState, RoundState } from "./type";
-import PreloadResources from "../../_shared/helpers/preload-resources";
-import PageIndicator from "../page-components/page-indicator";
 
 abstract class GameBase<P extends GameBaseProps, S extends GameBaseState> extends React.PureComponent<P, S> {
     protected socket: Socket;
@@ -491,7 +481,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState> extend
     renderHeaderBlock() {
         const { availableInGameData } = this.props.gameStateContextModel;
         return (
-            <div className="game-header">
+            <div className="game-header part-1">
                 {this.renderRoundIdSection()}
                 <div id="countdown-timer" className="countdown-timer">
                     {availableInGameData && <CountdownTimer GameStatusProp={this.renderGameStatus()} />}
@@ -570,23 +560,28 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState> extend
                                 {this.renderBetHistoryModal()}
                             </PFWrapper>
                         </PFProvider>
-                        <div>{availableInGameData && this.renderResultBlock()}</div>
-                        <PlaceBetProvider>
-                            <PlaceBetHandlerWrapper handler={this.placeBetHandler} signOut={(this.context as PlayerContextModel)?.signOut}>
-                                {this.renderBettingBlock()}
-                                {this.renderConfirmDialog()}
-                                {this.renderConfirmBet()}
-                            </PlaceBetHandlerWrapper>
-                        </PlaceBetProvider>
-                        <div className={SwiperNoSwiping}> {this.renderSlidingChips()}</div>
+                        <div className="part-2">{availableInGameData && this.renderResultBlock()}</div>
+                        <div className="part-3">
+                            <PlaceBetProvider>
+                                <PlaceBetHandlerWrapper
+                                    handler={this.placeBetHandler}
+                                    signOut={(this.context as PlayerContextModel)?.signOut}
+                                >
+                                    {this.renderBettingBlock()}
+                                    {this.renderConfirmDialog()}
+                                    {this.renderConfirmBet()}
+                                </PlaceBetHandlerWrapper>
+                            </PlaceBetProvider>
+                            <div className={SwiperNoSwiping}> {this.renderSlidingChips()}</div>
 
-                        <div className={`${SwiperNoSwiping} statistic-scoreboard-container`}>
-                            {this.renderStatistic()}
-                            {isScoreboardTab ? (
-                                this.renderScoreboards()
-                            ) : (
-                                <SideBetScoreboard>{this.renderStatisticContent()}</SideBetScoreboard>
-                            )}
+                            <div className={`${SwiperNoSwiping} statistic-scoreboard-container`}>
+                                {this.renderStatistic()}
+                                {isScoreboardTab ? (
+                                    this.renderScoreboards()
+                                ) : (
+                                    <SideBetScoreboard>{this.renderStatisticContent()}</SideBetScoreboard>
+                                )}
+                            </div>
                         </div>
 
                         {/* <Footer /> */}
