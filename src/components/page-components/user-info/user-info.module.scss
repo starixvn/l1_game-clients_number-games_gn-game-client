@@ -6,7 +6,6 @@
 .user {
     display: flex;
     align-items: center;
-    margin-left: 1.5rem;
     gap: 1rem;
 
     .avatar {
@@ -15,8 +14,8 @@
         --colorBackground: #092b2d80;
 
         position: relative;
-        width: 3rem;
-        height: 3rem;
+        width: 3.7rem;
+        height: 3.7rem;
         border-radius: 50%;
         border: 0.1rem solid transparent;
         background: linear-gradient(var(--colorBackground), var(--colorBackground)) padding-box,
@@ -44,10 +43,10 @@
     }
 
     .info {
-        margin-right: 0.8rem;
-        font-weight: 600;
-        text-align: right;
         white-space: nowrap;
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
     }
 
     .icon-user {
@@ -64,12 +63,13 @@
 
 .user-name {
     color: var(--username-color);
-    font: 500 1.1rem/1rem var(--font-family);
+    font: 400 1.4rem var(--font-family);
 }
 
 .balance {
     color: var(--header-balance-color);
-    font-size: 1.1rem;
+    font-size: 1.4rem;
+    font-weight: 600;
     display: flex;
     gap: 0.2rem;
 }
