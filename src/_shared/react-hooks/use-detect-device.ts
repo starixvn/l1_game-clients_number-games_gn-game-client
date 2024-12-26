@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { isIOS, isMobileOnly } from "react-device-detect";
+import { isAndroid } from "react-device-detect";
 
 // Constants
 export const VIEWPORT = {
@@ -47,17 +47,26 @@ const useDetectDevice = () => {
             setDimensions((prev) => {
                 const offset = newDimensions.height - prev.height;
 
+                // Only set offset if it's greater than 0 and hasn't been set before
                 setHeights((height) => ({
                     ...height,
-                    offset: offset > 0 && offset !== newDimensions.height ? offset : 0,
+                    offset: height.offset === 0 && offset > 0 && offset !== newDimensions.height ? offset : height.offset,
                 }));
                 return newDimensions;
             });
         };
 
         handleResize();
-        window.visualViewport?.addEventListener("resize", handleResize);
-        return () => window.visualViewport?.removeEventListener("resize", handleResize);
+
+        window.visualViewport
+            ? window.visualViewport.addEventListener("resize", handleResize)
+            : window.addEventListener("resize", handleResize);
+
+        return () => {
+            window.visualViewport
+                ? window.visualViewport.removeEventListener("resize", handleResize)
+                : window.removeEventListener("resize", handleResize);
+        };
     }, []);
 
     // Calculate game scale
@@ -94,6 +103,24 @@ const useDetectDevice = () => {
 
             const cageScale = (viewportHeight * GAME_DEFAULTS.MAX_CAGE_SCALE) / VIEWPORT.MAX_HEIGHT;
             const scale = Math.max(gameScale, cageScale);
+
+            if (isAndroid) {
+                if (viewportHeight > VIEWPORT.MIN_HEIGHT && viewportHeight < VIEWPORT.MAX_HEIGHT) {
+                    setHeights((height) => ({
+                        ...height,
+                        offset: viewportHeight - VIEWPORT.MIN_HEIGHT + (VIEWPORT.MAX_HEIGHT - viewportHeight),
+                    }));
+                }
+
+                const resultArea = GAME_DEFAULTS.MIN_RESULT_AREA_HEIGHT * scale + heights.offset;
+
+                return {
+                    cageScale,
+                    resultArea: resultArea,
+                    result: GAME_DEFAULTS.MIN_RESULT_HEIGHT * scale + heights.offset,
+                };
+            }
+
             return {
                 cageScale,
                 resultArea: GAME_DEFAULTS.MIN_RESULT_AREA_HEIGHT * scale + heights.offset,
@@ -112,6 +139,8 @@ const useDetectDevice = () => {
         cageScale: scales.cage,
         gameScale: scales.game,
         offsetHeight: heights.offset,
+        height: dimensions.height,
+        width: dimensions.width,
     };
 };
 
