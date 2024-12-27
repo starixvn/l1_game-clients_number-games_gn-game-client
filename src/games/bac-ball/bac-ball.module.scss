@@ -24,6 +24,10 @@
     z-index: 2;
     transform: scale(var(--betting-zone-scale));
     transform-origin: left bottom;
+
+    @media screen and (min-device-width: 500px) {
+        --betting-zone-scale: 1;
+    }
 }
 
 .result-container {

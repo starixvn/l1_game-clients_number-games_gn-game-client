@@ -65,17 +65,11 @@ html {
     --spacing-size-4: 1.6rem;
     --spacing-size-5: 2rem;
     --spacing-size-6: 2.4rem;
-
-    // --zoom-game: 1.25;
-
-    // footer
-    --color-copyright: rgba(161, 161, 161, 0.6);
 }
 
 [data-theme="light"] {
     --page-background-color: #000;
     --game-background-image: url("/static/images/bg-galaxy.webp?v=#{$version-image}");
-    --game-small-background-image: url("/static/images/bg-galaxy-small.webp?v=#{$version-image}");
     --background-image: url("/static/images/bg.webp?v=#{$version-image}");
     --text-color: #2c2f3e;
 
@@ -177,13 +171,6 @@ body {
     white-space: nowrap;
     animation: text-effect 1.3s ease-in forwards;
 }
-
-// .copyright {
-//     position: relative;
-//     font-size: 0.9rem;
-//     font-weight: 500;
-//     color: var(--color-copyright);
-// }
 
 @keyframes text-effect {
     0% {

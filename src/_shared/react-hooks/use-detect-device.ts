@@ -64,7 +64,7 @@ const useDetectDevice = () => {
                     }));
                     return newDimensions;
                 });
-            }, 100); // 100ms delay to allow viewport to settle
+            }, 50); // 100ms delay to allow viewport to settle
         };
 
         handleResize();
