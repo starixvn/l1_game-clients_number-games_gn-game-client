@@ -166,7 +166,7 @@ const BacBallBetOptionsComponent = () => {
             <div className={`${Style[BacBallBetOptions.TIE]} text-white flex flex-col items-center pt-2`}>
                 <Image
                     className={Style["bg-bet-option"]}
-                    width={105}
+                    width={108}
                     height={198}
                     src={
                         loadingComplete[BacBallBetOptions.TIE]
