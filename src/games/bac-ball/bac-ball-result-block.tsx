@@ -32,29 +32,7 @@ export const BacBallResultBlock: FC<BacBallResultBlockProps> = (props: BacBallRe
 
     const currentResult = useResult<BacBallResult>({ result, roundState, roundHistory });
 
-    const [viewportHeight, setViewportHeight] = useState(window.visualViewport?.height);
-    // const [scale, setScale] = useState(0.84);
-    const [distance, setDistance] = useState(0);
-    const { cageScale, offsetHeight, width, height, prevHeight, resultAreaHeight, resultHeight } = useDetectDevice();
-
-    useEffect(() => {
-        const handleResize = () => {
-            setViewportHeight((prev) => {
-                // const ratio = window.visualViewport.height / prev;
-                // setScale(ratio);
-                setDistance(window.visualViewport.height - prev);
-                return window.visualViewport.height;
-            });
-        };
-
-        // Attach the resize event listener to visualViewport
-        window.visualViewport?.addEventListener("resize", handleResize);
-
-        // Cleanup listener on component unmount
-        return () => {
-            window.visualViewport?.removeEventListener("resize", handleResize);
-        };
-    }, []);
+    const { cageScale, offsetHeight, viewportWidth, viewportHeight } = useDetectDevice();
 
     if (roundState === RoundState.SwitchRound && !isPlayStartRoundAnimation) {
         return <></>;
@@ -67,13 +45,9 @@ export const BacBallResultBlock: FC<BacBallResultBlockProps> = (props: BacBallRe
             }`}
         >
             <div className={`${Style["viewport-container"]}`}>
-                <p className={`${Style["viewport"]}`}>viewport prev height: {prevHeight}</p>
-                <p className={`${Style["viewport"]}`}>viewport height: {height}</p>
-                <p className={`${Style["viewport"]}`}>viewport width: {width}</p>
-                <p className={`${Style["viewport"]}`}>Height: {viewportHeight}px</p>
-                <p className={`${Style["viewport"]}`}>offsetHeight: {offsetHeight}</p>
-                <p className={`${Style["viewport"]}`}>resultAreaHeight: {resultAreaHeight}</p>
-                <p className={`${Style["viewport"]}`}>resultHeight: {resultHeight}</p>
+                <p className={`${Style["viewport"]}`}>viewport height: {viewportHeight}</p>
+                <p className={`${Style["viewport"]}`}>viewport width: {viewportWidth}</p>
+                <p className={`${Style["viewport"]}`}>offsetHeight: {offsetHeight}px</p>
             </div>
             <div className={Style["result"]}>
                 <Cage

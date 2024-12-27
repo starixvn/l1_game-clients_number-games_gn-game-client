@@ -6,6 +6,7 @@ export const VIEWPORT = {
     MIN_HEIGHT: 739, // iPhone 14 Pro Max
     MAX_HEIGHT: 821,
     MAX_WIDTH: 430,
+    SPECIAL_ASPECT_RATIO: 0.66, // 414 / 622 (Iphone 8 Plus)
 } as const;
 
 export const GAME_DEFAULTS = {
@@ -26,7 +27,7 @@ interface ViewportDimensions {
 const useDetectDevice = () => {
     // State management
     const [dimensions, setDimensions] = useState<ViewportDimensions>({ height: 0, width: 0 });
-    const [prevDimensions, setPrevDimensions] = useState(0);
+
     const [scales, setScales] = useState({ cage: 0, game: 1 });
     const [heights, setHeights] = useState({
         result: 0,
@@ -53,7 +54,6 @@ const useDetectDevice = () => {
             // Set new timeout to update dimensions
             resizeTimeout = setTimeout(() => {
                 const newDimensions = getViewportDimensions();
-                setPrevDimensions(dimensions.height);
                 setDimensions((prev) => {
                     const offset = newDimensions.height - prev.height;
 
@@ -85,15 +85,21 @@ const useDetectDevice = () => {
     }, []);
 
     // Calculate game scale
-    const calculateGameScale = (width: number): number => {
+    const calculateGameScale = (dimensions): number => {
+        const { height, width } = dimensions;
+
+        if (width / height >= VIEWPORT.SPECIAL_ASPECT_RATIO) {
+            return width / VIEWPORT.MAX_WIDTH - (width / height - VIEWPORT.MAX_WIDTH / VIEWPORT.MIN_HEIGHT) * 2;
+        }
+
         return width < VIEWPORT.MAX_WIDTH || width > VIEWPORT.MAX_WIDTH ? width / VIEWPORT.MAX_WIDTH : 1;
     };
 
     // Update game scale
     useEffect(() => {
-        const gameScale = calculateGameScale(dimensions.width);
+        const gameScale = calculateGameScale(dimensions);
         setScales((s) => ({ ...s, game: gameScale }));
-    }, [dimensions?.width]);
+    }, [dimensions]);
 
     // Update heights and cage scale
     useEffect(() => {
@@ -136,20 +142,11 @@ const useDetectDevice = () => {
                 };
             }
 
-            const resultArea = GAME_DEFAULTS.MIN_RESULT_AREA_HEIGHT * scale + heights.offset;
-            const result = GAME_DEFAULTS.MIN_RESULT_HEIGHT * scale + heights.offset;
-
             return {
                 cageScale,
-                resultArea: resultArea,
-                result: result,
+                resultArea: GAME_DEFAULTS.MIN_RESULT_AREA_HEIGHT * scale + heights.offset,
+                result: GAME_DEFAULTS.MIN_RESULT_HEIGHT * scale + heights.offset,
             };
-
-            // return {
-            //     cageScale,
-            //     resultArea: resultArea > GAME_DEFAULTS.MAX_RESULT_AREA_HEIGHT ? GAME_DEFAULTS.MAX_RESULT_AREA_HEIGHT : resultArea,
-            //     result: result > GAME_DEFAULTS.MAX_RESULT_HEIGHT ? GAME_DEFAULTS.MAX_RESULT_AREA_HEIGHT : result,
-            // };
         };
 
         const { cageScale, resultArea, result } = calculateDimensions(dimensions.height, scales.game);
@@ -163,9 +160,8 @@ const useDetectDevice = () => {
         cageScale: scales.cage,
         gameScale: scales.game,
         offsetHeight: heights.offset,
-        height: dimensions.height,
-        width: dimensions.width,
-        prevHeight: prevDimensions,
+        viewportWidth: dimensions.width,
+        viewportHeight: dimensions.height,
     };
 };
 

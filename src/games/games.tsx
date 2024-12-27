@@ -2,26 +2,20 @@ import { useTheme } from "next-themes";
 import dynamic from "next/dynamic";
 import React, { useContext, useEffect, useRef } from "react";
 import { isIOS, isMobileOnly } from "react-device-detect";
-
 import { Swiper, SwiperSlide } from "swiper/react";
+
 import { getAppSettings } from "../_shared/app-settings";
 import { GameIds, SwiperNoSwiping } from "../_shared/constants";
 import { AnalyticsHelper, TrackingAction, TrackingFunction } from "../_shared/helpers";
-import {
-    SettingEventActionType,
-    SystemContextProvider,
-    URLContext,
-    updateURLContext,
-    usePlayerContext,
-    useSettingDispatch,
-} from "../_shared/react-contexts";
+import { SettingEventActionType, SystemContextProvider, updateURLContext, URLContext, usePlayerContext, useSettingDispatch } from "../_shared/react-contexts";
 import { useBlockBetSound, usePlaceBetSound, useStartDrawSound, useStartRoundSound } from "../_shared/react-hooks";
+import useDetectDevice, { GAME_DEFAULTS } from "../_shared/react-hooks/use-detect-device";
 import { GameSound } from "../components/game-base/type";
 import GameLoading from "../components/game-components/game-loading";
+import { LoadingSpinner } from "../components/game-components/game-loading/loading-spinner";
 import { getChipSettings } from "../services/user-setting-service";
 import styles from "./games.module.scss";
 import { Props } from "./type";
-import { LoadingSpinner } from "../components/game-components/game-loading/loading-spinner";
 
 const LoadingGameComponent = () => (
     <>
@@ -29,8 +23,6 @@ const LoadingGameComponent = () => (
         <LoadingSpinner />
     </>
 );
-import useDetectDevice, { GAME_DEFAULTS } from "../_shared/react-hooks/use-detect-device";
-
 const SwitchGamesGuide = dynamic(() => import("../components/page-components/switch-games-guide"));
 const BacBall = dynamic(() => import("./bac-ball"), { loading: () => <LoadingGameComponent /> });
 const NextBall = dynamic(() => import("./next-ball/page"), { loading: () => <LoadingGameComponent /> });
@@ -51,7 +43,7 @@ export const Games: React.FC<Props> = ({
     const { theme } = useTheme();
     const { session } = usePlayerContext();
     const settingDispatch = useSettingDispatch();
-    const { resultAreaHeight, resultHeight, offsetHeight, gameScale } = useDetectDevice();
+    const { resultAreaHeight, resultHeight, offsetHeight, gameScale, viewportWidth } = useDetectDevice();
     const gameRef = useRef(null);
 
     useEffect(() => {
@@ -74,7 +66,8 @@ export const Games: React.FC<Props> = ({
         );
         gameRef.current.style.setProperty("--result-height", isMobileOnly ? resultHeight + "px" : GAME_DEFAULTS.MAX_RESULT_HEIGHT + "px");
         gameRef.current.style.setProperty("--offset-height", isMobileOnly ? offsetHeight + "px" : 0);
-    }, [gameScale, resultAreaHeight, resultHeight, offsetHeight]);
+        gameRef.current.style.setProperty("--viewport-width", viewportWidth);
+    }, [gameScale, resultAreaHeight, resultHeight, offsetHeight, viewportWidth]);
 
     const gameSound: GameSound = {
         playPlaceBetSound: usePlaceBetSound(),
