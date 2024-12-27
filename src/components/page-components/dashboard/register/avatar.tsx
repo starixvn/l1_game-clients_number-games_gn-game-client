@@ -17,10 +17,11 @@ export function Avatar({ id, onClick, selected }: AvatarProps): ReactNode {
         <div className={className} onClick={onClick}>
             <Image
                 src={`/static/images/avatar/${id}.jpg?v=${buildVersion}`}
-                height={72}
-                width={72}
+                height={162}
+                width={162}
                 className="img-fluid circle"
                 alt="Avatar"
+                quality={100}
             />
         </div>
     );
