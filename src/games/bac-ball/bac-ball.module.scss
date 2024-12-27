@@ -12,6 +12,7 @@
 }
 
 .betting-zone {
+    --betting-zone-scale: calc(var(--viewport-width) / 430);
     position: relative;
     display: flex;
     justify-content: space-between;
@@ -21,7 +22,7 @@
     padding-left: 0.8rem;
     padding-right: 0.8rem;
     z-index: 2;
-    transform: scale(var(--game-scale));
+    transform: scale(var(--betting-zone-scale));
     transform-origin: left bottom;
 }
 

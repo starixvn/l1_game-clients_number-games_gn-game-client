@@ -3,7 +3,7 @@ import "../../../games/scoreboards";
 import dynamic from "next/dynamic";
 import { withRouter } from "next/router";
 import React from "react";
-import { isDesktop, isMobile, isMobileOnly } from "react-device-detect";
+import { isMobile, isMobileOnly } from "react-device-detect";
 import SwiperCore from "swiper";
 
 import { ErrorNoGameOffer } from "../../../_shared/constants/error-code-dictionary";
@@ -134,14 +134,14 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
     async componentDidMount() {
         const { dashBoardHeight } = this.state;
 
-        const zoomGame = +getComputedStyle(document.getElementById("dashboard")).getPropertyValue("--zoom-game");
+        // const zoomGame = +getComputedStyle(document.getElementById("dashboard")).getPropertyValue("--zoom-game");
 
-        if (isDesktop && dashBoardHeight !== window.innerHeight) {
-            const scaleHeight = document.getElementById("dashboard").clientHeight * zoomGame;
-            this.setState({
-                dashBoardHeight: window.innerHeight + (window.innerHeight - scaleHeight) * (window.innerHeight / scaleHeight),
-            });
-        }
+        // if (isDesktop && dashBoardHeight !== window.innerHeight) {
+        //     const scaleHeight = document.getElementById("dashboard").clientHeight * zoomGame;
+        //     this.setState({
+        //         dashBoardHeight: window.innerHeight + (window.innerHeight - scaleHeight) * (window.innerHeight / scaleHeight),
+        //     });
+        // }
 
         document.addEventListener("visibilitychange", this.onVisibilityChange);
         this.backToLobbyEventId = registerGlobalMessageEvent(GlobalTransmitterEvent.BACK_TO_LOBBY, async () =>
@@ -249,9 +249,9 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
         );
     }
 
-    setDashBoardStyle(isRenderGames: boolean) {
-        return isDesktop && isRenderGames ? { height: this.state.dashBoardHeight } : {};
-    }
+    // setDashBoardStyle(isRenderGames: boolean) {
+    //     return isDesktop && isRenderGames ? { height: this.state.dashBoardHeight } : {};
+    // }
 
     renderDashBoard() {
         window.history.pushState(null, null, "/");
@@ -285,7 +285,7 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
                             isMobileOnly ? Styles["hidden-scrollbar"] : ""
                         }`}
                         id={"dashboard"}
-                        style={this.setDashBoardStyle(isRenderGames)}
+                        // style={this.setDashBoardStyle(isRenderGames)}
                     >
                         <Header />
                         <SoundSettings />
