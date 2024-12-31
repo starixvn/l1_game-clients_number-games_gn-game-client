@@ -6,28 +6,24 @@ import React from "react";
 import { isMobile, isMobileOnly } from "react-device-detect";
 import SwiperCore from "swiper";
 
+import { getAppSettings } from "../../../_shared/app-settings";
 import { ErrorNoGameOffer } from "../../../_shared/constants/error-code-dictionary";
 import { GetLocalizedErrorMessage, localStorageKeys, StorageHelper } from "../../../_shared/helpers";
 import { GlobalMessageTransmitter, GlobalTransmitterEvent, registerGlobalMessageEvent, unsubscribeGlobalMessageEvent } from "../../../_shared/helpers/message-transmitter/global-transmitter";
-import { loadURLContext, LobbyConnectionContextProvider, PlayerContextProvider, SettingContextProvider, updateURLContext } from "../../../_shared/react-contexts";
+import { loadURLContext, PlayerContextProvider, SettingContextProvider, updateURLContext } from "../../../_shared/react-contexts";
 import { UserStakeLevel } from "../../game-base/type";
 import { ModalType } from "../../game-components/base-dialog/type";
 import { ErrorApiText } from "../../game-components/error-api-text";
 import { LoadingSpinner } from "../../game-components/game-loading/loading-spinner";
 import BottomBar from "../bottom-bar";
 import Header from "../header";
-import Lobby from "../lobby/lobby";
 import { LobbyGameTransmitter } from "../lobby/lobby-socket-connection";
-import PageIndicator from "../page-indicator";
+import GameSelectionLobby from "../switch-game/game-selection-lobby";
 import ButtonSwipe from "./button-swipe";
 import Styles from "./dashboard.module.scss";
 import { DashboardHandler } from "./handlers/dash-board-handler";
 import { NotificationHandler } from "./handlers/notification-handler";
 import { DashboardProps, DashboardState } from "./type";
-import GameSelection from "../switch-game/game-selection";
-import { mockGames } from "../switch-game/mock-data-test";
-import { getAppSettings } from "../../../_shared/app-settings";
-import GameSelectionLobby from "../switch-game/game-selection-lobby";
 
 const SoundSettings = dynamic(() => import("../header/setting/settings-popup"));
 const Games = dynamic(() => import("../../../games/games"), { loading: () => <LoadingSpinner /> });
@@ -313,7 +309,7 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
                         <SoundSettings />
 
                         {isNoGameOffer ? <></> : renderOfferGameContainer()}
-                        <PageIndicator />
+
                         <BottomBar
                             lobbyConfigs={this.props.lobbyConfigs}
                             gameTransmitters={this.state.gameTransmitters}

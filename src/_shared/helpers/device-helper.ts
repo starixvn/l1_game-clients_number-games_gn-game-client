@@ -1,5 +1,3 @@
-import { deviceInfo } from "./device-detect-wrapper";
-
 export interface ViewportDimensions {
     height: number;
     width: number;
@@ -25,13 +23,18 @@ export const VIEWPORT = {
 } as const;
 
 export const GAME_DEFAULTS = {
-    MIN_CAGE_SCALE: 0.5,
+    MIN_CAGE_SCALE: 0.5, // iPhone 14 Pro Max
     MAX_CAGE_SCALE: 0.84,
+    CAGE_SIZE: 130,
     MIN_RESULT_AREA_HEIGHT: 120,
     MAX_RESULT_AREA_HEIGHT: 212,
     MIN_RESULT_HEIGHT: 80,
     MAX_RESULT_HEIGHT: 173,
     GAME_SCALE: 1,
+    GAME_HEADER_HEIGHT: 32,
+    GAME_COUNT_DOWN_TIMER_HEIGHT: 50,
+    GAME_BET_ZONE_CHIP_SCORE_BOARD_HEIGHT: 432,
+    GAME_BOTTOM_AREA_HEIGHT: 85,
 } as const;
 
 export const getViewportDimensions = (): ViewportDimensions => ({
@@ -58,18 +61,41 @@ const getDefaultDimensions = () => ({
 const calculateSmallViewportDimensions = (viewportHeight: number, gameScale: number) => {
     const cageScale = (viewportHeight * GAME_DEFAULTS.MIN_CAGE_SCALE) / VIEWPORT.MIN_HEIGHT;
     const scale = Math.min(gameScale, cageScale);
+    const resultArea =
+        viewportHeight -
+        GAME_DEFAULTS.GAME_HEADER_HEIGHT -
+        GAME_DEFAULTS.GAME_COUNT_DOWN_TIMER_HEIGHT -
+        GAME_DEFAULTS.GAME_BOTTOM_AREA_HEIGHT -
+        GAME_DEFAULTS.GAME_BET_ZONE_CHIP_SCORE_BOARD_HEIGHT * gameScale;
+
+    const result = resultArea * cageScale;
+
     return {
         cageScale,
-        resultArea: (GAME_DEFAULTS.MIN_RESULT_AREA_HEIGHT * scale) / GAME_DEFAULTS.MIN_CAGE_SCALE,
-        result: (GAME_DEFAULTS.MIN_RESULT_HEIGHT * scale) / GAME_DEFAULTS.MIN_CAGE_SCALE,
+        resultArea,
+        result,
     };
+
+    // return {
+    //     cageScale,
+    //     resultArea: (GAME_DEFAULTS.MIN_RESULT_AREA_HEIGHT * scale) / GAME_DEFAULTS.MIN_CAGE_SCALE,
+    //     result: (GAME_DEFAULTS.MIN_RESULT_HEIGHT * scale) / GAME_DEFAULTS.MIN_CAGE_SCALE,
+    // };
 };
 
 const calculateLargeViewportDimensions = (viewportHeight: number, gameScale: number, currentOffset: number) => {
     const cageScale = (viewportHeight * GAME_DEFAULTS.MAX_CAGE_SCALE) / VIEWPORT.MAX_HEIGHT;
     const scale = Math.max(gameScale, cageScale);
-    const resultArea = GAME_DEFAULTS.MIN_RESULT_AREA_HEIGHT * scale + currentOffset;
-    const result = GAME_DEFAULTS.MIN_RESULT_HEIGHT * scale + currentOffset;
+    // const resultArea = GAME_DEFAULTS.MIN_RESULT_AREA_HEIGHT * scale + currentOffset;
+    // const result = GAME_DEFAULTS.MIN_RESULT_HEIGHT * scale + currentOffset;
+
+    const resultArea =
+        viewportHeight -
+        GAME_DEFAULTS.GAME_HEADER_HEIGHT -
+        GAME_DEFAULTS.GAME_COUNT_DOWN_TIMER_HEIGHT -
+        GAME_DEFAULTS.GAME_BOTTOM_AREA_HEIGHT -
+        GAME_DEFAULTS.GAME_BET_ZONE_CHIP_SCORE_BOARD_HEIGHT * gameScale;
+    const result = Math.min(resultArea * scale, GAME_DEFAULTS.CAGE_SIZE);
 
     return {
         cageScale,
@@ -92,4 +118,4 @@ export const calculateDimensions = (
     }
 
     return calculateLargeViewportDimensions(viewportHeight, gameScale, currentOffset);
-}; 
+};

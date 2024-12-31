@@ -481,7 +481,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState> extend
     renderHeaderBlock() {
         const { availableInGameData } = this.props.gameStateContextModel;
         return (
-            <div className="game-header part-1">
+            <div className="game-header">
                 {this.renderRoundIdSection()}
                 <div id="countdown-timer" className="countdown-timer">
                     {availableInGameData && <CountdownTimer GameStatusProp={this.renderGameStatus()} />}

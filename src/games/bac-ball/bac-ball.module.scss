@@ -24,6 +24,7 @@
     z-index: 2;
     transform: scale(var(--betting-zone-scale));
     transform-origin: left bottom;
+    transition: transform 200ms;
 
     @media screen and (min-device-width: 500px) {
         --betting-zone-scale: 1;
@@ -33,11 +34,13 @@
 .result-container {
     display: grid;
     justify-content: center;
+    align-items: center;
     // grid-template-columns: repeat(2, 15.3rem);
     grid-template-columns: repeat(2, 1fr);
     grid-gap: 4rem;
     // height: 18.5rem;
     height: var(--result-area-height);
+    transition: height 200ms;
 }
 
 .ball-container {
@@ -53,6 +56,8 @@
     display: grid;
     // grid-template-rows: 15.3rem 1fr;
     grid-template-rows: calc(var(--result-height)) 3.6rem;
+    gap: 1rem;
+    transition: grid-template-rows 200ms;
 }
 
 .bg-bet-option {
