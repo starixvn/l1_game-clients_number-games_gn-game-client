@@ -13,6 +13,7 @@ import { GameSettings } from "../../../components/game-base/type";
 import 'swiper/css';
 import 'swiper/css/free-mode';
 import { getAppSettings } from '../../../_shared/app-settings';
+import { HighLightTab } from './prototype/tabs/high-light-tab';
 
 interface GameGroup {
     name: string;
@@ -156,7 +157,11 @@ const LobbyTab: React.FC<LobbyTabProps> = ({
                                     className={`${styles.tab} ${selectedCategory === index ? styles.active : ''}`}
                                     onClick={() => handleCategoryClick(index)}
                                 >
-                                    {category}
+                                    {selectedCategory === index ? (
+                                        <HighLightTab title={category} />
+                                    ) : (
+                                        <span>{category}</span>
+                                    )}
                                 </button>
                             </SwiperSlide>
                         ))}
