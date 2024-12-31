@@ -1,11 +1,14 @@
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 import { LobbyGameId } from "../../../../../_shared/constants";
 import PreloadResources from "../../../../../_shared/helpers/preload-resources";
 import { useLobbyConnectionContext } from "../../../../../_shared/react-contexts";
 import { GameSettings } from "../../../../game-base/type";
+import { LoadingSpinner } from "../../../../game-components/game-loading/loading-spinner";
 import { getLobbyData, LobbyGameTransmitter, LobbyMessageEvents } from "../../lobby-socket-connection";
+import { GameIcon } from "./game-icon";
 import { LobbyImagesData } from "./lobby-constant";
 import { CachedImage } from "../../../../game-components/cached-image";
 import styles from "./game-board.module.scss";
@@ -14,6 +17,7 @@ import { GameBoardHeader } from './game-board-header';
 import { GameBoardFooter } from './game-board-footer';
 
 const DisabledGameBlock = dynamic(() => import("./disable-game-block"));
+const CountdownTimer = dynamic(() => import("./countdown-timer"));
 const LobbyScoreboard = dynamic(() => import("./scoreboard"));
 
 type Props = {
@@ -33,6 +37,7 @@ export const GameBoard: React.FC<Props> = ({ gameSettings, openGame, gameTransmi
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [cancelPreloadResource, setCancelPreloadResource] = useState<boolean>(false);
     const { t } = useTranslator([gameSettings.tolgeeNamespace]);
+    const [isPlayButtonDisabled, setIsPlayButtonDisabled] = useState<boolean>(false);
 
     useEffect(() => {
         const cleanup = () => {
@@ -79,9 +84,16 @@ export const GameBoard: React.FC<Props> = ({ gameSettings, openGame, gameTransmi
     };
 
     const handlePlay = () => {
+        if (isPlayButtonDisabled || isLoading) return;
+
+        setIsPlayButtonDisabled(true);
         setClickGameId(gameSettings?.id);
         setIsLoading(true);
         setLastClickedGameId(gameSettings?.id);
+
+        setTimeout(() => {
+            setIsPlayButtonDisabled(false);
+        }, 3000);
     };
 
     useEffect(() => {
@@ -103,15 +115,39 @@ export const GameBoard: React.FC<Props> = ({ gameSettings, openGame, gameTransmi
         }
     }, [cancelPreloadResource]);
 
+    const renderPlayButton = () => (
+        <div
+            className={`${styles.playButtonWrapper} ${(isPlayButtonDisabled || isLoading) ? styles.disabled : ''}`}
+            role="button"
+            tabIndex={0}
+            aria-label="Play game"
+        >
+            {isLoading ? (
+                <LoadingSpinner />
+            ) : (
+                <div className={styles.playButton} onClick={handlePlay}>
+                    {t('play')}
+                    <Image
+                        src="/images/play-icon.png"
+                        className={styles.playIcon}
+                        width={24}
+                        height={24}
+                        alt="play-icon"
+                        priority={true}
+                    />
+                </div>
+            )}
+        </div>
+    );
+
     return (
         <div className={styles.gameCard} id={`icon-${gameSettings.gameName.toLowerCase()}`}>
-            <CachedImage
-                src={`/static/images/lobby/game-board-detail/bg-game-board-2x.webp`}
-                blurSrc={LobbyImagesData["game-block"]}
+            <Image
+                src="/images/background-card-game.png"
                 className={styles.backgroundImage}
                 width={360}
                 height={139}
-                alt="game-board-detail"
+                alt="game-board-background"
                 priority={true}
             />
 
@@ -126,18 +162,24 @@ export const GameBoard: React.FC<Props> = ({ gameSettings, openGame, gameTransmi
                 <div className={styles.gameBody}>
                     {isShow && transmitter && (
                         <div className={styles.scoreboardContainer}>
-                            <LobbyScoreboard gameSettings={gameSettings} transmitter={transmitter} />
+                            <LobbyScoreboard
+                                gameSettings={gameSettings}
+                                transmitter={transmitter}
+                            />
                         </div>
                     )}
                 </div>
-
-                <GameBoardFooter onPlay={handlePlay} />
             </div>
+
+            {renderPlayButton()}
 
             {clickGameId > 0 && (
                 <PreloadResources
                     gameId={clickGameId}
-                    setIsDonePreload={() => setIsDonePreloadResources(true)}
+                    setIsDonePreload={() => {
+                        setIsDonePreloadResources(true);
+                        setIsPlayButtonDisabled(false);
+                    }}
                     cancelPreload={cancelPreloadResource}
                 />
             )}

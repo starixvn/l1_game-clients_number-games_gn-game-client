@@ -97,4 +97,33 @@
             background: linear-gradient(to bottom, #45a049, #409444);
         }
     }
+}
+
+.playButtonWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    gap: 8px;
+    padding: 8px 0;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+    text-transform: uppercase;
+    
+    &.disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+}
+
+.playIcon {
+    width: 24px;
+    height: 24px;
+    transition: transform 0.2s ease;
+    
+    .playButtonWrapper:hover & {
+        transform: scale(1.1);
+    }
 } 

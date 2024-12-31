@@ -83,29 +83,29 @@ export default class LobbyScoreboard extends Component<LobbyScoreboardProps, Lob
         const { converter, ctor } = getBigRoadElement(gameSettings.id);
 
         if (!converter || !ctor || !isShow) {
-            return;
+            return null;
         }
 
-        blinkNodeFlag && converter.addBlinkNode(settlements as BacBallSettlementResult[]);
+        if (blinkNodeFlag) {
+            converter.addBlinkNode(settlements as BacBallSettlementResult[]);
+        }
 
         return (
-            <div className={Styles.scoreboard}>
-                <SwitchableScoreboard
-                    rounds={settlements}
-                    type="switch"
-                    className={Styles["scoreboard-lobby"]}
-                    scoreboards={[
-                        {
-                            element: ctor,
-                            arrange: ctor.arrange(converter.instance),
-                            column: 13,
-                            row: 6,
-                            blockClassName: Styles["scoreboard-lobby-block"],
-                            elementClassName: Styles["scoreboard-lobby-element"],
-                        },
-                    ]}
-                />
-            </div>
+            <SwitchableScoreboard
+                rounds={settlements}
+                type="switch"
+                className={Styles["scoreboard-lobby"]}
+                scoreboards={[
+                    {
+                        element: ctor,
+                        arrange: ctor.arrange(converter.instance),
+                        column: 17,
+                        row: 6,
+                        blockClassName: Styles["scoreboard-lobby-block"],
+                        elementClassName: Styles["scoreboard-lobby-element"]
+                    },
+                ]}
+            />
         );
     }
 }

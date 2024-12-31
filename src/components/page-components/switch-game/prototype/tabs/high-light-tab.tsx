@@ -9,6 +9,7 @@ export const HighLightTab = ({ title }: HighLightTabProps): JSX.Element => {
     return (
         <div className={styles.tab}>
             <div className={styles['text-wrapper']}>{title}</div>
+            <div className={styles.underline} />
         </div>
     );
 };
