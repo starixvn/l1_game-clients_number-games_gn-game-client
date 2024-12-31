@@ -1,177 +1,148 @@
-import { describe, it, expect, beforeEach } from '@jest/globals';
-import { deviceInfo } from '../device-detect-wrapper';
-import {
-    VIEWPORT,
-    GAME_DEFAULTS,
-    getViewportDimensions,
-    calculateGameScale,
-    calculateDimensions,
-    ViewportDimensions
-} from '../device-helper';
+import { calculateDimensions, calculateGameScale, GAME_DEFAULTS, getViewportDimensions, VIEWPORT } from "../device-helper";
 
-jest.mock('../device-detect-wrapper', () => ({
-    deviceInfo: {
-        isAndroid: false,
-        isIOS: false
-    }
-}));
+describe("device-helper", () => {
+    describe("getViewportDimensions", () => {
+        const originalVisualViewport = window.visualViewport;
+        const originalInnerHeight = window.innerHeight;
+        const originalInnerWidth = window.innerWidth;
 
-describe('device-helper', () => {
-    describe('getViewportDimensions', () => {
         beforeEach(() => {
-            Object.defineProperty(window, 'visualViewport', {
-                value: undefined,
-                writable: true
-            });
-            Object.defineProperty(window, 'innerHeight', {
-                value: 800,
-                writable: true
-            });
-            Object.defineProperty(window, 'innerWidth', {
-                value: 400,
-                writable: true
-            });
+            window.visualViewport = undefined;
+            window.innerHeight = 800;
+            window.innerWidth = 400;
         });
 
-        it('should use visualViewport when available', () => {
-            Object.defineProperty(window, 'visualViewport', {
-                value: {
-                    height: 750,
-                    width: 375
-                },
-                writable: true
-            });
-
-            const dimensions = getViewportDimensions();
-            expect(dimensions).toEqual({ height: 750, width: 375 });
+        afterEach(() => {
+            window.visualViewport = originalVisualViewport;
+            window.innerHeight = originalInnerHeight;
+            window.innerWidth = originalInnerWidth;
         });
 
-        it('should fallback to innerHeight/innerWidth when visualViewport is not available', () => {
+        it("should use visualViewport when available", () => {
+            // Arrange
+            window.visualViewport = {
+                height: 900,
+                width: 450,
+            } as VisualViewport;
+
+            // Act
             const dimensions = getViewportDimensions();
+
+            // Assert
+            expect(dimensions).toEqual({ height: 900, width: 450 });
+        });
+
+        it("should fallback to inner dimensions when visualViewport is not available", () => {
+            // Act
+            const dimensions = getViewportDimensions();
+
+            // Assert
             expect(dimensions).toEqual({ height: 800, width: 400 });
         });
     });
 
-    describe('calculateGameScale', () => {
-        const testCases = [
-            {
-                description: 'should calculate scale when width/height ratio >= SPECIAL_ASPECT_RATIO',
-                dimensions: { width: 414, height: 622 }, // ratio = 0.66
-                expected: 414 / VIEWPORT.MAX_WIDTH - (414 / 622 - VIEWPORT.MAX_WIDTH / VIEWPORT.MIN_HEIGHT) * 2
-            },
-            {
-                description: 'should return width/MAX_WIDTH when width < MAX_WIDTH',
-                dimensions: { width: 375, height: 800 },
-                expected: 375 / VIEWPORT.MAX_WIDTH
-            },
-            {
-                description: 'should return width/MAX_WIDTH when width > MAX_WIDTH',
-                dimensions: { width: 500, height: 800 },
-                expected: 500 / VIEWPORT.MAX_WIDTH
-            },
-            {
-                description: 'should return 1 when width equals MAX_WIDTH',
-                dimensions: { width: VIEWPORT.MAX_WIDTH, height: 800 },
-                expected: 1
-            }
-        ];
+    describe("calculateGameScale", () => {
+        it("should handle special aspect ratio case", () => {
+            // Arrange
+            const dimensions = { width: 414, height: 622 }; // Special aspect ratio case
 
-        testCases.forEach(({ dimensions, expected, description }) => {
-            it(description, () => {
-                const result = calculateGameScale(dimensions);
-                expect(result).toBeCloseTo(expected, 5);
-            });
+            // Act
+            const scale = calculateGameScale(dimensions);
+
+            // Assert
+            const aspectRatio = dimensions.width / dimensions.height;
+            const normalizedAspectRatio = aspectRatio - VIEWPORT.MAX_WIDTH / VIEWPORT.MIN_HEIGHT;
+            const expected = dimensions.width / VIEWPORT.MAX_WIDTH - normalizedAspectRatio * 2;
+            expect(scale).toBe(expected);
+        });
+
+        it("should return 1 when width equals MAX_WIDTH", () => {
+            // Arrange
+            const dimensions = { width: VIEWPORT.MAX_WIDTH, height: VIEWPORT.MIN_HEIGHT };
+
+            // Act
+            const scale = calculateGameScale(dimensions);
+
+            // Assert
+            expect(scale).toBe(GAME_DEFAULTS.GAME_SCALE);
+        });
+
+        it("should calculate scale for non-standard width", () => {
+            // Arrange
+            const dimensions = { width: VIEWPORT.MAX_WIDTH - 50, height: VIEWPORT.MIN_HEIGHT };
+
+            // Act
+            const scale = calculateGameScale(dimensions);
+
+            // Assert
+            expect(scale).toBe((VIEWPORT.MAX_WIDTH - 50) / VIEWPORT.MAX_WIDTH);
         });
     });
 
-    describe('calculateDimensions', () => {
-        describe('when viewportHeight equals MIN_HEIGHT', () => {
-            it('should return default values', () => {
-                const result = calculateDimensions(VIEWPORT.MIN_HEIGHT, 1, 0);
-                expect(result).toEqual({
-                    cageScale: GAME_DEFAULTS.MIN_CAGE_SCALE,
-                    resultArea: GAME_DEFAULTS.MIN_RESULT_AREA_HEIGHT,
-                    result: GAME_DEFAULTS.MIN_RESULT_HEIGHT
-                });
+    describe("calculateDimensions", () => {
+        it("should return default dimensions for MIN_HEIGHT", () => {
+            // Arrange
+            const viewportHeight = VIEWPORT.MIN_HEIGHT;
+            const gameScale = 1;
+
+            // Act
+            const dimensions = calculateDimensions(viewportHeight, gameScale);
+
+            // Assert
+            expect(dimensions).toEqual({
+                cageScale: GAME_DEFAULTS.MIN_CAGE_SCALE,
+                resultArea: GAME_DEFAULTS.MIN_RESULT_AREA_HEIGHT,
+                result: GAME_DEFAULTS.MIN_RESULT_HEIGHT,
             });
         });
 
-        describe('when viewportHeight < MIN_HEIGHT', () => {
-            it('should calculate scaled values with gameScale < cageScale', () => {
-                const viewportHeight = VIEWPORT.MIN_HEIGHT - 100;
-                const gameScale = 0.3;
-                const result = calculateDimensions(viewportHeight, gameScale, 0);
+        it("should calculate dimensions for small viewport", () => {
+            // Arrange
+            const viewportHeight = VIEWPORT.MIN_HEIGHT - 100;
+            const gameScale = 1;
 
-                const expectedCageScale = (viewportHeight * GAME_DEFAULTS.MIN_CAGE_SCALE) / VIEWPORT.MIN_HEIGHT;
-                const scale = Math.min(gameScale, expectedCageScale);
+            // Act
+            const dimensions = calculateDimensions(viewportHeight, gameScale);
 
-                expect(result).toEqual({
-                    cageScale: expectedCageScale,
-                    resultArea: (GAME_DEFAULTS.MIN_RESULT_AREA_HEIGHT * scale) / GAME_DEFAULTS.MIN_CAGE_SCALE,
-                    result: (GAME_DEFAULTS.MIN_RESULT_HEIGHT * scale) / GAME_DEFAULTS.MIN_CAGE_SCALE
-                });
-            });
+            // Assert
+            const expectedCageScale = (viewportHeight * GAME_DEFAULTS.MIN_CAGE_SCALE) / VIEWPORT.MIN_HEIGHT;
+            const expectedResultArea =
+                viewportHeight -
+                (GAME_DEFAULTS.HEIGHTS.HEADER +
+                    GAME_DEFAULTS.HEIGHTS.COUNT_DOWN_TIMER +
+                    GAME_DEFAULTS.HEIGHTS.BOTTOM_AREA +
+                    GAME_DEFAULTS.HEIGHTS.BET_ZONE_CHIP_SCORE_BOARD * gameScale);
+            const expectedResult = (GAME_DEFAULTS.MIN_RESULT_HEIGHT * expectedCageScale) / GAME_DEFAULTS.MIN_CAGE_SCALE;
 
-            it('should calculate scaled values with gameScale > cageScale', () => {
-                const viewportHeight = VIEWPORT.MIN_HEIGHT - 100;
-                const gameScale = 0.8;
-                const result = calculateDimensions(viewportHeight, gameScale, 0);
-
-                const expectedCageScale = (viewportHeight * GAME_DEFAULTS.MIN_CAGE_SCALE) / VIEWPORT.MIN_HEIGHT;
-                const scale = Math.min(gameScale, expectedCageScale);
-
-                expect(result).toEqual({
-                    cageScale: expectedCageScale,
-                    resultArea: (GAME_DEFAULTS.MIN_RESULT_AREA_HEIGHT * scale) / GAME_DEFAULTS.MIN_CAGE_SCALE,
-                    result: (GAME_DEFAULTS.MIN_RESULT_HEIGHT * scale) / GAME_DEFAULTS.MIN_CAGE_SCALE
-                });
+            expect(dimensions).toEqual({
+                cageScale: expectedCageScale,
+                resultArea: expectedResultArea,
+                result: expectedResult,
             });
         });
 
-        describe('when viewportHeight > MIN_HEIGHT', () => {
-            const viewportHeight = VIEWPORT.MIN_HEIGHT + 100;
-            const gameScale = 0.9;
-            const offset = 50;
+        it("should calculate dimensions for large viewport", () => {
+            // Arrange
+            const viewportHeight = VIEWPORT.MAX_HEIGHT + 100;
+            const gameScale = 1;
 
-            it('should calculate dimensions with gameScale < cageScale', () => {
-                const smallGameScale = 0.5;
-                const result = calculateDimensions(viewportHeight, smallGameScale, offset);
+            // Act
+            const dimensions = calculateDimensions(viewportHeight, gameScale);
 
-                const expectedCageScale = (viewportHeight * GAME_DEFAULTS.MAX_CAGE_SCALE) / VIEWPORT.MAX_HEIGHT;
-                const scale = Math.max(smallGameScale, expectedCageScale);
+            // Assert
+            const expectedCageScale = (viewportHeight * GAME_DEFAULTS.MAX_CAGE_SCALE) / VIEWPORT.MAX_HEIGHT;
+            const expectedResultArea =
+                viewportHeight -
+                (GAME_DEFAULTS.HEIGHTS.HEADER +
+                    GAME_DEFAULTS.HEIGHTS.COUNT_DOWN_TIMER +
+                    GAME_DEFAULTS.HEIGHTS.BOTTOM_AREA +
+                    GAME_DEFAULTS.HEIGHTS.BET_ZONE_CHIP_SCORE_BOARD * gameScale);
+            const expectedResult = GAME_DEFAULTS.MAX_RESULT_HEIGHT * expectedCageScale;
 
-                expect(result).toEqual({
-                    cageScale: expectedCageScale,
-                    resultArea: GAME_DEFAULTS.MIN_RESULT_AREA_HEIGHT * scale + offset,
-                    result: GAME_DEFAULTS.MIN_RESULT_HEIGHT * scale + offset
-                });
-            });
-
-            it('should calculate dimensions with gameScale > cageScale', () => {
-                const largeGameScale = 1.2;
-                const result = calculateDimensions(viewportHeight, largeGameScale, offset);
-
-                const expectedCageScale = (viewportHeight * GAME_DEFAULTS.MAX_CAGE_SCALE) / VIEWPORT.MAX_HEIGHT;
-                const scale = Math.max(largeGameScale, expectedCageScale);
-
-                expect(result).toEqual({
-                    cageScale: expectedCageScale,
-                    resultArea: GAME_DEFAULTS.MIN_RESULT_AREA_HEIGHT * scale + offset,
-                    result: GAME_DEFAULTS.MIN_RESULT_HEIGHT * scale + offset
-                });
-            });
-
-            it('should calculate dimensions with zero offset', () => {
-                const result = calculateDimensions(viewportHeight, gameScale, 0);
-
-                const expectedCageScale = (viewportHeight * GAME_DEFAULTS.MAX_CAGE_SCALE) / VIEWPORT.MAX_HEIGHT;
-                const scale = Math.max(gameScale, expectedCageScale);
-
-                expect(result).toEqual({
-                    cageScale: expectedCageScale,
-                    resultArea: GAME_DEFAULTS.MIN_RESULT_AREA_HEIGHT * scale,
-                    result: GAME_DEFAULTS.MIN_RESULT_HEIGHT * scale
-                });
+            expect(dimensions).toEqual({
+                cageScale: expectedCageScale,
+                resultArea: expectedResultArea,
+                result: expectedResult,
             });
         });
     });

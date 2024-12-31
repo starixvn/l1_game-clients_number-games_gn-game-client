@@ -56,7 +56,6 @@
     display: grid;
     // grid-template-rows: 15.3rem 1fr;
     grid-template-rows: calc(var(--result-height)) 3.6rem;
-    gap: 1rem;
     transition: grid-template-rows 200ms;
 }
 

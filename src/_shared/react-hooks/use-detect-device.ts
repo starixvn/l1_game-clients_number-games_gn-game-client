@@ -1,10 +1,6 @@
 import { useEffect, useState } from "react";
-import {
-    ViewportDimensions,
-    getViewportDimensions,
-    calculateGameScale,
-    calculateDimensions
-} from "../helpers/device-helper";
+
+import { calculateDimensions, calculateGameScale, getViewportDimensions, ViewportDimensions } from "../helpers/device-helper";
 
 const useDetectDevice = () => {
     // State management
@@ -13,30 +9,12 @@ const useDetectDevice = () => {
     const [heights, setHeights] = useState({
         result: 0,
         resultArea: 0,
-        offset: 0,
     });
 
     // Setup resize listener
     useEffect(() => {
-        let resizeTimeout: NodeJS.Timeout;
-
         const handleResize = () => {
-            if (resizeTimeout) {
-                clearTimeout(resizeTimeout);
-            }
-
-            resizeTimeout = setTimeout(() => {
-                const newDimensions = getViewportDimensions();
-                setDimensions((prev) => {
-                    const offset = newDimensions.height - prev.height;
-
-                    setHeights((height) => ({
-                        ...height,
-                        offset: height.offset === 0 && offset > 0 && offset !== newDimensions.height ? offset : height.offset,
-                    }));
-                    return newDimensions;
-                });
-            }, 100);
+            setDimensions(getViewportDimensions());
         };
 
         handleResize();
@@ -49,10 +27,6 @@ const useDetectDevice = () => {
             window.visualViewport
                 ? window.visualViewport.removeEventListener("resize", handleResize)
                 : window.removeEventListener("resize", handleResize);
-
-            if (resizeTimeout) {
-                clearTimeout(resizeTimeout);
-            }
         };
     }, []);
 
@@ -64,22 +38,17 @@ const useDetectDevice = () => {
 
     // Update heights and cage scale
     useEffect(() => {
-        const { cageScale, resultArea, result } = calculateDimensions(
-            dimensions.height,
-            scales.game,
-            heights.offset
-        );
+        const { cageScale, resultArea, result } = calculateDimensions(dimensions.height, scales.game);
 
         setScales((scale) => ({ ...scale, cage: cageScale }));
         setHeights((height) => ({ ...height, resultArea, result }));
-    }, [scales.game, dimensions.height, heights.offset]);
+    }, [scales.game, dimensions.height]);
 
     return {
         resultAreaHeight: heights.resultArea,
         resultHeight: heights.result,
         cageScale: scales.cage,
         gameScale: scales.game,
-        offsetHeight: heights.offset,
         viewportWidth: dimensions.width,
         viewportHeight: dimensions.height,
     };
