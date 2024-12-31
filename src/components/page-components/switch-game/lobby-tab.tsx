@@ -32,35 +32,31 @@ export const buildFilteredLobbyConfigs = (
     lobbyConfigs: ILobbyConfigs,
     selectedCategory: number
 ): ILobbyConfigs => {
-    console.log('Input lobbyConfigs:', lobbyConfigs);
-    console.log('Selected category:', selectedCategory);
+    // If selectedCategory is 0 (All Games), return the original configs
+    if (selectedCategory === 0) {
+        return lobbyConfigs;
+    }
+
+    // Adjust the category index since we added "All Games" at index 0
+    const adjustedCategoryIndex = selectedCategory - 1;
 
     // Create game groups from game settings
     const gameSettings = getAppSettings().gameSettings;
-    console.log('Game settings from app config:', gameSettings);
-
     const gameGroups = Object.values(gameSettings).reduce<GameGroup[]>((groups, game) => {
-        console.log('Processing game:', game);
         const existingGroup = groups.find(g => g.name === game.gameGroup);
         if (existingGroup) {
-            console.log('Adding game to existing group:', game.gameGroup);
             existingGroup.games.push({ id: game.id });
         } else {
-            console.log('Creating new group:', game.gameGroup);
             groups.push({
                 name: game.gameGroup,
                 games: [{ id: game.id }]
             });
         }
-        console.log('Current groups:', groups);
         return groups;
     }, []);
 
-    console.log('Generated game groups:', gameGroups);
-
     // Get the selected game group
-    const selectedGroup = gameGroups[selectedCategory];
-    console.log('Selected game group:', selectedGroup);
+    const selectedGroup = gameGroups[adjustedCategoryIndex];
 
     const filteredConfigs = {
         ...lobbyConfigs,
@@ -72,7 +68,6 @@ export const buildFilteredLobbyConfigs = (
         }))
     };
 
-    console.log('Filtered lobby configs:', filteredConfigs);
     return filteredConfigs;
 };
 
@@ -118,7 +113,8 @@ const LobbyTab: React.FC<LobbyTabProps> = ({
         }
     };
 
-    const categories = gameGroups.map(group => group.name);
+    // Add "All Games" to the categories array
+    const categories = ["All Games", ...gameGroups.map(group => group.name)];
 
     return (
         <LobbyConnectionContextProvider value={lobbyConnectionContextValue}>
@@ -129,12 +125,12 @@ const LobbyTab: React.FC<LobbyTabProps> = ({
                         slidesPerView="auto"
                         freeMode={{
                             enabled: true,
-                            sticky: true,
-                            momentumRatio: 0.5,
-                            momentumVelocityRatio: 0.5,
+                            sticky: false,
+                            momentumRatio: 0.25,
+                            momentumVelocityRatio: 0.25,
                         }}
                         speed={300}
-                        spaceBetween={8}
+                        spaceBetween={4}
                         grabCursor={true}
                         touchEventsTarget="container"
                         preventClicks={false}
@@ -143,12 +139,18 @@ const LobbyTab: React.FC<LobbyTabProps> = ({
                         onSwiper={setSwiperInstance}
                         centeredSlides={false}
                         initialSlide={selectedCategory}
+                        watchOverflow={true}
+                        observer={true}
+                        observeParents={true}
                     >
                         {categories.map((category, index) => (
                             <SwiperSlide
                                 key={category}
                                 className={styles.tabSlide}
-                                style={{ width: 'auto' }}
+                                style={{
+                                    width: 'auto',
+                                    marginRight: index === categories.length - 1 ? '0' : undefined
+                                }}
                             >
                                 <button
                                     className={`${styles.tab} ${selectedCategory === index ? styles.active : ''}`}

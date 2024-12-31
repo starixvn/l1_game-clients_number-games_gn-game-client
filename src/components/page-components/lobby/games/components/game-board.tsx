@@ -11,6 +11,8 @@ import Styles from "../../lobby.module.scss";
 import { GameIcon } from "./game-icon";
 import { LobbyImagesData } from "./lobby-constant";
 import { CachedImage } from "../../../../game-components/cached-image";
+import styles from "./game-board.module.scss";
+import { useTranslator } from "../../../../../_shared/react-hooks";
 
 const DisabledGameBlock = dynamic(() => import("./disable-game-block"));
 const CountdownTimer = dynamic(() => import("./countdown-timer"));
@@ -32,6 +34,7 @@ export const GameBoard: React.FC<Props> = ({ gameSettings, openGame, gameTransmi
     const [clickGameId, setClickGameId] = useState<number>(0);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [cancelPreloadResource, setCancelPreloadResource] = useState<boolean>(false);
+    const { t } = useTranslator([gameSettings.tolgeeNamespace]);
 
     useEffect(() => {
         document.addEventListener("visibilitychange", onVisibilityChange);
@@ -101,29 +104,57 @@ export const GameBoard: React.FC<Props> = ({ gameSettings, openGame, gameTransmi
     }, [cancelPreloadResource]);
 
     return (
-        <div
-            className={`${Styles["game-board-detail"]} ${!isShow ? "" : Styles["pointer"]}`}
-            id={`icon-${gameSettings.gameName.toLowerCase()}`}
-        >
+        <div className={styles.gameCard} id={`icon-${gameSettings.gameName.toLowerCase()}`}>
             <CachedImage
                 src={`/static/images/lobby/game-board-detail/bg-game-board-2x.webp`}
                 blurSrc={LobbyImagesData["game-block"]}
-                className={Styles["background"]}
+                className={styles.backgroundImage}
                 width={360}
                 height={139}
                 alt="game-board-detail"
                 priority={true}
             />
 
-            <div onClick={handleClickGameBoard} className="d-flex gap-2">
-                <GameIcon gameSettings={gameSettings} transmitter={transmitter} />
-                {isLoading && <LoadingSpinner />}
-                {isShow && (
-                    <div className={Styles["detail"]}>
-                        <CountdownTimer transmitter={transmitter} gameSettings={gameSettings} />
-                        {transmitter && <LobbyScoreboard gameSettings={gameSettings} transmitter={transmitter} />}
+            <div className={styles.gameContent} >
+                <div className={styles.gameHeader}>
+                    <div className={styles.gameInfo}>
+                        <h2>{t(`${gameSettings.tolgeeNamespace}.game_name_${gameSettings.id}`).toUpperCase()}</h2>
                     </div>
-                )}
+                    {isLoading ? (
+                        <LoadingSpinner />
+                    ) : (
+                        isShow && (
+                            <div className={styles.timerContainer}>
+                                <CountdownTimer transmitter={transmitter} gameSettings={gameSettings} />
+                            </div>
+                        )
+                    )}
+                </div>
+
+                <div className={styles.gameBody}>
+                    {isShow && transmitter && (
+                        <div className={styles.scoreboardContainer}>
+                            <LobbyScoreboard gameSettings={gameSettings} transmitter={transmitter} />
+                        </div>
+                    )}
+                </div>
+
+                <div className={styles.gameFooter}>
+                    <div className={styles.info}>
+                        {/* <span className={styles.betRange}>
+                            {gameSettings.betRange?.min || 1} - {gameSettings.betRange?.max || 100}
+                        </span>
+                        <span className={styles.rtp}>
+                            RTP 24h: {gameSettings.rtp || 96}%
+                        </span> */}
+                    </div>
+                    <button
+                        className={styles.playButton}
+                        onClick={() => handleClickGameBoard()}
+                    >
+                        PLAY
+                    </button>
+                </div>
             </div>
 
             {clickGameId > 0 && (

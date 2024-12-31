@@ -55,6 +55,11 @@ export interface GameSettings {
         optionalPaths?: string[];
         cachePaths?: string[];
     };
+    betRange?: {
+        min: number;
+        max: number;
+    };
+    rtp?: number;
 }
 
 export type GamePropsContext = {
