@@ -191,7 +191,6 @@ const BacBallBetOptionsComponent = () => {
                 <RippleButton className={Style["btn-ripple"]} id={`${tolgeeNamespace}-choice-tie`} choice={BacBallBetOptions.TIE} />
 
                 {isShowDisabledLayer && <div className={Style["disable-layer"]}></div>}
-
                 {isShowHighlightPrevResult({ betChoice: BacBallBetOptions.TIE, roundHistory, roundState }) && winningPrev}
             </div>
         );

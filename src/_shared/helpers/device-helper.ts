@@ -32,8 +32,8 @@ export const GAME_DEFAULTS = {
     MAX_RESULT_HEIGHT: 173,
     GAME_SCALE: 1,
     HEIGHTS: {
-        HEADER: 32,
-        COUNT_DOWN_TIMER: 50,
+        HEADER: 40,
+        COUNT_DOWN_TIMER: 30,
         BET_ZONE_CHIP_SCORE_BOARD: 455,
         BOTTOM_AREA: 85,
     },

@@ -1,13 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import { isMobileOnly } from "react-device-detect";
+
+import { AnalyticsHelper, TrackingAction, TrackingFunction } from "../../../../_shared/helpers";
 import { GameEventActionType } from "../../../../_shared/react-contexts/game-state-context/game-event-action";
 import { useGameStateContext, useGameStatesDispatch } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
-import { useClickSound } from "../../../../_shared/react-hooks";
-import Styles from "./menu.module.scss";
-import { RoundState } from "../../../game-base/type";
-import { AnalyticsHelper, TrackingAction, TrackingFunction } from "../../../../_shared/helpers";
 import { PFEventActionType } from "../../../../_shared/react-contexts/game-state-context/pf/pf-action";
 import { usePFDispatch } from "../../../../_shared/react-contexts/game-state-context/pf/pf-context";
+import { useClickSound } from "../../../../_shared/react-hooks";
+import { RoundState } from "../../../game-base/type";
+import Setting from "../../../page-components/header/setting";
+import Styles from "./menu.module.scss";
 
 const dropdownItemClassName = "dropdown-item";
 
@@ -38,7 +40,6 @@ export const Menu: React.FC = () => {
             action: TrackingAction.Open,
         });
     };
-
 
     const openBetHistory = () => {
         if (roundState === RoundState.Disabled) {
@@ -108,6 +109,11 @@ export const Menu: React.FC = () => {
                     </div>
                     <div className={`${dropdownItemClassName} ${Styles[dropdownItemClassName]}`} onClick={openGuide}>
                         <span id="icon-guide" className={`icon-guide ${Styles["menu-icon"]}`}></span>
+                    </div>
+                    <div className={`${dropdownItemClassName} ${Styles[dropdownItemClassName]}`} onClick={openGuide}>
+                        <div className={Styles["menu-icon"]}>
+                            <Setting />
+                        </div>
                     </div>
                 </div>
             </div>

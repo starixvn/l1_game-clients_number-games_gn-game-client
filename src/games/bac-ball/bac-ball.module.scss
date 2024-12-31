@@ -104,7 +104,10 @@
     }
 
     .winning-effect {
+        top: 0.1rem;
         left: 0;
+        right: 0;
+        bottom: 0;
     }
 
     .btn-ripple {
@@ -161,7 +164,10 @@
     }
 
     .winning-effect {
+        top: 0.1rem;
         right: 0;
+        left: 0;
+        bottom: 0;
         transform: scaleX(-1);
     }
 
@@ -223,8 +229,7 @@
     border-bottom-right-radius: 6.6rem;
 
     .winning-effect {
-        left: -5.8rem;
-        top: -0.4rem;
+        top: 0;
     }
 
     .btn-ripple {
@@ -265,19 +270,6 @@
     }
 }
 
-.winning-light-anim-player,
-.winning-light-anim-banker {
-    position: relative;
-    top: -1rem;
-    left: -1.1rem;
-}
-
-.winning-light-anim-tie {
-    position: relative;
-    top: -1.5rem;
-    left: 0.5rem;
-}
-
 .winning-effect {
     position: absolute;
     top: 0;
@@ -294,10 +286,10 @@
 .highlight-winning-tie {
     left: 5.7rem;
     top: 0.4rem;
-    width: 10.5rem;
+    width: 10.8rem;
     height: 19.8rem;
     background: url("/static/images/bac-number/highlight-winning-bg-tie.png?v=#{$version-image}");
-    background-size: 10.5rem 19.8rem;
+    background-size: 10.8rem 19.8rem;
 }
 
 .ball-svg {
@@ -330,23 +322,35 @@
         url("/static/images/bac-number/1x/winning-previous-tie.png?v=#{$version-image}") 1x,
         url("/static/images/bac-number/2x/winning-previous-tie.png?v=#{$version-image}") 2x
     );
-    background-size: 10.5rem 19.8rem;
-    width: 10.5rem;
+    background-size: 10.8rem 19.8rem;
+    width: 10.8rem;
     height: 19.8rem;
     position: absolute;
-    left: -0.1rem;
-    top: -0.1rem;
+    left: 0;
+    top: 0;
 }
 
 .choice-info {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-top: 1.6rem;
+    padding-top: 2.4rem;
+    padding-right: 1.2rem;
 
     &.choice-banker {
+        padding-left: 1.2rem;
+        padding-right: 0;
         flex-flow: row-reverse;
     }
+}
+
+.winning-light-anim-player,
+.winning-light-anim-banker {
+    transform: scale(1.12);
+}
+
+.winning-light-anim-tie {
+    transform: scale(1.12, 1.16);
 }
 
 .choice-odds-area {
