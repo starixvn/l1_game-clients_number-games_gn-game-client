@@ -5,17 +5,15 @@ import { LobbyGameId } from "../../../../../_shared/constants";
 import PreloadResources from "../../../../../_shared/helpers/preload-resources";
 import { useLobbyConnectionContext } from "../../../../../_shared/react-contexts";
 import { GameSettings } from "../../../../game-base/type";
-import { LoadingSpinner } from "../../../../game-components/game-loading/loading-spinner";
 import { getLobbyData, LobbyGameTransmitter, LobbyMessageEvents } from "../../lobby-socket-connection";
-import Styles from "../../lobby.module.scss";
-import { GameIcon } from "./game-icon";
 import { LobbyImagesData } from "./lobby-constant";
 import { CachedImage } from "../../../../game-components/cached-image";
 import styles from "./game-board.module.scss";
 import { useTranslator } from "../../../../../_shared/react-hooks";
+import { GameBoardHeader } from './game-board-header';
+import { GameBoardFooter } from './game-board-footer';
 
 const DisabledGameBlock = dynamic(() => import("./disable-game-block"));
-const CountdownTimer = dynamic(() => import("./countdown-timer"));
 const LobbyScoreboard = dynamic(() => import("./scoreboard"));
 
 type Props = {
@@ -37,11 +35,13 @@ export const GameBoard: React.FC<Props> = ({ gameSettings, openGame, gameTransmi
     const { t } = useTranslator([gameSettings.tolgeeNamespace]);
 
     useEffect(() => {
-        document.addEventListener("visibilitychange", onVisibilityChange);
-        return () => {
+        const cleanup = () => {
             document.removeEventListener("visibilitychange", onVisibilityChange);
             setClickGameId(0);
         };
+
+        document.addEventListener("visibilitychange", onVisibilityChange);
+        return cleanup;
     }, []);
 
     const onVisibilityChange = () => {
@@ -78,7 +78,7 @@ export const GameBoard: React.FC<Props> = ({ gameSettings, openGame, gameTransmi
         setIsShow(showData);
     };
 
-    const handleClickGameBoard = () => {
+    const handlePlay = () => {
         setClickGameId(gameSettings?.id);
         setIsLoading(true);
         setLastClickedGameId(gameSettings?.id);
@@ -115,21 +115,13 @@ export const GameBoard: React.FC<Props> = ({ gameSettings, openGame, gameTransmi
                 priority={true}
             />
 
-            <div className={styles.gameContent} >
-                <div className={styles.gameHeader}>
-                    <div className={styles.gameInfo}>
-                        <h2>{t(`${gameSettings.tolgeeNamespace}.game_name_${gameSettings.id}`).toUpperCase()}</h2>
-                    </div>
-                    {isLoading ? (
-                        <LoadingSpinner />
-                    ) : (
-                        isShow && (
-                            <div className={styles.timerContainer}>
-                                <CountdownTimer transmitter={transmitter} gameSettings={gameSettings} />
-                            </div>
-                        )
-                    )}
-                </div>
+            <div className={styles.gameContent}>
+                <GameBoardHeader
+                    gameSettings={gameSettings}
+                    isLoading={isLoading}
+                    isShow={isShow}
+                    transmitter={transmitter}
+                />
 
                 <div className={styles.gameBody}>
                     {isShow && transmitter && (
@@ -139,22 +131,7 @@ export const GameBoard: React.FC<Props> = ({ gameSettings, openGame, gameTransmi
                     )}
                 </div>
 
-                <div className={styles.gameFooter}>
-                    <div className={styles.info}>
-                        {/* <span className={styles.betRange}>
-                            {gameSettings.betRange?.min || 1} - {gameSettings.betRange?.max || 100}
-                        </span>
-                        <span className={styles.rtp}>
-                            RTP 24h: {gameSettings.rtp || 96}%
-                        </span> */}
-                    </div>
-                    <button
-                        className={styles.playButton}
-                        onClick={() => handleClickGameBoard()}
-                    >
-                        PLAY
-                    </button>
-                </div>
+                <GameBoardFooter onPlay={handlePlay} />
             </div>
 
             {clickGameId > 0 && (
