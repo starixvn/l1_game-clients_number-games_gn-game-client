@@ -26,9 +26,15 @@ type Props = {
     gameTransmitter: LobbyGameTransmitter;
     lastClickedGameId: number;
     setLastClickedGameId: Function;
+    gameIndex: number;
 };
 
-export const GameBoard: React.FC<Props> = ({ gameSettings, openGame, gameTransmitter, lastClickedGameId, setLastClickedGameId }) => {
+const getBackgroundImage = (gameId: number): string => {
+    const imageIndex = (gameId % 3) + 1;
+    return `/images/background-card-game-${imageIndex}.png`;
+};
+
+export const GameBoard: React.FC<Props> = ({ gameSettings, openGame, gameTransmitter, lastClickedGameId, setLastClickedGameId, gameIndex: index }) => {
     const [isShow, setIsShow] = useState<boolean>(true);
     const [transmitter, setTransmitter] = useState<LobbyGameTransmitter>(null);
     const { reconnectGameTransmitter, socket } = useLobbyConnectionContext();
@@ -122,28 +128,24 @@ export const GameBoard: React.FC<Props> = ({ gameSettings, openGame, gameTransmi
             tabIndex={0}
             aria-label="Play game"
         >
-            {isLoading ? (
-                <LoadingSpinner />
-            ) : (
-                <div className={styles.playButton} onClick={handlePlay}>
-                    {t('play')}
-                    <Image
-                        src="/images/play-icon.png"
-                        className={styles.playIcon}
-                        width={24}
-                        height={24}
-                        alt="play-icon"
-                        priority={true}
-                    />
-                </div>
-            )}
+            <div className={styles.playButton} onClick={handlePlay}>
+                {t('play')}
+                <Image
+                    src="/images/play-icon.png"
+                    className={styles.playIcon}
+                    width={24}
+                    height={24}
+                    alt="play-icon"
+                    priority={true}
+                />
+            </div>
         </div>
     );
 
     return (
         <div className={styles.gameCard} id={`icon-${gameSettings.gameName.toLowerCase()}`}>
             <Image
-                src="/images/background-card-game.png"
+                src={getBackgroundImage(index)}
                 className={styles.backgroundImage}
                 width={360}
                 height={139}

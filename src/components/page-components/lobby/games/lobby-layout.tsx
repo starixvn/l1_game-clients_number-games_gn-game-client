@@ -35,7 +35,7 @@ export const LobbyLayout: React.FC<Props> = ({ lobbyConfigs, openGame, gameTrans
         gamesSettings && (
             <div >
                 <div className={styles.gamesGrid}>
-                    {gamesSettings.map((gameSettings) => (
+                    {gamesSettings.map((gameSettings, index) => (
                         <div key={`game-board-${gameSettings.gameName}`} className={styles.gameItem}>
                             <GameBoard
                                 gameSettings={gameSettings}
@@ -43,6 +43,7 @@ export const LobbyLayout: React.FC<Props> = ({ lobbyConfigs, openGame, gameTrans
                                 gameTransmitter={gameTransmitters[gameSettings.id]}
                                 lastClickedGameId={lastClickedGameId}
                                 setLastClickedGameId={setLastClickedGameId}
+                                gameIndex={index}
                             />
                         </div>
                     ))}
