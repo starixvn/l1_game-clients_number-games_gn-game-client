@@ -32,7 +32,7 @@ export const BacBallResultBlock: FC<BacBallResultBlockProps> = (props: BacBallRe
 
     const currentResult = useResult<BacBallResult>({ result, roundState, roundHistory });
 
-    const { cageScale, offsetHeight, viewportWidth, viewportHeight } = useDetectDevice();
+    const { cageScale, viewportWidth, viewportHeight } = useDetectDevice();
 
     if (roundState === RoundState.SwitchRound && !isPlayStartRoundAnimation) {
         return <></>;
@@ -44,11 +44,10 @@ export const BacBallResultBlock: FC<BacBallResultBlockProps> = (props: BacBallRe
                 roundState === RoundState.SwitchRound && isPlayStartRoundAnimation ? "showResultContainer" : ""
             }`}
         >
-            <div className={`${Style["viewport-container"]}`}>
+            {/* <div className={`${Style["viewport-container"]}`}>
                 <p className={`${Style["viewport"]}`}>viewport height: {viewportHeight}</p>
                 <p className={`${Style["viewport"]}`}>viewport width: {viewportWidth}</p>
-                <p className={`${Style["viewport"]}`}>offsetHeight: {offsetHeight}px</p>
-            </div>
+            </div> */}
             <div className={Style["result"]}>
                 <Cage
                     scale={cageScale}

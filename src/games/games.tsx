@@ -8,7 +8,14 @@ import { getAppSettings } from "../_shared/app-settings";
 import { GameIds, SwiperNoSwiping } from "../_shared/constants";
 import { AnalyticsHelper, TrackingAction, TrackingFunction } from "../_shared/helpers";
 import { GAME_DEFAULTS } from "../_shared/helpers/device-helper";
-import { SettingEventActionType, SystemContextProvider, updateURLContext, URLContext, usePlayerContext, useSettingDispatch } from "../_shared/react-contexts";
+import {
+    SettingEventActionType,
+    SystemContextProvider,
+    updateURLContext,
+    URLContext,
+    usePlayerContext,
+    useSettingDispatch,
+} from "../_shared/react-contexts";
 import { useBlockBetSound, usePlaceBetSound, useStartDrawSound, useStartRoundSound } from "../_shared/react-hooks";
 import useDetectDevice from "../_shared/react-hooks/use-detect-device";
 import { GameSound } from "../components/game-base/type";
@@ -44,7 +51,7 @@ export const Games: React.FC<Props> = ({
     const { theme } = useTheme();
     const { session } = usePlayerContext();
     const settingDispatch = useSettingDispatch();
-    const { resultAreaHeight, resultHeight, offsetHeight, gameScale, viewportWidth } = useDetectDevice();
+    const { resultAreaHeight, resultHeight, gameScale, viewportWidth } = useDetectDevice();
     const gameRef = useRef(null);
 
     useEffect(() => {
@@ -66,9 +73,8 @@ export const Games: React.FC<Props> = ({
             isMobileOnly ? resultAreaHeight + "px" : GAME_DEFAULTS.MAX_RESULT_AREA_HEIGHT + "px"
         );
         gameRef.current.style.setProperty("--result-height", isMobileOnly ? resultHeight + "px" : GAME_DEFAULTS.MAX_RESULT_HEIGHT + "px");
-        gameRef.current.style.setProperty("--offset-height", isMobileOnly ? offsetHeight + "px" : 0);
         gameRef.current.style.setProperty("--viewport-width", viewportWidth);
-    }, [gameScale, resultAreaHeight, resultHeight, offsetHeight, viewportWidth]);
+    }, [gameScale, resultAreaHeight, resultHeight, viewportWidth]);
 
     const gameSound: GameSound = {
         playPlaceBetSound: usePlaceBetSound(),
