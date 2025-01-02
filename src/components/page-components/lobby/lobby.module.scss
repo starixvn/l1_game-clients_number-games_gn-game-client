@@ -180,17 +180,7 @@
     }
 }
 
-.scoreboard {
-    width: 100%;
-    max-width: 35.9rem;
-    margin: 0 auto;
-    padding: 1rem;
-    border-radius: 0.8rem;
-    background: rgba(0, 0, 0, 0.5);
-}
-
 .scoreboard-lobby {
-    background: transparent;
     display: grid;
     gap: 0.2rem;
     justify-content: center;

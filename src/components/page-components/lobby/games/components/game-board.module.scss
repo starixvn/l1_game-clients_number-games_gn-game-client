@@ -1,9 +1,10 @@
 .gameCard {
     position: relative;
-    border-radius: 12px;
+    border-radius: 1.2rem;
     overflow: hidden;
+    height: 20.7rem;
     background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(1rem);
     transition: transform 0.2s ease;
     cursor: pointer;
 
@@ -17,32 +18,33 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 20.7rem;
     object-fit: cover;
     z-index: -1;
 }
 
 .gameContent {
     position: relative;
-    padding: 16px;
+    padding: 0 2.1rem;
     height: 100%;
     display: flex;
     flex-direction: column;
-    gap: 12px;
 }
 
 .gameHeader {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 0.8rem 0;
 }
 
 .gameInfo {
     h2 {
-        color: #ffffff;
-        font-size: 1.25rem;
-        font-weight: 600;
-        margin: 0;
+        margin-bottom: 0;
+        color: #fff;
+        font-size: 1.4rem;
+        font-weight: 700;
+        text-transform: uppercase;
     }
 }
 
@@ -54,63 +56,31 @@
 
 .gameBody {
     display: flex;
-    gap: 16px;
+    gap: 1.2rem;
     align-items: center;
 }
 
 .scoreboardContainer {
     flex: 1;
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 8px;
-    padding: 8px;
-}
-
-.gameFooter {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 16px;
-    margin-top: auto;
-    
-    .info {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-        
-        .betRange, .rtp {
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.8);
-        }
-    }
-    
-    .playButton {
-        padding: 8px 24px;
-        background: linear-gradient(to bottom, #4CAF50, #45a049);
-        color: white;
-        border: none;
-        border-radius: 4px;
-        font-weight: bold;
-        cursor: pointer;
-        transition: background-color 0.2s;
-        
-        &:hover {
-            background: linear-gradient(to bottom, #45a049, #409444);
-        }
-    }
+    border-radius: 0.8rem;
+    border: 2px solid #000;
+    background: #021520;
 }
 
 .playButtonWrapper {
+    position: absolute;
+    bottom: 0;
+    right: 0;
     display: flex;
     align-items: center;
     justify-content: right;
-    gap: 8px;
-    padding: 8px 0;
-    border-radius: 4px;
+    width: 10.4rem;
+    height: 3.6rem;
     cursor: pointer;
     transition: all 0.2s ease;
     user-select: none;
     text-transform: uppercase;
-    
+
     &.disabled {
         opacity: 0.7;
         cursor: not-allowed;
@@ -122,8 +92,8 @@
     width: 24px;
     height: 24px;
     transition: transform 0.2s ease;
-    
+
     .playButtonWrapper:hover & {
         transform: scale(1.1);
     }
-} 
+}

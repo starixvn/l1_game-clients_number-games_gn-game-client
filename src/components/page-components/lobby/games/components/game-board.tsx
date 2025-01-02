@@ -1,20 +1,15 @@
 import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 import { LobbyGameId } from "../../../../../_shared/constants";
 import PreloadResources from "../../../../../_shared/helpers/preload-resources";
 import { useLobbyConnectionContext } from "../../../../../_shared/react-contexts";
-import { GameSettings } from "../../../../game-base/type";
-import { LoadingSpinner } from "../../../../game-components/game-loading/loading-spinner";
-import { getLobbyData, LobbyGameTransmitter, LobbyMessageEvents } from "../../lobby-socket-connection";
-import { GameIcon } from "./game-icon";
-import { LobbyImagesData } from "./lobby-constant";
-import { CachedImage } from "../../../../game-components/cached-image";
-import styles from "./game-board.module.scss";
 import { useTranslator } from "../../../../../_shared/react-hooks";
-import { GameBoardHeader } from './game-board-header';
-import { GameBoardFooter } from './game-board-footer';
+import { GameSettings } from "../../../../game-base/type";
+import { getLobbyData, LobbyGameTransmitter, LobbyMessageEvents } from "../../lobby-socket-connection";
+import { GameBoardHeader } from "./game-board-header";
+import styles from "./game-board.module.scss";
 
 const DisabledGameBlock = dynamic(() => import("./disable-game-block"));
 const CountdownTimer = dynamic(() => import("./countdown-timer"));
@@ -34,7 +29,14 @@ const getBackgroundImage = (gameId: number): string => {
     return `/images/background-card-game-${imageIndex}.png`;
 };
 
-export const GameBoard: React.FC<Props> = ({ gameSettings, openGame, gameTransmitter, lastClickedGameId, setLastClickedGameId, gameIndex: index }) => {
+export const GameBoard: React.FC<Props> = ({
+    gameSettings,
+    openGame,
+    gameTransmitter,
+    lastClickedGameId,
+    setLastClickedGameId,
+    gameIndex: index,
+}) => {
     const [isShow, setIsShow] = useState<boolean>(true);
     const [transmitter, setTransmitter] = useState<LobbyGameTransmitter>(null);
     const { reconnectGameTransmitter, socket } = useLobbyConnectionContext();
@@ -123,22 +125,14 @@ export const GameBoard: React.FC<Props> = ({ gameSettings, openGame, gameTransmi
 
     const renderPlayButton = () => (
         <div
-            className={`${styles.playButtonWrapper} ${(isPlayButtonDisabled || isLoading) ? styles.disabled : ''}`}
+            className={`${styles.playButtonWrapper} ${isPlayButtonDisabled || isLoading ? styles.disabled : ""}`}
             role="button"
             tabIndex={0}
             aria-label="Play game"
+            onClick={handlePlay}
         >
-            <div className={styles.playButton} onClick={handlePlay}>
-                {t('play')}
-                <Image
-                    src="/images/play-icon.png"
-                    className={styles.playIcon}
-                    width={24}
-                    height={24}
-                    alt="play-icon"
-                    priority={true}
-                />
-            </div>
+            {t("play")}
+            <Image src="/images/play-icon.png" className={styles.playIcon} width={24} height={24} alt="play-icon" priority={true} />
         </div>
     );
 
@@ -154,20 +148,12 @@ export const GameBoard: React.FC<Props> = ({ gameSettings, openGame, gameTransmi
             />
 
             <div className={styles.gameContent}>
-                <GameBoardHeader
-                    gameSettings={gameSettings}
-                    isLoading={isLoading}
-                    isShow={isShow}
-                    transmitter={transmitter}
-                />
+                <GameBoardHeader gameSettings={gameSettings} isLoading={isLoading} isShow={isShow} transmitter={transmitter} />
 
                 <div className={styles.gameBody}>
                     {isShow && transmitter && (
                         <div className={styles.scoreboardContainer}>
-                            <LobbyScoreboard
-                                gameSettings={gameSettings}
-                                transmitter={transmitter}
-                            />
+                            <LobbyScoreboard gameSettings={gameSettings} transmitter={transmitter} />
                         </div>
                     )}
                 </div>

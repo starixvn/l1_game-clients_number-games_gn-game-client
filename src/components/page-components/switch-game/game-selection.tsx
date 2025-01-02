@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import styles from './styles/game-selection.module.scss';
-import { ILobbyConfigs } from '../dashboard/type';
-import { LobbyGameTransmitter } from '../lobby/lobby-socket-connection';
-import LobbyTab from './lobby-tab';
+import React, { useEffect, useState } from "react";
+
+import { ILobbyConfigs } from "../dashboard/type";
+import { LobbyGameTransmitter } from "../lobby/lobby-socket-connection";
+import LobbyTab from "./lobby-tab";
+import styles from "./styles/game-selection.module.scss";
 
 interface GameGroup {
     name: string;
@@ -26,7 +27,7 @@ const GameSelection: React.FC<GameSelectionProps> = ({
     gameTransmitters,
     openGame,
     lobbyConnectionContextValue,
-    headerRef
+    headerRef,
 }) => {
     const [headerHeight, setHeaderHeight] = useState(0);
 
@@ -38,32 +39,29 @@ const GameSelection: React.FC<GameSelectionProps> = ({
         };
 
         updateHeaderHeight();
-        window.addEventListener('resize', updateHeaderHeight);
-        return () => window.removeEventListener('resize', updateHeaderHeight);
+        window.addEventListener("resize", updateHeaderHeight);
+        return () => window.removeEventListener("resize", updateHeaderHeight);
     }, [headerRef]);
 
     const handleClose = () => {
-        const gameId = headerRef.current?.getAttribute('data-game-id');
+        const gameId = headerRef.current?.getAttribute("data-game-id");
         onClose?.(gameId ? Number(gameId) : 0);
     };
 
     return (
         <>
-            <div
-                className={styles.overlay}
-                style={{ top: `${headerHeight}px` }}
-            />
+            <div className={styles.overlay} style={{ top: `${headerHeight}px` }} />
             <div
                 className={`${styles.container} game-container`}
                 style={{
                     top: `${headerHeight}px`,
-                    height: `calc(100vh - ${headerHeight}px)`
+                    height: `calc(100vh - ${headerHeight}px)`,
                 }}
             >
                 <header className={styles.header}>
                     <h1>GAME SELECTION</h1>
-                    <button className={styles.closeButton} onClick={handleClose} aria-label="Close">
-                        <span className={styles.closeIcon}>×</span>
+                    <button className={styles["close-button"]} onClick={handleClose} aria-label="Close">
+                        <span className={`icon-close ${styles["icon-close"]}`}></span>
                     </button>
                 </header>
 
