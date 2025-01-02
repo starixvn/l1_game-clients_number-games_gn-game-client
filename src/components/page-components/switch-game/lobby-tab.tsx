@@ -11,7 +11,7 @@ import styles from './styles/game-selection.module.scss';
 import 'swiper/css';
 import 'swiper/css/free-mode';
 import { getAppSettings } from '../../../_shared/app-settings';
-import { HighLightTab } from './prototype/tabs/high-light-tab';
+import { HighLightTab } from './high-light-tab';
 
 interface GameGroup {
     name: string;

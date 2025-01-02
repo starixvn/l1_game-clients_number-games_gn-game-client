@@ -8,7 +8,6 @@ import { ILobbyConfigs } from "../dashboard/type";
 import { LobbyLayout } from "./games/lobby-layout";
 import { LobbyGameTransmitter } from "./lobby-socket-connection";
 import Styles from "./lobby.module.scss";
-import { Banner } from "./banners/banner";
 
 const ChangeAvatar = dynamic(() => import("../header/change-avatar"));
 
