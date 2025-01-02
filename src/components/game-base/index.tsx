@@ -14,7 +14,6 @@ import { PlaceBetEventActionType } from "../../_shared/react-contexts/game-state
 import { PlaceBetProvider } from "../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-context";
 import { GameResourceKeys } from "../../_shared/resources";
 import { getBalance } from "../../services/auth-service";
-import Header from "../page-components/header";
 import BetConfirmDialog from "../game-components/bet-confirm-dialog";
 import ConfirmBet from "../game-components/confirm-bet";
 import CountdownTimer, { GameStatusMap } from "../game-components/countdown-timer/countdown-timer";
@@ -32,6 +31,7 @@ import { PFSettingModal } from "../game-components/provably-fair";
 import SideBetScoreboard from "../game-components/round-history/side-bet-scoreboard";
 import BackgroundGalaxy from "../page-components/background";
 import BetSettings from "../page-components/bet-settings";
+import Header from "../page-components/header";
 import { IRoundStateHandler } from "../round-base/round-state-handler";
 import { GameSoundHandler, IGameSoundHandler } from "../turn-base/game-sound-handler";
 import { GameDisableHandler, GameErrorHandler, GameFinishHandler, GameMessageHandler, GameRoundHistoryHandler, messageEventType, PlaceBetHandler, PlayerHandler } from "./handlers";
@@ -485,7 +485,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState> extend
         return (
             <>
                 <Header gameId={this.props.id} />
-                <div className="game-header">
+                <div className="round-id-container">
                     {this.renderRoundIdSection()}
                     <div id="countdown-timer" className="countdown-timer">
                         {availableInGameData && <CountdownTimer GameStatusProp={this.renderGameStatus()} />}
