@@ -114,6 +114,9 @@ export const GameIds = {
     SeBall1: 1005,
     LuckyThree: 1006,
     SicBall: 1007,
+    BaccaratNumber: 1008,
+    SpeedBaccaratNumber: 1009,
+    VipBaccaratNumber: 1010,
 };
 
 export const LobbyGameId = 0;

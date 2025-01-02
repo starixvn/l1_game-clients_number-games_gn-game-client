@@ -98,6 +98,9 @@ export const Games: React.FC<Props> = ({
         switch (gameId) {
             case GameIds.BacBall1:
             case GameIds.BacBall2:
+            case GameIds.BaccaratNumber:
+            case GameIds.SpeedBaccaratNumber:
+            case GameIds.VipBaccaratNumber:
                 return <BacBall key={`game-${gameId}`} {...gameProps} />;
 
             case GameIds.NextBall1:

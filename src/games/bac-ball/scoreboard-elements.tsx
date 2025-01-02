@@ -123,4 +123,4 @@ export class BacBallCockroachPigElement extends DerivedElement {
     }
 }
 
-registerBigRoadElement(BacBallBigRoadElement, BacBallBigRoadConverter, 1001, 1002);
+registerBigRoadElement(BacBallBigRoadElement, BacBallBigRoadConverter, 1001, 1002, 1008, 1009, 1010);

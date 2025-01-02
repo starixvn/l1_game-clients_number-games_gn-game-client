@@ -24,10 +24,7 @@
         "gamePath": "bac-ball",
         "gameResourceConfigs": {
             "path": "bac-number",
-            "cachePaths": [
-                "bac-number/highlight-winning-player.png",
-                "bac-number/highlight-winning-tie.png"
-            ]
+            "cachePaths": ["bac-number/highlight-winning-player.png", "bac-number/highlight-winning-tie.png"]
         }
     },
     "1002": {
@@ -55,10 +52,7 @@
         "gamePath": "bac-ball",
         "gameResourceConfigs": {
             "path": "bac-number",
-            "cachePaths": [
-                "bac-number/highlight-winning-player.png",
-                "bac-number/highlight-winning-tie.png"
-            ]
+            "cachePaths": ["bac-number/highlight-winning-player.png", "bac-number/highlight-winning-tie.png"]
         }
     },
     "1003": {
@@ -86,10 +80,7 @@
         "gamePath": "next-ball",
         "gameResourceConfigs": {
             "path": "next-ball",
-            "cachePaths": [
-                "next-ball/highlight-winning-over.png",
-                "next-ball/highlight-winning-odd.png"
-            ]
+            "cachePaths": ["next-ball/highlight-winning-over.png", "next-ball/highlight-winning-odd.png"]
         }
     },
     "1004": {
@@ -117,10 +108,7 @@
         "gamePath": "next-ball",
         "gameResourceConfigs": {
             "path": "next-ball",
-            "cachePaths": [
-                "next-ball/highlight-winning-over.png",
-                "next-ball/highlight-winning-odd.png"
-            ]
+            "cachePaths": ["next-ball/highlight-winning-over.png", "next-ball/highlight-winning-odd.png"]
         }
     },
     "1005": {
@@ -148,9 +136,7 @@
         "gamePath": "se-ball",
         "gameResourceConfigs": {
             "path": "se-ball",
-            "optionalPaths": [
-                "se-ball/result-ball"
-            ],
+            "optionalPaths": ["se-ball/result-ball"],
             "cachePaths": [
                 "se-ball/highlight-winning-even.png",
                 "se-ball/highlight-winning-blue3.png",
@@ -185,9 +171,7 @@
         "gamePath": "lucky-three",
         "gameResourceConfigs": {
             "path": "lucky-three",
-            "optionalPaths": [
-                "lucky-three/result-ball"
-            ],
+            "optionalPaths": ["lucky-three/result-ball"],
             "cachePaths": [
                 "lucky-three/highlight-winning-over.png",
                 "lucky-three/highlight-winning-under.png",
@@ -230,6 +214,90 @@
                 "sic-ball/winning-effect-small.png",
                 "sic-ball/winning-effect-specific1.png"
             ]
+        }
+    },
+    "1008": {
+        "id": 1008,
+        "tolgeeNamespace": "BacBall",
+        "gameName": "BaccaratNumber",
+        "gameGroup": "Bac Ball",
+        "socketInfo": {
+            "namespace": "baccaratnumber",
+            "path": "baccaratnumber"
+        },
+        "durations": {
+            "wholeRound": 92,
+            "wholeTurn": 22,
+            "placingBets": 15,
+            "lockingBet": 3,
+            "showResult": 7,
+            "resultAnimation": 3,
+            "beforePlaceBet": 0,
+            "switchRoundAnimation": 4,
+            "startNewRoundAnim": 82
+        },
+        "totalTurns": 4,
+        "numberOfRoundHistory": 100,
+        "gamePath": "bac-ball",
+        "gameResourceConfigs": {
+            "path": "bac-number",
+            "cachePaths": ["bac-number/highlight-winning-player.png", "bac-number/highlight-winning-tie.png"]
+        }
+    },
+    "1009": {
+        "id": 1009,
+        "tolgeeNamespace": "BacBall",
+        "gameName": "SpeedBaccaratNumber",
+        "gameGroup": "Bac Ball",
+        "socketInfo": {
+            "namespace": "speedbaccaratnumber",
+            "path": "speedbaccaratnumber"
+        },
+        "durations": {
+            "wholeRound": 80,
+            "wholeTurn": 19,
+            "placingBets": 12,
+            "lockingBet": 3,
+            "showResult": 7,
+            "resultAnimation": 3,
+            "beforePlaceBet": 0,
+            "switchRoundAnimation": 4,
+            "startNewRoundAnim": 70
+        },
+        "totalTurns": 4,
+        "numberOfRoundHistory": 100,
+        "gamePath": "bac-ball",
+        "gameResourceConfigs": {
+            "path": "bac-number",
+            "cachePaths": ["bac-number/highlight-winning-player.png", "bac-number/highlight-winning-tie.png"]
+        }
+    },
+    "1010": {
+        "id": 1010,
+        "tolgeeNamespace": "BacBall",
+        "gameName": "VipBaccaratNumber",
+        "gameGroup": "Bac Ball",
+        "socketInfo": {
+            "namespace": "vipbaccaratnumber",
+            "path": "vipbaccaratnumber"
+        },
+        "durations": {
+            "wholeRound": 92,
+            "wholeTurn": 22,
+            "placingBets": 15,
+            "lockingBet": 3,
+            "showResult": 7,
+            "resultAnimation": 3,
+            "beforePlaceBet": 0,
+            "switchRoundAnimation": 4,
+            "startNewRoundAnim": 82
+        },
+        "totalTurns": 4,
+        "numberOfRoundHistory": 100,
+        "gamePath": "bac-ball",
+        "gameResourceConfigs": {
+            "path": "bac-number",
+            "cachePaths": ["bac-number/highlight-winning-player.png", "bac-number/highlight-winning-tie.png"]
         }
     }
 }
