@@ -5,20 +5,20 @@ import { LobbyLayout } from '../lobby/games/lobby-layout';
 import { ILobbyConfigs } from '../dashboard/type';
 import { LobbyGameTransmitter } from '../lobby/lobby-socket-connection';
 import { LobbyConnectionContextProvider } from '../../../_shared/react-contexts';
-import styles from './styles/game-selection.module.scss';
+import styles from './game-selection.module.scss';
 
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/free-mode';
 import { getAppSettings } from '../../../_shared/app-settings';
-import { HighLightTab } from './high-light-tab';
+import { ActiveTabIndicator } from './active-tab-indicator';
 
 interface GameGroup {
     name: string;
     games: any[];
 }
 
-interface LobbyTabProps {
+interface GameSelectionTabProps {
     lobbyConfigs: ILobbyConfigs;
     gameTransmitters: Record<number, LobbyGameTransmitter>;
     openGame: Function;
@@ -66,7 +66,7 @@ export const buildFilteredLobbyConfigs = (
     return filteredConfigs;
 };
 
-const LobbyTab: React.FC<LobbyTabProps> = ({
+const GameCategoryNavigator: React.FC<GameSelectionTabProps> = ({
     lobbyConfigs,
     gameTransmitters,
     openGame,
@@ -151,7 +151,7 @@ const LobbyTab: React.FC<LobbyTabProps> = ({
                                     onClick={() => handleCategoryClick(index)}
                                 >
                                     {selectedCategory === index ? (
-                                        <HighLightTab title={category} />
+                                        <ActiveTabIndicator title={category} />
                                     ) : (
                                         <span>{category}</span>
                                     )}
@@ -176,4 +176,4 @@ const LobbyTab: React.FC<LobbyTabProps> = ({
     );
 };
 
-export default LobbyTab;
+export default GameCategoryNavigator;

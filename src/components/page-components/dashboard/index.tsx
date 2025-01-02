@@ -1,5 +1,3 @@
-import "../../../games/scoreboards";
-
 import dynamic from "next/dynamic";
 import { withRouter } from "next/router";
 import React from "react";
@@ -18,12 +16,13 @@ import { LoadingSpinner } from "../../game-components/game-loading/loading-spinn
 import BottomBar from "../bottom-bar";
 import Header from "../header";
 import { LobbyGameTransmitter } from "../lobby/lobby-socket-connection";
-import GameSelection from "../switch-game/game-selection";
+import GameSelection from "../game-selection";
 import ButtonSwipe from "./button-swipe";
 import Styles from "./dashboard.module.scss";
 import { DashboardHandler } from "./handlers/dash-board-handler";
 import { NotificationHandler } from "./handlers/notification-handler";
 import { DashboardProps, DashboardState } from "./type";
+import "../../../games/scoreboards";
 
 const SoundSettings = dynamic(() => import("../header/setting/settings-popup"));
 const Games = dynamic(() => import("../../../games/games"), { loading: () => <LoadingSpinner /> });
@@ -240,11 +239,16 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
     }
 
     openGameFromLobby(gameId: number) {
-        updateURLContext({ backToLobby: true, gameId: gameId });
+        let targetGameId = gameId;
+        if (gameId === 0 && gameGroups.length > 0 && gameGroups[0].games.length > 0) {
+            targetGameId = gameGroups[0].games[0].id;
+        }
+
+        updateURLContext({ backToLobby: true, gameId: targetGameId });
         window.scrollTo(0, 0);
-        if (this.state.openGameId !== gameId) {
-            this.dashboardHandler.removeGameTransmitter(gameId);
-            this.setState({ openGameId: gameId });
+        if (this.state.openGameId !== targetGameId) {
+            this.dashboardHandler.removeGameTransmitter(targetGameId);
+            this.setState({ openGameId: targetGameId });
         } else {
             this.forceUpdate();
         }

@@ -1,11 +1,11 @@
 import React from "react";
-import styles from './high-light-tab.module.scss';
+import styles from './active-tab-indicator.module.scss';
 
-interface HighLightTabProps {
+interface ActiveTabIndicatorProps {
     title: string;
 }
 
-export const HighLightTab = ({ title }: HighLightTabProps): JSX.Element => {
+export const ActiveTabIndicator = ({ title }: ActiveTabIndicatorProps): JSX.Element => {
     return (
         <div className={styles.tab}>
             <div className={styles['text-wrapper']}>{title}</div>

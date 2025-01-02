@@ -1,12 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import styles from './styles/game-selection.module.scss';
+import styles from './game-selection.module.scss';
 import { ILobbyConfigs } from '../dashboard/type';
 import { LobbyGameTransmitter } from '../lobby/lobby-socket-connection';
-import LobbyTab from './lobby-tab';
+import GameCategoryNavigator from './game-category-navigator';
 
 interface GameGroup {
     name: string;
-    games: any[];
+    games: Array<{
+        id: number;
+        gameName: string;
+        gameGroup?: string;
+        gamePath?: string;
+        isComingSoon?: boolean;
+        gameResourceConfigs: {
+            path: string;
+            optionalPaths?: string[];
+            cachePaths?: string[];
+        };
+        betRange?: {
+            min: number;
+            max: number;
+        };
+        rtp?: number;
+    }>;
 }
 
 interface GameSelectionProps {
@@ -68,7 +84,7 @@ const GameSelection: React.FC<GameSelectionProps> = ({
                 </header>
 
                 <div className={styles.gameList}>
-                    <LobbyTab
+                    <GameCategoryNavigator
                         lobbyConfigs={lobbyConfigs}
                         gameTransmitters={gameTransmitters}
                         openGame={openGame}
