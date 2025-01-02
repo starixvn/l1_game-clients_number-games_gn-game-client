@@ -32,7 +32,7 @@ interface GameSelectionProps {
     gameTransmitters: Record<number, LobbyGameTransmitter>;
     openGame: Function;
     lobbyConnectionContextValue: any;
-    headerRef?: React.RefObject<HTMLElement>;
+    headerRef?: any;
 }
 
 const GameSelection: React.FC<GameSelectionProps> = ({
@@ -58,7 +58,7 @@ const GameSelection: React.FC<GameSelectionProps> = ({
     }, [headerRef]);
 
     const handleClose = () => {
-        const gameId = headerRef.current?.getAttribute("data-game-id");
+        const gameId = headerRef?.current?.swiper?.el?.getAttribute("data-game-id");
         onClose?.(gameId ? Number(gameId) : 0);
     };
 

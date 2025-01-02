@@ -265,6 +265,7 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
                 onClose={(gameId: number) => this.openGameFromLobby(gameId)}
                 lobbyConnectionContextValue={lobbyConnectionContextValue}
                 gameGroups={gameGroups}
+                headerRef={this.swiperRef}
             />
         );
     }

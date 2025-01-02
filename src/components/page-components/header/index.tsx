@@ -8,26 +8,14 @@ import {
 import { Settings } from "../../game-components/settings";
 import HeaderTitle from "./header-title";
 import Styles from "./header.module.scss";
+const Header = forwardRef<HTMLElement, { gameId: number }>((props, ref) => {
+    const isRenderGames = props.gameId > 0;
 
-const Header = forwardRef<HTMLElement>((props, ref) => {
-    const [openingGameId, setOpeningGameId] = useState(0);
-
-    useEffect(() => {
-        const gameScriberId = registerGlobalMessageEvent(GlobalTransmitterEvent.OPEN_GAME_ID, ({ openingGameId }) => {
-            setOpeningGameId(openingGameId);
-        });
-
-        return () => {
-            unsubscribeGlobalMessageEvent(gameScriberId);
-        };
-    }, []);
-
-    const isRenderGames = openingGameId > 0;
     return (
-        <header className={`${Styles.header}`} data-testid="header" ref={ref} data-game-id={openingGameId}>
+        <header className={`${Styles.header}`} data-testid="header" ref={ref} data-game-id={props.gameId}>
             <div className="game-container d-flex">
                 <div className={Styles["header-container"]}>
-                    <HeaderTitle isRenderGames={isRenderGames} openingGameId={openingGameId} />
+                    <HeaderTitle isRenderGames={isRenderGames} openingGameId={props.gameId} />
                     <div className={Styles["header-right"]}>
                         <Settings />
                     </div>
