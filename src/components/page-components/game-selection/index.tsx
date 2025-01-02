@@ -60,6 +60,7 @@ const GameSelection: React.FC<GameSelectionProps> = ({
 
     const handleClose = () => {
         const gameId = headerRef?.current?.swiper?.el?.getAttribute("data-game-id");
+        console.log({ gameId });
         onClose?.(gameId ? Number(gameId) : 0);
     };
 

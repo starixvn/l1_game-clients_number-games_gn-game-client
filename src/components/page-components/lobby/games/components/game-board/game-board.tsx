@@ -23,18 +23,12 @@ type Props = {
     gameIndex: number;
 };
 
-const getBackgroundImage = (gameId: number): string => {
-    const imageIndex = (gameId % 3) + 1;
-    return `/images/background-card-game-${imageIndex}.png`;
-};
-
 export const GameBoard: React.FC<Props> = ({
     gameSettings,
     openGame,
     gameTransmitter,
     lastClickedGameId,
     setLastClickedGameId,
-    gameIndex: index,
 }) => {
     const [isShow, setIsShow] = useState<boolean>(true);
     const [transmitter, setTransmitter] = useState<LobbyGameTransmitter>(null);
