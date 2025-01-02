@@ -25,7 +25,7 @@
 
 .gameContent {
     position: relative;
-    padding: 0 2.6rem;
+    padding: 0 2.2rem;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -65,6 +65,19 @@
     border-radius: 0.8rem;
     border: 2px solid #000;
     background: #021520;
+
+    .scoreboard-lobby {
+        display: grid;
+        justify-content: center;
+        --border-scoreboard-color: #414141 !important;
+        --border-item-color: #414141 !important;
+        --background-color: #021520 !important;
+
+        &::before,
+        &::after {
+            content: none;
+        }
+    }
 }
 
 .playButtonWrapper {

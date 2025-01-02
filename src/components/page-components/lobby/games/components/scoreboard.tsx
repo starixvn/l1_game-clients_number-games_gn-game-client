@@ -1,10 +1,12 @@
 import { Component, ReactNode } from "react";
+
 import { GameStateContextModel } from "../../../../../_shared/react-contexts/game-state-context/game-state-context-model";
 import { BacBallSettlementResult } from "../../../../../games/bac-ball/types";
 import { GameSettings, Round } from "../../../../game-base/type";
 import { SwitchableScoreboard } from "../../../../game-components/round-history/scoreboard";
 import { LobbyGameTransmitter, LobbyMessageEvents } from "../../lobby-socket-connection";
 import Styles from "../../lobby.module.scss";
+import GameBoardStyles from "./game-board/game-board.module.scss";
 
 export type LobbyScoreboardProps = {
     gameSettings: GameSettings;
@@ -94,7 +96,7 @@ export default class LobbyScoreboard extends Component<LobbyScoreboardProps, Lob
             <SwitchableScoreboard
                 rounds={settlements}
                 type="switch"
-                className={Styles["scoreboard-lobby"]}
+                className={GameBoardStyles["scoreboard-lobby"]}
                 scoreboards={[
                     {
                         element: ctor,
@@ -102,7 +104,7 @@ export default class LobbyScoreboard extends Component<LobbyScoreboardProps, Lob
                         column: 17,
                         row: 6,
                         blockClassName: Styles["scoreboard-lobby-block"],
-                        elementClassName: Styles["scoreboard-lobby-element"]
+                        elementClassName: Styles["scoreboard-lobby-element"],
                     },
                 ]}
             />
