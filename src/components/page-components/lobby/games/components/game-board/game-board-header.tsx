@@ -1,9 +1,9 @@
-import { LoadingSpinner } from "../../../../game-components/game-loading/loading-spinner";
-import { GameSettings } from "../../../../game-base/type";
-import { LobbyGameTransmitter } from "../../lobby-socket-connection";
+import { LoadingSpinner } from "../../../../../game-components/game-loading/loading-spinner";
+import { GameSettings } from "../../../../../game-base/type";
+import { LobbyGameTransmitter } from "../../../lobby-socket-connection";
 import styles from "./game-board.module.scss";
-import { useTranslator } from "../../../../../_shared/react-hooks";
-import CountdownTimer from "./countdown-timer";
+import { useTranslator } from "../../../../../../_shared/react-hooks";
+import CountdownTimer from "../countdown-timer";
 
 type GameBoardHeaderProps = {
     gameSettings: GameSettings;
