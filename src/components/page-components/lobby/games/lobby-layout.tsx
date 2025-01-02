@@ -4,7 +4,6 @@ import { getOfferGamesIds, getRenderGameSettings } from "../../../../_shared/hel
 import { usePlayerContext } from "../../../../_shared/react-contexts";
 import { ILobbyConfigs } from "../../dashboard/type";
 import { LobbyGameTransmitter } from "../lobby-socket-connection";
-import { ComingSoonGameBoard } from "./components/coming-soon-game-board";
 import { GameBoard } from "./components/game-board";
 import styles from "./lobby-layout.module.scss";
 
@@ -48,15 +47,6 @@ export const LobbyLayout: React.FC<Props> = ({ lobbyConfigs, openGame, gameTrans
                         </div>
                     ))}
                 </div>
-                {comingSoonGameSettings.length > 0 && (
-                    <div className={styles.comingSoonGrid}>
-                        {comingSoonGameSettings.map((gameSettings) => (
-                            <div key={`coming-soon-${gameSettings.gameName}`} className={styles.gameItem}>
-                                <ComingSoonGameBoard gameSettings={gameSettings} />
-                            </div>
-                        ))}
-                    </div>
-                )}
             </div>
         )
     );

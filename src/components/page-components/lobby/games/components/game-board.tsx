@@ -1,23 +1,17 @@
-import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 
 import { LobbyGameId } from "../../../../../_shared/constants";
 import PreloadResources from "../../../../../_shared/helpers/preload-resources";
 import { useLobbyConnectionContext } from "../../../../../_shared/react-contexts";
 import { GameSettings } from "../../../../game-base/type";
-import { LoadingSpinner } from "../../../../game-components/game-loading/loading-spinner";
 import { getLobbyData, LobbyGameTransmitter, LobbyMessageEvents } from "../../lobby-socket-connection";
-import { GameIcon } from "./game-icon";
-import { LobbyImagesData } from "./lobby-constant";
-import { CachedImage } from "../../../../game-components/cached-image";
 import styles from "./game-board.module.scss";
 import { useTranslator } from "../../../../../_shared/react-hooks";
 import { GameBoardHeader } from './game-board-header';
-import { GameBoardFooter } from './game-board-footer';
 
 const DisabledGameBlock = dynamic(() => import("./disable-game-block"));
-const CountdownTimer = dynamic(() => import("./countdown-timer"));
 const LobbyScoreboard = dynamic(() => import("./scoreboard"));
 
 type Props = {

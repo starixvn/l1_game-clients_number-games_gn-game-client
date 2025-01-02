@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { AuthorizeResponse, SSOResponse } from "sc-user-service-client/dist/auth";
-import PreloadResources, { getAndHandleBannerOffer, getAndHandleGameOfferIds } from "../../../../../_shared/helpers/preload-resources";
+import PreloadResources, { getAndHandleGameOfferIds } from "../../../../../_shared/helpers/preload-resources";
 import { getLobbyConfigs } from "../../../../../services/auth-service";
 
 const PreloadResourceRegister: React.FC<{
@@ -18,7 +18,6 @@ const PreloadResourceRegister: React.FC<{
         const lobby = await getLobbyConfigs(session);
         if (lobby?.lobbyConfigs) {
             updateLobbyConfigs(lobby?.lobbyConfigs);
-            getAndHandleBannerOffer(authorizeResponse, lobby?.lobbyConfigs, setBannerId);
             getAndHandleGameOfferIds(authorizeResponse, lobby?.lobbyConfigs, setGameOfferIds);
         }
     };
