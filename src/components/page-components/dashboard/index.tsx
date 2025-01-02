@@ -14,7 +14,6 @@ import { ModalType } from "../../game-components/base-dialog/type";
 import { ErrorApiText } from "../../game-components/error-api-text";
 import { LoadingSpinner } from "../../game-components/game-loading/loading-spinner";
 import BottomBar from "../bottom-bar";
-import Header from "../header";
 import { LobbyGameTransmitter } from "../lobby/lobby-socket-connection";
 import GameSelection from "../game-selection";
 import ButtonSwipe from "./button-swipe";
@@ -48,7 +47,6 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
     private readonly dashboardHandler: DashboardHandler;
     private readonly notificationHandler: NotificationHandler;
     private readonly swiperRef = React.createRef<SwiperCore>();
-    private readonly headerRef = React.createRef<HTMLElement>();
     private backToLobbyEventId = null;
     private isUpdatingBalance = false;
 
@@ -267,14 +265,9 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
                 onClose={(gameId: number) => this.openGameFromLobby(gameId)}
                 lobbyConnectionContextValue={lobbyConnectionContextValue}
                 gameGroups={gameGroups}
-                headerRef={this.headerRef}
             />
         );
     }
-
-    // setDashBoardStyle(isRenderGames: boolean) {
-    //     return isDesktop && isRenderGames ? { height: this.state.dashBoardHeight } : {};
-    // }
 
     renderDashBoard() {
         window.history.pushState(null, null, "/");
@@ -307,9 +300,7 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
                         className={`${Styles["dashboard"]} ${changeGameStyle} ${!isRenderGames ? "no-scroll" : ""} ${isMobileOnly ? Styles["hidden-scrollbar"] : ""
                             }`}
                         id={"dashboard"}
-                    // style={this.setDashBoardStyle(isRenderGames)}
                     >
-                        <Header ref={this.headerRef} />
                         <SoundSettings />
 
                         {isNoGameOffer ? <></> : renderOfferGameContainer()}

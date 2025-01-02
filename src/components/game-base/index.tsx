@@ -14,6 +14,7 @@ import { PlaceBetEventActionType } from "../../_shared/react-contexts/game-state
 import { PlaceBetProvider } from "../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-context";
 import { GameResourceKeys } from "../../_shared/resources";
 import { getBalance } from "../../services/auth-service";
+import Header from "../page-components/header";
 import BetConfirmDialog from "../game-components/bet-confirm-dialog";
 import ConfirmBet from "../game-components/confirm-bet";
 import CountdownTimer, { GameStatusMap } from "../game-components/countdown-timer/countdown-timer";
@@ -57,6 +58,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState> extend
     private readonly gameRoundHistoryHandler?: GameRoundHistoryHandler;
     private readonly gameSoundHandler: IGameSoundHandler;
     private readonly gameRoundDataHandler?: GameRoundDataHandler;
+    private readonly headerRef = React.createRef<HTMLElement>();
 
     constructor(props: P, handlers: GameBaseHandlers) {
         super(props);
@@ -481,12 +483,15 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState> extend
     renderHeaderBlock() {
         const { availableInGameData } = this.props.gameStateContextModel;
         return (
-            <div className="game-header">
-                {this.renderRoundIdSection()}
-                <div id="countdown-timer" className="countdown-timer">
-                    {availableInGameData && <CountdownTimer GameStatusProp={this.renderGameStatus()} />}
+            <>
+                <Header ref={this.headerRef} />
+                <div className="game-header">
+                    {this.renderRoundIdSection()}
+                    <div id="countdown-timer" className="countdown-timer">
+                        {availableInGameData && <CountdownTimer GameStatusProp={this.renderGameStatus()} />}
+                    </div>
                 </div>
-            </div>
+            </>
         );
     }
 

@@ -32,7 +32,7 @@ interface GameSelectionProps {
     gameTransmitters: Record<number, LobbyGameTransmitter>;
     openGame: Function;
     lobbyConnectionContextValue: any;
-    headerRef: React.RefObject<HTMLElement>;
+    headerRef?: React.RefObject<HTMLElement>;
 }
 
 const GameSelection: React.FC<GameSelectionProps> = ({
@@ -48,14 +48,13 @@ const GameSelection: React.FC<GameSelectionProps> = ({
 
     useEffect(() => {
         const updateHeaderHeight = () => {
-            if (headerRef.current) {
-                setHeaderHeight(headerRef.current.getBoundingClientRect().height);
+            if (headerRef?.current) {
+                setHeaderHeight(headerRef.current.offsetHeight);
             }
         };
-
         updateHeaderHeight();
-        window.addEventListener("resize", updateHeaderHeight);
-        return () => window.removeEventListener("resize", updateHeaderHeight);
+        window.addEventListener('resize', updateHeaderHeight);
+        return () => window.removeEventListener('resize', updateHeaderHeight);
     }, [headerRef]);
 
     const handleClose = () => {
