@@ -5,13 +5,12 @@
     bottom: 0;
     display: flex;
     justify-content: space-between;
-    align-items: center;
     background: rgba(2, 21, 38, 0.8) radial-gradient(69.19% 82.83% at 56.51% -36.5%, rgba(67, 159, 241, 0.8) 0%, rgba(8, 23, 36, 0) 100%);
     backdrop-filter: blur(2px);
     height: 6rem;
     width: 100%;
-    padding: 0 4rem;
-    border-radius: 16px 16px 0 0;
+    padding: 0 4rem 0.6rem;
+    border-radius: 1.6rem 1.6rem 0 0;
     z-index: 100;
 
     @media screen and (min-device-width: 500px) {

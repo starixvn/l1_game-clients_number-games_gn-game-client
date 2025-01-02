@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 
 import { GlobalTransmitterEvent, registerGlobalMessageEvent, unsubscribeGlobalMessageEvent } from "../../../_shared/helpers/message-transmitter/global-transmitter";
+import { ILobbyConfigs } from "../dashboard/type";
+import { LobbyGameTransmitter } from "../lobby/lobby-socket-connection";
 import SwitchGame from "../switch-game";
 import UserInfo from "../user-info";
 import Styles from "./bottom-bar.module.scss";
-import { ILobbyConfigs } from "../dashboard/type";
-import { LobbyGameTransmitter } from "../lobby/lobby-socket-connection";
 
 interface BottomBarProps {
     lobbyConfigs: ILobbyConfigs;
@@ -31,8 +31,7 @@ const BottomBar: React.FC<BottomBarProps> = ({ lobbyConfigs, gameTransmitters, o
     return (
         <div className={Styles["bottom-bar"]}>
             <UserInfo isLobby={!isRenderGames} />
-            <SwitchGame
-            />
+            <SwitchGame />
         </div>
     );
 };

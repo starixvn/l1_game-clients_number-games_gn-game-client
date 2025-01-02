@@ -195,12 +195,11 @@ body {
 .game-area {
     position: relative;
     display: grid;
-    //grid-template-rows: 5rem 18.5rem 20.4rem 7.8rem 3.8rem 11.3rem;
-    // grid-template-columns: 37.5rem;
-    grid-template-rows: 5rem var(--result-area-height) 1fr;
+    grid-template-rows: 4rem var(--result-area-height) 1fr;
     grid-template-columns: 100%;
     justify-content: center;
     align-items: center;
+    padding-top: 1.2rem;
     height: 100%;
     transition: grid-template-rows 200ms;
 

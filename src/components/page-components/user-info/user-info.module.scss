@@ -9,17 +9,11 @@
     gap: 1rem;
 
     .avatar {
-        --colorBorderTop: #0394c5;
-        --colorBorderBottom: #01f2cfb3;
-        --colorBackground: #092b2d80;
-
         position: relative;
         width: 3.7rem;
         height: 3.7rem;
         border-radius: 50%;
-        border: 0.1rem solid transparent;
-        background: linear-gradient(var(--colorBackground), var(--colorBackground)) padding-box,
-            linear-gradient(to bottom, var(--colorBorderTop), var(--colorBorderBottom)) border-box;
+        background: #1c374f;
     }
 
     .icon-edit {
@@ -46,7 +40,7 @@
         white-space: nowrap;
         display: flex;
         flex-direction: column;
-        gap: 0.6rem;
+        gap: 0.2rem;
     }
 
     .icon-user {
