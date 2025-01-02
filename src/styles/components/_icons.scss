@@ -13,6 +13,10 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
+.icon-close-line:before {
+    content: "\e9d2";
+    color: #fff;
+}
 .icon-specific1 .path1:before {
     content: "\e939";
     color: rgb(12, 36, 58);

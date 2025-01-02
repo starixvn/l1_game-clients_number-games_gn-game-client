@@ -1,15 +1,15 @@
-import { useEffect, useState } from "react";
-import Image from "next/image";
 import dynamic from "next/dynamic";
+import Image from "next/image";
+import { useEffect, useState } from "react";
 
 import { LobbyGameId } from "../../../../../../_shared/constants";
 import PreloadResources from "../../../../../../_shared/helpers/preload-resources";
 import { useLobbyConnectionContext } from "../../../../../../_shared/react-contexts";
+import { useTranslator } from "../../../../../../_shared/react-hooks";
 import { GameSettings } from "../../../../../game-base/type";
 import { getLobbyData, LobbyGameTransmitter, LobbyMessageEvents } from "../../../lobby-socket-connection";
+import { GameBoardHeader } from "./game-board-header";
 import styles from "./game-board.module.scss";
-import { useTranslator } from "../../../../../../_shared/react-hooks";
-import { GameBoardHeader } from './game-board-header';
 
 const DisabledGameBlock = dynamic(() => import("../disable-game-block"));
 const LobbyScoreboard = dynamic(() => import("../scoreboard"));
@@ -28,7 +28,14 @@ const getBackgroundImage = (gameId: number): string => {
     return `/images/background-card-game-${imageIndex}.png`;
 };
 
-export const GameBoard: React.FC<Props> = ({ gameSettings, openGame, gameTransmitter, lastClickedGameId, setLastClickedGameId, gameIndex: index }) => {
+export const GameBoard: React.FC<Props> = ({
+    gameSettings,
+    openGame,
+    gameTransmitter,
+    lastClickedGameId,
+    setLastClickedGameId,
+    gameIndex: index,
+}) => {
     const [isShow, setIsShow] = useState<boolean>(true);
     const [transmitter, setTransmitter] = useState<LobbyGameTransmitter>(null);
     const { reconnectGameTransmitter, socket } = useLobbyConnectionContext();
@@ -124,14 +131,21 @@ export const GameBoard: React.FC<Props> = ({ gameSettings, openGame, gameTransmi
             onClick={handlePlay}
         >
             {t("play")}
-            <Image src="/images/play-icon.png" className={styles.playIcon} width={24} height={24} alt="play-icon" priority={true} />
+            <Image
+                src="/static/images/games-popup/play-icon.svg"
+                className={styles.playIcon}
+                width={18}
+                height={18}
+                alt="play-icon"
+                priority={true}
+            />
         </div>
     );
 
     return (
         <div className={styles.gameCard} id={`icon-${gameSettings.gameName.toLowerCase()}`}>
             <Image
-                src={getBackgroundImage(index)}
+                src="/static/images/games-popup/game-card.webp"
                 className={styles.backgroundImage}
                 width={360}
                 height={139}
@@ -140,20 +154,12 @@ export const GameBoard: React.FC<Props> = ({ gameSettings, openGame, gameTransmi
             />
 
             <div className={styles.gameContent}>
-                <GameBoardHeader
-                    gameSettings={gameSettings}
-                    isLoading={isLoading}
-                    isShow={isShow}
-                    transmitter={transmitter}
-                />
+                <GameBoardHeader gameSettings={gameSettings} isLoading={isLoading} isShow={isShow} transmitter={transmitter} />
 
                 <div className={styles.gameBody}>
                     {isShow && transmitter && (
                         <div className={styles.scoreboardContainer}>
-                            <LobbyScoreboard
-                                gameSettings={gameSettings}
-                                transmitter={transmitter}
-                            />
+                            <LobbyScoreboard gameSettings={gameSettings} transmitter={transmitter} />
                         </div>
                     )}
                 </div>

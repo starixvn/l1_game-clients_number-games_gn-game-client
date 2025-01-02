@@ -25,7 +25,7 @@
 
 .gameContent {
     position: relative;
-    padding: 0 2.1rem;
+    padding: 0 2.6rem;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -73,13 +73,20 @@
     right: 0;
     display: flex;
     align-items: center;
-    justify-content: right;
+    justify-content: center;
+    gap: 0.6rem;
     width: 10.4rem;
     height: 3.6rem;
     cursor: pointer;
     transition: all 0.2s ease;
     user-select: none;
     text-transform: uppercase;
+    color: #fbfff9;
+    text-shadow: 0px 0px 6px rgba(255, 255, 255, 0.6);
+    font-size: 1.4rem;
+    font-weight: 600;
+    line-height: 1.8rem; /* 128.571% */
+    letter-spacing: 0.28px;
 
     &.disabled {
         opacity: 0.7;
@@ -89,11 +96,5 @@
 }
 
 .playIcon {
-    width: 24px;
-    height: 24px;
     transition: transform 0.2s ease;
-
-    .playButtonWrapper:hover & {
-        transform: scale(1.1);
-    }
 }

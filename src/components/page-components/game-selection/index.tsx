@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import styles from './game-selection.module.scss';
+
 import { ILobbyConfigs } from "../dashboard/type";
 import { LobbyGameTransmitter } from "../lobby/lobby-socket-connection";
-import GameCategoryNavigator from './game-category-navigator';
+import GameCategoryNavigator from "./game-category-navigator";
+import styles from "./game-selection.module.scss";
 
 interface GameGroup {
     name: string;
@@ -53,8 +54,8 @@ const GameSelection: React.FC<GameSelectionProps> = ({
             }
         };
         updateHeaderHeight();
-        window.addEventListener('resize', updateHeaderHeight);
-        return () => window.removeEventListener('resize', updateHeaderHeight);
+        window.addEventListener("resize", updateHeaderHeight);
+        return () => window.removeEventListener("resize", updateHeaderHeight);
     }, [headerRef]);
 
     const handleClose = () => {
@@ -75,7 +76,7 @@ const GameSelection: React.FC<GameSelectionProps> = ({
                 <header className={styles.header}>
                     <h1>GAME SELECTION</h1>
                     <button className={styles["close-button"]} onClick={handleClose} aria-label="Close">
-                        <span className={`icon-close ${styles["icon-close"]}`}></span>
+                        <span className={`icon-close-line ${styles["icon-close"]}`}></span>
                     </button>
                 </header>
 
