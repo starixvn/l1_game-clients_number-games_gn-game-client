@@ -7,7 +7,6 @@ import styles from './styles/game-list.module.scss';
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/free-mode';
-import GameSelection from '../game-selection';
 
 interface GameGroup {
     name: string;

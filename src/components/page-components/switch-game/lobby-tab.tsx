@@ -2,12 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode } from 'swiper/modules';
 import { LobbyLayout } from '../lobby/games/lobby-layout';
-import { Banner } from '../lobby/banners/banner';
 import { ILobbyConfigs } from '../dashboard/type';
 import { LobbyGameTransmitter } from '../lobby/lobby-socket-connection';
 import { LobbyConnectionContextProvider } from '../../../_shared/react-contexts';
 import styles from './styles/game-selection.module.scss';
-import { GameSettings } from "../../../components/game-base/type";
 
 // Import Swiper styles
 import 'swiper/css';
@@ -17,7 +15,7 @@ import { HighLightTab } from './prototype/tabs/high-light-tab';
 
 interface GameGroup {
     name: string;
-    games: any[]; // Replace with proper game type
+    games: any[];
 }
 
 interface LobbyTabProps {
@@ -33,15 +31,12 @@ export const buildFilteredLobbyConfigs = (
     lobbyConfigs: ILobbyConfigs,
     selectedCategory: number
 ): ILobbyConfigs => {
-    // If selectedCategory is 0 (All Games), return the original configs
     if (selectedCategory === 0) {
         return lobbyConfigs;
     }
 
-    // Adjust the category index since we added "All Games" at index 0
     const adjustedCategoryIndex = selectedCategory - 1;
 
-    // Create game groups from game settings
     const gameSettings = getAppSettings().gameSettings;
     const gameGroups = Object.values(gameSettings).reduce<GameGroup[]>((groups, game) => {
         const existingGroup = groups.find(g => g.name === game.gameGroup);
@@ -56,7 +51,6 @@ export const buildFilteredLobbyConfigs = (
         return groups;
     }, []);
 
-    // Get the selected game group
     const selectedGroup = gameGroups[adjustedCategoryIndex];
 
     const filteredConfigs = {
@@ -114,7 +108,6 @@ const LobbyTab: React.FC<LobbyTabProps> = ({
         }
     };
 
-    // Add "All Games" to the categories array
     const categories = ["All Games", ...gameGroups.map(group => group.name)];
 
     return (
@@ -183,4 +176,4 @@ const LobbyTab: React.FC<LobbyTabProps> = ({
     );
 };
 
-export default LobbyTab; 
+export default LobbyTab;

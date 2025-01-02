@@ -18,7 +18,7 @@ import { LoadingSpinner } from "../../game-components/game-loading/loading-spinn
 import BottomBar from "../bottom-bar";
 import Header from "../header";
 import { LobbyGameTransmitter } from "../lobby/lobby-socket-connection";
-import GameSelectionLobby from "../switch-game/game-selection-lobby";
+import GameSelection from "../switch-game/game-selection";
 import ButtonSwipe from "./button-swipe";
 import Styles from "./dashboard.module.scss";
 import { DashboardHandler } from "./handlers/dash-board-handler";
@@ -256,7 +256,7 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
         const lobbyConnectionContextValue = this.dashboardHandler.buildLobbyConnectionContextValue();
 
         return (
-            <GameSelectionLobby
+            <GameSelection
                 lobbyConfigs={this.props.lobbyConfigs}
                 gameTransmitters={this.state.gameTransmitters}
                 openGame={this.openGameFromLobby}
@@ -303,7 +303,7 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
                         className={`${Styles["dashboard"]} ${changeGameStyle} ${!isRenderGames ? "no-scroll" : ""} ${isMobileOnly ? Styles["hidden-scrollbar"] : ""
                             }`}
                         id={"dashboard"}
-                        // style={this.setDashBoardStyle(isRenderGames)}
+                    // style={this.setDashBoardStyle(isRenderGames)}
                     >
                         <Header ref={this.headerRef} />
                         <SoundSettings />
