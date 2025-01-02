@@ -117,22 +117,14 @@ export const GameBoard: React.FC<Props> = ({ gameSettings, openGame, gameTransmi
 
     const renderPlayButton = () => (
         <div
-            className={`${styles.playButtonWrapper} ${(isPlayButtonDisabled || isLoading) ? styles.disabled : ''}`}
+            className={`${styles.playButtonWrapper} ${isPlayButtonDisabled || isLoading ? styles.disabled : ""}`}
             role="button"
             tabIndex={0}
             aria-label="Play game"
+            onClick={handlePlay}
         >
-            <div className={styles.playButton} onClick={handlePlay}>
-                {t('play')}
-                <Image
-                    src="/images/play-icon.png"
-                    className={styles.playIcon}
-                    width={24}
-                    height={24}
-                    alt="play-icon"
-                    priority={true}
-                />
-            </div>
+            {t("play")}
+            <Image src="/images/play-icon.png" className={styles.playIcon} width={24} height={24} alt="play-icon" priority={true} />
         </div>
     );
 
