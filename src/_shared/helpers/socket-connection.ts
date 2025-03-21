@@ -1,13 +1,13 @@
 import { io } from "socket.io-client";
 import MsgpackParser from "socket.io-msgpack-parser";
 import { getAppSettings } from "../app-settings";
-import { buildServerUrl } from "../helpers";
+import { buildGameServiceProxy } from "../helpers";
 import { SocketInfo } from "./../../components/game-base/type";
 import { GameMessageHandler, messageEventType } from "../../components/game-base/handlers";
 
-export function InitSocketIO(socketInfo: SocketInfo, session: any, gameName: string, gameMessageHandler: GameMessageHandler) {
+export async function InitSocketIO(socketInfo: SocketInfo, session: any, gameName: string, gameId: number, gameMessageHandler: GameMessageHandler) {
     const { proxy, enableMsgpackParser } = getAppSettings();
-    const socketUri = buildServerUrl(socketInfo.namespace);
+    const { socketUri } = await buildGameServiceProxy(socketInfo.namespace, gameId);
     const socketOption = {
         forceNew: true,
         transports: ["websocket"],

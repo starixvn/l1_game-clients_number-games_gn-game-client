@@ -1,7 +1,7 @@
 window.envConfig = {
     proxy: {
         ssl: true,
-        subDomain: "gnuatproxy",
+        subDomain: "gnuatproxy-k8s",
         path: "/uat",
     },
     sentry: {

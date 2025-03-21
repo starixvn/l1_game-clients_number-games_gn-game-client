@@ -231,7 +231,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState> extend
     protected async connectToGameService() {
         const { session } = this.context as PlayerContextModel;
         const { socketInfo, gameName } = this.props;
-        const { socket } = InitSocketIO(socketInfo, session, gameName, this.gameMessageHandler);
+        const { socket } = await InitSocketIO(socketInfo, session, gameName, this.props.id, this.gameMessageHandler);
 
         this.socket = socket;
     }

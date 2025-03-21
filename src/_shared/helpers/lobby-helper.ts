@@ -3,7 +3,7 @@ import { AuthorizeResponse } from "sc-user-service-client/dist/auth";
 import { GameSettings } from "../../components/game-base/type";
 import { IBanner, ILobbyConfigs } from "../../components/page-components/dashboard/type";
 import { getAppSettings } from "../app-settings";
-import { buildUrlWithPath } from "./url-helper";
+import { buildGameServiceProxy, buildUrlWithPath } from "./url-helper";
 
 export const getBanners = (lobbyConfigs: ILobbyConfigs): IBanner[] => {
     return lobbyConfigs?.banners;
@@ -49,9 +49,13 @@ export const getEnabledRenderGameSettings = (lobbyConfigs: ILobbyConfigs, author
 
 export const getServiceStatusIsAvailable = async (gameSetting: GameSettings) => {
     let statusCode = 0;
-    const { proxy } = getAppSettings();
 
-    const serviceUrl = buildUrlWithPath(`${proxy.path}/${gameSetting.socketInfo.namespace}/`);
+    let serviceUrl = (await buildGameServiceProxy(gameSetting.socketInfo.namespace, gameSetting.id)).url;
+    if (!serviceUrl) {
+        const { proxy } = getAppSettings();
+
+        serviceUrl = buildUrlWithPath(`${proxy.path}/${gameSetting.socketInfo.namespace}/`);
+    }
     try {
         const response = await fetch(serviceUrl);
         statusCode = response.status;

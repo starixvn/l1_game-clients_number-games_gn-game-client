@@ -8,7 +8,7 @@ window.envConfig = {
     },
     proxy: {
         ssl: true,
-        subDomain: "gn-proxy1",
+        subDomain: "gn-proxy",
         path: "",
     },
     sentry: {
@@ -16,7 +16,7 @@ window.envConfig = {
         environment: "DEV",
     },
     enableSourceMap: true,
-    subGuideDomain: "gn-guide1",
+    subGuideDomain: "gn-guide",
     enableMsgpackParser: false,
     system: "GN",
     appType: 1,
