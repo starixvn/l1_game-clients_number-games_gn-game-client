@@ -39,7 +39,7 @@ export const getRenderGameSettings = (lobbyConfigs: ILobbyConfigs, offerGamesIds
 
 export const getEnabledRenderGameSettings = (lobbyConfigs: ILobbyConfigs, authorizeInfo: AuthorizeResponse): GameSettings[] => {
     const gameOfferIds = getLobbyGamesIds(lobbyConfigs, authorizeInfo);
-    if (gameOfferIds.length > 0) {
+    if (gameOfferIds?.length > 0) {
         const renderGameSetting = getRenderGameSettings(lobbyConfigs, gameOfferIds);
         const enabledGames = authorizeInfo.user.enabledGameIds;
         return renderGameSetting.filter((gameSetting) => enabledGames.find((gameId) => gameId === gameSetting.id));

@@ -17,7 +17,14 @@ export class DashboardHandler {
     }
 
     checkIsNotOfferGame = () => {
-        return this.props.authorizeResponse?.user?.offerGames && this.props.authorizeResponse?.user?.offerGames.length === 0;
+        const offerGames = getOfferGamesIds(this.props.authorizeResponse);
+        if (this.props.directMode) {
+            return !offerGames?.includes(this.props.queryGame);
+        }
+        return (
+            (this.props.authorizeResponse?.user?.offerGames && this.props.authorizeResponse?.user?.offerGames.length === 0) ||
+            !this.getLobbyGamesIds()?.length
+        );
     };
 
     shouldRenderGames = (offerGames: number[], openGameId: number) => {

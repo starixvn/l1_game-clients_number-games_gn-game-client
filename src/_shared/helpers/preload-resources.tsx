@@ -20,7 +20,7 @@ export const getAndHandleBannerOffer = (authorizeInfo: AuthorizeResponse, lobbyC
 
 export const getAndHandleGameOfferIds = (authorizeInfo: AuthorizeResponse, lobbyConfigs: LobbyConfigs, callbackFn: Function) => {
     const gameOfferIds = getLobbyGamesIds(lobbyConfigs, authorizeInfo);
-    if (gameOfferIds.length > 0) {
+    if (gameOfferIds?.length > 0) {
         callbackFn(gameOfferIds);
     }
 };

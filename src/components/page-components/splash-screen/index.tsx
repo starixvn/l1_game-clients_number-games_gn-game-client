@@ -137,6 +137,9 @@ const SplashScreen: React.FC = () => {
 
     const loadLobbyConfigs = async (session: SSOResponse, authorizeInfo: any) => {
         const lobby = await getLobbyConfigs(session);
+        if (!lobby || Object.keys(lobby.lobbyConfigs).length === 0) {
+            return null;
+        }
         if (lobby?.lobbyConfigs) {
             setLobbyConfigs(lobby.lobbyConfigs);
             handleBannerOffer(authorizeInfo, lobby.lobbyConfigs, setBannerId);
