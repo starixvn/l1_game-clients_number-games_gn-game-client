@@ -20,7 +20,7 @@ let isSwipe = true;
 export const ChipSlider: React.FC<{ gameConfigs: GameConfigs; userStakeLevel: UserStakeLevel }> = ({ gameConfigs, userStakeLevel }) => {
     const systemContext = useSystemContext();
     const dispatch = useSystemDispatch();
-    const { authorizeInfo, enableQuickBet } = (usePlayerContext() as PlayerContextModel);
+    const { authorizeInfo, enableQuickBet } = usePlayerContext() as PlayerContextModel;
     const enabledQuickBet = authorizeInfo?.user?.settings.quickBet || enableQuickBet;
     const { selectedChip } = systemContext;
     const [enabledPrevBtn, setEnabledPrevBtn] = useState(false);
@@ -44,13 +44,13 @@ export const ChipSlider: React.FC<{ gameConfigs: GameConfigs; userStakeLevel: Us
         const chipIndex = chipValues.indexOf(chipValue);
         const currentSlide = sliderRef.innerSlider.state.currentSlide;
 
-        if (chipIndex + 1 - slidesToShow >= currentSlide) {
+        if (chipIndex + 1 - slidesToShow >= currentSlide && slidesToShow < chipValues.length) {
             disableSelectChipWhenSliding();
             isSwipe = false;
             sliderRef.slickGoTo(chipIndex + 2 - slidesToShow);
         }
 
-        if (chipIndex - 1 <= currentSlide) {
+        if (chipIndex - 1 <= currentSlide && slidesToShow < chipValues.length) {
             disableSelectChipWhenSliding();
             isSwipe = false;
             sliderRef.slickGoTo(chipIndex - 1);
@@ -93,7 +93,7 @@ export const ChipSlider: React.FC<{ gameConfigs: GameConfigs; userStakeLevel: Us
             const newSelectedChip = chipValues[chipIndex + 1];
 
             isSwipe = false;
-            sliderRef.slickGoTo(chipIndex + 3 - slidesToShow);
+            slidesToShow < chipValues.length && sliderRef.slickGoTo(chipIndex + 3 - slidesToShow);
             handleSelectChip(newSelectedChip);
             disableSelectChipWhenSliding();
         }
@@ -105,7 +105,7 @@ export const ChipSlider: React.FC<{ gameConfigs: GameConfigs; userStakeLevel: Us
             const newSelectedChip = chipValues[chipIndex - 1];
 
             isSwipe = false;
-            sliderRef.slickGoTo(chipIndex - 2);
+            slidesToShow < chipValues.length && sliderRef.slickGoTo(chipIndex - 2);
             handleSelectChip(newSelectedChip);
             disableSelectChipWhenSliding();
         }
@@ -135,7 +135,7 @@ export const ChipSlider: React.FC<{ gameConfigs: GameConfigs; userStakeLevel: Us
         infinite: false,
         adaptiveHeight: true,
         swipeToSlide: true,
-        slidesToShow,
+        slidesToShow: slidesToShow > chipValues.length ? chipValues.length : slidesToShow,
         arrows: false,
         onSwipe: () => {
             isSwipe = true;
