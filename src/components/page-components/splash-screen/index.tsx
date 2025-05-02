@@ -272,13 +272,13 @@ const SplashScreen: React.FC = () => {
             <div className={`${Styles.page}`}>
                 <div className={Styles["center"]}>
                     <div className={Styles["logo"]}>
-                        <Image
+                        {/* <Image
                             src={`/static/images/splash-screen/2x/logo${logoProps.postfix}.png?v=${buildVersion}`}
                             width={logoProps.width}
                             height={logoProps.height}
                             alt="logo"
                             priority={true}
-                        />
+                        /> */}
                     </div>
 
                     <div className={Styles["slogan"]}>{locale && t("SabaNumber.splashscreen_slogan")}</div>
