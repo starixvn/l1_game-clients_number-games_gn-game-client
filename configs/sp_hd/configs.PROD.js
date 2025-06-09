@@ -5,7 +5,7 @@ window.envConfig = {
         path: "",
     },
     sentry: {
-        dsn: "https://707edaf283cc4eed88a563bc734b975f@sentry.sabagame.com/174",
+        dsn: "https://aec64e89fed64d25a73926e63f2500f7@sentry.sabagame.com/179",
         environment: "PROD",
     },
     enableSourceMap: false,
