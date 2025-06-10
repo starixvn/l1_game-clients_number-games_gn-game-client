@@ -26,4 +26,7 @@ export default interface AppSettings {
     enableDebugLogs: boolean;
     gamePath: string;
     enablePreloadResource?: boolean;
+    hotdogScript?: {
+        baseUrl: string;
+    };
 }

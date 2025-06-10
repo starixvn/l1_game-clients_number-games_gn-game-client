@@ -17,4 +17,7 @@ window.envConfig = {
     socketGatewayPath: "gateway",
     useTolgeeStatic: true,
     googleAnalyticId: "G-F4HZV0YQ73",
+    hotdogScript: {
+        baseUrl: "https://res.hotdog-gaming.com/ingame-lobby-client/index.min.js",
+    },
 };
