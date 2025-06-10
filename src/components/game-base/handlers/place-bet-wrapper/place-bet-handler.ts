@@ -167,7 +167,7 @@ export class PlaceBetHandler {
             
             this.lastBetAmount = 0;
             
-            gameMessageHandler.broadcastGameEvent({ [messageEventType.UPDATE_PLAYER_BALANCE]: {} });
+            // gameMessageHandler.broadcastGameEvent({ [messageEventType.UPDATE_PLAYER_BALANCE]: {} });
         }
 
         this.placeBetDispatch({
