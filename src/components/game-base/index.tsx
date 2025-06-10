@@ -122,7 +122,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState> extend
                     this.props.gameSound.playPlaceBetSound();
                 },
                 gameId: this.props.id,
-                adjustUIBalance: this.adjustUIBalance,
+                adjustUIBalance: this.adjustUIBalance.bind(this),
             });
 
         this.gameFinishHandler =
