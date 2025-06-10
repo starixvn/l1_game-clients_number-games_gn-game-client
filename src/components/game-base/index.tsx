@@ -122,6 +122,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState> extend
                     this.props.gameSound.playPlaceBetSound();
                 },
                 gameId: this.props.id,
+                adjustUIBalance: this.adjustUIBalance,
             });
 
         this.gameFinishHandler =
@@ -165,9 +166,18 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState> extend
         this.updateUserBalance = this.updateUserBalance.bind(this);
         this.renderHeaderBlock = this.renderHeaderBlock.bind(this);
         this.onPreloadResourceDone = this.onPreloadResourceDone.bind(this);
+        this.adjustUIBalance = this.adjustUIBalance.bind(this);
 
         AnalyticsHelper.trackPage({ page_title: this.props.gameName });
         GlobalMessageTransmitter.broadcast({ [GlobalTransmitterEvent.OPEN_GAME_ID]: props.id });
+    }
+
+    adjustUIBalance(amountChange: number) {
+        const authContext = this.context as PlayerContextModel;
+        const currentBalance = authContext?.authorizeInfo?.user?.red || 0;
+        const newBalance = Math.max(0, currentBalance + amountChange);
+        
+        authContext?.setBalance(newBalance);
     }
 
     getGameStateContext = () => {
@@ -459,6 +469,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState> extend
     async updateUserBalance() {
         const authContext = this.context as PlayerContextModel;
         const balanceResponse = await getBalance(authContext?.session);
+        
         if (balanceResponse.isSuccessful) {
             authContext?.setBalance(balanceResponse.balance);
         } else {

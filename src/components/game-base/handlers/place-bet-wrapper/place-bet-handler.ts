@@ -34,6 +34,7 @@ export type PlaceBetHandlerProps = {
     getPlayerBalance: Function;
     gameId: number;
     signOut?: Function;
+    adjustUIBalance?: (amount: number) => void;
 };
 
 export class PlaceBetHandler {
@@ -48,6 +49,7 @@ export class PlaceBetHandler {
     private isProcessingBet: boolean;
     private roundState: RoundState = RoundState.None;
     private isFirstOwnBetHandler = false;
+    private lastBetAmount: number;
 
     constructor(public readonly props: PlaceBetHandlerProps) {
         this.isProcessingBet = false;
@@ -125,6 +127,10 @@ export class PlaceBetHandler {
             noticePayload.roundId = notice?.gameRoundId;
         }
 
+        if (this.lastBetAmount) {
+            this.lastBetAmount = 0;
+        }
+
         GlobalMessageTransmitter.broadcast({ [GlobalTransmitterEvent.NOTICE]: noticePayload });
     };
 
@@ -145,16 +151,23 @@ export class PlaceBetHandler {
 
         this.clearRetryInterval();
         GlobalMessageTransmitter.broadcast({ [GlobalTransmitterEvent.CLOSE_DIALOG]: {} });
+        
         if (endBet === -1) {
             !apiError && this.handleBetFailed({ notice, kickedOut }, signOut);
         } else {
+            if (this.lastBetAmount && this.props.adjustUIBalance) {
+                this.props.adjustUIBalance(-this.lastBetAmount);
+            }
+            
             enableSound && playPlaceBetSound();
             this.placeBetDispatch({
                 type: PlaceBetEventActionType.OWN_BETS,
                 payload: { ownBets },
             });
+            
+            this.lastBetAmount = 0;
+            
             gameMessageHandler.broadcastGameEvent({ [messageEventType.UPDATE_PLAYER_BALANCE]: {} });
-
         }
 
         this.placeBetDispatch({
@@ -285,9 +298,14 @@ export class PlaceBetHandler {
 
     sendConfirmBet(notConfirmOwnBets: object) {
         const betChoices = {};
+        let totalBetAmount = 0;
+        
         Object.entries(notConfirmOwnBets).forEach(([key, value]) => {
             betChoices[key] = value;
+            totalBetAmount += value as number;
         });
+
+        this.lastBetAmount = totalBetAmount;
 
         this.props.gameMessageHandler.broadcastGameEvent({
             [messageEventType.SEND_SOCKET_MESSAGE_WITH_CLIENT_SEED]: { event: "bet", data: { betChoices } },
@@ -367,6 +385,8 @@ export class PlaceBetHandler {
 
     protected sendBetMessage(betChoice: string, amount: number) {
         this.isProcessingBet = true;
+        this.lastBetAmount = amount;
+        
         this.props.gameMessageHandler.broadcastGameEvent({
             [messageEventType.SEND_SOCKET_MESSAGE_WITH_CLIENT_SEED]: {
                 event: "bet",
