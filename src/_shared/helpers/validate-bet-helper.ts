@@ -118,7 +118,7 @@ export const findHedgeBetGroup = (hedgeBetGroups: string[][], betChoice: string)
 };
 
 export const getAccountBalance = (balance: number): number => {
-    return Math.trunc(balance || 0);
+    return Math.round((balance || 0) * 100) / 100;
 };
 
 export const getMaxAvailableAmountOfChoice = (

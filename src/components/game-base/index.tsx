@@ -177,7 +177,9 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState> extend
         const currentBalance = authContext?.authorizeInfo?.user?.red || 0;
         const newBalance = Math.max(0, currentBalance + amountChange);
         
-        authContext?.setBalance(newBalance);
+        const roundedBalance = Math.round(newBalance * 100) / 100;
+        
+        authContext?.setBalance(roundedBalance);
     }
 
     getGameStateContext = () => {
