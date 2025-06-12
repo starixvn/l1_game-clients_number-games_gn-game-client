@@ -43,10 +43,11 @@ export const OwnBet: React.FC<BaseProps> = ({ tolgeeNamespace, choice, className
     };
 
     const ownBetValue = ownBet + (enableQuickBet ? 0 : notConfirmOwnBets?.[choice] ?? 0);
+    
     return (
         <>
-            {ownBetValue > 0 && ownBetUI(numberWithCommas(ownBetValue, 1))}
-            {isShowBetAnim && acceptedBets > 0 && ownBetUI(numberWithCommas(acceptedBets, 1), Styles["own-bet-anim"])}
+            {ownBetValue > 0 && ownBetUI(numberWithCommas(ownBetValue, 2))}
+            {isShowBetAnim && acceptedBets > 0 && ownBetUI(numberWithCommas(acceptedBets, 2), Styles["own-bet-anim"])}
         </>
     );
 };

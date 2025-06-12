@@ -15,7 +15,7 @@ const convertStakeToString = (amount: number, rate: number) => {
         if (total >= 10_000) {
             return (total / 1_000).toLocaleString(locale, options) + "K";
         }
-        if (total < 0.1) {
+        if (total < 0.01) {
             return "0";
         }
         return total.toLocaleString(locale, options);
