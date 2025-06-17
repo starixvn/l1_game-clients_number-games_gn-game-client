@@ -12,6 +12,10 @@ const numberWithCommas = (number: number, toFixed = 2, minimumFractionDigits = 0
     return number.toLocaleString("en-US", options);
 };
 
+export const roundToTwoDecimals = (number: number) => {
+    return Math.round((number || 0) * 100) / 100;
+};
+
 const randomInteger = (min: number, max: number) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 };

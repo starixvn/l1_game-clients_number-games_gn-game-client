@@ -3,6 +3,7 @@ import { confirmBet } from "../constants";
 import { NoticeErrorCode } from "../constants/error-code-dictionary";
 import { GameStateContextModel } from "../react-contexts/game-state-context/game-state-context-model";
 import { PlaceBetContextModel } from "../react-contexts/game-state-context/place-bet-context/place-bet-context-model";
+import { roundToTwoDecimals } from "./number-helper";
 
 export interface IAvailableSuggestBetAmount {
     suggestAmount?: number;
@@ -118,7 +119,7 @@ export const findHedgeBetGroup = (hedgeBetGroups: string[][], betChoice: string)
 };
 
 export const getAccountBalance = (balance: number): number => {
-    return Math.round((balance || 0) * 100) / 100;
+    return roundToTwoDecimals(balance);
 };
 
 export const getMaxAvailableAmountOfChoice = (

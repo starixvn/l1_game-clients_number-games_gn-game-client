@@ -1211,4 +1211,180 @@ describe("placeBet", () => {
             });
         });
     });
+
+    describe("sendConfirmBet calculation", () => {
+        beforeEach(() => {
+            jest.clearAllMocks();
+            placeBetHandler = new PlaceBetHandler(placeBetHandlerProps);
+            placeBetHandler.setPlaceBetDispatch(placeBetDispatch);
+        });
+
+        it("should correctly calculate betChoices and totalBetAmount with single bet", () => {
+            // Arrange
+            const notConfirmOwnBets = { player: 100 };
+            const broadcastGameEventSpy = jest.spyOn(gameMessageHandler, "broadcastGameEvent");
+
+            // Act
+            placeBetHandler.sendConfirmBet(notConfirmOwnBets);
+
+            // Assert
+            expect(broadcastGameEventSpy).toHaveBeenCalledWith({
+                "send-socket-message-with-client-seed": {
+                    event: "bet",
+                    data: { betChoices: { player: 100 } }
+                }
+            });
+            expect((placeBetHandler as any).lastBetAmount).toBe(100);
+        });
+
+        it("should correctly calculate betChoices and totalBetAmount with multiple bets", () => {
+            // Arrange
+            const notConfirmOwnBets = {
+                player: 100,
+                banker: 200,
+                tie: 50
+            };
+            const broadcastGameEventSpy = jest.spyOn(gameMessageHandler, "broadcastGameEvent");
+
+            // Act
+            placeBetHandler.sendConfirmBet(notConfirmOwnBets);
+
+            // Assert
+            expect(broadcastGameEventSpy).toHaveBeenCalledWith({
+                "send-socket-message-with-client-seed": {
+                    event: "bet",
+                    data: { betChoices: { player: 100, banker: 200, tie: 50 } }
+                }
+            });
+            expect((placeBetHandler as any).lastBetAmount).toBe(350);
+        });
+
+        it("should handle empty notConfirmOwnBets object", () => {
+            // Arrange
+            const notConfirmOwnBets = {};
+            const broadcastGameEventSpy = jest.spyOn(gameMessageHandler, "broadcastGameEvent");
+
+            // Act
+            placeBetHandler.sendConfirmBet(notConfirmOwnBets);
+
+            // Assert
+            expect(broadcastGameEventSpy).toHaveBeenCalledWith({
+                "send-socket-message-with-client-seed": {
+                    event: "bet",
+                    data: { betChoices: {} }
+                }
+            });
+            expect((placeBetHandler as any).lastBetAmount).toBe(0);
+        });
+
+        it("should handle zero amount bets correctly", () => {
+            // Arrange
+            const notConfirmOwnBets = {
+                player: 0,
+                banker: 100,
+                tie: 0
+            };
+            const broadcastGameEventSpy = jest.spyOn(gameMessageHandler, "broadcastGameEvent");
+
+            // Act
+            placeBetHandler.sendConfirmBet(notConfirmOwnBets);
+
+            // Assert
+            expect(broadcastGameEventSpy).toHaveBeenCalledWith({
+                "send-socket-message-with-client-seed": {
+                    event: "bet",
+                    data: { betChoices: { player: 0, banker: 100, tie: 0 } }
+                }
+            });
+            expect((placeBetHandler as any).lastBetAmount).toBe(100);
+        });
+
+        it("should handle decimal amounts correctly", () => {
+            // Arrange
+            const notConfirmOwnBets = {
+                player: 50.5,
+                banker: 100.25,
+                tie: 25.75
+            };
+            const broadcastGameEventSpy = jest.spyOn(gameMessageHandler, "broadcastGameEvent");
+
+            // Act
+            placeBetHandler.sendConfirmBet(notConfirmOwnBets);
+
+            // Assert
+            expect(broadcastGameEventSpy).toHaveBeenCalledWith({
+                "send-socket-message-with-client-seed": {
+                    event: "bet",
+                    data: { betChoices: { player: 50.5, banker: 100.25, tie: 25.75 } }
+                }
+            });
+            expect((placeBetHandler as any).lastBetAmount).toBe(176.5);
+        });
+
+        it("should handle large bet amounts correctly", () => {
+            // Arrange
+            const notConfirmOwnBets = {
+                player: 10000,
+                banker: 50000,
+                tie: 25000,
+                over: 15000
+            };
+            const broadcastGameEventSpy = jest.spyOn(gameMessageHandler, "broadcastGameEvent");
+
+            // Act
+            placeBetHandler.sendConfirmBet(notConfirmOwnBets);
+
+            // Assert
+            expect(broadcastGameEventSpy).toHaveBeenCalledWith({
+                "send-socket-message-with-client-seed": {
+                    event: "bet",
+                    data: { betChoices: { player: 10000, banker: 50000, tie: 25000, over: 15000 } }
+                }
+            });
+            expect((placeBetHandler as any).lastBetAmount).toBe(100000);
+        });
+
+        it("should preserve all bet choices in the betChoices object", () => {
+            // Arrange
+            const notConfirmOwnBets = {
+                choice1: 100,
+                choice2: 200,
+                choice3: 300,
+                choice4: 400,
+                choice5: 500
+            };
+            const broadcastGameEventSpy = jest.spyOn(gameMessageHandler, "broadcastGameEvent");
+
+            // Act
+            placeBetHandler.sendConfirmBet(notConfirmOwnBets);
+
+            // Assert
+            const expectedBetChoices = {
+                choice1: 100,
+                choice2: 200,
+                choice3: 300,
+                choice4: 400,
+                choice5: 500
+            };
+            expect(broadcastGameEventSpy).toHaveBeenCalledWith({
+                "send-socket-message-with-client-seed": {
+                    event: "bet",
+                    data: { betChoices: expectedBetChoices }
+                }
+            });
+            expect((placeBetHandler as any).lastBetAmount).toBe(1500);
+        });
+
+        it("should not modify the original notConfirmOwnBets object", () => {
+            // Arrange
+            const notConfirmOwnBets = { player: 100, banker: 200 };
+            const originalNotConfirmOwnBets = { ...notConfirmOwnBets };
+
+            // Act
+            placeBetHandler.sendConfirmBet(notConfirmOwnBets);
+
+            // Assert
+            expect(notConfirmOwnBets).toEqual(originalNotConfirmOwnBets);
+        });
+    });
 });

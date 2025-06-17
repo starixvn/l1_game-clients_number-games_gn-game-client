@@ -50,6 +50,7 @@ import { PFWrapper } from "./handlers/pf-wrapper/pf-wrapper";
 import { PlaceBetHandlerWrapper } from "./handlers/place-bet-wrapper/place-bet-handler-wrapper";
 import { GameBaseHandlers, GameBaseProps, GameBaseState, RoundState } from "./type";
 import PreloadResources from "../../_shared/helpers/preload-resources";
+import { roundToTwoDecimals } from "../../_shared/helpers/number-helper";
 
 abstract class GameBase<P extends GameBaseProps, S extends GameBaseState> extends React.PureComponent<P, S> {
     protected socket: Socket;
@@ -177,7 +178,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState> extend
         const currentBalance = authContext?.authorizeInfo?.user?.red || 0;
         const newBalance = Math.max(0, currentBalance + amountChange);
         
-        const roundedBalance = Math.round(newBalance * 100) / 100;
+        const roundedBalance = roundToTwoDecimals(newBalance);
         
         authContext?.setBalance(roundedBalance);
     }
