@@ -309,7 +309,7 @@ const SplashScreen: React.FC = () => {
     }
 
     const logoProps = {
-        postfix: isThirdParty ? `-saba-play` : ``,
+        postfix: isThirdParty ? `-saba-play` : ``, // TODO: change postfix to new sabaplay logo
         width: isThirdParty ? 272 : 195,
         height: isThirdParty ? 100 : 162,
     };

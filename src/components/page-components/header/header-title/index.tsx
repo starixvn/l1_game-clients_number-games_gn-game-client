@@ -16,11 +16,18 @@ const HeaderTitle: React.FC<Props> = (props) => {
     const { openingGameId, isRenderGames } = props;
     const appSetting = gameSettings[openingGameId];
     const tolgeeNamespace = appSetting ? appSetting["tolgeeNamespace"] : ResourceTypes.SABA_NUMBER;
-    const { isDirectMode } = useURLContext();
+    const { isDirectMode, isThirdParty } = useURLContext();
 
     const { t } = useTranslator([tolgeeNamespace]);
 
-    const logo = !isDirectMode ? <Image src={`/static/images/logo-site.svg`} height={26} width={110} className="logo" alt="Logo" /> : <></>;
+    const logo = isThirdParty ? (
+        <Image src={`/static/images/arrow-left.svg`} height={26} width={110} className="logo" alt="SabaPlay Logo" /> // TODO: change logo to new sabaplay logo
+    ) : !isDirectMode ? (
+        <Image src={`/static/images/logo-site.svg`} height={26} width={110} className="logo" alt="Logo" />
+    ) : (
+        <></>
+    );
+
     const headerTitle = isRenderGames ? (
         <div className="text-animation">{t(`${tolgeeNamespace}.game_name_${openingGameId}`).toUpperCase()}</div>
     ) : (
