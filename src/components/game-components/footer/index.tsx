@@ -6,9 +6,13 @@ const Footer = () => {
     const { t } = useTranslator();
     const { isThirdParty } = useURLContext();
 
+    if (isThirdParty) {
+        return null;
+    }
+
     return (
         <h3 className="text-center copyright">
-            {t(`${ResourceTypes.SABA_NUMBER}.copyright${isThirdParty ? "_sabaplay" : ""}`, {
+            {t(`${ResourceTypes.SABA_NUMBER}.copyright`, {
                 year: new Date().getFullYear(),
             }).replaceTolgeeFormat()}
         </h3>
