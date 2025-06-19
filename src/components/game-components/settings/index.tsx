@@ -10,9 +10,16 @@ export function Settings() {
     const clickSound = useClickSound();
     const { backToRedirectUrl, isDirectMode, redirectUrl } = useContext(URLContext);
 
+    console.log("[Settings] Settings component rendered");
+    console.log("[Settings] isDirectMode:", isDirectMode);
+    console.log("[Settings] redirectUrl:", redirectUrl);
+
     const handleBackToLobbyOnclick = () => {
+        console.log("[Settings] handleBackToLobbyOnclick called");
+        console.log("[Settings] Setting gameId to 0 for lobby redirect");
         clickSound();
         updateURLContext({ gameId: 0 });
+        console.log("[Settings] Calling backToRedirectUrl with:", redirectUrl);
         backToRedirectUrl(redirectUrl);
     };
 

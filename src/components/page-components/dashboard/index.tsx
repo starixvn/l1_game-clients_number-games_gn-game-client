@@ -56,6 +56,9 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
     ) {
         super(props);
 
+        console.log("[Dashboard] Constructor - queryGame from props:", this.props.queryGame);
+        console.log("[Dashboard] Constructor - directMode:", this.props.directMode);
+
         this.state = {
             userStakeLevel: { minBet: 0, maxBet: 0 },
             authorizeInfo: this.props.authorizeResponse,
@@ -124,6 +127,7 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
     }
 
     resetGameIdDashboardEvent() {
+        console.log("[Dashboard] resetGameIdDashboardEvent called - setting openGameId to 0");
         this.setState({ openGameId: 0 });
         this.forceUpdate();
     }
@@ -142,6 +146,7 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
     }
 
     async componentDidMount() {
+        console.log("[Dashboard] componentDidMount called");
         const { dashBoardHeight } = this.state;
 
         const zoomGame = +getComputedStyle(document.getElementById("dashboard")).getPropertyValue("--zoom-game");
@@ -159,6 +164,7 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
         );
 
         if (this.dashboardHandler.checkIsNotOfferGame()) {
+            console.log("[Dashboard] No game offer available");
             this.setState({
                 apiError: {
                     message: ErrorNoGameOffer,
@@ -176,7 +182,11 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
         }
 
         const { queryGame } = this.props;
-        queryGame && this.openGame(queryGame);
+        console.log("[Dashboard] componentDidMount - queryGame:", queryGame);
+        if (queryGame) {
+            console.log("[Dashboard] componentDidMount - opening game with queryGame:", queryGame);
+            this.openGame(queryGame);
+        }
     }
 
     private preventZoomBehavior(event: TouchEvent) {
@@ -212,8 +222,10 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
     }
 
     openGame(gameId: number) {
+        console.log("[Dashboard] openGame called with gameId:", gameId);
         this.setState({ queryGame: gameId, openGameId: gameId });
         updateURLContext({ gameId });
+        console.log("[Dashboard] openGame - updated URL context with gameId:", gameId);
     }
 
     renderGames() {
@@ -235,17 +247,22 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
     }
 
     openGameFromLobby(gameId: number) {
+        console.log("[Dashboard] openGameFromLobby called with gameId:", gameId);
+        console.log("[Dashboard] openGameFromLobby - current openGameId:", this.state.openGameId);
         updateURLContext({ backToLobby: true, gameId: gameId });
         window.scrollTo(0, 0);
         if (this.state.openGameId !== gameId) {
+            console.log("[Dashboard] openGameFromLobby - removing game transmitter for gameId:", gameId);
             this.dashboardHandler.removeGameTransmitter(gameId);
             this.setState({ openGameId: gameId });
         } else {
+            console.log("[Dashboard] openGameFromLobby - same gameId, forcing update");
             this.forceUpdate();
         }
     }
 
     renderLobby() {
+        console.log("[Dashboard] renderLobby called");
         updateURLContext({ backToLobby: true });
 
         return (
@@ -264,11 +281,17 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
     }
 
     renderDashBoard() {
+        console.log("[Dashboard] renderDashBoard called");
         window.history.pushState(null, null, "/");
 
         const { isShowErrorModal, authorizeInfo, isBlockUI, isChangedGame, isChangePrevGame, openGameId } = this.state;
         const offerGames = this.dashboardHandler.getOfferGamesIds();
         const isRenderGames = this.dashboardHandler.shouldRenderGames(offerGames, openGameId);
+
+        console.log("[Dashboard] renderDashBoard - openGameId:", openGameId);
+        console.log("[Dashboard] renderDashBoard - isRenderGames:", isRenderGames);
+        console.log("[Dashboard] renderDashBoard - offerGames:", offerGames);
+
         const allowSwipeGameOndDesktop = !this.props.directMode && !isMobileOnly && isRenderGames;
 
         const allowSwipeGameOndDesktopStyle = isChangePrevGame ? Styles["slide-left"] : Styles["slide-right"];
@@ -291,9 +314,8 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
                 <SettingContextProvider>
                     {allowSwipeGameOndDesktop && <ButtonSwipe isPrev={true} swiper={this.swiperRef} />}
                     <div
-                        className={`${Styles["dashboard"]} ${changeGameStyle} ${!isRenderGames ? "no-scroll" : ""} ${
-                            isMobileOnly ? Styles["hidden-scrollbar"] : ""
-                        }`}
+                        className={`${Styles["dashboard"]} ${changeGameStyle} ${!isRenderGames ? "no-scroll" : ""} ${isMobileOnly ? Styles["hidden-scrollbar"] : ""
+                            }`}
                         id={"dashboard"}
                         style={this.setDashBoardStyle(isRenderGames)}
                     >

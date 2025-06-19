@@ -119,10 +119,12 @@ const SplashScreen: React.FC = () => {
     const [isDoneLoadConfig, setIsDoneLoadConfig] = useState<boolean>(false);
 
     const signOut = () => {
+        console.log("[SplashScreen] signOut called - redirecting to timeout");
         router.push("timeout");
     };
 
     const handleUM = (session: SSOResponse) => {
+        console.log("[SplashScreen] handleUM called - setting UM session");
         StorageHelper.set(localStorageKeys.umInfo, session.umInfo);
         player.session = session;
         setIsUm(true);
@@ -136,11 +138,14 @@ const SplashScreen: React.FC = () => {
     };
 
     const loadLobbyConfigs = async (session: SSOResponse, authorizeInfo: any) => {
+        console.log("[SplashScreen] loadLobbyConfigs called");
         const lobby = await getLobbyConfigs(session);
         if (!lobby || Object.keys(lobby.lobbyConfigs).length === 0) {
+            console.log("[SplashScreen] No lobby configs found");
             return null;
         }
         if (lobby?.lobbyConfigs) {
+            console.log("[SplashScreen] Setting lobby configs:", Object.keys(lobby.lobbyConfigs));
             setLobbyConfigs(lobby.lobbyConfigs);
             handleBannerOffer(authorizeInfo, lobby.lobbyConfigs, setBannerId);
             getAndHandleGameOfferIds(authorizeInfo, lobby.lobbyConfigs, setGameOfferIds);
@@ -151,15 +156,22 @@ const SplashScreen: React.FC = () => {
     useEffect(() => {
         let authorizeInfo;
         const handleInitialization = async () => {
+            console.log("[SplashScreen] handleInitialization started");
+            console.log("[SplashScreen] Initial gameId from URL:", gameId);
+            console.log("[SplashScreen] isDirectMode:", isDirectMode);
+            console.log("[SplashScreen] latestGameId from storage:", latestGameId);
+
             const session = await getSession(token);
             const lang = await loadLanguage(session);
 
             if (!session || isTimeoutSession(session)) {
+                console.log("[SplashScreen] Session timeout or invalid - signing out");
                 signOut();
                 return;
             }
 
             if (session?.isUM) {
+                console.log("[SplashScreen] UM session detected");
                 handleUM(session);
                 return;
             }
@@ -168,15 +180,18 @@ const SplashScreen: React.FC = () => {
             authorizeInfo = await authorize(session);
 
             if (authorizeInfo.errorCode === "SB0002") {
+                console.log("[SplashScreen] Authorization error SB0002 - signing out");
                 signOut();
                 return;
             }
 
             if (!authorizeInfo?.authorized && isDirectMode) {
+                console.log("[SplashScreen] Not authorized in direct mode - auto creating nickname");
                 authorizeInfo = await autoCreateNickname(session, signOut);
             }
 
             if (!authorizeInfo?.authorized) {
+                console.log("[SplashScreen] Not authorized - rendering register");
                 setIsRenderRegister(true);
                 return;
             }
@@ -185,8 +200,10 @@ const SplashScreen: React.FC = () => {
 
             let toLoadGameId = gameId;
             if (!isDirectMode) {
+                console.log("[SplashScreen] Not direct mode - getting SSO redirect game ID");
                 toLoadGameId = await getSSORedirectToGameId(lobbyConfigs, authorizeInfo);
             }
+            console.log("[SplashScreen] Final toLoadGameId:", toLoadGameId);
             setCurrentGameId(toLoadGameId);
 
             if (authorizeInfo) {
@@ -205,45 +222,67 @@ const SplashScreen: React.FC = () => {
     }, []);
 
     const getSSORedirectToGameId = async (lobbyConfigs: ILobbyConfigs, authorizeInfo: AuthorizeResponse) => {
+        console.log("[SplashScreen] getSSORedirectToGameId called");
+        console.log("[SplashScreen] lobbyConfigs available:", !!lobbyConfigs);
+        console.log("[SplashScreen] authorizeInfo available:", !!authorizeInfo);
+
         if (!lobbyConfigs || !authorizeInfo) {
+            console.log("[SplashScreen] Missing lobbyConfigs or authorizeInfo - returning 0");
             return 0;
         }
         let toLoadGameId = latestGameId;
+        console.log("[SplashScreen] Starting with latestGameId:", toLoadGameId);
+
         const enabledRenderGameSettings = getEnabledRenderGameSettings(lobbyConfigs, authorizeInfo);
+        console.log("[SplashScreen] Enabled game settings count:", enabledRenderGameSettings.length);
+
         if (firstSSOToLobby && enabledRenderGameSettings.length > 0) {
+            console.log("[SplashScreen] firstSSOToLobby is true");
             let isFoundToLoadGame = false;
             toLoadGameId !== 0 && (isFoundToLoadGame = await isFoundToLoadGameId(enabledRenderGameSettings, toLoadGameId));
+            console.log("[SplashScreen] isFoundToLoadGame:", isFoundToLoadGame);
 
             if (!isFoundToLoadGame) {
+                console.log("[SplashScreen] Game not found - searching for available service");
                 for (const gameSetting of enabledRenderGameSettings) {
                     const isServiceAvailable = await getServiceStatusIsAvailable(gameSetting);
+                    console.log("[SplashScreen] Checking game", gameSetting.id, "service available:", isServiceAvailable);
                     if (isServiceAvailable) {
                         toLoadGameId = gameSetting.id;
+                        console.log("[SplashScreen] Found available game:", toLoadGameId);
                         break;
                     }
                 }
             }
         }
+        console.log("[SplashScreen] Final toLoadGameId from SSO redirect:", toLoadGameId);
         return toLoadGameId;
     };
 
     const isFoundToLoadGameId = async (enabledRenderGameSettings: GameSettings[], toLoadGameId: number) => {
+        console.log("[SplashScreen] isFoundToLoadGameId checking for gameId:", toLoadGameId);
         let isFoundToLoadGameId = false;
         const gameSetting = enabledRenderGameSettings.find((gameSetting) => gameSetting.id === toLoadGameId);
         if (gameSetting) {
+            console.log("[SplashScreen] Found game setting for ID:", toLoadGameId);
             const isServiceAvailable = await getServiceStatusIsAvailable(gameSetting);
+            console.log("[SplashScreen] Service available for game", toLoadGameId, ":", isServiceAvailable);
             if (isServiceAvailable) {
                 isFoundToLoadGameId = true;
             }
+        } else {
+            console.log("[SplashScreen] Game setting not found for ID:", toLoadGameId);
         }
         return isFoundToLoadGameId;
     };
 
     if (player?.session?.isUM || isUm) {
+        console.log("[SplashScreen] Rendering UM page");
         return <UMPage />;
     }
 
     if (isRenderDashboard) {
+        console.log("[SplashScreen] Rendering Dashboard with gameId:", currentGameId < 0 ? gameId : currentGameId);
         document.body.classList.add("galaxy-bg");
         return (
             <Dashboard
@@ -259,6 +298,7 @@ const SplashScreen: React.FC = () => {
     }
 
     if (isRenderRegister) {
+        console.log("[SplashScreen] Rendering Register with gameId:", gameId);
         return <Register session={currentSession} isUm={isUm} isDirectMode={isDirectMode} gameId={gameId} />;
     }
 

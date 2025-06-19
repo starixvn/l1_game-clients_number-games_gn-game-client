@@ -19,20 +19,31 @@ type Props = {
 };
 
 export const Lobby: React.FC<Props> = ({ openGame, lobbyConfigs, gameTransmitters }) => {
+    console.log("[Lobby] Lobby component rendered");
+    console.log("[Lobby] lobbyConfigs available:", !!lobbyConfigs);
+    console.log("[Lobby] gameTransmitters count:", Object.keys(gameTransmitters || {}).length);
+
     AnalyticsHelper.trackLobby();
 
     useEffect(() => {
+        console.log("[Lobby] useEffect - initializing lobby");
         StorageHelper.set(`${localStorageKeys.showPFSetting}`, "");
         GlobalMessageTransmitter.broadcast({ [GlobalTransmitterEvent.OPEN_GAME_ID]: 0 });
+        console.log("[Lobby] Broadcast OPEN_GAME_ID: 0");
     }, []);
+
+    const handleOpenGame = (gameId: number) => {
+        console.log("[Lobby] handleOpenGame called with gameId:", gameId);
+        openGame(gameId);
+    };
 
     return (
         <div className={Styles["lobby-container"]}>
             <div>
-                <Banner openGame={openGame} lobbyConfigs={lobbyConfigs} />
+                <Banner openGame={handleOpenGame} lobbyConfigs={lobbyConfigs} />
             </div>
             <div>
-                <LobbyLayout lobbyConfigs={lobbyConfigs} openGame={openGame} gameTransmitters={gameTransmitters} />
+                <LobbyLayout lobbyConfigs={lobbyConfigs} openGame={handleOpenGame} gameTransmitters={gameTransmitters} />
                 <ChangeAvatar />
             </div>
         </div>
