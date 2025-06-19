@@ -33,6 +33,7 @@ export type RegisterProps = {
     session: SSOResponse;
     isDirectMode: boolean;
     gameId: number;
+    firstSSOToLobby?: boolean;
 } & TranslatorProps;
 
 export type RegisterState = {
@@ -72,6 +73,7 @@ export class Register extends PureComponent<RegisterProps, RegisterState> {
         this.state = { ...Register.defaultState, toLoadGameId: props.gameId };
         console.log("[Register] Constructor - initial gameId from props:", props.gameId);
         console.log("[Register] Constructor - isDirectMode:", props.isDirectMode);
+        console.log("[Register] Constructor - firstSSOToLobby:", props.firstSSOToLobby);
     }
 
     toggleAvatarGallery() {
@@ -113,7 +115,7 @@ export class Register extends PureComponent<RegisterProps, RegisterState> {
         this.updateClickRegister(true);
 
         const { name, avatar } = this.state;
-        const { t, session } = this.props;
+        const { t, session, firstSSOToLobby } = this.props;
         let authorizeResponse;
 
         if (!NameGenerator.validateName(name)) {
@@ -154,7 +156,8 @@ export class Register extends PureComponent<RegisterProps, RegisterState> {
 
     updateToLoadGameId = async (authorizeResponse: AuthorizeResponse) => {
         console.log("[Register] updateToLoadGameId called");
-        const { session } = this.props;
+        const { session, firstSSOToLobby } = this.props;
+        console.log("[Register] firstSSOToLobby from props:", firstSSOToLobby);
 
         const lobby = await getLobbyConfigs(session);
         console.log("[Register] Lobby configs retrieved:", !!lobby?.lobbyConfigs);
@@ -162,8 +165,12 @@ export class Register extends PureComponent<RegisterProps, RegisterState> {
         const enabledRenderGameSettings = getEnabledRenderGameSettings(lobby.lobbyConfigs, authorizeResponse);
         console.log("[Register] Enabled game settings count:", enabledRenderGameSettings.length);
 
-        if (enabledRenderGameSettings.length > 0) {
-            console.log("[Register] Searching for available game service");
+        if (firstSSOToLobby && enabledRenderGameSettings.length > 0) {
+            console.log("[Register] firstSSOToLobby is true - redirecting to lobby (gameId = 0)");
+            // Business requirement: Redirect to lobby instead of specific game
+            this.setState({ toLoadGameId: 0 });
+        } else if (enabledRenderGameSettings.length > 0) {
+            console.log("[Register] firstSSOToLobby is false - searching for available game service");
             for (const gameSetting of enabledRenderGameSettings) {
                 const isServiceAvailable = await getServiceStatusIsAvailable(gameSetting);
                 console.log("[Register] Checking game", gameSetting.id, "service available:", isServiceAvailable);
@@ -206,7 +213,7 @@ export class Register extends PureComponent<RegisterProps, RegisterState> {
             isUm,
             isClickRegister,
         } = this.state;
-        const { t, session, isDirectMode } = this.props;
+        const { t, session, isDirectMode, firstSSOToLobby } = this.props;
 
         document.body.classList.add("galaxy-bg", "register");
 

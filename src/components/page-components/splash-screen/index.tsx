@@ -237,20 +237,26 @@ const SplashScreen: React.FC = () => {
         console.log("[SplashScreen] Enabled game settings count:", enabledRenderGameSettings.length);
 
         if (firstSSOToLobby && enabledRenderGameSettings.length > 0) {
-            console.log("[SplashScreen] firstSSOToLobby is true");
-            let isFoundToLoadGame = false;
-            toLoadGameId !== 0 && (isFoundToLoadGame = await isFoundToLoadGameId(enabledRenderGameSettings, toLoadGameId));
-            console.log("[SplashScreen] isFoundToLoadGame:", isFoundToLoadGame);
+            console.log("[SplashScreen] firstSSOToLobby is true - redirecting to lobby (gameId = 0)");
+            // Business requirement: Redirect to lobby instead of specific game
+            toLoadGameId = 0;
+        } else if (!firstSSOToLobby) {
+            console.log("[SplashScreen] firstSSOToLobby is false - using latestGameId");
+            // Only check for available game service if not firstSSOToLobby
+            if (toLoadGameId !== 0) {
+                const isFoundToLoadGame = await isFoundToLoadGameId(enabledRenderGameSettings, toLoadGameId);
+                console.log("[SplashScreen] isFoundToLoadGame:", isFoundToLoadGame);
 
-            if (!isFoundToLoadGame) {
-                console.log("[SplashScreen] Game not found - searching for available service");
-                for (const gameSetting of enabledRenderGameSettings) {
-                    const isServiceAvailable = await getServiceStatusIsAvailable(gameSetting);
-                    console.log("[SplashScreen] Checking game", gameSetting.id, "service available:", isServiceAvailable);
-                    if (isServiceAvailable) {
-                        toLoadGameId = gameSetting.id;
-                        console.log("[SplashScreen] Found available game:", toLoadGameId);
-                        break;
+                if (!isFoundToLoadGame) {
+                    console.log("[SplashScreen] Game not found - searching for available service");
+                    for (const gameSetting of enabledRenderGameSettings) {
+                        const isServiceAvailable = await getServiceStatusIsAvailable(gameSetting);
+                        console.log("[SplashScreen] Checking game", gameSetting.id, "service available:", isServiceAvailable);
+                        if (isServiceAvailable) {
+                            toLoadGameId = gameSetting.id;
+                            console.log("[SplashScreen] Found available game:", toLoadGameId);
+                            break;
+                        }
                     }
                 }
             }
@@ -299,7 +305,7 @@ const SplashScreen: React.FC = () => {
 
     if (isRenderRegister) {
         console.log("[SplashScreen] Rendering Register with gameId:", gameId);
-        return <Register session={currentSession} isUm={isUm} isDirectMode={isDirectMode} gameId={gameId} />;
+        return <Register session={currentSession} isUm={isUm} isDirectMode={isDirectMode} gameId={gameId} firstSSOToLobby={firstSSOToLobby} />;
     }
 
     const logoProps = {
