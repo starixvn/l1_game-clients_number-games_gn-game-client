@@ -305,13 +305,13 @@ const SplashScreen: React.FC = () => {
 
     if (isRenderRegister) {
         console.log("[SplashScreen] Rendering Register with gameId:", gameId);
-        return <Register session={currentSession} isUm={isUm} isDirectMode={isDirectMode} gameId={gameId} firstSSOToLobby={firstSSOToLobby} />;
+        return <Register session={currentSession} isUm={isUm} isDirectMode={isDirectMode} gameId={gameId} firstSSOToLobby={firstSSOToLobby} isThirdParty={isThirdParty} />;
     }
 
     const logoProps = {
-        postfix: isThirdParty ? `-saba-play` : ``, // TODO: change postfix to new sabaplay logo
-        width: isThirdParty ? 272 : 195,
-        height: isThirdParty ? 100 : 162,
+        postfix: isThirdParty ? `-sabaplay-number-games` : ``,
+        width: isThirdParty ? 219 : 195,
+        height: isThirdParty ? 180 : 162,
     };
     return (
         <>
@@ -327,7 +327,9 @@ const SplashScreen: React.FC = () => {
                         />
                     </div>
 
-                    <div className={Styles["slogan"]}>{locale && t("SabaNumber.splashscreen_slogan")}</div>
+                    {!isThirdParty ? (
+                        <div className={Styles["slogan"]}>{locale && t("SabaNumber.splashscreen_slogan")}</div>
+                    ) : null}
                 </div>
 
                 <div className={"loading"}>

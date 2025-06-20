@@ -21,7 +21,7 @@ const HeaderTitle: React.FC<Props> = (props) => {
     const { t } = useTranslator([tolgeeNamespace]);
 
     const logo = isThirdParty ? (
-        <Image src={`/static/images/arrow-left.svg`} height={26} width={110} className="logo" alt="SabaPlay Logo" /> // TODO: change logo to new sabaplay logo
+        <Image src={`/static/images/logo-sabaplay-number-games.svg`} height={32} width={114} className="logo" alt="SABAPLAY Number Games Logo" />
     ) : !isDirectMode ? (
         <Image src={`/static/images/logo-site.svg`} height={26} width={110} className="logo" alt="Logo" />
     ) : (

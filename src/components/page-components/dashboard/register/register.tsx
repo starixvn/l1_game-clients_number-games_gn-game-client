@@ -34,6 +34,7 @@ export type RegisterProps = {
     isDirectMode: boolean;
     gameId: number;
     firstSSOToLobby?: boolean;
+    isThirdParty?: boolean;
 } & TranslatorProps;
 
 export type RegisterState = {
@@ -214,7 +215,7 @@ export class Register extends PureComponent<RegisterProps, RegisterState> {
             isUm,
             isClickRegister,
         } = this.state;
-        const { t, session, isDirectMode, firstSSOToLobby } = this.props;
+        const { t, session, isDirectMode, firstSSOToLobby, isThirdParty } = this.props;
 
         console.log("[Register] Render - isDonePreloadResource:", isDonePreloadResource);
         console.log("[Register] Render - isTriggerPreloadResources:", isTriggerPreloadResources);
@@ -248,7 +249,11 @@ export class Register extends PureComponent<RegisterProps, RegisterState> {
             <FirstLoginContainer>
                 <div className={styles.welcome}>
                     <TextBlock>{t("SabaNumber.message_welcome")}</TextBlock>
-                    <h1 className={styles["welcom-numbergame"]}>{t("SabaNumber.message_welcome_numbergame")}</h1>
+                    {!isThirdParty ? (
+                        <h1 className={styles["welcom-numbergame"]}>{t("SabaNumber.message_welcome_numbergame")}</h1>
+                    ) : (
+                        <h1 className={styles["welcom-numbergame"]}>{t("SabaNumber.message_welcome_numbergame_sabaplay")}</h1>
+                    )}
                 </div>
 
                 <ProfilePicture avatarId={avatar} isEditable={true} onClick={this.toggleAvatarGallery.bind(this)} />
