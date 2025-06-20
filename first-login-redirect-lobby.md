@@ -121,13 +121,21 @@ flowchart TD
     I -->|Yes| J[Keep Original gameId]
     I -->|No| K[Update toLoadGameId]
     K --> L[Get Lobby Configs]
-    L --> M[Find Available Game Service]
-    M --> N[Set toLoadGameId]
+    L --> M{firstSSOToLobby?}
+    M -->|Yes| N[Set toLoadGameId = 0]
+    M -->|No| O[Find Available Game Service]
+    O --> P[Set toLoadGameId to Available Game]
 
-    J --> O[Trigger Preload]
-    N --> O
-    O --> P[Preload Resources]
-    P --> Q[Render Dashboard]
+    J --> Q[Trigger Preload]
+    N --> Q
+    P --> Q
+    Q --> R[Preload Resources]
+    R --> S{gameId = 0?}
+    S -->|Yes| T[PreloadResourceRegister Calls updateStatePreloadResource]
+    S -->|No| U[PreloadResources Component Handles Preload]
+    T --> V[Set isDonePreloadResource = true]
+    U --> V
+    V --> W[Render Dashboard]
 ```
 
 ## 5. Dashboard Component Flow
@@ -243,7 +251,74 @@ flowchart TD
 -   **Not Authorized + Direct Mode**: Auto-create nickname
 -   **Not Authorized + Non-Direct Mode**: Show registration
 
-## 11. Console Log Analysis Points
+## 11. Bug Fixes and Implementation Details
+
+### Register Success Flow Fix (Lobby Version)
+
+#### Problem:
+
+When `firstSSOToLobby = true`, the Register component would get stuck after successful registration and never render the Dashboard.
+
+#### Root Cause:
+
+The `PreloadResourceRegister` component had a logic flaw where it would return an empty fragment `<></>` when `gameId = 0` (lobby case) and `isDirectMode = false`, preventing `updateStatePreloadResource()` from being called.
+
+#### Original Logic:
+
+```typescript
+return useMemo(() => {
+    if (!isDirectMode && gameId > 0) {
+        return <PreloadResources ... />;
+    }
+    return isDirectMode ? (
+        <PreloadResources ... />
+    ) : (
+        <></>  // Problem: No updateStatePreloadResource call
+    );
+}, [gameId]);
+```
+
+#### Fix Implementation:
+
+Added a new `useEffect` to handle the lobby case specifically:
+
+```typescript
+useEffect(() => {
+    if (!isDirectMode && gameId === 0) {
+        console.log("[PreloadResourceRegister] Lobby case (gameId = 0) - calling updateStatePreloadResource");
+        const timer = setTimeout(() => {
+            updateStatePreloadResource();
+        }, 100);
+        return () => clearTimeout(timer);
+    }
+}, [gameId, isDirectMode, updateStatePreloadResource]);
+```
+
+#### Dashboard Rendering Fix:
+
+Also fixed the `shouldRenderGames` method in `DashboardHandler` to properly handle `openGameId = 0`:
+
+```typescript
+shouldRenderGames = (offerGames: number[], openGameId: number) => {
+    // Fix: When openGameId is 0 (lobby), we should render lobby, not games
+    if (openGameId === 0) {
+        return false;
+    }
+    // ... rest of logic
+};
+```
+
+#### Expected Flow After Fix:
+
+1. ✅ Registration succeeds
+2. ✅ `updateToLoadGameId` sets `toLoadGameId = 0`
+3. ✅ `isTriggerPreloadResources` is set to `true`
+4. ✅ `PreloadResourceRegister` calls `updateStatePreloadResource` for lobby case
+5. ✅ `isDonePreloadResource` becomes `true`
+6. ✅ Register component renders Dashboard with `queryGame = 0`
+7. ✅ Dashboard renders lobby (thanks to `shouldRenderGames` fix)
+
+## 12. Console Log Analysis Points
 
 ### Key Log Patterns to Monitor:
 
@@ -261,7 +336,34 @@ flowchart TD
 -   `openGame called with gameId` - Game opening
 -   `updateURLContext called with` - Context updates
 
-## 12. Common Flow Scenarios
+### Fixed Registration Flow Logs (Lobby Version):
+
+```
+[Register] Submit called
+[Register] Creating nickname with name: User123 avatar: 4
+[Register] Authorization successful
+[Register] Not direct mode - updating toLoadGameId
+[Register] updateToLoadGameId called
+[Register] firstSSOToLobby from props: true
+[Register] Lobby configs retrieved: true
+[Register] Enabled game settings count: 1
+[Register] firstSSOToLobby is true - redirecting to lobby (gameId = 0)
+[Register] updateLobbyConfigs called
+[PreloadResourceRegister] Lobby case (gameId = 0) - calling updateStatePreloadResource
+[Register] updateStatePreloadResource called
+[Register] Setting isDonePreloadResource = true and isClickRegister = false
+[Register] Render - isDonePreloadResource: true
+[Register] Rendering Dashboard with toLoadGameId: 0
+[Dashboard] Constructor - queryGame from props: 0
+[Dashboard] componentDidMount - queryGame: 0
+[Dashboard] openGame called with gameId: 0
+[Dashboard] renderDashBoard - openGameId: 0
+[Dashboard] renderDashBoard - isRenderGames: false
+[Dashboard] renderLobby called
+[Lobby] Lobby component rendered
+```
+
+## 13. Common Flow Scenarios
 
 ### Scenario 1: Direct Game Access
 
@@ -277,14 +379,29 @@ URL: (no gameId)
 Flow: URL → SplashScreen → Dashboard → Lobby → User selects game
 ```
 
-### Scenario 3: New User Registration
+### Scenario 3: New User Registration (Game Version)
 
 ```
 URL: ?gameId=123
 Flow: URL → SplashScreen → Register → Dashboard → Game 123
 ```
 
-### Scenario 4: SSO Redirect
+### Scenario 4: New User Registration (Lobby Version) - FIXED
+
+```
+URL: ?gameId=0 (or no gameId, firstSSOToLobby=true)
+Flow: URL → SplashScreen → Register → PreloadResourceRegister → Dashboard → Lobby
+```
+
+**Key Steps in Lobby Registration Flow:**
+
+1. User submits registration form
+2. `updateToLoadGameId` sets `toLoadGameId = 0` (lobby)
+3. `PreloadResourceRegister` calls `updateStatePreloadResource` for lobby case
+4. Register component renders Dashboard with `queryGame = 0`
+5. Dashboard renders lobby (not games) due to `shouldRenderGames` fix
+
+### Scenario 5: SSO Redirect
 
 ```
 URL: (no gameId, firstSSOToLobby=true)

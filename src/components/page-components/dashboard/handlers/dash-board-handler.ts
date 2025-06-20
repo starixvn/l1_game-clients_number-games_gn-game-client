@@ -32,6 +32,10 @@ export class DashboardHandler {
         const backToLobby = urlContextModel?.backToLobby || false;
         const ssoRedirectGameId = urlContextModel?.gameId || 0;
 
+        if (openGameId === 0) {
+            return false;
+        }
+
         return (offerGames.includes(openGameId) && !backToLobby) || ssoRedirectGameId > 0;
     };
 

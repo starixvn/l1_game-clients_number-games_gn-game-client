@@ -31,6 +31,16 @@ const PreloadResourceRegister: React.FC<{
         handleAuthorizedAccess();
     }, []);
 
+    useEffect(() => {
+        if (!isDirectMode && gameId === 0) {
+            console.log("[PreloadResourceRegister] Lobby case (gameId = 0) - calling updateStatePreloadResource");
+            const timer = setTimeout(() => {
+                updateStatePreloadResource();
+            }, 100);
+            return () => clearTimeout(timer);
+        }
+    }, [gameId, isDirectMode, updateStatePreloadResource]);
+
     return useMemo(() => {
         if (!isDirectMode && gameId > 0) {
             return (

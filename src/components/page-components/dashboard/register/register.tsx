@@ -191,6 +191,7 @@ export class Register extends PureComponent<RegisterProps, RegisterState> {
 
     updateStatePreloadResource() {
         console.log("[Register] updateStatePreloadResource called");
+        console.log("[Register] Setting isDonePreloadResource = true and isClickRegister = false");
         this.setState({ isDonePreloadResource: true, isClickRegister: false });
     }
 
@@ -214,6 +215,10 @@ export class Register extends PureComponent<RegisterProps, RegisterState> {
             isClickRegister,
         } = this.state;
         const { t, session, isDirectMode, firstSSOToLobby } = this.props;
+
+        console.log("[Register] Render - isDonePreloadResource:", isDonePreloadResource);
+        console.log("[Register] Render - isTriggerPreloadResources:", isTriggerPreloadResources);
+        console.log("[Register] Render - toLoadGameId:", this.state.toLoadGameId);
 
         document.body.classList.add("galaxy-bg", "register");
 
