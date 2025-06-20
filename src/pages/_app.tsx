@@ -30,7 +30,8 @@ export const AppTittle = () => {
     return (
         <Head>
             <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-            <title>{isThirdParty ? "SABA Play" : "SABA xD"}</title>
+            <title>{isThirdParty ? "SABAPLAY NUMBER GAMES" : "SABA xD"}</title>
+            {/* TODO: Change favicon */}
             <link rel="shortcut icon" type="image/x-icon" href={`/favicons/favicon.ico?v=${buildVersion}`} sizes="any" />
             <link rel="icon" type="image/png" href={`/favicons/favicon2.png?v=${buildVersion}`} sizes="16x16" />
             <link rel="apple-touch-icon" type="image/png" href={`/favicons/favicon2.png?v=${buildVersion}`} sizes="any" />
