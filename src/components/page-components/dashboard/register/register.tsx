@@ -215,7 +215,7 @@ export class Register extends PureComponent<RegisterProps, RegisterState> {
             isUm,
             isClickRegister,
         } = this.state;
-        const { t, session, isDirectMode, firstSSOToLobby, isThirdParty, isSabaPlay } = this.props;
+        const { t, session, isDirectMode, isSabaPlay } = this.props;
 
         console.log("[Register] Render - isDonePreloadResource:", isDonePreloadResource);
         console.log("[Register] Render - isTriggerPreloadResources:", isTriggerPreloadResources);

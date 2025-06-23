@@ -10,10 +10,29 @@ jest.mock("../../../../../_shared/helpers", () => ({
     localStorageKeys: {
         url: "url",
     },
+    getLobbyGameIds: jest.fn(),
+    getOfferGamesIds: jest.fn(),
 }));
 
 jest.mock("../../../../../_shared/react-contexts", () => ({
     URLContextModel: jest.fn(),
+    loadURLContext: jest.fn(),
+}));
+
+jest.mock("../../../../../_shared/app-settings", () => ({
+    getAppSettings: jest.fn(),
+}));
+
+jest.mock("../../../lobby/lobby-socket-connection", () => ({
+    LobbySocketConnection: jest.fn().mockImplementation(() => ({
+        initLobbySocket: jest.fn(),
+        getSocket: jest.fn(),
+        getTransmitters: jest.fn(),
+        unsubscribeGame: jest.fn(),
+        signInGame: jest.fn(),
+        initGameTransmitter: jest.fn(),
+        closeSocket: jest.fn(),
+    })),
 }));
 
 describe("DashboardHandler", () => {
@@ -21,6 +40,10 @@ describe("DashboardHandler", () => {
     let mockProps: any;
 
     beforeEach(() => {
+        const { loadURLContext } = require("../../../../../_shared/react-contexts");
+        (loadURLContext as jest.Mock).mockReturnValue({ gameId: 0, isDirectMode: false });
+        const { getAppSettings } = require("../../../../../_shared/app-settings");
+        (getAppSettings as jest.Mock).mockReturnValue({ gameSettings: {} });
         mockProps = {
             authorizeResponse: {
                 user: {
