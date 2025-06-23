@@ -185,7 +185,9 @@ const SplashScreen: React.FC = () => {
                 return;
             }
 
-            if (!authorizeInfo?.authorized && isDirectMode) {
+            console.log("[SplashScreen] isDirectMode:", isDirectMode);
+            console.log("[SplashScreen] isSabaPlay:", isSabaPlay);
+            if (!authorizeInfo?.authorized && (isDirectMode || isSabaPlay)) {
                 console.log("[SplashScreen] Not authorized in direct mode - auto creating nickname");
                 authorizeInfo = await autoCreateNickname(session, signOut);
             }

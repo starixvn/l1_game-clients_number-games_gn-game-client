@@ -22,7 +22,7 @@ flowchart TD
     J -->|Yes| K["Render UM Page"]
     J -->|No| L{"User Authorized?"}
 
-    L -->|No| M{"Direct Mode?"}
+    L -->|No| M{"Direct Mode OR isSabaPlay?"}
     M -->|Yes| N["Auto Create Nickname"]
     M -->|No| O["Render Register"]
     N --> P{"Authorization Success?"}
@@ -37,8 +37,8 @@ flowchart TD
     S -->|Yes| T["Use URL gameId"]
     S -->|No| U["Get SSO Redirect GameId"]
     U --> V{"firstSSOToLobby?"}
-    V -->|Yes| W["Find Available Game Service"]
-    V -->|No| X["Use latestGameId"]
+    V -->|Yes| W["Redirect to Lobby (gameId = 0)"]
+    V -->|No| X["Use latestGameId & Check Service"]
     W --> Y["Set toLoadGameId"]
     X --> Y
     T --> Y
@@ -63,6 +63,7 @@ flowchart TD
 // From URL parameters
 gameId = Number(params.get("gameId") || 0);
 isDirectMode = !!params.get("ref");
+isSabaPlay = params.get("op") === "SP";
 redirectUrl = isDirectMode ? params.get("rurl") : "";
 ```
 
@@ -78,7 +79,7 @@ flowchart TD
     E -->|No| G["Authorize User"]
 
     G --> H{"Authorized?"}
-    H -->|No| I{"Direct Mode?"}
+    H -->|No| I{"Direct Mode OR isSabaPlay?"}
     I -->|Yes| J["Auto Create Nickname"]
     I -->|No| K["Render Register"]
     J --> L{"Success?"}
@@ -93,8 +94,8 @@ flowchart TD
     O -->|Yes| P["Use URL gameId"]
     O -->|No| Q["SSO Redirect Logic"]
     Q --> R{"firstSSOToLobby?"}
-    R -->|Yes| S["Find Available Game"]
-    R -->|No| T["Use latestGameId"]
+    R -->|Yes| S["Redirect to Lobby (gameId = 0)"]
+    R -->|No| T["Use latestGameId & Check Service"]
     S --> U["Set Current GameId"]
     T --> U
     P --> U
@@ -131,7 +132,7 @@ flowchart TD
     P --> Q
     Q --> R["Preload Resources"]
     R --> S{"gameId = 0?"}
-    S -->|Yes| T["PreloadResourceRegister Calls updateStatePreloadResource"]
+    S -->|Yes| T["PreloadResourceRegister useEffect Calls updateStatePreloadResource"]
     S -->|No| U["PreloadResources Component Handles Preload"]
     T --> V["Set isDonePreloadResource = true"]
     U --> V
@@ -234,89 +235,183 @@ flowchart TD
 -   **Direct Mode**: Uses URL gameId directly, no SSO redirect logic
 -   **Non-Direct Mode**: Applies SSO redirect logic, may change gameId
 
-### 2. firstSSOToLobby Logic:
+### 2. isSabaPlay Logic:
+
+-   **True**: Triggers auto nickname creation (same as Direct Mode)
+-   **False**: Normal registration flow
+-   **Note**: `isSabaPlay` is determined by URL parameter `op=SP`
+
+### 3. firstSSOToLobby Logic:
 
 -   **True**: Redirect to lobby (gameId = 0) - **Business Requirement**
 -   **False**: Use latestGameId from localStorage and check service availability
 
-### 3. Game Service Availability:
+### 4. Game Service Availability:
 
 -   Check each enabled game setting for service availability
 -   Select first available game if current game unavailable
 -   **Note**: Only applies when firstSSOToLobby is false
 
-### 4. Authorization Flow:
+### 5. Authorization Flow:
 
 -   **Authorized**: Proceed to game/lobby
--   **Not Authorized + Direct Mode**: Auto-create nickname
--   **Not Authorized + Non-Direct Mode**: Show registration
+-   **Not Authorized + (Direct Mode OR isSabaPlay)**: Auto-create nickname
+-   **Not Authorized + Non-Direct Mode + !isSabaPlay**: Show registration
 
-## 11. Bug Fixes and Implementation Details
+## 11. Current Implementation Details
 
-### Register Success Flow Fix (Lobby Version)
-
-#### Problem:
-
-When `firstSSOToLobby = true`, the Register component would get stuck after successful registration and never render the Dashboard.
-
-#### Root Cause:
-
-The `PreloadResourceRegister` component had a logic flaw where it would return an empty fragment `<></>` when `gameId = 0` (lobby case) and `isDirectMode = false`, preventing `updateStatePreloadResource()` from being called.
-
-#### Original Logic:
+### SplashScreen Auto Nickname Creation Logic:
 
 ```typescript
-return useMemo(() => {
-    if (!isDirectMode && gameId > 0) {
-        return <PreloadResources ... />;
-    }
-    return isDirectMode ? (
-        <PreloadResources ... />
-    ) : (
-        <></>  // Problem: No updateStatePreloadResource call
-    );
-}, [gameId]);
+console.log("[SplashScreen] isDirectMode:", isDirectMode);
+console.log("[SplashScreen] isSabaPlay:", isSabaPlay);
+if (!authorizeInfo?.authorized && (isDirectMode || isSabaPlay)) {
+    console.log("[SplashScreen] Not authorized in direct mode - auto creating nickname");
+    authorizeInfo = await autoCreateNickname(session, signOut);
+}
 ```
 
-#### Fix Implementation:
-
-Added a new `useEffect` to handle the lobby case specifically:
+### SplashScreen getSSORedirectToGameId Logic:
 
 ```typescript
-useEffect(() => {
-    if (!isDirectMode && gameId === 0) {
-        console.log("[PreloadResourceRegister] Lobby case (gameId = 0) - calling updateStatePreloadResource");
-        const timer = setTimeout(() => {
-            updateStatePreloadResource();
-        }, 100);
-        return () => clearTimeout(timer);
+const getSSORedirectToGameId = async (lobbyConfigs: ILobbyConfigs, authorizeInfo: AuthorizeResponse) => {
+    let toLoadGameId = latestGameId;
+
+    if (firstSSOToLobby && enabledRenderGameSettings.length > 0) {
+        // Business requirement: Redirect to lobby instead of specific game
+        toLoadGameId = 0;
+    } else {
+        // Only check for available game service if not firstSSOToLobby
+        if (toLoadGameId !== 0) {
+            const isFoundToLoadGame = await isFoundToLoadGameId(enabledRenderGameSettings, toLoadGameId);
+            if (!isFoundToLoadGame) {
+                // Search for available game service
+                for (const gameSetting of enabledRenderGameSettings) {
+                    const isServiceAvailable = await getServiceStatusIsAvailable(gameSetting);
+                    if (isServiceAvailable) {
+                        toLoadGameId = gameSetting.id;
+                        break;
+                    }
+                }
+            }
+        }
     }
-}, [gameId, isDirectMode, updateStatePreloadResource]);
+    return toLoadGameId;
+};
 ```
 
-#### Dashboard Rendering Fix:
+### Register updateToLoadGameId Logic:
 
-Also fixed the `shouldRenderGames` method in `DashboardHandler` to properly handle `openGameId = 0`:
+```typescript
+updateToLoadGameId = async (authorizeResponse: AuthorizeResponse) => {
+    const lobby = await getLobbyConfigs(session);
+    const enabledRenderGameSettings = getEnabledRenderGameSettings(lobby.lobbyConfigs, authorizeResponse);
+
+    if (firstSSOToLobby && enabledRenderGameSettings.length > 0) {
+        // Business requirement: Redirect to lobby instead of specific game
+        this.setState({ toLoadGameId: 0 });
+    } else if (enabledRenderGameSettings.length > 0) {
+        // Search for available game service
+        for (const gameSetting of enabledRenderGameSettings) {
+            const isServiceAvailable = await getServiceStatusIsAvailable(gameSetting);
+            if (isServiceAvailable) {
+                this.setState({ toLoadGameId: gameSetting.id });
+                break;
+            }
+        }
+    }
+};
+```
+
+### PreloadResourceRegister Current Implementation:
+
+```typescript
+const PreloadResourceRegister: React.FC<{
+    isDirectMode?: boolean;
+    gameId: number;
+    updateStatePreloadResource: Function;
+    updateLobbyConfigs: Function;
+    session: SSOResponse;
+    authorizeResponse: AuthorizeResponse;
+}> = ({ isDirectMode, gameId, updateStatePreloadResource, updateLobbyConfigs, session, authorizeResponse }) => {
+    // Handle lobby case (gameId = 0) with useEffect
+    useEffect(() => {
+        if (!isDirectMode && gameId === 0) {
+            console.log("[PreloadResourceRegister] Lobby case (gameId = 0) - calling updateStatePreloadResource");
+            const timer = setTimeout(() => {
+                updateStatePreloadResource();
+            }, 100);
+            return () => clearTimeout(timer);
+        }
+    }, [gameId, isDirectMode, updateStatePreloadResource]);
+
+    return useMemo(() => {
+        if (!isDirectMode && gameId > 0) {
+            return <PreloadResources ... />;
+        }
+        return isDirectMode ? (
+            <PreloadResources ... />
+        ) : (
+            <></>
+        );
+    }, [gameId]);
+};
+```
+
+### Dashboard shouldRenderGames Logic:
 
 ```typescript
 shouldRenderGames = (offerGames: number[], openGameId: number) => {
+    const urlContextModel = StorageHelper.get<URLContextModel>(localStorageKeys.url);
+    const backToLobby = urlContextModel?.backToLobby || false;
+    const ssoRedirectGameId = urlContextModel?.gameId || 0;
+
     // Fix: When openGameId is 0 (lobby), we should render lobby, not games
     if (openGameId === 0) {
         return false;
     }
-    // ... rest of logic
+
+    return (offerGames.includes(openGameId) && !backToLobby) || ssoRedirectGameId > 0;
 };
 ```
 
-#### Expected Flow After Fix:
+### isSabaPlay UI Differences:
 
-1. ✅ Registration succeeds
-2. ✅ `updateToLoadGameId` sets `toLoadGameId = 0`
-3. ✅ `isTriggerPreloadResources` is set to `true`
-4. ✅ `PreloadResourceRegister` calls `updateStatePreloadResource` for lobby case
-5. ✅ `isDonePreloadResource` becomes `true`
-6. ✅ Register component renders Dashboard with `queryGame = 0`
-7. ✅ Dashboard renders lobby (thanks to `shouldRenderGames` fix)
+```typescript
+// SplashScreen logo rendering
+const logoProps = {
+    postfix: isSabaPlay ? `-sabaplay-number-games` : ``,
+    width: isSabaPlay ? 219 : 195,
+    height: isSabaPlay ? 180 : 162,
+};
+
+// Register welcome message
+{
+    isSabaPlay ? (
+        <h1 className={styles["welcom-numbergame"]}>{t("SabaNumber.message_welcome_numbergame_sabaplay")}</h1>
+    ) : (
+        <h1 className={styles["welcom-numbergame"]}>{t("SabaNumber.message_welcome_numbergame")}</h1>
+    );
+}
+
+// Header title logo
+const logo = isSabaPlay ? (
+    <Image
+        src={`/static/images/logo-sabaplay-number-games.svg`}
+        height={32}
+        width={114}
+        className="logo"
+        alt="SABAPLAY Number Games Logo"
+    />
+) : !isDirectMode ? (
+    <Image src={`/static/images/logo-site.svg`} height={26} width={110} className="logo" alt="Logo" />
+) : (
+    <></>
+);
+
+// Page title
+<title>{isSabaPlay ? "SABAPLAY Number Games" : "SABA xD"}</title>;
+```
 
 ## 12. Console Log Analysis Points
 
@@ -336,7 +431,7 @@ shouldRenderGames = (offerGames: number[], openGameId: number) => {
 -   `openGame called with gameId` - Game opening
 -   `updateURLContext called with` - Context updates
 
-### Fixed Registration Flow Logs (Lobby Version):
+### Current Registration Flow Logs (Lobby Version):
 
 ```
 [Register] Submit called
@@ -386,7 +481,7 @@ URL: ?gameId=123
 Flow: URL → SplashScreen → Register → Dashboard → Game 123
 ```
 
-### Scenario 4: New User Registration (Lobby Version) - FIXED
+### Scenario 4: New User Registration (Lobby Version) - IMPLEMENTED
 
 ```
 URL: ?gameId=0 (or no gameId, firstSSOToLobby=true)
@@ -397,15 +492,52 @@ Flow: URL → SplashScreen → Register → PreloadResourceRegister → Dashboar
 
 1. User submits registration form
 2. `updateToLoadGameId` sets `toLoadGameId = 0` (lobby)
-3. `PreloadResourceRegister` calls `updateStatePreloadResource` for lobby case
+3. `PreloadResourceRegister` calls `updateStatePreloadResource` for lobby case via useEffect
 4. Register component renders Dashboard with `queryGame = 0`
-5. Dashboard renders lobby (not games) due to `shouldRenderGames` fix
+5. Dashboard renders lobby (not games) due to `shouldRenderGames` logic
 
 ### Scenario 5: SSO Redirect
 
 ```
 URL: (no gameId, firstSSOToLobby=true)
 Flow: URL → SplashScreen → Redirect to Lobby
+```
+
+### Scenario 6: SabaPlay Auto Registration
+
+```
+URL: ?op=SP&gameId=123
+Flow: URL → SplashScreen → Auto Create Nickname → Dashboard → Game 123
+```
+
+**Key Steps in SabaPlay Flow:**
+
+1. `isSabaPlay = true` from URL parameter `op=SP`
+2. User not authorized triggers auto nickname creation
+3. Auto-generated nickname and avatar created
+4. Direct navigation to game without registration form
+
+## 14. Testing Coverage
+
+### DashboardHandler Tests:
+
+The `shouldRenderGames` method has comprehensive test coverage including:
+
+-   Lobby case (openGameId = 0) returns false
+-   Valid game with no backToLobby returns true
+-   Valid game with backToLobby returns false
+-   SSO redirect with gameId > 0 returns true
+-   Invalid game with no SSO redirect returns false
+
+### Key Test Cases:
+
+```typescript
+it("should return false when openGameId is 0 (lobby case)", () => {
+    const offerGames = [1001, 1002, 1003];
+    const openGameId = 0;
+    const result = dashboardHandler.shouldRenderGames(offerGames, openGameId);
+    expect(result).toBe(false);
+});
 ```
 
 This workflow analysis provides a comprehensive understanding of how gameId flows through the application, enabling better debugging and feature development.
