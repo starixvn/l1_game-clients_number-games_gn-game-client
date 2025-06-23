@@ -99,7 +99,7 @@ const autoCreateNickname = async (session: SSOResponse, signOut: Function) => {
 };
 
 const SplashScreen: React.FC = () => {
-    const { gameId, isDirectMode, token, language, firstSSOToLobby, isThirdParty } = useContext(URLContext);
+    const { gameId, isDirectMode, token, language, firstSSOToLobby, isSabaPlay } = useContext(URLContext);
     const latestGameId = StorageHelper.get<number>(localStorageKeys.latestGameId) || 0;
 
     const router = useRouter();
@@ -305,13 +305,13 @@ const SplashScreen: React.FC = () => {
 
     if (isRenderRegister) {
         console.log("[SplashScreen] Rendering Register with gameId:", gameId);
-        return <Register session={currentSession} isUm={isUm} isDirectMode={isDirectMode} gameId={gameId} firstSSOToLobby={firstSSOToLobby} isThirdParty={isThirdParty} />;
+        return <Register session={currentSession} isUm={isUm} isDirectMode={isDirectMode} gameId={gameId} firstSSOToLobby={firstSSOToLobby} isSabaPlay={isSabaPlay} />;
     }
 
     const logoProps = {
-        postfix: isThirdParty ? `-sabaplay-number-games` : ``,
-        width: isThirdParty ? 219 : 195,
-        height: isThirdParty ? 180 : 162,
+        postfix: isSabaPlay ? `-sabaplay-number-games` : ``,
+        width: isSabaPlay ? 219 : 195,
+        height: isSabaPlay ? 180 : 162,
     };
     return (
         <>
@@ -327,9 +327,9 @@ const SplashScreen: React.FC = () => {
                         />
                     </div>
 
-                    {!isThirdParty ? (
+                    {isSabaPlay ? null : (
                         <div className={Styles["slogan"]}>{locale && t("SabaNumber.splashscreen_slogan")}</div>
-                    ) : null}
+                    )}
                 </div>
 
                 <div className={"loading"}>

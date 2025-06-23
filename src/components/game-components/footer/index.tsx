@@ -4,9 +4,9 @@ import { ResourceTypes } from "../../../_shared/resources";
 
 const Footer = () => {
     const { t } = useTranslator();
-    const { isThirdParty } = useURLContext();
+    const { isSabaPlay } = useURLContext();
 
-    if (isThirdParty) {
+    if (isSabaPlay) {
         return null;
     }
 

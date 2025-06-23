@@ -10,10 +10,10 @@ export type URLContextModel = {
     gameId?: number;
     isDirectMode?: boolean;
     redirectUrl?: string;
-    isThirdParty?: boolean;
     backToLobby?: boolean;
     backToRedirectUrl?: Function;
     firstSSOToLobby?: boolean;
+    isSabaPlay?: boolean;
 };
 
 export function parseContextFromURL(): URLContextModel | undefined {
@@ -30,11 +30,11 @@ export function parseContextFromURL(): URLContextModel | undefined {
     const gameId = Number(params.get("gameId") || 0);
     const isDirectMode = !!params.get("ref");
     const redirectUrl = isDirectMode ? params.get("rurl") : "";
-    const isThirdParty = isDirectMode && !!redirectUrl;
+    const isSabaPlay = params.get("op") === "SP";
 
     console.log("[URLContext] Parsed from URL - gameId:", gameId, "isDirectMode:", isDirectMode, "redirectUrl:", redirectUrl);
 
-    return { token, language, gameId, isDirectMode, redirectUrl, isThirdParty, firstSSOToLobby: true };
+    return { token, language, gameId, isDirectMode, redirectUrl, firstSSOToLobby: true, isSabaPlay };
 }
 
 export function loadURLContext(): URLContextModel {
