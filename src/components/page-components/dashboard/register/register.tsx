@@ -145,9 +145,9 @@ export class Register extends PureComponent<RegisterProps, RegisterState> {
                 console.log("[Register] Direct mode - keeping original gameId:", this.state.toLoadGameId);
             }
         } else {
-            console.log("[Register] Authorization failed with error:", authorizeResponse.errorCode);
+            console.log("[Register] Authorization failed with error:", authorizeResponse?.errorCode);
             this.setState({
-                formValidity: t(GetLocalizedErrorMessage(authorizeResponse.errorCode)),
+                formValidity: t(GetLocalizedErrorMessage(authorizeResponse?.errorCode)),
                 isValidUsername: false,
             });
         }
@@ -163,7 +163,7 @@ export class Register extends PureComponent<RegisterProps, RegisterState> {
         const lobby = await getLobbyConfigs(session);
         console.log("[Register] Lobby configs retrieved:", !!lobby?.lobbyConfigs);
 
-        const enabledRenderGameSettings = getEnabledRenderGameSettings(lobby.lobbyConfigs, authorizeResponse);
+        const enabledRenderGameSettings = getEnabledRenderGameSettings(lobby?.lobbyConfigs, authorizeResponse);
         console.log("[Register] Enabled game settings count:", enabledRenderGameSettings.length);
 
         if (firstSSOToLobby && enabledRenderGameSettings.length > 0) {
@@ -187,7 +187,7 @@ export class Register extends PureComponent<RegisterProps, RegisterState> {
     };
 
     isAuthorizeResponse = (response): response is AuthorizeResponse => {
-        return response?.authorized;
+        return !!response?.authorized;
     };
 
     updateStatePreloadResource() {
