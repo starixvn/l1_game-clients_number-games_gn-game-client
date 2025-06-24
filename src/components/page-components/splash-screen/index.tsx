@@ -286,7 +286,7 @@ const SplashScreen: React.FC = () => {
 
     if (player?.session?.isUM || isUm) {
         console.log("[SplashScreen] Rendering UM page");
-        return <UMPage />;
+        return <UMPage data-testid="um-page" />;
     }
 
     if (isRenderDashboard) {
@@ -294,6 +294,7 @@ const SplashScreen: React.FC = () => {
         document.body.classList.add("galaxy-bg");
         return (
             <Dashboard
+                data-testid="dashboard-component"
                 session={player?.session}
                 queryGame={currentGameId < 0 ? gameId : currentGameId}
                 setIsUm={setIsUm}
@@ -307,7 +308,7 @@ const SplashScreen: React.FC = () => {
 
     if (isRenderRegister) {
         console.log("[SplashScreen] Rendering Register with gameId:", gameId);
-        return <Register session={currentSession} isUm={isUm} isDirectMode={isDirectMode} gameId={gameId} firstSSOToLobby={firstSSOToLobby} isSabaPlay={isSabaPlay} />;
+        return <Register data-testid="register-component" session={currentSession} isUm={isUm} isDirectMode={isDirectMode} gameId={gameId} firstSSOToLobby={firstSSOToLobby} isSabaPlay={isSabaPlay} />;
     }
 
     const logoProps = {
@@ -317,7 +318,7 @@ const SplashScreen: React.FC = () => {
     };
     return (
         <>
-            <div className={`${Styles.page}`}>
+            <div className={`${Styles.page}`} data-testid="splash-screen">
                 <div className={Styles["center"]}>
                     <div className={Styles["logo"]}>
                         <Image
@@ -330,20 +331,21 @@ const SplashScreen: React.FC = () => {
                     </div>
 
                     {isSabaPlay ? null : (
-                        <div className={Styles["slogan"]}>{locale && t("SabaNumber.splashscreen_slogan")}</div>
+                        <div className={Styles["slogan"]} data-testid="splash-screen-slogan">{locale && t("SabaNumber.splashscreen_slogan")}</div>
                     )}
                 </div>
 
                 <div className={"loading"}>
                     <div className={"progress"}>
-                        <div className={"progress-bar"} id="progress-bar"></div>
+                        <div className={"progress-bar"} id="progress-bar" data-testid="progress-bar"></div>
                     </div>
-                    <p className={"text-first-download"}>{locale && t("Common.message_download_first_visit")}</p>
+                    <p className={"text-first-download"} data-testid="download-message">{locale && t("Common.message_download_first_visit")}</p>
                 </div>
             </div>
 
             {isDoneLoadConfig && currentGameId >= 0 && (
                 <PreloadResources
+                    data-testid="preload-resources"
                     bannerId={bannerId}
                     setIsDonePreload={() => {
                         setIsRenderDashboard(true);
