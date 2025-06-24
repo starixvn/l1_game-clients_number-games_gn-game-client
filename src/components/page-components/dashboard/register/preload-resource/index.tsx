@@ -15,15 +15,19 @@ const PreloadResourceRegister: React.FC<{
     const [gameOfferIds, setGameOfferIds] = useState<number[]>([]);
 
     const handleAuthorizedAccess = async () => {
-        const lobby = await getLobbyConfigs(session);
-        if (!lobby || Object.keys(lobby.lobbyConfigs).length === 0) {
-            updateStatePreloadResource();
-        } else {
-            if (lobby?.lobbyConfigs) {
-                updateLobbyConfigs(lobby?.lobbyConfigs);
-                getAndHandleBannerOffer(authorizeResponse, lobby?.lobbyConfigs, setBannerId);
-                getAndHandleGameOfferIds(authorizeResponse, lobby?.lobbyConfigs, setGameOfferIds);
+        try {
+            const lobby = await getLobbyConfigs(session);
+            if (!lobby || Object.keys(lobby.lobbyConfigs).length === 0) {
+                updateStatePreloadResource();
+            } else {
+                if (lobby?.lobbyConfigs) {
+                    updateLobbyConfigs(lobby?.lobbyConfigs);
+                    getAndHandleBannerOffer(authorizeResponse, lobby?.lobbyConfigs, setBannerId);
+                    getAndHandleGameOfferIds(authorizeResponse, lobby?.lobbyConfigs, setGameOfferIds);
+                }
             }
+        } catch (error) {
+            console.error(error);
         }
     };
 
