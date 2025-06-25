@@ -271,13 +271,13 @@ const SplashScreen: React.FC = () => {
     }
 
     const logoProps = {
-        postfix: isSabaPlay ? `-sabaplay-number-games` : ``,
-        width: isSabaPlay ? 219 : 195,
-        height: isSabaPlay ? 180 : 162,
+        postfix: isSabaPlay ? `-sabaplay` : ``,
+        width: isSabaPlay ? 173 : 195,
+        height: isSabaPlay ? 205 : 162,
     };
     return (
         <>
-            <div className={`${Styles.page}`} data-testid="splash-screen">
+            <div className={`${Styles.page} ${isSabaPlay ? Styles.sabaPlayBg : ''}`} data-testid="splash-screen">
                 <div className={Styles["center"]}>
                     <div className={Styles["logo"]}>
                         <Image
@@ -287,19 +287,32 @@ const SplashScreen: React.FC = () => {
                             alt="logo"
                             priority={true}
                         />
+                        {isSabaPlay && locale && (
+                            <div className={Styles["slogan-image"]}>
+                                <Image
+                                    src={`/static/images/splash-screen/slogan-sabaplay/slogan-sabaplay-${locale}.webp?v=${buildVersion}`}
+                                    width={354}
+                                    height={46}
+                                    alt="slogan"
+                                    priority={true}
+                                />
+                            </div>
+                        )}
                     </div>
 
-                    {isSabaPlay ? null : (
+                    {!isSabaPlay && (
                         <div className={Styles["slogan"]} data-testid="splash-screen-slogan">{locale && t("SabaNumber.splashscreen_slogan")}</div>
                     )}
                 </div>
 
-                <div className={"loading"}>
-                    <div className={"progress"}>
-                        <div className={"progress-bar"} id="progress-bar" data-testid="progress-bar"></div>
+                {!isSabaPlay && (
+                    <div className={"loading"}>
+                        <div className={"progress"}>
+                            <div className={"progress-bar"} id="progress-bar" data-testid="progress-bar"></div>
+                        </div>
+                        <p className={"text-first-download"} data-testid="download-message">{locale && t("Common.message_download_first_visit")}</p>
                     </div>
-                    <p className={"text-first-download"} data-testid="download-message">{locale && t("Common.message_download_first_visit")}</p>
-                </div>
+                )}
             </div>
 
             {isDoneLoadConfig && currentGameId >= 0 && (

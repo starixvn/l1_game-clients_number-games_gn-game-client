@@ -83,6 +83,23 @@
         color: #fff;
         text-shadow: 1px 1px 10px rgba(255, 255, 255, 0.6);
     }
+
+    .slogan-image {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    &.sabaPlayBg {
+        background: #000000;
+
+        .logo {
+            &::before,
+            &::after {
+                display: none;
+            }
+        }
+    }
 }
 
 @keyframes blink {
