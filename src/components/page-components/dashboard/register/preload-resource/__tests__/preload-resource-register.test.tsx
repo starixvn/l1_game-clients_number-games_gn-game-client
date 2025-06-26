@@ -145,15 +145,8 @@ describe("PreloadResourceRegister", () => {
             mockGetLobbyConfigs.mockResolvedValue(MOCK_LOBBY_CONFIGS);
 
             const props = createProps({ isDirectMode: false, gameId: 0 });
-            const consoleSpy = jest.spyOn(console, "log").mockImplementation(() => { });
 
             render(<PreloadResourceRegister {...props} />);
-
-            await waitFor(() => {
-                expect(consoleSpy).toHaveBeenCalledWith(
-                    "[PreloadResourceRegister] Lobby case (gameId = 0) - calling updateStatePreloadResource"
-                );
-            });
 
             act(() => {
                 jest.advanceTimersByTime(100);
@@ -162,8 +155,6 @@ describe("PreloadResourceRegister", () => {
             await waitFor(() => {
                 expect(props.updateStatePreloadResource).toHaveBeenCalled();
             });
-
-            consoleSpy.mockRestore();
         });
 
         it("should not handle lobby case when isDirectMode is true", async () => {
