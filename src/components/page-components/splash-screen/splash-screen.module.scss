@@ -87,6 +87,14 @@
     .slogan-image {
         position: absolute;
         left: 50%;
+        bottom: -4rem;
+        transform: translateX(-50%);
+    }
+
+    .loading-bar-sabaplay {
+        position: absolute;
+        left: 50%;
+        bottom: -9rem;
         transform: translateX(-50%);
     }
 

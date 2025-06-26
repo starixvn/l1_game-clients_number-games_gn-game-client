@@ -288,15 +288,26 @@ const SplashScreen: React.FC = () => {
                             priority={true}
                         />
                         {isSabaPlay && locale && (
-                            <div className={Styles["slogan-image"]}>
-                                <Image
-                                    src={`/static/images/splash-screen/slogan-sabaplay/slogan-sabaplay-${locale}.webp?v=${buildVersion}`}
-                                    width={354}
-                                    height={46}
-                                    alt="slogan"
-                                    priority={true}
-                                />
-                            </div>
+                            <>
+                                <div className={Styles["slogan-image"]}>
+                                    <Image
+                                        src={`/static/images/splash-screen/slogan-sabaplay/slogan-sabaplay-${locale}.webp?v=${buildVersion}`}
+                                        width={354}
+                                        height={46}
+                                        alt="slogan"
+                                        priority={true}
+                                    />
+                                </div>
+                                <div className={Styles["loading-bar-sabaplay"]}>
+                                    <Image
+                                        src={`/static/images/splash-screen/loading-bar-sabaplay.gif?v=${buildVersion}`}
+                                        width={108}
+                                        height={6}
+                                        alt="loading"
+                                        priority={true}
+                                    />
+                                </div>
+                            </>
                         )}
                     </div>
 
