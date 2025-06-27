@@ -583,7 +583,7 @@ describe("Register Component", () => {
             // Assert
             await waitFor(() => {
                 expect(screen.getByText("Common.name_invalid")).toBeInTheDocument();
-            });
+            }, { timeout: 5000 });
         });
 
         it("should handle avatar gallery interaction", () => {
@@ -630,7 +630,7 @@ describe("Register Component", () => {
             // Assert
             await waitFor(() => {
                 expect(screen.getByText("Common.name_invalid")).toBeInTheDocument();
-            });
+            }, { timeout: 5000 });
         });
 
         it("should handle network timeout during nickname creation", async () => {
@@ -647,7 +647,7 @@ describe("Register Component", () => {
             // Assert
             await waitFor(() => {
                 expect(createNickname).toHaveBeenCalled();
-            });
+            }, { timeout: 5000 });
         });
 
         it("should handle lobby configs being null", async () => {

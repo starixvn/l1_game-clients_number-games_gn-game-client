@@ -110,6 +110,15 @@ const defineMockPFWithDispatch = (state?: Object, gameMessageHandler?: Object) =
 };
 
 describe(PFSettingModal.name, () => {
+    afterEach(() => {
+        jest.clearAllTimers();
+        jest.clearAllMocks();
+    });
+
+    afterAll(() => {
+        jest.useRealTimers();
+    });
+
     describe("render", () => {
         test.each([
             [0, 0],

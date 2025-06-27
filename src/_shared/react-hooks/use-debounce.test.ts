@@ -1,9 +1,18 @@
-import { renderHook, act } from "@testing-library/react-hooks";
+import { renderHook, act } from "@testing-library/react";
 import useDebounce from "./use-debounce";
 
 jest.useFakeTimers();
 
 describe("useDebounce", () => {
+    afterEach(() => {
+        jest.clearAllTimers();
+        jest.clearAllMocks();
+    });
+
+    afterAll(() => {
+        jest.useRealTimers();
+    });
+
     it("should return the initial value immediately", () => {
         const { result } = renderHook(() => useDebounce("initial", 500));
 

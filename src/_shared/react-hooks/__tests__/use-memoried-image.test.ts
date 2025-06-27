@@ -1,7 +1,6 @@
-import { renderHook } from "@testing-library/react-hooks/dom";
 import { useMemoriedImage } from "../use-memoried-image";
 import { downloadAndCacheImage, imageCache } from "../../helpers/image-cache-controller";
-import { act } from "@testing-library/react";
+import { act, waitFor, renderHook } from "@testing-library/react";
 
 // Mock the image cache controller
 jest.mock("../../helpers/image-cache-controller");
@@ -25,18 +24,19 @@ describe("useMemoriedImage", () => {
         });
 
         // Act
-        const { result, waitForNextUpdate } = renderHook(() => useMemoriedImage(imagePath));
+        const { result } = renderHook(() => useMemoriedImage(imagePath));
 
         // Assert initial state
         expect(result.current.isLoading).toBe(true);
         expect(result.current.data).toBe(undefined);
         expect(result.current.error).toBeNull();
 
-        // Wait for the async operation to complete
-        await waitForNextUpdate();
+        // Wait for the async operation to complete with timeout
+        await waitFor(() => {
+            expect(result.current.isLoading).toBe(false);
+        }, { timeout: 3000 });
 
         // Assert final state
-        expect(result.current.isLoading).toBe(false);
         expect(result.current.data).toBe(expectedBase64);
         expect(result.current.error).toBeNull();
         expect(mockedDownloadAndCacheImage).toHaveBeenCalledWith(imagePath);
@@ -52,18 +52,19 @@ describe("useMemoriedImage", () => {
         });
 
         // Act
-        const { result, waitForNextUpdate } = renderHook(() => useMemoriedImage(imagePath));
+        const { result } = renderHook(() => useMemoriedImage(imagePath));
 
         // Assert initial state
         expect(result.current.isLoading).toBe(true);
         expect(result.current.data).toBe(undefined);
         expect(result.current.error).toBeNull();
 
-        // Wait for the async operation to complete
-        await waitForNextUpdate();
+        // Wait for the async operation to complete with timeout
+        await waitFor(() => {
+            expect(result.current.isLoading).toBe(false);
+        }, { timeout: 3000 });
 
         // Assert final state
-        expect(result.current.isLoading).toBe(false);
         expect(result.current.data).toBe(undefined);
         expect(result.current.error).toBeInstanceOf(Error);
         expect(result.current.error.message).toBe("Network response was not ok");
@@ -76,18 +77,19 @@ describe("useMemoriedImage", () => {
         mockedDownloadAndCacheImage.mockRejectedValueOnce(expectedError);
 
         // Act
-        const { result, waitForNextUpdate } = renderHook(() => useMemoriedImage(imagePath));
+        const { result } = renderHook(() => useMemoriedImage(imagePath));
 
         // Assert initial state
         expect(result.current.isLoading).toBe(true);
         expect(result.current.data).toBe(undefined);
         expect(result.current.error).toBeNull();
 
-        // Wait for the async operation to complete
-        await waitForNextUpdate();
+        // Wait for the async operation to complete with timeout
+        await waitFor(() => {
+            expect(result.current.isLoading).toBe(false);
+        }, { timeout: 3000 });
 
         // Assert final state
-        expect(result.current.isLoading).toBe(false);
         expect(result.current.data).toBe(undefined);
         expect(result.current.error).toBe(expectedError);
         expect(mockedDownloadAndCacheImage).toHaveBeenCalledTimes(1);
@@ -153,10 +155,12 @@ describe("useMemoriedImage", () => {
             });
 
         // Act
-        const { result, waitForNextUpdate, rerender } = renderHook((path) => useMemoriedImage(path), { initialProps: initialPath });
+        const { result, rerender } = renderHook((path) => useMemoriedImage(path), { initialProps: initialPath });
 
         // Wait for first load
-        await waitForNextUpdate();
+        await waitFor(() => {
+            expect(result.current.isLoading).toBe(false);
+        }, { timeout: 3000 });
         expect(result.current.data).toBe(initialBase64);
 
         // Change the path
@@ -168,11 +172,12 @@ describe("useMemoriedImage", () => {
         // Assert loading state after path change
         expect(result.current.isLoading).toBe(true);
 
-        // Wait for second load
-        await waitForNextUpdate();
+        // Wait for second load with timeout
+        await waitFor(() => {
+            expect(result.current.isLoading).toBe(false);
+        }, { timeout: 3000 });
 
         // Assert final state
-        expect(result.current.isLoading).toBe(false);
         expect(result.current.data).toBe(newBase64);
         expect(result.current.error).toBeNull();
         expect(mockedDownloadAndCacheImage).toHaveBeenCalledTimes(2);

@@ -67,6 +67,15 @@ const defineMock = (state?: Object) => {
 
 
 describe("PFGuide", () => {
+    afterEach(() => {
+        jest.clearAllTimers();
+        jest.clearAllMocks();
+    });
+
+    afterAll(() => {
+        jest.useRealTimers();
+    });
+
     describe("click button pf guide", () => {
         it("should render pf guide", () => {
             defineMock();
