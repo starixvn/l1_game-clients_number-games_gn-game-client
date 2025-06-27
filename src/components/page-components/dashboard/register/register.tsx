@@ -72,9 +72,6 @@ export class Register extends PureComponent<RegisterProps, RegisterState> {
         super(props);
 
         this.state = { ...Register.defaultState, toLoadGameId: props.gameId };
-        console.log("[Register] Constructor - initial gameId from props:", props.gameId);
-        console.log("[Register] Constructor - isDirectMode:", props.isDirectMode);
-        console.log("[Register] Constructor - firstSSOToLobby:", props.firstSSOToLobby);
     }
 
     toggleAvatarGallery() {
@@ -102,7 +99,6 @@ export class Register extends PureComponent<RegisterProps, RegisterState> {
     }
 
     setIsUM() {
-        console.log("[Register] setIsUM called");
         this.setState({ isUm: true });
     }
 
@@ -112,7 +108,6 @@ export class Register extends PureComponent<RegisterProps, RegisterState> {
 
     async submit(event: FormEvent) {
         event.preventDefault();
-        console.log("[Register] Submit called");
         this.updateClickRegister(true);
 
         const { name, avatar } = this.state;
@@ -120,32 +115,25 @@ export class Register extends PureComponent<RegisterProps, RegisterState> {
         let authorizeResponse;
 
         if (!NameGenerator.validateName(name)) {
-            console.log("[Register] Invalid name validation");
             this.setState({ formValidity: t("Common.name_invalid"), isValidUsername: false });
             this.updateClickRegister(false);
             return;
         }
 
         try {
-            console.log("[Register] Creating nickname with name:", name, "avatar:", avatar);
             authorizeResponse = await createNickname(session, name, avatar);
         } catch (error) {
-            console.log("Error Create Nick Name", error);
+            // Error handled silently
         }
 
         if (this.isAuthorizeResponse(authorizeResponse)) {
-            console.log("[Register] Authorization successful");
             Object.assign(authorizeResponse.user, { settings: { theme: Themes.light } });
             this.setState({ authorizeResponse: authorizeResponse, isTriggerPreloadResources: true });
 
             if (!this.props.isDirectMode) {
-                console.log("[Register] Not direct mode - updating toLoadGameId");
                 await this.updateToLoadGameId(authorizeResponse);
-            } else {
-                console.log("[Register] Direct mode - keeping original gameId:", this.state.toLoadGameId);
             }
         } else {
-            console.log("[Register] Authorization failed with error:", authorizeResponse?.errorCode);
             this.setState({
                 formValidity: t(GetLocalizedErrorMessage(authorizeResponse?.errorCode)),
                 isValidUsername: false,
@@ -156,33 +144,23 @@ export class Register extends PureComponent<RegisterProps, RegisterState> {
     }
 
     updateToLoadGameId = async (authorizeResponse: AuthorizeResponse) => {
-        console.log("[Register] updateToLoadGameId called");
         const { session, firstSSOToLobby } = this.props;
-        console.log("[Register] firstSSOToLobby from props:", firstSSOToLobby);
 
         const lobby = await getLobbyConfigs(session);
-        console.log("[Register] Lobby configs retrieved:", !!lobby?.lobbyConfigs);
 
         const enabledRenderGameSettings = getEnabledRenderGameSettings(lobby?.lobbyConfigs, authorizeResponse);
-        console.log("[Register] Enabled game settings count:", enabledRenderGameSettings.length);
 
         if (firstSSOToLobby && enabledRenderGameSettings.length > 0) {
-            console.log("[Register] firstSSOToLobby is true - redirecting to lobby (gameId = 0)");
             // Business requirement: Redirect to lobby instead of specific game
             this.setState({ toLoadGameId: 0 });
         } else if (enabledRenderGameSettings.length > 0) {
-            console.log("[Register] firstSSOToLobby is false - searching for available game service");
             for (const gameSetting of enabledRenderGameSettings) {
                 const isServiceAvailable = await getServiceStatusIsAvailable(gameSetting);
-                console.log("[Register] Checking game", gameSetting.id, "service available:", isServiceAvailable);
                 if (isServiceAvailable) {
-                    console.log("[Register] Found available game service:", gameSetting.id);
                     this.setState({ toLoadGameId: gameSetting.id });
                     break;
                 }
             }
-        } else {
-            console.log("[Register] No enabled game settings found");
         }
     };
 
@@ -191,13 +169,10 @@ export class Register extends PureComponent<RegisterProps, RegisterState> {
     };
 
     updateStatePreloadResource() {
-        console.log("[Register] updateStatePreloadResource called");
-        console.log("[Register] Setting isDonePreloadResource = true and isClickRegister = false");
         this.setState({ isDonePreloadResource: true, isClickRegister: false });
     }
 
     updateLobbyConfigs(lobbyConfigs: any) {
-        console.log("[Register] updateLobbyConfigs called");
         this.setState({ lobbyConfigs });
     }
 
@@ -217,19 +192,13 @@ export class Register extends PureComponent<RegisterProps, RegisterState> {
         } = this.state;
         const { t, session, isDirectMode, isSabaPlay } = this.props;
 
-        console.log("[Register] Render - isDonePreloadResource:", isDonePreloadResource);
-        console.log("[Register] Render - isTriggerPreloadResources:", isTriggerPreloadResources);
-        console.log("[Register] Render - toLoadGameId:", this.state.toLoadGameId);
-
         document.body.classList.add("galaxy-bg", "register");
 
         if (isUm) {
-            console.log("[Register] Rendering UM page");
             return <UMPage />;
         }
 
         if (isDonePreloadResource) {
-            console.log("[Register] Rendering Dashboard with toLoadGameId:", this.state.toLoadGameId);
             document.body.classList.remove("register");
 
             return (

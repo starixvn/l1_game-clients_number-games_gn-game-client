@@ -18,7 +18,6 @@ describe("TurnTimeCounterHandler", () => {
         };
 
         handler = new TurnTimelineCounter(durations);
-        console.log(handler.allTurnTimeline);
     });
 
     describe("compute turn timeline", () => {

@@ -78,7 +78,6 @@ export class DashboardHandler {
         );
 
         if (lobbyGamesIds?.length === 0) {
-            console.log(`False connectLobbySocket lobbyGamesIds`);
             return;
         }
 
