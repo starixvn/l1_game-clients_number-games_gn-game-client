@@ -120,14 +120,14 @@ const BacBallBetOptionsComponent = () => {
                     alt={choice}
                     priority={true}
                 />
-                <div className={`${Style["choice-info"]} ${Style[`choice-${choice}`]}`}>
+                <div className={`${Style["choice-info"]} ${Style["choice-" + choice]}`}>
                     <div className={Style.stake}>
                         {totalBetComponent}
                         {playerBetCount}
                     </div>
                     {betPercentage}
                 </div>
-                <div className={`${Style["choice-odds-area"]} ${Style[`${choice}-choice`]}`}>
+                <div className={`${Style["choice-odds-area"]} ${Style[choice + "-choice"]}`}>
                     {betChoice}
                     {odds}
                 </div>
@@ -182,7 +182,7 @@ const BacBallBetOptionsComponent = () => {
                     {totalBetComponent}
                     {playerBetCount}
                 </div>
-                <div className={`${Style["choice-odds-area"]} ${Style[`${BacBallBetOptions.TIE}-choice`]}`}>
+                <div className={`${Style["choice-odds-area"]} ${Style[BacBallBetOptions.TIE + "-choice"]}`}>
                     {betChoice}
                     {odds}
                 </div>

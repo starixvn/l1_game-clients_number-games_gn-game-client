@@ -43,13 +43,13 @@ export class Scoreboard<Round> extends Component<ScoreboardProps<Round>> {
         const columns = chunk(horizontalGroups, rowByGroup);
         const verticalGroups = chunk(columns, block);
 
-        const groups = verticalGroups.flatMap((vertical) => {
+        return verticalGroups.flatMap((vertical) => {
             const blocks = [];
 
             for (let row = 0; row < rowByGroup; row++) {
                 const block = [];
 
-                for (let horizontal of vertical) {
+                for (const horizontal of vertical) {
                     block.push(...horizontal[row]);
                 }
 
@@ -58,8 +58,6 @@ export class Scoreboard<Round> extends Component<ScoreboardProps<Round>> {
 
             return blocks;
         });
-
-        return groups;
     }
 
     getHTMLAttributes() {

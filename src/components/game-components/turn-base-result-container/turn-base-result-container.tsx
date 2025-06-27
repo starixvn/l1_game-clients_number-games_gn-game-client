@@ -47,7 +47,7 @@ export const TurnBaseResultSlotContainer: React.FC<IResultSlotContainer> = (prop
         };
 
         const getBallsDataFromRoundData = () => {
-            let clonedData = cloneDefaultData();
+            const clonedData = cloneDefaultData();
             if (roundData?.[betChoiceBalls]?.length > 0) {
                 for (let i = 0; i < clonedData.length; i++) {
                     const number = roundData[betChoiceBalls][i];

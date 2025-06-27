@@ -42,6 +42,11 @@ describe("Settings Component", () => {
     const mockDispatch = jest.fn();
     const mockPFDispatch = jest.fn();
     const mockClickSound = jest.fn();
+    
+    // Selector constants
+    const ICON_HOME_SELECTOR = ".icon-home";
+    const ICON_LIST_GAME_SELECTOR = ".icon-list-game";
+    const ICON_PF_SELECTOR = ".icon-pf";
 
     beforeEach(() => {
         jest.clearAllMocks();
@@ -78,8 +83,8 @@ describe("Settings Component", () => {
         });
 
         const { container } = render(<Settings />);
-        expect(container.querySelector(".icon-home")).toBeInTheDocument();
-        expect(container.querySelector(".icon-pf")).toBeInTheDocument();
+        expect(container.querySelector(ICON_HOME_SELECTOR)).toBeInTheDocument();
+        expect(container.querySelector(ICON_PF_SELECTOR)).toBeInTheDocument();
     });
 
     test("should render list game and PF button when it is not direct mode", () => {
@@ -89,8 +94,8 @@ describe("Settings Component", () => {
         });
 
         const { container } = render(<Settings />);
-        expect(container.querySelector(".icon-list-game")).toBeInTheDocument();
-        expect(container.querySelector(".icon-pf")).toBeInTheDocument();
+        expect(container.querySelector(ICON_LIST_GAME_SELECTOR)).toBeInTheDocument();
+        expect(container.querySelector(ICON_PF_SELECTOR)).toBeInTheDocument();
     });
 
     test.each([[true]])("should not render list game when it is direct mode", (isDirectMode: boolean) => {
@@ -100,7 +105,7 @@ describe("Settings Component", () => {
         });
 
         const { container } = render(<Settings />);
-        expect(container.querySelector(".icon-list-game")).not.toBeInTheDocument();
+        expect(container.querySelector(ICON_LIST_GAME_SELECTOR)).not.toBeInTheDocument();
     });
 
     test("should render only PF button when it is direct mode but redirect url is empty", () => {
@@ -111,9 +116,9 @@ describe("Settings Component", () => {
         });
 
         const { container } = render(<Settings />);
-        expect(container.querySelector(".icon-home")).not.toBeInTheDocument();
-        expect(container.querySelector(".icon-list-game")).not.toBeInTheDocument();
-        expect(container.querySelector(".icon-pf")).toBeInTheDocument();
+        expect(container.querySelector(ICON_HOME_SELECTOR)).not.toBeInTheDocument();
+        expect(container.querySelector(ICON_LIST_GAME_SELECTOR)).not.toBeInTheDocument();
+        expect(container.querySelector(ICON_PF_SELECTOR)).toBeInTheDocument();
     });
 
     test("should dispatch the correct action on PF settings button click", () => {

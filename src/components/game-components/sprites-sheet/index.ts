@@ -176,7 +176,8 @@ export class Spritesheet extends Component<SpritesheetProps> {
             elMove
         );
 
-        const elSprite = React.createElement(
+        // return elSprite
+        return React.createElement(
             "div",
             {
                 className: `react-responsive-spritesheet ${this.id} ${className || ""}`,
@@ -193,8 +194,6 @@ export class Spritesheet extends Component<SpritesheetProps> {
             },
             elContainer
         );
-
-        return elSprite;
     };
 
     init = () => {
@@ -298,7 +297,9 @@ export class Spritesheet extends Component<SpritesheetProps> {
             } else {
                 this.frame += 1;
             }
-            if (onEachFrame) onEachFrame(this.setInstance());
+            if (onEachFrame) {
+                onEachFrame(this.setInstance());
+            }
             this.props.writeDebugLog &&
                 console.log(
                     JSON.stringify({
@@ -319,7 +320,9 @@ export class Spritesheet extends Component<SpritesheetProps> {
                 (this.direction === "rewind" && (this.frame === -1 || this.frame === this.endAt))
             ) {
                 if (loop) {
-                    if (onLoopComplete) onLoopComplete(this.setInstance());
+                    if (onLoopComplete) {
+                        onLoopComplete(this.setInstance());
+                    }
                     this.completeLoopCicles += 1;
                     this.frame = this.startAt ?? (this.direction === "rewind" ? this.steps - 1 : 0);
                 } else {
@@ -333,8 +336,12 @@ export class Spritesheet extends Component<SpritesheetProps> {
         const { onPause } = this.props;
 
         this.isPlaying = false;
-        if (this.intervalSprite) clearInterval(this.intervalSprite);
-        if (onPause) onPause(this.setInstance());
+        if (this.intervalSprite) {
+            clearInterval(this.intervalSprite);
+        }
+        if (onPause) {
+            onPause(this.setInstance());
+        }
     };
 
     goToAndPlay = (frame: number) => {
@@ -369,7 +376,9 @@ export class Spritesheet extends Component<SpritesheetProps> {
     };
 
     getInfo = (param: string) => {
-        if (!this.spriteElContainer) return;
+        if (!this.spriteElContainer) {
+            return;
+        }
 
         switch (param) {
             case "direction":

@@ -36,7 +36,7 @@ export const BacBallWinningAnimation: React.FC<Props> = ({ choice, resourceName,
                     loop={true}
                     fps={22}
                 />
-                <div className={`highlight-winning-bg-anim ${Styles[`highlight-winning-${choice}`]}`}></div>
+                <div className={`highlight-winning-bg-anim ${Styles["highlight-winning-" + choice]}`}></div>
             </div>
         )
     );

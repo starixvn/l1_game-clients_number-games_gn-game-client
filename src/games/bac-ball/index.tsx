@@ -25,7 +25,7 @@ import { BacBallResult, BacBallSettlementResult } from "./types";
 const BacBallBetHistoryModal = dynamic(() => import("./history"));
 
 class BacBall extends GameBase<GameBaseProps, GameBaseState> {
-    private turnIdHandler?: TurnIdHandler;
+    readonly turnIdHandler?: TurnIdHandler;
 
     constructor(props: GameBaseProps) {
         const gameMessageHandler = new GameMessageHandler(props.dispatch);

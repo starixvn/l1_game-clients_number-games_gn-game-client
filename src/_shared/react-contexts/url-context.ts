@@ -45,8 +45,7 @@ export function loadURLContext(): URLContextModel {
         AnalyticsHelper?.login(contextFromURL);
     }
 
-    const result = contextFromURL || contextFromLocalStorage;
-    return result;
+    return contextFromURL || contextFromLocalStorage;
 }
 
 export const initialURLContextData = {
@@ -78,6 +77,5 @@ export function updateURLContext(context: Partial<URLContextModel>) {
 }
 
 export function getURLContext() {
-    const context = StorageHelper.get<URLContextModel>(localStorageKeys.url) || {};
-    return context;
+    return StorageHelper.get<URLContextModel>(localStorageKeys.url) || {};
 }

@@ -111,7 +111,7 @@ export class Register extends PureComponent<RegisterProps, RegisterState> {
         this.updateClickRegister(true);
 
         const { name, avatar } = this.state;
-        const { t, session, firstSSOToLobby } = this.props;
+        const { t, session } = this.props;
         let authorizeResponse;
 
         if (!NameGenerator.validateName(name)) {

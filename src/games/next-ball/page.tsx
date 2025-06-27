@@ -33,7 +33,7 @@ export type NextBallState = {
 class NextBall extends GameBase<GameBaseProps, NextBallState> {
     state: NextBallState = { statisticGroup: 0, isLoaded: false };
 
-    private turnIdHandler?: TurnIdHandler;
+    readonly turnIdHandler?: TurnIdHandler;
 
     constructor(props: GameBaseProps) {
         const gameMessageHandler = new GameMessageHandler(props.dispatch);
