@@ -1,7 +1,7 @@
 window.envConfig = {
     proxy: {
         ssl: true,
-        subDomain: "proxy",
+        subDomain: "proxy2",
         path: "",
     },
     sentry: {
@@ -9,12 +9,12 @@ window.envConfig = {
         environment: "PROD",
     },
     enableSourceMap: false,
-    subGuideDomain: "guides",
+    subGuideDomain: "guides2",
     enableMsgpackParser: true,
     system: "HD",
     appType: 1,
     enableDebugLogs: true,
-    socketGatewayPath: "gateway",
+    socketGatewayPath: "gateway2",
     useTolgeeStatic: true,
     googleAnalyticId: "G-VC2LC87W10",
     hotdogScript: {

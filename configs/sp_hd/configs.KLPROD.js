@@ -1,0 +1,23 @@
+window.envConfig = {
+    proxy: {
+        ssl: true,
+        subDomain: "proxy2",
+        path: "",
+    },
+    sentry: {
+        dsn: "https://aec64e89fed64d25a73926e63f2500f7@sentry.sabagaming.com/179",
+        environment: "PROD",
+    },
+    enableSourceMap: false,
+    subGuideDomain: "guides2",
+    enableMsgpackParser: true,
+    system: "HD",
+    appType: 1,
+    enableDebugLogs: true,
+    socketGatewayPath: "gateway2",
+    useTolgeeStatic: true,
+    googleAnalyticId: "G-VC2LC87W10",
+    hotdogScript: {
+        baseUrl: "https://res.hotdog-yee.com/ingame-lobby-client/index.min.js",
+    },
+};
