@@ -45,16 +45,21 @@ export class DashboardHandler {
 
         console.log("[DashboardHandler] shouldRenderGames - URL context:", { backToLobby, ssoRedirectGameId });
 
-        // Fix: Handle null and 0 values properly
-        if (openGameId === 0 || openGameId === null || openGameId === undefined) {
-            console.log("[DashboardHandler] shouldRenderGames - openGameId is 0/null/undefined, returning false");
+        // Fix: Use ssoRedirectGameId when openGameId is null/0/undefined
+        const effectiveGameId = (openGameId === 0 || openGameId === null || openGameId === undefined) ? ssoRedirectGameId : openGameId;
+
+        console.log("[DashboardHandler] shouldRenderGames - Effective gameId:", effectiveGameId);
+
+        if (effectiveGameId === 0 || effectiveGameId === null || effectiveGameId === undefined) {
+            console.log("[DashboardHandler] shouldRenderGames - Effective gameId is 0/null/undefined, returning false");
             return false;
         }
 
-        const result = (offerGames.includes(openGameId) && !backToLobby) || ssoRedirectGameId > 0;
+        const result = (offerGames.includes(effectiveGameId) && !backToLobby) || ssoRedirectGameId > 0;
         console.log("[DashboardHandler] shouldRenderGames - Final result:", result);
         console.log("[DashboardHandler] shouldRenderGames - Breakdown:", {
-            offerGamesIncludes: offerGames.includes(openGameId),
+            effectiveGameId,
+            offerGamesIncludes: offerGames.includes(effectiveGameId),
             notBackToLobby: !backToLobby,
             ssoRedirectGameIdGreaterThan0: ssoRedirectGameId > 0
         });

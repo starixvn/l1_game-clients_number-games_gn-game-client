@@ -207,9 +207,9 @@ const SplashScreen: React.FC = () => {
             console.log("[SplashScreen] handleInitialization - Initial toLoadGameId:", toLoadGameId);
             console.log("[SplashScreen] handleInitialization - isDirectMode:", isDirectMode);
 
-            if (!isDirectMode) {
+            if (!isDirectMode && !isSabaPlay) {
                 console.log("[SplashScreen] handleInitialization - Not direct mode, getting SSO redirect gameId");
-                toLoadGameId = await getSSORedirectToGameId(lobbyConfigs, authorizeInfo);
+                toLoadGameId = await getSSORedirectToGameId(lobbyConfigs, authorizeInfo, gameId);
                 console.log("[SplashScreen] handleInitialization - SSO redirect gameId result:", toLoadGameId);
             } else {
                 console.log("[SplashScreen] handleInitialization - Direct mode, using URL gameId directly:", toLoadGameId);
@@ -241,16 +241,26 @@ const SplashScreen: React.FC = () => {
         handleInitialization();
     }, []);
 
-    const getSSORedirectToGameId = async (lobbyConfigs: ILobbyConfigs, authorizeInfo: AuthorizeResponse) => {
+    const getSSORedirectToGameId = async (lobbyConfigs: ILobbyConfigs, authorizeInfo: AuthorizeResponse, urlGameId: number) => {
         if (!lobbyConfigs || !authorizeInfo) {
             return 0;
         }
-        let toLoadGameId = latestGameId;
+
+        // Fix: Prioritize gameId from URL over latestGameId
+        let toLoadGameId = urlGameId > 0 ? urlGameId : latestGameId;
+
+        console.log("[SplashScreen] getSSORedirectToGameId - Input values:", {
+            urlGameId,
+            latestGameId,
+            toLoadGameId,
+            firstSSOToLobby
+        });
 
         const enabledRenderGameSettings = getEnabledRenderGameSettings(lobbyConfigs, authorizeInfo);
 
         if (firstSSOToLobby && enabledRenderGameSettings.length > 0) {
             // Business requirement: Redirect to lobby instead of specific game
+            console.log("[SplashScreen] getSSORedirectToGameId - First SSO to lobby, redirecting to lobby");
             toLoadGameId = 0;
         } else if (!firstSSOToLobby) {
             // Only check for available game service if not firstSSOToLobby
@@ -258,16 +268,22 @@ const SplashScreen: React.FC = () => {
                 const isFoundToLoadGame = await isFoundToLoadGameId(enabledRenderGameSettings, toLoadGameId);
 
                 if (!isFoundToLoadGame) {
+                    console.log("[SplashScreen] getSSORedirectToGameId - Game not found, looking for available service");
                     for (const gameSetting of enabledRenderGameSettings) {
                         const isServiceAvailable = await getServiceStatusIsAvailable(gameSetting);
                         if (isServiceAvailable) {
                             toLoadGameId = gameSetting.id;
+                            console.log("[SplashScreen] getSSORedirectToGameId - Found available service, using gameId:", toLoadGameId);
                             break;
                         }
                     }
+                } else {
+                    console.log("[SplashScreen] getSSORedirectToGameId - Game found and service available, keeping gameId:", toLoadGameId);
                 }
             }
         }
+
+        console.log("[SplashScreen] getSSORedirectToGameId - Final result:", toLoadGameId);
         return toLoadGameId;
     };
 
