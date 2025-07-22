@@ -2,7 +2,7 @@ import { FormatIcu } from "@tolgee/format-icu";
 import { BackendFetch, Tolgee } from "@tolgee/react";
 import { getAppSettings } from "./app-settings";
 
-const languageCodes = ["en", "id", "th", "vi", "zh_cn", "zh_tw"];
+const languageCodes = ["en", "id", "th", "vi", "zh_cn", "zh_tw", "ja"];
 const tolgeeNamespaceByGameSetting = Object.values(getAppSettings().gameSettings)
     .map((setting) => setting.tolgeeNamespace)
     .filter((ns) => ns);
