@@ -187,14 +187,14 @@ const SplashScreen: React.FC = () => {
             console.log("[SplashScreen] handleInitialization - isSabaPlay:", isSabaPlay);
             console.log("[SplashScreen] handleInitialization - Condition: !authorizeInfo?.authorized && isSabaPlay =", !authorizeInfo?.authorized && isSabaPlay);
 
-            if (!authorizeInfo?.authorized && isSabaPlay) {
+            if (!authorizeInfo?.authorized && (isDirectMode || isSabaPlay)) {
                 console.log("[SplashScreen] handleInitialization - Auto creating nickname for SabaPlay");
                 authorizeInfo = await autoCreateNickname(session, signOut);
                 console.log("[SplashScreen] handleInitialization - Auto nickname creation result:", authorizeInfo);
             }
 
             console.log("[SplashScreen] handleInitialization - Final authorization check:", authorizeInfo?.authorized);
-            if (!authorizeInfo?.authorized && (isDirectMode || isSabaPlay)) {
+            if (!authorizeInfo?.authorized) {
                 console.log("[SplashScreen] handleInitialization - User not authorized, rendering register page");
                 setIsRenderRegister(true);
                 return;

@@ -1,37 +1,120 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# URL Context Documentation
 
-## Getting Started
+This documentation provides comprehensive analysis of the URL context parameters (`isDirectMode`, `redirectUrl`, `isSabaPlay`, `gameId`) and their critical roles in the first login to lobby flow of the gaming application.
 
-First, run the development server:
+## 🚨 Breaking Change Alert
 
-```bash
-npm run dev
-# or
-yarn dev
+### ⚠️ **Major Change: isDirectMode Now Equals isSabaPlay**
 
-# run test
-yarn test
+**Change Applied**: `isDirectMode` is now set to the same value as `isSabaPlay` instead of being based on the `ref` parameter.
+
+**Before**:
+```typescript
+const isDirectMode = !!params.get("ref"); // Based on ref parameter
+const isSabaPlay = params.get("op") === "SP";
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**After**:
+```typescript
+const isSabaPlay = params.get("op") === "SP";
+const isDirectMode = isSabaPlay; // Now identical to isSabaPlay
+```
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+### **Critical Implications**
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+#### **❌ Breaking Changes**:
+- **Direct Mode Access**: URLs with `?ref=true` but `op≠SP` no longer work as direct mode
+- **Redirect URLs**: Only available when `op=SP` (SabaPlay mode)
+- **Analytics**: Same tracking for direct mode and SabaPlay (may be misleading)
+- **Game Selection**: Non-SabaPlay direct access now applies SSO logic
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+#### **✅ Still Working**:
+- `?op=SP&gameId=123` → Direct mode, bypasses SSO
+- `?op=SP&gameId=123&rurl=<base64>` → Direct mode with redirect
+- `?gameId=123` → Normal SSO flow
 
-## Learn More
+#### **❌ No Longer Working**:
+- `?ref=true&gameId=123` → No longer direct mode
+- `?ref=true&gameId=123&rurl=<base64>` → No redirect URL
+- `?ref=true&op=GN&gameId=123` → No longer direct mode
 
-To learn more about Next.js, take a look at the following resources:
+### **Migration Required**
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+If you have existing integrations using `?ref=true` for direct mode access, you need to:
+1. **Change URLs** to use `?op=SP` instead of `?ref=true`
+2. **Update Analytics** to account for combined tracking
+3. **Test All Flows** to ensure they work with the new logic
+4. **Update Documentation** to reflect the new URL patterns
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## 📋 Documentation Overview
 
-## Deploy on Vercel
+### Core Analysis Documents
+- **[URL Context Analysis](URL_Context_Analysis.md)** - Comprehensive analysis of URL context parameters and their roles
+- **[URL Parameter Combinations](URL_Parameter_Combinations.md)** - Complete matrix of all parameter combinations and behaviors
+- **[URL Context Flow Diagrams](URL_Context_Flow_Diagrams.md)** - Visual flow diagrams for all application scenarios
+- **[URL Context Testing Guide](URL_Context_Testing_Guide.md)** - Comprehensive testing guidelines and test cases
+- **[isDirectMode vs isSabaPlay Analysis](isDirectMode_vs_isSabaPlay_Analysis.md)** - Detailed comparison and confusion analysis
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Testing Documentation
+- **[Analytics Testing Documentation](Analytics_Testing_Documentation.md)** - Comprehensive testing guidelines for analytics integration
+- **[First Login Redirect Lobby](first-login-redirect-lobby.md)** - Detailed flow analysis for first login to lobby
+- **[First Login Redirect Game](first-login-redirect-game.md)** - Detailed flow analysis for first login to game
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### Recent Updates
+- **Breaking Change Applied**: `isDirectMode` now equals `isSabaPlay`
+- **Analytics Integration**: Complete test coverage for SSO method classification
+- **Comprehensive Testing**: Unit tests, integration tests, and automated test runner
+
+## 🐛 Recent Bug Fixes
+
+### Registration Flow Getting Stuck - FIXED ✅
+
+**Issue**: New users with URLs like `?token=xxx&lang=vi-VN&appType=1&op=GN&cg=Credit_VN` (missing gameId, non-direct mode, non-SabaPlay) would get stuck after registration completion.
+
+**Root Cause**: 
+1. `PreloadResourceRegister.handleAuthorizedAccess` was not calling `updateStatePreloadResource()` when lobby configs were successfully loaded
+2. `Register.updateToLoadGameId` had no fallback when no enabled games were available
+
+**Fix Applied**:
+- **PreloadResourceRegister**: Added `updateStatePreloadResource()` call when lobby configs are successfully loaded and on error
+- **Register.updateToLoadGameId**: Added fallback to lobby (`toLoadGameId = 0`) when no enabled games are available
+
+**Impact**: All registration flows now complete successfully with proper error handling.
+
+## 🔧 Key Components
+
+### URL Context Parameters
+- **`gameId`**: Determines which game to load or whether to show the lobby
+- **`isDirectMode`**: Controls SSO redirect logic bypass
+- **`redirectUrl`**: Base64 encoded URL for post-game redirection
+- **`isSabaPlay`**: Identifies SabaPlay platform integration
+
+### Critical Decision Points
+- **Direct Mode vs Non-Direct Mode**: Different game selection logic
+- **SabaPlay Integration**: Auto nickname creation trigger
+- **First SSO to Lobby**: Business requirement for lobby redirection
+- **Game Service Availability**: Fallback logic for unavailable games
+
+## 📊 Test Coverage
+
+The documentation includes comprehensive test cases covering:
+- Happy path scenarios
+- Edge cases and error handling
+- All 16 parameter combinations
+- Integration scenarios
+- Recent bug fix scenarios
+
+## 🚀 Getting Started
+
+1. Start with **[URL Context Analysis](URL_Context_Analysis.md)** for an overview
+2. Review **[First Login to Lobby Flow](first-login-redirect-lobby.md)** for detailed workflow
+3. Check **[URL Parameter Combinations](URL_Parameter_Combinations.md)** for specific scenarios
+4. Use **[URL Context Testing Guide](URL_Context_Testing_Guide.md)** for testing implementation
+
+## 📝 Contributing
+
+When making changes to URL context logic:
+1. Update the relevant documentation files
+2. Add test cases to the testing guide
+3. Update flow diagrams if needed
+4. Document any new parameter combinations

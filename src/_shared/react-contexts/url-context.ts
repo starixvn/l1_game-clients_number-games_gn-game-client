@@ -32,7 +32,16 @@ export function parseContextFromURL(): URLContextModel | undefined {
     const language = params.get("lang");
     const gameId = Number(params.get("gameId") || 0);
     const redirectUrl = params.get("rurl");
-    const isDirectMode = !!params.get("ref") && !redirectUrl;
+    const ref = params.get("ref");
+
+    // Refactored: isDirectMode is true when both ref and rurl are present
+    const isDirectMode = !!(ref && redirectUrl);
+
+    console.log("[URLContext] parseContextFromURL - Direct mode calculation:", {
+        ref,
+        redirectUrl,
+        isDirectMode
+    });
 
     const isSabaPlay = params.get("op") === "SP";
 
