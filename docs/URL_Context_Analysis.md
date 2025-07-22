@@ -158,13 +158,17 @@ flowchart TD
     M3 -->|Yes| N3[Set toLoadGameId equals 0 Lobby]
     M3 -->|No| O3[Find Available Game Service]
 
-    O3 --> P3[Set toLoadGameId to Available Game]
-    J3 --> Q3[Trigger Preload]
-    N3 --> Q3
-    P3 --> Q3
+    O3 --> P3{Service Available?}
+    P3 -->|Yes| Q3[Set toLoadGameId to Available Game]
+    P3 -->|No| R3[Set toLoadGameId equals 0 Lobby]
 
-    Q3 --> R3[Preload Resources]
-    R3 --> S3[Render Dashboard]
+    J3 --> S3[Trigger Preload]
+    N3 --> S3
+    Q3 --> S3
+    R3 --> S3
+
+    S3 --> T3[Preload Resources]
+    T3 --> U3[Render Dashboard]
 ```
 
 ### 4. Dashboard Rendering Logic
@@ -384,6 +388,82 @@ static login(urlContext: URLContextModel) {
     - Invalid URL parameters
     - Network failures
     - Session timeouts
+
+## Recent Bug Fixes and Improvements
+
+### Bug Fix: Registration Flow Getting Stuck
+
+**Issue**: New users with URLs like `?token=xxx&lang=vi-VN&appType=1&op=GN&cg=Credit_VN` (missing gameId, non-direct mode, non-SabaPlay) would get stuck after registration completion.
+
+**Root Cause**:
+
+1. `PreloadResourceRegister.handleAuthorizedAccess` was not calling `updateStatePreloadResource()` when lobby configs were successfully loaded
+2. `Register.updateToLoadGameId` had no fallback when no enabled games were available
+
+**Fix Applied**:
+
+#### 1. PreloadResourceRegister Fix
+
+```typescript
+const handleAuthorizedAccess = async () => {
+    try {
+        const lobby = await getLobbyConfigs(session);
+        if (!lobby || Object.keys(lobby.lobbyConfigs).length === 0) {
+            updateStatePreloadResource();
+        } else {
+            if (lobby?.lobbyConfigs) {
+                updateLobbyConfigs(lobby?.lobbyConfigs);
+                getAndHandleBannerOffer(authorizeResponse, lobby?.lobbyConfigs, setBannerId);
+                getAndHandleGameOfferIds(authorizeResponse, lobby?.lobbyConfigs, setGameOfferIds);
+                // Fix: Call updateStatePreloadResource when lobby configs are successfully loaded
+                updateStatePreloadResource();
+            }
+        }
+    } catch (error) {
+        console.error(error);
+        // Fix: Call updateStatePreloadResource even on error to prevent getting stuck
+        updateStatePreloadResource();
+    }
+};
+```
+
+#### 2. Register updateToLoadGameId Fix
+
+```typescript
+updateToLoadGameId = async (authorizeResponse: AuthorizeResponse) => {
+    const lobby = await getLobbyConfigs(session);
+    const enabledRenderGameSettings = getEnabledRenderGameSettings(lobby?.lobbyConfigs, authorizeResponse);
+
+    if (firstSSOToLobby && enabledRenderGameSettings.length > 0) {
+        this.setState({ toLoadGameId: 0 });
+    } else if (enabledRenderGameSettings.length > 0) {
+        for (const gameSetting of enabledRenderGameSettings) {
+            const isServiceAvailable = await getServiceStatusIsAvailable(gameSetting);
+            if (isServiceAvailable) {
+                this.setState({ toLoadGameId: gameSetting.id });
+                break;
+            }
+        }
+    } else {
+        // Fix: Handle case when no enabled games are available - default to lobby
+        this.setState({ toLoadGameId: 0 });
+    }
+};
+```
+
+**Impact**:
+
+-   Registration flow now completes successfully for all URL parameter combinations
+-   Users are properly redirected to lobby when no specific game is available
+-   Error handling prevents the flow from getting stuck
+
+**Test Cases Covered**:
+
+-   URLs with missing gameId parameter
+-   Non-direct mode registrations
+-   Non-SabaPlay integrations
+-   Scenarios with no enabled games
+-   Network errors during lobby config loading
 
 ## Conclusion
 

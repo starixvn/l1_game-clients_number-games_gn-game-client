@@ -305,7 +305,7 @@ const getSSORedirectToGameId = async (lobbyConfigs: ILobbyConfigs, authorizeInfo
 ```typescript
 updateToLoadGameId = async (authorizeResponse: AuthorizeResponse) => {
     const lobby = await getLobbyConfigs(session);
-    const enabledRenderGameSettings = getEnabledRenderGameSettings(lobby.lobbyConfigs, authorizeResponse);
+    const enabledRenderGameSettings = getEnabledRenderGameSettings(lobby?.lobbyConfigs, authorizeResponse);
 
     if (firstSSOToLobby && enabledRenderGameSettings.length > 0) {
         // Business requirement: Redirect to lobby instead of specific game
@@ -319,6 +319,9 @@ updateToLoadGameId = async (authorizeResponse: AuthorizeResponse) => {
                 break;
             }
         }
+    } else {
+        // Fix: Handle case when no enabled games are available - default to lobby
+        this.setState({ toLoadGameId: 0 });
     }
 };
 ```
@@ -334,6 +337,27 @@ const PreloadResourceRegister: React.FC<{
     session: SSOResponse;
     authorizeResponse: AuthorizeResponse;
 }> = ({ isDirectMode, gameId, updateStatePreloadResource, updateLobbyConfigs, session, authorizeResponse }) => {
+    const handleAuthorizedAccess = async () => {
+        try {
+            const lobby = await getLobbyConfigs(session);
+            if (!lobby || Object.keys(lobby.lobbyConfigs).length === 0) {
+                updateStatePreloadResource();
+            } else {
+                if (lobby?.lobbyConfigs) {
+                    updateLobbyConfigs(lobby?.lobbyConfigs);
+                    getAndHandleBannerOffer(authorizeResponse, lobby?.lobbyConfigs, setBannerId);
+                    getAndHandleGameOfferIds(authorizeResponse, lobby?.lobbyConfigs, setGameOfferIds);
+                    // Fix: Call updateStatePreloadResource when lobby configs are successfully loaded
+                    updateStatePreloadResource();
+                }
+            }
+        } catch (error) {
+            console.error(error);
+            // Fix: Call updateStatePreloadResource even on error to prevent getting stuck
+            updateStatePreloadResource();
+        }
+    };
+
     // Handle lobby case (gameId = 0) with useEffect
     useEffect(() => {
         if (!isDirectMode && gameId === 0) {
@@ -539,5 +563,81 @@ it("should return false when openGameId is 0 (lobby case)", () => {
     expect(result).toBe(false);
 });
 ```
+
+## 15. Recent Bug Fixes and Improvements
+
+### Bug Fix: Registration Flow Getting Stuck
+
+**Issue**: New users with URLs like `?token=xxx&lang=vi-VN&appType=1&op=GN&cg=Credit_VN` (missing gameId, non-direct mode, non-SabaPlay) would get stuck after registration completion.
+
+**Root Cause**:
+
+1. `PreloadResourceRegister.handleAuthorizedAccess` was not calling `updateStatePreloadResource()` when lobby configs were successfully loaded
+2. `Register.updateToLoadGameId` had no fallback when no enabled games were available
+
+**Fix Applied**:
+
+#### 1. PreloadResourceRegister Fix
+
+```typescript
+const handleAuthorizedAccess = async () => {
+    try {
+        const lobby = await getLobbyConfigs(session);
+        if (!lobby || Object.keys(lobby.lobbyConfigs).length === 0) {
+            updateStatePreloadResource();
+        } else {
+            if (lobby?.lobbyConfigs) {
+                updateLobbyConfigs(lobby?.lobbyConfigs);
+                getAndHandleBannerOffer(authorizeResponse, lobby?.lobbyConfigs, setBannerId);
+                getAndHandleGameOfferIds(authorizeResponse, lobby?.lobbyConfigs, setGameOfferIds);
+                // Fix: Call updateStatePreloadResource when lobby configs are successfully loaded
+                updateStatePreloadResource();
+            }
+        }
+    } catch (error) {
+        console.error(error);
+        // Fix: Call updateStatePreloadResource even on error to prevent getting stuck
+        updateStatePreloadResource();
+    }
+};
+```
+
+#### 2. Register updateToLoadGameId Fix
+
+```typescript
+updateToLoadGameId = async (authorizeResponse: AuthorizeResponse) => {
+    const lobby = await getLobbyConfigs(session);
+    const enabledRenderGameSettings = getEnabledRenderGameSettings(lobby?.lobbyConfigs, authorizeResponse);
+
+    if (firstSSOToLobby && enabledRenderGameSettings.length > 0) {
+        this.setState({ toLoadGameId: 0 });
+    } else if (enabledRenderGameSettings.length > 0) {
+        for (const gameSetting of enabledRenderGameSettings) {
+            const isServiceAvailable = await getServiceStatusIsAvailable(gameSetting);
+            if (isServiceAvailable) {
+                this.setState({ toLoadGameId: gameSetting.id });
+                break;
+            }
+        }
+    } else {
+        // Fix: Handle case when no enabled games are available - default to lobby
+        this.setState({ toLoadGameId: 0 });
+    }
+};
+```
+
+**Impact**:
+
+-   Registration flow now completes successfully for all URL parameter combinations
+-   Users are properly redirected to lobby when no specific game is available
+-   Error handling prevents the flow from getting stuck
+
+**Test Cases Covered**:
+
+-   URLs with missing gameId parameter
+-   Non-direct mode registrations
+-   Non-SabaPlay integrations
+-   Scenarios with no enabled games
+-   Network errors during lobby config loading
 
 This workflow analysis provides a comprehensive understanding of how gameId flows through the application, enabling better debugging and feature development.

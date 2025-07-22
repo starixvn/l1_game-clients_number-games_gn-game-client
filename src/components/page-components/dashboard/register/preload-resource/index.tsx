@@ -24,10 +24,14 @@ const PreloadResourceRegister: React.FC<{
                     updateLobbyConfigs(lobby?.lobbyConfigs);
                     getAndHandleBannerOffer(authorizeResponse, lobby?.lobbyConfigs, setBannerId);
                     getAndHandleGameOfferIds(authorizeResponse, lobby?.lobbyConfigs, setGameOfferIds);
+                    // Fix: Call updateStatePreloadResource when lobby configs are successfully loaded
+                    updateStatePreloadResource();
                 }
             }
         } catch (error) {
             console.error(error);
+            // Fix: Call updateStatePreloadResource even on error to prevent getting stuck
+            updateStatePreloadResource();
         }
     };
 

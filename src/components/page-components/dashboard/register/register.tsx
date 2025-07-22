@@ -161,6 +161,9 @@ export class Register extends PureComponent<RegisterProps, RegisterState> {
                     break;
                 }
             }
+        } else {
+            // Fix: Handle case when no enabled games are available - default to lobby
+            this.setState({ toLoadGameId: 0 });
         }
     };
 
