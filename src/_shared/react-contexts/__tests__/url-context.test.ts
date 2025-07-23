@@ -1,5 +1,5 @@
 import { URLContextModel, parseContextFromURL, loadURLContext, updateURLContext, getURLContext } from '../url-context';
-import { StorageHelper, localStorageKeys } from '../../helpers';
+import { StorageHelper, localStorageKeys, setUserLatestGameId } from '../../helpers';
 
 // Mock dependencies
 jest.mock('../../helpers', () => ({
@@ -10,10 +10,12 @@ jest.mock('../../helpers', () => ({
     localStorageKeys: {
         url: 'url',
         latestGameId: 'latestGameId'
-    }
+    },
+    setUserLatestGameId: jest.fn()
 }));
 
 const mockStorageHelper = StorageHelper as jest.Mocked<typeof StorageHelper>;
+const mockSetUserLatestGameId = setUserLatestGameId as jest.MockedFunction<typeof setUserLatestGameId>;
 
 describe('URL Context', () => {
     beforeEach(() => {
@@ -146,7 +148,7 @@ describe('URL Context', () => {
 
         it('should set isDirectMode to true when ref and redirectUrl are both present', () => {
             // Arrange
-            globalThis.location.search = '?ref=d_direct&rurl=redirect&token=abc123';
+            globalThis.location.search = '?ref=d_direct&rurl=redirect&token=abc123&gameId=1001';
 
             // Act
             const result = parseContextFromURL();
@@ -157,7 +159,7 @@ describe('URL Context', () => {
 
         it('should set isDirectMode to true when ref+redirectUrl and op=SP are present', () => {
             // Arrange
-            globalThis.location.search = '?ref=d_direct&rurl=redirect&op=SP&token=abc123';
+            globalThis.location.search = '?ref=d_direct&rurl=redirect&op=SP&token=abc123&gameId=1001';
 
             // Act
             const result = parseContextFromURL();
@@ -168,7 +170,7 @@ describe('URL Context', () => {
 
         it('should set isDirectMode to true when ref and redirectUrl are present but op=SP is also present', () => {
             // Arrange
-            globalThis.location.search = '?ref=d_direct&rurl=redirect&op=SP&token=abc123';
+            globalThis.location.search = '?ref=d_direct&rurl=redirect&op=SP&token=abc123&gameId=1001';
 
             // Act
             const result = parseContextFromURL();
@@ -179,7 +181,7 @@ describe('URL Context', () => {
 
         it('should set isDirectMode to true when both ref+redirectUrl and op=SP are present', () => {
             // Arrange
-            globalThis.location.search = '?ref=d_direct&rurl=redirect&op=SP&token=abc123';
+            globalThis.location.search = '?ref=d_direct&rurl=redirect&op=SP&token=abc123&gameId=1001';
 
             // Act
             const result = parseContextFromURL();
@@ -367,9 +369,13 @@ describe('URL Context', () => {
 
             // Assert
             expect(mockStorageHelper.set).toHaveBeenCalledWith(
-                localStorageKeys.latestGameId,
-                1002
+                localStorageKeys.url,
+                expect.objectContaining({
+                    gameId: 1002,
+                    firstSSOToLobby: false
+                })
             );
+            expect(mockSetUserLatestGameId).toHaveBeenCalledWith(1002, undefined);
         });
 
         it('should not store latestGameId when gameId is not provided', () => {

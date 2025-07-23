@@ -178,7 +178,7 @@ export class Register extends PureComponent<RegisterProps, RegisterState> {
 
         const lobby = await getLobbyConfigs(session);
 
-        const enabledRenderGameSettings = getEnabledRenderGameSettings(lobby?.lobbyConfigs, authorizeResponse);
+        const enabledRenderGameSettings = getEnabledRenderGameSettings(lobby?.lobbyConfigs as any, authorizeResponse);
 
         if (firstSSOToLobby && enabledRenderGameSettings.length > 0) {
             // Business requirement: Redirect to lobby instead of specific game

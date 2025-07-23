@@ -50,6 +50,8 @@ export interface ILobbyConfigs {
     miniPanelGameIds: number[];
     categories: IGameCategory[];
     banners: IBanner[];
+    gameSettings?: Record<number, any>;
+    roundTimerGame?: number | null;
 }
 
 export interface IBanner {

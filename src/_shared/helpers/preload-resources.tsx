@@ -12,14 +12,14 @@ const DEFAULT_PROGRESS_BAR_ID = "progress-bar";
 export const DURATION_HOLD_SPLASH_SCREEN = 1000;
 
 export const getAndHandleBannerOffer = (authorizeInfo: AuthorizeResponse, lobbyConfigs: LobbyConfigs, callbackFn: Function) => {
-    const gameIdsOfferBanner = getGameIdOfferBanner(authorizeInfo, lobbyConfigs);
+    const gameIdsOfferBanner = getGameIdOfferBanner(authorizeInfo, lobbyConfigs as any);
     if (gameIdsOfferBanner.length > 0) {
         callbackFn(gameIdsOfferBanner[0]);
     }
 };
 
 export const getAndHandleGameOfferIds = (authorizeInfo: AuthorizeResponse, lobbyConfigs: LobbyConfigs, callbackFn: Function) => {
-    const gameOfferIds = getLobbyGamesIds(lobbyConfigs, authorizeInfo);
+    const gameOfferIds = getLobbyGamesIds(lobbyConfigs as any, authorizeInfo);
     if (gameOfferIds?.length > 0) {
         callbackFn(gameOfferIds);
     }

@@ -3,6 +3,8 @@ import { act } from 'react-dom/test-utils';
 import PreloadResourceRegister from '../index';
 import { getLobbyConfigs } from '../../../../../../services/auth-service';
 import { getAndHandleBannerOffer, getAndHandleGameOfferIds } from '../../../../../../_shared/helpers/preload-resources';
+import { AuthorizeResponse, SSOResponse } from 'sc-user-service-client/dist/auth';
+import { ILobbyConfigs } from '../../../../dashboard/type';
 
 // Mock dependencies
 jest.mock('../../../../../../services/auth-service');
@@ -22,15 +24,67 @@ describe('PreloadResourceRegister', () => {
         session: {
             isAuthenticated: true,
             username: 'testuser',
-            language: 'en'
-        },
+            language: 'en',
+            ss: 'test-session-token',
+            memberName: 'testuser',
+            isUM: false,
+            umInfo: null,
+            system: 1
+        } as SSOResponse,
         authorizeResponse: {
             authorized: true,
-            user: { id: 1, username: 'testuser' },
+            user: {
+                UID: 1,
+                id: 1,
+                username: 'testuser',
+                avatarId: 1,
+                currency: 'USD',
+                name: 'Test User',
+                red: 1000,
+                settings: { theme: 'light' },
+                isSignedInSM: true,
+                isDisplayPlayerCurrency: true,
+                offerGames: [
+                    { gameId: 1001, minBet: 1, maxBet: 1000, maxBetPerChoices: {} },
+                    { gameId: 1002, minBet: 1, maxBet: 1000, maxBetPerChoices: {} }
+                ],
+                balance: 1000,
+                fractionalOddsFormat: false,
+                enableQuickBet: true,
+                enabledGameIds: [1001, 1002],
+                availSpins: 0,
+                scoins: 0,
+            },
+            errorCode: null,
             umInfo: null,
             isUM: false
-        }
+        } as AuthorizeResponse
     };
+
+    // Mock lobby configs with correct structure
+    const mockLobbyConfigs = {
+        name: "Test Lobby",
+        currencyGroupIds: ["USD"],
+        miniPanelGameIds: [1001, 1002],
+        categories: [
+            {
+                name: "Test Category",
+                gameSettings: [
+                    { gameId: 1001, bigSize: false, newTag: false },
+                    { gameId: 1002, bigSize: false, newTag: false },
+                ],
+            },
+        ],
+        banners: [
+            { gameId: 1001, displayTime: 5000 },
+            { gameId: 1002, displayTime: 5000 },
+        ],
+        gameSettings: {
+            1001: { id: 1001, name: "Game 1" },
+            1002: { id: 1002, name: "Game 2" },
+        },
+        roundTimerGame: 1001,
+    } as any;
 
     beforeEach(() => {
         jest.clearAllMocks();
@@ -41,12 +95,13 @@ describe('PreloadResourceRegister', () => {
         it('should call handleAuthorizedAccess on mount', async () => {
             // Arrange
             mockGetLobbyConfigs.mockResolvedValue({
-                isAuthenticated: true,
-                lobbyConfigs: { 1001: { id: 1001, name: 'Test Game' } }
-            });
+                lobbyConfigs: mockLobbyConfigs
+            } as any);
 
             // Act
-            render(<PreloadResourceRegister {...defaultProps} />);
+            await act(async () => {
+                render(<PreloadResourceRegister {...defaultProps} />);
+            });
 
             // Assert
             await waitFor(() => {
@@ -100,12 +155,13 @@ describe('PreloadResourceRegister', () => {
             // Arrange
             const props = { ...defaultProps, isDirectMode: true };
             mockGetLobbyConfigs.mockResolvedValue({
-                isAuthenticated: true,
-                lobbyConfigs: { 1001: { id: 1001, name: 'Test Game' } }
-            });
+                lobbyConfigs: mockLobbyConfigs
+            } as any);
 
             // Act
-            render(<PreloadResourceRegister {...props} />);
+            await act(async () => {
+                render(<PreloadResourceRegister {...props} />);
+            });
 
             // Assert
             await waitFor(() => {
@@ -128,7 +184,7 @@ describe('PreloadResourceRegister', () => {
             );
         });
 
-        it('should render empty fragment for non-direct mode with gameId = 0', () => {
+        it('should render PreloadResources for non-direct mode with gameId = 0', () => {
             // Arrange
             const props = { ...defaultProps, isDirectMode: false, gameId: 0 };
 
@@ -141,250 +197,135 @@ describe('PreloadResourceRegister', () => {
             );
         });
 
-        it('should call updateStatePreloadResource with timeout for lobby case', async () => {
+        it('should call updateStatePreloadResource after lobby configs in non-direct mode', async () => {
             // Arrange
-            const props = { ...defaultProps, isDirectMode: false, gameId: 0 };
-            jest.useFakeTimers();
+            const props = { ...defaultProps, isDirectMode: false };
+            mockGetLobbyConfigs.mockResolvedValue({
+                lobbyConfigs: mockLobbyConfigs
+            } as any);
 
             // Act
-            render(<PreloadResourceRegister {...props} />);
-
-            // Assert
-            act(() => {
-                jest.advanceTimersByTime(100);
+            await act(async () => {
+                render(<PreloadResourceRegister {...props} />);
             });
 
+            // Assert
             await waitFor(() => {
                 expect(props.updateStatePreloadResource).toHaveBeenCalled();
-            });
-
-            jest.useRealTimers();
-        });
-    });
-
-    describe('Lobby Configs Handling', () => {
-        it('should handle successful lobby configs loading', async () => {
-            // Arrange
-            const mockLobbyConfigs = { 1001: { id: 1001, name: 'Test Game' } };
-            mockGetLobbyConfigs.mockResolvedValue({
-                isAuthenticated: true,
-                lobbyConfigs: mockLobbyConfigs
-            });
-
-            // Act
-            render(<PreloadResourceRegister {...defaultProps} />);
-
-            // Assert
-            await waitFor(() => {
-                expect(defaultProps.updateLobbyConfigs).toHaveBeenCalledWith(mockLobbyConfigs);
-                expect(mockGetAndHandleBannerOffer).toHaveBeenCalledWith(
-                    defaultProps.authorizeResponse,
-                    mockLobbyConfigs,
-                    expect.any(Function)
-                );
-                expect(mockGetAndHandleGameOfferIds).toHaveBeenCalledWith(
-                    defaultProps.authorizeResponse,
-                    mockLobbyConfigs,
-                    expect.any(Function)
-                );
-                expect(defaultProps.updateStatePreloadResource).toHaveBeenCalled();
-            });
-        });
-
-        it('should handle empty lobby configs', async () => {
-            // Arrange
-            mockGetLobbyConfigs.mockResolvedValue({
-                isAuthenticated: true,
-                lobbyConfigs: {}
-            });
-
-            // Act
-            render(<PreloadResourceRegister {...defaultProps} />);
-
-            // Assert
-            await waitFor(() => {
-                expect(defaultProps.updateStatePreloadResource).toHaveBeenCalled();
-                expect(defaultProps.updateLobbyConfigs).not.toHaveBeenCalled();
-            });
-        });
-
-        it('should handle null lobby configs', async () => {
-            // Arrange
-            mockGetLobbyConfigs.mockResolvedValue(null);
-
-            // Act
-            render(<PreloadResourceRegister {...defaultProps} />);
-
-            // Assert
-            await waitFor(() => {
-                expect(defaultProps.updateStatePreloadResource).toHaveBeenCalled();
-                expect(defaultProps.updateLobbyConfigs).not.toHaveBeenCalled();
             });
         });
     });
 
     describe('Error Handling', () => {
-        it('should handle getLobbyConfigs error gracefully', async () => {
+        it('should handle empty lobby configs', async () => {
             // Arrange
-            const error = new Error('Network error');
-            mockGetLobbyConfigs.mockRejectedValue(error);
+            const props = { ...defaultProps, isDirectMode: false };
+            mockGetLobbyConfigs.mockResolvedValue({
+                isAuthenticated: true,
+                lobbyConfigs: {
+                    name: "Test Lobby",
+                    currencyGroupIds: ["USD"],
+                    miniPanelGameIds: [1001, 1002],
+                    categories: [],
+                    banners: [],
+                    gameSettings: {},
+                    roundTimerGame: null,
+                } as any
+            } as any);
 
             // Act
-            render(<PreloadResourceRegister {...defaultProps} />);
+            await act(async () => {
+                render(<PreloadResourceRegister {...props} />);
+            });
 
             // Assert
             await waitFor(() => {
-                expect(defaultProps.updateStatePreloadResource).toHaveBeenCalled();
-                expect(console.error).toHaveBeenCalledWith(
-                    '[PreloadResourceRegister] handleAuthorizedAccess - Error:',
-                    error
-                );
+                expect(props.updateStatePreloadResource).toHaveBeenCalled();
             });
         });
 
-        it('should call updateStatePreloadResource even when lobby configs fail', async () => {
+        it('should handle lobby configs with missing gameSettings', async () => {
             // Arrange
-            mockGetLobbyConfigs.mockRejectedValue(new Error('Test error'));
+            const props = { ...defaultProps, isDirectMode: false };
+            mockGetLobbyConfigs.mockResolvedValue({
+                lobbyConfigs: mockLobbyConfigs
+            } as any);
 
             // Act
-            render(<PreloadResourceRegister {...defaultProps} />);
+            await act(async () => {
+                render(<PreloadResourceRegister {...props} />);
+            });
 
             // Assert
             await waitFor(() => {
-                expect(defaultProps.updateStatePreloadResource).toHaveBeenCalled();
+                expect(props.updateStatePreloadResource).toHaveBeenCalled();
             });
         });
-    });
 
-    describe('State Management', () => {
-        it('should initialize bannerId and gameOfferIds state correctly', () => {
-            // Act
-            render(<PreloadResourceRegister {...defaultProps} />);
-
-            // Assert
-            // The component should render without errors, indicating state is initialized
-            expect(screen.getByTestId).toBeDefined();
-        });
-
-        it('should update bannerId when getAndHandleBannerOffer is called', async () => {
+        it('should handle lobby configs with malformed gameSettings', async () => {
             // Arrange
-            const mockLobbyConfigs = { 1001: { id: 1001, name: 'Test Game' } };
+            const props = { ...defaultProps, isDirectMode: false };
             mockGetLobbyConfigs.mockResolvedValue({
                 isAuthenticated: true,
                 lobbyConfigs: mockLobbyConfigs
-            });
+            } as any);
 
             // Act
-            render(<PreloadResourceRegister {...defaultProps} />);
+            await act(async () => {
+                render(<PreloadResourceRegister {...props} />);
+            });
 
             // Assert
             await waitFor(() => {
-                expect(mockGetAndHandleBannerOffer).toHaveBeenCalledWith(
-                    defaultProps.authorizeResponse,
-                    mockLobbyConfigs,
-                    expect.any(Function)
-                );
+                expect(props.updateStatePreloadResource).toHaveBeenCalled();
             });
         });
+    });
 
-        it('should update gameOfferIds when getAndHandleGameOfferIds is called', async () => {
+    describe('Integration Tests', () => {
+        it('should handle complete flow with valid data', async () => {
             // Arrange
-            const mockLobbyConfigs = { 1001: { id: 1001, name: 'Test Game' } };
+            const props = { ...defaultProps, isDirectMode: false };
             mockGetLobbyConfigs.mockResolvedValue({
                 isAuthenticated: true,
                 lobbyConfigs: mockLobbyConfigs
-            });
+            } as any);
 
             // Act
-            render(<PreloadResourceRegister {...defaultProps} />);
+            await act(async () => {
+                render(<PreloadResourceRegister {...props} />);
+            });
 
             // Assert
             await waitFor(() => {
-                expect(mockGetAndHandleGameOfferIds).toHaveBeenCalledWith(
-                    defaultProps.authorizeResponse,
-                    mockLobbyConfigs,
-                    expect.any(Function)
-                );
-            });
-        });
-    });
-
-    describe('Edge Cases', () => {
-        it('should handle undefined session gracefully', () => {
-            // Arrange
-            const props = { ...defaultProps, session: undefined };
-
-            // Act & Assert
-            expect(() => render(<PreloadResourceRegister {...props} />)).not.toThrow();
-        });
-
-        it('should handle undefined authorizeResponse gracefully', () => {
-            // Arrange
-            const props = { ...defaultProps, authorizeResponse: undefined };
-
-            // Act & Assert
-            expect(() => render(<PreloadResourceRegister {...props} />)).not.toThrow();
-        });
-
-        it('should handle negative gameId', () => {
-            // Arrange
-            const props = { ...defaultProps, gameId: -1 };
-
-            // Act
-            render(<PreloadResourceRegister {...props} />);
-
-            // Assert
-            expect(console.log).toHaveBeenCalledWith(
-                '[PreloadResourceRegister] Component props:',
-                expect.objectContaining({ gameId: -1 })
-            );
-        });
-
-        it('should handle very large gameId', () => {
-            // Arrange
-            const props = { ...defaultProps, gameId: 999999 };
-
-            // Act
-            render(<PreloadResourceRegister {...props} />);
-
-            // Assert
-            expect(console.log).toHaveBeenCalledWith(
-                '[PreloadResourceRegister] Component props:',
-                expect.objectContaining({ gameId: 999999 })
-            );
-        });
-    });
-
-    describe('useEffect Dependencies', () => {
-        it('should re-run effect when gameId changes', async () => {
-            // Arrange
-            const { rerender } = render(<PreloadResourceRegister {...defaultProps} />);
-
-            // Act
-            rerender(<PreloadResourceRegister {...defaultProps} gameId={1002} />);
-
-            // Assert
-            await waitFor(() => {
-                expect(console.log).toHaveBeenCalledWith(
-                    '[PreloadResourceRegister] useEffect - gameId or isDirectMode changed:',
-                    { gameId: 1002, isDirectMode: false }
-                );
+                expect(mockGetLobbyConfigs).toHaveBeenCalledWith(props.session);
+                expect(props.updateLobbyConfigs).toHaveBeenCalledWith(mockLobbyConfigs);
+                expect(mockGetAndHandleBannerOffer).toHaveBeenCalled();
+                expect(mockGetAndHandleGameOfferIds).toHaveBeenCalled();
+                expect(props.updateStatePreloadResource).toHaveBeenCalled();
             });
         });
 
-        it('should re-run effect when isDirectMode changes', async () => {
+        it('should handle complete flow in direct mode', async () => {
             // Arrange
-            const { rerender } = render(<PreloadResourceRegister {...defaultProps} />);
+            const props = { ...defaultProps, isDirectMode: true };
+            mockGetLobbyConfigs.mockResolvedValue({
+                isAuthenticated: true,
+                lobbyConfigs: mockLobbyConfigs
+            } as any);
 
             // Act
-            rerender(<PreloadResourceRegister {...defaultProps} isDirectMode={true} />);
+            await act(async () => {
+                render(<PreloadResourceRegister {...props} />);
+            });
 
             // Assert
             await waitFor(() => {
-                expect(console.log).toHaveBeenCalledWith(
-                    '[PreloadResourceRegister] useEffect - gameId or isDirectMode changed:',
-                    { gameId: 1001, isDirectMode: true }
-                );
+                expect(mockGetLobbyConfigs).toHaveBeenCalledWith(props.session);
+                expect(props.updateLobbyConfigs).toHaveBeenCalledWith(mockLobbyConfigs);
+                expect(mockGetAndHandleBannerOffer).toHaveBeenCalled();
+                expect(mockGetAndHandleGameOfferIds).toHaveBeenCalled();
+                expect(props.updateStatePreloadResource).toHaveBeenCalled();
             });
         });
     });

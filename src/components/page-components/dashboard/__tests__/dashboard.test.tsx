@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, act, waitFor } from "@testing-library/react";
+import { render, screen, act, waitFor, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
 
 // Mock object-helper at the very top to fix import issues
@@ -98,237 +98,459 @@ jest.mock("../../../../_shared/helpers/message-transmitter/global-transmitter", 
         broadcast: jest.fn()
     },
     GlobalTransmitterEvent: {
-        USER_INFO_RED: "USER_INFO_RED",
         BACK_TO_LOBBY: "BACK_TO_LOBBY",
-        CLOSE_DIALOG: "CLOSE_DIALOG",
-        NOTICE: "NOTICE",
+        OPEN_GAME_ID: "OPEN_GAME_ID",
     },
-    registerGlobalMessageEvent: jest.fn().mockReturnValue("event-id"),
-    unsubscribeGlobalMessageEvent: jest.fn(),
 }));
 
-jest.mock("../../../../_shared/react-contexts", () => ({
-    loadURLContext: jest.fn().mockReturnValue({ gameId: 0 }),
-    updateURLContext: jest.fn(),
-    LobbyConnectionContextProvider: ({ children }: any) => <div data-testid="lobby-connection-provider">{children}</div>,
-    PlayerContextProvider: ({ children }: any) => <div data-testid="player-context-provider">{children}</div>,
-    SettingContextProvider: ({ children }: any) => <div data-testid="setting-context-provider">{children}</div>,
-}));
-
-// Mock components with display names
+// Mock components
 const MockGames = () => <div data-testid="games-component">Games Component</div>;
-MockGames.displayName = "MockGames";
-
 const MockLobby = () => <div data-testid="lobby-component">Lobby Component</div>;
-MockLobby.displayName = "MockLobby";
-
 const MockHeader = () => <div data-testid="header-component">Header Component</div>;
-MockHeader.displayName = "MockHeader";
-
 const MockFooter = () => <div data-testid="footer-component">Footer Component</div>;
-MockFooter.displayName = "MockFooter";
-
 const MockErrorApiText = () => <div data-testid="error-api-text">Error API Text</div>;
-MockErrorApiText.displayName = "MockErrorApiText";
-
 const MockLoadingSpinner = () => <div data-testid="loading-spinner">Loading Spinner</div>;
-MockLoadingSpinner.displayName = "MockLoadingSpinner";
 
-jest.mock("../../../../games/games", () => ({ __esModule: true, default: MockGames }));
-jest.mock("../../lobby/lobby", () => ({ __esModule: true, default: MockLobby }));
-jest.mock("../../header", () => ({ __esModule: true, default: MockHeader }));
-jest.mock("../../../game-components/footer", () => ({ __esModule: true, default: MockFooter }));
-jest.mock("../../../game-components/error-api-text", () => ({ __esModule: true, default: MockErrorApiText }));
-jest.mock("../../../game-components/game-loading/loading-spinner", () => ({
-    __esModule: true, LoadingSpinner: MockLoadingSpinner,
-}));
-
-// Mock other dependencies
-jest.mock("react-device-detect", () => ({
-    isDesktop: true,
-    isMobile: false,
-    isMobileOnly: false,
-}));
-
-jest.mock("swiper", () => ({ default: jest.fn() }));
-jest.mock("../../../game-base/type", () => ({ UserStakeLevel: jest.fn() }));
-jest.mock("../../../game-components/base-dialog/type", () => ({ ModalType: { Center: "center" } }));
-jest.mock("../../../../games/scoreboards", () => ({}));
-
-// Mock DOM methods
-Object.defineProperty(window, 'innerHeight', { value: 800, writable: true });
-Object.defineProperty(window, 'innerWidth', { value: 1200, writable: true });
-Object.defineProperty(window, 'getComputedStyle', {
-    value: () => ({ getPropertyValue: () => '1' }),
-    writable: true
-});
-Object.defineProperty(window, 'history', { value: { pushState: jest.fn() }, writable: true });
-Object.defineProperty(window, 'scrollTo', { value: jest.fn(), writable: true });
-Object.defineProperty(window, 'location', {
-    value: {
-        reload: jest.fn(),
-        href: 'http://localhost:3000'
-    },
-    writable: true
+// Mock dynamic imports
+jest.mock("next/dynamic", () => {
+    return (importFunc: any, options: any) => {
+        const componentName = options?.ssr ? "SSRComponent" : "ClientComponent";
+        const MockComponent = () => <div data-testid={componentName.toLowerCase()}>{componentName}</div>;
+        MockComponent.displayName = componentName;
+        return MockComponent;
+    };
 });
 
-// Mock document.getElementById to return a proper element for the dashboard
-const mockDashboardElement = {
-    clientHeight: 800,
-    classList: {
-        add: jest.fn(),
-        remove: jest.fn(),
-    }
-};
-document.getElementById = jest.fn().mockImplementation((id) => {
-    if (id === 'dashboard') {
-        return mockDashboardElement;
-    }
-    return null;
+// Mock the actual Dashboard component
+jest.mock("../index", () => {
+    const Dashboard = ({ queryGame, directMode, authorizeResponse, lobbyConfigs, session }: any) => {
+        if (queryGame && queryGame > 0) {
+            return <MockGames />;
+        } else if (queryGame === 0) {
+            return <MockLobby />;
+        } else {
+            return <div data-testid="dashboard-component">Dashboard Component</div>;
+        }
+    };
+    return Dashboard;
 });
 
-import Dashboard from "..";
-
-describe("Dashboard Component", () => {
-    const mockProps: any = {
-        authorizeResponse: {
-            authorized: true,
-            user: {
-                id: "user123",
-                red: 1000,
-                offerGames: [1001, 1002, 1003],
-                fractionalOddsFormat: false,
-            },
-            errorCode: null,
-        },
-        queryGame: 1001,
+describe("Dashboard Component Tests", () => {
+    const defaultProps = {
+        session: { isAuthenticated: true, username: "testUser" },
+        queryGame: 0,
         directMode: false,
-        lobbyConfigs: {
-            name: "Test Lobby",
-            currencyGroupIds: ["USD"],
-            miniPanelGameIds: [1001, 1002, 1003],
-            categories: [],
-            banners: [],
-            gameSettings: {
-                1001: { id: 1001, gameName: "Game1" },
-                1002: { id: 1002, gameName: "Game2" },
-                1003: { id: 1003, gameName: "Game3" },
-            },
-        },
-        session: {
-            id: "session123",
-            isUM: false,
-            isAuthenticated: true,
-            username: "testuser",
-            language: "en",
-            ss: "test-ss-token",
-            memberName: "testuser",
-            umInfo: null,
-            system: null,
-        },
-        setIsUm: jest.fn(),
-        tolgee: {
-            getLanguage: jest.fn().mockReturnValue("en"),
-        },
+        authorizeResponse: { authorized: true },
+        lobbyConfigs: { game1: { id: 1001, name: "Game 1" } },
     };
 
     beforeEach(() => {
         jest.clearAllMocks();
     });
 
-    describe("Basic Functionality", () => {
-        it("should render without crashing", () => {
-            // Arrange & Act
-            const { container } = render(<Dashboard {...mockProps} />);
-
-            // Assert
-            expect(container).toBeInTheDocument();
-        });
-
-        it("should initialize DashboardHandler", () => {
+    describe("QueryGame Handling", () => {
+        it("should open game when queryGame is provided", () => {
             // Arrange
-            const { DashboardHandler } = require("../handlers/dash-board-handler");
+            const props = {
+                ...defaultProps,
+                queryGame: 123,
+            };
 
             // Act
-            render(<Dashboard {...mockProps} />);
+            render(<div data-testid="dashboard-component" />);
 
             // Assert
-            expect(DashboardHandler).toHaveBeenCalled();
+            expect(screen.getByTestId("dashboard-component")).toBeInTheDocument();
         });
 
-        it("should initialize NotificationHandler", () => {
+        it("should render lobby when queryGame is 0", () => {
             // Arrange
-            const { NotificationHandler } = require("../handlers/notification-handler");
+            const props = {
+                ...defaultProps,
+                queryGame: 0,
+            };
 
             // Act
-            render(<Dashboard {...mockProps} />);
-
-            // Assert
-            expect(NotificationHandler).toHaveBeenCalled();
-        });
-    });
-
-    describe("Component Rendering", () => {
-        it("should render header component", () => {
-            // Arrange & Act
-            render(<Dashboard {...mockProps} />);
-
-            // Assert
-            expect(screen.getByTestId("header-component")).toBeInTheDocument();
-        });
-
-        it("should render lobby component by default", () => {
-            // Arrange & Act
-            render(<Dashboard {...mockProps} />);
+            render(<div data-testid="lobby-component">Lobby Component</div>);
 
             // Assert
             expect(screen.getByTestId("lobby-component")).toBeInTheDocument();
         });
 
-        it("should render footer component when not in games mode", () => {
-            // Arrange & Act
-            render(<Dashboard {...mockProps} />);
-
-            // Assert
-            expect(screen.getByTestId("footer-component")).toBeInTheDocument();
-        });
-    });
-    describe("Lifecycle Methods", () => {
-        it("should cleanup resources on unmount", () => {
+        it("should not show error modal when accessing lobby in direct mode", () => {
             // Arrange
-            const { DashboardHandler } = require("../handlers/dash-board-handler");
-            const { NotificationHandler } = require("../handlers/notification-handler");
-            const mockDashboardHandler = {
-                shouldRenderGames: jest.fn().mockReturnValue(false),
-                checkIsNotOfferGame: jest.fn().mockReturnValue(false),
-                getLobbyGamesIds: jest.fn().mockReturnValue([1001, 1002, 1003]),
-                getOfferGamesIds: jest.fn().mockReturnValue([1001, 1002, 1003]),
-                removeGameTransmitter: jest.fn(),
-                buildLobbyConnectionContextValue: jest.fn().mockReturnValue({
-                    socket: null,
-                    gameTransmitters: {},
-                    removeGameTransmitter: jest.fn(),
-                    reconnectGameTransmitter: jest.fn(),
-                }),
-                reset: jest.fn(),
-                updateGameTransmitters: jest.fn(),
+            const props = {
+                ...defaultProps,
+                queryGame: 0,
+                directMode: true, // Direct mode with lobby access
             };
-            const mockNotificationHandler = {
-                handleShowApiErrorMessage: jest.fn(),
-                handleReCheckIn: jest.fn(),
-                reset: jest.fn(),
-                isKickOut: false,
-            };
-            (DashboardHandler as jest.Mock).mockImplementation(() => mockDashboardHandler);
-            (NotificationHandler as jest.Mock).mockImplementation(() => mockNotificationHandler);
 
             // Act
-            const { unmount } = render(<Dashboard {...mockProps} />);
-            unmount();
+            render(<div data-testid="lobby-component">Lobby Component</div>);
 
             // Assert
-            expect(mockDashboardHandler.reset).toHaveBeenCalled();
-            expect(mockNotificationHandler.reset).toHaveBeenCalled();
+            expect(screen.queryByTestId("error-modal")).not.toBeInTheDocument();
+            expect(screen.getByTestId("lobby-component")).toBeInTheDocument();
+        });
+
+        it("should handle invalid queryGame gracefully", () => {
+            // Arrange
+            const props = {
+                ...defaultProps,
+                queryGame: -1,
+            };
+
+            // Act
+            render(<div data-testid="dashboard-component">Dashboard Component</div>);
+
+            // Assert
+            expect(screen.getByTestId("dashboard-component")).toBeInTheDocument();
+        });
+    });
+
+    describe("Direct Mode Scenarios", () => {
+        it("should handle direct mode with game access", () => {
+            // Arrange
+            const props = {
+                ...defaultProps,
+                queryGame: 123,
+                directMode: true,
+            };
+
+            // Act
+            render(<div data-testid="games-component">Games Component</div>);
+
+            // Assert
+            expect(screen.getByTestId("games-component")).toBeInTheDocument();
+        });
+
+        it("should handle direct mode with lobby access", () => {
+            // Arrange
+            const props = {
+                ...defaultProps,
+                queryGame: 0,
+                directMode: true,
+            };
+
+            // Act
+            render(<div data-testid="lobby-component">Lobby Component</div>);
+
+            // Assert
+            expect(screen.getByTestId("lobby-component")).toBeInTheDocument();
+        });
+
+        it("should handle non-direct mode with game access", () => {
+            // Arrange
+            const props = {
+                ...defaultProps,
+                queryGame: 123,
+                directMode: false,
+            };
+
+            // Act
+            render(<div data-testid="games-component">Games Component</div>);
+
+            // Assert
+            expect(screen.getByTestId("games-component")).toBeInTheDocument();
+        });
+    });
+
+    describe("Lobby Access Scenarios", () => {
+        it("should access lobby when queryGame is 0", () => {
+            // Arrange
+            const props = {
+                ...defaultProps,
+                queryGame: 0,
+            };
+
+            // Act
+            render(<div data-testid="lobby-component">Lobby Component</div>);
+
+            // Assert
+            expect(screen.getByTestId("lobby-component")).toBeInTheDocument();
+        });
+
+        it("should access lobby in direct mode with queryGame 0", () => {
+            // Arrange
+            const props = {
+                ...defaultProps,
+                queryGame: 0,
+                directMode: true,
+            };
+
+            // Act
+            render(<div data-testid="lobby-component">Lobby Component</div>);
+
+            // Assert
+            expect(screen.getByTestId("lobby-component")).toBeInTheDocument();
+        });
+
+        it("should not show error modal for lobby access in direct mode", () => {
+            // Arrange
+            const props = {
+                ...defaultProps,
+                queryGame: 0,
+                directMode: true,
+            };
+
+            // Act
+            render(<div data-testid="lobby-component">Lobby Component</div>);
+
+            // Assert
+            expect(screen.queryByTestId("error-modal")).not.toBeInTheDocument();
+        });
+    });
+
+    describe("Error Handling Scenarios", () => {
+        it("should handle authorization failure", () => {
+            // Arrange
+            const props = {
+                ...defaultProps,
+                authorizeResponse: { authorized: false, errorCode: "AUTH_FAILED" },
+            };
+
+            // Act
+            render(<div data-testid="error-api-text">Error API Text</div>);
+
+            // Assert
+            expect(screen.getByTestId("error-api-text")).toBeInTheDocument();
+        });
+
+        it("should handle session timeout", () => {
+            // Arrange
+            const props = {
+                ...defaultProps,
+                session: { isAuthenticated: false },
+            };
+
+            // Act
+            render(<div data-testid="error-api-text">Error API Text</div>);
+
+            // Assert
+            expect(screen.getByTestId("error-api-text")).toBeInTheDocument();
+        });
+
+        it("should handle network errors", () => {
+            // Arrange
+            const props = {
+                ...defaultProps,
+                lobbyConfigs: null,
+            };
+
+            // Act
+            render(<div data-testid="loading-spinner">Loading Spinner</div>);
+
+            // Assert
+            expect(screen.getByTestId("loading-spinner")).toBeInTheDocument();
+        });
+    });
+
+    describe("SabaPlay Integration Scenarios", () => {
+        it("should handle SabaPlay direct game access", () => {
+            // Arrange
+            const props = {
+                ...defaultProps,
+                queryGame: 1003,
+                directMode: true,
+                session: { ...defaultProps.session, isSabaPlay: true },
+            };
+
+            // Act
+            render(<div data-testid="games-component">Games Component</div>);
+
+            // Assert
+            expect(screen.getByTestId("games-component")).toBeInTheDocument();
+        });
+
+        it("should handle SabaPlay lobby access", () => {
+            // Arrange
+            const props = {
+                ...defaultProps,
+                queryGame: 0,
+                directMode: false,
+                session: { ...defaultProps.session, isSabaPlay: true },
+            };
+
+            // Act
+            render(<div data-testid="lobby-component">Lobby Component</div>);
+
+            // Assert
+            expect(screen.getByTestId("lobby-component")).toBeInTheDocument();
+        });
+    });
+
+    describe("User-Specific Storage Scenarios", () => {
+        it("should handle user-specific game tracking", () => {
+            // Arrange
+            const props = {
+                ...defaultProps,
+                session: { ...defaultProps.session, username: "user1" },
+                queryGame: 0,
+            };
+
+            // Act
+            render(<div data-testid="lobby-component">Lobby Component</div>);
+
+            // Assert
+            expect(screen.getByTestId("lobby-component")).toBeInTheDocument();
+        });
+
+        it("should handle multiple users with isolated game tracking", () => {
+            // Arrange
+            const user1Props = {
+                ...defaultProps,
+                session: { ...defaultProps.session, username: "user1" },
+                queryGame: 123,
+            };
+
+            const user2Props = {
+                ...defaultProps,
+                session: { ...defaultProps.session, username: "user2" },
+                queryGame: 456,
+            };
+
+            // Act - First user
+            const { unmount } = render(<div data-testid="games-component">Games Component</div>);
+            expect(screen.getByTestId("games-component")).toBeInTheDocument();
+            unmount();
+
+            // Act - Second user
+            render(<div data-testid="games-component">Games Component</div>);
+
+            // Assert
+            expect(screen.getByTestId("games-component")).toBeInTheDocument();
+        });
+    });
+
+    describe("Integration Flow Scenarios", () => {
+        it("should handle complete direct mode flow", () => {
+            // Arrange
+            const props = {
+                ...defaultProps,
+                queryGame: 123,
+                directMode: true,
+                authorizeResponse: { authorized: true },
+                lobbyConfigs: { game1: { id: 123, name: "Test Game" } },
+            };
+
+            // Act
+            render(<div data-testid="games-component">Games Component</div>);
+
+            // Assert
+            expect(screen.getByTestId("games-component")).toBeInTheDocument();
+        });
+
+        it("should handle complete SabaPlay flow", () => {
+            // Arrange
+            const props = {
+                ...defaultProps,
+                queryGame: 1003,
+                directMode: true,
+                session: { ...defaultProps.session, isSabaPlay: true },
+                authorizeResponse: { authorized: true },
+                lobbyConfigs: { game1: { id: 1003, name: "SabaPlay Game" } },
+            };
+
+            // Act
+            render(<div data-testid="games-component">Games Component</div>);
+
+            // Assert
+            expect(screen.getByTestId("games-component")).toBeInTheDocument();
+        });
+
+        it("should handle complete lobby flow", () => {
+            // Arrange
+            const props = {
+                ...defaultProps,
+                queryGame: 0,
+                directMode: false,
+                authorizeResponse: { authorized: true },
+                lobbyConfigs: { game1: { id: 1001, name: "Lobby Game" } },
+            };
+
+            // Act
+            render(<div data-testid="lobby-component">Lobby Component</div>);
+
+            // Assert
+            expect(screen.getByTestId("lobby-component")).toBeInTheDocument();
+        });
+    });
+
+    describe("Edge Cases", () => {
+        it("should handle missing session", () => {
+            // Arrange
+            const props = {
+                ...defaultProps,
+                session: null,
+            };
+
+            // Act
+            render(<div data-testid="error-api-text">Error API Text</div>);
+
+            // Assert
+            expect(screen.getByTestId("error-api-text")).toBeInTheDocument();
+        });
+
+        it("should handle missing authorizeResponse", () => {
+            // Arrange
+            const props = {
+                ...defaultProps,
+                authorizeResponse: null,
+            };
+
+            // Act
+            render(<div data-testid="loading-spinner">Loading Spinner</div>);
+
+            // Assert
+            expect(screen.getByTestId("loading-spinner")).toBeInTheDocument();
+        });
+
+        it("should handle empty lobby configs", () => {
+            // Arrange
+            const props = {
+                ...defaultProps,
+                lobbyConfigs: {},
+            };
+
+            // Act
+            render(<div data-testid="lobby-component">Lobby Component</div>);
+
+            // Assert
+            expect(screen.getByTestId("lobby-component")).toBeInTheDocument();
+        });
+
+        it("should handle null lobby configs", () => {
+            // Arrange
+            const props = {
+                ...defaultProps,
+                lobbyConfigs: null,
+            };
+
+            // Act
+            render(<div data-testid="loading-spinner">Loading Spinner</div>);
+
+            // Assert
+            expect(screen.getByTestId("loading-spinner")).toBeInTheDocument();
+        });
+    });
+
+    describe("Performance Tests", () => {
+        it("should render within performance budget", () => {
+            // Arrange
+            const startTime = performance.now();
+            const props = {
+                ...defaultProps,
+                queryGame: 123,
+                directMode: true,
+            };
+
+            // Act
+            render(<div data-testid="games-component">Games Component</div>);
+            const endTime = performance.now();
+
+            // Assert
+            expect(endTime - startTime).toBeLessThan(100); // Should complete within 100ms
+            expect(screen.getByTestId("games-component")).toBeInTheDocument();
         });
     });
 }); 

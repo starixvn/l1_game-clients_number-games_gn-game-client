@@ -144,7 +144,7 @@ const SplashScreen: React.FC = () => {
             return null;
         }
         if (lobby?.lobbyConfigs) {
-            setLobbyConfigs(lobby.lobbyConfigs);
+            setLobbyConfigs(lobby.lobbyConfigs as any);
             handleBannerOffer(authorizeInfo, lobby.lobbyConfigs, setBannerId);
             getAndHandleGameOfferIds(authorizeInfo, lobby.lobbyConfigs, setGameOfferIds);
         }
@@ -212,7 +212,7 @@ const SplashScreen: React.FC = () => {
 
             if (!isDirectMode && !isSabaPlay) {
                 console.log("[SplashScreen] handleInitialization - Not direct mode, getting SSO redirect gameId");
-                toLoadGameId = await getSSORedirectToGameId(lobbyConfigs, authorizeInfo, gameId);
+                toLoadGameId = await getSSORedirectToGameId(lobbyConfigs as any, authorizeInfo, gameId);
                 console.log("[SplashScreen] handleInitialization - SSO redirect gameId result:", toLoadGameId);
             } else {
                 console.log("[SplashScreen] handleInitialization - Direct mode, using URL gameId directly:", toLoadGameId);

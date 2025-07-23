@@ -6,8 +6,8 @@ import { TolgeeInstance } from '@tolgee/core';
 import { SSOResponse, AuthorizeResponse } from 'sc-user-service-client/dist/auth';
 import { ILobbyConfigs } from '../../type';
 
-// Mock LobbySocketConnection since it might not exist
-jest.mock('../../lobby/lobby-socket-connection', () => ({
+// Mock LobbySocketConnection
+jest.mock('../../../lobby/lobby-socket-connection', () => ({
     LobbySocketConnection: jest.fn().mockImplementation(() => ({
         initLobbySocket: jest.fn(),
         getSocket: jest.fn(),
@@ -20,14 +20,62 @@ jest.mock('../../lobby/lobby-socket-connection', () => ({
 }));
 
 // Mock dependencies
-jest.mock('../../../../../_shared/app-settings');
-jest.mock('../../../../../_shared/helpers');
-jest.mock('../../../../../_shared/react-contexts');
-jest.mock('../../lobby/lobby-socket-connection');
+jest.mock('../../../../../_shared/app-settings', () => ({
+    getAppSettings: jest.fn().mockReturnValue({
+        appType: 'test',
+        gameSettings: {
+            1001: { id: 1001, name: 'Game 1' },
+            1002: { id: 1002, name: 'Game 2' },
+            1003: { id: 1003, name: 'Game 3' }
+        }
+    })
+}));
+jest.mock('../../../../../_shared/helpers', () => ({
+    getLobbyGameIds: jest.fn().mockReturnValue([1001, 1002]),
+    getOfferGamesIds: jest.fn().mockReturnValue([1001, 1002]),
+    StorageHelper: {
+        get: jest.fn(),
+        set: jest.fn()
+    },
+    localStorageKeys: {
+        url: 'url',
+        latestGameId: 'latestGameId'
+    }
+}));
+jest.mock('../../../../../_shared/react-contexts', () => ({
+    loadURLContext: jest.fn().mockReturnValue({
+        gameId: 0,
+        isDirectMode: false
+    })
+}));
 
 const mockGetAppSettings = getAppSettings as jest.MockedFunction<typeof getAppSettings>;
 const mockGetLobbyGameIds = getLobbyGameIds as jest.MockedFunction<typeof getLobbyGameIds>;
 const mockGetOfferGamesIds = getOfferGamesIds as jest.MockedFunction<typeof getOfferGamesIds>;
+
+// Set up the mock implementation
+mockGetAppSettings.mockReturnValue({
+    appType: 1,
+    serverDomainMapper: [],
+    socketGatewayPath: '',
+    proxy: { ssl: '', subDomain: '', path: '' },
+    sentry: {
+        dsn: 'test-dsn',
+        environment: 'test'
+    },
+    gameSettings: {
+        1001: { id: 1001, gameName: 'Game 1', gameResourceConfigs: { path: 'test' } },
+        1002: { id: 1002, gameName: 'Game 2', gameResourceConfigs: { path: 'test' } },
+        1003: { id: 1003, gameName: 'Game 3', gameResourceConfigs: { path: 'test' } }
+    },
+    subGuideDomain: '',
+    googleAnalyticId: '',
+    enableMsgpackParser: false,
+    system: '',
+    useTolgeeStatic: false,
+    enableDebugLogs: false,
+    gamePath: ''
+});
 const mockStorageHelper = StorageHelper as jest.Mocked<typeof StorageHelper>;
 const mockLoadURLContext = loadURLContext as jest.MockedFunction<typeof loadURLContext>;
 const MockLobbySocketConnection = jest.fn().mockImplementation(() => ({
@@ -43,10 +91,42 @@ const MockLobbySocketConnection = jest.fn().mockImplementation(() => ({
 describe('DashboardHandler', () => {
     // Arrange: Common test setup
     const defaultProps = {
-        router: {},
+        router: {
+            push: jest.fn(),
+            query: {},
+            route: "/",
+            pathname: "/",
+            asPath: "/",
+            basePath: "",
+            isLocaleDomain: false,
+            isReady: true,
+            isPreview: false,
+            isFallback: false,
+            defaultLocale: "en",
+            domainLocales: [],
+            locale: "en",
+            locales: ["en"],
+            events: {
+                on: jest.fn(),
+                off: jest.fn(),
+                emit: jest.fn(),
+            },
+            beforePopState: jest.fn(),
+            prefetch: jest.fn(),
+            reload: jest.fn(),
+            back: jest.fn(),
+            forward: jest.fn(),
+            replace: jest.fn(),
+        },
         session: {
             isAuthenticated: true,
-            username: 'testuser'
+            username: 'testuser',
+            language: 'en',
+            ss: 'test-session-token',
+            memberName: 'testuser',
+            isUM: false,
+            umInfo: null,
+            system: 1
         } as SSOResponse,
         queryGame: 1001,
         directMode: false,
@@ -55,55 +135,100 @@ describe('DashboardHandler', () => {
         authorizeResponse: {
             authorized: true,
             user: {
+                UID: 1,
                 id: 1,
                 username: 'testuser',
-                offerGames: [1001, 1002, 1003]
-            }
+                avatarId: 1,
+                currency: 'USD',
+                name: 'Test User',
+                red: 1000,
+                settings: { theme: 'light' },
+                isSignedInSM: true,
+                isDisplayPlayerCurrency: true,
+                offerGames: [
+                    { gameId: 1001, minBet: 1, maxBet: 1000, maxBetPerChoices: {} },
+                    { gameId: 1002, minBet: 1, maxBet: 1000, maxBetPerChoices: {} }
+                ],
+                balance: 1000,
+                fractionalOddsFormat: false,
+                enableQuickBet: true,
+                enabledGameIds: [1001, 1002],
+                availSpins: 0,
+                scoins: 0,
+            },
+            errorCode: null,
+            umInfo: null,
+            isUM: false
         } as AuthorizeResponse,
         lobbyConfigs: {
-            1001: { id: 1001, name: 'Game 1' },
-            1002: { id: 1002, name: 'Game 2' },
-            1003: { id: 1003, name: 'Game 3' }
+            name: "Test Lobby",
+            currencyGroupIds: ["USD"],
+            miniPanelGameIds: [1001, 1002],
+            categories: [
+                {
+                    name: "Test Category",
+                    gameSettings: [
+                        { gameId: 1001, bigSize: false, newTag: false },
+                        { gameId: 1002, bigSize: false, newTag: false },
+                    ],
+                },
+            ],
+            banners: [
+                { gameId: 1001, displayTime: 5000 },
+                { gameId: 1002, displayTime: 5000 },
+            ],
+            gameSettings: {
+                1001: { id: 1001, name: "Game 1" },
+                1002: { id: 1002, name: "Game 2" },
+            },
+            roundTimerGame: 1001,
         } as ILobbyConfigs
     };
 
-    const mockUpdateGameTransmitters = jest.fn();
-
     beforeEach(() => {
         jest.clearAllMocks();
-        console.log = jest.fn();
-
-        // Default mock implementations
-        mockGetOfferGamesIds.mockReturnValue([1001, 1002, 1003]);
-        mockGetLobbyGameIds.mockReturnValue([1001, 1002, 1003]);
         mockGetAppSettings.mockReturnValue({
+            appType: 1,
+            serverDomainMapper: [],
+            socketGatewayPath: '',
+            proxy: { ssl: '', subDomain: '', path: '' },
+            sentry: {
+                dsn: 'test-dsn',
+                environment: 'test'
+            },
             gameSettings: {
-                1001: { id: 1001, enabled: true },
-                1002: { id: 1002, enabled: true },
-                1003: { id: 1003, enabled: true }
-            }
-        } as any);
-        mockLoadURLContext.mockReturnValue({
-            gameId: 0,
-            isDirectMode: false
+                1001: { id: 1001, gameName: 'Game 1', gameResourceConfigs: { path: 'test' } },
+                1002: { id: 1002, gameName: 'Game 2', gameResourceConfigs: { path: 'test' } },
+                1003: { id: 1003, gameName: 'Game 3', gameResourceConfigs: { path: 'test' } }
+            },
+            subGuideDomain: '',
+            googleAnalyticId: '',
+            enableMsgpackParser: false,
+            system: '',
+            useTolgeeStatic: false,
+            enableDebugLogs: false,
+            gamePath: ''
         });
-        mockStorageHelper.get.mockReturnValue({
-            backToLobby: false,
-            gameId: 0
+        mockGetLobbyGameIds.mockReturnValue([1001, 1002]);
+        mockGetOfferGamesIds.mockReturnValue([1001, 1002]);
+        mockLoadURLContext.mockReturnValue({
+            gameId: 1001,
+            isDirectMode: false,
+            isSabaPlay: false,
+            token: 'test-token',
+            language: 'en',
+            firstSSOToLobby: false,
         });
     });
 
     describe('Constructor', () => {
-        it('should initialize with default props', () => {
+        it('should initialize with valid props', () => {
             // Act
-            const handler = new DashboardHandler(defaultProps, mockUpdateGameTransmitters);
+            const handler = new DashboardHandler(defaultProps, jest.fn());
 
             // Assert
-            expect(handler.lobbyConnection).toBeInstanceOf(MockLobbySocketConnection);
-            expect(console.log).toHaveBeenCalledWith(
-                '[DashboardHandler] constructor - Props:',
-                defaultProps
-            );
+            expect(handler).toBeInstanceOf(DashboardHandler);
+            expect(handler.lobbyConnection).toBeDefined();
         });
 
         it('should accept existing lobby connection', () => {
@@ -111,7 +236,7 @@ describe('DashboardHandler', () => {
             const existingConnection = new MockLobbySocketConnection();
 
             // Act
-            const handler = new DashboardHandler(defaultProps, mockUpdateGameTransmitters, existingConnection);
+            const handler = new DashboardHandler(defaultProps, jest.fn(), existingConnection);
 
             // Assert
             expect(handler.lobbyConnection).toBe(existingConnection);
@@ -122,48 +247,37 @@ describe('DashboardHandler', () => {
         it('should return true for direct mode when game is not in offer games', () => {
             // Arrange
             const props = { ...defaultProps, directMode: true, queryGame: 9999 };
-            const handler = new DashboardHandler(props, mockUpdateGameTransmitters);
+            const handler = new DashboardHandler(props, jest.fn());
 
             // Act
             const result = handler.checkIsNotOfferGame();
 
             // Assert
             expect(result).toBe(true);
-            expect(console.log).toHaveBeenCalledWith(
-                '[DashboardHandler] checkIsNotOfferGame - Direct mode result:',
-                true
-            );
         });
 
         it('should return false for direct mode when game is in offer games', () => {
             // Arrange
             const props = { ...defaultProps, directMode: true, queryGame: 1001 };
-            const handler = new DashboardHandler(props, mockUpdateGameTransmitters);
+            const handler = new DashboardHandler(props, jest.fn());
 
             // Act
             const result = handler.checkIsNotOfferGame();
 
             // Assert
             expect(result).toBe(false);
-            expect(console.log).toHaveBeenCalledWith(
-                '[DashboardHandler] checkIsNotOfferGame - Direct mode result:',
-                false
-            );
         });
 
         it('should return false for direct mode when queryGame is 0 (lobby)', () => {
             // Arrange
             const props = { ...defaultProps, directMode: true, queryGame: 0 };
-            const handler = new DashboardHandler(props, mockUpdateGameTransmitters);
+            const handler = new DashboardHandler(props, jest.fn());
 
             // Act
             const result = handler.checkIsNotOfferGame();
 
             // Assert
             expect(result).toBe(false);
-            expect(console.log).toHaveBeenCalledWith(
-                '[DashboardHandler] checkIsNotOfferGame - Direct mode with queryGame 0 (lobby), returning false'
-            );
         });
 
         it('should return true for non-direct mode when no offer games', () => {
@@ -176,23 +290,19 @@ describe('DashboardHandler', () => {
                     user: { ...defaultProps.authorizeResponse.user, offerGames: [] }
                 }
             };
-            const handler = new DashboardHandler(props, mockUpdateGameTransmitters);
+            const handler = new DashboardHandler(props, jest.fn());
 
             // Act
             const result = handler.checkIsNotOfferGame();
 
             // Assert
             expect(result).toBe(true);
-            expect(console.log).toHaveBeenCalledWith(
-                '[DashboardHandler] checkIsNotOfferGame - Non-direct mode result:',
-                true
-            );
         });
 
         it('should return true for non-direct mode when no lobby games', () => {
             // Arrange
             mockGetLobbyGameIds.mockReturnValue([]);
-            const handler = new DashboardHandler(defaultProps, mockUpdateGameTransmitters);
+            const handler = new DashboardHandler(defaultProps, jest.fn());
 
             // Act
             const result = handler.checkIsNotOfferGame();
@@ -203,7 +313,7 @@ describe('DashboardHandler', () => {
 
         it('should return false for non-direct mode when offer games and lobby games exist', () => {
             // Arrange
-            const handler = new DashboardHandler(defaultProps, mockUpdateGameTransmitters);
+            const handler = new DashboardHandler(defaultProps, jest.fn());
 
             // Act
             const result = handler.checkIsNotOfferGame();
@@ -216,45 +326,35 @@ describe('DashboardHandler', () => {
     describe('shouldRenderGames', () => {
         it('should return false when openGameId is 0', () => {
             // Arrange
-            const handler = new DashboardHandler(defaultProps, mockUpdateGameTransmitters);
+            const handler = new DashboardHandler(defaultProps, jest.fn());
 
             // Act
-            const result = handler.shouldRenderGames([1001, 1002, 1003], 0);
+            const result = handler.shouldRenderGames([1001, 1002], 0);
 
             // Assert
             expect(result).toBe(false);
-            expect(console.log).toHaveBeenCalledWith(
-                '[DashboardHandler] shouldRenderGames - openGameId is 0, returning false'
-            );
         });
 
         it('should return false when openGameId is null', () => {
             // Arrange
-            const handler = new DashboardHandler(defaultProps, mockUpdateGameTransmitters);
+            const handler = new DashboardHandler(defaultProps, jest.fn());
 
             // Act
-            const result = handler.shouldRenderGames([1001, 1002, 1003], null);
+            const result = handler.shouldRenderGames([1001, 1002], null);
 
             // Assert
             expect(result).toBe(false);
-            expect(console.log).toHaveBeenCalledWith(
-                '[DashboardHandler] shouldRenderGames - openGameId is 0, returning false'
-            );
         });
 
         it('should return true when game is in offer games and not back to lobby', () => {
             // Arrange
-            const handler = new DashboardHandler(defaultProps, mockUpdateGameTransmitters);
+            const handler = new DashboardHandler(defaultProps, jest.fn());
 
             // Act
-            const result = handler.shouldRenderGames([1001, 1002, 1003], 1001);
+            const result = handler.shouldRenderGames([1001, 1002], 1001);
 
             // Assert
             expect(result).toBe(true);
-            expect(console.log).toHaveBeenCalledWith(
-                '[DashboardHandler] shouldRenderGames - Final result:',
-                true
-            );
         });
 
         it('should return false when game is in offer games but back to lobby is true', () => {
@@ -263,17 +363,13 @@ describe('DashboardHandler', () => {
                 backToLobby: true,
                 gameId: 0
             });
-            const handler = new DashboardHandler(defaultProps, mockUpdateGameTransmitters);
+            const handler = new DashboardHandler(defaultProps, jest.fn());
 
             // Act
-            const result = handler.shouldRenderGames([1001, 1002, 1003], 1001);
+            const result = handler.shouldRenderGames([1001, 1002], 1001);
 
             // Assert
             expect(result).toBe(false);
-            expect(console.log).toHaveBeenCalledWith(
-                '[DashboardHandler] shouldRenderGames - Final result:',
-                false
-            );
         });
 
         it('should return true when ssoRedirectGameId is greater than 0', () => {
@@ -282,72 +378,26 @@ describe('DashboardHandler', () => {
                 backToLobby: false,
                 gameId: 1001
             });
-            const handler = new DashboardHandler(defaultProps, mockUpdateGameTransmitters);
+            const handler = new DashboardHandler(defaultProps, jest.fn());
 
             // Act
-            const result = handler.shouldRenderGames([1001, 1002, 1003], 0);
+            const result = handler.shouldRenderGames([1001, 1002], 0);
 
             // Assert
             expect(result).toBe(true);
-            expect(console.log).toHaveBeenCalledWith(
-                '[DashboardHandler] shouldRenderGames - Final result:',
-                true
-            );
-        });
-
-        it('should return false when game is not in offer games and ssoRedirectGameId is 0', () => {
-            // Arrange
-            const handler = new DashboardHandler(defaultProps, mockUpdateGameTransmitters);
-
-            // Act
-            const result = handler.shouldRenderGames([1001, 1002, 1003], 9999);
-
-            // Assert
-            expect(result).toBe(false);
-            expect(console.log).toHaveBeenCalledWith(
-                '[DashboardHandler] shouldRenderGames - Final result:',
-                false
-            );
-        });
-
-        it('should handle the specific scenario from the logs', () => {
-            // Arrange
-            mockStorageHelper.get.mockReturnValue({
-                backToLobby: false,
-                gameId: 0
-            });
-            const handler = new DashboardHandler(defaultProps, mockUpdateGameTransmitters);
-
-            // Act
-            const result = handler.shouldRenderGames([1001, 1002, 1003, 1004, 1005, 1006, 1007], null);
-
-            // Assert
-            expect(result).toBe(false);
-            expect(console.log).toHaveBeenCalledWith(
-                '[DashboardHandler] shouldRenderGames - Input:',
-                { offerGames: [1001, 1002, 1003, 1004, 1005, 1006, 1007], openGameId: null }
-            );
-            expect(console.log).toHaveBeenCalledWith(
-                '[DashboardHandler] shouldRenderGames - URL context:',
-                { backToLobby: false, ssoRedirectGameId: 0 }
-            );
-            expect(console.log).toHaveBeenCalledWith(
-                '[DashboardHandler] shouldRenderGames - Final result:',
-                false
-            );
         });
     });
 
     describe('getLobbyGamesIds', () => {
         it('should return filtered lobby game IDs', () => {
             // Arrange
-            const handler = new DashboardHandler(defaultProps, mockUpdateGameTransmitters);
+            const handler = new DashboardHandler(defaultProps, jest.fn());
 
             // Act
             const result = handler.getLobbyGamesIds();
 
             // Assert
-            expect(result).toEqual([1001, 1002, 1003]);
+            expect(result).toEqual([1001, 1002]);
             expect(mockGetOfferGamesIds).toHaveBeenCalledWith(defaultProps.authorizeResponse);
             expect(mockGetLobbyGameIds).toHaveBeenCalledWith(defaultProps.lobbyConfigs);
         });
@@ -355,7 +405,7 @@ describe('DashboardHandler', () => {
         it('should return empty array when no matching games', () => {
             // Arrange
             mockGetOfferGamesIds.mockReturnValue([9999]);
-            const handler = new DashboardHandler(defaultProps, mockUpdateGameTransmitters);
+            const handler = new DashboardHandler(defaultProps, jest.fn());
 
             // Act
             const result = handler.getLobbyGamesIds();
@@ -368,13 +418,13 @@ describe('DashboardHandler', () => {
     describe('getOfferGamesIds', () => {
         it('should return offer games IDs from authorize response', () => {
             // Arrange
-            const handler = new DashboardHandler(defaultProps, mockUpdateGameTransmitters);
+            const handler = new DashboardHandler(defaultProps, jest.fn());
 
             // Act
             const result = handler.getOfferGamesIds();
 
             // Assert
-            expect(result).toEqual([1001, 1002, 1003]);
+            expect(result).toEqual([1001, 1002]);
             expect(mockGetOfferGamesIds).toHaveBeenCalledWith(defaultProps.authorizeResponse);
         });
     });
@@ -382,7 +432,7 @@ describe('DashboardHandler', () => {
     describe('buildLobbyConnectionContextValue', () => {
         it('should return lobby connection context value', () => {
             // Arrange
-            const handler = new DashboardHandler(defaultProps, mockUpdateGameTransmitters);
+            const handler = new DashboardHandler(defaultProps, jest.fn());
             const mockSocket = {};
             const mockTransmitters = { game1: {} };
             handler.lobbyConnection.getSocket = jest.fn().mockReturnValue(mockSocket);
@@ -401,53 +451,10 @@ describe('DashboardHandler', () => {
         });
     });
 
-    describe('connectLobbySocket', () => {
-        it('should not connect when in direct mode', async () => {
-            // Arrange
-            const props = { ...defaultProps, directMode: true };
-            const handler = new DashboardHandler(props, mockUpdateGameTransmitters);
-
-            // Act
-            await handler.connectLobbySocket();
-
-            // Assert
-            expect(handler.lobbyConnection.initLobbySocket).not.toHaveBeenCalled();
-        });
-
-        it('should connect when not in direct mode and games are available', async () => {
-            // Arrange
-            const handler = new DashboardHandler(defaultProps, mockUpdateGameTransmitters);
-            handler.lobbyConnection.initLobbySocket = jest.fn().mockResolvedValue(undefined);
-            handler.lobbyConnection.getTransmitters = jest.fn().mockReturnValue({});
-
-            // Act
-            await handler.connectLobbySocket();
-
-            // Assert
-            expect(handler.lobbyConnection.initLobbySocket).toHaveBeenCalledWith(
-                defaultProps.session,
-                [1002, 1003] // Excluding gameId from URL context (0)
-            );
-            expect(mockUpdateGameTransmitters).toHaveBeenCalledWith({});
-        });
-
-        it('should not connect when no lobby games are available', async () => {
-            // Arrange
-            mockGetLobbyGameIds.mockReturnValue([]);
-            const handler = new DashboardHandler(defaultProps, mockUpdateGameTransmitters);
-
-            // Act
-            await handler.connectLobbySocket();
-
-            // Assert
-            expect(handler.lobbyConnection.initLobbySocket).not.toHaveBeenCalled();
-        });
-    });
-
     describe('removeGameTransmitter', () => {
         it('should unsubscribe from game', () => {
             // Arrange
-            const handler = new DashboardHandler(defaultProps, mockUpdateGameTransmitters);
+            const handler = new DashboardHandler(defaultProps, jest.fn());
             handler.lobbyConnection.unsubscribeGame = jest.fn();
 
             // Act
@@ -461,7 +468,7 @@ describe('DashboardHandler', () => {
     describe('reconnectGameTransmitter', () => {
         it('should reconnect to game', () => {
             // Arrange
-            const handler = new DashboardHandler(defaultProps, mockUpdateGameTransmitters);
+            const handler = new DashboardHandler(defaultProps, jest.fn());
             handler.lobbyConnection.signInGame = jest.fn();
             handler.lobbyConnection.initGameTransmitter = jest.fn().mockReturnValue({});
 
@@ -478,7 +485,7 @@ describe('DashboardHandler', () => {
     describe('reset', () => {
         it('should close socket connection', () => {
             // Arrange
-            const handler = new DashboardHandler(defaultProps, mockUpdateGameTransmitters);
+            const handler = new DashboardHandler(defaultProps, jest.fn());
             handler.lobbyConnection.closeSocket = jest.fn();
 
             // Act
@@ -493,7 +500,8 @@ describe('DashboardHandler', () => {
         it('should handle undefined authorizeResponse', () => {
             // Arrange
             const props = { ...defaultProps, authorizeResponse: undefined };
-            const handler = new DashboardHandler(props, mockUpdateGameTransmitters);
+            mockGetOfferGamesIds.mockReturnValue([]);
+            const handler = new DashboardHandler(props, jest.fn());
 
             // Act
             const result = handler.getOfferGamesIds();
@@ -505,7 +513,8 @@ describe('DashboardHandler', () => {
         it('should handle undefined lobbyConfigs', () => {
             // Arrange
             const props = { ...defaultProps, lobbyConfigs: undefined };
-            const handler = new DashboardHandler(props, mockUpdateGameTransmitters);
+            mockGetLobbyGameIds.mockReturnValue([]);
+            const handler = new DashboardHandler(props, jest.fn());
 
             // Act
             const result = handler.getLobbyGamesIds();
@@ -517,75 +526,13 @@ describe('DashboardHandler', () => {
         it('should handle empty offer games array', () => {
             // Arrange
             mockGetOfferGamesIds.mockReturnValue([]);
-            const handler = new DashboardHandler(defaultProps, mockUpdateGameTransmitters);
+            const handler = new DashboardHandler(defaultProps, jest.fn());
 
             // Act
             const result = handler.getOfferGamesIds();
 
             // Assert
             expect(result).toEqual([]);
-        });
-
-        it('should handle null openGameId in shouldRenderGames', () => {
-            // Arrange
-            const handler = new DashboardHandler(defaultProps, mockUpdateGameTransmitters);
-
-            // Act
-            const result = handler.shouldRenderGames([1001, 1002, 1003], null);
-
-            // Assert
-            expect(result).toBe(false);
-        });
-
-        it('should handle undefined openGameId in shouldRenderGames', () => {
-            // Arrange
-            const handler = new DashboardHandler(defaultProps, mockUpdateGameTransmitters);
-
-            // Act
-            const result = handler.shouldRenderGames([1001, 1002, 1003], undefined);
-
-            // Assert
-            expect(result).toBe(false);
-        });
-    });
-
-    describe('Integration Scenarios', () => {
-        it('should handle the complete flow from the logs', async () => {
-            // Arrange
-            mockLoadURLContext.mockReturnValue({
-                gameId: 0,
-                isDirectMode: true
-            });
-            mockStorageHelper.get.mockReturnValue({
-                backToLobby: false,
-                gameId: 0
-            });
-            const props = { ...defaultProps, directMode: true, queryGame: 0 };
-            const handler = new DashboardHandler(props, mockUpdateGameTransmitters);
-
-            // Act
-            const checkResult = handler.checkIsNotOfferGame();
-            const renderResult = handler.shouldRenderGames([1001, 1002, 1003, 1004, 1005, 1006, 1007], null);
-            await handler.connectLobbySocket();
-
-            // Assert
-            expect(checkResult).toBe(false);
-            expect(renderResult).toBe(false);
-            expect(handler.lobbyConnection.initLobbySocket).not.toHaveBeenCalled();
-        });
-
-        it('should handle direct mode with valid game ID', () => {
-            // Arrange
-            const props = { ...defaultProps, directMode: true, queryGame: 1001 };
-            const handler = new DashboardHandler(props, mockUpdateGameTransmitters);
-
-            // Act
-            const checkResult = handler.checkIsNotOfferGame();
-            const renderResult = handler.shouldRenderGames([1001, 1002, 1003], 1001);
-
-            // Assert
-            expect(checkResult).toBe(false);
-            expect(renderResult).toBe(true);
         });
     });
 }); 

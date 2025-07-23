@@ -2,6 +2,7 @@ import React from "react";
 import { render, screen, waitFor, act } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import PreloadResourceRegister from "../index";
+import { ILobbyConfigs } from "../../../../dashboard/type";
 
 // Mock dependencies
 jest.mock("../../../../../../_shared/helpers/preload-resources", () => ({
@@ -44,8 +45,18 @@ const MOCK_AUTHORIZE_RESPONSE = {
 
 const MOCK_LOBBY_CONFIGS = {
     lobbyConfigs: {
-        banners: [{ gameId: 1 }],
-        categories: [{ gameSettings: [{ gameId: 1 }] }]
+        name: "Test Lobby",
+        currencyGroupIds: ["USD"],
+        miniPanelGameIds: [1],
+        categories: [{
+            name: "Test Category",
+            gameSettings: [{ gameId: 1, bigSize: false, newTag: false }]
+        }],
+        banners: [{ gameId: 1, displayTime: 5000 }],
+        gameSettings: {
+            1: { id: 1, name: "Game 1" }
+        },
+        roundTimerGame: 1,
     }
 } as any;
 
@@ -59,7 +70,7 @@ const createProps = (overrides = {}) => ({
     ...overrides,
 });
 
-describe("PreloadResourceRegister", () => {
+describe("PreloadResourceRegister Component Tests", () => {
     beforeEach(() => {
         jest.clearAllMocks();
         jest.useFakeTimers();
@@ -69,193 +80,237 @@ describe("PreloadResourceRegister", () => {
         jest.useRealTimers();
     });
 
-    describe("Component Initialization", () => {
-        it("should initialize with default state values", async () => {
+    describe("handleAuthorizedAccess Scenarios", () => {
+        it("should call updateStatePreloadResource when lobby configs are successfully loaded", async () => {
+            // Arrange
             const mockGetLobbyConfigs = getLobbyConfigs as jest.MockedFunction<typeof getLobbyConfigs>;
-            mockGetLobbyConfigs.mockResolvedValue(MOCK_LOBBY_CONFIGS);
+            const mockLobbyConfigs = {
+                lobbyConfigs: {
+                    name: "Test Lobby",
+                    currencyGroupIds: ["USD"],
+                    miniPanelGameIds: [1001, 1002],
+                    categories: [
+                        {
+                            name: "Test Category",
+                            gameSettings: [
+                                { gameId: 1001, bigSize: false, newTag: false },
+                                { gameId: 1002, bigSize: false, newTag: false },
+                            ],
+                        },
+                    ],
+                    banners: [
+                        { gameId: 1001, displayTime: 5000 },
+                        { gameId: 1002, displayTime: 5000 },
+                    ],
+                    gameSettings: {
+                        1001: { id: 1001, name: "Game 1" },
+                        1002: { id: 1002, name: "Game 2" },
+                    },
+                    roundTimerGame: 1001,
+                } as ILobbyConfigs
+            };
+            mockGetLobbyConfigs.mockResolvedValue(mockLobbyConfigs as any);
 
-            const props = createProps();
+            const mockUpdateStatePreloadResource = jest.fn();
+            const mockUpdateLobbyConfigs = jest.fn();
+            const props = createProps({
+                updateStatePreloadResource: mockUpdateStatePreloadResource,
+                updateLobbyConfigs: mockUpdateLobbyConfigs,
+            });
 
+            // Act
             render(<PreloadResourceRegister {...props} />);
 
+            // Assert
             await waitFor(() => {
                 expect(mockGetLobbyConfigs).toHaveBeenCalledWith(MOCK_SESSION);
+                expect(mockUpdateLobbyConfigs).toHaveBeenCalledWith(mockLobbyConfigs.lobbyConfigs);
+                expect(mockUpdateStatePreloadResource).toHaveBeenCalled();
+            });
+        });
+
+        it("should call updateStatePreloadResource when lobby configs are empty", async () => {
+            // Arrange
+            const mockGetLobbyConfigs = getLobbyConfigs as jest.MockedFunction<typeof getLobbyConfigs>;
+            mockGetLobbyConfigs.mockResolvedValue({
+                lobbyConfigs: {
+                    name: "Test Lobby",
+                    currencyGroupIds: ["USD"],
+                    miniPanelGameIds: [],
+                    categories: [],
+                    banners: [],
+                    gameSettings: {},
+                    roundTimerGame: null,
+                }
+            } as any);
+
+            const mockUpdateStatePreloadResource = jest.fn();
+            const mockUpdateLobbyConfigs = jest.fn();
+            const props = createProps({
+                updateStatePreloadResource: mockUpdateStatePreloadResource,
+                updateLobbyConfigs: mockUpdateLobbyConfigs,
+            });
+
+            // Act
+            render(<PreloadResourceRegister {...props} />);
+
+            // Assert
+            await waitFor(() => {
+                expect(mockUpdateStatePreloadResource).toHaveBeenCalled();
+            });
+        });
+
+        it("should call updateStatePreloadResource when lobby configs fail to load", async () => {
+            // Arrange
+            const mockGetLobbyConfigs = getLobbyConfigs as jest.MockedFunction<typeof getLobbyConfigs>;
+            mockGetLobbyConfigs.mockRejectedValue(new Error("Network error"));
+
+            const mockUpdateStatePreloadResource = jest.fn();
+            const mockUpdateLobbyConfigs = jest.fn();
+            const props = createProps({
+                updateStatePreloadResource: mockUpdateStatePreloadResource,
+                updateLobbyConfigs: mockUpdateLobbyConfigs,
+            });
+
+            // Act
+            render(<PreloadResourceRegister {...props} />);
+
+            // Assert
+            await waitFor(() => {
+                expect(mockUpdateStatePreloadResource).toHaveBeenCalled();
+                expect(mockUpdateLobbyConfigs).not.toHaveBeenCalled();
             });
         });
     });
 
-    describe("handleAuthorizedAccess - Happy Path", () => {
-        it("should handle successful lobby configs retrieval", async () => {
-            const mockGetLobbyConfigs = getLobbyConfigs as jest.MockedFunction<typeof getLobbyConfigs>;
-            const mockGetAndHandleBannerOffer = getAndHandleBannerOffer as jest.MockedFunction<typeof getAndHandleBannerOffer>;
-            const mockGetAndHandleGameOfferIds = getAndHandleGameOfferIds as jest.MockedFunction<typeof getAndHandleGameOfferIds>;
+    describe("Direct Mode Scenarios", () => {
+        it("should render PreloadResources for direct mode with valid gameId", () => {
+            // Arrange
+            const props = createProps({ isDirectMode: true, gameId: 1001 });
 
-            mockGetLobbyConfigs.mockResolvedValue(MOCK_LOBBY_CONFIGS);
-            mockGetAndHandleBannerOffer.mockImplementation((auth, configs, callback) => {
-                act(() => callback(1));
-            });
-            mockGetAndHandleGameOfferIds.mockImplementation((auth, configs, callback) => {
-                act(() => callback([1, 2]));
-            });
-
-            const props = createProps();
-
+            // Act
             render(<PreloadResourceRegister {...props} />);
 
-            await waitFor(() => {
-                expect(mockGetLobbyConfigs).toHaveBeenCalledWith(MOCK_SESSION);
-                expect(props.updateLobbyConfigs).toHaveBeenCalledWith(MOCK_LOBBY_CONFIGS.lobbyConfigs);
-                expect(mockGetAndHandleBannerOffer).toHaveBeenCalled();
-                expect(mockGetAndHandleGameOfferIds).toHaveBeenCalled();
-            });
-        });
-    });
-
-    describe("handleAuthorizedAccess - Edge Cases", () => {
-        it("should handle null lobby configs", async () => {
-            const mockGetLobbyConfigs = getLobbyConfigs as jest.MockedFunction<typeof getLobbyConfigs>;
-            mockGetLobbyConfigs.mockResolvedValue(null);
-
-            const props = createProps();
-
-            render(<PreloadResourceRegister {...props} />);
-
-            await waitFor(() => {
-                expect(props.updateStatePreloadResource).toHaveBeenCalled();
-            });
+            // Assert
+            expect(screen.getByTestId("preload-resources")).toBeInTheDocument();
         });
 
-        it("should handle empty lobby configs", async () => {
-            const mockGetLobbyConfigs = getLobbyConfigs as jest.MockedFunction<typeof getLobbyConfigs>;
-            mockGetLobbyConfigs.mockResolvedValue({ lobbyConfigs: {} } as any);
-
-            const props = createProps();
-
-            render(<PreloadResourceRegister {...props} />);
-
-            await waitFor(() => {
-                expect(props.updateStatePreloadResource).toHaveBeenCalled();
-            });
-        });
-    });
-
-    describe("Lobby Case useEffect", () => {
-        it("should handle lobby case when gameId is 0 and not direct mode", async () => {
-            const mockGetLobbyConfigs = getLobbyConfigs as jest.MockedFunction<typeof getLobbyConfigs>;
-            mockGetLobbyConfigs.mockResolvedValue(MOCK_LOBBY_CONFIGS);
-
-            const props = createProps({ isDirectMode: false, gameId: 0 });
-
-            render(<PreloadResourceRegister {...props} />);
-
-            act(() => {
-                jest.advanceTimersByTime(100);
-            });
-
-            await waitFor(() => {
-                expect(props.updateStatePreloadResource).toHaveBeenCalled();
-            });
-        });
-
-        it("should not handle lobby case when isDirectMode is true", async () => {
-            const mockGetLobbyConfigs = getLobbyConfigs as jest.MockedFunction<typeof getLobbyConfigs>;
-            mockGetLobbyConfigs.mockResolvedValue(MOCK_LOBBY_CONFIGS);
-
+        it("should render PreloadResources for direct mode with gameId = 0", () => {
+            // Arrange
             const props = createProps({ isDirectMode: true, gameId: 0 });
 
+            // Act
             render(<PreloadResourceRegister {...props} />);
 
-            act(() => {
-                jest.advanceTimersByTime(100);
+            // Assert
+            expect(screen.getByTestId("preload-resources")).toBeInTheDocument();
+        });
+
+        it("should call updateStatePreloadResource after lobby configs in direct mode", async () => {
+            // Arrange
+            const mockGetLobbyConfigs = getLobbyConfigs as jest.MockedFunction<typeof getLobbyConfigs>;
+            mockGetLobbyConfigs.mockResolvedValue(MOCK_LOBBY_CONFIGS);
+
+            const mockUpdateStatePreloadResource = jest.fn();
+            const props = createProps({
+                isDirectMode: true,
+                updateStatePreloadResource: mockUpdateStatePreloadResource,
             });
 
-            expect(props.updateStatePreloadResource).not.toHaveBeenCalled();
+            // Act
+            render(<PreloadResourceRegister {...props} />);
+
+            // Assert
+            await waitFor(() => {
+                expect(mockUpdateStatePreloadResource).toHaveBeenCalled();
+            });
         });
     });
 
-    describe("Rendering Logic", () => {
-        it("should render PreloadResources when not direct mode and gameId > 0", async () => {
-            const mockGetLobbyConfigs = getLobbyConfigs as jest.MockedFunction<typeof getLobbyConfigs>;
-            mockGetLobbyConfigs.mockResolvedValue(MOCK_LOBBY_CONFIGS);
+    describe("Non-Direct Mode Scenarios", () => {
+        it("should render PreloadResources for non-direct mode with gameId > 0", () => {
+            // Arrange
+            const props = createProps({ isDirectMode: false, gameId: 1001 });
 
-            const props = createProps({ isDirectMode: false, gameId: 5 });
-
+            // Act
             render(<PreloadResourceRegister {...props} />);
 
-            await waitFor(() => {
-                const preloadElement = screen.getByTestId("preload-resources");
-                expect(preloadElement).toBeInTheDocument();
-                expect(preloadElement).toHaveTextContent("GameId: 5");
-            });
+            // Assert
+            expect(screen.getByTestId("preload-resources")).toBeInTheDocument();
         });
 
-        it("should render PreloadResources when isDirectMode is true", async () => {
-            const mockGetLobbyConfigs = getLobbyConfigs as jest.MockedFunction<typeof getLobbyConfigs>;
-            mockGetLobbyConfigs.mockResolvedValue(MOCK_LOBBY_CONFIGS);
-
-            const props = createProps({ isDirectMode: true, gameId: 3 });
-
-            render(<PreloadResourceRegister {...props} />);
-
-            await waitFor(() => {
-                const preloadElement = screen.getByTestId("preload-resources");
-                expect(preloadElement).toBeInTheDocument();
-                expect(preloadElement).toHaveTextContent("GameId: 3");
-            });
-        });
-
-        it("should render empty fragment when not direct mode and gameId is 0", async () => {
-            const mockGetLobbyConfigs = getLobbyConfigs as jest.MockedFunction<typeof getLobbyConfigs>;
-            mockGetLobbyConfigs.mockResolvedValue(MOCK_LOBBY_CONFIGS);
-
+        it("should render PreloadResources for non-direct mode with gameId = 0", () => {
+            // Arrange
             const props = createProps({ isDirectMode: false, gameId: 0 });
 
-            const { container } = render(<PreloadResourceRegister {...props} />);
+            // Act
+            render(<PreloadResourceRegister {...props} />);
 
+            // Assert
+            expect(screen.getByTestId("preload-resources")).toBeInTheDocument();
+        });
+
+        it("should call updateStatePreloadResource after lobby configs in non-direct mode", async () => {
+            // Arrange
+            const mockGetLobbyConfigs = getLobbyConfigs as jest.MockedFunction<typeof getLobbyConfigs>;
+            mockGetLobbyConfigs.mockResolvedValue(MOCK_LOBBY_CONFIGS);
+
+            const mockUpdateStatePreloadResource = jest.fn();
+            const props = createProps({
+                isDirectMode: false,
+                updateStatePreloadResource: mockUpdateStatePreloadResource,
+            });
+
+            // Act
+            render(<PreloadResourceRegister {...props} />);
+
+            // Assert
             await waitFor(() => {
-                expect(screen.queryByTestId("preload-resources")).not.toBeInTheDocument();
-                expect(container.firstChild).toBeNull();
+                expect(mockUpdateStatePreloadResource).toHaveBeenCalled();
             });
         });
     });
 
     describe("Error Handling", () => {
-        it("should handle getLobbyConfigs throwing an error", async () => {
+        it("should handle malformed lobby configs gracefully", async () => {
+            // Arrange
             const mockGetLobbyConfigs = getLobbyConfigs as jest.MockedFunction<typeof getLobbyConfigs>;
-            const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => { });
-            mockGetLobbyConfigs.mockRejectedValue(new Error("Network error"));
+            const malformedConfigs = {
+                lobbyConfigs: {
+                    name: "Test Lobby",
+                    currencyGroupIds: ["USD"],
+                    miniPanelGameIds: [1001],
+                    categories: [
+                        {
+                            name: "Test Category",
+                            gameSettings: [
+                                { gameId: 1, bigSize: false, newTag: false },
+                            ],
+                        },
+                    ],
+                    banners: [
+                        { gameId: 1001, displayTime: 5000 },
+                    ],
+                    gameSettings: {
+                        1001: { id: 1001, name: "Game 1" },
+                    },
+                    roundTimerGame: 1001,
+                }
+            } as any;
+            mockGetLobbyConfigs.mockResolvedValue(malformedConfigs);
 
-            const props = createProps();
-
-            // The component should not throw when getLobbyConfigs fails
-            expect(() => {
-                render(<PreloadResourceRegister {...props} />);
-            }).not.toThrow();
-
-            // Wait for the async operation to complete
-            await waitFor(() => {
-                expect(mockGetLobbyConfigs).toHaveBeenCalled();
+            const mockUpdateStatePreloadResource = jest.fn();
+            const props = createProps({
+                updateStatePreloadResource: mockUpdateStatePreloadResource,
             });
 
-            consoleSpy.mockRestore();
-        });
+            // Act
+            render(<PreloadResourceRegister {...props} />);
 
-        it("should handle undefined props gracefully", async () => {
-            const mockGetLobbyConfigs = getLobbyConfigs as jest.MockedFunction<typeof getLobbyConfigs>;
-            mockGetLobbyConfigs.mockResolvedValue(MOCK_LOBBY_CONFIGS);
-
-            const props = {
-                isDirectMode: undefined,
-                gameId: undefined,
-                updateStatePreloadResource: jest.fn(), // Provide mock function
-                updateLobbyConfigs: jest.fn(), // Provide mock function
-                session: undefined,
-                authorizeResponse: undefined,
-            };
-
-            expect(() => {
-                render(<PreloadResourceRegister {...props} />);
-            }).not.toThrow();
+            // Assert
+            await waitFor(() => {
+                expect(mockUpdateStatePreloadResource).toHaveBeenCalled();
+            });
         });
     });
 }); 

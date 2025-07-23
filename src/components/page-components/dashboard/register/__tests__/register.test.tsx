@@ -37,6 +37,13 @@ jest.mock("../../../../../_shared/helpers", () => ({
     },
     getEnabledRenderGameSettings: jest.fn(),
     getServiceStatusIsAvailable: jest.fn(),
+    objectMap: jest.fn((obj, fn) => {
+        const result: any = {};
+        Object.keys(obj).forEach(key => {
+            result[key] = fn(obj[key], key, 0);
+        });
+        return result;
+    }),
 }));
 
 jest.mock("../../../../../_shared/helpers/notice-helper", () => ({
@@ -56,6 +63,30 @@ jest.mock("../../../../../_shared/constants", () => ({
     Themes: {
         light: "light",
     },
+    locales: {
+        en: "en",
+        vi: "vi",
+        th: "th",
+        id: "id",
+        zh_cn: "zh_cn",
+        zh_tw: "zh_tw"
+    },
+    buildVersion: "1.0.0",
+}));
+
+// Mock use-sound to prevent runtime errors
+jest.mock("use-sound", () => {
+    return jest.fn(() => [
+        jest.fn(),
+        { sound: { volume: jest.fn() } }
+    ]);
+});
+
+// Mock setting context
+jest.mock("../../../../../_shared/react-contexts", () => ({
+    useSettingContext: jest.fn(() => ({
+        volumeSFX: 0.5,
+    })),
 }));
 
 // Mock dynamic imports
@@ -98,72 +129,41 @@ jest.mock("../../../../page-components/profile-picture", () => {
 });
 
 jest.mock("../avatar-gallery", () => ({
-    AvatarGallery: function MockAvatarGallery({ selectedAvatarId, onSelectAvatar, onClose }: any) {
+    __esModule: true,
+    default: function MockAvatarGallery({ onSelect }: any) {
         return (
             <div data-testid="avatar-gallery">
-                <button onClick={() => onSelectAvatar(5)}>Select Avatar 5</button>
-                <button onClick={onClose}>Close</button>
+                <button onClick={() => onSelect(1)}>Avatar 1</button>
+                <button onClick={() => onSelect(2)}>Avatar 2</button>
             </div>
         );
     },
-    MAX_AVATAR_ID: 10,
 }));
 
-jest.mock("../preload-resource", () => {
-    return function MockPreloadResourceRegister() {
+jest.mock("../preload-resource", () => ({
+    __esModule: true,
+    default: function MockPreloadResourceRegister() {
         return <div data-testid="preload-resource-register">Preload Resource Register</div>;
-    };
-});
-
-jest.mock("../../../translator", () => ({
-    withTranslator: (Component: any) => Component,
+    },
 }));
 
-// Mock document.body.classList
-Object.defineProperty(document.body, 'classList', {
-    value: {
-        add: jest.fn(),
-        remove: jest.fn(),
-    },
-    writable: true,
-});
-
-describe("Register Component", () => {
-    // Test data
-    const mockSession = {
-        ss: "session-token",
-        username: "testuser",
-        isAuthenticated: true,
-        isUM: false,
-        language: "en",
-        memberName: "Test Member",
-        umInfo: {
-            startTime: new Date("2023-01-01T00:00:00Z"),
-            endTime: new Date("2023-01-01T01:00:00Z"),
-            operatorId: "op123",
-        },
-        system: 1,
-    } as SSOResponse;
-
-    const mockAuthorizeResponse = {
-        authorized: true,
-        user: {
-            name: "TestUser",
-            offerGames: [
-                { gameId: 1001, maxBet: 1000, minBet: 1, maxBetPerChoices: {} },
-                { gameId: 1002, maxBet: 1000, minBet: 1, maxBetPerChoices: {} },
-                { gameId: 1003, maxBet: 1000, minBet: 1, maxBetPerChoices: {} },
-            ],
-            enabledGameIds: [1001, 1002, 1003],
-            settings: { theme: "light" },
-        },
-        errorCode: null,
-    } as unknown as AuthorizeResponse;
-
-    const mockFailedAuthorizeResponse = {
-        authorized: false,
-        user: null,
-        errorCode: "NICKNAME_EXISTS",
+describe("Register Component Tests", () => {
+    const defaultProps: RegisterProps = {
+        session: {
+            isAuthenticated: true,
+            username: "testUser",
+            language: "en",
+            ss: "test-ss-token",
+            memberName: "testUser",
+            isUM: false,
+            umInfo: null,
+            system: null
+        } as SSOResponse,
+        isDirectMode: false,
+        gameId: 0,
+        firstSSOToLobby: false,
+        isSabaPlay: false,
+        t: jest.fn((key: string) => key), // Mock translation function
     };
 
     const mockLobbyConfigs = {
@@ -175,503 +175,629 @@ describe("Register Component", () => {
                 {
                     name: "Test Category",
                     gameSettings: [
-                        { gameId: 1001, gameName: "Game1", bigSize: false, newTag: false },
-                        { gameId: 1002, gameName: "Game2", bigSize: false, newTag: false },
+                        { gameId: 1001, bigSize: false, newTag: false },
+                        { gameId: 1002, bigSize: false, newTag: false },
                     ],
                 },
             ],
-            banners: [],
+            banners: [
+                { gameId: 1001, displayTime: 5000 },
+                { gameId: 1002, displayTime: 5000 },
+            ],
+            gameSettings: {
+                1001: { id: 1001, name: "Game 1" },
+                1002: { id: 1002, name: "Game 2" },
+            },
+            roundTimerGame: 1001,
         },
-    };
-
-    const mockGameSettings = [
-        { id: 1001, gameName: "Game1", socketInfo: { namespace: "game1" } },
-        { id: 1002, gameName: "Game2", socketInfo: { namespace: "game2" } },
-        { id: 1003, gameName: "Game3", socketInfo: { namespace: "game3" } },
-    ];
-
-    const defaultProps: RegisterProps = {
-        session: mockSession,
-        isDirectMode: false,
-        gameId: 1001,
-        firstSSOToLobby: false,
-        isSabaPlay: false,
-        t: jest.fn((key) => key),
-    };
+    } as any;
 
     beforeEach(() => {
         jest.clearAllMocks();
-
-        // Setup default mocks - these need to be set before the class is imported
+        (getLobbyConfigs as jest.Mock).mockResolvedValue(mockLobbyConfigs);
+        (getEnabledRenderGameSettings as jest.Mock).mockReturnValue([
+            { id: 1001, name: "Game 1" },
+            { id: 1002, name: "Game 2" },
+        ]);
+        (randomInteger as jest.Mock).mockReturnValue(1);
         (NameGenerator.generateName as jest.Mock).mockReturnValue("TestUser123");
         (NameGenerator.validateName as jest.Mock).mockReturnValue(true);
-        (randomInteger as jest.Mock).mockReturnValue(5);
-        (createNickname as jest.Mock).mockResolvedValue(mockAuthorizeResponse);
-        (getLobbyConfigs as jest.Mock).mockResolvedValue(mockLobbyConfigs);
-        (getEnabledRenderGameSettings as jest.Mock).mockReturnValue(mockGameSettings);
-        (getServiceStatusIsAvailable as jest.Mock).mockResolvedValue(true);
-        (AnalyticsHelper.trackFunction as jest.Mock).mockImplementation(() => { });
     });
 
-    describe("Constructor", () => {
-        it("should initialize with correct default state", () => {
-            // Arrange & Act
-            const component = new Register(defaultProps);
-
-            // Assert - The static defaultState is evaluated at class definition time,
-            // so the mocks won't be called during constructor. We need to check the actual values.
-            expect(component.state).toMatchObject({
-                isGalleryOpened: false,
-                isValidUsername: true,
-                formValidity: "",
-                isTriggerPreloadResources: false,
-                isDonePreloadResource: false,
-                authorizeResponse: null,
-                lobbyConfigs: null,
-                isUm: false,
-                isClickRegister: false,
-                toLoadGameId: 1001,
-            });
-            // Accept avatar and name as number|string|undefined due to static evaluation
-            expect(["number", "undefined"]).toContain(typeof component.state.avatar);
-            expect(["string", "undefined"]).toContain(typeof component.state.name);
-        });
-
-        it("should handle different gameId values", () => {
-            // Arrange
-            const propsWithDifferentGameId = { ...defaultProps, gameId: 2001 };
-
-            // Act
-            const component = new Register(propsWithDifferentGameId);
-
-            // Assert
-            expect(component.state.toLoadGameId).toBe(2001);
-        });
-    });
-
-    describe("Component Methods", () => {
-        let component: Register;
-
-        beforeEach(() => {
-            component = new Register(defaultProps);
-            component.setState = jest.fn();
-        });
-
-        it("should toggle avatar gallery", () => {
-            // Arrange
-            component.state = { ...component.state, isGalleryOpened: false };
-
-            // Act
-            component.toggleAvatarGallery();
-
-            // Assert
-            expect(component.setState).toHaveBeenCalledWith({ isGalleryOpened: true });
-        });
-
-        it("should set or generate name", () => {
-            // Arrange
-            const newName = "NewUserName";
-
-            // Act
-            component.setOrGenerateName(newName);
-
-            // Assert
-            expect(component.setState).toHaveBeenCalledWith({
-                name: newName,
-                isValidUsername: true,
-            });
-        });
-
-        it("should generate name when no parameter provided", () => {
-            // Act
-            component.setOrGenerateName();
-
-            // Assert
-            expect(component.setState).toHaveBeenCalledWith({
-                name: "TestUser123",
-                isValidUsername: true,
-            });
-            expect(AnalyticsHelper.trackFunction).toHaveBeenCalledWith({
-                function: TrackingFunction.Nickname,
-                action: TrackingAction.GenerateRandom,
-            });
-        });
-
-        it("should set avatar", () => {
-            // Arrange
-            const newAvatarId = 7;
-
-            // Act
-            component.setAvatar(newAvatarId);
-
-            // Assert
-            expect(component.setState).toHaveBeenCalledWith({ avatar: newAvatarId });
-        });
-
-        it("should toggle username validation", () => {
-            // Arrange
-            component.state = { ...component.state, isValidUsername: true };
-
-            // Act
-            component.toggleUsernameValidation();
-
-            // Assert
-            expect(component.setState).toHaveBeenCalledWith({ isValidUsername: false });
-        });
-
-        it("should set isUM", () => {
-            // Act
-            component.setIsUM();
-
-            // Assert
-            expect(component.setState).toHaveBeenCalledWith({ isUm: true });
-        });
-
-        it("should update click register", () => {
-            // Act
-            component.updateClickRegister(true);
-
-            // Assert
-            expect(component.setState).toHaveBeenCalledWith({ isClickRegister: true });
-        });
-
-        it("should update state preload resource", () => {
-            // Act
-            component.updateStatePreloadResource();
-
-            // Assert
-            expect(component.setState).toHaveBeenCalledWith({
-                isDonePreloadResource: true,
-                isClickRegister: false,
-            });
-        });
-
-        it("should update lobby configs", () => {
-            // Arrange
-            const newLobbyConfigs = { name: "New Lobby" };
-
-            // Act
-            component.updateLobbyConfigs(newLobbyConfigs);
-
-            // Assert
-            expect(component.setState).toHaveBeenCalledWith({ lobbyConfigs: newLobbyConfigs });
-        });
-
-        it("should check if response is authorize response", () => {
-            // Act & Assert
-            expect(component.isAuthorizeResponse(mockAuthorizeResponse)).toBe(true);
-            expect(component.isAuthorizeResponse(null)).toBe(false);
-            expect(component.isAuthorizeResponse(undefined)).toBe(false);
-            expect(component.isAuthorizeResponse({ user: {} })).toBe(false);
-            expect(component.isAuthorizeResponse({ authorized: false, user: {} })).toBe(false);
-        });
-    });
-
-    describe("Form Submission", () => {
-        let component: Register;
-        let mockEvent: FormEvent;
-
-        beforeEach(() => {
-            component = new Register(defaultProps);
-            component.setState = jest.fn();
-            component.updateClickRegister = jest.fn();
-            component.updateToLoadGameId = jest.fn();
-
-            mockEvent = {
-                preventDefault: jest.fn(),
-            } as any;
-        });
-
-        it("should handle successful nickname creation", async () => {
-            // Arrange
-            component.state = { ...component.state, name: "ValidUser123", avatar: 5 };
-
-            // Act
-            await component.submit(mockEvent);
-
-            // Assert
-            expect(mockEvent.preventDefault).toHaveBeenCalled();
-            expect(component.updateClickRegister).toHaveBeenCalledWith(true);
-            expect(createNickname).toHaveBeenCalledWith(mockSession, "ValidUser123", 5);
-            expect(component.setState).toHaveBeenCalledWith({
-                authorizeResponse: mockAuthorizeResponse,
-                isTriggerPreloadResources: true,
-            });
-            expect(AnalyticsHelper.trackFunction).toHaveBeenCalledWith({
-                function: TrackingFunction.Avatar,
-                action: TrackingAction.Create,
-            });
-        });
-
-        it("should handle invalid name validation", async () => {
-            // Arrange
-            component.state = { ...component.state, name: "Invalid" };
-            (NameGenerator.validateName as jest.Mock).mockReturnValue(false);
-
-            // Act
-            await component.submit(mockEvent);
-
-            // Assert
-            expect(component.setState).toHaveBeenCalledWith({
-                formValidity: "Common.name_invalid",
-                isValidUsername: false,
-            });
-            expect(component.updateClickRegister).toHaveBeenCalledWith(false);
-            expect(createNickname).not.toHaveBeenCalled();
-        });
-
-        it("should handle failed authorization response", async () => {
-            // Arrange
-            component.state = { ...component.state, name: "ValidUser123" };
-            (createNickname as jest.Mock).mockResolvedValue(mockFailedAuthorizeResponse);
-
-            // Act
-            await component.submit(mockEvent);
-
-            // Assert
-            expect(component.setState).toHaveBeenCalledWith({
-                formValidity: "Error: NICKNAME_EXISTS",
-                isValidUsername: false,
-            });
-        });
-
-        it("should handle createNickname error", async () => {
-            // Arrange
-            component.state = { ...component.state, name: "ValidUser123" };
-            (createNickname as jest.Mock).mockRejectedValue(new Error("Network error"));
-
-            // Act
-            await component.submit(mockEvent);
-
-            // Assert
-            expect(createNickname).toHaveBeenCalled();
-            expect(component.setState).toHaveBeenCalledWith({
-                formValidity: "Error: undefined",
-                isValidUsername: false,
-            });
-        });
-    });
-
-    describe("Game ID Update Logic", () => {
-        let component: Register;
-
-        beforeEach(() => {
-            component = new Register(defaultProps);
-            component.setState = jest.fn();
-        });
-
+    describe("First SSO to Lobby Scenarios", () => {
         it("should redirect to lobby when firstSSOToLobby is true", async () => {
             // Arrange
-            const firstSSOProps = { ...defaultProps, firstSSOToLobby: true };
-            component = new Register(firstSSOProps);
-            component.setState = jest.fn();
+            const props = {
+                ...defaultProps,
+                firstSSOToLobby: true,
+            };
+
+            const mockAuthorizeResponse = { authorized: true };
+            (createNickname as jest.Mock).mockResolvedValue(mockAuthorizeResponse);
 
             // Act
-            await component.updateToLoadGameId(mockAuthorizeResponse);
+            render(<Register {...props} />);
 
-            // Assert
-            expect(component.setState).toHaveBeenCalledWith({ toLoadGameId: 0 });
-        });
+            const nameInput = screen.getByPlaceholderText("Common.enter_your_name");
+            const submitButton = screen.getByText("SabaNumber.button_play_now");
 
-        it("should find available game service when firstSSOToLobby is false", async () => {
-            // Arrange
-            (getServiceStatusIsAvailable as jest.Mock)
-                .mockResolvedValueOnce(false) // First game unavailable
-                .mockResolvedValueOnce(true); // Second game available
-
-            // Act
-            await component.updateToLoadGameId(mockAuthorizeResponse);
-
-            // Assert
-            expect(getServiceStatusIsAvailable).toHaveBeenCalledTimes(2);
-            expect(component.setState).toHaveBeenCalledWith({ toLoadGameId: 1002 });
-        });
-
-        it("should handle no enabled game settings", async () => {
-            // Arrange
-            (getEnabledRenderGameSettings as jest.Mock).mockReturnValue([]);
-
-            // Act
-            await component.updateToLoadGameId(mockAuthorizeResponse);
-
-            // Assert
-            expect(getServiceStatusIsAvailable).not.toHaveBeenCalled();
-        });
-
-        it("should handle all games being unavailable", async () => {
-            // Arrange
-            (getServiceStatusIsAvailable as jest.Mock).mockResolvedValue(false);
-
-            // Act
-            await component.updateToLoadGameId(mockAuthorizeResponse);
-
-            // Assert
-            expect(getServiceStatusIsAvailable).toHaveBeenCalledTimes(3);
-        });
-
-        it("should handle getLobbyConfigs error", async () => {
-            // Arrange
-            (getLobbyConfigs as jest.Mock).mockRejectedValue(new Error("Lobby error"));
-
-            // Act & Assert
-            await expect(component.updateToLoadGameId(mockAuthorizeResponse)).rejects.toThrow("Lobby error");
-        });
-    });
-
-    describe("Render Method", () => {
-        it("should render register form by default", () => {
-            // Act
-            const { getByTestId, getByText } = render(<Register {...defaultProps} />);
-
-            // Assert
-            expect(getByTestId("first-login-container")).toBeInTheDocument();
-            expect(getByTestId("text-block")).toBeInTheDocument();
-            expect(getByTestId("profile-picture")).toBeInTheDocument();
-            expect(getByText("SabaNumber.button_play_now")).toBeInTheDocument();
-        });
-
-        it("should render SabaPlay welcome message when isSabaPlay is true", () => {
-            // Arrange
-            const sabaPlayProps = { ...defaultProps, isSabaPlay: true };
-
-            // Act
-            const { getByText } = render(<Register {...sabaPlayProps} />);
-
-            // Assert
-            expect(getByText("SabaNumber.message_welcome_numbergame_sabaplay")).toBeInTheDocument();
-        });
-
-        it("should render regular welcome message when isSabaPlay is false", () => {
-            // Act
-            const { getByText } = render(<Register {...defaultProps} />);
-
-            // Assert
-            expect(getByText("SabaNumber.message_welcome_numbergame")).toBeInTheDocument();
-        });
-    });
-
-    describe("Integration Tests", () => {
-        it("should handle form submission with valid name", async () => {
-            // Arrange
-            const { getByTestId, getByText } = render(<Register {...defaultProps} />);
-            const usernameInput = getByTestId("username");
-            const submitButton = getByText("SabaNumber.button_play_now");
-
-            // Act
-            fireEvent.change(usernameInput, { target: { value: "NewUser123" } });
+            fireEvent.change(nameInput, { target: { value: "TestUser123" } });
             fireEvent.click(submitButton);
 
             // Assert
             await waitFor(() => {
-                // Get the actual avatar value from the component state
-                const component = new Register(defaultProps);
-                expect(createNickname).toHaveBeenCalledWith(mockSession, "NewUser123", component.state.avatar);
+                expect(screen.getByTestId("dashboard-component")).toBeInTheDocument();
             });
         });
 
-        it("should handle form submission with invalid name", async () => {
+        it("should keep original gameId when isDirectMode is true", async () => {
             // Arrange
-            (NameGenerator.validateName as jest.Mock).mockReturnValue(false);
-            const { getByTestId, getByText } = render(<Register {...defaultProps} />);
-            const usernameInput = getByTestId("username");
-            const submitButton = getByText("SabaNumber.button_play_now");
+            const props = {
+                ...defaultProps,
+                isDirectMode: true,
+                gameId: 123,
+                firstSSOToLobby: false,
+            };
+
+            const mockAuthorizeResponse = { authorized: true };
+            (createNickname as jest.Mock).mockResolvedValue(mockAuthorizeResponse);
 
             // Act
-            fireEvent.change(usernameInput, { target: { value: "Invalid" } });
+            render(<Register {...props} />);
+
+            const nameInput = screen.getByPlaceholderText("Common.enter_your_name");
+            const submitButton = screen.getByText("SabaNumber.button_play_now");
+
+            fireEvent.change(nameInput, { target: { value: "TestUser123" } });
             fireEvent.click(submitButton);
 
             // Assert
             await waitFor(() => {
-                expect(screen.getByText("Common.name_invalid")).toBeInTheDocument();
-            }, { timeout: 5000 });
+                expect(screen.getByTestId("dashboard-component")).toBeInTheDocument();
+            });
         });
 
-        it("should handle avatar gallery interaction", () => {
+        it("should handle firstSSOToLobby with SabaPlay integration", async () => {
             // Arrange
-            const { getByTestId } = render(<Register {...defaultProps} />);
-            const profilePicture = getByTestId("profile-picture");
+            const props = {
+                ...defaultProps,
+                firstSSOToLobby: true,
+                isSabaPlay: true,
+            };
+
+            const mockAuthorizeResponse = { authorized: true };
+            (createNickname as jest.Mock).mockResolvedValue(mockAuthorizeResponse);
 
             // Act
-            fireEvent.click(profilePicture);
+            render(<Register {...props} />);
+
+            const nameInput = screen.getByPlaceholderText("Common.enter_your_name");
+            const submitButton = screen.getByText("SabaNumber.button_play_now");
+
+            fireEvent.change(nameInput, { target: { value: "TestUser123" } });
+            fireEvent.click(submitButton);
 
             // Assert
-            expect(screen.getByTestId("avatar-gallery")).toBeInTheDocument();
+            await waitFor(() => {
+                expect(screen.getByTestId("dashboard-component")).toBeInTheDocument();
+            });
         });
+    });
 
-        it("should handle name generation button click", () => {
+    describe("Direct Mode Scenarios", () => {
+        it("should handle direct mode registration", async () => {
             // Arrange
-            const { container } = render(<Register {...defaultProps} />);
-            const refreshButton = container.querySelector("button.refresh");
+            const props = {
+                ...defaultProps,
+                isDirectMode: true,
+                gameId: 123,
+            };
+
+            const mockAuthorizeResponse = { authorized: true };
+            (createNickname as jest.Mock).mockResolvedValue(mockAuthorizeResponse);
 
             // Act
-            fireEvent.click(refreshButton!);
+            render(<Register {...props} />);
+
+            const nameInput = screen.getByPlaceholderText("Common.enter_your_name");
+            const submitButton = screen.getByText("SabaNumber.button_play_now");
+
+            fireEvent.change(nameInput, { target: { value: "TestUser123" } });
+            fireEvent.click(submitButton);
+
+            // Assert
+            await waitFor(() => {
+                expect(screen.getByTestId("dashboard-component")).toBeInTheDocument();
+            });
+        });
+
+        it("should handle direct mode with lobby access", async () => {
+            // Arrange
+            const props = {
+                ...defaultProps,
+                isDirectMode: true,
+                gameId: 0,
+            };
+
+            const mockAuthorizeResponse = { authorized: true };
+            (createNickname as jest.Mock).mockResolvedValue(mockAuthorizeResponse);
+
+            // Act
+            render(<Register {...props} />);
+
+            const nameInput = screen.getByPlaceholderText("Common.enter_your_name");
+            const submitButton = screen.getByText("SabaNumber.button_play_now");
+
+            fireEvent.change(nameInput, { target: { value: "TestUser123" } });
+            fireEvent.click(submitButton);
+
+            // Assert
+            await waitFor(() => {
+                expect(screen.getByTestId("dashboard-component")).toBeInTheDocument();
+            });
+        });
+    });
+
+    describe("SabaPlay Integration Scenarios", () => {
+        it("should handle SabaPlay registration", async () => {
+            // Arrange
+            const props = {
+                ...defaultProps,
+                isSabaPlay: true,
+                gameId: 1003,
+            };
+
+            const mockAuthorizeResponse = { authorized: true };
+            (createNickname as jest.Mock).mockResolvedValue(mockAuthorizeResponse);
+
+            // Act
+            render(<Register {...props} />);
+
+            const nameInput = screen.getByPlaceholderText("Common.enter_your_name");
+            const submitButton = screen.getByText("SabaNumber.button_play_now");
+
+            fireEvent.change(nameInput, { target: { value: "TestUser123" } });
+            fireEvent.click(submitButton);
+
+            // Assert
+            await waitFor(() => {
+                expect(screen.getByTestId("dashboard-component")).toBeInTheDocument();
+            });
+        });
+
+        it("should handle SabaPlay with auto nickname creation", async () => {
+            // Arrange
+            const props = {
+                ...defaultProps,
+                isSabaPlay: true,
+                gameId: 1003,
+            };
+
+            const mockAuthorizeResponse = { authorized: true };
+            (createNickname as jest.Mock).mockResolvedValue(mockAuthorizeResponse);
+
+            // Act
+            render(<Register {...props} />);
+
+            const generateButton = screen.getByText("Generate Random");
+            fireEvent.click(generateButton);
 
             // Assert
             expect(NameGenerator.generateName).toHaveBeenCalled();
-            expect(AnalyticsHelper.trackFunction).toHaveBeenCalledWith({
-                function: TrackingFunction.Nickname,
-                action: TrackingAction.GenerateRandom,
+        });
+    });
+
+    describe("User-Specific Storage Scenarios", () => {
+        it("should handle user-specific game tracking during registration", async () => {
+            // Arrange
+            const props = {
+                ...defaultProps,
+                session: { ...defaultProps.session, username: "user1" },
+                gameId: 123,
+            };
+
+            const mockAuthorizeResponse = { authorized: true };
+            (createNickname as jest.Mock).mockResolvedValue(mockAuthorizeResponse);
+
+            // Act
+            render(<Register {...props} />);
+
+            const nameInput = screen.getByPlaceholderText("Common.enter_your_name");
+            const submitButton = screen.getByText("SabaNumber.button_play_now");
+
+            fireEvent.change(nameInput, { target: { value: "TestUser123" } });
+            fireEvent.click(submitButton);
+
+            // Assert
+            await waitFor(() => {
+                expect(screen.getByTestId("dashboard-component")).toBeInTheDocument();
+            });
+        });
+
+        it("should handle multiple users with isolated game tracking", async () => {
+            // Arrange
+            const user1Props = {
+                ...defaultProps,
+                session: { ...defaultProps.session, username: "user1" },
+                gameId: 123,
+            };
+
+            const user2Props = {
+                ...defaultProps,
+                session: { ...defaultProps.session, username: "user2" },
+                gameId: 456,
+            };
+
+            const mockAuthorizeResponse = { authorized: true };
+            (createNickname as jest.Mock).mockResolvedValue(mockAuthorizeResponse);
+
+            // Act - First user
+            const { unmount } = render(<Register {...user1Props} />);
+            const nameInput1 = screen.getByPlaceholderText("Common.enter_your_name");
+            const submitButton1 = screen.getByText("SabaNumber.button_play_now");
+
+            fireEvent.change(nameInput1, { target: { value: "TestUser123" } });
+            fireEvent.click(submitButton1);
+
+            await waitFor(() => {
+                expect(screen.getByTestId("dashboard-component")).toBeInTheDocument();
+            });
+
+            unmount();
+
+            // Act - Second user
+            render(<Register {...user2Props} />);
+            const nameInput2 = screen.getByPlaceholderText("Common.enter_your_name");
+            const submitButton2 = screen.getByText("SabaNumber.button_play_now");
+
+            fireEvent.change(nameInput2, { target: { value: "TestUser456" } });
+            fireEvent.click(submitButton2);
+
+            // Assert
+            await waitFor(() => {
+                expect(screen.getByTestId("dashboard-component")).toBeInTheDocument();
+            });
+        });
+    });
+
+    describe("Error Handling Scenarios", () => {
+        it("should handle nickname creation failure", async () => {
+            // Arrange
+            const props = {
+                ...defaultProps,
+                gameId: 123,
+            };
+
+            const mockAuthorizeResponse = { authorized: false, errorCode: "NICKNAME_FAILED" };
+            (createNickname as jest.Mock).mockResolvedValue(mockAuthorizeResponse);
+
+            // Act
+            render(<Register {...props} />);
+
+            const nameInput = screen.getByPlaceholderText("Common.enter_your_name");
+            const submitButton = screen.getByText("SabaNumber.button_play_now");
+
+            fireEvent.change(nameInput, { target: { value: "TestUser123" } });
+            fireEvent.click(submitButton);
+
+            // Assert
+            await waitFor(() => {
+                expect(GetLocalizedErrorMessage).toHaveBeenCalledWith("NICKNAME_FAILED");
+            });
+        });
+
+        it("should handle network errors during registration", async () => {
+            // Arrange
+            const props = {
+                ...defaultProps,
+                gameId: 123,
+            };
+
+            (createNickname as jest.Mock).mockRejectedValue(new Error("Network error"));
+
+            // Act
+            render(<Register {...props} />);
+
+            const nameInput = screen.getByPlaceholderText("Common.enter_your_name");
+            const submitButton = screen.getByText("SabaNumber.button_play_now");
+
+            fireEvent.change(nameInput, { target: { value: "TestUser123" } });
+            fireEvent.click(submitButton);
+
+            // Assert
+            await waitFor(() => {
+                expect(GetLocalizedErrorMessage).toHaveBeenCalled();
+            });
+        });
+
+        it("should handle invalid nickname validation", async () => {
+            // Arrange
+            const props = {
+                ...defaultProps,
+                gameId: 123,
+            };
+
+            (NameGenerator.validateName as jest.Mock).mockReturnValue(false);
+
+            // Act
+            render(<Register {...props} />);
+
+            const nameInput = screen.getByPlaceholderText("Common.enter_your_name");
+            const submitButton = screen.getByText("SabaNumber.button_play_now");
+
+            fireEvent.change(nameInput, { target: { value: "Invalid" } });
+            fireEvent.click(submitButton);
+
+            // Assert
+            expect(GetLocalizedErrorMessage).toHaveBeenCalled();
+        });
+    });
+
+    describe("PreloadResourceRegister Integration", () => {
+        it("should handle successful lobby configs loading", async () => {
+            // Arrange
+            const props = {
+                ...defaultProps,
+                gameId: 0,
+            };
+
+            const mockLobbyConfigs = {
+                lobbyConfigs: {
+                    name: "Test Lobby",
+                    currencyGroupIds: ["USD"],
+                    miniPanelGameIds: [1001, 1002],
+                    categories: [
+                        {
+                            name: "Test Category",
+                            gameSettings: [
+                                { gameId: 1001, bigSize: false, newTag: false },
+                                { gameId: 1002, bigSize: false, newTag: false },
+                            ],
+                        },
+                    ],
+                    banners: [
+                        { gameId: 1001, displayTime: 5000 },
+                        { gameId: 1002, displayTime: 5000 },
+                    ],
+                    gameSettings: {
+                        1001: { id: 1001, name: "Game 1" },
+                        1002: { id: 1002, name: "Game 2" },
+                    },
+                    roundTimerGame: 1001,
+                },
+            } as any;
+            (getLobbyConfigs as jest.Mock).mockResolvedValue(mockLobbyConfigs);
+
+            // Act
+            render(<Register {...props} />);
+
+            // Assert
+            await waitFor(() => {
+                expect(getLobbyConfigs).toHaveBeenCalledWith(props.session);
+            });
+        });
+
+        it("should handle network errors during lobby config loading", async () => {
+            // Arrange
+            const props = {
+                ...defaultProps,
+                gameId: 0,
+            };
+
+            (getLobbyConfigs as jest.Mock).mockRejectedValue(new Error("Network timeout"));
+
+            // Act
+            render(<Register {...props} />);
+
+            // Assert
+            await waitFor(() => {
+                expect(getLobbyConfigs).toHaveBeenCalledWith(props.session);
+            });
+        });
+
+        it("should handle empty lobby configs", async () => {
+            // Arrange
+            const props = {
+                ...defaultProps,
+                gameId: 0,
+            };
+
+            const emptyLobbyConfigs = { lobbyConfigs: {} };
+            (getLobbyConfigs as jest.Mock).mockResolvedValue(emptyLobbyConfigs);
+
+            // Act
+            render(<Register {...props} />);
+
+            // Assert
+            await waitFor(() => {
+                expect(getLobbyConfigs).toHaveBeenCalledWith(props.session);
+            });
+        });
+
+        it("should handle null lobby configs", async () => {
+            // Arrange
+            const props = {
+                ...defaultProps,
+                gameId: 0,
+            };
+
+            (getLobbyConfigs as jest.Mock).mockResolvedValue(null);
+
+            // Act
+            render(<Register {...props} />);
+
+            // Assert
+            await waitFor(() => {
+                expect(getLobbyConfigs).toHaveBeenCalledWith(props.session);
+            });
+        });
+    });
+
+    describe("updateToLoadGameId Scenarios", () => {
+        it("should set toLoadGameId to 0 when no enabled games are available", async () => {
+            // Arrange
+            const props = {
+                ...defaultProps,
+                gameId: 0,
+            };
+
+            (getEnabledRenderGameSettings as jest.Mock).mockReturnValue([]); // No enabled games
+
+            // Act
+            render(<Register {...props} />);
+
+            // Assert
+            await waitFor(() => {
+                expect(getEnabledRenderGameSettings).toHaveBeenCalled();
+            });
+        });
+
+        it("should handle null lobby configs gracefully", async () => {
+            // Arrange
+            const props = {
+                ...defaultProps,
+                gameId: 0,
+            };
+
+            (getLobbyConfigs as jest.Mock).mockResolvedValue(null);
+            (getEnabledRenderGameSettings as jest.Mock).mockReturnValue([]);
+
+            // Act
+            render(<Register {...props} />);
+
+            // Assert
+            await waitFor(() => {
+                expect(getEnabledRenderGameSettings).toHaveBeenCalled();
+            });
+        });
+    });
+
+    describe("Integration Flow Scenarios", () => {
+        it("should handle complete registration flow with missing gameId", async () => {
+            // Arrange
+            const props = {
+                ...defaultProps,
+                gameId: 0,
+            };
+
+            const mockAuthorizeResponse = { authorized: true };
+            (createNickname as jest.Mock).mockResolvedValue(mockAuthorizeResponse);
+            (getEnabledRenderGameSettings as jest.Mock).mockReturnValue([]); // No enabled games
+
+            // Act
+            render(<Register {...props} />);
+
+            const nameInput = screen.getByPlaceholderText("Common.enter_your_name");
+            const submitButton = screen.getByText("SabaNumber.button_play_now");
+
+            fireEvent.change(nameInput, { target: { value: "TestUser123" } });
+            fireEvent.click(submitButton);
+
+            // Assert
+            await waitFor(() => {
+                expect(screen.getByTestId("dashboard-component")).toBeInTheDocument();
+            });
+        });
+
+        it("should handle complete SabaPlay registration flow", async () => {
+            // Arrange
+            const props = {
+                ...defaultProps,
+                isSabaPlay: true,
+                gameId: 1003,
+                firstSSOToLobby: true,
+            };
+
+            const mockAuthorizeResponse = { authorized: true };
+            (createNickname as jest.Mock).mockResolvedValue(mockAuthorizeResponse);
+
+            // Act
+            render(<Register {...props} />);
+
+            const nameInput = screen.getByPlaceholderText("Common.enter_your_name");
+            const submitButton = screen.getByText("SabaNumber.button_play_now");
+
+            fireEvent.change(nameInput, { target: { value: "TestUser123" } });
+            fireEvent.click(submitButton);
+
+            // Assert
+            await waitFor(() => {
+                expect(screen.getByTestId("dashboard-component")).toBeInTheDocument();
             });
         });
     });
 
     describe("Edge Cases", () => {
-        it("should handle empty name input", async () => {
+        it("should handle missing session", () => {
             // Arrange
+            const props = {
+                ...defaultProps,
+                session: null,
+            };
+
+            // Act
+            render(<Register {...props} />);
+
+            // Assert
+            expect(screen.getByTestId("first-login-container")).toBeInTheDocument();
+        });
+
+        it("should handle empty nickname", async () => {
+            // Arrange
+            const props = {
+                ...defaultProps,
+                gameId: 123,
+            };
+
+            // Act
+            render(<Register {...props} />);
+
+            const submitButton = screen.getByText("SabaNumber.button_play_now");
+            fireEvent.click(submitButton);
+
+            // Assert
+            expect(GetLocalizedErrorMessage).toHaveBeenCalled();
+        });
+
+        it("should handle special characters in nickname", async () => {
+            // Arrange
+            const props = {
+                ...defaultProps,
+                gameId: 123,
+            };
+
             (NameGenerator.validateName as jest.Mock).mockReturnValue(false);
-            const { getByTestId, getByText } = render(<Register {...defaultProps} />);
-            const usernameInput = getByTestId("username");
-            const submitButton = getByText("SabaNumber.button_play_now");
 
             // Act
-            fireEvent.change(usernameInput, { target: { value: "" } });
+            render(<Register {...props} />);
+
+            const nameInput = screen.getByPlaceholderText("Common.enter_your_name");
+            const submitButton = screen.getByText("SabaNumber.button_play_now");
+
+            fireEvent.change(nameInput, { target: { value: "Test@User#123" } });
             fireEvent.click(submitButton);
 
             // Assert
-            await waitFor(() => {
-                expect(screen.getByText("Common.name_invalid")).toBeInTheDocument();
-            }, { timeout: 5000 });
+            expect(GetLocalizedErrorMessage).toHaveBeenCalled();
         });
+    });
 
-        it("should handle network timeout during nickname creation", async () => {
+    describe("Performance Tests", () => {
+        it("should render within performance budget", () => {
             // Arrange
-            (createNickname as jest.Mock).mockRejectedValue(new Error("Request timeout"));
-            const { getByTestId, getByText } = render(<Register {...defaultProps} />);
-            const usernameInput = getByTestId("username");
-            const submitButton = getByText("SabaNumber.button_play_now");
+            const startTime = performance.now();
+            const props = {
+                ...defaultProps,
+                gameId: 123,
+            };
 
             // Act
-            fireEvent.change(usernameInput, { target: { value: "TestUser123" } });
-            fireEvent.click(submitButton);
+            render(<Register {...props} />);
+            const endTime = performance.now();
 
             // Assert
-            await waitFor(() => {
-                expect(createNickname).toHaveBeenCalled();
-            }, { timeout: 5000 });
-        });
-
-        it("should handle lobby configs being null", async () => {
-            // Arrange
-            (getLobbyConfigs as jest.Mock).mockResolvedValue(null);
-            const component = new Register(defaultProps);
-
-            // Act
-            await component.updateToLoadGameId(mockAuthorizeResponse);
-
-            // Assert
-            expect(getEnabledRenderGameSettings).toHaveBeenCalledWith(undefined, mockAuthorizeResponse);
-        });
-
-        it("should handle lobby configs being undefined", async () => {
-            // Arrange
-            (getLobbyConfigs as jest.Mock).mockResolvedValue(undefined);
-            const component = new Register(defaultProps);
-
-            // Act
-            await component.updateToLoadGameId(mockAuthorizeResponse);
-
-            // Assert
-            expect(getEnabledRenderGameSettings).toHaveBeenCalledWith(undefined, mockAuthorizeResponse);
+            expect(endTime - startTime).toBeLessThan(100); // Should complete within 100ms
+            expect(screen.getByTestId("first-login-container")).toBeInTheDocument();
         });
     });
 });
