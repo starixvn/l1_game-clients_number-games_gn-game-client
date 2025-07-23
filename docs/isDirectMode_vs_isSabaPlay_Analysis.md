@@ -4,12 +4,44 @@
 
 There is significant confusion and overlap between the `isDirectMode` and `isSabaPlay` parameters in the gaming application. Both parameters trigger the same behavior (auto nickname creation) but serve different business purposes and have different sources.
 
+## 🚨 Latest Updates (Latest Version)
+
+### Key Changes Applied
+
+**1. Enhanced Direct Mode Logic**
+
+-   **Change**: Direct mode calculation now properly handles lobby access
+-   **Implementation**: `effectiveRedirectUrl = gameId === 0 ? null : redirectUrl`
+-   **Impact**: Allows lobby access even when `ref` and `rurl` parameters are present
+
+**2. User-Specific Storage**
+
+-   **Change**: `latestGameId` is now stored per user using username-based keys
+-   **Implementation**: `getUserLatestGameId(username)` and `setUserLatestGameId(username, gameId)`
+-   **Impact**: Prevents cross-user state leakage and ensures proper game tracking
+
+**3. HTML-Encoded Ampersands Handling**
+
+-   **Change**: URLs with `&amp;` are now properly decoded before parsing
+-   **Implementation**: `searchParams.replace(/&amp;/g, '&')` before parsing
+-   **Impact**: Fixes URL parsing issues in various integrations
+
 ## Parameter Definitions
 
-| Parameter      | Source      | Purpose                                | Business Context                |
-| -------------- | ----------- | -------------------------------------- | ------------------------------- |
-| `isDirectMode` | `?ref=true` | Direct game access bypassing SSO logic | General direct access scenarios |
-| `isSabaPlay`   | `?op=SP`    | SabaPlay platform integration          | Specific platform partnership   |
+| Parameter      | Source         | Purpose                                | Business Context                |
+| -------------- | -------------- | -------------------------------------- | ------------------------------- |
+| `isDirectMode` | Enhanced logic | Direct game access bypassing SSO logic | General direct access scenarios |
+| `isSabaPlay`   | `?op=SP`       | SabaPlay platform integration          | Specific platform partnership   |
+
+### Current Direct Mode Logic
+
+```typescript
+// Current implementation in url-context.ts
+const isDirectMode = !!(ref && effectiveRedirectUrl) || (isSabaPlay && gameId !== 0);
+
+// Where effectiveRedirectUrl is calculated as:
+const effectiveRedirectUrl = gameId === 0 ? null : redirectUrl;
+```
 
 ## The Confusion: Same Behavior, Different Sources
 
@@ -41,10 +73,10 @@ When either parameter is `true`, the user flow is identical:
 
 #### isDirectMode
 
--   **URL Parameter**: `?ref=true`
+-   **URL Parameter**: Enhanced logic based on `ref` and `effectiveRedirectUrl`
 -   **Trigger**: Direct access scenarios
 -   **Use Case**: Bypass SSO redirect logic
--   **Example**: `?gameId=123&ref=true`
+-   **Example**: `?gameId=123&ref=true` or `?gameId=123&op=SP`
 
 #### isSabaPlay
 
@@ -67,7 +99,9 @@ if (isDirectMode) {
     if (firstSSOToLobby) {
         currentGameId = 0; // Lobby
     } else {
-        currentGameId = findAvailableGame(urlContext.gameId);
+        // Use user-specific latestGameId
+        const userLatestGameId = getUserLatestGameId(session?.username);
+        currentGameId = findAvailableGame(urlContext.gameId || userLatestGameId);
     }
 }
 ```
@@ -75,11 +109,11 @@ if (isDirectMode) {
 #### isSabaPlay Logic
 
 ```typescript
-// isSabaPlay does NOT affect game selection logic
-// It only affects registration flow
-if (isSabaPlay) {
-    // Auto create nickname
-    // But still apply SSO redirect logic for game selection
+// isSabaPlay affects direct mode calculation
+// When gameId > 0, isSabaPlay makes isDirectMode = true
+// When gameId = 0, isSabaPlay does NOT make isDirectMode = true
+if (isSabaPlay && gameId !== 0) {
+    isDirectMode = true; // Triggers direct mode behavior
 }
 ```
 
@@ -111,13 +145,13 @@ const analyticsContext = {
 
 Looking at the parameter combinations matrix, several scenarios are redundant:
 
-| Combination | isDirectMode | isSabaPlay | Behavior               | Issue                                      |
-| ----------- | ------------ | ---------- | ---------------------- | ------------------------------------------ |
-| 4           | ✅           | ✅         | Auto nickname creation | **Redundant** - both trigger same behavior |
-| 6           | ✅           | ✅         | Auto nickname creation | **Redundant** - both trigger same behavior |
-| 10          | ✅           | ✅         | Auto nickname creation | **Redundant** - both trigger same behavior |
-| 12          | ✅           | ✅         | Auto nickname creation | **Redundant** - both trigger same behavior |
-| 16          | ✅           | ✅         | Auto nickname creation | **Redundant** - both trigger same behavior |
+| Combination | isDirectMode | isSabaPlay | Behavior               | Issue                                                         |
+| ----------- | ------------ | ---------- | ---------------------- | ------------------------------------------------------------- |
+| 4           | ❌           | ✅         | Auto nickname creation | **Redundant** - SabaPlay triggers direct mode when gameId > 0 |
+| 6           | ❌           | ✅         | Auto nickname creation | **Redundant** - SabaPlay triggers direct mode when gameId > 0 |
+| 10          | ✅           | ✅         | Auto nickname creation | **Redundant** - both trigger same behavior                    |
+| 12          | ✅           | ✅         | Auto nickname creation | **Redundant** - both trigger same behavior                    |
+| 16          | ❌           | ✅         | Auto nickname creation | **Redundant** - SabaPlay triggers direct mode when gameId > 0 |
 
 ### 📝 **Notes in Matrix**
 
@@ -159,6 +193,19 @@ const logoProps = {
 ```
 
 **Note**: Only `isSabaPlay` affects visual branding.
+
+### 4. **User-Specific Storage**
+
+```typescript
+// User-specific latestGameId usage
+const latestGameId = getUserLatestGameId(player?.session?.username) || 0;
+
+// This affects both direct mode and SSO logic
+if (!isDirectMode && !isSabaPlay) {
+    // Use user-specific latestGameId for SSO redirect logic
+    toLoadGameId = urlGameId > 0 ? urlGameId : userLatestGameId;
+}
+```
 
 ## Recommended Solutions
 
@@ -222,16 +269,18 @@ if (!authorizeInfo?.authorized && shouldAutoCreateNickname) {
 /**
  * URL Context Parameters
  *
- * isDirectMode (?ref=true):
+ * isDirectMode (Enhanced Logic):
  * - Triggers auto nickname creation
  * - Bypasses SSO redirect logic
  * - Uses URL gameId directly
+ * - Calculated as: !!(ref && effectiveRedirectUrl) || (isSabaPlay && gameId !== 0)
  *
  * isSabaPlay (?op=SP):
  * - Triggers auto nickname creation
- * - Applies SSO redirect logic
+ * - Can trigger direct mode when gameId > 0
  * - Affects UI branding and text
  * - Platform-specific integration
+ * - User-specific storage isolation
  */
 ```
 
@@ -242,6 +291,7 @@ if (!authorizeInfo?.authorized && shouldAutoCreateNickname) {
 1. **Redundant Test Cases**: Testing combinations 4, 6, 10, 12, 16 is redundant
 2. **Unclear Test Purpose**: Tests don't distinguish between the two parameters
 3. **Missing Edge Cases**: No tests for when both are true
+4. **User-Specific Storage**: Need tests for cross-user isolation
 
 ### Recommended Test Strategy
 
@@ -261,6 +311,14 @@ describe("Auto Nickname Creation", () => {
 
     it("should show registration form when both are false", () => {
         // Test normal flow
+    });
+
+    it("should use user-specific latestGameId", () => {
+        // Test user-specific storage
+    });
+
+    it("should handle HTML-encoded URLs", () => {
+        // Test URL parsing with &amp;
     });
 });
 ```
@@ -285,6 +343,47 @@ describe("Auto Nickname Creation", () => {
 -   Future platform integrations may need similar logic
 -   Scalability concerns
 
+### 4. **User-Specific Storage**
+
+-   Each user has isolated game tracking
+-   Prevents cross-user state interference
+-   Better user experience and data integrity
+
+## Recent Bug Fixes and Improvements
+
+### Bug Fix 1: Cross-User latestGameId Interference - FIXED ✅
+
+**Issue**: `latestGameId` was stored globally, causing cross-user interference when multiple users accessed the application.
+
+**Root Cause**:
+
+-   Global localStorage key used for all users
+-   No user-specific isolation
+
+**Fix Applied**:
+
+-   **Storage Helper**: Added `getUserLatestGameId(username)` and `setUserLatestGameId(username, gameId)`
+-   **Splash Screen**: Uses user-specific latestGameId instead of global one
+-   **URL Context**: Stores and retrieves user-specific game IDs
+
+**Impact**: Each user now has isolated game tracking, preventing cross-user interference.
+
+### Bug Fix 2: SabaPlay Lobby Access Issues - FIXED ✅
+
+**Issue**: SabaPlay users with `ref` and `rurl` parameters couldn't access lobby when `gameId=0`.
+
+**Root Cause**:
+
+-   Direct mode logic didn't properly handle lobby access scenarios
+-   `rurl` parameter was always considered for direct mode calculation
+
+**Fix Applied**:
+
+-   **URL Context**: Enhanced direct mode logic to ignore `rurl` when `gameId=0`
+-   **Effective Redirect URL**: Set to `null` when accessing lobby to prioritize lobby access
+
+**Impact**: SabaPlay users can now access lobby properly regardless of `ref` and `rurl` parameters.
+
 ## Conclusion
 
 The confusion between `isDirectMode` and `isSabaPlay` stems from:
@@ -293,6 +392,7 @@ The confusion between `isDirectMode` and `isSabaPlay` stems from:
 2. **Different Purposes**: Direct access vs platform integration
 3. **Unclear Separation**: Code doesn't clearly distinguish their roles
 4. **Redundant Combinations**: Multiple scenarios where both are true
+5. **Enhanced Logic**: Direct mode calculation is now more complex
 
 ### Recommendations:
 
@@ -301,5 +401,7 @@ The confusion between `isDirectMode` and `isSabaPlay` stems from:
 3. **Consider Consolidation**: Evaluate if both parameters are necessary
 4. **Update Tests**: Ensure test coverage reflects the actual business logic
 5. **Monitor Analytics**: Track usage patterns to understand real-world usage
+6. **Maintain User Isolation**: Ensure user-specific storage is properly implemented
+7. **Test Edge Cases**: Verify lobby access scenarios work correctly
 
-The parameters serve different business purposes but share implementation logic, which creates confusion. Clear documentation and improved code structure can help mitigate this issue.
+The parameters serve different business purposes but share implementation logic, which creates confusion. Clear documentation and improved code structure can help mitigate this issue. The latest improvements ensure better user isolation and more robust URL parsing.

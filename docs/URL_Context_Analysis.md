@@ -4,6 +4,28 @@
 
 This document provides a comprehensive analysis of the URL context parameters (`isDirectMode`, `redirectUrl`, `isSabaPlay`, `gameId`) and their critical roles in the first login to lobby flow of the gaming application.
 
+## 🚨 Latest Updates (Latest Version)
+
+### Key Improvements Applied
+
+**1. User-Specific latestGameId Storage**
+
+-   **Change**: `latestGameId` is now stored per user using username-based keys
+-   **Implementation**: `getUserLatestGameId(username)` and `setUserLatestGameId(username, gameId)`
+-   **Impact**: Prevents cross-user state leakage and ensures proper game tracking
+
+**2. HTML-Encoded Ampersands Handling**
+
+-   **Change**: URLs with `&amp;` are now properly decoded before parsing
+-   **Implementation**: `searchParams.replace(/&amp;/g, '&')` before parsing
+-   **Impact**: Fixes URL parsing issues in various integrations
+
+**3. Smart Direct Mode Logic**
+
+-   **Change**: Enhanced direct mode calculation that properly handles lobby access
+-   **Implementation**: `effectiveRedirectUrl = gameId === 0 ? null : redirectUrl`
+-   **Impact**: Allows lobby access even when `ref` and `rurl` parameters are present
+
 ## URL Context Parameters
 
 ### 1. `gameId` (number)
@@ -21,8 +43,15 @@ This document provides a comprehensive analysis of the URL context parameters (`
 ### 2. `isDirectMode` (boolean)
 
 **Purpose**: Controls whether the user should be taken directly to a specific game or follow SSO redirect logic
-**Source**: URL parameter `?ref=true`
+**Source**: Enhanced calculation based on multiple parameters
 **Default**: `false`
+
+**Current Logic**:
+
+```typescript
+const isDirectMode = !!(ref && effectiveRedirectUrl) || (isSabaPlay && gameId !== 0);
+const effectiveRedirectUrl = gameId === 0 ? null : redirectUrl;
+```
 
 **Behavior**:
 
@@ -51,27 +80,67 @@ This document provides a comprehensive analysis of the URL context parameters (`
 ## URL Context Parsing Flow
 
 ```typescript
-// From url-context.ts
+// From url-context.ts (Latest Version)
 export function parseContextFromURL(): URLContextModel | undefined {
-    const params = new URLSearchParams(globalThis.location?.search);
+    let searchParams = globalThis.location?.search;
+
+    // Fix: Handle HTML-encoded ampersands
+    if (searchParams) {
+        searchParams = searchParams.replace(/&amp;/g, "&");
+    }
+
+    const params = new URLSearchParams(searchParams);
 
     const token = params.get("token");
     const language = params.get("lang");
     const gameId = Number(params.get("gameId") || 0);
-    const isDirectMode = !!params.get("ref");
-    const redirectUrl = isDirectMode ? params.get("rurl") : "";
+    const ref = params.get("ref");
+    const redirectUrl = params.get("rurl");
     const isSabaPlay = params.get("op") === "SP";
+
+    // Enhanced direct mode logic
+    const effectiveRedirectUrl = gameId === 0 ? null : redirectUrl;
+    const isDirectMode = !!(ref && effectiveRedirectUrl) || (isSabaPlay && gameId !== 0);
 
     return {
         token,
         language,
         gameId,
         isDirectMode,
-        redirectUrl,
+        redirectUrl: effectiveRedirectUrl,
         firstSSOToLobby: true,
         isSabaPlay,
     };
 }
+```
+
+## User-Specific Storage Implementation
+
+### Storage Helper Functions
+
+```typescript
+// From storage-helper.ts
+export const getUserLatestGameId = (username: string): number => {
+    if (!username) return 0;
+    const key = `${localStorageKeys.latestGameId}_${username}`;
+    return StorageHelper.get(key) || 0;
+};
+
+export const setUserLatestGameId = (username: string, gameId: number): void => {
+    if (!username) return;
+    const key = `${localStorageKeys.latestGameId}_${username}`;
+    StorageHelper.set(key, gameId);
+};
+```
+
+### Usage in Components
+
+```typescript
+// In SplashScreen component
+const latestGameId = getUserLatestGameId(player?.session?.username) || 0;
+
+// In URL Context
+const userLatestGameId = getUserLatestGameId(session?.username);
 ```
 
 ## Complete First Login to Lobby Flow
@@ -81,17 +150,20 @@ export function parseContextFromURL(): URLContextModel | undefined {
 ```mermaid
 flowchart TD
     A1[User accesses application] --> B1[parseContextFromURL]
-    B1 --> C1{URL Parameters Present?}
-    C1 -->|Yes| D1[Parse all parameters]
-    C1 -->|No| E1[Return undefined]
+    B1 --> C1[Decode HTML-encoded ampersands]
+    C1 --> D1{URL Parameters Present?}
+    D1 -->|Yes| E1[Parse all parameters]
+    D1 -->|No| F1[Return undefined]
 
-    D1 --> F1[Extract gameId, isDirectMode, redirectUrl, isSabaPlay]
-    F1 --> G1[Store in localStorage]
-    G1 --> H1[Clear URL parameters]
-    H1 --> I1[loadURLContext returns context]
+    E1 --> G1[Extract gameId, isDirectMode, redirectUrl, isSabaPlay]
+    G1 --> H1[Calculate effectiveRedirectUrl]
+    H1 --> I1[Determine isDirectMode]
+    I1 --> J1[Store in localStorage]
+    J1 --> K1[Clear URL parameters]
+    K1 --> L1[loadURLContext returns context]
 
-    E1 --> J1[Load from localStorage]
-    J1 --> I1
+    F1 --> M1[Load from localStorage]
+    M1 --> L1
 ```
 
 ### 2. SplashScreen Initialization Flow
@@ -124,7 +196,7 @@ flowchart TD
 
     Q2 --> R2{firstSSOToLobby?}
     R2 -->|Yes| S2[Set gameId equals 0 Lobby]
-    R2 -->|No| T2[Use latestGameId and Check Service]
+    R2 -->|No| T2[Use user-specific latestGameId and Check Service]
 
     P2 --> U2[Set currentGameId]
     S2 --> U2
@@ -230,7 +302,7 @@ flowchart TD
 **Business Requirement**: Redirect to lobby instead of specific game
 
 -   **When `true`**: Sets `gameId = 0` (lobby mode)
--   **When `false`**: Uses `latestGameId` from localStorage and checks service availability
+-   **When `false`**: Uses user-specific `latestGameId` from localStorage and checks service availability
 
 ### 4. Game Service Availability Check
 
@@ -241,6 +313,15 @@ flowchart TD
 3. If not available, find first available game service
 4. Set `toLoadGameId` to available game
 
+### 5. User-Specific Storage
+
+**Process**:
+
+1. Use username to create unique storage keys
+2. Store and retrieve `latestGameId` per user
+3. Prevent cross-user state interference
+4. Maintain isolated game tracking
+
 ## URL Context State Management
 
 ### Context Storage Flow
@@ -249,9 +330,9 @@ flowchart TD
 flowchart TD
     A5[URL Context Update] --> B5[updateURLContext]
     B5 --> C5{gameId Present?}
-    C5 -->|Yes| D5[Update latestGameId]
+    C5 -->|Yes| D5[Update user-specific latestGameId]
     C5 -->|No| E5[Skip gameId Update]
-    D5 --> F5[Store in localStorage]
+    D5 --> F5[Store in localStorage with username key]
     E5 --> F5
     F5 --> G5[Context Updated]
 ```
@@ -271,32 +352,39 @@ flowchart TD
 
 ## Common Flow Scenarios
 
-### Scenario 1: Direct Game Access
-
-```
-URL: ?gameId=123&ref=true&rurl=<base64-url>
-Flow: URL → SplashScreen → Auto Create Nickname → Dashboard → Game 123
-```
-
-### Scenario 2: Lobby Access (First SSO)
-
-```
-URL: ?gameId=0 (or no gameId)
-Flow: URL → SplashScreen → Register → Dashboard → Lobby
-```
-
-### Scenario 3: SabaPlay Integration
+### Scenario 1: SabaPlay Direct Game Access
 
 ```
 URL: ?gameId=123&op=SP
 Flow: URL → SplashScreen → Auto Create Nickname → Dashboard → Game 123
 ```
 
-### Scenario 4: Normal SSO with Game Redirect
+### Scenario 2: SabaPlay Lobby Access
 
 ```
-URL: ?gameId=123
-Flow: URL → SplashScreen → Register → Dashboard → Available Game
+URL: ?op=SP (no gameId)
+Flow: URL → SplashScreen → Auto Create Nickname → Dashboard → Lobby
+```
+
+### Scenario 3: SabaPlay Lobby with rurl (Fixed)
+
+```
+URL: ?ref=d_direct&rurl=xxx&op=SP
+Flow: URL → SplashScreen → Auto Create Nickname → Dashboard → Lobby (rurl ignored)
+```
+
+### Scenario 4: HTML-Encoded URL (Fixed)
+
+```
+URL: ?token=xxx&amp;gameId=123&amp;op=SP
+Flow: URL → SplashScreen → Auto Create Nickname → Dashboard → Game 123
+```
+
+### Scenario 5: User-Specific Storage (Fixed)
+
+```
+Multiple users: Each user has isolated latestGameId storage
+Flow: No cross-user interference, proper game tracking per user
 ```
 
 ## Key State Variables
@@ -305,7 +393,7 @@ Flow: URL → SplashScreen → Register → Dashboard → Available Game
 
 -   `currentGameId`: Final gameId to load
 -   `gameId`: Original URL gameId
--   `latestGameId`: From localStorage
+-   `latestGameId`: User-specific from localStorage
 
 ### Register State:
 
@@ -340,6 +428,16 @@ Flow: URL → SplashScreen → Register → Dashboard → Available Game
 -   Retries with exponential backoff
 -   Shows user-friendly error messages
 
+### 5. HTML-Encoded URLs (Fixed)
+
+-   Automatically decodes `&amp;` to `&`
+-   Ensures proper URL parsing
+
+### 6. Cross-User Interference (Fixed)
+
+-   User-specific storage keys
+-   Isolated game tracking per user
+
 ## Analytics and Tracking
 
 ### SSO Method Tracking:
@@ -371,11 +469,13 @@ static login(urlContext: URLContextModel) {
     - Direct game access with valid gameId
     - Direct mode with invalid gameId
     - Direct mode with unauthorized user
+    - Lobby access in direct mode (queryGame=0)
 
 2. **SabaPlay Scenarios**:
 
     - SabaPlay integration with auto nickname creation
     - SabaPlay with different gameIds
+    - SabaPlay lobby access with rurl parameters
 
 3. **SSO Redirect Scenarios**:
 
@@ -383,87 +483,91 @@ static login(urlContext: URLContextModel) {
     - SSO with game redirect
     - Service availability checks
 
-4. **Edge Cases**:
+4. **User-Specific Storage Scenarios**:
+
+    - Multiple users accessing same application
+    - User switching scenarios
+    - Cross-user isolation verification
+
+5. **HTML-Encoded URL Scenarios**:
+
+    - URLs with `&amp;` parameters
+    - Mixed encoded and non-encoded parameters
+    - Various integration scenarios
+
+6. **Edge Cases**:
     - No URL parameters
     - Invalid URL parameters
     - Network failures
     - Session timeouts
+    - Missing username scenarios
 
 ## Recent Bug Fixes and Improvements
 
-### Bug Fix: Registration Flow Getting Stuck
+### Bug Fix 1: Cross-User latestGameId Interference - FIXED ✅
 
-**Issue**: New users with URLs like `?token=xxx&lang=vi-VN&appType=1&op=GN&cg=Credit_VN` (missing gameId, non-direct mode, non-SabaPlay) would get stuck after registration completion.
+**Issue**: `latestGameId` was stored globally, causing cross-user interference when multiple users accessed the application.
 
 **Root Cause**:
 
-1. `PreloadResourceRegister.handleAuthorizedAccess` was not calling `updateStatePreloadResource()` when lobby configs were successfully loaded
-2. `Register.updateToLoadGameId` had no fallback when no enabled games were available
+-   Global localStorage key used for all users
+-   No user-specific isolation
 
 **Fix Applied**:
 
-#### 1. PreloadResourceRegister Fix
+-   **Storage Helper**: Added `getUserLatestGameId(username)` and `setUserLatestGameId(username, gameId)`
+-   **Splash Screen**: Uses user-specific latestGameId instead of global one
+-   **URL Context**: Stores and retrieves user-specific game IDs
 
-```typescript
-const handleAuthorizedAccess = async () => {
-    try {
-        const lobby = await getLobbyConfigs(session);
-        if (!lobby || Object.keys(lobby.lobbyConfigs).length === 0) {
-            updateStatePreloadResource();
-        } else {
-            if (lobby?.lobbyConfigs) {
-                updateLobbyConfigs(lobby?.lobbyConfigs);
-                getAndHandleBannerOffer(authorizeResponse, lobby?.lobbyConfigs, setBannerId);
-                getAndHandleGameOfferIds(authorizeResponse, lobby?.lobbyConfigs, setGameOfferIds);
-                // Fix: Call updateStatePreloadResource when lobby configs are successfully loaded
-                updateStatePreloadResource();
-            }
-        }
-    } catch (error) {
-        console.error(error);
-        // Fix: Call updateStatePreloadResource even on error to prevent getting stuck
-        updateStatePreloadResource();
-    }
-};
-```
+**Impact**: Each user now has isolated game tracking, preventing cross-user interference.
 
-#### 2. Register updateToLoadGameId Fix
+### Bug Fix 2: HTML-Encoded Ampersands Breaking URL Parsing - FIXED ✅
 
-```typescript
-updateToLoadGameId = async (authorizeResponse: AuthorizeResponse) => {
-    const lobby = await getLobbyConfigs(session);
-    const enabledRenderGameSettings = getEnabledRenderGameSettings(lobby?.lobbyConfigs, authorizeResponse);
+**Issue**: URLs with `&amp;` (HTML-encoded ampersands) failed to parse correctly.
 
-    if (firstSSOToLobby && enabledRenderGameSettings.length > 0) {
-        this.setState({ toLoadGameId: 0 });
-    } else if (enabledRenderGameSettings.length > 0) {
-        for (const gameSetting of enabledRenderGameSettings) {
-            const isServiceAvailable = await getServiceStatusIsAvailable(gameSetting);
-            if (isServiceAvailable) {
-                this.setState({ toLoadGameId: gameSetting.id });
-                break;
-            }
-        }
-    } else {
-        // Fix: Handle case when no enabled games are available - default to lobby
-        this.setState({ toLoadGameId: 0 });
-    }
-};
-```
+**Root Cause**:
 
-**Impact**:
+-   URLSearchParams didn't handle HTML-encoded ampersands
+-   Parsing failed for certain integration scenarios
 
--   Registration flow now completes successfully for all URL parameter combinations
--   Users are properly redirected to lobby when no specific game is available
--   Error handling prevents the flow from getting stuck
+**Fix Applied**:
 
-**Test Cases Covered**:
+-   **URL Context**: Added `searchParams.replace(/&amp;/g, '&')` before parsing
+-   **Comprehensive Testing**: Verified all URL parameter combinations work
 
--   URLs with missing gameId parameter
--   Non-direct mode registrations
--   Non-SabaPlay integrations
--   Scenarios with no enabled games
--   Network errors during lobby config loading
+**Impact**: All URL parsing scenarios now work correctly, including HTML-encoded parameters.
+
+### Bug Fix 3: SabaPlay Lobby Access Issues - FIXED ✅
+
+**Issue**: SabaPlay users with `ref` and `rurl` parameters couldn't access lobby when `gameId=0`.
+
+**Root Cause**:
+
+-   Direct mode logic didn't properly handle lobby access scenarios
+-   `rurl` parameter was always considered for direct mode calculation
+
+**Fix Applied**:
+
+-   **URL Context**: Enhanced direct mode logic to ignore `rurl` when `gameId=0`
+-   **Effective Redirect URL**: Set to `null` when accessing lobby to prioritize lobby access
+
+**Impact**: SabaPlay users can now access lobby properly regardless of `ref` and `rurl` parameters.
+
+### Bug Fix 4: Dashboard Error Modal for Lobby Access - FIXED ✅
+
+**Issue**: Dashboard showed error modal when accessing lobby in direct mode with `queryGame=0`.
+
+**Root Cause**:
+
+-   `checkIsNotOfferGame` incorrectly treated lobby access as "not in offer"
+-   Direct mode logic didn't account for lobby scenarios
+
+**Fix Applied**:
+
+-   **Dashboard Handler**: Fixed `checkIsNotOfferGame` to return `false` for lobby access in direct mode
+-   **Special Case Handling**: Added logic for `queryGame=0` in direct mode
+
+**Impact**: Lobby access in direct mode no longer shows error modal.
 
 ## Conclusion
 
@@ -475,4 +579,10 @@ The URL context parameters (`isDirectMode`, `redirectUrl`, `isSabaPlay`, `gameId
 -   Ensuring proper analytics tracking
 -   Testing all possible scenarios
 
-The flow is designed to handle various integration scenarios while maintaining a consistent user experience across different platforms and access methods.
+The flow is designed to handle various integration scenarios while maintaining a consistent user experience across different platforms and access methods. The latest improvements ensure:
+
+-   **User isolation**: No cross-user state interference
+-   **Robust URL parsing**: Handles HTML-encoded parameters
+-   **Smart lobby access**: Proper handling of lobby scenarios
+-   **Enhanced error handling**: Better fallback mechanisms
+-   **Comprehensive logging**: Detailed debugging information
