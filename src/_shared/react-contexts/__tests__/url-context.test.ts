@@ -133,7 +133,18 @@ describe('URL Context', () => {
             expect(result?.isDirectMode).toBe(true);
         });
 
-        it('should set isDirectMode to false when ref is present but redirectUrl is also present', () => {
+        it('should set isDirectMode to false when op=SP but gameId=0 (lobby)', () => {
+            // Arrange
+            globalThis.location.search = '?op=SP&token=abc123&gameId=0';
+
+            // Act
+            const result = parseContextFromURL();
+
+            // Assert
+            expect(result?.isDirectMode).toBe(false);
+        });
+
+        it('should set isDirectMode to true when ref and redirectUrl are both present', () => {
             // Arrange
             globalThis.location.search = '?ref=d_direct&rurl=redirect&token=abc123';
 
@@ -141,7 +152,18 @@ describe('URL Context', () => {
             const result = parseContextFromURL();
 
             // Assert
-            expect(result?.isDirectMode).toBe(false);
+            expect(result?.isDirectMode).toBe(true);
+        });
+
+        it('should set isDirectMode to true when ref+redirectUrl and op=SP are present', () => {
+            // Arrange
+            globalThis.location.search = '?ref=d_direct&rurl=redirect&op=SP&token=abc123';
+
+            // Act
+            const result = parseContextFromURL();
+
+            // Assert
+            expect(result?.isDirectMode).toBe(true);
         });
 
         it('should set isDirectMode to true when ref and redirectUrl are present but op=SP is also present', () => {

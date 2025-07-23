@@ -23,6 +23,13 @@ export class DashboardHandler {
         console.log("[DashboardHandler] checkIsNotOfferGame - props:", { directMode: this.props.directMode, queryGame: this.props.queryGame });
 
         if (this.props.directMode) {
+            // Fix: When queryGame is 0, it means lobby, not a specific game
+            // So it should not be treated as "not in offer"
+            if (this.props.queryGame === 0) {
+                console.log("[DashboardHandler] checkIsNotOfferGame - Direct mode with queryGame 0 (lobby), returning false");
+                return false;
+            }
+
             const result = !offerGames?.includes(this.props.queryGame);
             console.log("[DashboardHandler] checkIsNotOfferGame - Direct mode result:", result);
             return result;

@@ -151,6 +151,21 @@ describe('DashboardHandler', () => {
             );
         });
 
+        it('should return false for direct mode when queryGame is 0 (lobby)', () => {
+            // Arrange
+            const props = { ...defaultProps, directMode: true, queryGame: 0 };
+            const handler = new DashboardHandler(props, mockUpdateGameTransmitters);
+
+            // Act
+            const result = handler.checkIsNotOfferGame();
+
+            // Assert
+            expect(result).toBe(false);
+            expect(console.log).toHaveBeenCalledWith(
+                '[DashboardHandler] checkIsNotOfferGame - Direct mode with queryGame 0 (lobby), returning false'
+            );
+        });
+
         it('should return true for non-direct mode when no offer games', () => {
             // Arrange
             const props = {
@@ -554,7 +569,7 @@ describe('DashboardHandler', () => {
             await handler.connectLobbySocket();
 
             // Assert
-            expect(checkResult).toBe(true);
+            expect(checkResult).toBe(false);
             expect(renderResult).toBe(false);
             expect(handler.lobbyConnection.initLobbySocket).not.toHaveBeenCalled();
         });
