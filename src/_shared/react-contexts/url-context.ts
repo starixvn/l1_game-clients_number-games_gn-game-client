@@ -39,20 +39,23 @@ export function parseContextFromURL(): URLContextModel | undefined {
     const ref = params.get("ref");
     const isSabaPlay = params.get("op") === "SP";
 
-    // Fix: Treat SabaPlay URLs as direct mode since they should go directly to the specified game
+    // Fix: When gameId=0 (lobby), ignore rurl parameter to allow lobby access
+    // Treat SabaPlay URLs as direct mode since they should go directly to the specified game
     // But when gameId=0 (lobby), treat it like op=GN to go through SSO redirect logic
-    // Also keep the existing logic for ref + redirectUrl
-    const isDirectMode = !!(ref && redirectUrl) || (isSabaPlay && gameId !== 0);
+    // Also keep the existing logic for ref + redirectUrl, but ignore redirectUrl when gameId=0
+    const effectiveRedirectUrl = gameId === 0 ? null : redirectUrl;
+    const isDirectMode = !!(ref && effectiveRedirectUrl) || (isSabaPlay && gameId !== 0);
 
     console.log("[URLContext] parseContextFromURL - Direct mode calculation:", {
         ref,
         redirectUrl,
+        effectiveRedirectUrl,
         isSabaPlay,
         gameId,
         isDirectMode
     });
 
-    const result = { token, language, gameId, isDirectMode, redirectUrl, firstSSOToLobby: true, isSabaPlay };
+    const result = { token, language, gameId, isDirectMode, redirectUrl: effectiveRedirectUrl, firstSSOToLobby: true, isSabaPlay };
     console.log("[URLContext] parseContextFromURL - Parsed result:", result);
 
     return result;
