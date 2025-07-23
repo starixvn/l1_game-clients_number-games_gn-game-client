@@ -15,6 +15,7 @@ import {
     getServiceStatusIsAvailable,
     localStorageKeys,
     randomInteger,
+    getUserLatestGameId,
 } from "../../../_shared/helpers";
 import PreloadResources, {
     DURATION_HOLD_SPLASH_SCREEN,
@@ -100,11 +101,13 @@ const autoCreateNickname = async (session: SSOResponse, signOut: Function) => {
 
 const SplashScreen: React.FC = () => {
     const { gameId, isDirectMode, token, language, firstSSOToLobby, isSabaPlay } = useContext(URLContext);
-    const latestGameId = StorageHelper.get<number>(localStorageKeys.latestGameId) || 0;
 
     const router = useRouter();
     const player = usePlayerContext();
     const { t } = useTranslator();
+
+    // Use user-specific latestGameId instead of global one
+    const latestGameId = getUserLatestGameId(player?.session?.username) || 0;
 
     const [isUm, setIsUm] = useState(player?.session?.isUM);
     const [bannerId, setBannerId] = useState<number>(0);
@@ -246,12 +249,13 @@ const SplashScreen: React.FC = () => {
             return 0;
         }
 
-        // Fix: Prioritize gameId from URL over latestGameId
-        let toLoadGameId = urlGameId > 0 ? urlGameId : latestGameId;
+        // Fix: Prioritize gameId from URL over user-specific latestGameId
+        const userLatestGameId = getUserLatestGameId(player?.session?.username);
+        let toLoadGameId = urlGameId > 0 ? urlGameId : userLatestGameId;
 
         console.log("[SplashScreen] getSSORedirectToGameId - Input values:", {
             urlGameId,
-            latestGameId,
+            userLatestGameId,
             toLoadGameId,
             firstSSOToLobby
         });

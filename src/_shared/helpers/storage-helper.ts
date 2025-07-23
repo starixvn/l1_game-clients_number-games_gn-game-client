@@ -129,6 +129,8 @@ export const localStorageKeys = {
     volumeMusic: buildLocalStorageKey("volume-music"),
     volumeSFX: buildLocalStorageKey("volume-SFX"),
     latestGameId: buildLocalStorageKey("latest-game-id"),
+    // User-specific latestGameId - will be built dynamically with username
+    userLatestGameId: "latest-game-id", // Base key, will be prefixed with username
 };
 
 export function buildLocalStorageKey(key: string) {
@@ -137,4 +139,29 @@ export function buildLocalStorageKey(key: string) {
     }
 
     return key;
+}
+
+export function buildUserSpecificLocalStorageKey(key: string, username?: string) {
+    const baseKey = buildLocalStorageKey(key);
+    if (username) {
+        return `${baseKey}.${username}`;
+    }
+    return baseKey;
+}
+
+export function getUserLatestGameId(username?: string): number {
+    if (!username) {
+        return StorageHelper.get<number>(localStorageKeys.latestGameId) || 0;
+    }
+    const userKey = buildUserSpecificLocalStorageKey(localStorageKeys.userLatestGameId, username);
+    return StorageHelper.get<number>(userKey) || 0;
+}
+
+export function setUserLatestGameId(gameId: number, username?: string): void {
+    if (!username) {
+        StorageHelper.set(localStorageKeys.latestGameId, gameId);
+        return;
+    }
+    const userKey = buildUserSpecificLocalStorageKey(localStorageKeys.userLatestGameId, username);
+    StorageHelper.set(userKey, gameId);
 }

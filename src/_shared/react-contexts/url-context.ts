@@ -1,6 +1,6 @@
 import isEmpty from "lodash/isEmpty";
 import { createContext, useContext } from "react";
-import { AnalyticsHelper, StorageHelper, localStorageKeys } from "../helpers";
+import { AnalyticsHelper, StorageHelper, localStorageKeys, setUserLatestGameId } from "../helpers";
 import { GameUtils } from "../helpers/base-64-helper";
 import { GlobalMessageTransmitter, GlobalTransmitterEvent } from "../helpers/message-transmitter/global-transmitter";
 
@@ -99,7 +99,10 @@ export function updateURLContext(context: Partial<URLContextModel>) {
     const contextFromLocalStorage = StorageHelper.get<URLContextModel>(localStorageKeys.url) || {};
 
     if (context.gameId !== undefined) {
-        StorageHelper.set(localStorageKeys.latestGameId, context.gameId);
+        // Use user-specific latestGameId if username is available in the session
+        const session = StorageHelper.get<any>(localStorageKeys.session);
+        const username = session?.username;
+        setUserLatestGameId(context.gameId, username);
     }
 
     const updatedContext = { ...contextFromLocalStorage, ...context, firstSSOToLobby: false };
