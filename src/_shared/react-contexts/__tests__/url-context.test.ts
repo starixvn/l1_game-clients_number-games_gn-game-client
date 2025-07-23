@@ -98,7 +98,7 @@ describe('URL Context', () => {
                 token: 'abc123',
                 language: null,
                 gameId: NaN,
-                isDirectMode: true,
+                isDirectMode: false,
                 redirectUrl: null,
                 firstSSOToLobby: true,
                 isSabaPlay: false
@@ -111,9 +111,20 @@ describe('URL Context', () => {
             expect(result).toEqual(expected);
         });
 
-        it('should set isDirectMode to true when ref is present and redirectUrl is not', () => {
+        it('should set isDirectMode to false when ref is present and redirectUrl is not', () => {
             // Arrange
             globalThis.location.search = '?ref=d_direct&token=abc123';
+
+            // Act
+            const result = parseContextFromURL();
+
+            // Assert
+            expect(result?.isDirectMode).toBe(false);
+        });
+
+        it('should set isDirectMode to true when op=SP (SabaPlay)', () => {
+            // Arrange
+            globalThis.location.search = '?op=SP&token=abc123&gameId=1003';
 
             // Act
             const result = parseContextFromURL();
@@ -131,6 +142,28 @@ describe('URL Context', () => {
 
             // Assert
             expect(result?.isDirectMode).toBe(false);
+        });
+
+        it('should set isDirectMode to true when ref and redirectUrl are present but op=SP is also present', () => {
+            // Arrange
+            globalThis.location.search = '?ref=d_direct&rurl=redirect&op=SP&token=abc123';
+
+            // Act
+            const result = parseContextFromURL();
+
+            // Assert
+            expect(result?.isDirectMode).toBe(true);
+        });
+
+        it('should set isDirectMode to true when both ref+redirectUrl and op=SP are present', () => {
+            // Arrange
+            globalThis.location.search = '?ref=d_direct&rurl=redirect&op=SP&token=abc123';
+
+            // Act
+            const result = parseContextFromURL();
+
+            // Assert
+            expect(result?.isDirectMode).toBe(true);
         });
 
         it('should set isSabaPlay to true when op=SP', () => {
@@ -174,6 +207,26 @@ describe('URL Context', () => {
             // Assert
             expect(result).toEqual(expected);
         });
+
+        it('should handle HTML-encoded ampersands in URL parameters', () => {
+            // Arrange
+            globalThis.location.search = '?token=c2ee0ee1-5bd8-409a-944e-42d3f131d8d9&amp;lang=vi-VN&amp;appType=1&amp;gameId=1003&amp;op=SP&amp;cg=SabaPlay_VN';
+            const expected: URLContextModel = {
+                token: 'c2ee0ee1-5bd8-409a-944e-42d3f131d8d9',
+                language: 'vi-VN',
+                gameId: 1003,
+                isDirectMode: true,
+                redirectUrl: null,
+                firstSSOToLobby: true,
+                isSabaPlay: true
+            };
+
+            // Act
+            const result = parseContextFromURL();
+
+            // Assert
+            expect(result).toEqual(expected);
+        });
     });
 
     describe('loadURLContext', () => {
@@ -183,7 +236,7 @@ describe('URL Context', () => {
             const expectedContext = {
                 language: 'en',
                 gameId: 1001,
-                isDirectMode: true,
+                isDirectMode: false,
                 redirectUrl: null,
                 firstSSOToLobby: true,
                 isSabaPlay: false
@@ -428,7 +481,7 @@ describe('URL Context', () => {
                 token: '999d8dd3-94da-45b1-a945-40ba6594a99a',
                 language: 'vi-VN',
                 gameId: 0,
-                isDirectMode: true,
+                isDirectMode: false,
                 redirectUrl: null,
                 firstSSOToLobby: true,
                 isSabaPlay: false
@@ -454,7 +507,7 @@ describe('URL Context', () => {
                 token: 'abc123',
                 language: 'en',
                 gameId: 1001,
-                isDirectMode: true
+                isDirectMode: false
             }));
             expect(mockStorageHelper.set).toHaveBeenCalledWith(
                 localStorageKeys.url,
@@ -462,7 +515,7 @@ describe('URL Context', () => {
                     token: undefined,
                     language: 'en',
                     gameId: 1001,
-                    isDirectMode: true
+                    isDirectMode: false
                 })
             );
         });

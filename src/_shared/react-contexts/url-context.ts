@@ -3,7 +3,6 @@ import { createContext, useContext } from "react";
 import { AnalyticsHelper, StorageHelper, localStorageKeys } from "../helpers";
 import { GameUtils } from "../helpers/base-64-helper";
 import { GlobalMessageTransmitter, GlobalTransmitterEvent } from "../helpers/message-transmitter/global-transmitter";
-import { emit } from "process";
 
 export type URLContextModel = {
     token?: string;
@@ -18,8 +17,13 @@ export type URLContextModel = {
 };
 
 export function parseContextFromURL(): URLContextModel | undefined {
-    const params = new URLSearchParams(globalThis.location?.search);
+    // Fix: Handle HTML-encoded ampersands by decoding them first
+    const rawSearch = globalThis.location?.search || '';
+    const decodedSearch = rawSearch.replace(/&amp;/g, '&');
+
+    const params = new URLSearchParams(decodedSearch);
     console.log("[URLContext] parseContextFromURL - URL search params:", globalThis.location?.search);
+    console.log("[URLContext] parseContextFromURL - Decoded search params:", decodedSearch);
     console.log("[URLContext] parseContextFromURL - All params:", Array.from(params.entries()));
 
     // Reload page
@@ -33,17 +37,18 @@ export function parseContextFromURL(): URLContextModel | undefined {
     const gameId = Number(params.get("gameId") || 0);
     const redirectUrl = params.get("rurl");
     const ref = params.get("ref");
+    const isSabaPlay = params.get("op") === "SP";
 
-    // Refactored: isDirectMode is true when both ref and rurl are present
-    const isDirectMode = !!(ref && redirectUrl);
+    // Fix: Treat SabaPlay URLs as direct mode since they should go directly to the specified game
+    // Also keep the existing logic for ref + redirectUrl
+    const isDirectMode = !!(ref && redirectUrl) || isSabaPlay;
 
     console.log("[URLContext] parseContextFromURL - Direct mode calculation:", {
         ref,
         redirectUrl,
+        isSabaPlay,
         isDirectMode
     });
-
-    const isSabaPlay = params.get("op") === "SP";
 
     const result = { token, language, gameId, isDirectMode, redirectUrl, firstSSOToLobby: true, isSabaPlay };
     console.log("[URLContext] parseContextFromURL - Parsed result:", result);
