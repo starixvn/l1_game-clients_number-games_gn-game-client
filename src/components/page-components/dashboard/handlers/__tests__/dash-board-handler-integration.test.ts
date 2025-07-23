@@ -431,7 +431,7 @@ describe('DashboardHandler Integration - Direct Mode Scenario', () => {
             expect(result).toBe(false);
         });
 
-        it('should return true when queryGame is in offer games', () => {
+        it('should return false when queryGame is in offer games', () => {
             // Arrange
             const props = {
                 router: mockRouter,
@@ -512,7 +512,8 @@ describe('DashboardHandler Integration - Direct Mode Scenario', () => {
             const result = handler.checkIsNotOfferGame();
 
             // Assert
-            expect(result).toBe(true);
+            // When queryGame (1001) is in offer games, checkIsNotOfferGame should return false
+            expect(result).toBe(false);
         });
 
         it('should return true when queryGame is not in offer games', () => {

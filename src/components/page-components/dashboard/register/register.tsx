@@ -149,7 +149,9 @@ export class Register extends PureComponent<RegisterProps, RegisterState> {
 
         if (this.isAuthorizeResponse(authorizeResponse)) {
             console.log("[Register] submit - Authorization successful");
-            Object.assign(authorizeResponse.user, { settings: { theme: Themes.light } });
+            if (authorizeResponse.user) {
+                Object.assign(authorizeResponse.user, { settings: { theme: Themes.light } });
+            }
             this.setState({ authorizeResponse: authorizeResponse, isTriggerPreloadResources: true });
 
             if (!this.props.isDirectMode) {
@@ -176,23 +178,29 @@ export class Register extends PureComponent<RegisterProps, RegisterState> {
     updateToLoadGameId = async (authorizeResponse: AuthorizeResponse) => {
         const { session, firstSSOToLobby } = this.props;
 
-        const lobby = await getLobbyConfigs(session);
+        try {
+            const lobby = await getLobbyConfigs(session);
 
-        const enabledRenderGameSettings = getEnabledRenderGameSettings(lobby?.lobbyConfigs as any, authorizeResponse);
+            const enabledRenderGameSettings = getEnabledRenderGameSettings(lobby?.lobbyConfigs as any, authorizeResponse);
 
-        if (firstSSOToLobby && enabledRenderGameSettings.length > 0) {
-            // Business requirement: Redirect to lobby instead of specific game
-            this.setState({ toLoadGameId: 0 });
-        } else if (enabledRenderGameSettings.length > 0) {
-            for (const gameSetting of enabledRenderGameSettings) {
-                const isServiceAvailable = await getServiceStatusIsAvailable(gameSetting);
-                if (isServiceAvailable) {
-                    this.setState({ toLoadGameId: gameSetting.id });
-                    break;
+            if (firstSSOToLobby && enabledRenderGameSettings.length > 0) {
+                // Business requirement: Redirect to lobby instead of specific game
+                this.setState({ toLoadGameId: 0 });
+            } else if (enabledRenderGameSettings.length > 0) {
+                for (const gameSetting of enabledRenderGameSettings) {
+                    const isServiceAvailable = await getServiceStatusIsAvailable(gameSetting);
+                    if (isServiceAvailable) {
+                        this.setState({ toLoadGameId: gameSetting.id });
+                        break;
+                    }
                 }
+            } else {
+                // Fix: Handle case when no enabled games are available - default to lobby
+                this.setState({ toLoadGameId: 0 });
             }
-        } else {
-            // Fix: Handle case when no enabled games are available - default to lobby
+        } catch (error) {
+            console.error("[Register] updateToLoadGameId - Error loading lobby configs:", error);
+            // Handle error gracefully - default to lobby (toLoadGameId: 0)
             this.setState({ toLoadGameId: 0 });
         }
     };

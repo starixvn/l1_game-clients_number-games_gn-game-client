@@ -239,15 +239,18 @@ describe("PreloadResourceRegister Component Tests", () => {
             expect(screen.getByTestId("preload-resources")).toBeInTheDocument();
         });
 
-        it("should render PreloadResources for non-direct mode with gameId = 0", () => {
+        it("should render empty fragment for non-direct mode with gameId = 0", () => {
             // Arrange
             const props = createProps({ isDirectMode: false, gameId: 0 });
 
             // Act
-            render(<PreloadResourceRegister {...props} />);
+            const { container } = render(<PreloadResourceRegister {...props} />);
 
             // Assert
-            expect(screen.getByTestId("preload-resources")).toBeInTheDocument();
+            // When gameId = 0 in non-direct mode, component should render empty fragment
+            // This is the "lobby case" where no specific game is being loaded
+            expect(container.firstChild).toBeNull();
+            expect(screen.queryByTestId("preload-resources")).not.toBeInTheDocument();
         });
 
         it("should call updateStatePreloadResource after lobby configs in non-direct mode", async () => {

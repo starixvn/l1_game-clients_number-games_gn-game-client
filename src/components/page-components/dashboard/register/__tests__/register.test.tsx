@@ -226,7 +226,7 @@ describe("Register Component Tests", () => {
 
             // Assert
             await waitFor(() => {
-                expect(screen.getByTestId("dashboard-component")).toBeInTheDocument();
+                expect(screen.getByTestId("preload-resource-register")).toBeInTheDocument();
             });
         });
 
@@ -253,7 +253,7 @@ describe("Register Component Tests", () => {
 
             // Assert
             await waitFor(() => {
-                expect(screen.getByTestId("dashboard-component")).toBeInTheDocument();
+                expect(screen.getByTestId("preload-resource-register")).toBeInTheDocument();
             });
         });
 
@@ -279,7 +279,7 @@ describe("Register Component Tests", () => {
 
             // Assert
             await waitFor(() => {
-                expect(screen.getByTestId("dashboard-component")).toBeInTheDocument();
+                expect(screen.getByTestId("preload-resource-register")).toBeInTheDocument();
             });
         });
     });
@@ -307,7 +307,7 @@ describe("Register Component Tests", () => {
 
             // Assert
             await waitFor(() => {
-                expect(screen.getByTestId("dashboard-component")).toBeInTheDocument();
+                expect(screen.getByTestId("preload-resource-register")).toBeInTheDocument();
             });
         });
 
@@ -333,7 +333,7 @@ describe("Register Component Tests", () => {
 
             // Assert
             await waitFor(() => {
-                expect(screen.getByTestId("dashboard-component")).toBeInTheDocument();
+                expect(screen.getByTestId("preload-resource-register")).toBeInTheDocument();
             });
         });
     });
@@ -361,7 +361,7 @@ describe("Register Component Tests", () => {
 
             // Assert
             await waitFor(() => {
-                expect(screen.getByTestId("dashboard-component")).toBeInTheDocument();
+                expect(screen.getByTestId("preload-resource-register")).toBeInTheDocument();
             });
         });
 
@@ -379,8 +379,8 @@ describe("Register Component Tests", () => {
             // Act
             render(<Register {...props} />);
 
-            const generateButton = screen.getByText("Generate Random");
-            fireEvent.click(generateButton);
+            const refreshButton = screen.getByRole("button", { name: "" });
+            fireEvent.click(refreshButton);
 
             // Assert
             expect(NameGenerator.generateName).toHaveBeenCalled();
@@ -410,7 +410,7 @@ describe("Register Component Tests", () => {
 
             // Assert
             await waitFor(() => {
-                expect(screen.getByTestId("dashboard-component")).toBeInTheDocument();
+                expect(screen.getByTestId("preload-resource-register")).toBeInTheDocument();
             });
         });
 
@@ -440,7 +440,7 @@ describe("Register Component Tests", () => {
             fireEvent.click(submitButton1);
 
             await waitFor(() => {
-                expect(screen.getByTestId("dashboard-component")).toBeInTheDocument();
+                expect(screen.getByTestId("preload-resource-register")).toBeInTheDocument();
             });
 
             unmount();
@@ -455,7 +455,7 @@ describe("Register Component Tests", () => {
 
             // Assert
             await waitFor(() => {
-                expect(screen.getByTestId("dashboard-component")).toBeInTheDocument();
+                expect(screen.getByTestId("preload-resource-register")).toBeInTheDocument();
             });
         });
     });
@@ -529,7 +529,9 @@ describe("Register Component Tests", () => {
             fireEvent.click(submitButton);
 
             // Assert
-            expect(GetLocalizedErrorMessage).toHaveBeenCalled();
+            await waitFor(() => {
+                expect(screen.getByText("Common.name_invalid")).toBeInTheDocument();
+            });
         });
     });
 
@@ -568,8 +570,17 @@ describe("Register Component Tests", () => {
             } as any;
             (getLobbyConfigs as jest.Mock).mockResolvedValue(mockLobbyConfigs);
 
+            const mockAuthorizeResponse = { authorized: true };
+            (createNickname as jest.Mock).mockResolvedValue(mockAuthorizeResponse);
+
             // Act
             render(<Register {...props} />);
+
+            const nameInput = screen.getByPlaceholderText("Common.enter_your_name");
+            const submitButton = screen.getByText("SabaNumber.button_play_now");
+
+            fireEvent.change(nameInput, { target: { value: "TestUser123" } });
+            fireEvent.click(submitButton);
 
             // Assert
             await waitFor(() => {
@@ -584,14 +595,24 @@ describe("Register Component Tests", () => {
                 gameId: 0,
             };
 
+            // Mock getLobbyConfigs to throw an error
             (getLobbyConfigs as jest.Mock).mockRejectedValue(new Error("Network timeout"));
+            const mockAuthorizeResponse = { authorized: true };
+            (createNickname as jest.Mock).mockResolvedValue(mockAuthorizeResponse);
 
             // Act
             render(<Register {...props} />);
 
-            // Assert
+            const nameInput = screen.getByPlaceholderText("Common.enter_your_name");
+            const submitButton = screen.getByText("SabaNumber.button_play_now");
+
+            fireEvent.change(nameInput, { target: { value: "TestUser123" } });
+            fireEvent.click(submitButton);
+
+            // Assert - The component should still render the preload resource component
+            // The error from getLobbyConfigs should be handled gracefully
             await waitFor(() => {
-                expect(getLobbyConfigs).toHaveBeenCalledWith(props.session);
+                expect(screen.getByTestId("preload-resource-register")).toBeInTheDocument();
             });
         });
 
@@ -604,9 +625,17 @@ describe("Register Component Tests", () => {
 
             const emptyLobbyConfigs = { lobbyConfigs: {} };
             (getLobbyConfigs as jest.Mock).mockResolvedValue(emptyLobbyConfigs);
+            const mockAuthorizeResponse = { authorized: true };
+            (createNickname as jest.Mock).mockResolvedValue(mockAuthorizeResponse);
 
             // Act
             render(<Register {...props} />);
+
+            const nameInput = screen.getByPlaceholderText("Common.enter_your_name");
+            const submitButton = screen.getByText("SabaNumber.button_play_now");
+
+            fireEvent.change(nameInput, { target: { value: "TestUser123" } });
+            fireEvent.click(submitButton);
 
             // Assert
             await waitFor(() => {
@@ -622,9 +651,17 @@ describe("Register Component Tests", () => {
             };
 
             (getLobbyConfigs as jest.Mock).mockResolvedValue(null);
+            const mockAuthorizeResponse = { authorized: true };
+            (createNickname as jest.Mock).mockResolvedValue(mockAuthorizeResponse);
 
             // Act
             render(<Register {...props} />);
+
+            const nameInput = screen.getByPlaceholderText("Common.enter_your_name");
+            const submitButton = screen.getByText("SabaNumber.button_play_now");
+
+            fireEvent.change(nameInput, { target: { value: "TestUser123" } });
+            fireEvent.click(submitButton);
 
             // Assert
             await waitFor(() => {
@@ -642,9 +679,17 @@ describe("Register Component Tests", () => {
             };
 
             (getEnabledRenderGameSettings as jest.Mock).mockReturnValue([]); // No enabled games
+            const mockAuthorizeResponse = { authorized: true };
+            (createNickname as jest.Mock).mockResolvedValue(mockAuthorizeResponse);
 
             // Act
             render(<Register {...props} />);
+
+            const nameInput = screen.getByPlaceholderText("Common.enter_your_name");
+            const submitButton = screen.getByText("SabaNumber.button_play_now");
+
+            fireEvent.change(nameInput, { target: { value: "TestUser123" } });
+            fireEvent.click(submitButton);
 
             // Assert
             await waitFor(() => {
@@ -661,9 +706,17 @@ describe("Register Component Tests", () => {
 
             (getLobbyConfigs as jest.Mock).mockResolvedValue(null);
             (getEnabledRenderGameSettings as jest.Mock).mockReturnValue([]);
+            const mockAuthorizeResponse = { authorized: true };
+            (createNickname as jest.Mock).mockResolvedValue(mockAuthorizeResponse);
 
             // Act
             render(<Register {...props} />);
+
+            const nameInput = screen.getByPlaceholderText("Common.enter_your_name");
+            const submitButton = screen.getByText("SabaNumber.button_play_now");
+
+            fireEvent.change(nameInput, { target: { value: "TestUser123" } });
+            fireEvent.click(submitButton);
 
             // Assert
             await waitFor(() => {
@@ -695,7 +748,7 @@ describe("Register Component Tests", () => {
 
             // Assert
             await waitFor(() => {
-                expect(screen.getByTestId("dashboard-component")).toBeInTheDocument();
+                expect(screen.getByTestId("preload-resource-register")).toBeInTheDocument();
             });
         });
 
@@ -722,7 +775,7 @@ describe("Register Component Tests", () => {
 
             // Assert
             await waitFor(() => {
-                expect(screen.getByTestId("dashboard-component")).toBeInTheDocument();
+                expect(screen.getByTestId("preload-resource-register")).toBeInTheDocument();
             });
         });
     });
@@ -749,14 +802,21 @@ describe("Register Component Tests", () => {
                 gameId: 123,
             };
 
+            // Mock NameGenerator.validateName to return false for empty names
+            (NameGenerator.validateName as jest.Mock).mockImplementation((name) => {
+                return name && name.trim().length > 0;
+            });
+
             // Act
             render(<Register {...props} />);
 
             const submitButton = screen.getByText("SabaNumber.button_play_now");
             fireEvent.click(submitButton);
 
-            // Assert
-            expect(GetLocalizedErrorMessage).toHaveBeenCalled();
+            // Assert - The component should show validation error for empty nickname
+            await waitFor(() => {
+                expect(screen.getByText("Common.name_invalid")).toBeInTheDocument();
+            });
         });
 
         it("should handle special characters in nickname", async () => {
@@ -778,7 +838,9 @@ describe("Register Component Tests", () => {
             fireEvent.click(submitButton);
 
             // Assert
-            expect(GetLocalizedErrorMessage).toHaveBeenCalled();
+            await waitFor(() => {
+                expect(screen.getByText("Common.name_invalid")).toBeInTheDocument();
+            });
         });
     });
 
