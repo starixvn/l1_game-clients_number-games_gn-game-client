@@ -551,7 +551,7 @@ const logo = isSabaPlay ? (
 ### Scenario 1: Direct Game Access
 
 ```
-URL: ?gameId=123&ref=true
+URL: ?gameId=123&ref=d_direct
 Flow: URL → SplashScreen → Dashboard → Game 123
 ```
 

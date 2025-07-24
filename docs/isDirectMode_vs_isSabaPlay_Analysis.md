@@ -76,7 +76,7 @@ When either parameter is `true`, the user flow is identical:
 -   **URL Parameter**: Enhanced logic based on `ref` and `effectiveRedirectUrl`
 -   **Trigger**: Direct access scenarios
 -   **Use Case**: Bypass SSO redirect logic
--   **Example**: `?gameId=123&ref=true` or `?gameId=123&op=SP`
+-   **Example**: `?gameId=123&ref=d_direct` or `?gameId=123&op=SP`
 
 #### isSabaPlay
 

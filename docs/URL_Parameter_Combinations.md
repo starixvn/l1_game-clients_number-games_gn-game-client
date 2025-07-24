@@ -34,16 +34,20 @@ This document provides a comprehensive analysis of all possible combinations of 
 | `isDirectMode` | boolean | Enhanced logic   | `false` | Controls SSO redirect logic bypass                          |
 | `redirectUrl`  | string  | `?rurl=<base64>` | `""`    | Base64 encoded redirect URL (only when `isDirectMode=true`) |
 | `isSabaPlay`   | boolean | `?op=SP`         | `false` | Identifies SabaPlay platform integration                    |
+| `ref`          | string  | `?ref=<value>`   | `null`  | Direct mode trigger (valid values: "d_direct", "m_direct")  |
 
 ### Current Direct Mode Logic
 
 ```typescript
 // Current implementation in url-context.ts
+const ref = params.get("ref"); // Returns string value or null
 const isDirectMode = !!(ref && effectiveRedirectUrl) || (isSabaPlay && gameId !== 0);
 
 // Where effectiveRedirectUrl is calculated as:
 const effectiveRedirectUrl = gameId === 0 ? null : redirectUrl;
 ```
+
+**Note**: The `ref` parameter is a string with two valid values: `"d_direct"` and `"m_direct"`. Only these specific values will enable direct mode when combined with a valid `redirectUrl`. Invalid values are ignored.
 
 ## Complete Parameter Combinations Matrix
 
@@ -55,24 +59,24 @@ const effectiveRedirectUrl = gameId === 0 ? null : redirectUrl;
 -   `>0` = Specific game ID
 -   `N/A` = Not applicable
 
-| #   | gameId | isDirectMode | redirectUrl | isSabaPlay | URL Example                                | Behavior                                     | User Flow                                                        | Notes                                 |
-| --- | ------ | ------------ | ----------- | ---------- | ------------------------------------------ | -------------------------------------------- | ---------------------------------------------------------------- | ------------------------------------- |
-| 1   | `0`    | ❌           | N/A         | ❌         | `?gameId=0`                                | Normal SSO to Lobby                          | URL → SplashScreen → Register → Dashboard → Lobby                | First SSO to lobby                    |
-| 2   | `0`    | ❌           | N/A         | ✅         | `?gameId=0&op=SP`                          | SabaPlay to Lobby                            | URL → SplashScreen → Auto Create Nickname → Dashboard → Lobby    | SabaPlay integration to lobby         |
-| 3   | `0`    | ❌           | ❌          | ❌         | `?gameId=0&ref=true`                       | Normal SSO to Lobby (ref ignored)            | URL → SplashScreen → Register → Dashboard → Lobby                | ref ignored when gameId=0             |
-| 4   | `0`    | ❌           | ❌          | ✅         | `?gameId=0&ref=true&op=SP`                 | SabaPlay to Lobby (ref ignored)              | URL → SplashScreen → Auto Create Nickname → Dashboard → Lobby    | ref ignored when gameId=0             |
-| 5   | `0`    | ❌           | ✅          | ❌         | `?gameId=0&ref=true&rurl=<base64>`         | Normal SSO to Lobby (rurl ignored)           | URL → SplashScreen → Register → Dashboard → Lobby                | rurl ignored when gameId=0            |
-| 6   | `0`    | ❌           | ✅          | ✅         | `?gameId=0&ref=true&rurl=<base64>&op=SP`   | SabaPlay to Lobby (rurl ignored)             | URL → SplashScreen → Auto Create Nickname → Dashboard → Lobby    | rurl ignored when gameId=0            |
-| 7   | `>0`   | ❌           | N/A         | ❌         | `?gameId=123`                              | Normal SSO to Game                           | URL → SplashScreen → Register → Dashboard → Available Game       | SSO with game redirect                |
-| 8   | `>0`   | ✅           | N/A         | ❌         | `?gameId=123&op=SP`                        | SabaPlay to Game                             | URL → SplashScreen → Auto Create Nickname → Dashboard → Game 123 | SabaPlay integration to specific game |
-| 9   | `>0`   | ✅           | ❌          | ❌         | `?gameId=123&ref=true`                     | Direct Mode to Game                          | URL → SplashScreen → Auto Create Nickname → Dashboard → Game 123 | Direct game access                    |
-| 10  | `>0`   | ✅           | ❌          | ✅         | `?gameId=123&ref=true&op=SP`               | Direct Mode + SabaPlay to Game               | URL → SplashScreen → Auto Create Nickname → Dashboard → Game 123 | Redundant SabaPlay flag               |
-| 11  | `>0`   | ✅           | ✅          | ❌         | `?gameId=123&ref=true&rurl=<base64>`       | Direct Mode to Game with Redirect            | URL → SplashScreen → Auto Create Nickname → Dashboard → Game 123 | Redirect URL stored for post-game     |
-| 12  | `>0`   | ✅           | ✅          | ✅         | `?gameId=123&ref=true&rurl=<base64>&op=SP` | Direct Mode + SabaPlay to Game with Redirect | URL → SplashScreen → Auto Create Nickname → Dashboard → Game 123 | Redirect URL stored for post-game     |
-| 13  | ❌     | ❌           | N/A         | ❌         | No parameters                              | Default to Lobby                             | URL → SplashScreen → Register → Dashboard → Lobby                | Default behavior                      |
-| 14  | ❌     | ❌           | N/A         | ✅         | `?op=SP`                                   | SabaPlay Default                             | URL → SplashScreen → Auto Create Nickname → Dashboard → Lobby    | SabaPlay with no game specified       |
-| 15  | ❌     | ❌           | ❌          | ❌         | `?ref=true`                                | Normal SSO to Lobby (no gameId)              | URL → SplashScreen → Register → Dashboard → Lobby                | ref ignored when no gameId            |
-| 16  | ❌     | ❌           | ❌          | ✅         | `?ref=true&op=SP`                          | SabaPlay to Lobby (ref ignored)              | URL → SplashScreen → Auto Create Nickname → Dashboard → Lobby    | ref ignored when no gameId            |
+| #   | gameId | isDirectMode | redirectUrl | isSabaPlay | URL Example                                    | Behavior                                     | User Flow                                                        | Notes                                 |
+| --- | ------ | ------------ | ----------- | ---------- | ---------------------------------------------- | -------------------------------------------- | ---------------------------------------------------------------- | ------------------------------------- |
+| 1   | `0`    | ❌           | N/A         | ❌         | `?gameId=0`                                    | Normal SSO to Lobby                          | URL → SplashScreen → Register → Dashboard → Lobby                | First SSO to lobby                    |
+| 2   | `0`    | ❌           | N/A         | ✅         | `?gameId=0&op=SP`                              | SabaPlay to Lobby                            | URL → SplashScreen → Auto Create Nickname → Dashboard → Lobby    | SabaPlay integration to lobby         |
+| 3   | `0`    | ❌           | ❌          | ❌         | `?gameId=0&ref=d_direct`                       | Normal SSO to Lobby (ref ignored)            | URL → SplashScreen → Register → Dashboard → Lobby                | ref ignored when gameId=0             |
+| 4   | `0`    | ❌           | ❌          | ✅         | `?gameId=0&ref=d_direct&op=SP`                 | SabaPlay to Lobby (ref ignored)              | URL → SplashScreen → Auto Create Nickname → Dashboard → Lobby    | ref ignored when gameId=0             |
+| 5   | `0`    | ❌           | ✅          | ❌         | `?gameId=0&ref=d_direct&rurl=<base64>`         | Normal SSO to Lobby (rurl ignored)           | URL → SplashScreen → Register → Dashboard → Lobby                | rurl ignored when gameId=0            |
+| 6   | `0`    | ❌           | ✅          | ✅         | `?gameId=0&ref=d_direct&rurl=<base64>&op=SP`   | SabaPlay to Lobby (rurl ignored)             | URL → SplashScreen → Auto Create Nickname → Dashboard → Lobby    | rurl ignored when gameId=0            |
+| 7   | `>0`   | ❌           | N/A         | ❌         | `?gameId=123`                                  | Normal SSO to Game                           | URL → SplashScreen → Register → Dashboard → Available Game       | SSO with game redirect                |
+| 8   | `>0`   | ✅           | N/A         | ❌         | `?gameId=123&op=SP`                            | SabaPlay to Game                             | URL → SplashScreen → Auto Create Nickname → Dashboard → Game 123 | SabaPlay integration to specific game |
+| 9   | `>0`   | ✅           | ❌          | ❌         | `?gameId=123&ref=d_direct`                     | Direct Mode to Game                          | URL → SplashScreen → Auto Create Nickname → Dashboard → Game 123 | Direct game access                    |
+| 10  | `>0`   | ✅           | ❌          | ✅         | `?gameId=123&ref=d_direct&op=SP`               | Direct Mode + SabaPlay to Game               | URL → SplashScreen → Auto Create Nickname → Dashboard → Game 123 | Redundant SabaPlay flag               |
+| 11  | `>0`   | ✅           | ✅          | ❌         | `?gameId=123&ref=d_direct&rurl=<base64>`       | Direct Mode to Game with Redirect            | URL → SplashScreen → Auto Create Nickname → Dashboard → Game 123 | Redirect URL stored for post-game     |
+| 12  | `>0`   | ✅           | ✅          | ✅         | `?gameId=123&ref=d_direct&rurl=<base64>&op=SP` | Direct Mode + SabaPlay to Game with Redirect | URL → SplashScreen → Auto Create Nickname → Dashboard → Game 123 | Redirect URL stored for post-game     |
+| 13  | ❌     | ❌           | N/A         | ❌         | No parameters                                  | Default to Lobby                             | URL → SplashScreen → Register → Dashboard → Lobby                | Default behavior                      |
+| 14  | ❌     | ❌           | N/A         | ✅         | `?op=SP`                                       | SabaPlay Default                             | URL → SplashScreen → Auto Create Nickname → Dashboard → Lobby    | SabaPlay with no game specified       |
+| 15  | ❌     | ❌           | ❌          | ❌         | `?ref=d_direct`                                | Normal SSO to Lobby (no gameId)              | URL → SplashScreen → Register → Dashboard → Lobby                | ref ignored when no gameId            |
+| 16  | ❌     | ❌           | ❌          | ✅         | `?ref=d_direct&op=SP`                          | SabaPlay to Lobby (ref ignored)              | URL → SplashScreen → Auto Create Nickname → Dashboard → Lobby    | ref ignored when no gameId            |
 
 ## Detailed Behavior Analysis
 
@@ -291,20 +295,22 @@ const analyticsContext = {
 
 ### Happy Path Tests
 
-1. **Direct game access**: `?gameId=123&ref=true`
+1. **Direct game access**: `?gameId=123&ref=d_direct`
 2. **SSO to lobby**: `?gameId=0`
 3. **SabaPlay integration**: `?gameId=123&op=SP`
-4. **With redirect URL**: `?gameId=123&ref=true&rurl=<base64>`
+4. **With redirect URL**: `?gameId=123&ref=d_direct&rurl=<base64>`
 5. **HTML-encoded URL**: `?token=xxx&amp;gameId=123&amp;op=SP`
+6. **Current production URL**: `?token=xxx&lang=vi-VN&appType=1&ref=d_direct&op=GN&cg=Credit_VN`
 
 ### Edge Case Tests
 
 1. **No parameters**: Empty URL
 2. **Invalid gameId**: `?gameId=999999`
 3. **Invalid redirect URL**: `?rurl=invalid-base64`
-4. **Conflicting flags**: `?ref=true&op=SP` (redundant)
-5. **Lobby with rurl**: `?gameId=0&ref=true&rurl=<base64>` (rurl ignored)
+4. **Conflicting flags**: `?ref=d_direct&op=SP` (redundant)
+5. **Lobby with rurl**: `?gameId=0&ref=d_direct&rurl=<base64>` (rurl ignored)
 6. **Multiple users**: Test user-specific storage isolation
+7. **Different ref values**: `?ref=d_direct`, `?ref=m_direct`, `?ref=invalid_value`
 
 ### Error Handling Tests
 
@@ -314,6 +320,63 @@ const analyticsContext = {
 4. **Authorization failure**: Invalid credentials
 5. **HTML-encoded ampersands**: Test URL parsing
 6. **Cross-user scenarios**: Test storage isolation
+
+## Current Production URL Analysis
+
+### Your Specific URL Case
+
+**URL**: `https://gn-game.lumigame.com/?token=c72fd835-5b1d-48a1-a1cc-3d1eaa79aecf&lang=vi-VN&appType=1&ref=d_direct&op=GN&cg=Credit_VN`
+
+**Parameter Analysis**:
+
+-   `token`: `c72fd835-5b1d-48a1-a1cc-3d1eaa79aecf` (authentication token)
+-   `lang`: `vi-VN` (Vietnamese language)
+-   `appType`: `1` (application type)
+-   `ref`: `d_direct` (direct mode trigger - **valid string value**)
+-   `op`: `GN` (operator/platform - **not SabaPlay, so isSabaPlay=false**)
+-   `cg`: `Credit_VN` (credit group)
+-   `gameId`: **missing** (defaults to 0 - lobby mode)
+
+**Behavior Prediction**:
+
+-   `isDirectMode`: `false` (because `ref=d_direct` but no `rurl` parameter and `gameId=0`)
+-   `isSabaPlay`: `false` (because `op=GN`, not `op=SP`)
+-   `gameId`: `0` (lobby mode)
+-   `refType`: `d_direct` (valid ref parameter)
+-   **Result**: Normal SSO to Lobby flow
+
+**Expected User Journey**:
+
+1. URL → SplashScreen
+2. Register (manual nickname creation)
+3. Dashboard → Lobby
+
+**Note**: This URL would benefit from adding a `gameId` parameter if direct game access is intended, or adding `rurl` parameter if post-game redirect is needed.
+
+### Ref Parameter Validation
+
+The `ref` parameter now has strict validation with only two valid values:
+
+-   **`d_direct`**: Desktop direct mode
+-   **`m_direct`**: Mobile direct mode
+
+**Invalid values** (like `"true"`, `"direct"`, `"any_value"`) are ignored and will not enable direct mode.
+
+**Implementation**:
+
+```typescript
+// URL helper validation functions
+export const isValidRefParameter = (ref: string | null): boolean => {
+    return ref === "d_direct" || ref === "m_direct";
+};
+
+export const getRefParameterType = (ref: string | null): "d_direct" | "m_direct" | null => {
+    if (ref === "d_direct" || ref === "m_direct") {
+        return ref;
+    }
+    return null;
+};
+```
 
 ## Implementation Recommendations
 

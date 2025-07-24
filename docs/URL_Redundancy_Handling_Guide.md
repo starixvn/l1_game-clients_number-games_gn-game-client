@@ -32,13 +32,13 @@ This guide addresses the redundancy between `ref` (direct mode) and `op=SP` (Sab
 
 Based on the URL Parameter Combinations Matrix, the following combinations are redundant:
 
-| Combination | URL Example                                | Issue                   | Behavior                            |
-| ----------- | ------------------------------------------ | ----------------------- | ----------------------------------- |
-| 4           | `?gameId=0&ref=true&op=SP`                 | Redundant SabaPlay flag | Both trigger auto nickname creation |
-| 6           | `?gameId=0&ref=true&rurl=<base64>&op=SP`   | Redundant SabaPlay flag | Both support redirect URL           |
-| 10          | `?gameId=123&ref=true&op=SP`               | Redundant SabaPlay flag | Both trigger auto nickname creation |
-| 12          | `?gameId=123&ref=true&rurl=<base64>&op=SP` | Redundant SabaPlay flag | Both support redirect URL           |
-| 16          | `?ref=true&op=SP`                          | Redundant flags         | Both trigger auto nickname creation |
+| Combination | URL Example                                    | Issue                   | Behavior                            |
+| ----------- | ---------------------------------------------- | ----------------------- | ----------------------------------- |
+| 4           | `?gameId=0&ref=d_direct&op=SP`                 | Redundant SabaPlay flag | Both trigger auto nickname creation |
+| 6           | `?gameId=0&ref=d_direct&rurl=<base64>&op=SP`   | Redundant SabaPlay flag | Both support redirect URL           |
+| 10          | `?gameId=123&ref=d_direct&op=SP`               | Redundant SabaPlay flag | Both trigger auto nickname creation |
+| 12          | `?gameId=123&ref=d_direct&rurl=<base64>&op=SP` | Redundant SabaPlay flag | Both support redirect URL           |
+| 16          | `?ref=d_direct&op=SP`                          | Redundant flags         | Both trigger auto nickname creation |
 
 ### Your Specific Case
 
@@ -151,7 +151,7 @@ export function validateURLCombination(context: URLContextModel): {
 
     if (isRedundant) {
         warnings.push("Redundant combination: both ref and op=SP parameters present");
-        recommendations.push("Use either ref=true OR op=SP, not both");
+        recommendations.push("Use either ref=d_direct OR op=SP, not both");
         recommendations.push("Consider using op=SP for SabaPlay integration");
     }
 
@@ -174,7 +174,7 @@ export function validateURLCombination(context: URLContextModel): {
 ### 1. Direct Access (Recommended)
 
 ```
-?ref=true&rurl=<base64-encoded-url>
+?ref=d_direct&rurl=<base64-encoded-url>
 ```
 
 -   **Use Case**: Direct game access from external systems
@@ -196,7 +196,7 @@ export function validateURLCombination(context: URLContextModel): {
 ### 3. Lobby Access (Fixed)
 
 ```
-?gameId=0&ref=true&rurl=<base64>  // rurl ignored, lobby access allowed
+?gameId=0&ref=d_direct&rurl=<base64>  // rurl ignored, lobby access allowed
 ?gameId=0&op=SP&rurl=<base64>     // rurl ignored, lobby access allowed
 ```
 
@@ -207,8 +207,8 @@ export function validateURLCombination(context: URLContextModel): {
 ### 4. Avoid Redundant Combinations
 
 ```
-❌ ?ref=true&op=SP&rurl=<base64-encoded-url>  // Redundant
-✅ ?ref=true&rurl=<base64-encoded-url>       // Direct access
+❌ ?ref=d_direct&op=SP&rurl=<base64-encoded-url>  // Redundant
+✅ ?ref=d_direct&rurl=<base64-encoded-url>       // Direct access
 ✅ ?op=SP&rurl=<base64-encoded-url>          // SabaPlay integration
 ```
 
@@ -313,7 +313,7 @@ expect(context.effectiveMode).toBe("normal");
 ### 2. Redundant Combination
 
 ```typescript
-// Test URL: ?ref=true&op=SP&gameId=123
+// Test URL: ?ref=d_direct&op=SP&gameId=123
 const context = parseContextFromURL();
 expect(context.isDirectMode).toBe(true);
 expect(context.isSabaPlay).toBe(true);
@@ -364,7 +364,7 @@ expect(getUserSpecificGameId(user1)).not.toBe(getUserSpecificGameId(user2));
 
 ### 1. URL Parameter Guidelines
 
--   **Use `ref=true`** for direct access scenarios
+-   **Use `ref=d_direct`** for direct access scenarios
 -   **Use `op=SP`** for SabaPlay platform integration
 -   **Always include `rurl`** when post-game redirect is needed
 -   **Avoid combining both** `ref` and `op=SP` in the same URL
@@ -376,7 +376,7 @@ expect(getUserSpecificGameId(user1)).not.toBe(getUserSpecificGameId(user2));
 #### Direct Game Access
 
 ```
-https://game.example.com?token=<token>&ref=true&gameId=123&rurl=<base64-encoded-redirect>
+https://game.example.com?token=<token>&ref=d_direct&gameId=123&rurl=<base64-encoded-redirect>
 ```
 
 #### SabaPlay Integration
@@ -388,7 +388,7 @@ https://game.example.com?token=<token>&op=SP&gameId=123&rurl=<base64-encoded-red
 #### Lobby Access (Fixed)
 
 ```
-https://game.example.com?token=<token>&gameId=0&ref=true&rurl=<base64>  // rurl ignored
+https://game.example.com?token=<token>&gameId=0&ref=d_direct&rurl=<base64>  // rurl ignored
 https://game.example.com?token=<token>&gameId=0&op=SP&rurl=<base64>     // rurl ignored
 ```
 
