@@ -16,12 +16,20 @@ const HeaderTitle: React.FC<Props> = (props) => {
     const { openingGameId, isRenderGames } = props;
     const appSetting = gameSettings[openingGameId];
     const tolgeeNamespace = appSetting ? appSetting["tolgeeNamespace"] : ResourceTypes.SABA_NUMBER;
-    const { isDirectMode, isSabaPlay } = useURLContext();
+    const { isDirectMode, isSabaPlay, redirectUrl, backToRedirectUrl } = useURLContext();
 
     const { t } = useTranslator([tolgeeNamespace]);
 
+    const handleClickLogo = () => {
+        if (backToRedirectUrl && redirectUrl) {
+            backToRedirectUrl(redirectUrl);
+        }
+    };
+
     const logo = isSabaPlay ? (
-        <Image src={`/static/images/logo-sabaplay-number-games.webp`} height={32} width={140} className="logo" alt="SABAPLAY Number Games Logo" />
+        <div onClick={handleClickLogo} style={{ cursor: "pointer" }}> 
+            <Image src={`/static/images/logo-sabaplay-number-games.webp`} height={32} width={140} className="logo" alt="SABAPLAY Number Games Logo" />
+        </div>
     ) : !isDirectMode ? (
         <Image src={`/static/images/logo-site.svg`} height={26} width={110} className="logo" alt="Logo" />
     ) : (

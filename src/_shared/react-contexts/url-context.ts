@@ -39,7 +39,8 @@ export function parseContextFromURL(): URLContextModel | undefined {
     // Treat SabaPlay URLs as direct mode since they should go directly to the specified game
     // But when gameId=0 (lobby), treat it like op=GN to go through SSO redirect logic
     // Also keep the existing logic for ref + redirectUrl, but ignore redirectUrl when gameId=0
-    const effectiveRedirectUrl = gameId === 0 ? null : redirectUrl;
+    // Update: For SabaPlay, always use redirectUrl regardless of gameId
+    const effectiveRedirectUrl = isSabaPlay ? redirectUrl : (gameId === 0 ? null : redirectUrl);
     const isDirectMode = !!(ref && effectiveRedirectUrl) || (isSabaPlay && gameId !== 0);
 
     return { token, language, gameId, isDirectMode, redirectUrl: effectiveRedirectUrl, firstSSOToLobby: true, isSabaPlay };
