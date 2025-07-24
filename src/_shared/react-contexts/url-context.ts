@@ -42,9 +42,7 @@ export function parseContextFromURL(): URLContextModel | undefined {
     const effectiveRedirectUrl = gameId === 0 ? null : redirectUrl;
     const isDirectMode = !!(ref && effectiveRedirectUrl) || (isSabaPlay && gameId !== 0);
 
-    const result = { token, language, gameId, isDirectMode, redirectUrl: effectiveRedirectUrl, firstSSOToLobby: true, isSabaPlay };
-
-    return result;
+    return { token, language, gameId, isDirectMode, redirectUrl: effectiveRedirectUrl, firstSSOToLobby: true, isSabaPlay };
 }
 
 export function loadURLContext(): URLContextModel {
@@ -59,8 +57,7 @@ export function loadURLContext(): URLContextModel {
         AnalyticsHelper?.login(contextFromURL);
     }
 
-    const finalContext = contextFromURL || contextFromLocalStorage;
-    return finalContext;
+    return contextFromURL || contextFromLocalStorage;
 }
 
 export const initialURLContextData = {

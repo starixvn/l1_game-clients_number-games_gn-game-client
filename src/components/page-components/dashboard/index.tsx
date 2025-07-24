@@ -113,7 +113,6 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
             GlobalMessageTransmitter.broadcast({ [GlobalTransmitterEvent.USER_INFO_RED]: authorizeInfo.user.red });
             this.isUpdatingBalance = setBalanceByPlaceBet;
             this.setState({ authorizeInfo });
-        } else {
         }
     };
 
@@ -186,7 +185,6 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
         const { queryGame } = this.props;
         if (queryGame) {
             this.openGame(queryGame);
-        } else {
         }
     }
 

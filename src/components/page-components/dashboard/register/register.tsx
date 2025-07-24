@@ -141,10 +141,6 @@ export class Register extends PureComponent<RegisterProps, RegisterState> {
 
             if (!this.props.isDirectMode) {
                 await this.updateToLoadGameId(authorizeResponse);
-            } else {
-                // Fix: Ensure toLoadGameId is properly set for direct mode
-                if (this.state.toLoadGameId === 0) {
-                }
             }
         } else {
             this.setState({

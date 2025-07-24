@@ -242,7 +242,6 @@ const SplashScreen: React.FC = () => {
                             break;
                         }
                     }
-                } else {
                 }
             }
         }

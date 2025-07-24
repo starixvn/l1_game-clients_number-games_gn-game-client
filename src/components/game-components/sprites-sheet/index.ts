@@ -197,7 +197,7 @@ export class Spritesheet extends Component<SpritesheetProps> {
     };
 
     init = () => {
-        const { imageData, widthFrame, heightFrame, autoplay, getInstance, onInit, image } = this.props;
+        const { imageData, widthFrame, heightFrame, autoplay, getInstance, onInit } = this.props;
 
         const imgLoadSprite = new Image();
         imgLoadSprite.src = imageData;

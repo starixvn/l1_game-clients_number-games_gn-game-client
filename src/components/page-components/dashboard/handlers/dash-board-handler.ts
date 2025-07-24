@@ -26,15 +26,13 @@ export class DashboardHandler {
                 return false;
             }
 
-            const result = !offerGames?.includes(this.props.queryGame);
-            return result;
+            return !offerGames?.includes(this.props.queryGame);
         }
 
-        const result = (
+        return (
             (this.props.authorizeResponse?.user?.offerGames && this.props.authorizeResponse?.user?.offerGames.length === 0) ||
             !this.getLobbyGamesIds()?.length
         );
-        return result;
     };
 
     shouldRenderGames = (offerGames: number[], openGameId: number | null) => {
@@ -49,9 +47,7 @@ export class DashboardHandler {
             return false;
         }
 
-        const result = (offerGames.includes(effectiveGameId) && !backToLobby) || ssoRedirectGameId > 0;
-
-        return result;
+        return (offerGames.includes(effectiveGameId) && !backToLobby) || ssoRedirectGameId > 0;
     };
 
     getLobbyGamesIds = () => {

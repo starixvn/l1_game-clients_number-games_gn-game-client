@@ -50,7 +50,7 @@ const PreloadResourceRegister: React.FC<{
         }
     }, [gameId, isDirectMode, updateStatePreloadResource]);
 
-    const renderResult = useMemo(() => {
+    return useMemo(() => {
         if (!isDirectMode && gameId > 0) {
             return (
                 <PreloadResources
@@ -77,8 +77,6 @@ const PreloadResourceRegister: React.FC<{
 
         return <></>;
     }, [gameId]);
-
-    return renderResult;
 };
 
 export default PreloadResourceRegister;
