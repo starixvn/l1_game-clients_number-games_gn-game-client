@@ -166,8 +166,8 @@ describe("URL Parameter Combinations Matrix Tests", () => {
                         token: null,
                         language: null,
                         gameId: 0,
-                        isDirectMode: false,
-                        redirectUrl: null, // rurl ignored when gameId=0
+                        isDirectMode: false, // ref + rurl but gameId=0, so not direct mode
+                        redirectUrl: null, // rurl ignored when gameId=0 for non-SabaPlay
                         firstSSOToLobby: true,
                         isSabaPlay: false,
                     };
@@ -188,8 +188,8 @@ describe("URL Parameter Combinations Matrix Tests", () => {
                         token: null,
                         language: null,
                         gameId: 0,
-                        isDirectMode: false,
-                        redirectUrl: null, // rurl ignored when gameId=0
+                        isDirectMode: true, // ref + rurl triggers direct mode even for lobby
+                        redirectUrl: "aHR0cHM6Ly9leGFtcGxlLmNvbQ==", // rurl is preserved for SabaPlay
                         firstSSOToLobby: true,
                         isSabaPlay: true,
                     };
