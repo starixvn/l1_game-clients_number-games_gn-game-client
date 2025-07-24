@@ -2,9 +2,9 @@ const gameSettings = require("./game-settings.json");
 const configs = require("./configs.json");
 const { v4: uuidv4 } = require("uuid");
 const { withSentryConfig } = require("@sentry/nextjs");
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-    enabled: process.env.ANALYZE === 'true',
-  });
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+    enabled: process.env.ANALYZE === "true",
+});
 
 const basePath = "";
 const appSettings = {
@@ -18,7 +18,7 @@ const buildVersion = new Date().getTime();
  */
 const nextConfig = withSentryConfig({
     publicRuntimeConfig: appSettings,
-    productionBrowserSourceMaps: true,
+    productionBrowserSourceMaps: false,
     sentry: {
         disableServerWebpackPlugin: true,
         disableClientWebpackPlugin: true,
@@ -26,6 +26,9 @@ const nextConfig = withSentryConfig({
     },
     generateBuildId: async () => uuidv4(),
     webpack: (config, options) => {
+        // Disable source maps
+        config.devtool = false;
+
         config.module.rules.push({
             test: /\.(png|jpg|gif|svg|eot|ttf|woff|woff2|mp3|webp)$/,
             use: {
