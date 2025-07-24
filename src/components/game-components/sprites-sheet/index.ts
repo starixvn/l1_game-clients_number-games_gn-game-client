@@ -229,7 +229,7 @@ export class Spritesheet extends Component<SpritesheetProps> {
         };
 
         imgLoadSprite.onerror = () => {
-            console.error(`Failed to load image ${image} ${imgLoadSprite.src}`);
+            // Failed to load image ${image} ${imgLoadSprite.src}
         };
     };
 
@@ -278,9 +278,7 @@ export class Spritesheet extends Component<SpritesheetProps> {
         if (this.spriteElMove) {
             currentRow = parseInt(String(Math.floor(this.frame / (this.cols || 1))));
             currentCol = parseInt(String(this.frame - (this.cols || 1) * currentRow));
-            this.spriteElMove.style.backgroundPosition = `-${this.props.widthFrame * currentCol}px -${
-                this.props.heightFrame * currentRow
-            }px`;
+            this.spriteElMove.style.backgroundPosition = `-${this.props.widthFrame * currentCol}px -${this.props.heightFrame * currentRow}px`;
         }
 
         if (onEnterFrame) {
@@ -300,18 +298,18 @@ export class Spritesheet extends Component<SpritesheetProps> {
             if (onEachFrame) {
                 onEachFrame(this.setInstance());
             }
-            this.props.writeDebugLog &&
-                console.log(
-                    JSON.stringify({
-                        id: this.id,
-                        cols: this.cols,
-                        currentCol,
-                        rows: this.rows,
-                        currentRow,
-                        frame: this.frame,
-                        pos: this.spriteElMove.style.backgroundPosition,
-                    })
-                );
+            // this.props.writeDebugLog &&
+            //     console.log(
+            //         JSON.stringify({
+            //             id: this.id,
+            //             cols: this.cols,
+            //             currentCol,
+            //             rows: this.rows,
+            //             currentRow,
+            //             frame: this.frame,
+            //             pos: this.spriteElMove.style.backgroundPosition,
+            //         })
+            //     );
         }
 
         if (this.isPlaying) {

@@ -22,13 +22,13 @@ export function parseContextFromURL(): URLContextModel | undefined {
     const decodedSearch = rawSearch.replace(/&amp;/g, '&');
 
     const params = new URLSearchParams(decodedSearch);
-    console.log("[URLContext] parseContextFromURL - URL search params:", globalThis.location?.search);
-    console.log("[URLContext] parseContextFromURL - Decoded search params:", decodedSearch);
-    console.log("[URLContext] parseContextFromURL - All params:", Array.from(params.entries()));
+    // console.log("[URLContext] parseContextFromURL - URL search params:", globalThis.location?.search);
+    // console.log("[URLContext] parseContextFromURL - Decoded search params:", decodedSearch);
+    // console.log("[URLContext] parseContextFromURL - All params:", Array.from(params.entries()));
 
     // Reload page
     if (Array.from(params.values()).length === 0) {
-        console.log("[URLContext] parseContextFromURL - No URL parameters found, returning undefined");
+        // console.log("[URLContext] parseContextFromURL - No URL parameters found, returning undefined");
         return;
     }
 
@@ -46,32 +46,32 @@ export function parseContextFromURL(): URLContextModel | undefined {
     const effectiveRedirectUrl = gameId === 0 ? null : redirectUrl;
     const isDirectMode = !!(ref && effectiveRedirectUrl) || (isSabaPlay && gameId !== 0);
 
-    console.log("[URLContext] parseContextFromURL - Direct mode calculation:", {
-        ref,
-        redirectUrl,
-        effectiveRedirectUrl,
-        isSabaPlay,
-        gameId,
-        isDirectMode
-    });
+    // console.log("[URLContext] parseContextFromURL - Direct mode calculation:", {
+    //     ref,
+    //     redirectUrl,
+    //     effectiveRedirectUrl,
+    //     isSabaPlay,
+    //     gameId,
+    //     isDirectMode
+    // });
 
     const result = { token, language, gameId, isDirectMode, redirectUrl: effectiveRedirectUrl, firstSSOToLobby: true, isSabaPlay };
-    console.log("[URLContext] parseContextFromURL - Parsed result:", result);
+    // console.log("[URLContext] parseContextFromURL - Parsed result:", result);
 
     return result;
 }
 
 export function loadURLContext(): URLContextModel {
-    console.log("[URLContext] loadURLContext - Starting URL context loading");
+    // console.log("[URLContext] loadURLContext - Starting URL context loading");
     const contextFromURL = parseContextFromURL();
     const contextFromLocalStorage = StorageHelper?.get(localStorageKeys.url) || null;
 
-    console.log("[URLContext] loadURLContext - Context from URL:", contextFromURL);
-    console.log("[URLContext] loadURLContext - Context from localStorage:", contextFromLocalStorage);
+    // console.log("[URLContext] loadURLContext - Context from URL:", contextFromURL);
+    // console.log("[URLContext] loadURLContext - Context from localStorage:", contextFromLocalStorage);
 
     if (!!contextFromURL) {
         const contextString = { ...contextFromURL, token: undefined };
-        console.log("[URLContext] loadURLContext - Storing context in localStorage:", contextString);
+        // console.log("[URLContext] loadURLContext - Storing context in localStorage:", contextString);
 
         globalThis.history.pushState(null, "", globalThis.location?.href.split("?")[0]);
         StorageHelper?.set(localStorageKeys.url, contextString);
@@ -79,7 +79,7 @@ export function loadURLContext(): URLContextModel {
     }
 
     const finalContext = contextFromURL || contextFromLocalStorage;
-    console.log("[URLContext] loadURLContext - Final context returned:", finalContext);
+    // console.log("[URLContext] loadURLContext - Final context returned:", finalContext);
     return finalContext;
 }
 

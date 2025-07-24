@@ -59,11 +59,11 @@ export class LobbySocketConnection {
                 });
 
                 socket.on(messageEventType.SOCKET_CONNECT_ERROR, () => {
-                    console.log("error");
+                    // console.log("error");
                     resolve(socket);
                 });
                 socket.on(messageEventType.SOCKET_DISCONNECTED, () => {
-                    console.log("disconnect");
+                    // console.log("disconnect");
                     resolve(socket);
                 });
             }

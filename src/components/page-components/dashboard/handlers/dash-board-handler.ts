@@ -12,26 +12,26 @@ export class DashboardHandler {
         private readonly updateGameTransmitters: Function,
         lobbyConnection: LobbySocketConnection = null
     ) {
-        console.log("[DashboardHandler] constructor - Props:", props);
+        // console.log("[DashboardHandler] constructor - Props:", props);
         this.lobbyConnection = lobbyConnection ?? new LobbySocketConnection();
         this.connectLobbySocket();
     }
 
     checkIsNotOfferGame = () => {
         const offerGames = getOfferGamesIds(this.props.authorizeResponse);
-        console.log("[DashboardHandler] checkIsNotOfferGame - offerGames:", offerGames);
-        console.log("[DashboardHandler] checkIsNotOfferGame - props:", { directMode: this.props.directMode, queryGame: this.props.queryGame });
+        // console.log("[DashboardHandler] checkIsNotOfferGame - offerGames:", offerGames);
+        // console.log("[DashboardHandler] checkIsNotOfferGame - props:", { directMode: this.props.directMode, queryGame: this.props.queryGame });
 
         if (this.props.directMode) {
             // Fix: When queryGame is 0, it means lobby, not a specific game
             // So it should not be treated as "not in offer"
             if (this.props.queryGame === 0) {
-                console.log("[DashboardHandler] checkIsNotOfferGame - Direct mode with queryGame 0 (lobby), returning false");
+                // console.log("[DashboardHandler] checkIsNotOfferGame - Direct mode with queryGame 0 (lobby), returning false");
                 return false;
             }
 
             const result = !offerGames?.includes(this.props.queryGame);
-            console.log("[DashboardHandler] checkIsNotOfferGame - Direct mode result:", result);
+            // console.log("[DashboardHandler] checkIsNotOfferGame - Direct mode result:", result);
             return result;
         }
 
@@ -39,37 +39,37 @@ export class DashboardHandler {
             (this.props.authorizeResponse?.user?.offerGames && this.props.authorizeResponse?.user?.offerGames.length === 0) ||
             !this.getLobbyGamesIds()?.length
         );
-        console.log("[DashboardHandler] checkIsNotOfferGame - Non-direct mode result:", result);
+        // console.log("[DashboardHandler] checkIsNotOfferGame - Non-direct mode result:", result);
         return result;
     };
 
     shouldRenderGames = (offerGames: number[], openGameId: number | null) => {
-        console.log("[DashboardHandler] shouldRenderGames - Input:", { offerGames, openGameId });
+        // console.log("[DashboardHandler] shouldRenderGames - Input:", { offerGames, openGameId });
 
         const urlContextModel = StorageHelper.get<URLContextModel>(localStorageKeys.url);
         const backToLobby = urlContextModel?.backToLobby || false;
         const ssoRedirectGameId = urlContextModel?.gameId || 0;
 
-        console.log("[DashboardHandler] shouldRenderGames - URL context:", { backToLobby, ssoRedirectGameId });
+        // console.log("[DashboardHandler] shouldRenderGames - URL context:", { backToLobby, ssoRedirectGameId });
 
         // Fix: Use ssoRedirectGameId when openGameId is null/0/undefined
         const effectiveGameId = (openGameId === 0 || openGameId === null || openGameId === undefined) ? ssoRedirectGameId : openGameId;
 
-        console.log("[DashboardHandler] shouldRenderGames - Effective gameId:", effectiveGameId);
+        // console.log("[DashboardHandler] shouldRenderGames - Effective gameId:", effectiveGameId);
 
         if (effectiveGameId === 0 || effectiveGameId === null || effectiveGameId === undefined) {
-            console.log("[DashboardHandler] shouldRenderGames - Effective gameId is 0/null/undefined, returning false");
+            // console.log("[DashboardHandler] shouldRenderGames - Effective gameId is 0/null/undefined, returning false");
             return false;
         }
 
         const result = (offerGames.includes(effectiveGameId) && !backToLobby) || ssoRedirectGameId > 0;
-        console.log("[DashboardHandler] shouldRenderGames - Final result:", result);
-        console.log("[DashboardHandler] shouldRenderGames - Breakdown:", {
-            effectiveGameId,
-            offerGamesIncludes: offerGames.includes(effectiveGameId),
-            notBackToLobby: !backToLobby,
-            ssoRedirectGameIdGreaterThan0: ssoRedirectGameId > 0
-        });
+        // console.log("[DashboardHandler] shouldRenderGames - Final result:", result);
+        // console.log("[DashboardHandler] shouldRenderGames - Breakdown:", {
+        //     effectiveGameId,
+        //     offerGamesIncludes: offerGames.includes(effectiveGameId),
+        //     notBackToLobby: !backToLobby,
+        //     ssoRedirectGameIdGreaterThan0: ssoRedirectGameId > 0
+        // });
 
         return result;
     };

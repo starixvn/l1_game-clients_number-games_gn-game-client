@@ -74,7 +74,7 @@ export const Banner: React.FC<{ openGame: Function; lobbyConfigs: ILobbyConfigs 
                     updatedBanners.push({ ...banner, path: validPath });
                 }
             } catch (error) {
-                console.log("Error get banner follow path", banner);
+                // console.log("Error get banner follow path", banner);
             }
         }
 
@@ -96,7 +96,7 @@ export const Banner: React.FC<{ openGame: Function; lobbyConfigs: ILobbyConfigs 
                     break;
                 }
             } catch (error) {
-                console.log("Error invalid path image:", path);
+                // console.log("Error invalid path image:", path);
             }
         }
 
