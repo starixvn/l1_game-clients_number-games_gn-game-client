@@ -76,7 +76,7 @@ jest.mock("../handlers/notification-handler", () => ({
 
 // Mock shared dependencies
 jest.mock("../../../../_shared/constants/error-code-dictionary", () => ({
-    ErrorNoGameOffer: "No game offer available",
+    ErrorNoGameOffer: "Your account is not supported on this game portal. Please contact your upline, thank you.",
 }));
 
 jest.mock("../../../../_shared/helpers", () => ({

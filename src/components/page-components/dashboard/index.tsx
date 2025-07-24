@@ -165,15 +165,28 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
             this.resetGameIdDashboardEvent()
         );
 
-        if (this.dashboardHandler.checkIsNotOfferGame()) {
-            this.setState({
-                apiError: {
-                    message: ErrorNoGameOffer,
-                    errorCode: "",
-                },
-                isShowErrorModal: true,
-                isBlockUI: true,
-            });
+        // Fix: Add retry mechanism for timing issues with data availability
+        const checkGameOffer = () => {
+            if (this.dashboardHandler.checkIsNotOfferGame()) {
+                this.setState({
+                    apiError: {
+                        message: ErrorNoGameOffer,
+                        errorCode: "",
+                    },
+                    isShowErrorModal: true,
+                    isBlockUI: true,
+                });
+            }
+        };
+
+        // Check immediately
+        checkGameOffer();
+
+        // If data might not be ready, retry after a short delay
+        if (!this.props.authorizeResponse || !this.props.lobbyConfigs) {
+            setTimeout(() => {
+                checkGameOffer();
+            }, 1000); // Retry after 1 second
         }
 
         if (isMobile) {

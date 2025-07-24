@@ -244,9 +244,28 @@ describe('DashboardHandler', () => {
     });
 
     describe('checkIsNotOfferGame', () => {
-        it('should return true for direct mode when game is not in offer games', () => {
+        it('should return false when queryGame is 0 (lobby access)', () => {
             // Arrange
-            const props = { ...defaultProps, directMode: true, queryGame: 9999 };
+            const props = {
+                ...defaultProps,
+                queryGame: 0
+            };
+            const handler = new DashboardHandler(props, jest.fn());
+
+            // Act
+            const result = handler.checkIsNotOfferGame();
+
+            // Assert
+            expect(result).toBe(false);
+        });
+
+        it('should return true when queryGame is not in offer games in direct mode', () => {
+            // Arrange
+            const props = {
+                ...defaultProps,
+                directMode: true,
+                queryGame: 9999 // Game not in offer
+            };
             const handler = new DashboardHandler(props, jest.fn());
 
             // Act
@@ -256,38 +275,135 @@ describe('DashboardHandler', () => {
             expect(result).toBe(true);
         });
 
-        it('should return false for direct mode when game is in offer games', () => {
-            // Arrange
-            const props = { ...defaultProps, directMode: true, queryGame: 1001 };
-            const handler = new DashboardHandler(props, jest.fn());
-
-            // Act
-            const result = handler.checkIsNotOfferGame();
-
-            // Assert
-            expect(result).toBe(false);
-        });
-
-        it('should return false for direct mode when queryGame is 0 (lobby)', () => {
-            // Arrange
-            const props = { ...defaultProps, directMode: true, queryGame: 0 };
-            const handler = new DashboardHandler(props, jest.fn());
-
-            // Act
-            const result = handler.checkIsNotOfferGame();
-
-            // Assert
-            expect(result).toBe(false);
-        });
-
-        it('should return true for non-direct mode when no offer games', () => {
+        it('should return false when queryGame is in offer games in direct mode', () => {
             // Arrange
             const props = {
                 ...defaultProps,
-                directMode: false,
+                directMode: true,
+                queryGame: 1001 // Game in offer
+            };
+            const handler = new DashboardHandler(props, jest.fn());
+
+            // Act
+            const result = handler.checkIsNotOfferGame();
+
+            // Assert
+            expect(result).toBe(false);
+        });
+
+        it('should return false when queryGame is 0 even with null authorizeResponse', () => {
+            // Arrange
+            const props = {
+                ...defaultProps,
+                queryGame: 0,
+                authorizeResponse: null
+            };
+            const handler = new DashboardHandler(props, jest.fn());
+
+            // Act
+            const result = handler.checkIsNotOfferGame();
+
+            // Assert
+            expect(result).toBe(false); // Lobby access should always be allowed
+        });
+
+        it('should return false when queryGame is 0 even with undefined authorizeResponse', () => {
+            // Arrange
+            const props = {
+                ...defaultProps,
+                queryGame: 0,
+                authorizeResponse: undefined
+            };
+            const handler = new DashboardHandler(props, jest.fn());
+
+            // Act
+            const result = handler.checkIsNotOfferGame();
+
+            // Assert
+            expect(result).toBe(false); // Lobby access should always be allowed
+        });
+
+        it('should return false when queryGame is 0 even with no offer games', () => {
+            // Arrange
+            const props = {
+                ...defaultProps,
+                queryGame: 0,
                 authorizeResponse: {
                     ...defaultProps.authorizeResponse,
-                    user: { ...defaultProps.authorizeResponse.user, offerGames: [] }
+                    user: {
+                        ...defaultProps.authorizeResponse.user,
+                        offerGames: []
+                    }
+                }
+            };
+            const handler = new DashboardHandler(props, jest.fn());
+
+            // Act
+            const result = handler.checkIsNotOfferGame();
+
+            // Assert
+            expect(result).toBe(false); // Lobby access should always be allowed
+        });
+
+        it('should return false when queryGame is 0 even with null lobbyConfigs', () => {
+            // Arrange
+            const props = {
+                ...defaultProps,
+                queryGame: 0,
+                lobbyConfigs: null
+            };
+            const handler = new DashboardHandler(props, jest.fn());
+
+            // Act
+            const result = handler.checkIsNotOfferGame();
+
+            // Assert
+            expect(result).toBe(false); // Lobby access should always be allowed
+        });
+
+        it('should return false when queryGame is 0 even with undefined lobbyConfigs', () => {
+            // Arrange
+            const props = {
+                ...defaultProps,
+                queryGame: 0,
+                lobbyConfigs: undefined
+            };
+            const handler = new DashboardHandler(props, jest.fn());
+
+            // Act
+            const result = handler.checkIsNotOfferGame();
+
+            // Assert
+            expect(result).toBe(false); // Lobby access should always be allowed
+        });
+
+        it('should return false when queryGame is 0 even with no lobby games available', () => {
+            // Arrange
+            mockGetLobbyGameIds.mockReturnValue([]);
+            const props = {
+                ...defaultProps,
+                queryGame: 0
+            };
+            const handler = new DashboardHandler(props, jest.fn());
+
+            // Act
+            const result = handler.checkIsNotOfferGame();
+
+            // Assert
+            expect(result).toBe(false); // Lobby access should always be allowed
+        });
+
+        it('should return true when queryGame is not 0 and user has no offer games', () => {
+            // Arrange
+            const props = {
+                ...defaultProps,
+                queryGame: 1001, // Not lobby
+                authorizeResponse: {
+                    ...defaultProps.authorizeResponse,
+                    user: {
+                        ...defaultProps.authorizeResponse.user,
+                        offerGames: []
+                    }
                 }
             };
             const handler = new DashboardHandler(props, jest.fn());
@@ -299,27 +415,99 @@ describe('DashboardHandler', () => {
             expect(result).toBe(true);
         });
 
-        it('should return true for non-direct mode when no lobby games', () => {
+        it('should return false when queryGame is not 0 and lobbyConfigs is null (timing issue)', () => {
             // Arrange
-            mockGetLobbyGameIds.mockReturnValue([]);
-            const handler = new DashboardHandler(defaultProps, jest.fn());
+            const props = {
+                ...defaultProps,
+                queryGame: 1001, // Not lobby
+                lobbyConfigs: null
+            };
+            const handler = new DashboardHandler(props, jest.fn());
 
             // Act
             const result = handler.checkIsNotOfferGame();
 
             // Assert
-            expect(result).toBe(true);
+            expect(result).toBe(false); // Returns false when data is not available (timing issue)
         });
 
-        it('should return false for non-direct mode when offer games and lobby games exist', () => {
+        it('should return true when queryGame is not 0 and no lobby games are available', () => {
             // Arrange
-            const handler = new DashboardHandler(defaultProps, jest.fn());
+            mockGetLobbyGameIds.mockReturnValue([]);
+            const props = {
+                ...defaultProps,
+                queryGame: 1001 // Not lobby
+            };
+            const handler = new DashboardHandler(props, jest.fn());
+
+            // Act
+            const result = handler.checkIsNotOfferGame();
+
+            // Assert
+            expect(result).toBe(true); // Returns true when no lobby games are available
+        });
+
+        it('should return false when queryGame is not 0 and user has offer games and lobby games are available', () => {
+            // Arrange
+            const props = {
+                ...defaultProps,
+                queryGame: 1001, // Not lobby
+                authorizeResponse: {
+                    ...defaultProps.authorizeResponse,
+                    user: {
+                        ...defaultProps.authorizeResponse.user,
+                        offerGames: [{ gameId: 1001, minBet: 1, maxBet: 100, maxBetPerChoices: {} }, { gameId: 1002, minBet: 1, maxBet: 100, maxBetPerChoices: {} }]
+                    }
+                }
+            };
+            const handler = new DashboardHandler(props, jest.fn());
 
             // Act
             const result = handler.checkIsNotOfferGame();
 
             // Assert
             expect(result).toBe(false);
+        });
+
+        it('should handle timing issue where queryGame is not 0 and authorizeResponse is incomplete on first load', () => {
+            // Arrange - Simulate first load scenario where data is not yet available
+            const props = {
+                ...defaultProps,
+                queryGame: 1001, // Not lobby
+                authorizeResponse: {
+                    ...defaultProps.authorizeResponse,
+                    user: {
+                        ...defaultProps.authorizeResponse.user,
+                        offerGames: undefined // Missing offerGames property - simulates incomplete data
+                    }
+                }
+            };
+            const handler = new DashboardHandler(props, jest.fn());
+
+            // Act
+            const result = handler.checkIsNotOfferGame();
+
+            // Assert
+            expect(result).toBe(false); // Returns false when data is not available (timing issue)
+        });
+
+        it('should handle timing issue where queryGame is not 0 and lobbyConfigs is incomplete on first load', () => {
+            // Arrange - Simulate first load scenario where lobbyConfigs is not yet loaded
+            const props = {
+                ...defaultProps,
+                queryGame: 1001, // Not lobby
+                lobbyConfigs: {
+                    ...defaultProps.lobbyConfigs,
+                    categories: [] // Empty categories - simulates incomplete data
+                }
+            };
+            const handler = new DashboardHandler(props, jest.fn());
+
+            // Act
+            const result = handler.checkIsNotOfferGame();
+
+            // Assert
+            expect(result).toBe(false); // Returns false when data is not available (timing issue)
         });
     });
 

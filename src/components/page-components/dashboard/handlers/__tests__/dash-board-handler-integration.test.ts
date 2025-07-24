@@ -600,4 +600,404 @@ describe('DashboardHandler Integration - Direct Mode Scenario', () => {
             expect(result).toBe(true);
         });
     });
+});
+
+describe('DashboardHandler Integration Tests - Timing Issues', () => {
+    describe('checkIsNotOfferGame timing issues', () => {
+        it('should handle first load scenario where authorizeResponse is not available but queryGame is 0', () => {
+            // Arrange - Simulate first load where data is not yet loaded but accessing lobby
+            const props = {
+                router: mockRouter,
+                session: {
+                    isAuthenticated: true,
+                    username: 'testuser',
+                    language: 'en',
+                    ss: 'test-session-token',
+                    memberName: 'testuser',
+                    isUM: false,
+                    umInfo: null,
+                    system: 1
+                } as SSOResponse,
+                queryGame: 0, // Lobby access
+                directMode: true,
+                setIsUm: jest.fn(),
+                tolgee: {} as TolgeeInstance,
+                authorizeResponse: null, // Data not available yet
+                lobbyConfigs: {
+                    name: "Test Lobby",
+                    currencyGroupIds: ["USD"],
+                    miniPanelGameIds: [1001, 1002, 1003],
+                    categories: [
+                        {
+                            name: "Test Category",
+                            gameSettings: [
+                                { gameId: 1001, bigSize: false, newTag: false },
+                                { gameId: 1002, bigSize: false, newTag: false },
+                                { gameId: 1003, bigSize: false, newTag: false },
+                            ],
+                        },
+                    ],
+                    banners: [
+                        { gameId: 1001, displayTime: 5000 },
+                        { gameId: 1002, displayTime: 5000 },
+                        { gameId: 1003, displayTime: 5000 },
+                    ],
+                    gameSettings: {
+                        1001: { id: 1001, name: 'Game 1' },
+                        1002: { id: 1002, name: 'Game 2' },
+                        1003: { id: 1003, name: 'Game 3' },
+                    },
+                    roundTimerGame: 1001,
+                } as ILobbyConfigs
+            };
+            const handler = new DashboardHandler(props, jest.fn());
+
+            // Act
+            const result = handler.checkIsNotOfferGame();
+
+            // Assert
+            expect(result).toBe(false); // Lobby access should always be allowed regardless of data availability
+        });
+
+        it('should handle first load scenario where lobbyConfigs is not available but queryGame is 0', () => {
+            // Arrange - Simulate first load where data is not yet loaded but accessing lobby
+            const props = {
+                router: mockRouter,
+                session: {
+                    isAuthenticated: true,
+                    username: 'testuser',
+                    language: 'en',
+                    ss: 'test-session-token',
+                    memberName: 'testuser',
+                    isUM: false,
+                    umInfo: null,
+                    system: 1
+                } as SSOResponse,
+                queryGame: 0, // Lobby access
+                directMode: true,
+                setIsUm: jest.fn(),
+                tolgee: {} as TolgeeInstance,
+                authorizeResponse: {
+                    authorized: true,
+                    user: {
+                        UID: 1,
+                        id: 1,
+                        username: 'testuser',
+                        avatarId: 1,
+                        currency: 'USD',
+                        name: 'Test User',
+                        red: 1000,
+                        settings: { theme: 'light' },
+                        isSignedInSM: true,
+                        isDisplayPlayerCurrency: true,
+                        offerGames: [
+                            { gameId: 1001, minBet: 1, maxBet: 1000, maxBetPerChoices: {} },
+                            { gameId: 1002, minBet: 1, maxBet: 1000, maxBetPerChoices: {} },
+                            { gameId: 1003, minBet: 1, maxBet: 1000, maxBetPerChoices: {} },
+                        ],
+                        balance: 1000,
+                        fractionalOddsFormat: false,
+                        enableQuickBet: true,
+                        enabledGameIds: [1001, 1002, 1003],
+                        availSpins: 0,
+                        scoins: 0,
+                    },
+                    errorCode: null,
+                    umInfo: null,
+                    isUM: false
+                } as AuthorizeResponse,
+                lobbyConfigs: null // Data not available yet
+            };
+            const handler = new DashboardHandler(props, jest.fn());
+
+            // Act
+            const result = handler.checkIsNotOfferGame();
+
+            // Assert
+            expect(result).toBe(false); // Lobby access should always be allowed regardless of data availability
+        });
+
+        it('should handle first load scenario where both data sources are not available but queryGame is 0', () => {
+            // Arrange - Simulate first load where both data sources are not yet loaded but accessing lobby
+            const props = {
+                router: mockRouter,
+                session: {
+                    isAuthenticated: true,
+                    username: 'testuser',
+                    language: 'en',
+                    ss: 'test-session-token',
+                    memberName: 'testuser',
+                    isUM: false,
+                    umInfo: null,
+                    system: 1
+                } as SSOResponse,
+                queryGame: 0, // Lobby access
+                directMode: true,
+                setIsUm: jest.fn(),
+                tolgee: {} as TolgeeInstance,
+                authorizeResponse: null, // Data not available yet
+                lobbyConfigs: null // Data not available yet
+            };
+            const handler = new DashboardHandler(props, jest.fn());
+
+            // Act
+            const result = handler.checkIsNotOfferGame();
+
+            // Assert
+            expect(result).toBe(false); // Lobby access should always be allowed regardless of data availability
+        });
+
+        it('should work correctly when data becomes available after initial load', () => {
+            // Arrange - Simulate data becoming available
+            const props = {
+                router: mockRouter,
+                session: {
+                    isAuthenticated: true,
+                    username: 'testuser',
+                    language: 'en',
+                    ss: 'test-session-token',
+                    memberName: 'testuser',
+                    isUM: false,
+                    umInfo: null,
+                    system: 1
+                } as SSOResponse,
+                queryGame: 0, // Lobby access
+                directMode: true,
+                setIsUm: jest.fn(),
+                tolgee: {} as TolgeeInstance,
+                authorizeResponse: {
+                    authorized: true,
+                    user: {
+                        UID: 123,
+                        avatarId: 1,
+                        currency: 'USD',
+                        name: 'testuser',
+                        red: 1000,
+                        settings: { theme: 'light' },
+                        enabledGameIds: [1001, 1002],
+                        offerGames: [{ gameId: 1001, minBet: 1, maxBet: 100, maxBetPerChoices: {} }],
+                        fractionalOddsFormat: false,
+                        isSignedInSM: true,
+                        isDisplayPlayerCurrency: true,
+                        availSpins: 0,
+                        scoins: 0
+                    }
+                },
+                lobbyConfigs: {
+                    name: 'test',
+                    currencyGroupIds: ['USD'],
+                    miniPanelGameIds: [1001],
+                    categories: [{
+                        id: 1,
+                        name: 'test',
+                        gameSettings: [{ gameId: 1001, bigSize: false, newTag: false }]
+                    }],
+                    banners: []
+                }
+            };
+            const handler = new DashboardHandler(props, jest.fn());
+
+            // Act
+            const result = handler.checkIsNotOfferGame();
+
+            // Assert
+            expect(result).toBe(false); // Lobby access should always be allowed
+        });
+
+        it('should return false when queryGame is not 0 and data is not available (timing issue)', () => {
+            // Arrange - Simulate first load where data is not yet loaded and accessing specific game
+            const props = {
+                router: mockRouter,
+                session: {
+                    isAuthenticated: true,
+                    username: 'testuser',
+                    language: 'en',
+                    ss: 'test-session-token',
+                    memberName: 'testuser',
+                    isUM: false,
+                    umInfo: null,
+                    system: 1
+                } as SSOResponse,
+                queryGame: 1001, // Specific game access
+                directMode: true,
+                setIsUm: jest.fn(),
+                tolgee: {} as TolgeeInstance,
+                authorizeResponse: null, // Data not available yet
+                lobbyConfigs: null // Data not available yet
+            };
+            const handler = new DashboardHandler(props, jest.fn());
+
+            // Act
+            const result = handler.checkIsNotOfferGame();
+
+            // Assert
+            expect(result).toBe(false); // Returns false when data is not available (timing issue)
+        });
+
+        it('should handle normal mode with complete data correctly', () => {
+            // Arrange - Normal mode with complete data
+            const props = {
+                router: mockRouter,
+                session: {
+                    isAuthenticated: true,
+                    username: 'testuser',
+                    language: 'en',
+                    ss: 'test-session-token',
+                    memberName: 'testuser',
+                    isUM: false,
+                    umInfo: null,
+                    system: 1
+                } as SSOResponse,
+                queryGame: 1001,
+                directMode: false,
+                setIsUm: jest.fn(),
+                tolgee: {} as TolgeeInstance,
+                authorizeResponse: {
+                    authorized: true,
+                    user: {
+                        UID: 1,
+                        id: 1,
+                        username: 'testuser',
+                        avatarId: 1,
+                        currency: 'USD',
+                        name: 'Test User',
+                        red: 1000,
+                        settings: { theme: 'light' },
+                        isSignedInSM: true,
+                        isDisplayPlayerCurrency: true,
+                        offerGames: [
+                            { gameId: 1001, minBet: 1, maxBet: 1000, maxBetPerChoices: {} },
+                            { gameId: 1002, minBet: 1, maxBet: 1000, maxBetPerChoices: {} },
+                            { gameId: 1003, minBet: 1, maxBet: 1000, maxBetPerChoices: {} },
+                        ],
+                        balance: 1000,
+                        fractionalOddsFormat: false,
+                        enableQuickBet: true,
+                        enabledGameIds: [1001, 1002, 1003],
+                        availSpins: 0,
+                        scoins: 0,
+                    },
+                    errorCode: null,
+                    umInfo: null,
+                    isUM: false
+                } as AuthorizeResponse,
+                lobbyConfigs: {
+                    name: "Test Lobby",
+                    currencyGroupIds: ["USD"],
+                    miniPanelGameIds: [1001, 1002, 1003],
+                    categories: [
+                        {
+                            name: "Test Category",
+                            gameSettings: [
+                                { gameId: 1001, bigSize: false, newTag: false },
+                                { gameId: 1002, bigSize: false, newTag: false },
+                                { gameId: 1003, bigSize: false, newTag: false },
+                            ],
+                        },
+                    ],
+                    banners: [
+                        { gameId: 1001, displayTime: 5000 },
+                        { gameId: 1002, displayTime: 5000 },
+                        { gameId: 1003, displayTime: 5000 },
+                    ],
+                    gameSettings: {
+                        1001: { id: 1001, name: 'Game 1' },
+                        1002: { id: 1002, name: 'Game 2' },
+                        1003: { id: 1003, name: 'Game 3' },
+                    },
+                    roundTimerGame: 1001,
+                } as ILobbyConfigs
+            };
+            const handler = new DashboardHandler(props, jest.fn());
+
+            // Act
+            const result = handler.checkIsNotOfferGame();
+
+            // Assert
+            expect(result).toBe(false); // Should not show error when game is available
+        });
+
+        it('should handle direct mode with complete data correctly', () => {
+            // Arrange - Direct mode with complete data
+            const props = {
+                router: mockRouter,
+                session: {
+                    isAuthenticated: true,
+                    username: 'testuser',
+                    language: 'en',
+                    ss: 'test-session-token',
+                    memberName: 'testuser',
+                    isUM: false,
+                    umInfo: null,
+                    system: 1
+                } as SSOResponse,
+                queryGame: 1001,
+                directMode: true,
+                setIsUm: jest.fn(),
+                tolgee: {} as TolgeeInstance,
+                authorizeResponse: {
+                    authorized: true,
+                    user: {
+                        UID: 1,
+                        id: 1,
+                        username: 'testuser',
+                        avatarId: 1,
+                        currency: 'USD',
+                        name: 'Test User',
+                        red: 1000,
+                        settings: { theme: 'light' },
+                        isSignedInSM: true,
+                        isDisplayPlayerCurrency: true,
+                        offerGames: [
+                            { gameId: 1001, minBet: 1, maxBet: 1000, maxBetPerChoices: {} },
+                            { gameId: 1002, minBet: 1, maxBet: 1000, maxBetPerChoices: {} },
+                            { gameId: 1003, minBet: 1, maxBet: 1000, maxBetPerChoices: {} },
+                        ],
+                        balance: 1000,
+                        fractionalOddsFormat: false,
+                        enableQuickBet: true,
+                        enabledGameIds: [1001, 1002, 1003],
+                        availSpins: 0,
+                        scoins: 0,
+                    },
+                    errorCode: null,
+                    umInfo: null,
+                    isUM: false
+                } as AuthorizeResponse,
+                lobbyConfigs: {
+                    name: "Test Lobby",
+                    currencyGroupIds: ["USD"],
+                    miniPanelGameIds: [1001, 1002, 1003],
+                    categories: [
+                        {
+                            name: "Test Category",
+                            gameSettings: [
+                                { gameId: 1001, bigSize: false, newTag: false },
+                                { gameId: 1002, bigSize: false, newTag: false },
+                                { gameId: 1003, bigSize: false, newTag: false },
+                            ],
+                        },
+                    ],
+                    banners: [
+                        { gameId: 1001, displayTime: 5000 },
+                        { gameId: 1002, displayTime: 5000 },
+                        { gameId: 1003, displayTime: 5000 },
+                    ],
+                    gameSettings: {
+                        1001: { id: 1001, name: 'Game 1' },
+                        1002: { id: 1002, name: 'Game 2' },
+                        1003: { id: 1003, name: 'Game 3' },
+                    },
+                    roundTimerGame: 1001,
+                } as ILobbyConfigs
+            };
+            const handler = new DashboardHandler(props, jest.fn());
+
+            // Act
+            const result = handler.checkIsNotOfferGame();
+
+            // Assert
+            expect(result).toBe(false); // Should not show error when game is available
+        });
+    });
 }); 

@@ -17,15 +17,24 @@ export class DashboardHandler {
     }
 
     checkIsNotOfferGame = () => {
+        // Fix: When queryGame is 0, it means lobby, not a specific game
+        // So it should not be treated as "not in offer"
+        if (this.props.queryGame === 0) {
+            return false;
+        }
+        // Fix: Handle timing issues where data might not be available on first load
+        // Check if required data is available before proceeding
+        if (!this.props.authorizeResponse || !this.props.lobbyConfigs) {
+            console.warn('[DashboardHandler] checkIsNotOfferGame: Required data not available yet', {
+                hasAuthorizeResponse: !!this.props.authorizeResponse,
+                hasLobbyConfigs: !!this.props.lobbyConfigs
+            });
+            return false; // Don't show error modal when data is not ready
+        }
+
         const offerGames = getOfferGamesIds(this.props.authorizeResponse);
 
         if (this.props.directMode) {
-            // Fix: When queryGame is 0, it means lobby, not a specific game
-            // So it should not be treated as "not in offer"
-            if (this.props.queryGame === 0) {
-                return false;
-            }
-
             return !offerGames?.includes(this.props.queryGame);
         }
 
