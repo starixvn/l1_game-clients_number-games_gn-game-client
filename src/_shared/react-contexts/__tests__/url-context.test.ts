@@ -35,7 +35,7 @@ describe('URL Context', () => {
             },
             writable: true
         });
-        console.log = jest.fn();
+
     });
 
     describe('parseContextFromURL', () => {
@@ -68,9 +68,6 @@ describe('URL Context', () => {
 
             // Assert
             expect(result).toBeUndefined();
-            expect(console.log).toHaveBeenCalledWith(
-                '[URLContext] parseContextFromURL - No URL parameters found, returning undefined'
-            );
         });
 
         it('should handle missing optional parameters', () => {

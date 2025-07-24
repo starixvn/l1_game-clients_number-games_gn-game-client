@@ -9,10 +9,10 @@ export function usePWAWoker() {
                 workerRef.current = new Worker("/worker.js", { type: "module" });
                 workerRef.current.onmessage = (evt) => workerRef.current.postMessage(evt.data);
             } else {
-                // Your browser doesn't support web workers.
+                console.log("Your browser doesn't support web workers.");
             }
         } catch (error) {
-            // Error: error
+            console.log(error);
         }
         return () => {
             workerRef.current && workerRef.current.terminate();

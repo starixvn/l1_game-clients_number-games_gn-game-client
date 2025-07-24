@@ -70,21 +70,14 @@ export class Register extends PureComponent<RegisterProps, RegisterState> {
 
     constructor(props: RegisterProps) {
         super(props);
-        // console.log("[Register] constructor - Props received:", props);
-        // console.log("[Register] constructor - gameId from props:", props.gameId);
 
         this.state = { ...Register.defaultState, toLoadGameId: props.gameId };
-        // console.log("[Register] constructor - Initial state set:", this.state);
     }
 
     componentDidMount() {
-        // console.log("[Register] componentDidMount - Register component mounted");
-        // console.log("[Register] componentDidMount - Current state:", this.state);
     }
 
     componentDidUpdate(prevProps: RegisterProps, prevState: RegisterState) {
-        // console.log("[Register] componentDidUpdate - Props changed:", { prevProps, currentProps: this.props });
-        // console.log("[Register] componentDidUpdate - State changed:", { prevState, currentState: this.state });
     }
 
     toggleAvatarGallery() {
@@ -121,51 +114,39 @@ export class Register extends PureComponent<RegisterProps, RegisterState> {
 
     async submit(event: FormEvent) {
         event.preventDefault();
-        // console.log("[Register] submit - Form submitted");
         this.updateClickRegister(true);
 
         const { name, avatar } = this.state;
         const { t, session } = this.props;
-        // console.log("[Register] submit - Form data:", { name, avatar });
-        // console.log("[Register] submit - Props:", { isDirectMode: this.props.isDirectMode, gameId: this.props.gameId, isSabaPlay: this.props.isSabaPlay });
 
         let authorizeResponse;
 
         if (!NameGenerator.validateName(name)) {
-            // console.log("[Register] submit - Name validation failed");
             this.setState({ formValidity: t("Common.name_invalid"), isValidUsername: false });
             this.updateClickRegister(false);
             return;
         }
 
         try {
-            // console.log("[Register] submit - Creating nickname...");
             authorizeResponse = await createNickname(session, name, avatar);
-            // console.log("[Register] submit - createNickname result:", authorizeResponse);
         } catch (error) {
-            // console.error("[Register] submit - createNickname error:", error);
             // Error handled silently
         }
 
         if (this.isAuthorizeResponse(authorizeResponse)) {
-            // console.log("[Register] submit - Authorization successful");
             if (authorizeResponse.user) {
                 Object.assign(authorizeResponse.user, { settings: { theme: Themes.light } });
             }
             this.setState({ authorizeResponse: authorizeResponse, isTriggerPreloadResources: true });
 
             if (!this.props.isDirectMode) {
-                // console.log("[Register] submit - Not direct mode, updating toLoadGameId");
                 await this.updateToLoadGameId(authorizeResponse);
             } else {
-                // console.log("[Register] submit - Direct mode, keeping original gameId");
                 // Fix: Ensure toLoadGameId is properly set for direct mode
                 if (this.state.toLoadGameId === 0) {
-                    // console.log("[Register] submit - Direct mode with toLoadGameId 0, this might indicate an issue");
                 }
             }
         } else {
-            // console.log("[Register] submit - Authorization failed:", authorizeResponse);
             this.setState({
                 formValidity: t(GetLocalizedErrorMessage(authorizeResponse?.errorCode)),
                 isValidUsername: false,
@@ -199,7 +180,6 @@ export class Register extends PureComponent<RegisterProps, RegisterState> {
                 this.setState({ toLoadGameId: 0 });
             }
         } catch (error) {
-            // console.error("[Register] updateToLoadGameId - Error loading lobby configs:", error);
             // Handle error gracefully - default to lobby (toLoadGameId: 0)
             this.setState({ toLoadGameId: 0 });
         }
@@ -233,19 +213,15 @@ export class Register extends PureComponent<RegisterProps, RegisterState> {
         } = this.state;
         const { t, session, isDirectMode, isSabaPlay } = this.props;
 
-        // console.log("[Register] render - Current state:", this.state);
-        // console.log("[Register] render - Props:", { isDirectMode, isSabaPlay, gameId: this.props.gameId });
-        // console.log("[Register] render - isDonePreloadResource:", isDonePreloadResource);
+
 
         document.body.classList.add("galaxy-bg", "register");
 
         if (isUm) {
-            // console.log("[Register] render - Rendering UM page");
             return <UMPage />;
         }
 
         if (isDonePreloadResource) {
-            // console.log("[Register] render - Preload complete, rendering Dashboard");
             document.body.classList.remove("register");
 
             return (
@@ -261,7 +237,6 @@ export class Register extends PureComponent<RegisterProps, RegisterState> {
             );
         }
 
-        // console.log("[Register] render - Rendering Register form");
         return (
             <FirstLoginContainer>
                 <div className={styles.welcome}>

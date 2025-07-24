@@ -57,7 +57,7 @@ const mockRouter: NextRouter = {
 describe('DashboardHandler Integration - Direct Mode Scenario', () => {
     beforeEach(() => {
         jest.clearAllMocks();
-        console.log = jest.fn();
+
     });
 
     describe('shouldRenderGames with null openGameId', () => {

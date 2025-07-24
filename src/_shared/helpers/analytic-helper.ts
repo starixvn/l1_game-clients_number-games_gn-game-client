@@ -102,7 +102,6 @@ export class AnalyticsHelper {
                 AnalyticsHelper.ssoContext.gameName = getGameSettings(urlContext.gameId)?.gameName;
             }
         } catch (e) {
-            // Error logged: e
         }
     }
 
@@ -113,7 +112,6 @@ export class AnalyticsHelper {
 
             AnalyticsHelper.send(commandNames.event, TrackingEvent.Function, params);
         } catch (e) {
-            // Error logged: e
         }
     }
 
@@ -151,7 +149,6 @@ export class AnalyticsHelper {
         try {
             globalThis.gtag && globalThis.gtag(command, event, params);
         } catch (e) {
-            // Error logged: e
         }
     }
 }

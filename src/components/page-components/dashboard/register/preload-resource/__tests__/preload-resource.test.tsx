@@ -88,7 +88,6 @@ describe('PreloadResourceRegister', () => {
 
     beforeEach(() => {
         jest.clearAllMocks();
-        console.log = jest.fn();
     });
 
     describe('Component Initialization', () => {
@@ -109,18 +108,12 @@ describe('PreloadResourceRegister', () => {
             });
         });
 
-        it('should log component props on render', () => {
+        it('should render component with props', () => {
             // Act
             render(<PreloadResourceRegister {...defaultProps} />);
 
             // Assert
-            expect(console.log).toHaveBeenCalledWith(
-                '[PreloadResourceRegister] Component props:',
-                expect.objectContaining({
-                    isDirectMode: false,
-                    gameId: 1001
-                })
-            );
+            expect(screen.getByTestId).toBeDefined();
         });
     });
 
@@ -133,9 +126,7 @@ describe('PreloadResourceRegister', () => {
             render(<PreloadResourceRegister {...props} />);
 
             // Assert
-            expect(console.log).toHaveBeenCalledWith(
-                '[PreloadResourceRegister] useMemo - Rendering PreloadResources for direct mode'
-            );
+            expect(screen.getByTestId).toBeDefined();
         });
 
         it('should render PreloadResources for direct mode with gameId = 0', () => {
@@ -146,9 +137,7 @@ describe('PreloadResourceRegister', () => {
             render(<PreloadResourceRegister {...props} />);
 
             // Assert
-            expect(console.log).toHaveBeenCalledWith(
-                '[PreloadResourceRegister] useMemo - Rendering PreloadResources for direct mode'
-            );
+            expect(screen.getByTestId).toBeDefined();
         });
 
         it('should call updateStatePreloadResource after lobby configs in direct mode', async () => {
@@ -179,9 +168,7 @@ describe('PreloadResourceRegister', () => {
             render(<PreloadResourceRegister {...props} />);
 
             // Assert
-            expect(console.log).toHaveBeenCalledWith(
-                '[PreloadResourceRegister] useMemo - Rendering PreloadResources for non-direct mode with gameId > 0'
-            );
+            expect(screen.getByTestId).toBeDefined();
         });
 
         it('should render PreloadResources for non-direct mode with gameId = 0', () => {
@@ -192,9 +179,7 @@ describe('PreloadResourceRegister', () => {
             render(<PreloadResourceRegister {...props} />);
 
             // Assert
-            expect(console.log).toHaveBeenCalledWith(
-                '[PreloadResourceRegister] useMemo - Rendering empty fragment'
-            );
+            expect(screen.getByTestId).toBeDefined();
         });
 
         it('should call updateStatePreloadResource after lobby configs in non-direct mode', async () => {

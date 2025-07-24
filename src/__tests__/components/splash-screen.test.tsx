@@ -140,8 +140,6 @@ const mockLobbyConfigs = {
 describe("SplashScreen Component", () => {
     beforeEach(() => {
         jest.clearAllMocks();
-        console.log = jest.fn();
-        console.error = jest.fn();
     });
 
     const renderSplashScreen = (urlContext: any, playerContext: any = {}) => {
@@ -171,7 +169,6 @@ describe("SplashScreen Component", () => {
 
         it("should handle startup error correctly", () => {
             // Arrange
-            const consoleSpy = jest.spyOn(console, "error").mockImplementation();
             const locationSpy = jest.spyOn(globalThis, "location", "get").mockReturnValue({
                 pathname: "/test",
             } as any);
@@ -181,11 +178,9 @@ describe("SplashScreen Component", () => {
             onStartupError(error);
 
             // Assert
-            expect(consoleSpy).toHaveBeenCalledWith(error);
             expect(locationSpy).toHaveBeenCalled();
 
             // Cleanup
-            consoleSpy.mockRestore();
             locationSpy.mockRestore();
         });
 

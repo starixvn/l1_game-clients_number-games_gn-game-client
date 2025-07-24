@@ -74,7 +74,7 @@ const PreloadResources: React.FC<{
                 let loadedImages = 0;
                 imagesPath.forEach((path) => {
                     const callBack = () => {
-                        // loadedImages === 0 && console.time("preload-resources");
+
 
                         loadedImages++;
                         updateProgressBar(loadedImages, imagesPath.length, progressBarId);
@@ -84,7 +84,6 @@ const PreloadResources: React.FC<{
                         downloadAndCacheImage(path)
                             .then(callBack)
                             .catch((error) => {
-                                // console.error(error);
                                 callBack();
                             });
                     } else {
@@ -95,7 +94,6 @@ const PreloadResources: React.FC<{
                 setIsDonePreload();
             }
         } catch (error) {
-            // Error fetching images: error
             setIsDonePreload();
         }
     };
@@ -114,7 +112,6 @@ const PreloadResources: React.FC<{
         if (loaded === total) {
             loadedGames[gameId] = true;
             setIsDonePreload && setIsDonePreload();
-            // console.timeEnd("preload-resources");
         }
     };
 

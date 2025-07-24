@@ -56,12 +56,7 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
     ) {
         super(props);
 
-        // console.log("[Dashboard] constructor - Props received:", {
-        //     queryGame: props.queryGame,
-        //     directMode: props.directMode,
-        //     authorizeResponse: props.authorizeResponse,
-        //     lobbyConfigs: props.lobbyConfigs
-        // });
+
 
         this.state = {
             userStakeLevel: { minBet: 0, maxBet: 0 },
@@ -79,11 +74,7 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
             dashBoardHeight: 0,
         };
 
-        // console.log("[Dashboard] constructor - Initial state set:", {
-        //     queryGame: this.state.queryGame,
-        //     openGameId: this.state.openGameId,
-        //     authorizeInfo: this.state.authorizeInfo
-        // });
+
 
         this.closeDialog = this.closeDialog.bind(this);
         this.showApiErrorMessage = this.showApiErrorMessage.bind(this);
@@ -112,55 +103,44 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
 
         GlobalMessageTransmitter.broadcast({ [GlobalTransmitterEvent.USER_INFO_RED]: this.props.authorizeResponse.user.red });
 
-        // console.log("[Dashboard] constructor - Dashboard initialized successfully");
+
     }
 
     updateUserBalance = (balance: number, setBalanceByPlaceBet = true) => {
-        // console.log("[Dashboard] updateUserBalance - Called with:", { balance, setBalanceByPlaceBet, currentBalance: this.state.authorizeInfo.user.red });
-
         const authorizeInfo = { ...this.state.authorizeInfo };
         if (authorizeInfo.user.red !== balance) {
             authorizeInfo.user.red = balance;
             GlobalMessageTransmitter.broadcast({ [GlobalTransmitterEvent.USER_INFO_RED]: authorizeInfo.user.red });
             this.isUpdatingBalance = setBalanceByPlaceBet;
             this.setState({ authorizeInfo });
-            // console.log("[Dashboard] updateUserBalance - Balance updated to:", balance);
         } else {
-            // console.log("[Dashboard] updateUserBalance - Balance unchanged, no update needed");
         }
     };
 
     onVisibilityChange() {
-        // console.log("[Dashboard] onVisibilityChange - Document visibility changed, hidden:", document["hidden"]);
         if (!document["hidden"]) {
-            // console.log("[Dashboard] onVisibilityChange - Document became visible, calling handleReCheckIn");
             this.notificationHandler.handleReCheckIn();
         }
     }
 
     changeOrientation() {
-        // console.log("[Dashboard] changeOrientation - Called");
         setTimeout(() => {
             const isLandscapeMode = window.innerHeight < window.innerWidth;
-            // console.log("[Dashboard] changeOrientation - Setting landscape mode:", isLandscapeMode);
             this.setState({ isLandscapeMode });
         }, 100);
     }
 
     resetGameIdDashboardEvent() {
-        // console.log("[Dashboard] resetGameIdDashboardEvent - Resetting openGameId to 0");
         this.setState({ openGameId: 0 });
         this.forceUpdate();
     }
 
     updateGameTransmitters(gameTransmitters: Record<number, LobbyGameTransmitter>) {
-        // console.log("[Dashboard] updateGameTransmitters - Updating game transmitters:", Object.keys(gameTransmitters));
         this.setState({ gameTransmitters });
     }
 
     shouldComponentUpdate(nextProps: Readonly<DashboardProps>, nextState: Readonly<DashboardState>, nextContext: any): boolean {
         if (this.state.openGameId > 0 && this.isUpdatingBalance) {
-            // console.log("[Dashboard] shouldComponentUpdate - Blocking update due to balance update in progress");
             this.isUpdatingBalance = false;
             return false;
         }
@@ -169,7 +149,6 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
     }
 
     async componentDidMount() {
-        // console.log("[Dashboard] componentDidMount - Starting component initialization");
 
         const { dashBoardHeight } = this.state;
 
@@ -187,9 +166,7 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
             this.resetGameIdDashboardEvent()
         );
 
-        // console.log("[Dashboard] componentDidMount - Checking if game is not in offer");
         if (this.dashboardHandler.checkIsNotOfferGame()) {
-            // console.log("[Dashboard] componentDidMount - Game not in offer, showing error modal");
             this.setState({
                 apiError: {
                     message: ErrorNoGameOffer,
@@ -208,13 +185,9 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
 
         const { queryGame } = this.props;
         if (queryGame) {
-            // console.log("[Dashboard] componentDidMount - Opening game from queryGame:", queryGame);
             this.openGame(queryGame);
         } else {
-            // console.log("[Dashboard] componentDidMount - No queryGame provided");
         }
-
-        // console.log("[Dashboard] componentDidMount - Component initialization complete");
     }
 
     private preventZoomBehavior(event: TouchEvent) {
@@ -225,7 +198,6 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
     }
 
     componentWillUnmount() {
-        // console.log("[Dashboard] componentWillUnmount - Cleaning up component");
         unsubscribeGlobalMessageEvent(this.backToLobbyEventId);
         document.removeEventListener("visibilitychange", this.onVisibilityChange);
 
@@ -234,45 +206,31 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
     }
 
     signOut() {
-        // console.log("[Dashboard] signOut - Redirecting to timeout page");
         this.props.router.push("/timeout", "/timeout", { locale: this.props.tolgee.getLanguage() });
     }
 
     handleUpdateUserStakeLevel(userStakeLevel: UserStakeLevel) {
-        // console.log("[Dashboard] handleUpdateUserStakeLevel - Updating stake level:", userStakeLevel);
         this.setState({ userStakeLevel });
     }
 
     showApiErrorMessage(errorCode: string) {
-        // console.log("[Dashboard] showApiErrorMessage - Showing error modal for code:", errorCode);
         this.setState({ isShowErrorModal: true, isBlockUI: false, apiError: { errorCode, message: GetLocalizedErrorMessage(errorCode) } });
     }
 
     closeDialog() {
-        // console.log("[Dashboard] closeDialog - Closing error modal");
         this.setState({ isShowErrorModal: false });
         this.notificationHandler.isKickOut && this.signOut();
     }
 
     openGame(gameId: number) {
-        // console.log("[Dashboard] openGame - Opening game:", gameId);
         this.setState({ queryGame: gameId, openGameId: gameId });
         updateURLContext({ gameId });
-        // console.log("[Dashboard] openGame - Game opened and URL context updated");
     }
 
     renderGames() {
-        // console.log("[Dashboard] renderGames - Rendering Games component");
         const { userStakeLevel, openGameName } = this.state;
         const urlContext = loadURLContext();
 
-        // console.log("[Dashboard] renderGames - URL context:", urlContext);
-        // console.log("[Dashboard] renderGames - Props for Games:", {
-        //     openGameId: urlContext.gameId,
-        //     openGameName,
-        //     directMode: this.props.directMode,
-        //     lobbyGamesIds: this.dashboardHandler.getLobbyGamesIds()
-        // });
 
         return (
             <Games
@@ -289,21 +247,17 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
     }
 
     openGameFromLobby(gameId: number) {
-        // console.log("[Dashboard] openGameFromLobby - Opening game from lobby:", gameId);
         updateURLContext({ backToLobby: true, gameId: gameId });
         window.scrollTo(0, 0);
         if (this.state.openGameId !== gameId) {
-            // console.log("[Dashboard] openGameFromLobby - Game changed, removing transmitter for:", this.state.openGameId);
             this.dashboardHandler.removeGameTransmitter(gameId);
             this.setState({ openGameId: gameId });
         } else {
-            // console.log("[Dashboard] openGameFromLobby - Same game, forcing update");
             this.forceUpdate();
         }
     }
 
     renderLobby() {
-        // console.log("[Dashboard] renderLobby - Rendering Lobby component");
         updateURLContext({ backToLobby: true });
 
         return (
@@ -322,22 +276,14 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
     }
 
     renderDashBoard() {
-        // console.log("[Dashboard] renderDashBoard - Starting dashboard render");
+
         window.history.pushState(null, null, "/");
 
         const { isShowErrorModal, authorizeInfo, isBlockUI, isChangedGame, isChangePrevGame, openGameId } = this.state;
         const offerGames = this.dashboardHandler.getOfferGamesIds();
         const isRenderGames = this.dashboardHandler.shouldRenderGames(offerGames, openGameId);
 
-        // console.log("[Dashboard] renderDashBoard - Render state:", {
-        //     openGameId,
-        //     offerGames,
-        //     isRenderGames,
-        //     isShowErrorModal,
-        //     isBlockUI,
-        //     isChangedGame,
-        //     isChangePrevGame
-        // });
+
 
         const allowSwipeGameOndDesktop = !this.props.directMode && !isMobileOnly && isRenderGames;
 
@@ -346,11 +292,7 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
         const isNoGameOffer = this.state.apiError?.message === ErrorNoGameOffer;
         const renderOfferGameContainer = () => (isRenderGames ? this.renderGames() : this.renderLobby());
 
-        // console.log("[Dashboard] renderDashBoard - Render decisions:", {
-        //     allowSwipeGameOndDesktop,
-        //     isNoGameOffer,
-        //     willRenderGames: isRenderGames
-        // });
+
 
         const authContextValue = {
             authorizeInfo: authorizeInfo,
@@ -408,14 +350,10 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
     }
 
     render() {
-        // console.log("[Dashboard] render - Component render called");
-
         if (this.state.isLandscapeMode && isMobileOnly) {
-            // console.log("[Dashboard] render - Rendering landscape mode");
             return <LandscapeMode />;
         }
 
-        // console.log("[Dashboard] render - Rendering dashboard");
         return this.renderDashBoard();
     }
 }

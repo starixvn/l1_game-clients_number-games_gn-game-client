@@ -26,7 +26,6 @@ export class LocalStorage implements IActionStorage {
         try {
             return JSON.parse(storage);
         } catch (error) {
-            // LocalStorage ${name} can not parse
             return null;
         }
     }
@@ -42,7 +41,6 @@ export class LocalStorage implements IActionStorage {
             localStorage.removeItem(test);
             return true;
         } catch (e) {
-            // Browser not support Local Storage
             return false;
         }
     }

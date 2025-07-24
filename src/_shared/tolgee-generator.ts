@@ -65,5 +65,5 @@ tg.on("initialLoad", async () => {
         });
     });
 
-    // Generated done!
+
 });
