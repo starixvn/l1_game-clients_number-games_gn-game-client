@@ -1,3 +1,5 @@
+import { locales } from "./constants";
+
 const { DevTools, Tolgee } = require("@tolgee/react");
 const fs = require("fs");
 const path = require("path");
@@ -26,11 +28,11 @@ const tolgeeNamespaceByGameSetting = Object.values(tmpGameSettings)
     .map((setting) => setting.tolgeeNamespace)
     .filter((ns) => ns);
 const namespaces = ["SabaNumber", "Common", ...tolgeeNamespaceByGameSetting].filter((value, index, arr) => arr.indexOf(value) === index);
-const languageCodes = ["en", "id", "th", "vi", "zh_cn", "zh_tw", "ja"];
+
 const tg = Tolgee().use(DevTools()).init({
     defaultLanguage: "en",
     fallbackLanguage: "en",
-    availableLanguages: languageCodes,
+    availableLanguages: Object.values(locales),
     apiKey: "tgpak_gvpw45brha2xg3btoztxeytunvudc5dbn5twqodtonztc",
     apiUrl: "https://tolgee.sabagame.com/",
     projectId: "5",
@@ -48,7 +50,7 @@ tg.on("initialLoad", async () => {
             };
         };
     } = {};
-    languageCodes.forEach(async (languageId) => {
+    Object.values(locales).forEach(async (languageId) => {
         await tg.changeLanguage(languageId);
         languages[languageId] = {};
         tg.getAllRecords().forEach((record) => {
