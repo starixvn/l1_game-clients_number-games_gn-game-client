@@ -7,6 +7,19 @@ const renderModal = helpers.renderModal;
 const mockGameState = useGameStateContext as jest.Mock;
 jest.useFakeTimers();
 
+// Mock app-settings
+jest.mock("../../../../_shared/app-settings", () => ({
+    getAppSettings: jest.fn().mockReturnValue({
+        gameSettings: {
+            456: {
+                tolgeeNamespace: "TestNamespace",
+                gamePath: "/test-game"
+            }
+        },
+        system: "gn"
+    })
+}));
+
 jest.mock("../../modal-container", () => {
     const ModalContainer = ({ children, onCloseModal }) => {
         return (
@@ -31,6 +44,7 @@ jest.mock("../../../../_shared/constants", () => ({
     Themes: {
         numberGame: "dark",
     },
+    locales: { en: "en", vi: "vi", th: "th", id: "id", zh_cn: "zh_cn", zh_tw: "zh_tw", ja: "ja" },
 }));
 
 jest.mock("../../../../_shared/react-hooks", () => ({
