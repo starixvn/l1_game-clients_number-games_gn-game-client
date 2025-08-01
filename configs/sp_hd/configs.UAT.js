@@ -1,7 +1,7 @@
 window.envConfig = {
     proxy: {
         ssl: true,
-        subDomain: "hduatclient",
+        subDomain: "hduatproxy",
         path: "/uat",
     },
     sentry: {
