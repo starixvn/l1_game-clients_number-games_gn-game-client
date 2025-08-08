@@ -1,8 +1,9 @@
 import { FormatIcu } from "@tolgee/format-icu";
 import { BackendFetch, GetPath, Tolgee } from "@tolgee/react";
 import { getAppSettings } from "./app-settings";
-import { buildVersion, locales } from "./constants";
+import { buildVersion } from "./constants";
 
+const languageCodes = ["en", "id", "th", "vi", "zh_cn", "zh_tw", "ja", "es"];
 const tolgeeNamespaceByGameSetting = Object.values(getAppSettings().gameSettings)
     .map((setting) => setting.tolgeeNamespace)
     .filter((ns) => ns);
@@ -20,7 +21,7 @@ const getPath: GetPath = ({ namespace, language, prefix }: { namespace: string; 
 export const tolgee = Tolgee().use(FormatIcu()).use(BackendFetch({ getPath })).init({
     fallbackLanguage: "en",
     defaultLanguage: "en",
-    availableLanguages: Object.values(locales),
+    availableLanguages: languageCodes,
     projectId: "5",
     ns: namespaces,
     defaultNs: "SabaNumber",
