@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?1og49t');
-  src:  url('fonts/icomoon.eot?1og49t#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?1og49t') format('truetype'),
-    url('fonts/icomoon.woff?1og49t') format('woff'),
-    url('fonts/icomoon.svg?1og49t#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?5s1xtj');
+  src:  url('fonts/icomoon.eot?5s1xtj#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?5s1xtj') format('truetype'),
+    url('fonts/icomoon.woff?5s1xtj') format('woff'),
+    url('fonts/icomoon.svg?5s1xtj#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,95 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-even_es .path1:before {
+  content: "\e9d2";
+  color: rgb(43, 26, 38);
+}
+.icon-even_es .path2:before {
+  content: "\e9d3";
+  margin-left: -1em;
+  color: rgb(150, 51, 95);
+}
+.icon-even_es .path3:before {
+  content: "\e9d4";
+  margin-left: -1em;
+  color: rgb(255, 94, 94);
+}
+.icon-odd_es .path1:before {
+  content: "\e9d5";
+  color: rgb(12, 36, 58);
+}
+.icon-odd_es .path2:before {
+  content: "\e9d6";
+  margin-left: -1em;
+  color: rgb(3, 92, 175);
+}
+.icon-odd_es .path3:before {
+  content: "\e9d7";
+  margin-left: -1em;
+  color: rgb(28, 123, 223);
+}
+.icon-player_es .path1:before {
+  content: "\e9d8";
+  color: rgb(12, 36, 58);
+}
+.icon-player_es .path2:before {
+  content: "\e9d9";
+  margin-left: -1em;
+  color: rgb(3, 92, 175);
+}
+.icon-player_es .path3:before {
+  content: "\e9da";
+  margin-left: -1em;
+  color: rgb(28, 123, 223);
+}
+.icon-small_es .path1:before {
+  content: "\e9db";
+  color: rgb(43, 26, 38);
+}
+.icon-small_es .path2:before {
+  content: "\e9dc";
+  margin-left: -1em;
+  color: rgb(150, 51, 95);
+}
+.icon-small_es .path3:before {
+  content: "\e9dd";
+  margin-left: -1em;
+  color: rgb(255, 94, 94);
+}
+.icon-tie_es .path1:before {
+  content: "\e9de";
+  color: rgb(9, 43, 45);
+}
+.icon-tie_es .path2:before {
+  content: "\e9df";
+  margin-left: -1em;
+  color: rgb(28, 126, 58);
+}
+.icon-tie_es .path3:before {
+  content: "\e9e0";
+  margin-left: -1em;
+  color: rgb(62, 172, 62);
+}
+.icon-big_es .path1:before {
+  content: "\e9e1";
+  color: rgb(12, 36, 58);
+}
+.icon-big_es .path2:before {
+  content: "\e9e2";
+  margin-left: -1em;
+  color: rgb(3, 92, 175);
+}
+.icon-big_es .path3:before {
+  content: "\e9e3";
+  margin-left: -1em;
+  color: rgb(28, 123, 223);
+}
+.icon-big_es .path4:before {
+  content: "\e9e4";
+  margin-left: -1em;
+  color: rgb(28, 123, 223);
+}
 .icon-specific1 .path1:before {
   content: "\e939";
   color: rgb(12, 36, 58);
