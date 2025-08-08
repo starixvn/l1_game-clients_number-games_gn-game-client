@@ -11,6 +11,7 @@ import { AnalyticsHelper, TrackingAction, TrackingFunction } from "../../../../_
 import { Section } from "../pf-form-components";
 import { usePFContext, usePFDispatch } from "../../../../_shared/react-contexts/game-state-context/pf/pf-context";
 import { PFEventActionType } from "../../../../_shared/react-contexts/game-state-context/pf/pf-action";
+import { useGameStateContext } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
 
 const PFClientSeedInfoModal: FC<{
     fileNameExport: (data?: any) => string;
@@ -18,6 +19,8 @@ const PFClientSeedInfoModal: FC<{
     const { isShowPFClientSeedInfo } = usePFContext();
     const { t: translateSNGames } = useSNTranslate();
     const dispatch = usePFDispatch();
+
+    const { locale } = usePlayerContext();
 
     const handleCloseModal = () => {
         dispatch({
@@ -34,9 +37,11 @@ const PFClientSeedInfoModal: FC<{
             <ModalContainer
                 id="pf-client-seed-info-modal"
                 title={
-                    <div>
+                    <div >
                         <ButtonPFGuide />
-                        {translateSNGames("pf_title_client_seed_info")}
+                        <div className={locale === "es" ? Styles["pf-client-seed-info-modal-title-es"] : ""}>
+                            {translateSNGames("pf_title_client_seed_info")}
+                        </div>
                     </div>
                 }
                 isOpen={isShowPFClientSeedInfo}

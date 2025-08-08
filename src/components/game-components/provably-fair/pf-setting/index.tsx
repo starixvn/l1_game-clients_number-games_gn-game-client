@@ -1,6 +1,6 @@
 import { FC, useEffect, useRef, useState } from "react";
 
-import { useGameContext } from "../../../../_shared/react-contexts";
+import { useGameContext, usePlayerContext } from "../../../../_shared/react-contexts";
 import { useGameStateContext } from "../../../../_shared/react-contexts/game-state-context/game-state-context";
 import { useCommonTranslate, useSNTranslate } from "../../../../_shared/react-hooks";
 import { messageEventType } from "../../../game-base/handlers";
@@ -30,6 +30,7 @@ const PFSettingModal: FC<{ customClientSeedInfo?: string }> = ({ customClientSee
     const { isShowPFSetting } = usePFContext();
     const { t: translateSNGames } = useSNTranslate();
     const dispatch = usePFDispatch();
+    const { locale } = usePlayerContext();
 
     const handleCloseModal = () => {
         dispatch({ type: PFEventActionType.TOGGLE_PF_SETTING, payload: { isShowPFSetting: false } });
@@ -42,7 +43,9 @@ const PFSettingModal: FC<{ customClientSeedInfo?: string }> = ({ customClientSee
                 title={
                     <div>
                         <ButtonPFGuide />
-                        {translateSNGames("pf_title_bacball_provably_fair_settings")}
+                        <div className={locale === "es" ? Styles["pf-client-seed-info-modal-title-es"] : ""}>
+                            {translateSNGames("pf_title_bacball_provably_fair_settings")}
+                        </div>
                     </div>
                 }
                 isOpen={true}
