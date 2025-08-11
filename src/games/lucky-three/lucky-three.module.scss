@@ -36,9 +36,6 @@
 
         animation: zoom-in-cage 0.7s 0.3s cubic-bezier(0.38, 0.12, 0.75, 0.72) forwards;
 
-        // &.low-performance-device {
-        //     animation: zoom-in-cage-low-performance 1s cubic-bezier(0.38, 0.12, 0.75, 0.72) forwards;
-        // }
 
         .slot-container {
             animation: fade-in 0.5s 0.5s ease-in forwards;
@@ -48,9 +45,6 @@
     &.zoom-out-anim {
         animation: zoom-out-cage 1s cubic-bezier(0.47, 0, 0.745, 0.715) forwards;
 
-        // &.low-performance-device {
-        //     animation: zoom-out-cage-low-performance 1s cubic-bezier(0.47, 0, 0.745, 0.715) forwards;
-        // }
 
         .slot-container {
             animation: fade-out 0.3s 0.5s ease-in forwards;
@@ -103,21 +97,6 @@
     }
 }
 
-// @keyframes zoom-in-cage-low-performance {
-//     0% {
-//         opacity: 0;
-//     }
-
-//     85% {
-//         opacity: 0;
-//         transform: scale(var(--default-scale)) translateY(var(--default-y));
-//     }
-
-//     100% {
-//         opacity: 1;
-//         transform: scale(var(--default-scale)) translateY(var(--default-y));
-//     }
-// }
 
 @keyframes zoom-out-cage {
     0% {
@@ -128,30 +107,6 @@
     }
 }
 
-// @keyframes zoom-out-cage-low-performance {
-//     0% {
-//         opacity: 1;
-//     }
-
-//     90% {
-//         opacity: 0;
-//     }
-
-//     91% {
-//         opacity: 0;
-//         transform: scale(var(--mup-up-scale)) translateY(var(--move-up-y));
-//     }
-
-//     95% {
-//         opacity: 0;
-//         transform: scale(var(--mup-up-scale)) translateY(var(--move-up-y));
-//     }
-
-//     100% {
-//         opacity: 1;
-//         transform: scale(var(--mup-up-scale)) translateY(var(--move-up-y));
-//     }
-// }
 
 //-------------- CHOICE ODD EVEN -----------------//
 .bg-bet-option {
