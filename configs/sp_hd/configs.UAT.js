@@ -5,7 +5,7 @@ window.envConfig = {
         path: "/uat",
     },
     sentry: {
-        dsn: "https://937e616976cf45c581d1f39e07c133ab@scsentry.sgamesuat.com/284",
+        dsn: "http://aec64e89fed64d25a73926e63f2500f7@sentrysc-ovs.ops-kluat.gamora.prod/179",
         environment: "UAT",
     },
     enableSourceMap: false,
