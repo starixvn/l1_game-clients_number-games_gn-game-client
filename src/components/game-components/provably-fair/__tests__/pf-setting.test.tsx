@@ -32,6 +32,7 @@ jest.mock("../../../../_shared/react-contexts/game-state-context/pf/pf-context",
 
 jest.mock("../../../../_shared/react-contexts", () => ({
     useGameContext: jest.fn(),
+    usePlayerContext: jest.fn().mockReturnValue({ locale: "en" }),
 }));
 
 jest.mock("../../../../_shared/react-hooks", () => ({
