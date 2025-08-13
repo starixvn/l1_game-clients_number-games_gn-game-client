@@ -46,6 +46,7 @@ export const TurnBaseResultSlotContainer: React.FC<IResultSlotContainer> = (prop
             });
         };
 
+        
         const getBallsDataFromRoundData = () => {
             const clonedData = cloneDefaultData();
             if (roundData?.[betChoiceBalls]?.length > 0) {

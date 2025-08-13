@@ -213,6 +213,7 @@ const SplashScreen: React.FC = () => {
         handleInitialization();
     }, []);
 
+    
     const getSSORedirectToGameId = async (lobbyConfigs: ILobbyConfigs, authorizeInfo: AuthorizeResponse, urlGameId: number) => {
         if (!lobbyConfigs || !authorizeInfo) {
             return 0;
