@@ -4,27 +4,30 @@ import { confirmBet } from "../../../_shared/constants";
 import { PlayerContextModel, useGameActionContext, usePlayerContext } from "../../../_shared/react-contexts";
 import { useClickSound, useSNTranslate } from "../../../_shared/react-hooks";
 import Styles from "./confirm-bet.module.scss";
-import { usePlaceBetContext, usePlaceBetDispatch } from "../../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-context";
+import {
+    usePlaceBetContext,
+    usePlaceBetDispatch,
+} from "../../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-context";
 import { PlaceBetEventActionType } from "../../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-action";
 
 const ConfirmBet: React.FC = () => {
     const dispatch = usePlaceBetDispatch();
     const gameActionContext = useGameActionContext();
     const placeBetContext = usePlaceBetContext();
-    const { authorizeInfo, enableQuickBet } = (usePlayerContext() as PlayerContextModel);
-    const enabledQuickBet = authorizeInfo?.user?.settings.quickBet || enableQuickBet;
+    const { authorizeInfo, enableQuickBet } = usePlayerContext() as PlayerContextModel;
+    const enabledQuickBet = authorizeInfo?.user?.settings?.quickBet || enableQuickBet;
     const clickSound = useClickSound();
     const { t } = useSNTranslate();
 
     useEffect(() => {
-        return () => { };
+        return () => {};
     }, []);
 
     const onCancel = () => {
         clickSound();
         dispatch({
             type: PlaceBetEventActionType.SHOW_CONFIRM_BET,
-            payload: { showConfirmBet: false }
+            payload: { showConfirmBet: false },
         });
 
         dispatch({

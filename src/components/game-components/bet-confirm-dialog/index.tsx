@@ -1,15 +1,18 @@
 import { numberRoundDownWithCommas } from "../../../_shared/helpers";
 import { PlayerContextModel, usePlayerContext } from "../../../_shared/react-contexts";
 import { PlaceBetEventActionType } from "../../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-action";
-import { usePlaceBetContext, usePlaceBetDispatch } from "../../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-context";
+import {
+    usePlaceBetContext,
+    usePlaceBetDispatch,
+} from "../../../_shared/react-contexts/game-state-context/place-bet-context/place-bet-context";
 import { useTranslator } from "../../../_shared/react-hooks";
 import ConfirmDialog from "../confirm-dialog";
 
 const BetConfirmDialog = () => {
     const dispatch = usePlaceBetDispatch();
     const placeBetContext = usePlaceBetContext();
-    const { authorizeInfo, enableQuickBet } = (usePlayerContext() as PlayerContextModel);
-    const enabledQuickBet = authorizeInfo?.user?.settings.quickBet || enableQuickBet;
+    const { authorizeInfo, enableQuickBet } = usePlayerContext() as PlayerContextModel;
+    const enabledQuickBet = authorizeInfo?.user?.settings?.quickBet || enableQuickBet;
     const suggestBet = placeBetContext.suggestBet;
     const currentBetChoice = suggestBet.currentBetChoice;
     const outstandingBalance = suggestBet.suggestBetAmount;
@@ -38,7 +41,7 @@ const BetConfirmDialog = () => {
     const handleCloseModal = () => {
         dispatch({
             type: PlaceBetEventActionType.SHOW_CONFIRM_DIALOG,
-            payload: { showConfirmDialog: false }
+            payload: { showConfirmDialog: false },
         });
 
         enabledQuickBet && removeSuggestBet();
@@ -47,7 +50,7 @@ const BetConfirmDialog = () => {
     const handleSubmitBet = () => {
         dispatch({
             type: PlaceBetEventActionType.SHOW_CONFIRM_DIALOG,
-            payload: { showConfirmDialog: false }
+            payload: { showConfirmDialog: false },
         });
 
         if (enabledQuickBet) {
@@ -59,7 +62,7 @@ const BetConfirmDialog = () => {
 
         dispatch({
             type: PlaceBetEventActionType.SHOW_CONFIRM_BET,
-            payload: { showConfirmBet: true }
+            payload: { showConfirmBet: true },
         });
 
         const notConfirmOwnBets = placeBetContext.notConfirmOwnBets;
@@ -67,7 +70,7 @@ const BetConfirmDialog = () => {
 
         dispatch({
             type: PlaceBetEventActionType.NOT_CONFIRM_OWN_BETS,
-            payload: { notConfirmOwnBets }
+            payload: { notConfirmOwnBets },
         });
     };
 

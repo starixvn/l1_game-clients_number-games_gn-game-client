@@ -177,9 +177,9 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState> extend
         const authContext = this.context as PlayerContextModel;
         const currentBalance = authContext?.authorizeInfo?.user?.red || 0;
         const newBalance = Math.max(0, currentBalance + amountChange);
-        
+
         const roundedBalance = roundToTwoDecimals(newBalance);
-        
+
         authContext?.setBalance(roundedBalance);
     }
 
@@ -472,7 +472,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState> extend
     async updateUserBalance() {
         const authContext = this.context as PlayerContextModel;
         const balanceResponse = await getBalance(authContext?.session);
-        
+
         if (balanceResponse.isSuccessful) {
             authContext?.setBalance(balanceResponse.balance);
         } else {
@@ -482,7 +482,7 @@ abstract class GameBase<P extends GameBaseProps, S extends GameBaseState> extend
 
     placeBet(betChoice: string, amount: number) {
         const { authorizeInfo, enableQuickBet } = this.context as PlayerContextModel;
-        const enabledQuickBet = authorizeInfo?.user?.settings.quickBet || enableQuickBet;
+        const enabledQuickBet = authorizeInfo?.user?.settings?.quickBet || enableQuickBet;
 
         this.placeBetHandler.placeBet(betChoice, amount, enabledQuickBet, this.props.gameStateContextModel, this.props.systemContextModel);
     }

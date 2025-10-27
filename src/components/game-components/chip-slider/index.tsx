@@ -21,7 +21,7 @@ export const ChipSlider: React.FC<{ gameConfigs: GameConfigs; userStakeLevel: Us
     const systemContext = useSystemContext();
     const dispatch = useSystemDispatch();
     const { authorizeInfo, enableQuickBet } = usePlayerContext() as PlayerContextModel;
-    const enabledQuickBet = authorizeInfo?.user?.settings.quickBet || enableQuickBet;
+    const enabledQuickBet = authorizeInfo?.user?.settings?.quickBet || enableQuickBet;
     const { selectedChip } = systemContext;
     const [enabledPrevBtn, setEnabledPrevBtn] = useState(false);
     const [enabledNextBtn, setEnabledNextBtn] = useState(true);
