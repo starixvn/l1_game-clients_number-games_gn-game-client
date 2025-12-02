@@ -5,7 +5,7 @@ export interface SystemContextModel {
 
 export const initialSystemContextModel = (): SystemContextModel => {
     return {
-        selectedChip: 1,
+        selectedChip: 0,
         isEnableQuickBet: true,
     };
 };
