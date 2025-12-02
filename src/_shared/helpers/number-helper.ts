@@ -1,10 +1,10 @@
-const numberRoundDownWithCommas = (number: number, toFixed = 2) => {
+const numberRoundDownWithCommas = (number: number, toFixed = 4) => {
     const result = Math.floor(number * Math.pow(10, toFixed)) / Math.pow(10, toFixed);
 
     return numberWithCommas(result, toFixed);
 };
 
-const numberWithCommas = (number: number, toFixed = 2, minimumFractionDigits = 0) => {
+const numberWithCommas = (number: number, toFixed = 4, minimumFractionDigits = 0) => {
     const options = { maximumFractionDigits: toFixed } as any;
     if (number % parseInt(number.toString()) !== 0) {
         options.minimumFractionDigits = minimumFractionDigits;
