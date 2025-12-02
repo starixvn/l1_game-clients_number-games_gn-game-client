@@ -46,8 +46,8 @@ export const OwnBet: React.FC<BaseProps> = ({ tolgeeNamespace, choice, className
     
     return (
         <>
-            {ownBetValue > 0 && ownBetUI(numberWithCommas(ownBetValue, 2))}
-            {isShowBetAnim && acceptedBets > 0 && ownBetUI(numberWithCommas(acceptedBets, 2), Styles["own-bet-anim"])}
+            {ownBetValue > 0 && ownBetUI(numberWithCommas(ownBetValue, 4))}
+            {isShowBetAnim && acceptedBets > 0 && ownBetUI(numberWithCommas(acceptedBets, 4), Styles["own-bet-anim"])}
         </>
     );
 };
